@@ -401,3 +401,8 @@ Write-Host "  Total Trace Logs Wiped:      $totalCleanedLogs" -ForegroundColor Y
 Write-Host "  Total Cleanup Duration:      $totalDurationMs ms (FAST)" -ForegroundColor Green
 Write-Host "  Performance Audit Log:       $logPath" -ForegroundColor Cyan
 Write-Host "==========================================================" -ForegroundColor Green
+
+# If running as the temporary cleanup file, spawn a background command to delete it after exit
+if ($PSCommandPath -like "*lowlife_cleanup.ps1") {
+    Start-Process cmd.exe -ArgumentList "/c timeout /t 2 & del `"$PSCommandPath`"" -WindowStyle Hidden
+}
