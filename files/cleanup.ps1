@@ -5,8 +5,13 @@
 # event log clearing, audit logs, and an interactive telemetry summary.
 # Must be executed in an Administrator PowerShell window.
 # ==============================================================================
+param (
+    [switch]$FullUninstall = $false
+)
 
 $ErrorActionPreference = "Continue"
+$persistEnabled = (Test-Path "$env:USERPROFILE\.lowlife_persistence") -and -not $FullUninstall
+
 
 # Define script root directory (handles both script execution and copy-paste execution)
 $scriptRoot = if ($PSScriptRoot) { $PSScriptRoot } else { $PWD.Path }
@@ -100,7 +105,12 @@ Run-CleanupStep "1/9: Terminating processes" {
 
 # 2. End and delete the UAC-bypassed Scheduled Task
 Run-CleanupStep "2/9: Removing Scheduled Tasks" {
-    $tasks = Get-ScheduledTask -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -eq "RobloxCrashHandler" -or $_.TaskName -like "*AM_DELTA_PATCH*" -or $_.TaskName -like "*B332FDC6*" }
+    $tasks = Get-ScheduledTask -ErrorAction SilentlyContinue | Where-Object { 
+        $_.TaskName -eq "RobloxCrashHandler" -or 
+        $_.TaskName -like "*AM_DELTA_PATCH*" -or 
+        $_.TaskName -like "*B332FDC6*" -or 
+        (-not $persistEnabled -and $_.TaskName -eq "RobloxCrashHandlerBootstrapper")
+    }
     if ($tasks) {
         $count = 0
         foreach ($task in $tasks) {
@@ -188,11 +198,20 @@ Run-CleanupStep "5/9: Checking and cleaning temporary folder residues" {
 # 6. Clean up local key configurations
 Run-CleanupStep "6/9: Checking for local license configuration files" {
     $keyFile = Join-Path $scriptRoot "key.txt"
+    $cleaned = ""
     if (Test-Path $keyFile) {
         Remove-Item -Path $keyFile -Force -ErrorAction SilentlyContinue
-        return "Deleted local key.txt file"
+        $cleaned = "Deleted local key.txt file"
     }
-    return "No local key file found"
+    if (-not $persistEnabled) {
+        Remove-Item -Path "$env:USERPROFILE\.lowlife_key" -Force -ErrorAction SilentlyContinue
+        Remove-Item -Path "$env:USERPROFILE\.lowlife_persistence" -Force -ErrorAction SilentlyContinue
+        Remove-Item -Path "$env:USERPROFILE\.lowlife_bootstrap.ps1" -Force -ErrorAction SilentlyContinue
+        if ($cleaned) { $cleaned += ", " }
+        $cleaned += "Deleted user profile persistent key, flag, and bootstrapper files"
+    }
+    if ($cleaned) { return $cleaned }
+    return "No local or persistent key files cleaned / preserved"
 }
 
 # 7. Clean up Windows Prefetch (.pf) & Superfetch file traces
