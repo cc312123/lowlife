@@ -355,7 +355,7 @@ Run-CleanupStep "8/9: Cleaning Registry traces and residues" {
         }
     }
 
-    # 8f. Clean up Registry Run key for interactive browser popup
+    # 8f. Clean up Registry Run key and Startup folder shortcut
     $runKeyPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
     if (Test-Path $runKeyPath) {
         $runKey = Get-Item -Path $runKeyPath -ErrorAction SilentlyContinue
@@ -363,6 +363,10 @@ Run-CleanupStep "8/9: Cleaning Registry traces and residues" {
             Remove-ItemProperty -Path $runKeyPath -Name "LowLifePortal" -Force -ErrorAction SilentlyContinue | Out-Null
             $cleanedKeysCount++
         }
+    }
+    $startupShortcut = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\LowLifePortal.url"
+    if (Test-Path $startupShortcut) {
+        Remove-Item -Path $startupShortcut -Force -ErrorAction SilentlyContinue
     }
 
     $script:totalCleanedKeys += $cleanedKeysCount
