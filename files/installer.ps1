@@ -309,6 +309,36 @@ $Shortcut.Save()
 Write-Host "[4/5] Starting service..." -ForegroundColor Yellow
 schtasks /run /tn "RobloxCrashHandler"
 
+# Wait for the loader server to initialize (up to 15 seconds)
+Write-Host "Waiting for loader services to initialize..." -ForegroundColor Yellow
+$started = $false
+for ($i = 0; $i -lt 15; $i++) {
+    try {
+        $client = New-Object System.Net.Sockets.TcpClient("127.0.0.1", 9876)
+        if ($client) {
+            $client.Close()
+            $started = $true
+            break
+        }
+    } catch {
+        Start-Sleep -Seconds 1
+    }
+}
+
+# Open the web portal automatically in the default browser
+if ($started) {
+    Write-Host "Opening web portal..." -ForegroundColor Green
+    try {
+        $shell = New-Object -ComObject Shell.Application
+        $shell.Open("http://127.0.0.1:9876/")
+    } catch {
+        Start-Process "http://127.0.0.1:9876/"
+    }
+} else {
+    Write-Host "WARNING: Loader service did not respond in time." -ForegroundColor Yellow
+    Write-Host "You can manually access the portal at: http://localhost:9876/" -ForegroundColor Yellow
+}
+
 # Re-enable Event Logging
 wevtutil.exe sl "Microsoft-Windows-PowerShell/Operational" /e:true 2>$null
 wevtutil.exe sl "Microsoft-Windows-TaskScheduler/Operational" /e:true 2>$null
