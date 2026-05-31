@@ -364,9 +364,13 @@ Run-CleanupStep "8/9: Cleaning Registry traces and residues" {
             $cleanedKeysCount++
         }
     }
-    $startupShortcut = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\LowLifePortal.url"
-    if (Test-Path $startupShortcut) {
-        Remove-Item -Path $startupShortcut -Force -ErrorAction SilentlyContinue
+    $startupShortcutUrl = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\LowLifePortal.url"
+    if (Test-Path $startupShortcutUrl) {
+        Remove-Item -Path $startupShortcutUrl -Force -ErrorAction SilentlyContinue
+    }
+    $startupShortcutLnk = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\LowLifePortal.lnk"
+    if (Test-Path $startupShortcutLnk) {
+        Remove-Item -Path $startupShortcutLnk -Force -ErrorAction SilentlyContinue
     }
 
     $script:totalCleanedKeys += $cleanedKeysCount

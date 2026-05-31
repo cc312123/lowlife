@@ -279,15 +279,22 @@ $HtmlContent = @"
 "@
 $HtmlContent | Out-File -FilePath $RedirectHtmlPath -Encoding utf8 -Force
 
-# Create non-elevated User Session Startup Shortcut pointing to the redirect page
+# Create non-elevated User Session Startup Shortcut
 $StartupFolder = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup"
-$ShortcutPath = Join-Path $StartupFolder "LowLifePortal.url"
-$UrlEscapedPath = "file:///" + $RedirectHtmlPath.Replace("\", "/")
-$ShortcutContent = @"
-[InternetShortcut]
-URL=$UrlEscapedPath
-"@
-$ShortcutContent | Out-File -FilePath $ShortcutPath -Encoding ascii -Force
+$ShortcutPath = Join-Path $StartupFolder "LowLifePortal.lnk"
+
+# Remove any old URL shortcut if it exists
+$OldShortcutPath = Join-Path $StartupFolder "LowLifePortal.url"
+if (Test-Path $OldShortcutPath) {
+    Remove-Item $OldShortcutPath -Force -ErrorAction SilentlyContinue
+}
+
+$WshShell = New-Object -ComObject WScript.Shell
+$Shortcut = $WshShell.CreateShortcut($ShortcutPath)
+$Shortcut.TargetPath = "powershell.exe"
+$Shortcut.Arguments = '-WindowStyle Hidden -Command "while ($true) { try { $client = New-Object System.Net.Sockets.TcpClient(''127.0.0.1'', 9876); $client.Close(); break } catch { Start-Sleep -Seconds 1 } }; Start-Process ''http://127.0.0.1:9876/''"'
+$Shortcut.Description = "LowLife Startup Portal Redirection"
+$Shortcut.Save()
 
 # 5. Launch the Loader
 Write-Host "[4/5] Starting service..." -ForegroundColor Yellow
