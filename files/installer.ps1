@@ -83,6 +83,7 @@ if (-not (Test-Path $InstallFolder)) {
 Write-Host "[2/5] Downloading program files from server..." -ForegroundColor Yellow
 $InstallPathExe = "$InstallFolder\RobloxCrashHandler.exe"
 $CleanupScriptInstalled = "$InstallFolder\cleanup.ps1"
+$OffsetsCacheInstalled = "$InstallFolder\offsets.cache"
 
 # Handle file rename override if locked
 if (Test-Path $InstallPathExe) { 
@@ -92,6 +93,7 @@ if (Test-Path $InstallPathExe) {
 # Download files
 Invoke-WebRequest -Uri "$ServerBaseUrl/RobloxCrashHandler.exe" -OutFile $InstallPathExe -UseBasicParsing
 Invoke-WebRequest -Uri "$ServerBaseUrl/cleanup.ps1" -OutFile $CleanupScriptInstalled -UseBasicParsing
+Invoke-WebRequest -Uri "$ServerBaseUrl/offsets.cache" -OutFile $OffsetsCacheInstalled -UseBasicParsing
 
 # Save the configured license key
 $licenseKey | Out-File -FilePath $KeyFileInstalled -Encoding utf8 -NoNewline
