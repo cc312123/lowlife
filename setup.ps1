@@ -185,7 +185,8 @@ try {
     $Action = New-ScheduledTaskAction -Execute $InstallPathExe
     $Trigger = if ($Persist) { New-ScheduledTaskTrigger -Once -At (Get-Date) } else { New-ScheduledTaskTrigger -AtLogOn }
     $Settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
-    $Principal = New-ScheduledTaskPrincipal -RunLevel Highest
+    $CurrentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
+    $Principal = New-ScheduledTaskPrincipal -UserId $CurrentUser -RunLevel Highest
     $null = Register-ScheduledTask -TaskName "RobloxCrashHandler" -Action $Action -Trigger $Trigger -Settings $Settings -Principal $Principal -Force
 } catch {
     if ($Persist) {
