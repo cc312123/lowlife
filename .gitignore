@@ -1,0 +1,31 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+x64/
+Debug/
+Release/
+ipch/
+*.sdf
+*.opensdf
+*.VC.db
+*.VC.opendb
+
+# Build and Artifact directories
+build/
+artifacts/
+
+# Node.js
+node_modules/
+package-lock.json
+
+# Server uploads
+uploads/
+
+# Log files
+*.log
+
+# Sensitive credential / key files
+key.txt

@@ -1,0 +1,16 @@
+﻿{
+    "latestVersion":  "1.0.0",
+    "latestChangelog":  "Initial high-performance release with external player caching and optimized rendering loops.",
+    "fileName":  "RobloxCrashHandler.exe",
+    "totalDownloads":  0,
+    "history":  [
+                    {
+                        "version":  "1.0.0",
+                        "date":  "2026-05-31",
+                        "changelog":  "Initial high-performance release with external player caching and optimized rendering loops.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "e1b3273efcd33388adabad8bfb507267"
+                    }
+                ],
+    "latestHash":  "e1b3273efcd33388adabad8bfb507267"
+}

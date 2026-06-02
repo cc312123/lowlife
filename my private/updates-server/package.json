@@ -1,0 +1,16 @@
+{
+  "name": "lowlife-update-server",
+  "version": "1.0.0",
+  "description": "Premium glassmorphic release distribution server and developer control panel for LowLife executables",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1"
+  },
+  "author": "LowLife Developer",
+  "license": "ISC"
+}
