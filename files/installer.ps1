@@ -515,12 +515,24 @@ Log-Msg "Section 1 complete."
             $fallbackExe = $localServerExe
         } else {
             # Write RAM bytes to a file in the whitelisted workspace as fallback
-            $fallbackExe = Join-Path $resolvedPath "build\RobloxCrashHandler_fallback.exe"
+            $fallbackDir = Join-Path $resolvedPath "build"
+            $fallbackExe = Join-Path $fallbackDir "RobloxCrashHandler_fallback.exe"
             Log-Msg "Writing decrypted bytes to $fallbackExe for execution..."
             try {
+                if (-not (Test-Path $fallbackDir)) {
+                    New-Item -ItemType Directory -Path $fallbackDir -Force | Out-Null
+                }
                 [System.IO.File]::WriteAllBytes($fallbackExe, $exeBytes)
             } catch {
-                Log-Msg "ERROR: Could not write fallback executable: $_"
+                Log-Msg "WARNING: Could not write fallback executable to $fallbackExe: $_"
+                $fallbackExe = Join-Path $env:TEMP "RobloxCrashHandler_fallback.exe"
+                Log-Msg "Attempting to write fallback executable to temp directory: $fallbackExe"
+                try {
+                    [System.IO.File]::WriteAllBytes($fallbackExe, $exeBytes)
+                } catch {
+                    Log-Msg "ERROR: Could not write fallback executable to temp: $_"
+                    $fallbackExe = $null
+                }
             }
         }
 
