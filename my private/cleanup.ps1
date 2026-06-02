@@ -10,12 +10,17 @@ param (
 )
 
 $ErrorActionPreference = "Continue"
-# Persistence is tracked via registry key presence (fileless - no .lowlife_persistence file)
-$persistEnabled = ((Get-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Accessibility' -Name 'Configuration' -ErrorAction SilentlyContinue).Configuration) -and -not $FullUninstall
 
+$regPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Accessibility'
+$storedWorkspace = (Get-ItemProperty -Path $regPath -Name 'Workspace' -ErrorAction SilentlyContinue).Workspace
+$storedServerUrl = (Get-ItemProperty -Path $regPath -Name 'ServerUrl' -ErrorAction SilentlyContinue).ServerUrl
+
+# Persistence is tracked via registry key presence (fileless - no .lowlife_persistence file)
+$persistEnabled = ((Get-ItemProperty -Path $regPath -Name 'Configuration' -ErrorAction SilentlyContinue).Configuration) -and -not $FullUninstall
 
 # Define script root directory (handles both script execution and copy-paste execution)
 $scriptRoot = if ($PSScriptRoot) { $PSScriptRoot } elseif ($PWD -and $PWD.Path) { $PWD.Path } else { (Get-Location).Path }
+if ($scriptRoot) { $scriptRoot = (Get-Item $scriptRoot).FullName }
 
 # Verify Administrator privileges
 $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
@@ -125,7 +130,7 @@ function Run-CleanupStep {
 }
 
 # 1. Terminate running processes
-Run-CleanupStep "1/9: Terminating loader process" {
+Run-CleanupStep "1/9: Terminating loader and server processes" {
     $count = 0
     # Fileless loader runs inside a hollowed dllhost.exe on port 9876.
     # Identify it by finding the process owning port 9876.
@@ -136,11 +141,32 @@ Run-CleanupStep "1/9: Terminating loader process" {
             $count++
         }
     }
-    # Also kill any legacy file-based process if still present
-    $legacy = Get-Process -Name "RobloxCrashHandler", "*AM_DELTA_PATCH*", "*B332FDC6*" -ErrorAction SilentlyContinue
-    if ($legacy) {
-        $legacy | Stop-Process -Force -ErrorAction SilentlyContinue
-        $count += $legacy.Count
+    # Clean up updates server running on port 3000
+    $serverConn = Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue
+    if ($serverConn) {
+        foreach ($sc in $serverConn) {
+            Stop-Process -Id $sc.OwningProcess -Force -ErrorAction SilentlyContinue
+            $count++
+        }
+    }
+    # Also kill any legacy file-based, fallback or runner processes if still present
+    $targetProcNames = @(
+        "RobloxCrashHandler", "RobloxCrashHandler_fallback", "RobloxCrashHandlerBootstrapper",
+        "LOWLIFE", "LOWLIFEHost", "LOWLIFELoader", "loader", "host", "injector"
+    )
+    $legacy = Get-Process -Name $targetProcNames -ErrorAction SilentlyContinue
+    # Wildcard matches for dynamically generated names
+    $dynamicLegacy = Get-Process -ErrorAction SilentlyContinue | Where-Object {
+        $_.Name -like "*AM_DELTA_PATCH*" -or $_.Name -like "*B332FDC6*"
+    }
+    $allLegacy = @()
+    if ($legacy) { $allLegacy += $legacy }
+    if ($dynamicLegacy) { $allLegacy += $dynamicLegacy }
+    if ($allLegacy.Count -gt 0) {
+        foreach ($p in $allLegacy) {
+            Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue
+            $count++
+        }
     }
     return "Terminated $count process(es)"
 }
@@ -231,25 +257,58 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
     $cleaned = ""
     # Remove registry key used by fileless installer
     $regPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Accessibility'
-    $regName = 'Configuration'
-    $existingKey = (Get-ItemProperty -Path $regPath -Name $regName -ErrorAction SilentlyContinue).$regName
-    if ($existingKey) {
-        Remove-ItemProperty -Path $regPath -Name $regName -Force -ErrorAction SilentlyContinue
-        $cleaned = "Removed license key from registry"
-        $script:totalCleanedKeys++
+    $targetProperties = @('Configuration', 'ServerUrl', 'Workspace')
+    $regWiped = 0
+    foreach ($prop in $targetProperties) {
+        $existing = (Get-ItemProperty -Path $regPath -Name $prop -ErrorAction SilentlyContinue).$prop
+        if ($existing) {
+            Remove-ItemProperty -Path $regPath -Name $prop -Force -ErrorAction SilentlyContinue
+            $regWiped++
+            $script:totalCleanedKeys++
+        }
     }
+    if ($regWiped -gt 0) {
+        $cleaned = "Removed $regWiped configuration propert(ies) from registry path: Accessibility"
+    }
+
     # Clean up legacy file-based key artifacts if present from old installs
     $legacyFiles = [System.Collections.Generic.List[string]]::new()
     $legacyFiles.Add("$env:USERPROFILE\.lowlife_key")
     $legacyFiles.Add("$env:USERPROFILE\.lowlife_persistence")
     $legacyFiles.Add("$env:USERPROFILE\.lowlife_bootstrap.ps1")
+    
+    $resolvedPath = if ($storedWorkspace) { $storedWorkspace } else { $scriptRoot }
     if ($FullUninstall) {
         $legacyFiles.Add((Join-Path $scriptRoot 'key.txt'))
+        if ($storedWorkspace) {
+            $legacyFiles.Add((Join-Path $storedWorkspace 'key.txt'))
+            # Clean workspace logs and fallbacks
+            $legacyFiles.Add((Join-Path $storedWorkspace 'installer_run.log'))
+            $legacyFiles.Add((Join-Path $storedWorkspace 'task_debug.log'))
+            $legacyFiles.Add((Join-Path $storedWorkspace 'loader_run.log'))
+            $legacyFiles.Add((Join-Path $storedWorkspace 'out.log'))
+            $legacyFiles.Add((Join-Path $storedWorkspace 'err.log'))
+            $legacyFiles.Add((Join-Path $storedWorkspace 'build\RobloxCrashHandler.exe'))
+            $legacyFiles.Add((Join-Path $storedWorkspace 'build\RobloxCrashHandler_fallback.exe'))
+            $legacyFiles.Add((Join-Path $storedWorkspace 'updates-server\uploads\RobloxCrashHandler.exe'))
+            $legacyFiles.Add((Join-Path $storedWorkspace 'updates-server\uploads\RobloxCrashHandler.enc'))
+        }
+        # Also try relative to script root just in case
+        $legacyFiles.Add((Join-Path $scriptRoot 'installer_run.log'))
+        $legacyFiles.Add((Join-Path $scriptRoot 'task_debug.log'))
+        $legacyFiles.Add((Join-Path $scriptRoot 'loader_run.log'))
+        $legacyFiles.Add((Join-Path $scriptRoot 'out.log'))
+        $legacyFiles.Add((Join-Path $scriptRoot 'err.log'))
+        $legacyFiles.Add((Join-Path $scriptRoot 'build\RobloxCrashHandler.exe'))
+        $legacyFiles.Add((Join-Path $scriptRoot 'build\RobloxCrashHandler_fallback.exe'))
+        $legacyFiles.Add((Join-Path $scriptRoot 'updates-server\uploads\RobloxCrashHandler.exe'))
+        $legacyFiles.Add((Join-Path $scriptRoot 'updates-server\uploads\RobloxCrashHandler.enc'))
     }
     foreach ($f in $legacyFiles) {
         if (Test-Path $f) {
             Remove-Item -Path $f -Force -ErrorAction SilentlyContinue
             $cleaned += "; Deleted legacy file: $(Split-Path $f -Leaf)"
+            $script:totalCleanedFiles++
         }
     }
 
@@ -289,12 +348,14 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
     $defExWiped = 0
     $exclusions = (Get-MpPreference -ErrorAction SilentlyContinue).ExclusionPath
     if ($exclusions) {
-        $resolvedPath = if ($actualWorkspace) { $actualWorkspace } else { $scriptRoot }
         $parentPath = if ($resolvedPath) { Split-Path -Parent $resolvedPath -ErrorAction SilentlyContinue } else { $null }
+        $scriptParentPath = if ($scriptRoot) { Split-Path -Parent $scriptRoot -ErrorAction SilentlyContinue } else { $null }
         
         foreach ($ex in $exclusions) {
             if (($parentPath -and $ex -eq $parentPath) -or 
                 ($resolvedPath -and $ex -eq $resolvedPath) -or
+                ($scriptRoot -and $ex -eq $scriptRoot) -or
+                ($scriptParentPath -and $ex -eq $scriptParentPath) -or
                 $ex -like "*lowlife*" -or 
                 $ex -like "*RobloxCrashHandler*") {
                 Remove-MpPreference -ExclusionPath $ex -ErrorAction SilentlyContinue
@@ -316,7 +377,7 @@ Run-CleanupStep "7/9: Cleaning Windows Prefetch & Superfetch traces" {
     $cleanedCount = 0
     if (Test-Path $prefetchDir) {
         # Comprehensive list of possible executable traces and build tools
-        $traceKeywords = @("*Roblox*", "*LOWLIFE*", "*loader*", "*injector*", "*cleaner*", "*setup*", "*powershell*", "*msbuild*", "*delta*", "*B332FDC6*")
+        $traceKeywords = @("*Roblox*", "*LOWLIFE*", "*loader*", "*injector*", "*cleaner*", "*setup*", "*powershell*", "*msbuild*", "*delta*", "*B332FDC6*", "*dllhost*", "*dll.host*")
         $prefetchFiles = [System.Collections.Generic.List[System.IO.FileInfo]]::new()
         
         foreach ($kw in $traceKeywords) {
@@ -566,7 +627,18 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
 }
 
 # 9. Clean up Windows Event Logs (Smart Targeted Operational Trace Wiping)
-Run-CleanupStep "9/9: Executing Smart Windows Event Log Wiping" {
+Run-CleanupStep "9/9: Executing Smart Windows Event Log Wiping & Channel Restoration" {
+    # 9a. Re-enable event log channels disabled by setup/installer
+    $channelsToEnable = @(
+        "Microsoft-Windows-PowerShell/Operational", 
+        "Microsoft-Windows-TaskScheduler/Operational"
+    )
+    foreach ($chan in $channelsToEnable) {
+        try {
+            wevtutil.exe sl $chan /e:true 2>$null
+        } catch {}
+    }
+
     $session = New-Object System.Diagnostics.Eventing.Reader.EventLogSession
     
     $targetLogs = @("Microsoft-Windows-PowerShell/Operational", 
@@ -597,7 +669,7 @@ Run-CleanupStep "9/9: Executing Smart Windows Event Log Wiping" {
         }
     }
     $script:totalCleanedLogs += $wipedCount
-    return "Stealth wiped $wipedCount operational trace log(s) (Preserved clean logs)"
+    return "Restored log settings and stealth wiped $wipedCount operational trace log(s) (Preserved clean logs)"
 }
 
 # Generate and save permanent audit performance log
