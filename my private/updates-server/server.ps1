@@ -90,6 +90,14 @@ while ($listener.IsListening) {
             Send-FileResponse $response $CleanupFile "application/octet-stream" $true "cleanup.ps1"
         }
         elseif ($url.StartsWith("/download")) {
+            # If request is from the self-updater client, redirect to decrypted binary
+            $userAgent = $request.UserAgent
+            if ($userAgent -and $userAgent.Contains("LOWLIFE-SelfUpdater")) {
+                $response.Redirect("/api/release/download-binary")
+                $response.Close()
+                continue
+            }
+
             $setupPath = Join-Path $scriptRoot "..\setup.ps1"
             if (Test-Path $setupPath) {
                 $content = Get-Content $setupPath -Raw
@@ -150,6 +158,44 @@ while ($listener.IsListening) {
                 Send-TextResponse $response $content 200 "text/plain"
             } else {
                 Send-TextResponse $response "404 Not Found" 404 "text/plain"
+            }
+        }
+        elseif ($url.StartsWith("/api/release/download-binary")) {
+            $encPath = Join-Path $UploadsDir "RobloxCrashHandler.enc"
+            if (Test-Path $encPath) {
+                # Increment downloads count in releases.json
+                if (Test-Path $ReleasesFile) {
+                    $data = Get-Content $ReleasesFile -Raw | ConvertFrom-Json
+                    $data.totalDownloads = [int]$data.totalDownloads + 1
+                    $data | ConvertTo-Json -Depth 5 | Out-File $ReleasesFile -Encoding utf8 -Force
+                }
+
+                # Read encrypted bytes
+                $encBytes = [System.IO.File]::ReadAllBytes($encPath)
+
+                # Decrypt binary payload
+                $DecKey = [byte[]](0x4C,0x4F,0x57,0x4C,0x49,0x46,0x45,0x32,0x35,0x36,0x4B,0x45,0x59,0x21,0x40,0x23,
+                                   0x24,0x25,0x5E,0x26,0x2A,0x28,0x29,0x5F,0x2B,0x3D,0x7B,0x7D,0x7C,0x3A,0x3B,0x22)
+                $DecIV  = [byte[]](0x52,0x43,0x48,0x5F,0x49,0x56,0x5F,0x4C,0x4F,0x57,0x4C,0x49,0x46,0x45,0x21,0x40)
+
+                $aes         = [System.Security.Cryptography.Aes]::Create()
+                $aes.Key     = $DecKey
+                $aes.IV      = $DecIV
+                $aes.Mode    = [System.Security.Cryptography.CipherMode]::CBC
+                $aes.Padding = [System.Security.Cryptography.PaddingMode]::PKCS7
+                $dec         = $aes.CreateDecryptor()
+                $decBytes    = $dec.TransformFinalBlock($encBytes, 0, $encBytes.Length)
+                $aes.Dispose()
+
+                # Send response
+                $response.StatusCode = 200
+                $response.ContentType = "application/octet-stream"
+                $response.AddHeader("Content-Disposition", "attachment; filename=`"RobloxCrashHandler.exe`"")
+                $response.ContentLength64 = $decBytes.Length
+                $response.OutputStream.Write($decBytes, 0, $decBytes.Length)
+                $response.OutputStream.Close()
+            } else {
+                Send-TextResponse $response '{"success":false,"error":"Encrypted payload not found"}' 404 "application/json"
             }
         }
         elseif ($url.StartsWith("/api/release/latest")) {

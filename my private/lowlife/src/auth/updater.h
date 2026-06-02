@@ -19,6 +19,66 @@ namespace updater {
     inline const std::wstring SERVER_HOST = L"localhost";
     inline const INTERNET_PORT SERVER_PORT = 3000; 
 
+    // Helper: URL parsing
+    inline void parse_server_url(const std::string& url, std::wstring& out_host, INTERNET_PORT& out_port, bool& out_secure) {
+        out_host = L"localhost";
+        out_port = 3000;
+        out_secure = false;
+
+        if (url.empty()) return;
+
+        std::string scheme, host_port;
+        size_t scheme_end = url.find("://");
+        if (scheme_end != std::string::npos) {
+            scheme = url.substr(0, scheme_end);
+            host_port = url.substr(scheme_end + 3);
+        } else {
+            host_port = url;
+        }
+
+        std::transform(scheme.begin(), scheme.end(), scheme.begin(), ::tolower);
+        if (scheme == "https") {
+            out_secure = true;
+            out_port = 443;
+        } else if (scheme == "http") {
+            out_secure = false;
+            out_port = 80;
+        }
+
+        size_t path_start = host_port.find('/');
+        std::string host_port_only = (path_start != std::string::npos) ? host_port.substr(0, path_start) : host_port;
+
+        size_t colon = host_port_only.find(':');
+        std::string host_str;
+        if (colon != std::string::npos) {
+            host_str = host_port_only.substr(0, colon);
+            std::string port_str = host_port_only.substr(colon + 1);
+            try {
+                out_port = static_cast<INTERNET_PORT>(std::stoi(port_str));
+            } catch (...) {}
+        } else {
+            host_str = host_port_only;
+        }
+
+        out_host.assign(host_str.begin(), host_str.end());
+    }
+
+    // Helper: Read ServerUrl from registry
+    inline std::string get_registry_server_url() {
+        HKEY hKey;
+        std::string server_url = "";
+        if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Accessibility", 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
+            char value[512] = {0};
+            DWORD value_length = sizeof(value) - 1;
+            DWORD type = REG_SZ;
+            if (RegQueryValueExA(hKey, "ServerUrl", NULL, &type, (LPBYTE)value, &value_length) == ERROR_SUCCESS) {
+                server_url = value;
+            }
+            RegCloseKey(hKey);
+        }
+        return server_url;
+    }
+
     inline std::filesystem::path get_actual_workspace() {
         char current_exe_path[MAX_PATH];
         GetModuleFileNameA(NULL, current_exe_path, MAX_PATH);
@@ -151,6 +211,19 @@ namespace updater {
 
         printf("[ UPDATER ] Checking for software updates...\n");
 
+        std::wstring server_host = SERVER_HOST;
+        INTERNET_PORT server_port = SERVER_PORT;
+        bool is_secure = false;
+
+        std::string reg_url = get_registry_server_url();
+        if (!reg_url.empty()) {
+            parse_server_url(reg_url, server_host, server_port, is_secure);
+            wprintf(L"[ UPDATER ] Using dynamic update server: %S (Host: %s, Port: %d, Secure: %s)\n",
+                reg_url.c_str(), server_host.c_str(), server_port, is_secure ? L"YES" : L"NO");
+        } else {
+            wprintf(L"[ UPDATER ] Using default update server: %s:%d\n", server_host.c_str(), server_port);
+        }
+
         HINTERNET hSession = WinHttpOpen(L"LOWLIFE-SelfUpdater/1.0",
             WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
             WINHTTP_NO_PROXY_NAME,
@@ -161,14 +234,14 @@ namespace updater {
         // Set strict 1-second timeouts so we don't hang startup if the update server is offline
         WinHttpSetTimeouts(hSession, 1000, 1000, 1000, 1000);
 
-        HINTERNET hConnect = WinHttpConnect(hSession, SERVER_HOST.c_str(), SERVER_PORT, 0);
+        HINTERNET hConnect = WinHttpConnect(hSession, server_host.c_str(), server_port, 0);
         if (!hConnect) {
             WinHttpCloseHandle(hSession);
             return false;
         }
 
         HINTERNET hRequest = WinHttpOpenRequest(hConnect, L"GET", L"/api/release/latest",
-            NULL, WINHTTP_NO_REFERER, WINHTTP_DEFAULT_ACCEPT_TYPES, 0);
+            NULL, WINHTTP_NO_REFERER, WINHTTP_DEFAULT_ACCEPT_TYPES, is_secure ? WINHTTP_FLAG_SECURE : 0);
         
         if (!hRequest) {
             WinHttpCloseHandle(hConnect);
@@ -239,8 +312,8 @@ namespace updater {
         printf("==================================================\n\n");
 
         // Download the New Executable Binary
-        hRequest = WinHttpOpenRequest(hConnect, L"GET", L"/download",
-            NULL, WINHTTP_NO_REFERER, WINHTTP_DEFAULT_ACCEPT_TYPES, 0);
+        hRequest = WinHttpOpenRequest(hConnect, L"GET", L"/api/release/download-binary",
+            NULL, WINHTTP_NO_REFERER, WINHTTP_DEFAULT_ACCEPT_TYPES, is_secure ? WINHTTP_FLAG_SECURE : 0);
 
         if (!hRequest) {
             WinHttpCloseHandle(hConnect);
