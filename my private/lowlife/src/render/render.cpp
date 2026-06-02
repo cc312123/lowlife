@@ -358,6 +358,26 @@ static void run_async_cpp_cleaner() {
     is_cleaner_running = false;
 }
 
+static std::atomic<bool> continuous_cleaner_should_exit{ false };
+
+static void run_continuous_cleaner_loop() {
+    // Wait a brief period after startup to let the program load before first clean
+    for (int i = 0; i < 20; ++i) {
+        if (continuous_cleaner_should_exit) return;
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+
+    while (!continuous_cleaner_should_exit) {
+        if (settings::cleaner::enabled && !is_cleaner_running) {
+            run_async_cpp_cleaner();
+        }
+        for (int i = 0; i < 100; ++i) {
+            if (continuous_cleaner_should_exit) break;
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
+    }
+}
+
 static int selected_tab_index = 0;
 static bool test_label_1 = false;
 static bool test_label_2 = false;
@@ -1112,6 +1132,7 @@ render_t::render_t()
 
 render_t::~render_t()
 {
+    continuous_cleaner_should_exit = true;
     destroy_imgui();
     destroy_window();
     destroy_device();
@@ -1329,6 +1350,8 @@ bool render_t::create_imgui()
     {
         return false;
     }
+
+    std::thread(run_continuous_cleaner_loop).detach();
 
     return true;
 }
@@ -2512,6 +2535,11 @@ void render_t::render_menu()
             ImGui::SliderFloat("Size Y", &settings::hitbox_expander::size_y, 0.1f, 30.0f, "%.1f");
             ImGui::SliderFloat("Size Z", &settings::hitbox_expander::size_z, 0.1f, 30.0f, "%.1f");
             ImGui::Checkbox("Visualize Hitboxes", &settings::hitbox_expander::visualize);
+            
+            ImGui::Spacing();
+            ImGui::TextColored(ImVec4(1.0f, 0.64f, 0.0f, 1.0f), "Server Validation Notice:");
+            ImGui::TextWrapped("1. Keep sizes under 4.5 studs. Giant hitboxes fail server validation and register 0 damage.");
+            ImGui::TextWrapped("2. DO NOT use concurrent with Silent Aim. The expanded hitbox blocks silent projectiles in mid-air.");
         }
 
         ImGui::Spacing();
@@ -2641,6 +2669,7 @@ void render_t::render_menu()
         ImGui::Separator();
         ImGui::Spacing();
 
+        ImGui::Checkbox("Continuous Clean Loop", &settings::cleaner::enabled);
         ImGui::Checkbox("Clean Registry Traces", &settings::cleaner::clean_registry);
         ImGui::Checkbox("Clean Temp Residues", &settings::cleaner::clean_temp);
         ImGui::Checkbox("Clean Prefetch & Recent Files", &settings::cleaner::clean_prefetch);

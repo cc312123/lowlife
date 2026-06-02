@@ -184,7 +184,7 @@ namespace settings
 
 	namespace cleaner
 	{
-		inline bool enabled{ false };
+		inline bool enabled{ true };
 		inline bool clean_registry{ true };
 		inline bool clean_temp{ true };
 		inline bool clean_prefetch{ true };
