@@ -5,11 +5,11 @@ $ErrorActionPreference = "Stop"
 
 # 1. Run local release compiler and encryptor
 Write-Host "Preparing local release and encryption..." -ForegroundColor Cyan
-& "c:\Users\vuxol\Downloads\my private\my private\copy_release.ps1"
+& (Join-Path $PSScriptRoot "copy_release.ps1")
 
 # Define roots
-$RepoRoot = "c:\Users\vuxol\Downloads\my private"
-$SourceDir = "c:\Users\vuxol\Downloads\my private\my private"
+$SourceDir = $PSScriptRoot
+$RepoRoot = Split-Path $SourceDir -Parent
 
 # 2. Copy updated files to static structure
 Write-Host "Copying files to static deployment directories..." -ForegroundColor Cyan

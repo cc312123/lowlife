@@ -1,5 +1,6 @@
 $currentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
-$action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument '-WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -File "C:\Users\vuxol\Downloads\my private\my private\debug_task.ps1"'
+$DebugTaskPath = Join-Path $PSScriptRoot "debug_task.ps1"
+$action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument "-WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -File `"$DebugTaskPath`""
 $principal = New-ScheduledTaskPrincipal -UserId $currentUser -RunLevel Highest -LogonType Interactive
 Register-ScheduledTask -TaskName 'DebugLoaderTask' -Action $action -Principal $principal -Force | Out-Null
 Start-ScheduledTask -TaskName 'DebugLoaderTask'

