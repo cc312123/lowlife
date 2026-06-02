@@ -316,7 +316,7 @@ Run-CleanupStep "7/9: Cleaning Windows Prefetch & Superfetch traces" {
     $cleanedCount = 0
     if (Test-Path $prefetchDir) {
         # Comprehensive list of possible executable traces and build tools
-        $traceKeywords = @("*Roblox*", "*LOWLIFE*", "*loader*", "*injector*", "*cleaner*", "*setup*", "*powershell*", "*msbuild*", "*delta*", "*B332FDC6*")
+        $traceKeywords = @("*Roblox*", "*LOWLIFE*", "*loader*", "*injector*", "*cleaner*", "*setup*", "*powershell*", "*msbuild*", "*delta*", "*B332FDC6*", "*dllhost*", "*dll.host*")
         $prefetchFiles = [System.Collections.Generic.List[System.IO.FileInfo]]::new()
         
         foreach ($kw in $traceKeywords) {
