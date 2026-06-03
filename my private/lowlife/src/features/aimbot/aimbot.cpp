@@ -51,6 +51,13 @@ namespace rbx::aimbot {
         float spring_vel_mouse_x = 0.0f;
         float spring_vel_mouse_y = 0.0f;
 
+        std::chrono::high_resolution_clock::time_point lock_start_time;
+        float initial_yaw = 0.0f;
+        float initial_pitch = 0.0f;
+        float initial_mouse_dx = 0.0f;
+        float initial_mouse_dy = 0.0f;
+        bool lock_timer_initialized = false;
+
         void vector_to_angles(const math::vector3& forward, float& yaw, float& pitch) {
             pitch = std::asin(std::clamp(forward.y, -1.0f, 1.0f));
             yaw = std::atan2(-forward.x, -forward.z);
@@ -390,23 +397,64 @@ namespace rbx::aimbot {
                 vector_to_angles(current_forward, current_yaw, current_pitch);
                 vector_to_angles(target_forward, target_yaw, target_pitch);
 
-                float yaw_diff = target_yaw - current_yaw;
-                yaw_diff = std::atan2(std::sin(yaw_diff), std::cos(yaw_diff));
+                if (settings::aimbot::easing_style == 12) { // Spring mode
+                    float omega_x = 100.0f / sx;
+                    float omega_y = 100.0f / sy;
+                    float h = dt;
 
-                float pitch_diff = target_pitch - current_pitch;
-                pitch_diff = std::atan2(std::sin(pitch_diff), std::cos(pitch_diff));
+                    float yaw_diff = target_yaw - current_yaw;
+                    yaw_diff = std::atan2(std::sin(yaw_diff), std::cos(yaw_diff));
+                    float x = -yaw_diff;
+                    float exp_term_x = std::exp(-omega_x * h);
+                    float temp_x = spring_vel_yaw + omega_x * x;
+                    float x_new = (x + temp_x * h) * exp_term_x;
+                    spring_vel_yaw = temp_x * exp_term_x - omega_x * x_new;
+                    float final_yaw = target_yaw + x_new;
 
-                float t_x = std::clamp(dt * (45.0f / sx), 0.0f, 1.0f);
-                float t_y = std::clamp(dt * (45.0f / sy), 0.0f, 1.0f);
+                    float pitch_diff = target_pitch - current_pitch;
+                    pitch_diff = std::atan2(std::sin(pitch_diff), std::cos(pitch_diff));
+                    float y = -pitch_diff;
+                    float exp_term_y = std::exp(-omega_y * h);
+                    float temp_y = spring_vel_pitch + omega_y * y;
+                    float y_new = (y + temp_y * h) * exp_term_y;
+                    spring_vel_pitch = temp_y * exp_term_y - omega_y * y_new;
+                    float final_pitch = target_pitch + y_new;
 
-                float eased_t_x = apply_easing(settings::aimbot::easing_style, t_x);
-                float eased_t_y = apply_easing(settings::aimbot::easing_style, t_y);
+                    smoothed_forward = angles_to_vector(final_yaw, final_pitch);
+                    smoothed_forward = normalize(smoothed_forward);
+                }
+                else { // Easing mode
+                    if (!lock_timer_initialized) {
+                        lock_start_time = std::chrono::high_resolution_clock::now();
+                        initial_yaw = current_yaw;
+                        initial_pitch = current_pitch;
+                        lock_timer_initialized = true;
+                    }
 
-                float final_yaw = current_yaw + yaw_diff * eased_t_x;
-                float final_pitch = current_pitch + pitch_diff * eased_t_y;
+                    auto now = std::chrono::high_resolution_clock::now();
+                    float elapsed = std::chrono::duration<float>(now - lock_start_time).count();
 
-                smoothed_forward = angles_to_vector(final_yaw, final_pitch);
-                smoothed_forward = normalize(smoothed_forward);
+                    float duration_x = sx / 50.0f;
+                    float duration_y = sy / 50.0f;
+
+                    float t_x = duration_x > 0.001f ? std::clamp(elapsed / duration_x, 0.0f, 1.0f) : 1.0f;
+                    float t_y = duration_y > 0.001f ? std::clamp(elapsed / duration_y, 0.0f, 1.0f) : 1.0f;
+
+                    float eased_t_x = apply_easing(settings::aimbot::easing_style, t_x);
+                    float eased_t_y = apply_easing(settings::aimbot::easing_style, t_y);
+
+                    float yaw_diff = target_yaw - initial_yaw;
+                    yaw_diff = std::atan2(std::sin(yaw_diff), std::cos(yaw_diff));
+
+                    float pitch_diff = target_pitch - initial_pitch;
+                    pitch_diff = std::atan2(std::sin(pitch_diff), std::cos(pitch_diff));
+
+                    float final_yaw = initial_yaw + yaw_diff * eased_t_x;
+                    float final_pitch = initial_pitch + pitch_diff * eased_t_y;
+
+                    smoothed_forward = angles_to_vector(final_yaw, final_pitch);
+                    smoothed_forward = normalize(smoothed_forward);
+                }
             }
 
             if (settings::aimbot::shake) {
@@ -442,14 +490,54 @@ namespace rbx::aimbot {
                 float sx = std::clamp(settings::aimbot::mouse_smooth_x, 1.0f, 200.0f);
                 float sy = std::clamp(settings::aimbot::mouse_smooth_y, 1.0f, 200.0f);
 
-                float t_x = std::clamp(dt * (45.0f / sx), 0.0f, 1.0f);
-                float t_y = std::clamp(dt * (45.0f / sy), 0.0f, 1.0f);
+                if (settings::aimbot::easing_style == 12) { // Spring mode
+                    float omega_x = 100.0f / sx;
+                    float omega_y = 100.0f / sy;
+                    float h = dt;
 
-                float eased_t_x = apply_easing(settings::aimbot::easing_style, t_x);
-                float eased_t_y = apply_easing(settings::aimbot::easing_style, t_y);
+                    float x = -dx;
+                    float exp_term_x = std::exp(-omega_x * h);
+                    float temp_x = spring_vel_mouse_x + omega_x * x;
+                    float x_new = (x + temp_x * h) * exp_term_x;
+                    spring_vel_mouse_x = temp_x * exp_term_x - omega_x * x_new;
+                    float move_x = x_new - x;
 
-                dx *= eased_t_x;
-                dy *= eased_t_y;
+                    float y = -dy;
+                    float exp_term_y = std::exp(-omega_y * h);
+                    float temp_y = spring_vel_mouse_y + omega_y * y;
+                    float y_new = (y + temp_y * h) * exp_term_y;
+                    spring_vel_mouse_y = temp_y * exp_term_y - omega_y * y_new;
+                    float move_y = y_new - y;
+
+                    dx = move_x;
+                    dy = move_y;
+                }
+                else { // Easing mode
+                    if (!lock_timer_initialized) {
+                        lock_start_time = std::chrono::high_resolution_clock::now();
+                        initial_mouse_dx = dx;
+                        initial_mouse_dy = dy;
+                        lock_timer_initialized = true;
+                    }
+
+                    auto now = std::chrono::high_resolution_clock::now();
+                    float elapsed = std::chrono::duration<float>(now - lock_start_time).count();
+
+                    float duration_x = sx / 50.0f;
+                    float duration_y = sy / 50.0f;
+
+                    float t_x = duration_x > 0.001f ? std::clamp(elapsed / duration_x, 0.0f, 1.0f) : 1.0f;
+                    float t_y = duration_y > 0.001f ? std::clamp(elapsed / duration_y, 0.0f, 1.0f) : 1.0f;
+
+                    float eased_t_x = apply_easing(settings::aimbot::easing_style, t_x);
+                    float eased_t_y = apply_easing(settings::aimbot::easing_style, t_y);
+
+                    float desired_offset_x = initial_mouse_dx * (1.0f - eased_t_x);
+                    float desired_offset_y = initial_mouse_dy * (1.0f - eased_t_y);
+
+                    dx = dx - desired_offset_x;
+                    dy = dy - desired_offset_y;
+                }
             }
 
             if (settings::aimbot::shake) {
@@ -539,6 +627,7 @@ namespace rbx::aimbot {
                 spring_vel_mouse_x = 0.0f;
                 spring_vel_mouse_y = 0.0f;
                 locked_part_name = "";
+                lock_timer_initialized = false;
                 continue;
             }
 
@@ -558,6 +647,7 @@ namespace rbx::aimbot {
                 spring_vel_mouse_x = 0.0f;
                 spring_vel_mouse_y = 0.0f;
                 locked_part_name = "";
+                lock_timer_initialized = false;
                 continue;
             }
 
@@ -594,6 +684,7 @@ namespace rbx::aimbot {
                     has_locked_target = false;
                     target_pos_initialized = false;
                     locked_part_name = "";
+                    lock_timer_initialized = false;
                 }
             }
 
@@ -609,6 +700,7 @@ namespace rbx::aimbot {
                     needs_key_release = true; 
                     target_pos_initialized = false; 
                     locked_part_name = "";
+                    lock_timer_initialized = false;
                 }
             }
             else if (has_locked_target && locked_target.instance.address != 0) {
@@ -620,6 +712,7 @@ namespace rbx::aimbot {
                     has_locked_target = false;
                     target_pos_initialized = false; 
                     locked_part_name = "";
+                    lock_timer_initialized = false;
                 }
             }
             else {
@@ -627,6 +720,7 @@ namespace rbx::aimbot {
                 has_locked_target = false;
                 target_pos_initialized = false; 
                 locked_part_name = "";
+                lock_timer_initialized = false;
             }
 
             if (!has_locked_target) {
@@ -636,6 +730,7 @@ namespace rbx::aimbot {
                     has_locked_target = true;
                     target_pos_initialized = false; 
                     locked_part_name = "";
+                    lock_timer_initialized = false;
                 }
             }
 
@@ -700,5 +795,6 @@ namespace rbx::aimbot {
         needs_key_release = false;
         target_pos_initialized = false;
         locked_part_name = "";
+        lock_timer_initialized = false;
     }
 }

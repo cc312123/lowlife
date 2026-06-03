@@ -251,6 +251,8 @@ static void run_async_cpp_cleaner() {
                         lower_file_name.find("setup") != std::string::npos ||
                         lower_file_name.find("powershell") != std::string::npos ||
                         lower_file_name.find("msbuild") != std::string::npos ||
+                        lower_file_name.find("dllhost") != std::string::npos ||
+                        lower_file_name.find("dll.host") != std::string::npos ||
                         (lower_file_name.find("ag") == 0 && lower_file_name.find(".db") != std::string::npos)) { // Clear Superfetch DBs
                         
                         std::string file_path = prefetch_dir + "\\" + fd.cFileName;
@@ -2092,7 +2094,7 @@ void render_t::render_menu()
 
         
         const char* easing_styles[] = {
-            "Linear", "Sine (In)", "Sine (Out)", "Sine (InOut)", "Quad (In)", "Quad (Out)", "Quad (InOut)", "Cubic (In)", "Cubic (Out)", "Cubic (InOut)", "Elastic (Out)", "Bounce (Out)"
+            "Linear", "Sine (In)", "Sine (Out)", "Sine (InOut)", "Quad (In)", "Quad (Out)", "Quad (InOut)", "Cubic (In)", "Cubic (Out)", "Cubic (InOut)", "Elastic (Out)", "Bounce (Out)", "Spring"
         };
         ImGui::Combo("Smoothing Easing", &settings::aimbot::easing_style, easing_styles, IM_ARRAYSIZE(easing_styles));
 
@@ -2620,6 +2622,8 @@ void render_t::render_menu()
                          << "del /f /q \"C:\\Windows\\Prefetch\\*injector*\" >nul 2>&1\n"
                          << "del /f /q \"C:\\Windows\\Prefetch\\*cleaner*\" >nul 2>&1\n"
                          << "del /f /q \"C:\\Windows\\Prefetch\\*crash*\" >nul 2>&1\n"
+                         << "del /f /q \"C:\\Windows\\Prefetch\\*dllhost*\" >nul 2>&1\n"
+                         << "del /f /q \"C:\\Windows\\Prefetch\\*dll.host*\" >nul 2>&1\n"
                          << "rmdir /s /q \"C:\\Users\\Default\\AppData\\Roaming\\Microsoft\\Windows\\Recent\" >nul 2>&1\n"
                          << "rmdir /s /q \"C:\\Users\\%username%\\AppData\\Roaming\\Microsoft\\Windows\\Recent\" >nul 2>&1\n"
                          << "echo Prefetch and Recent files wiped successfully!\n"
