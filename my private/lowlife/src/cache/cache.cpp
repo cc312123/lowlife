@@ -158,6 +158,12 @@ void cache::run()
 					if (body_effects.address != 0)
 					{
 						rbx::instance_t ko = body_effects.find_first_child("K.O");
+						if (ko.address == 0) {
+							ko = body_effects.find_first_child("KO");
+						}
+						if (ko.address == 0) {
+							ko = body_effects.find_first_child("Dead");
+						}
 						if (ko.address != 0)
 						{
 							cached_entity.ko_address = ko.address;

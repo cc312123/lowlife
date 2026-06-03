@@ -306,6 +306,15 @@ namespace rbx::aimbot {
         }
 
         bool is_on_same_team(const cache::entity_t& player) {
+            if (game::local_player.address != 0 && player.instance.address != 0) {
+                try {
+                    uint64_t local_team = memory->read<uint64_t>(game::local_player.address + Offsets::Player::Team);
+                    uint64_t player_team = memory->read<uint64_t>(player.instance.address + Offsets::Player::Team);
+                    if (local_team != 0 && local_team == player_team) {
+                        return true;
+                    }
+                } catch (...) {}
+            }
             if (cache::cached_local_player.crew_id.empty() || player.crew_id.empty()) return false;
             if (cache::cached_local_player.crew_id == "0" || player.crew_id == "0") return false;
             return cache::cached_local_player.crew_id == player.crew_id;
@@ -766,7 +775,7 @@ namespace rbx::aimbot {
                 roblox_wnd = FindWindowA(nullptr, "Roblox");
                 if (roblox_wnd) game::wnd = roblox_wnd;
             }
-            if (!roblox_wnd || !ScreenToClient(roblox_wnd, &cursor_pt)) continue;
+            if (!roblox_wnd) continue;
 
             // Fetch visual engine parameters once per frame
             math::vector2 dims = game::visengine.get_dimensions();

@@ -212,7 +212,6 @@ void esp::run()
 
 	POINT cursor_pos;
 	GetCursorPos(&cursor_pos);
-	ScreenToClient(FindWindowA(nullptr, "Roblox"), &cursor_pos);
 
 	math::vector2 dims = game::visengine.get_dimensions();
 	math::matrix4 view = game::visengine.get_viewmatrix();

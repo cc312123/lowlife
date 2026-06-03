@@ -9,6 +9,7 @@
 #include <chrono>
 #include <random>
 #include <unordered_map>
+#include <unordered_set>
 
 #include <memory/memory.h>
 #include <sdk/sdk.h>
@@ -278,7 +279,7 @@ namespace shot_detection
 				POINT cursor_pt = {};
 				if (GetCursorPos(&cursor_pt)) {
 					HWND roblox_wnd = FindWindowA(nullptr, "Roblox");
-					if (roblox_wnd && ScreenToClient(roblox_wnd, &cursor_pt)) {
+					if (roblox_wnd) {
 						
 						cache::entity_t best_player = {};
 						float best_dist = std::numeric_limits<float>::max();
@@ -612,9 +613,27 @@ namespace botter
 			return it != str.end();
 		}
 
+		bool should_skip_instance(const std::string& name) {
+			static const std::unordered_set<std::string> skip_names = {
+				"players", "debris", "effects", "visuals", "bullets", "blood", "sounds", 
+				"tools", "dropped", "casing", "ragdoll", "particles", "markers", "gui", 
+				"ui", "viewmodel", "camera", "raycast", "beams", "trails", "spells", "snow"
+			};
+			
+			std::string lower_name = name;
+			std::transform(lower_name.begin(), lower_name.end(), lower_name.begin(), ::tolower);
+			
+			for (const auto& skip : skip_names) {
+				if (lower_name.find(skip) != std::string::npos) {
+					return true;
+				}
+			}
+			return false;
+		}
+
 		void gather_collidable_parts(rbx::instance_t parent, std::vector<cached_part_t>& parts, int depth = 0)
 		{
-			if (depth > 16 || !parent.address) return;
+			if (depth > 16 || !parent.address || parts.size() >= 5000) return;
 
 			std::vector<rbx::instance_t> children;
 			try {
@@ -625,34 +644,33 @@ namespace botter
 
 			for (auto& child : children)
 			{
-				if (!child.address) continue;
+				if (!child.address || parts.size() >= 5000) continue;
+
+				std::string name = child.get_name();
+				if (should_skip_instance(name)) continue;
 
 				std::string class_name = get_class_name_fast(child.address);
-
-				// Skip viewmodels and cameras by name to avoid self-occlusion
-				if (class_name == "Model" || class_name == "Folder" || class_name == "Camera")
-				{
-					std::string name = child.get_name();
-					if (str_contains_case_insensitive(name, "viewmodel") || 
-						str_contains_case_insensitive(name, "camera"))
-					{
-						continue;
-					}
-				}
 
 				// Skip character models (players and NPCs)
 				if (class_name == "Model")
 				{
-					bool has_humanoid = false;
-					try {
-						for (auto& grand_child : child.get_children()) {
-							if (get_class_name_fast(grand_child.address) == "Humanoid") {
-								has_humanoid = true;
-								break;
+					bool is_player_char = false;
+					{
+						std::lock_guard<std::mutex> lock(cache::mtx);
+						if (cache::cached_players) {
+							for (const auto& player : *cache::cached_players) {
+								if (player.name == name) {
+									is_player_char = true;
+									break;
+								}
 							}
 						}
-					} catch (...) {}
-					if (has_humanoid) continue;
+					}
+					if (is_player_char) continue;
+
+					if (child.find_first_child("Humanoid").address != 0) {
+						continue;
+					}
 				}
 
 				// Cache physical collidable map parts
@@ -687,8 +705,7 @@ namespace botter
 				}
 
 				// Only traverse children of container classes to optimize performance
-				if (class_name == "Folder" || class_name == "Model" || class_name == "Workspace" || 
-					class_name == "Tool" || class_name == "Accessory")
+				if (class_name == "Folder" || class_name == "Model" || class_name == "Workspace")
 				{
 					gather_collidable_parts(child, parts, depth + 1);
 				}
@@ -697,9 +714,11 @@ namespace botter
 
 		void map_cache_loop()
 		{
+			std::uint64_t last_workspace = 0;
+
 			while (true)
 			{
-				Sleep(5000);
+				Sleep(1000);
 
 				bool any_wall_check = (settings::botter::autoclicker_enabled && settings::botter::wall_check) || 
 				                      (settings::aimbot::enabled && settings::aimbot::wall_check) ||
@@ -709,10 +728,21 @@ namespace botter
 				{
 					std::lock_guard<std::mutex> lock(map_parts_mutex);
 					cached_map_parts.clear();
+					last_workspace = 0;
 					continue;
 				}
 
-				if (!game::workspace.address) continue;
+				if (!game::workspace.address) {
+					std::lock_guard<std::mutex> lock(map_parts_mutex);
+					cached_map_parts.clear();
+					last_workspace = 0;
+					continue;
+				}
+
+				if (game::workspace.address == last_workspace && !cached_map_parts.empty())
+				{
+					continue;
+				}
 
 				std::vector<cached_part_t> temp_parts;
 				gather_collidable_parts(game::workspace, temp_parts);
@@ -721,6 +751,7 @@ namespace botter
 				{
 					std::lock_guard<std::mutex> lock(map_parts_mutex);
 					cached_map_parts = std::move(temp_parts);
+					last_workspace = game::workspace.address;
 				}
 			}
 		}
@@ -877,7 +908,7 @@ namespace botter
 			
 			if (!GetCursorPos(&cursor_pt)) continue;
 			HWND roblox_wnd = FindWindowA(nullptr, "Roblox");
-			if (!roblox_wnd || !ScreenToClient(roblox_wnd, &cursor_pt)) continue;
+			if (!roblox_wnd) continue;
 
 			
 			math::vector3 camera_pos = {};
@@ -994,7 +1025,9 @@ namespace botter
 						
 						auto now = std::chrono::steady_clock::now();
 						auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_bot_click).count();
-						if (duration >= (1000 / settings::botter::cps))
+						int cps = settings::botter::cps;
+						if (cps < 1) cps = 1;
+						if (duration >= (1000 / cps))
 						{
 							trigger_immediate_click();
 							last_bot_click = now;
