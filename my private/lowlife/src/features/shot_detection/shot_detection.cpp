@@ -1,4 +1,4 @@
-﻿#define NOMINMAX
+#define NOMINMAX
 #include <Windows.h>
 #include <thread>
 #include <vector>
@@ -8,6 +8,7 @@
 #include <mutex>
 #include <chrono>
 #include <random>
+#include <unordered_map>
 
 #include <memory/memory.h>
 #include <sdk/sdk.h>
@@ -571,10 +572,49 @@ namespace botter
 		std::vector<cached_part_t> cached_map_parts;
 		std::mutex map_parts_mutex;
 
-		
+		std::string get_class_name_fast(std::uint64_t instance_addr)
+		{
+			if (!instance_addr) return "unknown";
+			std::uint64_t class_descriptor = memory->read<std::uint64_t>(instance_addr + Offsets::Instance::ClassDescriptor);
+			if (!class_descriptor) return "unknown";
+
+			static std::unordered_map<std::uint64_t, std::string> descriptor_cache;
+			static std::uint32_t last_pid = 0;
+			std::uint32_t current_pid = memory->get_process_id();
+			if (current_pid != last_pid)
+			{
+				descriptor_cache.clear();
+				last_pid = current_pid;
+			}
+
+			auto it = descriptor_cache.find(class_descriptor);
+			if (it != descriptor_cache.end())
+			{
+				return it->second;
+			}
+
+			std::uint64_t class_name_ptr = memory->read<std::uint64_t>(class_descriptor + Offsets::Instance::ClassName);
+			std::string name = "unknown";
+			if (class_name_ptr)
+			{
+				name = memory->read_string(class_name_ptr);
+			}
+			descriptor_cache[class_descriptor] = name;
+			return name;
+		}
+
+		bool str_contains_case_insensitive(const std::string& str, const std::string& find) {
+			auto it = std::search(
+				str.begin(), str.end(),
+				find.begin(), find.end(),
+				[](char ch1, char ch2) { return std::tolower(ch1) == std::tolower(ch2); }
+			);
+			return it != str.end();
+		}
+
 		void gather_collidable_parts(rbx::instance_t parent, std::vector<cached_part_t>& parts, int depth = 0)
 		{
-			if (depth > 6 || !parent.address) return;
+			if (depth > 16 || !parent.address) return;
 
 			std::vector<rbx::instance_t> children;
 			try {
@@ -587,30 +627,46 @@ namespace botter
 			{
 				if (!child.address) continue;
 
-				std::string class_name;
-				try {
-					class_name = child.get_class_name();
-				} catch (...) {
-					continue;
-				}
+				std::string class_name = get_class_name_fast(child.address);
 
-				
-				if (class_name == "Model")
+				// Skip viewmodels and cameras by name to avoid self-occlusion
+				if (class_name == "Model" || class_name == "Folder" || class_name == "Camera")
 				{
-					rbx::instance_t humanoid = child.find_first_child_by_class("Humanoid");
-					if (humanoid.address != 0)
+					std::string name = child.get_name();
+					if (str_contains_case_insensitive(name, "viewmodel") || 
+						str_contains_case_insensitive(name, "camera"))
 					{
-						continue; 
+						continue;
 					}
 				}
 
-				
+				// Skip character models (players and NPCs)
+				if (class_name == "Model")
+				{
+					bool has_humanoid = false;
+					try {
+						for (auto& grand_child : child.get_children()) {
+							if (get_class_name_fast(grand_child.address) == "Humanoid") {
+								has_humanoid = true;
+								break;
+							}
+						}
+					} catch (...) {}
+					if (has_humanoid) continue;
+				}
+
+				// Cache physical collidable map parts
 				if (class_name == "Part" || class_name == "MeshPart" || class_name == "WedgePart" ||
 					class_name == "CornerWedgePart" || class_name == "TrussPart" || class_name == "SpawnLocation" ||
 					class_name == "UnionOperation")
 				{
 					try {
 						rbx::part_t part{ child.address };
+						
+						// Skip transparent/invisible parts (like invisible walls/clip brushes)
+						float transparency = memory->read<float>(part.address + Offsets::BasePart::Transparency);
+						if (transparency > 0.95f) continue;
+
 						rbx::primitive_t prim = part.get_primitive();
 						if (prim.address)
 						{
@@ -630,21 +686,24 @@ namespace botter
 					} catch (...) {}
 				}
 
-				
-				gather_collidable_parts(child, parts, depth + 1);
+				// Only traverse children of container classes to optimize performance
+				if (class_name == "Folder" || class_name == "Model" || class_name == "Workspace" || 
+					class_name == "Tool" || class_name == "Accessory")
+				{
+					gather_collidable_parts(child, parts, depth + 1);
+				}
 			}
 		}
 
-		
 		void map_cache_loop()
 		{
 			while (true)
 			{
 				Sleep(5000);
 
-				
 				bool any_wall_check = (settings::botter::autoclicker_enabled && settings::botter::wall_check) || 
-				                      (settings::aimbot::enabled && settings::aimbot::wall_check);
+				                      (settings::aimbot::enabled && settings::aimbot::wall_check) ||
+				                      (settings::silent::enabled && settings::silent::wall_check);
 
 				if (!any_wall_check)
 				{

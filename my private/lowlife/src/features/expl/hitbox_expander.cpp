@@ -19,6 +19,18 @@ namespace rbx::hitbox_expander
 	namespace
 	{
 		std::unordered_map<std::uint64_t, math::vector3> original_head_scales;
+		std::unordered_map<std::uint64_t, float> original_transparencies;
+
+		void restore_transparency(rbx::part_t& part)
+		{
+			if (!part.address) return;
+			auto it = original_transparencies.find(part.address);
+			if (it != original_transparencies.end())
+			{
+				memory->write<float>(part.address + Offsets::BasePart::Transparency, it->second);
+				original_transparencies.erase(it);
+			}
+		}
 
 		void reset_all_parts(cache::entity_t& player)
 		{
@@ -34,6 +46,7 @@ namespace rbx::hitbox_expander
 			auto head_it = player.parts.find("Head");
 			if (head_it != player.parts.end() && head_it->second.address)
 			{
+				restore_transparency(head_it->second);
 				rbx::primitive_t prim = head_it->second.get_primitive();
 				if (prim.address)
 				{
@@ -65,6 +78,7 @@ namespace rbx::hitbox_expander
 			auto torso_it = player.parts.find("Torso");
 			if (torso_it != player.parts.end() && torso_it->second.address)
 			{
+				restore_transparency(torso_it->second);
 				rbx::primitive_t prim = torso_it->second.get_primitive();
 				if (prim.address)
 				{
@@ -84,6 +98,7 @@ namespace rbx::hitbox_expander
 			auto upper_torso_it = player.parts.find("UpperTorso");
 			if (upper_torso_it != player.parts.end() && upper_torso_it->second.address)
 			{
+				restore_transparency(upper_torso_it->second);
 				rbx::primitive_t prim = upper_torso_it->second.get_primitive();
 				if (prim.address)
 				{
@@ -103,6 +118,7 @@ namespace rbx::hitbox_expander
 			auto hrp_it = player.parts.find("HumanoidRootPart");
 			if (hrp_it != player.parts.end() && hrp_it->second.address)
 			{
+				restore_transparency(hrp_it->second);
 				rbx::primitive_t prim = hrp_it->second.get_primitive();
 				if (prim.address)
 				{
@@ -160,19 +176,21 @@ namespace rbx::hitbox_expander
 			try {
 				prim.set_size(new_size);
 				
-				// Clear CanCollide and CanTouch (prevent barrier/flings), keep CanQuery (allow shooting/hits)
+				// Clear CanCollide (prevent barrier/flings), keep CanTouch and CanQuery (allow shooting/hits/touched)
 				std::uint8_t flags = memory->read<std::uint8_t>(prim.address + Offsets::Primitive::Flags);
 				flags &= ~Offsets::PrimitiveFlags::CanCollide;
-				flags &= ~Offsets::PrimitiveFlags::CanTouch;
+				flags |= Offsets::PrimitiveFlags::CanTouch;
 				flags |= Offsets::PrimitiveFlags::CanQuery;
 				memory->write<std::uint8_t>(prim.address + Offsets::Primitive::Flags, flags);
 
 				// If target part is Head, scale SpecialMesh to keep normal visual size
+				bool has_mesh = false;
 				if (settings::hitbox_expander::target_part == 0)
 				{
 					rbx::instance_t mesh = part_it->second.find_first_child_by_class("SpecialMesh");
 					if (mesh.address)
 					{
+						has_mesh = true;
 						math::vector3 current_scale = memory->read<math::vector3>(mesh.address + Offsets::SpecialMesh::Scale);
 						
 						// If not stored yet, store it
@@ -197,6 +215,18 @@ namespace rbx::hitbox_expander
 						
 						memory->write<math::vector3>(mesh.address + Offsets::SpecialMesh::Scale, target_scale);
 					}
+				}
+
+				// If the part does not have a SpecialMesh, make it transparent to hide the giant physical block
+				if (!has_mesh)
+				{
+					auto it = original_transparencies.find(part_it->second.address);
+					if (it == original_transparencies.end())
+					{
+						float current_trans = memory->read<float>(part_it->second.address + Offsets::BasePart::Transparency);
+						original_transparencies[part_it->second.address] = current_trans;
+					}
+					memory->write<float>(part_it->second.address + Offsets::BasePart::Transparency, 1.0f);
 				}
 			}
 			catch (...) {}

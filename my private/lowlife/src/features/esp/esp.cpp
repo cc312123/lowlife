@@ -623,9 +623,24 @@ void esp::run()
 				rbx::primitive_t prim = part.get_primitive();
 				math::vector3 size = prim.get_size();
 				
-				if (settings::hitbox_expander::enabled && part_name == "HumanoidRootPart")
+				if (settings::hitbox_expander::enabled)
 				{
-					size = math::vector3{ 2.0f, 2.0f, 1.0f };
+					if (part_name == "HumanoidRootPart")
+					{
+						size = math::vector3{ 2.0f, 2.0f, 1.0f };
+					}
+					else if (part_name == "Head")
+					{
+						size = (entity.rig_type == 0) ? math::vector3{ 2.0f, 1.0f, 1.0f } : math::vector3{ 1.2f, 1.2f, 1.2f };
+					}
+					else if (part_name == "Torso")
+					{
+						size = math::vector3{ 2.0f, 2.0f, 1.0f };
+					}
+					else if (part_name == "UpperTorso")
+					{
+						size = math::vector3{ 2.0f, 1.6f, 1.0f };
+					}
 				}
 				
 				math::vector3 pos = world_positions[part_name];

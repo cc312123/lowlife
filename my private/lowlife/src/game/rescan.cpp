@@ -1,4 +1,4 @@
-﻿#include <chrono>
+#include <chrono>
 #include <thread>
 #include <windows.h>
 #include <iostream>
@@ -8,6 +8,7 @@
 #include <sdk/sdk.h>
 #include <sdk/offsets.h>
 #include <game/game.h>
+#include <filesystem>
 #include "rescan.h"
 
 namespace AutoRescan {
@@ -251,7 +252,11 @@ bool PerformSmartRescan(GameState::StateType expectedState) {
         auto now = std::chrono::steady_clock::now();
         auto timeSinceProcessCheck = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastProcessCheck);
 
-        if (timeSinceProcessCheck > std::chrono::milliseconds(AutoRescan::PROCESS_CHECK_MS)) {
+        bool needsProcessCheck = (timeSinceProcessCheck > std::chrono::milliseconds(AutoRescan::PROCESS_CHECK_MS)) || 
+                                 !AutoRescan::memoryHealthy.load() || 
+                                 (memory->get_module_address() == 0);
+
+        if (needsProcessCheck) {
             DWORD currentPID = memory->find_process_id("RobloxPlayerBeta.exe");
             if (currentPID != memory->get_process_id() || currentPID == 0) {
                 if (currentPID == 0) {
@@ -260,6 +265,21 @@ bool PerformSmartRescan(GameState::StateType expectedState) {
 
                 if (!memory->attach_to_process("RobloxPlayerBeta.exe")) {
                     return false;
+                }
+
+                if (!memory->find_module_address("RobloxPlayerBeta.exe")) {
+                    return false;
+                }
+
+                game::wnd = FindWindowA(nullptr, "Roblox");
+
+                // Update offsets for the new process version
+                char path[MAX_PATH] = { 0 };
+                DWORD pathSize = sizeof(path);
+                if (QueryFullProcessImageNameA(memory->get_process_handle(), 0, path, &pathSize)) {
+                    std::filesystem::path fs_path(path);
+                    std::string running_version = fs_path.parent_path().filename().string();
+                    Offsets::Update(running_version);
                 }
             }
             lastProcessCheck = now;
@@ -304,6 +324,7 @@ bool PerformSmartRescan(GameState::StateType expectedState) {
 
         AutoRescan::consecutiveSuccesses++;
         AutoRescan::consecutiveFailures = 0;
+        AutoRescan::memoryHealthy = true;
         return true;
 
     }

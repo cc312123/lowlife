@@ -103,11 +103,19 @@ std::uint64_t memory_t::find_module_address(const std::string& module_name)
 
 bool memory_t::attach_to_process(const std::string& process_name)
 {
-	HANDLE process = OpenProcess(PROCESS_ALL_ACCESS, false, find_process_id(process_name));
+	DWORD pid = find_process_id(process_name);
+	if (pid == 0) return false;
+
+	HANDLE process = OpenProcess(PROCESS_ALL_ACCESS, false, pid);
 
 	if (process == NULL || process == INVALID_HANDLE_VALUE)
 	{
 		return false;
+	}
+
+	if (process_handle && process_handle != INVALID_HANDLE_VALUE)
+	{
+		CloseHandle(process_handle);
 	}
 
 	process_handle = process;

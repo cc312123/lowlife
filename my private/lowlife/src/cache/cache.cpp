@@ -8,9 +8,18 @@ void cache::run()
 {
 	static std::unordered_map<std::uint64_t, cache::entity_t> persistent_cache;
 	static std::unordered_map<std::uint64_t, std::uint64_t> cached_model_addresses;
+	static std::uint32_t last_pid = 0;
 
 	while (true)
 	{
+		std::uint32_t current_pid = memory->get_process_id();
+		if (current_pid != last_pid)
+		{
+			persistent_cache.clear();
+			cached_model_addresses.clear();
+			last_pid = current_pid;
+		}
+
 		rbx::player_t local_player_obj = { game::local_player.address };
 		game::local_character = { local_player_obj.get_model_instance().address };
 

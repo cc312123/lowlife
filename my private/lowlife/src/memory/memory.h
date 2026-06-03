@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <windows.h>
 #include <TlHelp32.h>
 #include <vector>
@@ -48,9 +48,9 @@ public:
 	std::uint64_t get_module_address();
 	HANDLE get_process_handle();
 private:
-	std::uint32_t process_id;
-	std::uint64_t base_address;
-	HANDLE process_handle;
+	std::uint32_t process_id{ 0 };
+	std::uint64_t base_address{ 0 };
+	HANDLE process_handle{ nullptr };
 };
 
 template <typename T>

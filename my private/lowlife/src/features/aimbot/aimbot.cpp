@@ -280,7 +280,12 @@ namespace rbx::aimbot {
                 float cursor_x = static_cast<float>(cursor_pt.x);
                 float cursor_y = static_cast<float>(cursor_pt.y);
                 float dist = vector2_distance(screen_pos.x, screen_pos.y, cursor_x, cursor_y);
-                if (dist > settings::aimbot::fov) return false;
+                
+                float fov_tolerance = settings::aimbot::fov;
+                if (has_locked_target && player.instance.address == locked_target.instance.address) {
+                    fov_tolerance *= 1.5f;
+                }
+                if (dist > fov_tolerance) return false;
             }
 
             if (settings::aimbot::wall_check) {
@@ -476,47 +481,60 @@ namespace rbx::aimbot {
         }
 
         void execute_mouse_aim(const math::vector3& target_pos, const POINT& cursor_pt, float dt, const math::vector2& dims, const math::matrix4& view) {
-            math::vector2 screen_pos = {};
-            if (!game::visengine.world_to_screen(target_pos, screen_pos, dims, view)) return;
+            rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
+            if (!camera_inst.address) return;
 
-            float dx = screen_pos.x - static_cast<float>(cursor_pt.x);
-            float dy = screen_pos.y - static_cast<float>(cursor_pt.y);
+            rbx::camera_t camera{ camera_inst.address };
+            math::matrix3 current_rot = camera.get_rotation();
+            math::vector3 camera_pos = camera.get_position();
 
-            float sensitivity = std::clamp(settings::aimbot::mouse_sensitivity, 0.1f, 10.0f);
-            dx *= sensitivity;
-            dy *= sensitivity;
+            math::vector3 target_forward = normalize(vector3_sub(target_pos, camera_pos));
+            math::vector3 smoothed_forward = target_forward;
 
             if (settings::aimbot::mouse_smooth) {
                 float sx = std::clamp(settings::aimbot::mouse_smooth_x, 1.0f, 200.0f);
                 float sy = std::clamp(settings::aimbot::mouse_smooth_y, 1.0f, 200.0f);
+
+                math::vector3 current_forward = { -current_rot.m[2], -current_rot.m[5], -current_rot.m[8] };
+                current_forward = normalize(current_forward);
+
+                float current_yaw = 0.0f, current_pitch = 0.0f;
+                float target_yaw = 0.0f, target_pitch = 0.0f;
+
+                vector_to_angles(current_forward, current_yaw, current_pitch);
+                vector_to_angles(target_forward, target_yaw, target_pitch);
 
                 if (settings::aimbot::easing_style == 12) { // Spring mode
                     float omega_x = 100.0f / sx;
                     float omega_y = 100.0f / sy;
                     float h = dt;
 
-                    float x = -dx;
+                    float yaw_diff = target_yaw - current_yaw;
+                    yaw_diff = std::atan2(std::sin(yaw_diff), std::cos(yaw_diff));
+                    float x = -yaw_diff;
                     float exp_term_x = std::exp(-omega_x * h);
                     float temp_x = spring_vel_mouse_x + omega_x * x;
                     float x_new = (x + temp_x * h) * exp_term_x;
                     spring_vel_mouse_x = temp_x * exp_term_x - omega_x * x_new;
-                    float move_x = x_new - x;
+                    float final_yaw = target_yaw + x_new;
 
-                    float y = -dy;
+                    float pitch_diff = target_pitch - current_pitch;
+                    pitch_diff = std::atan2(std::sin(pitch_diff), std::cos(pitch_diff));
+                    float y = -pitch_diff;
                     float exp_term_y = std::exp(-omega_y * h);
                     float temp_y = spring_vel_mouse_y + omega_y * y;
                     float y_new = (y + temp_y * h) * exp_term_y;
                     spring_vel_mouse_y = temp_y * exp_term_y - omega_y * y_new;
-                    float move_y = y_new - y;
+                    float final_pitch = target_pitch + y_new;
 
-                    dx = move_x;
-                    dy = move_y;
+                    smoothed_forward = angles_to_vector(final_yaw, final_pitch);
+                    smoothed_forward = normalize(smoothed_forward);
                 }
                 else { // Easing mode
                     if (!lock_timer_initialized) {
                         lock_start_time = std::chrono::high_resolution_clock::now();
-                        initial_mouse_dx = dx;
-                        initial_mouse_dy = dy;
+                        initial_yaw = current_yaw;
+                        initial_pitch = current_pitch;
                         lock_timer_initialized = true;
                     }
 
@@ -532,13 +550,31 @@ namespace rbx::aimbot {
                     float eased_t_x = apply_easing(settings::aimbot::easing_style, t_x);
                     float eased_t_y = apply_easing(settings::aimbot::easing_style, t_y);
 
-                    float desired_offset_x = initial_mouse_dx * (1.0f - eased_t_x);
-                    float desired_offset_y = initial_mouse_dy * (1.0f - eased_t_y);
+                    float yaw_diff = target_yaw - initial_yaw;
+                    yaw_diff = std::atan2(std::sin(yaw_diff), std::cos(yaw_diff));
 
-                    dx = dx - desired_offset_x;
-                    dy = dy - desired_offset_y;
+                    float pitch_diff = target_pitch - initial_pitch;
+                    pitch_diff = std::atan2(std::sin(pitch_diff), std::cos(pitch_diff));
+
+                    float final_yaw = initial_yaw + yaw_diff * eased_t_x;
+                    float final_pitch = initial_pitch + pitch_diff * eased_t_y;
+
+                    smoothed_forward = angles_to_vector(final_yaw, final_pitch);
+                    smoothed_forward = normalize(smoothed_forward);
                 }
             }
+
+            // Project the smoothed direction to screen coordinates to find the required pixel movement
+            math::vector3 desired_pos = camera_pos + smoothed_forward * 100.0f;
+            math::vector2 screen_pos = {};
+            if (!game::visengine.world_to_screen(desired_pos, screen_pos, dims, view)) return;
+
+            float dx = screen_pos.x - static_cast<float>(cursor_pt.x);
+            float dy = screen_pos.y - static_cast<float>(cursor_pt.y);
+
+            float sensitivity = std::clamp(settings::aimbot::mouse_sensitivity, 0.1f, 10.0f);
+            dx *= sensitivity;
+            dy *= sensitivity;
 
             if (settings::aimbot::shake) {
                 float sx = std::abs(settings::aimbot::shake_x);
@@ -731,6 +767,10 @@ namespace rbx::aimbot {
                     target_pos_initialized = false; 
                     locked_part_name = "";
                     lock_timer_initialized = false;
+                    spring_vel_yaw = 0.0f;
+                    spring_vel_pitch = 0.0f;
+                    spring_vel_mouse_x = 0.0f;
+                    spring_vel_mouse_y = 0.0f;
                 }
             }
 
@@ -765,11 +805,16 @@ namespace rbx::aimbot {
                 target_pos = apply_prediction(primitive, settings::aimbot::aimbot_type == 0);
             }
 
-            if (!target_pos_initialized) {
+            bool any_smoothing = (settings::aimbot::aimbot_type == 0 && settings::aimbot::camera_smooth) ||
+                                 (settings::aimbot::aimbot_type == 1 && settings::aimbot::mouse_smooth);
+            if (!any_smoothing) {
+                filtered_target_pos = target_pos;
+                target_pos_initialized = true;
+            } else if (!target_pos_initialized) {
                 filtered_target_pos = target_pos;
                 target_pos_initialized = true;
             } else {
-                float target_ema_factor = 1.0f - std::exp(-12.0f * dt);
+                float target_ema_factor = 1.0f - std::exp(-60.0f * dt);
                 target_ema_factor = std::clamp(target_ema_factor, 0.0f, 1.0f);
                 filtered_target_pos.x += (target_pos.x - filtered_target_pos.x) * target_ema_factor;
                 filtered_target_pos.y += (target_pos.y - filtered_target_pos.y) * target_ema_factor;
