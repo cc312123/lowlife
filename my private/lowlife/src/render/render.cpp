@@ -2083,6 +2083,9 @@ void render_t::render_menu()
         const char* aimbot_types[] = { "Camera Lock", "Mouse Lock" };
         ImGui::Combo("Aimbot Type", &settings::aimbot::aimbot_type, aimbot_types, IM_ARRAYSIZE(aimbot_types));
 
+        const char* target_selection_modes[] = { "Screen Distance", "3D Distance", "Lowest Health" };
+        ImGui::Combo("Target Mode", &settings::aimbot::target_selection_mode, target_selection_modes, IM_ARRAYSIZE(target_selection_modes));
+
         const char* aimparts[] = {
             "Head", "Upper Torso", "Torso", "Lower Torso", "HumanoidRootPart", "Left Arm", "Right Arm", "Left Leg", "Right Leg", "Closest Point"
         };
@@ -2091,12 +2094,20 @@ void render_t::render_menu()
         ImGui::Checkbox("Knocked Check", &settings::aimbot::knocked_check);
         ImGui::Checkbox("Wall Check", &settings::aimbot::wall_check);
         ImGui::Checkbox("Team Check", &settings::aimbot::team_check);
+        ImGui::Checkbox("Smart Bone fallback (Multipoint)", &settings::aimbot::multipoint);
 
-        
-        const char* easing_styles[] = {
-            "Linear", "Sine (In)", "Sine (Out)", "Sine (InOut)", "Quad (In)", "Quad (Out)", "Quad (InOut)", "Cubic (In)", "Cubic (Out)", "Cubic (InOut)", "Elastic (Out)", "Bounce (Out)"
-        };
-        ImGui::Combo("Smoothing Easing", &settings::aimbot::easing_style, easing_styles, IM_ARRAYSIZE(easing_styles));
+        const char* smoothing_modes[] = { "Classic Easing", "Spring Physics" };
+        ImGui::Combo("Smoothing Mode", &settings::aimbot::smoothing_mode, smoothing_modes, IM_ARRAYSIZE(smoothing_modes));
+
+        if (settings::aimbot::smoothing_mode == 0) {
+            const char* easing_styles[] = {
+                "Linear", "Sine (In)", "Sine (Out)", "Sine (InOut)", "Quad (In)", "Quad (Out)", "Quad (InOut)", "Cubic (In)", "Cubic (Out)", "Cubic (InOut)", "Elastic (Out)", "Bounce (Out)"
+            };
+            ImGui::Combo("Smoothing Easing", &settings::aimbot::easing_style, easing_styles, IM_ARRAYSIZE(easing_styles));
+        } else if (settings::aimbot::smoothing_mode == 1) {
+            ImGui::SliderFloat("Spring Stiffness", &settings::aimbot::spring_stiffness, 1.0f, 300.0f, "%.1f");
+            ImGui::SliderFloat("Spring Damping", &settings::aimbot::spring_damping, 0.1f, 50.0f, "%.1f");
+        }
 
         if (settings::aimbot::aimbot_type == 0) {
             ImGui::Checkbox("Camera Smooth", &settings::aimbot::camera_smooth);
@@ -2108,6 +2119,8 @@ void render_t::render_menu()
             if (settings::aimbot::camera_prediction) {
                 ImGui::SliderFloat("camera prediction x", &settings::aimbot::camera_prediction_x, 1.0f, 20.0f, "%.1f");
                 ImGui::SliderFloat("camera prediction y", &settings::aimbot::camera_prediction_y, 1.0f, 20.0f, "%.1f");
+                ImGui::SliderFloat("Prediction Gravity", &settings::aimbot::prediction_gravity, 0.0f, 500.0f, "%.1f");
+                ImGui::SliderFloat("Prediction Latency", &settings::aimbot::prediction_latency, 0.0f, 1.0f, "%.3f");
             }
         }
 
@@ -2122,6 +2135,8 @@ void render_t::render_menu()
             if (settings::aimbot::mouse_prediction) {
                 ImGui::SliderFloat("mouse prediction x", &settings::aimbot::mouse_prediction_x, 1.0f, 20.0f, "%.1f");
                 ImGui::SliderFloat("mouse prediction y", &settings::aimbot::mouse_prediction_y, 1.0f, 20.0f, "%.1f");
+                ImGui::SliderFloat("Prediction Gravity", &settings::aimbot::prediction_gravity, 0.0f, 500.0f, "%.1f");
+                ImGui::SliderFloat("Prediction Latency", &settings::aimbot::prediction_latency, 0.0f, 1.0f, "%.3f");
             }
         }
 
