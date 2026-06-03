@@ -41,6 +41,14 @@ namespace rbx::aimbot {
         bool target_pos_initialized = false;
 
         
+        math::vector3 filtered_target_vel = { 0.0f, 0.0f, 0.0f };
+        bool target_vel_initialized = false;
+
+        
+        math::matrix3 last_camera_rot = {};
+        bool has_last_camera_rot = false;
+
+        
         float virtual_yaw = 0.0f;
         float virtual_pitch = 0.0f;
         bool virtual_angles_initialized = false;
@@ -347,11 +355,7 @@ namespace rbx::aimbot {
 
         math::vector3 apply_prediction(rbx::primitive_t primitive, bool is_camera) {
             math::vector3 pos = primitive.get_position();
-            math::vector3 vel = primitive.get_velocity();
-
-            if (!std::isfinite(vel.x) || !std::isfinite(vel.y) || !std::isfinite(vel.z) ||
-                std::abs(vel.x) > MAX_VELOCITY || std::abs(vel.y) > MAX_VELOCITY || std::abs(vel.z) > MAX_VELOCITY)
-                return pos;
+            math::vector3 vel = filtered_target_vel;
 
             float px = is_camera ? settings::aimbot::camera_prediction_x : settings::aimbot::mouse_prediction_x;
             float py = is_camera ? settings::aimbot::camera_prediction_y : settings::aimbot::mouse_prediction_y;
@@ -657,6 +661,7 @@ namespace rbx::aimbot {
                 needs_key_release = false;
                 was_disabled_by_typing = check::textchatopen;
                 target_pos_initialized = false; 
+                target_vel_initialized = false;
                 virtual_angles_initialized = false; 
                 spring_vel_yaw = 0.0f;
                 spring_vel_pitch = 0.0f;
@@ -664,6 +669,7 @@ namespace rbx::aimbot {
                 spring_vel_mouse_y = 0.0f;
                 locked_part_name = "";
                 lock_timer_initialized = false;
+                has_last_camera_rot = false;
                 continue;
             }
 
@@ -677,6 +683,7 @@ namespace rbx::aimbot {
                 has_locked_target = false;
                 needs_key_release = false;
                 target_pos_initialized = false; 
+                target_vel_initialized = false;
                 virtual_angles_initialized = false; 
                 spring_vel_yaw = 0.0f;
                 spring_vel_pitch = 0.0f;
@@ -684,6 +691,7 @@ namespace rbx::aimbot {
                 spring_vel_mouse_y = 0.0f;
                 locked_part_name = "";
                 lock_timer_initialized = false;
+                has_last_camera_rot = false;
                 continue;
             }
 
@@ -691,9 +699,53 @@ namespace rbx::aimbot {
                 continue;
             }
 
-            if (!GetCursorPos(&cursor_pt)) continue;
+            if (!GetCursorPos(&cursor_pt)) {
+                continue;
+            }
+
             HWND roblox_wnd = FindWindowA(nullptr, "Roblox");
-            if (!roblox_wnd || !ScreenToClient(roblox_wnd, &cursor_pt)) continue;
+            if (!roblox_wnd || GetForegroundWindow() != roblox_wnd) {
+                // If Roblox is not focused, clear all states and sleep
+                std::lock_guard<std::mutex> lock(mtx);
+                locked_target = cache::entity_t{};
+                has_locked_target = false;
+                needs_key_release = false;
+                target_pos_initialized = false; 
+                target_vel_initialized = false;
+                virtual_angles_initialized = false; 
+                spring_vel_yaw = 0.0f;
+                spring_vel_pitch = 0.0f;
+                spring_vel_mouse_x = 0.0f;
+                spring_vel_mouse_y = 0.0f;
+                locked_part_name = "";
+                lock_timer_initialized = false;
+                has_last_camera_rot = false;
+                continue;
+            }
+
+            // Frame Sync check: If current camera rotation in memory has not changed since last processed tick, skip this tick
+            rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
+            if (camera_inst.address != 0) {
+                rbx::camera_t camera{ camera_inst.address };
+                math::matrix3 current_rot = camera.get_rotation();
+                if (has_last_camera_rot) {
+                    bool rot_changed = false;
+                    for (int i = 0; i < 9; ++i) {
+                        if (std::abs(current_rot.m[i] - last_camera_rot.m[i]) > 0.00001f) {
+                            rot_changed = true;
+                            break;
+                        }
+                    }
+                    if (!rot_changed) {
+                        // Skip calculation for this frame to synchronize with game engine ticks
+                        continue;
+                    }
+                }
+                last_camera_rot = current_rot;
+                has_last_camera_rot = true;
+            } else {
+                has_last_camera_rot = false;
+            }
 
             // Fetch visual engine parameters once per frame
             math::vector2 dims = game::visengine.get_dimensions();
@@ -719,6 +771,7 @@ namespace rbx::aimbot {
                     locked_target = cache::entity_t{};
                     has_locked_target = false;
                     target_pos_initialized = false;
+                    target_vel_initialized = false;
                     locked_part_name = "";
                     lock_timer_initialized = false;
                 }
@@ -747,6 +800,7 @@ namespace rbx::aimbot {
                     locked_target = cache::entity_t{};
                     has_locked_target = false;
                     target_pos_initialized = false; 
+                    target_vel_initialized = false;
                     locked_part_name = "";
                     lock_timer_initialized = false;
                 }
@@ -755,6 +809,7 @@ namespace rbx::aimbot {
                 locked_target = cache::entity_t{};
                 has_locked_target = false;
                 target_pos_initialized = false; 
+                target_vel_initialized = false;
                 locked_part_name = "";
                 lock_timer_initialized = false;
             }
@@ -765,6 +820,7 @@ namespace rbx::aimbot {
                     locked_target = target;
                     has_locked_target = true;
                     target_pos_initialized = false; 
+                    target_vel_initialized = false;
                     locked_part_name = "";
                     lock_timer_initialized = false;
                     spring_vel_yaw = 0.0f;
@@ -798,6 +854,24 @@ namespace rbx::aimbot {
 
             rbx::primitive_t primitive = target_part.get_primitive();
             math::vector3 target_pos = primitive.get_position();
+
+            // Update target velocity low-pass filtering (EMA) to reduce physics spike noise
+            math::vector3 current_vel = primitive.get_velocity();
+            if (!std::isfinite(current_vel.x) || !std::isfinite(current_vel.y) || !std::isfinite(current_vel.z) ||
+                std::abs(current_vel.x) > MAX_VELOCITY || std::abs(current_vel.y) > MAX_VELOCITY || std::abs(current_vel.z) > MAX_VELOCITY) {
+                current_vel = { 0.0f, 0.0f, 0.0f };
+            }
+
+            if (!target_vel_initialized) {
+                filtered_target_vel = current_vel;
+                target_vel_initialized = true;
+            } else {
+                float vel_ema_factor = 1.0f - std::exp(-25.0f * dt);
+                vel_ema_factor = std::clamp(vel_ema_factor, 0.0f, 1.0f);
+                filtered_target_vel.x += (current_vel.x - filtered_target_vel.x) * vel_ema_factor;
+                filtered_target_vel.y += (current_vel.y - filtered_target_vel.y) * vel_ema_factor;
+                filtered_target_vel.z += (current_vel.z - filtered_target_vel.z) * vel_ema_factor;
+            }
 
             bool use_prediction = (settings::aimbot::aimbot_type == 0 && settings::aimbot::camera_prediction) ||
                                   (settings::aimbot::aimbot_type == 1 && settings::aimbot::mouse_prediction);
@@ -839,7 +913,9 @@ namespace rbx::aimbot {
         was_disabled_by_typing = false;
         needs_key_release = false;
         target_pos_initialized = false;
+        target_vel_initialized = false;
         locked_part_name = "";
         lock_timer_initialized = false;
+        has_last_camera_rot = false;
     }
 }
