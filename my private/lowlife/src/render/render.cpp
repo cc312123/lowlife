@@ -2094,7 +2094,7 @@ void render_t::render_menu()
 
         
         const char* easing_styles[] = {
-            "Linear", "Sine (In)", "Sine (Out)", "Sine (InOut)", "Quad (In)", "Quad (Out)", "Quad (InOut)", "Cubic (In)", "Cubic (Out)", "Cubic (InOut)", "Elastic (Out)", "Bounce (Out)", "Spring"
+            "Linear", "Sine (In)", "Sine (Out)", "Sine (InOut)", "Quad (In)", "Quad (Out)", "Quad (InOut)", "Cubic (In)", "Cubic (Out)", "Cubic (InOut)", "Elastic (Out)", "Bounce (Out)"
         };
         ImGui::Combo("Smoothing Easing", &settings::aimbot::easing_style, easing_styles, IM_ARRAYSIZE(easing_styles));
 
