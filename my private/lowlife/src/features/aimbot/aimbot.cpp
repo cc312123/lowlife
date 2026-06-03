@@ -45,8 +45,8 @@ namespace rbx::aimbot {
         bool target_vel_initialized = false;
 
         
-        math::matrix3 last_camera_rot = {};
-        bool has_last_camera_rot = false;
+        bool waiting_for_mouse_sync = false;
+        math::matrix3 sync_camera_rot = {};
 
         
         float virtual_yaw = 0.0f;
@@ -613,6 +613,9 @@ namespace rbx::aimbot {
                     input.mi.dy = move_y;
                     input.mi.dwFlags = MOUSEEVENTF_MOVE;
                     SendInput(1, &input, sizeof(INPUT));
+
+                    waiting_for_mouse_sync = true;
+                    sync_camera_rot = current_rot;
                 }
             } else {
                 accum_x = 0.0f;
@@ -669,7 +672,7 @@ namespace rbx::aimbot {
                 spring_vel_mouse_y = 0.0f;
                 locked_part_name = "";
                 lock_timer_initialized = false;
-                has_last_camera_rot = false;
+                waiting_for_mouse_sync = false;
                 continue;
             }
 
@@ -691,7 +694,7 @@ namespace rbx::aimbot {
                 spring_vel_mouse_y = 0.0f;
                 locked_part_name = "";
                 lock_timer_initialized = false;
-                has_last_camera_rot = false;
+                waiting_for_mouse_sync = false;
                 continue;
             }
 
@@ -719,32 +722,29 @@ namespace rbx::aimbot {
                 spring_vel_mouse_y = 0.0f;
                 locked_part_name = "";
                 lock_timer_initialized = false;
-                has_last_camera_rot = false;
+                waiting_for_mouse_sync = false;
                 continue;
             }
 
-            // Frame Sync check: If current camera rotation in memory has not changed since last processed tick, skip this tick
-            rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
-            if (camera_inst.address != 0) {
-                rbx::camera_t camera{ camera_inst.address };
-                math::matrix3 current_rot = camera.get_rotation();
-                if (has_last_camera_rot) {
+            // Frame Sync check for mouse aim: If we sent mouse input, wait until the camera rotation in memory changes
+            if (settings::aimbot::aimbot_type == 1 && waiting_for_mouse_sync) {
+                rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
+                if (camera_inst.address != 0) {
+                    rbx::camera_t camera{ camera_inst.address };
+                    math::matrix3 current_rot = camera.get_rotation();
                     bool rot_changed = false;
                     for (int i = 0; i < 9; ++i) {
-                        if (std::abs(current_rot.m[i] - last_camera_rot.m[i]) > 0.00001f) {
+                        if (std::abs(current_rot.m[i] - sync_camera_rot.m[i]) > 0.00001f) {
                             rot_changed = true;
                             break;
                         }
                     }
                     if (!rot_changed) {
-                        // Skip calculation for this frame to synchronize with game engine ticks
+                        // Skip this tick because the game has not yet processed the previous mouse input
                         continue;
                     }
                 }
-                last_camera_rot = current_rot;
-                has_last_camera_rot = true;
-            } else {
-                has_last_camera_rot = false;
+                waiting_for_mouse_sync = false;
             }
 
             // Fetch visual engine parameters once per frame
@@ -916,6 +916,6 @@ namespace rbx::aimbot {
         target_vel_initialized = false;
         locked_part_name = "";
         lock_timer_initialized = false;
-        has_last_camera_rot = false;
+        waiting_for_mouse_sync = false;
     }
 }
