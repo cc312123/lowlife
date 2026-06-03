@@ -20,10 +20,32 @@
 #include <features/silent/silent.h>
 #include <features/aimbot/aimbot.h>
 
+enum BoneIdx {
+	IDX_HEAD = 0, IDX_TORSO, IDX_UPPER_TORSO, IDX_LOWER_TORSO,
+	IDX_LEFT_ARM, IDX_LEFT_UPPER_ARM, IDX_LEFT_LOWER_ARM, IDX_LEFT_HAND,
+	IDX_RIGHT_ARM, IDX_RIGHT_UPPER_ARM, IDX_RIGHT_LOWER_ARM, IDX_RIGHT_HAND,
+	IDX_LEFT_LEG, IDX_LEFT_UPPER_LEG, IDX_LEFT_LOWER_LEG, IDX_LEFT_FOOT,
+	IDX_RIGHT_LEG, IDX_RIGHT_UPPER_LEG, IDX_RIGHT_LOWER_LEG, IDX_RIGHT_FOOT,
+	IDX_HUMANOID_ROOT_PART
+};
+
+static const char* bone_names[] = {
+	"Head", "Torso", "UpperTorso", "LowerTorso",
+	"Left Arm", "LeftUpperArm", "LeftLowerArm", "LeftHand",
+	"Right Arm", "RightUpperArm", "RightLowerArm", "RightHand",
+	"Left Leg", "LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
+	"Right Leg", "RightUpperLeg", "RightLowerLeg", "RightFoot",
+	"HumanoidRootPart"
+};
+constexpr int num_bones = sizeof(bone_names) / sizeof(bone_names[0]);
+
 static float get_effective_fov()
 {
 	if (!settings::silent::gun_based_fov)
 		return settings::silent::fov;
+
+	static std::string last_tool = "";
+	static float cached_fov = settings::silent::fov;
 
 	std::string tool_name;
 	{
@@ -31,20 +53,25 @@ static float get_effective_fov()
 		tool_name = cache::cached_local_player.tool_name;
 	}
 
-	std::string tool_name_lower = tool_name;
-	std::transform(tool_name_lower.begin(), tool_name_lower.end(), tool_name_lower.begin(), ::tolower);
+	if (tool_name != last_tool) {
+		last_tool = tool_name;
+		std::string tool_name_lower = tool_name;
+		std::transform(tool_name_lower.begin(), tool_name_lower.end(), tool_name_lower.begin(), ::tolower);
 
-	if (tool_name_lower.find("double-barrel") != std::string::npos || 
-		tool_name_lower.find("double barrel") != std::string::npos ||
-		tool_name_lower.find("doublebarrel") != std::string::npos)
-		return settings::silent::fov_double_barrel;
-	else if (tool_name_lower.find("tacticalshotgun") != std::string::npos ||
-		tool_name_lower.find("tactical shotgun") != std::string::npos)
-		return settings::silent::fov_tactical_shotgun;
-	else if (tool_name_lower.find("revolver") != std::string::npos)
-		return settings::silent::fov_revolver;
+		if (tool_name_lower.find("double-barrel") != std::string::npos || 
+			tool_name_lower.find("double barrel") != std::string::npos ||
+			tool_name_lower.find("doublebarrel") != std::string::npos)
+			cached_fov = settings::silent::fov_double_barrel;
+		else if (tool_name_lower.find("tacticalshotgun") != std::string::npos ||
+			tool_name_lower.find("tactical shotgun") != std::string::npos)
+			cached_fov = settings::silent::fov_tactical_shotgun;
+		else if (tool_name_lower.find("revolver") != std::string::npos)
+			cached_fov = settings::silent::fov_revolver;
+		else
+			cached_fov = settings::silent::fov;
+	}
 
-	return settings::silent::fov;
+	return cached_fov;
 }
 
 #include <clipper2/clipper.h>
@@ -348,31 +375,43 @@ void esp::run()
 			}
 		}
 
-		// Pre-fetch world & screen positions of all player parts once per player frame
-		std::unordered_map<std::string, math::vector3> world_positions;
-		std::unordered_map<std::string, ImVec2> screen_positions;
+		// Use a local stack-based lazy evaluation cache instead of heavy dynamic maps
+		ImVec2 bone_screens[num_bones];
+		bool bone_has_screen[num_bones] = { false };
+		bool bone_computed[num_bones] = { false };
+		math::vector3 bone_worlds[num_bones];
 
-		for (auto& part_pair : entity.parts)
-		{
-			if (part_pair.second.address == 0) continue;
-			
-			rbx::primitive_t prim = part_pair.second.get_primitive();
-			math::vector3 wpos = prim.get_position();
-			math::vector2 spos = {};
-			
-			world_positions[part_pair.first] = wpos;
-			if (game::visengine.world_to_screen(wpos, spos, dims, view))
-			{
-				screen_positions[part_pair.first] = ImVec2(spos.x, spos.y);
+		auto get_bone_data = [&](int bone_idx, math::vector3& wpos, ImVec2& spos) -> bool {
+			if (bone_computed[bone_idx]) {
+				wpos = bone_worlds[bone_idx];
+				spos = bone_screens[bone_idx];
+				return bone_has_screen[bone_idx];
 			}
+			bone_computed[bone_idx] = true;
+			auto it = entity.parts.find(bone_names[bone_idx]);
+			if (it != entity.parts.end() && it->second.address != 0) {
+				wpos = it->second.get_primitive().get_position();
+				bone_worlds[bone_idx] = wpos;
+				math::vector2 out_s = {};
+				if (game::visengine.world_to_screen(wpos, out_s, dims, view)) {
+					spos = ImVec2(out_s.x, out_s.y);
+					bone_screens[bone_idx] = spos;
+					bone_has_screen[bone_idx] = true;
+					return true;
+				}
+			}
+			bone_has_screen[bone_idx] = false;
+			return false;
+		};
+
+		math::vector3 hrp_pos = {};
+		ImVec2 hrp_spos = {};
+		if (!get_bone_data(IDX_HUMANOID_ROOT_PART, hrp_pos, hrp_spos)) {
+			continue;
 		}
 
-		auto hrp_pos_it = world_positions.find("HumanoidRootPart");
-		if (hrp_pos_it == world_positions.end()) continue;
-		math::vector3 hrp_pos = hrp_pos_it->second;
-
 		auto hrp_it = entity.parts.find("HumanoidRootPart");
-		if (hrp_it == entity.parts.end()) continue;
+		if (hrp_it == entity.parts.end() || hrp_it->second.address == 0) continue;
 		rbx::primitive_t hrp_prim = hrp_it->second.get_primitive();
 		math::matrix3 hrp_rot = hrp_prim.get_rotation();
 
@@ -432,11 +471,10 @@ void esp::run()
 		}
 
 		// 2. Head Dot & Look Vector
-		auto head_screen_it = screen_positions.find("Head");
-		if (head_screen_it != screen_positions.end())
+		math::vector3 head_world_pos = {};
+		ImVec2 head_screen_pos = {};
+		if (get_bone_data(IDX_HEAD, head_world_pos, head_screen_pos))
 		{
-			ImVec2 head_screen_pos = head_screen_it->second;
-
 			if (settings::visuals::head_dot)
 			{
 				ImU32 dot_col = get_relation_color(entity.name, settings::visuals::head_dot_color);
@@ -451,7 +489,6 @@ void esp::run()
 				{
 					rbx::primitive_t head_prim = head_it->second.get_primitive();
 					math::matrix3 head_rot = head_prim.get_rotation();
-					math::vector3 head_world_pos = world_positions["Head"];
 					
 					math::vector3 look_dir = { -head_rot.m[2], -head_rot.m[5], -head_rot.m[8] };
 					math::vector3 look_target = head_world_pos + look_dir * 6.0f; 
@@ -497,40 +534,40 @@ void esp::run()
 			ImU32 skeleton_col = get_relation_color(entity.name, settings::visuals::skeleton_color);
 			bool is_r15 = (entity.rig_type == 1); 
 
-			auto draw_bone = [&](const std::string& partA, const std::string& partB) {
-				auto itA = screen_positions.find(partA);
-				auto itB = screen_positions.find(partB);
-				if (itA != screen_positions.end() && itB != screen_positions.end())
+			auto draw_bone = [&](int idxA, int idxB) {
+				math::vector3 wposA, wposB;
+				ImVec2 sposA, sposB;
+				if (get_bone_data(idxA, wposA, sposA) && get_bone_data(idxB, wposB, sposB))
 				{
-					draw->AddLine(itA->second, itB->second, IM_COL32(0, 0, 0, 255), 3.0f);
-					draw->AddLine(itA->second, itB->second, skeleton_col, 1.2f);
+					draw->AddLine(sposA, sposB, IM_COL32(0, 0, 0, 255), 3.0f);
+					draw->AddLine(sposA, sposB, skeleton_col, 1.2f);
 				}
 			};
 
 			if (is_r15)
 			{
-				draw_bone("Head", "UpperTorso");
-				draw_bone("UpperTorso", "LowerTorso");
-				draw_bone("UpperTorso", "LeftUpperArm");
-				draw_bone("LeftUpperArm", "LeftLowerArm");
-				draw_bone("LeftLowerArm", "LeftHand");
-				draw_bone("UpperTorso", "RightUpperArm");
-				draw_bone("RightUpperArm", "RightLowerArm");
-				draw_bone("RightLowerArm", "RightHand");
-				draw_bone("LowerTorso", "LeftUpperLeg");
-				draw_bone("LeftUpperLeg", "LeftLowerLeg");
-				draw_bone("LeftLowerLeg", "LeftFoot");
-				draw_bone("LowerTorso", "RightUpperLeg");
-				draw_bone("RightUpperLeg", "RightLowerLeg");
-				draw_bone("RightLowerLeg", "RightFoot");
+				draw_bone(IDX_HEAD, IDX_UPPER_TORSO);
+				draw_bone(IDX_UPPER_TORSO, IDX_LOWER_TORSO);
+				draw_bone(IDX_UPPER_TORSO, IDX_LEFT_UPPER_ARM);
+				draw_bone(IDX_LEFT_UPPER_ARM, IDX_LEFT_LOWER_ARM);
+				draw_bone(IDX_LEFT_LOWER_ARM, IDX_LEFT_HAND);
+				draw_bone(IDX_UPPER_TORSO, IDX_RIGHT_UPPER_ARM);
+				draw_bone(IDX_RIGHT_UPPER_ARM, IDX_RIGHT_LOWER_ARM);
+				draw_bone(IDX_RIGHT_LOWER_ARM, IDX_RIGHT_HAND);
+				draw_bone(IDX_LOWER_TORSO, IDX_LEFT_UPPER_LEG);
+				draw_bone(IDX_LEFT_UPPER_LEG, IDX_LEFT_LOWER_LEG);
+				draw_bone(IDX_LEFT_LOWER_LEG, IDX_LEFT_FOOT);
+				draw_bone(IDX_LOWER_TORSO, IDX_RIGHT_UPPER_LEG);
+				draw_bone(IDX_RIGHT_UPPER_LEG, IDX_RIGHT_LOWER_LEG);
+				draw_bone(IDX_RIGHT_LOWER_LEG, IDX_RIGHT_FOOT);
 			}
 			else
 			{
-				draw_bone("Head", "Torso");
-				draw_bone("Torso", "Left Arm");
-				draw_bone("Torso", "Right Arm");
-				draw_bone("Torso", "Left Leg");
-				draw_bone("Torso", "Right Leg");
+				draw_bone(IDX_HEAD, IDX_TORSO);
+				draw_bone(IDX_TORSO, IDX_LEFT_ARM);
+				draw_bone(IDX_TORSO, IDX_RIGHT_ARM);
+				draw_bone(IDX_TORSO, IDX_LEFT_LEG);
+				draw_bone(IDX_TORSO, IDX_RIGHT_LEG);
 			}
 		}
 
@@ -643,7 +680,7 @@ void esp::run()
 					}
 				}
 				
-				math::vector3 pos = world_positions[part_name];
+				math::vector3 pos = prim.get_position();
 				math::matrix3 rot = prim.get_rotation();
 
 				for (const auto& lc : corners) {

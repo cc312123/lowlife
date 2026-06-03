@@ -3,7 +3,10 @@
 
 $ErrorActionPreference = "Stop"
 
-$BuildExe = Join-Path $PSScriptRoot "build\RobloxCrashHandler.exe"
+$BuildExe = Join-Path $PSScriptRoot "build\RobloxCrashHandler_new.exe"
+if (-not (Test-Path $BuildExe)) {
+    $BuildExe = Join-Path $PSScriptRoot "build\RobloxCrashHandler.exe"
+}
 $ServerDir = Join-Path $PSScriptRoot "updates-server"
 $ServerUploadsExe = Join-Path $ServerDir "uploads\RobloxCrashHandler.exe"
 $ReleasesJsonPath = Join-Path $ServerDir "releases.json"

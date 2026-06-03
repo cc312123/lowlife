@@ -4,6 +4,96 @@
 #include <unordered_map>
 #include <unordered_set>
 
+static std::string get_equipped_tool_name(std::uint64_t character_address)
+{
+	if (character_address == 0) return "";
+
+	std::uint64_t start = memory->read<std::uint64_t>(character_address + Offsets::Instance::ChildrenStart);
+	if (start == 0) return "";
+
+	std::uint64_t array_start = memory->read<std::uint64_t>(start);
+	std::uint64_t array_end = memory->read<std::uint64_t>(start + Offsets::Instance::ChildrenEnd);
+
+	if (array_start == 0 || array_end == 0 || array_start >= array_end)
+	{
+		return "";
+	}
+
+	std::uint64_t size_bytes = array_end - array_start;
+	std::uint64_t count = size_bytes / 16; // 16 bytes per shared_ptr
+
+	if (count == 0 || count > 1000)
+	{
+		return "";
+	}
+
+	struct raw_shared_ptr {
+		std::uint64_t ptr;
+		std::uint64_t ref_count;
+	};
+
+	std::vector<raw_shared_ptr> raw_ptrs;
+	raw_shared_ptr* ptr_buf = nullptr;
+	raw_shared_ptr stack_ptrs[64];
+	if (count <= 64) {
+		ptr_buf = stack_ptrs;
+	} else {
+		raw_ptrs.resize(count);
+		ptr_buf = raw_ptrs.data();
+	}
+
+	Luck_ReadVirtualMemory(memory->get_process_handle(), reinterpret_cast<void*>(array_start), ptr_buf, static_cast<ULONG>(count * 16), nullptr);
+
+	struct msvc_string_layout {
+		union {
+			char buf[16];
+			char* ptr;
+		} u;
+		size_t size;
+		size_t res;
+	};
+
+	for (std::uint64_t i = 0; i < count; ++i)
+	{
+		std::uint64_t child_address = ptr_buf[i].ptr;
+		if (child_address == 0) continue;
+
+		// Class descriptor address
+		std::uint64_t class_descriptor = memory->read<std::uint64_t>(child_address + Offsets::Instance::ClassDescriptor);
+		if (class_descriptor == 0) continue;
+
+		// Class name address
+		std::uint64_t class_name_addr = memory->read<std::uint64_t>(class_descriptor + Offsets::Instance::ClassName);
+		if (class_name_addr == 0) continue;
+
+		// Read class name string structure
+		msvc_string_layout layout{};
+		Luck_ReadVirtualMemory(memory->get_process_handle(), reinterpret_cast<void*>(class_name_addr), &layout, sizeof(msvc_string_layout), nullptr);
+		if (layout.size == 0 || layout.size > 255) continue;
+
+		char stack_buf[16];
+		const char* class_str = nullptr;
+		if (layout.size < 16) {
+			layout.u.buf[layout.size] = '\0';
+			class_str = layout.u.buf;
+		} else {
+			Luck_ReadVirtualMemory(memory->get_process_handle(), layout.u.ptr, stack_buf, 15, nullptr);
+			stack_buf[15] = '\0';
+			class_str = stack_buf;
+		}
+
+		if (strcmp(class_str, "Tool") == 0 || strcmp(class_str, "HopperBin") == 0)
+		{
+			std::uint64_t name_ptr = memory->read<std::uint64_t>(child_address + Offsets::Instance::Name);
+			if (name_ptr) {
+				return memory->read_string(name_ptr);
+			}
+		}
+	}
+
+	return "";
+}
+
 void cache::run()
 {
 	static std::unordered_map<std::uint64_t, cache::entity_t> persistent_cache;
@@ -97,15 +187,7 @@ void cache::run()
 			cached_entity.tool_name = "";
 			if (model_instance.address != 0)
 			{
-				for (rbx::instance_t& child : model_instance.get_children<rbx::instance_t>())
-				{
-					std::string child_class = child.get_class_name();
-					if (child_class == "Tool" || child_class == "HopperBin")
-					{
-						cached_entity.tool_name = child.get_name();
-						break;
-					}
-				}
+				cached_entity.tool_name = get_equipped_tool_name(model_instance.address);
 
 				if (cached_entity.humanoid.address != 0)
 				{
