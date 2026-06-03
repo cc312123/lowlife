@@ -98,6 +98,7 @@ void cache::run()
 {
 	static std::unordered_map<std::uint64_t, cache::entity_t> persistent_cache;
 	static std::unordered_map<std::uint64_t, std::uint64_t> cached_model_addresses;
+	static std::unordered_map<std::uint64_t, size_t> cached_model_children_counts;
 	static std::uint32_t last_pid = 0;
 
 	while (true)
@@ -107,6 +108,7 @@ void cache::run()
 		{
 			persistent_cache.clear();
 			cached_model_addresses.clear();
+			cached_model_children_counts.clear();
 			last_pid = current_pid;
 		}
 
@@ -145,8 +147,33 @@ void cache::run()
 			cache::entity_t& cached_entity = persistent_cache[player.address];
 			rbx::model_instance_t model_instance = player.get_model_instance();
 
-			// Re-cache character parts only if model address has changed (e.g. respawn)
-			if (model_instance.address != cached_model_addresses[player.address])
+			// Re-cache character parts only if model address has changed (e.g. respawn),
+			// or if the character parts have finished replicating/loading since the initial cache.
+			bool model_changed = (model_instance.address != cached_model_addresses[player.address]);
+			bool needs_recache = model_changed;
+
+			if (!needs_recache && model_instance.address != 0)
+			{
+				// Only re-cache if we are missing essential components AND new components have actually loaded
+				if (cached_entity.humanoid.address == 0 || cached_entity.parts.size() < 6)
+				{
+					size_t current_child_count = model_instance.get_children().size();
+					if (current_child_count > cached_model_children_counts[player.address])
+					{
+						needs_recache = true;
+					}
+					else if (cached_entity.humanoid.address == 0)
+					{
+						rbx::instance_t temp_humanoid = model_instance.find_first_child("Humanoid");
+						if (temp_humanoid.address != 0)
+						{
+							needs_recache = true;
+						}
+					}
+				}
+			}
+
+			if (needs_recache)
 			{
 				cached_model_addresses[player.address] = model_instance.address;
 				cached_entity.parts.clear();
@@ -154,6 +181,8 @@ void cache::run()
 
 				if (model_instance.address != 0)
 				{
+					cached_model_children_counts[player.address] = model_instance.get_children().size();
+
 					rbx::instance_t body_effects = model_instance.find_first_child("BodyEffects");
 					if (body_effects.address != 0)
 					{
@@ -184,6 +213,7 @@ void cache::run()
 				}
 				else
 				{
+					cached_model_children_counts[player.address] = 0;
 					cached_entity.humanoid = { 0 };
 					cached_entity.rig_type = 0;
 				}
@@ -231,6 +261,7 @@ void cache::run()
 			if (active_addresses.find(it_pc->first) == active_addresses.end())
 			{
 				cached_model_addresses.erase(it_pc->first);
+				cached_model_children_counts.erase(it_pc->first);
 				it_pc = persistent_cache.erase(it_pc);
 			}
 			else

