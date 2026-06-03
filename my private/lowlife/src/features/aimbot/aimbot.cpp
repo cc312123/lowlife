@@ -259,22 +259,17 @@ namespace rbx::aimbot {
             return rbx::part_t{};
         }
 
-        rbx::part_t get_smart_target_part(const cache::entity_t& player, int aim_part, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view) {
+        rbx::part_t get_smart_target_part(const cache::entity_t& player, int aim_part, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, const math::vector3& camera_pos, bool camera_valid) {
             rbx::part_t primary = get_target_part(player, aim_part, cursor_pt, dims, view);
-            if (!settings::aimbot::multipoint || !settings::aimbot::wall_check) {
+            if (!settings::aimbot::multipoint || !settings::aimbot::wall_check || !camera_valid) {
                 return primary;
             }
 
             if (primary.address) {
                 rbx::primitive_t primitive = primary.get_primitive();
                 math::vector3 world_pos = primitive.get_position();
-                rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
-                if (camera_inst.address != 0) {
-                    rbx::camera_t camera{ camera_inst.address };
-                    math::vector3 camera_pos = camera.get_position();
-                    if (!botter::is_occluded(camera_pos, world_pos)) {
-                        return primary;
-                    }
+                if (!botter::is_occluded(camera_pos, world_pos)) {
+                    return primary;
                 }
             }
 
@@ -288,28 +283,22 @@ namespace rbx::aimbot {
             float cursor_x = static_cast<float>(cursor_pt.x);
             float cursor_y = static_cast<float>(cursor_pt.y);
 
-            rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
-            if (camera_inst.address != 0) {
-                rbx::camera_t camera{ camera_inst.address };
-                math::vector3 camera_pos = camera.get_position();
+            for (const auto& part_name : scan_order) {
+                auto it = player.parts.find(part_name);
+                if (it == player.parts.end() || !it->second.address) continue;
+                rbx::part_t part = it->second;
+                rbx::primitive_t primitive = part.get_primitive();
+                math::vector3 world_pos = primitive.get_position();
 
-                for (const auto& part_name : scan_order) {
-                    auto it = player.parts.find(part_name);
-                    if (it == player.parts.end() || !it->second.address) continue;
-                    rbx::part_t part = it->second;
-                    rbx::primitive_t primitive = part.get_primitive();
-                    math::vector3 world_pos = primitive.get_position();
+                if (botter::is_occluded(camera_pos, world_pos)) continue;
 
-                    if (botter::is_occluded(camera_pos, world_pos)) continue;
+                math::vector2 screen_pos = {};
+                if (!game::visengine.world_to_screen(world_pos, screen_pos, dims, view)) continue;
 
-                    math::vector2 screen_pos = {};
-                    if (!game::visengine.world_to_screen(world_pos, screen_pos, dims, view)) continue;
-
-                    float dist = vector2_distance(screen_pos.x, screen_pos.y, cursor_x, cursor_y);
-                    if (dist < min_dist) {
-                        min_dist = dist;
-                        best_visible = part;
-                    }
+                float dist = vector2_distance(screen_pos.x, screen_pos.y, cursor_x, cursor_y);
+                if (dist < min_dist) {
+                    min_dist = dist;
+                    best_visible = part;
                 }
             }
 
@@ -339,7 +328,7 @@ namespace rbx::aimbot {
             return true;
         }
 
-        bool is_target_valid(const cache::entity_t& player, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, bool skip_fov_check = false) {
+        bool is_target_valid(const cache::entity_t& player, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, const math::vector3& camera_pos, bool camera_valid, bool skip_fov_check = false) {
             if (!is_target_cheap_valid(player)) return false;
 
             rbx::part_t target_part = {};
@@ -354,7 +343,7 @@ namespace rbx::aimbot {
                 }
                 if (settings::aimbot::multipoint) {
                     target_part = get_smart_target_part(player,
-                        settings::aimbot::aimpart, cursor_pt, dims, view);
+                        settings::aimbot::aimpart, cursor_pt, dims, view, camera_pos, camera_valid);
                 } else {
                     target_part = get_target_part(player,
                         settings::aimbot::aimpart, cursor_pt, dims, view);
@@ -381,34 +370,36 @@ namespace rbx::aimbot {
                 if (dist > settings::aimbot::fov) return false;
             }
 
-            if (settings::aimbot::wall_check) {
+            if (settings::aimbot::wall_check && camera_valid) {
                 rbx::part_t part = {};
                 math::vector3 pos = {};
                 if (!get_pos(part, pos)) return false;
 
-                rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
-                if (camera_inst.address != 0) {
-                    rbx::camera_t camera{ camera_inst.address };
-                    math::vector3 camera_pos = camera.get_position();
-                    if (botter::is_occluded(camera_pos, pos)) {
-                        return false;
-                    }
+                if (botter::is_occluded(camera_pos, pos)) {
+                    return false;
                 }
             }
 
             return true;
         }
 
-        cache::entity_t find_best_target(const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view) {
-            cache::entity_t best = {};
-            float best_metric = std::numeric_limits<float>::max();
+        struct target_candidate_t {
+            cache::entity_t player;
+            float metric;
+            rbx::part_t target_part;
+            math::vector3 world_pos;
+            float dist_from_crosshair;
+        };
 
-            std::lock_guard<std::mutex> lock(cache::mtx);
+        cache::entity_t find_best_target(const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, const math::vector3& camera_pos, bool camera_valid) {
+            std::vector<target_candidate_t> candidates;
+
             float cursor_x = static_cast<float>(cursor_pt.x);
             float cursor_y = static_cast<float>(cursor_pt.y);
 
             math::vector3 local_pos = { 0.0f, 0.0f, 0.0f };
             if (settings::aimbot::target_selection_mode == 1) {
+                std::lock_guard<std::mutex> lock(cache::mtx);
                 if (auto it = cache::cached_local_player.parts.find("HumanoidRootPart"); it != cache::cached_local_player.parts.end() && it->second.address) {
                     local_pos = it->second.get_primitive().get_position();
                 } else if (auto it2 = cache::cached_local_player.parts.find("Head"); it2 != cache::cached_local_player.parts.end() && it2->second.address) {
@@ -416,73 +407,83 @@ namespace rbx::aimbot {
                 }
             }
 
-            if (cache::cached_players) {
-                for (const auto& player : *cache::cached_players) {
-                    if (player.instance.address == 0 ||
-                        player.instance.address == cache::cached_local_player.instance.address)
-                        continue;
+            {
+                std::lock_guard<std::mutex> lock(cache::mtx);
+                if (cache::cached_players) {
+                    for (const auto& player : *cache::cached_players) {
+                        if (player.instance.address == 0 ||
+                            player.instance.address == cache::cached_local_player.instance.address)
+                            continue;
 
-                    // 1. Cheap validation checks first
-                    if (!is_target_cheap_valid(player)) continue;
+                        // 1. Cheap checks first
+                        if (!is_target_cheap_valid(player)) continue;
 
-                    // 2. Fetch part and position (use smart multipoint if enabled)
-                    rbx::part_t target_part = {};
-                    if (settings::aimbot::multipoint) {
-                        target_part = get_smart_target_part(player,
+                        // 2. Get baseline target part (non-multipoint) to avoid raycasting everyone
+                        rbx::part_t target_part = get_target_part(player,
                             settings::aimbot::aimpart, cursor_pt, dims, view);
-                    } else {
-                        target_part = get_target_part(player,
-                            settings::aimbot::aimpart, cursor_pt, dims, view);
-                    }
-                    if (!target_part.address) continue;
+                        if (!target_part.address) continue;
 
-                    rbx::primitive_t primitive = target_part.get_primitive();
-                    math::vector3 world_pos = primitive.get_position();
-                    math::vector2 screen_pos = {};
+                        rbx::primitive_t primitive = target_part.get_primitive();
+                        math::vector3 world_pos = primitive.get_position();
+                        math::vector2 screen_pos = {};
 
-                    bool w2s_ok = game::visengine.world_to_screen(world_pos, screen_pos, dims, view);
-                    if (!w2s_ok && settings::aimbot::target_selection_mode == 0) continue;
+                        bool w2s_ok = game::visengine.world_to_screen(world_pos, screen_pos, dims, view);
+                        if (!w2s_ok && settings::aimbot::target_selection_mode == 0) continue;
 
-                    // 3. FOV Check
-                    float dist_from_crosshair = 0.0f;
-                    if (w2s_ok) {
-                        dist_from_crosshair = vector2_distance(screen_pos.x, screen_pos.y, cursor_x, cursor_y);
-                    } else {
-                        dist_from_crosshair = std::numeric_limits<float>::max();
-                    }
-
-                    if (settings::aimbot::fov_check && dist_from_crosshair > settings::aimbot::fov) continue;
-
-                    // 4. Calculate sorting metric based on mode
-                    float current_metric = 0.0f;
-                    if (settings::aimbot::target_selection_mode == 0) { // Screen Distance
-                        current_metric = dist_from_crosshair;
-                    } else if (settings::aimbot::target_selection_mode == 1) { // 3D Distance
-                        math::vector3 diff = vector3_sub(world_pos, local_pos);
-                        current_metric = std::sqrt(diff.x * diff.x + diff.y * diff.y + diff.z * diff.z);
-                    } else if (settings::aimbot::target_selection_mode == 2) { // Health Priority
-                        current_metric = player.health;
-                    }
-
-                    // 5. Compare metrics
-                    if (current_metric < best_metric) {
-                        // 6. Wall check (deferred)
-                        if (settings::aimbot::wall_check) {
-                            rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
-                            if (camera_inst.address != 0) {
-                                rbx::camera_t camera{ camera_inst.address };
-                                math::vector3 camera_pos = camera.get_position();
-                                if (botter::is_occluded(camera_pos, world_pos)) {
-                                    continue;
-                                }
-                            }
+                        // 3. FOV Check
+                        float dist_from_crosshair = 0.0f;
+                        if (w2s_ok) {
+                            dist_from_crosshair = vector2_distance(screen_pos.x, screen_pos.y, cursor_x, cursor_y);
+                        } else {
+                            dist_from_crosshair = std::numeric_limits<float>::max();
                         }
-                        best_metric = current_metric;
-                        best = player;
+
+                        if (settings::aimbot::fov_check && dist_from_crosshair > settings::aimbot::fov) continue;
+
+                        // 4. Calculate sorting metric
+                        float current_metric = 0.0f;
+                        if (settings::aimbot::target_selection_mode == 0) { // Screen Distance
+                            current_metric = dist_from_crosshair;
+                        } else if (settings::aimbot::target_selection_mode == 1) { // 3D Distance
+                            math::vector3 diff = vector3_sub(world_pos, local_pos);
+                            current_metric = std::sqrt(diff.x * diff.x + diff.y * diff.y + diff.z * diff.z);
+                        } else if (settings::aimbot::target_selection_mode == 2) { // Health Priority
+                            current_metric = player.health;
+                        }
+
+                        candidates.push_back({ player, current_metric, target_part, world_pos, dist_from_crosshair });
                     }
                 }
             }
-            return best;
+
+            if (candidates.empty()) return cache::entity_t{};
+
+            // Sort candidates by metric ascending
+            std::sort(candidates.begin(), candidates.end(), [](const target_candidate_t& a, const target_candidate_t& b) {
+                return a.metric < b.metric;
+            });
+
+            // 5. Visibility and smart bone scanning on sorted candidates (deferred)
+            for (auto& cand : candidates) {
+                rbx::part_t final_part = cand.target_part;
+                math::vector3 final_pos = cand.world_pos;
+
+                if (settings::aimbot::multipoint) {
+                    final_part = get_smart_target_part(cand.player,
+                        settings::aimbot::aimpart, cursor_pt, dims, view, camera_pos, camera_valid);
+                    if (!final_part.address) continue;
+                    final_pos = final_part.get_primitive().get_position();
+                } else if (settings::aimbot::wall_check && camera_valid) {
+                    if (botter::is_occluded(camera_pos, final_pos)) {
+                        continue; // try next candidate
+                    }
+                }
+
+                // If we get here, this target is valid and visible!
+                return cand.player;
+            }
+
+            return cache::entity_t{};
         }
 
         math::vector3 apply_prediction(rbx::primitive_t primitive, bool is_camera) {
@@ -771,6 +772,15 @@ namespace rbx::aimbot {
             math::vector2 dims = game::visengine.get_dimensions();
             math::matrix4 view = game::visengine.get_viewmatrix();
 
+            math::vector3 camera_pos = { 0.0f, 0.0f, 0.0f };
+            bool camera_valid = false;
+            rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
+            if (camera_inst.address != 0) {
+                rbx::camera_t camera{ camera_inst.address };
+                camera_pos = camera.get_position();
+                camera_valid = true;
+            }
+
             std::lock_guard<std::mutex> lock(mtx);
 
             if (has_locked_target && locked_target.instance.address != 0) {
@@ -798,7 +808,7 @@ namespace rbx::aimbot {
             cache::entity_t target = {};
 
             if (settings::aimbot::sticky_aim && has_locked_target && locked_target.instance.address != 0) {
-                if (is_target_valid(locked_target, cursor_pt, dims, view, true)) {
+                if (is_target_valid(locked_target, cursor_pt, dims, view, camera_pos, camera_valid, true)) {
                     target = locked_target;  
                 }
                 else {
@@ -810,7 +820,7 @@ namespace rbx::aimbot {
                 }
             }
             else if (has_locked_target && locked_target.instance.address != 0) {
-                if (is_target_valid(locked_target, cursor_pt, dims, view, false)) {
+                if (is_target_valid(locked_target, cursor_pt, dims, view, camera_pos, camera_valid, false)) {
                     target = locked_target;
                 }
                 else {
@@ -828,7 +838,7 @@ namespace rbx::aimbot {
             }
 
             if (!has_locked_target) {
-                target = find_best_target(cursor_pt, dims, view);
+                target = find_best_target(cursor_pt, dims, view, camera_pos, camera_valid);
                 if (target.instance.address != 0) {
                     locked_target = target;
                     has_locked_target = true;
@@ -842,7 +852,7 @@ namespace rbx::aimbot {
             rbx::part_t target_part = {};
             if (settings::aimbot::multipoint) {
                 target_part = get_smart_target_part(target,
-                    settings::aimbot::aimpart, cursor_pt, dims, view);
+                    settings::aimbot::aimpart, cursor_pt, dims, view, camera_pos, camera_valid);
             } else {
                 if (settings::aimbot::aimpart == 9) { 
                     if (locked_part_name.empty() || 
