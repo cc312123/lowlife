@@ -270,6 +270,84 @@ namespace rbx::aimbot {
                 "LeftUpperArm", "RightUpperArm", "LeftUpperLeg", "RightUpperLeg"
             };
 
+            int aim_part = settings::aimbot::aimpart;
+            chosen_bone_name = "";
+            rbx::part_t target_part = {};
+
+            // 1. Try selected bone first
+            switch (aim_part) {
+            case 0:
+                if (auto it = player.parts.find("Head"); it != player.parts.end()) { chosen_bone_name = "Head"; target_part = it->second; }
+                break;
+            case 1:
+                if (auto it = player.parts.find("UpperTorso"); it != player.parts.end()) { chosen_bone_name = "UpperTorso"; target_part = it->second; }
+                if (target_part.address == 0) {
+                    if (auto it = player.parts.find("Torso"); it != player.parts.end()) { chosen_bone_name = "Torso"; target_part = it->second; }
+                }
+                break;
+            case 2:
+                if (auto it = player.parts.find("Torso"); it != player.parts.end()) { chosen_bone_name = "Torso"; target_part = it->second; }
+                if (target_part.address == 0) {
+                    if (auto it = player.parts.find("UpperTorso"); it != player.parts.end()) { chosen_bone_name = "UpperTorso"; target_part = it->second; }
+                }
+                break;
+            case 3:
+                if (auto it = player.parts.find("LowerTorso"); it != player.parts.end()) { chosen_bone_name = "LowerTorso"; target_part = it->second; }
+                if (target_part.address == 0) {
+                    if (auto it = player.parts.find("Torso"); it != player.parts.end()) { chosen_bone_name = "Torso"; target_part = it->second; }
+                }
+                break;
+            case 4:
+                if (auto it = player.parts.find("HumanoidRootPart"); it != player.parts.end()) { chosen_bone_name = "HumanoidRootPart"; target_part = it->second; }
+                break;
+            case 5:
+                if (auto it = player.parts.find("LeftUpperArm"); it != player.parts.end()) { chosen_bone_name = "LeftUpperArm"; target_part = it->second; }
+                if (target_part.address == 0) {
+                    if (auto it = player.parts.find("Left Arm"); it != player.parts.end()) { chosen_bone_name = "Left Arm"; target_part = it->second; }
+                }
+                break;
+            case 6:
+                if (auto it = player.parts.find("RightUpperArm"); it != player.parts.end()) { chosen_bone_name = "RightUpperArm"; target_part = it->second; }
+                if (target_part.address == 0) {
+                    if (auto it = player.parts.find("Right Arm"); it != player.parts.end()) { chosen_bone_name = "Right Arm"; target_part = it->second; }
+                }
+                break;
+            case 7:
+                if (auto it = player.parts.find("LeftUpperLeg"); it != player.parts.end()) { chosen_bone_name = "LeftUpperLeg"; target_part = it->second; }
+                if (target_part.address == 0) {
+                    if (auto it = player.parts.find("Left Leg"); it != player.parts.end()) { chosen_bone_name = "Left Leg"; target_part = it->second; }
+                }
+                break;
+            case 8:
+                if (auto it = player.parts.find("RightUpperLeg"); it != player.parts.end()) { chosen_bone_name = "RightUpperLeg"; target_part = it->second; }
+                if (target_part.address == 0) {
+                    if (auto it = player.parts.find("Right Leg"); it != player.parts.end()) { chosen_bone_name = "Right Leg"; target_part = it->second; }
+                }
+                break;
+            case 9:
+                {
+                    rbx::part_t closest = get_closest_part(player, cursor_pt, dims, view);
+                    if (closest.address != 0) {
+                        chosen_bone_name = closest.get_name();
+                        target_part = closest;
+                    }
+                }
+                break;
+            }
+
+            // If selected part is found, check if it's visible (or if wall check is disabled)
+            if (target_part.address != 0) {
+                bool is_visible = true;
+                if (settings::aimbot::wall_check) {
+                    math::vector3 pos = target_part.get_primitive().get_position();
+                    is_visible = !is_bone_occluded_cached(player.instance.address, chosen_bone_name, camera_pos, pos);
+                }
+                if (is_visible) {
+                    return target_part;
+                }
+            }
+
+            // 2. Fallback to Smart Bone dynamic scan if selected bone is occluded/not found
             if (settings::aimbot::smart_bone) {
                 for (const auto& bone_name : bone_priority) {
                     auto it = player.parts.find(bone_name);
@@ -288,54 +366,10 @@ namespace rbx::aimbot {
                 }
             }
 
-            int aim_part = settings::aimbot::aimpart;
-            chosen_bone_name = "";
-            switch (aim_part) {
-            case 0:
-                if (auto it = player.parts.find("Head"); it != player.parts.end()) { chosen_bone_name = "Head"; return it->second; }
-                break;
-            case 1:
-                if (auto it = player.parts.find("UpperTorso"); it != player.parts.end()) { chosen_bone_name = "UpperTorso"; return it->second; }
-                if (auto it = player.parts.find("Torso"); it != player.parts.end()) { chosen_bone_name = "Torso"; return it->second; }
-                break;
-            case 2:
-                if (auto it = player.parts.find("Torso"); it != player.parts.end()) { chosen_bone_name = "Torso"; return it->second; }
-                if (auto it = player.parts.find("UpperTorso"); it != player.parts.end()) { chosen_bone_name = "UpperTorso"; return it->second; }
-                break;
-            case 3:
-                if (auto it = player.parts.find("LowerTorso"); it != player.parts.end()) { chosen_bone_name = "LowerTorso"; return it->second; }
-                if (auto it = player.parts.find("Torso"); it != player.parts.end()) { chosen_bone_name = "Torso"; return it->second; }
-                break;
-            case 4:
-                if (auto it = player.parts.find("HumanoidRootPart"); it != player.parts.end()) { chosen_bone_name = "HumanoidRootPart"; return it->second; }
-                break;
-            case 5:
-                if (auto it = player.parts.find("LeftUpperArm"); it != player.parts.end()) { chosen_bone_name = "LeftUpperArm"; return it->second; }
-                if (auto it = player.parts.find("Left Arm"); it != player.parts.end()) { chosen_bone_name = "Left Arm"; return it->second; }
-                break;
-            case 6:
-                if (auto it = player.parts.find("RightUpperArm"); it != player.parts.end()) { chosen_bone_name = "RightUpperArm"; return it->second; }
-                if (auto it = player.parts.find("Right Arm"); it != player.parts.end()) { chosen_bone_name = "Right Arm"; return it->second; }
-                break;
-            case 7:
-                if (auto it = player.parts.find("LeftUpperLeg"); it != player.parts.end()) { chosen_bone_name = "LeftUpperLeg"; return it->second; }
-                if (auto it = player.parts.find("Left Leg"); it != player.parts.end()) { chosen_bone_name = "Left Leg"; return it->second; }
-                break;
-            case 8:
-                if (auto it = player.parts.find("RightUpperLeg"); it != player.parts.end()) { chosen_bone_name = "RightUpperLeg"; return it->second; }
-                if (auto it = player.parts.find("Right Leg"); it != player.parts.end()) { chosen_bone_name = "Right Leg"; return it->second; }
-                break;
-            case 9:
-                {
-                    rbx::part_t closest = get_closest_part(player, cursor_pt, dims, view);
-                    if (closest.address != 0) {
-                        chosen_bone_name = closest.get_name();
-                        return closest;
-                    }
-                }
-                break;
+            // 3. Fallback to selected bone even if occluded, or HumanoidRootPart as a last resort
+            if (target_part.address != 0) {
+                return target_part;
             }
-
             if (auto it = player.parts.find("HumanoidRootPart"); it != player.parts.end()) { chosen_bone_name = "HumanoidRootPart"; return it->second; }
             return rbx::part_t{};
         }
@@ -690,19 +724,23 @@ namespace rbx::aimbot {
 
             bool right_click_held = (GetAsyncKeyState(VK_RBUTTON) & 0x8000);
             
-            // Check if mouse is captured using a sticky timer to handle transition frames
-            static bool sticky_captured = false;
-            static auto last_captured_time = std::chrono::steady_clock::now();
+            // Check if mouse is captured using a sticky session-based timer to handle transitions robustly
+            static bool session_captured = false;
+            static auto last_near_center_time = std::chrono::steady_clock::now();
 
-            bool near_center = (std::abs(target_ref_x - center_x) < 5.0f && std::abs(target_ref_y - center_y) < 5.0f);
+            bool near_center = (std::abs(target_ref_x - center_x) < 10.0f && std::abs(target_ref_y - center_y) < 10.0f);
             if (near_center || cursor_hidden || right_click_held) {
-                sticky_captured = true;
-                last_captured_time = current_time;
-            } else if (std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_captured_time).count() > 300) {
-                sticky_captured = false;
+                session_captured = true;
+                last_near_center_time = current_time;
+            } else if (!cursor_hidden && !right_click_held) {
+                // If cursor is visible, right-click not held, and we have been far from the center for more than 150ms,
+                // we are sure the user has freed their cursor (e.g. menu is open).
+                if (std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_near_center_time).count() > 150) {
+                    session_captured = false;
+                }
             }
 
-            if (sticky_captured) {
+            if (session_captured) {
                 target_ref_x = center_x;
                 target_ref_y = center_y;
             }
@@ -725,12 +763,13 @@ namespace rbx::aimbot {
                 // Map smooth factor to critically-damped spring physics
                 float stiffness_x = 350.0f / (sx * 0.5f + 1.0f);
                 float stiffness_y = 350.0f / (sy * 0.5f + 1.0f);
-                
-                float damping_x = 2.0f * std::sqrt(stiffness_x);
-                float damping_y = 2.0f * std::sqrt(stiffness_y);
 
                 stiffness_x *= sensitivity;
                 stiffness_y *= sensitivity;
+                
+                // Calculate damping AFTER multiplying by sensitivity to ensure critical damping holds
+                float damping_x = 2.0f * std::sqrt(stiffness_x);
+                float damping_y = 2.0f * std::sqrt(stiffness_y);
 
                 float accel_x = stiffness_x * dx - damping_x * spring_vel_mouse_x;
                 float accel_y = stiffness_y * dy - damping_y * spring_vel_mouse_y;

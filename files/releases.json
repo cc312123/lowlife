@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.5",
-    "latestChangelog":  "Fix mouse aim lock jitter with independent rate-limited time delta integration and sticky captured mouse detection.",
+    "latestVersion":  "1.0.6",
+    "latestChangelog":  "Fix Smart Bone fallback prioritization override and correct spring-damper sensitivity math to prevent camera jumping.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -45,7 +45,14 @@
                         "changelog":  "Fix mouse aim lock jitter with independent rate-limited time delta integration and sticky captured mouse detection.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "17aa5600f5d9e3a277d80d1a44067f62"
+                    },
+                    {
+                        "version":  "1.0.6",
+                        "date":  "2026-06-04",
+                        "changelog":  "Fix Smart Bone fallback prioritization override and correct spring-damper sensitivity math to prevent camera jumping.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "13cbb866ae2676233648d0f5ca8456f7"
                     }
                 ],
-    "latestHash":  "17aa5600f5d9e3a277d80d1a44067f62"
+    "latestHash":  "13cbb866ae2676233648d0f5ca8456f7"
 }
