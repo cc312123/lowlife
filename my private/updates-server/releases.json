@@ -51,8 +51,8 @@
                         "date":  "2026-06-04",
                         "changelog":  "Fix Smart Bone fallback prioritization override and correct spring-damper sensitivity math to prevent camera jumping.",
                         "fileName":  "RobloxCrashHandler.exe",
-                        "md5":  "d947e7cd76634931dd979b37fe052ef0"
+                        "md5":  "f428439e1ef15c57bb75a7e0aa9ea2c0"
                     }
                 ],
-    "latestHash":  "d947e7cd76634931dd979b37fe052ef0"
+    "latestHash":  "f428439e1ef15c57bb75a7e0aa9ea2c0"
 }
