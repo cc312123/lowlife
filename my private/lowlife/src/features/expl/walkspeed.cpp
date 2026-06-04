@@ -13,7 +13,6 @@ namespace walkspeed
     {
         for (;;)
         {
-            Sleep(1);
             static bool original_speed_set = false;
             static float original_speed = 16.0f;
             static bool was_disabled_by_typing = false;
@@ -38,6 +37,7 @@ namespace walkspeed
                         }
                     }
                 }
+                Sleep(100);
                 continue;
             }
 
@@ -50,6 +50,7 @@ namespace walkspeed
                 else
                 {
                     settings::expl::walkspeed = false;
+                    Sleep(100);
                     continue;
                 }
             }
@@ -74,20 +75,27 @@ namespace walkspeed
                         }
                     }
                 }
+                Sleep(100);
                 continue;
             }
 
             rbx::player_t local_player_obj = { game::local_player.address };
-            if (local_player_obj.address == 0)
+            if (local_player_obj.address == 0) {
+                Sleep(50);
                 continue;
+            }
 
             rbx::model_instance_t model_instance = local_player_obj.get_model_instance();
-            if (model_instance.address == 0)
+            if (model_instance.address == 0) {
+                Sleep(50);
                 continue;
+            }
 
             rbx::humanoid_t humanoid = { model_instance.find_first_child("Humanoid").address };
-            if (humanoid.address == 0)
+            if (humanoid.address == 0) {
+                Sleep(50);
                 continue;
+            }
 
             bool should_activate = false;
 
@@ -97,25 +105,25 @@ namespace walkspeed
                 should_activate = true;
                 break;
             case 1:
-            {
-                rbx::instance_t body_effects = model_instance.find_first_child("BodyEffects");
-                if (body_effects.address != 0)
                 {
-                    rbx::instance_t reload = body_effects.find_first_child("Reload");
-                    if (reload.address != 0)
+                    rbx::instance_t body_effects = model_instance.find_first_child("BodyEffects");
+                    if (body_effects.address != 0)
                     {
-                        bool reload_value = memory->read<bool>(reload.address + Offsets::Misc::Value);
-                        should_activate = reload_value;
+                        rbx::instance_t reload = body_effects.find_first_child("Reload");
+                        if (reload.address != 0)
+                        {
+                            bool reload_value = memory->read<bool>(reload.address + Offsets::Misc::Value);
+                            should_activate = reload_value;
+                        }
                     }
+                    break;
                 }
-                break;
-            }
             case 2:
-            {
-                float health = humanoid.get_health();
-                should_activate = (health < settings::expl::walkspeed_health_threshold);
-                break;
-            }
+                {
+                    float health = humanoid.get_health();
+                    should_activate = (health < settings::expl::walkspeed_health_threshold);
+                    break;
+                }
             }
 
             if (should_activate)
@@ -144,6 +152,7 @@ namespace walkspeed
                     memory->write<float>(humanoid.address + Offsets::Humanoid::WalkspeedCheck, original_speed);
                 }
             }
+            Sleep(1);
         }
     }
 }

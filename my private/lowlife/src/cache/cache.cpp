@@ -3,6 +3,8 @@
 #include <game/game.h>
 #include <unordered_map>
 #include <unordered_set>
+#include <settings.h>
+
 
 static std::string get_equipped_tool_name(std::uint64_t character_address)
 {
@@ -100,9 +102,11 @@ void cache::run()
 	static std::unordered_map<std::uint64_t, std::uint64_t> cached_model_addresses;
 	static std::unordered_map<std::uint64_t, size_t> cached_model_children_counts;
 	static std::uint32_t last_pid = 0;
+	static std::uint64_t tick_count = 0;
 
 	while (true)
 	{
+		tick_count++;
 		std::uint32_t current_pid = memory->get_process_id();
 		if (current_pid != last_pid)
 		{
@@ -221,10 +225,23 @@ void cache::run()
 			}
 
 			// Active properties to update every iteration
-			cached_entity.tool_name = "";
 			if (model_instance.address != 0)
 			{
-				cached_entity.tool_name = get_equipped_tool_name(model_instance.address);
+				if (player.address == game::local_player.address)
+				{
+					cached_entity.tool_name = get_equipped_tool_name(model_instance.address);
+				}
+				else if (settings::visuals::tool)
+				{
+					if (tick_count % 15 == 0 || cached_entity.tool_name.empty())
+					{
+						cached_entity.tool_name = get_equipped_tool_name(model_instance.address);
+					}
+				}
+				else
+				{
+					cached_entity.tool_name = "";
+				}
 
 				if (cached_entity.humanoid.address != 0)
 				{

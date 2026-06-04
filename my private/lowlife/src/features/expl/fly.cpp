@@ -58,13 +58,12 @@ namespace fly
         
         for (;;)
         {
-            Sleep(1);
-            
             if (check::textchatopen)
             {
                 was_disabled_by_typing = true;
                 toggle_state = false;
                 is_hovering = false;
+                Sleep(100);
                 continue;
             }
 
@@ -78,6 +77,7 @@ namespace fly
             {
                 toggle_state = false;
                 is_hovering = false;
+                Sleep(100);
                 continue;
             }
 
@@ -109,32 +109,44 @@ namespace fly
                 key_pressed = true;
             }
 
-            if (!key_pressed)
+            if (!key_pressed) {
+                Sleep(50);
                 continue;
+            }
 
-            if (game::local_player.address == 0)
+            if (game::local_player.address == 0) {
+                Sleep(50);
                 continue;
+            }
 
             rbx::player_t local_player_obj = { game::local_player.address };
             rbx::model_instance_t model_instance = local_player_obj.get_model_instance();
-            if (model_instance.address == 0)
+            if (model_instance.address == 0) {
+                Sleep(50);
                 continue;
+            }
 
             rbx::instance_t hrp = model_instance.find_first_child("HumanoidRootPart");
-            if (hrp.address == 0)
+            if (hrp.address == 0) {
+                Sleep(50);
                 continue;
+            }
 
             rbx::part_t part(hrp.address);
             rbx::primitive_t prim = part.get_primitive();
-            if (prim.address == 0)
+            if (prim.address == 0) {
+                Sleep(50);
                 continue;
+            }
 
             math::vector3 current_position = prim.get_position();
             math::matrix3 current_rotation = prim.get_rotation();
 
             rbx::instance_t camera_instance = game::workspace.find_first_child_by_class("Camera");
-            if (camera_instance.address == 0)
+            if (camera_instance.address == 0) {
+                Sleep(10);
                 continue;
+            }
 
             rbx::camera_t camera{ camera_instance.address };
             math::matrix3 camera_rotation = camera.get_rotation();
@@ -210,6 +222,7 @@ namespace fly
                 memory->write<math::matrix3>(prim.address + Offsets::Primitive::Rotation, current_rotation);
                 memory->write<math::vector3>(prim.address + Offsets::Primitive::AssemblyLinearVelocity, math::vector3(0.0f, 0.0f, 0.0f));
             }
+            Sleep(1);
         }
     }
 }

@@ -470,8 +470,44 @@ namespace rbx::aimbot {
             math::vector2 screen_pos = {};
             if (!game::visengine.world_to_screen(target_pos, screen_pos, dims, view)) return;
 
-            float dx = screen_pos.x - static_cast<float>(cursor_pt.x);
-            float dy = screen_pos.y - static_cast<float>(cursor_pt.y);
+            float target_ref_x = static_cast<float>(cursor_pt.x);
+            float target_ref_y = static_cast<float>(cursor_pt.y);
+
+            // Get screen-space client position
+            float client_x = 0.0f;
+            float client_y = 0.0f;
+            HWND roblox_wnd = game::wnd;
+            if (roblox_wnd) {
+                RECT client_rect = {};
+                POINT client_pt = {};
+                if (GetClientRect(roblox_wnd, &client_rect)) {
+                    client_pt.x = client_rect.left;
+                    client_pt.y = client_rect.top;
+                    ClientToScreen(roblox_wnd, &client_pt);
+                    client_x = static_cast<float>(client_pt.x);
+                    client_y = static_cast<float>(client_pt.y);
+                }
+            }
+
+            // Check if cursor is locked (hidden)
+            CURSORINFO ci = { sizeof(CURSORINFO) };
+            bool cursor_hidden = false;
+            if (GetCursorInfo(&ci)) {
+                if (ci.flags == 0) {
+                    cursor_hidden = true;
+                }
+            }
+
+            float center_x = (dims.x / 2.0f) + client_x;
+            float center_y = (dims.y / 2.0f) + client_y;
+
+            if (cursor_hidden || (std::abs(target_ref_x - center_x) < 20.0f && std::abs(target_ref_y - center_y) < 20.0f)) {
+                target_ref_x = center_x;
+                target_ref_y = center_y;
+            }
+
+            float dx = screen_pos.x - target_ref_x;
+            float dy = screen_pos.y - target_ref_y;
 
             float sensitivity = std::clamp(settings::aimbot::mouse_sensitivity, 0.1f, 10.0f);
             dx *= sensitivity;
@@ -557,8 +593,6 @@ namespace rbx::aimbot {
         static math::vector3 last_target_pos = {};
 
         while (true) {
-            Sleep(1);
-
             if (!settings::aimbot::enabled ||
                 (settings::aimbot::aimbot_type < 0 || settings::aimbot::aimbot_type > 1) ||
                 check::textchatopen || !game::workspace.address) {
@@ -575,6 +609,7 @@ namespace rbx::aimbot {
                 spring_vel_mouse_y = 0.0f;
                 locked_part_name = "";
                 last_tick = std::chrono::high_resolution_clock::now();
+                Sleep(100);
                 continue;
             }
 
@@ -595,21 +630,29 @@ namespace rbx::aimbot {
                 spring_vel_mouse_y = 0.0f;
                 locked_part_name = "";
                 last_tick = std::chrono::high_resolution_clock::now();
+                Sleep(30);
                 continue;
             }
 
             if (needs_key_release) {
                 last_tick = std::chrono::high_resolution_clock::now();
+                Sleep(10);
                 continue;
             }
 
-            if (!GetCursorPos(&cursor_pt)) continue;
+            if (!GetCursorPos(&cursor_pt)) {
+                Sleep(1);
+                continue;
+            }
             HWND roblox_wnd = game::wnd;
             if (!roblox_wnd) {
                 roblox_wnd = FindWindowA(nullptr, "Roblox");
                 if (roblox_wnd) game::wnd = roblox_wnd;
             }
-            if (!roblox_wnd || !ScreenToClient(roblox_wnd, &cursor_pt)) continue;
+            if (!roblox_wnd) {
+                Sleep(10);
+                continue;
+            }
 
             // Fetch visual engine parameters once per frame
             math::vector2 dims = game::visengine.get_dimensions();
@@ -681,7 +724,10 @@ namespace rbx::aimbot {
                 }
             }
 
-            if (target.instance.address == 0) continue;
+            if (target.instance.address == 0) {
+                Sleep(10);
+                continue;
+            }
 
             rbx::part_t target_part = {};
             if (settings::aimbot::aimpart == 9) { 
@@ -701,7 +747,10 @@ namespace rbx::aimbot {
                     settings::aimbot::aimpart, cursor_pt, dims, view);
             }
 
-            if (!target_part.address) continue;
+            if (!target_part.address) {
+                Sleep(1);
+                continue;
+            }
 
             rbx::primitive_t primitive = target_part.get_primitive();
             math::vector3 target_pos = primitive.get_position();
@@ -726,6 +775,7 @@ namespace rbx::aimbot {
                                    target_pos.z != last_target_pos.z);
 
             if (target_pos_initialized && !view_changed && !target_changed) {
+                Sleep(1);
                 continue;
             }
 
@@ -738,15 +788,21 @@ namespace rbx::aimbot {
 
             if (dt > 0.1f) dt = 0.016f;
 
-            if (!target_pos_initialized) {
+            bool is_smooth_enabled = (settings::aimbot::aimbot_type == 0) ? settings::aimbot::camera_smooth : settings::aimbot::mouse_smooth;
+            if (!is_smooth_enabled) {
                 filtered_target_pos = target_pos;
                 target_pos_initialized = true;
             } else {
-                float target_ema_factor = 1.0f - std::exp(-12.0f * dt);
-                target_ema_factor = std::clamp(target_ema_factor, 0.0f, 1.0f);
-                filtered_target_pos.x += (target_pos.x - filtered_target_pos.x) * target_ema_factor;
-                filtered_target_pos.y += (target_pos.y - filtered_target_pos.y) * target_ema_factor;
-                filtered_target_pos.z += (target_pos.z - filtered_target_pos.z) * target_ema_factor;
+                if (!target_pos_initialized) {
+                    filtered_target_pos = target_pos;
+                    target_pos_initialized = true;
+                } else {
+                    float target_ema_factor = 1.0f - std::exp(-12.0f * dt);
+                    target_ema_factor = std::clamp(target_ema_factor, 0.0f, 1.0f);
+                    filtered_target_pos.x += (target_pos.x - filtered_target_pos.x) * target_ema_factor;
+                    filtered_target_pos.y += (target_pos.y - filtered_target_pos.y) * target_ema_factor;
+                    filtered_target_pos.z += (target_pos.z - filtered_target_pos.z) * target_ema_factor;
+                }
             }
 
             if (settings::aimbot::aimbot_type == 0) {
@@ -755,6 +811,7 @@ namespace rbx::aimbot {
             else {
                 execute_mouse_aim(filtered_target_pos, cursor_pt, dt, dims, view);
             }
+            Sleep(1);
         }
     }
 
