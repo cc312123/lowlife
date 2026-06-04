@@ -11,5 +11,4 @@ namespace game
 	inline rbx::instance_t local_character{};
 
 	inline HWND wnd;
-	inline math::vector2 client_offset{ 0.0f, 0.0f };
 }

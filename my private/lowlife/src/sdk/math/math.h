@@ -66,10 +66,4 @@ namespace math
 			};
 		}
 	};
-
-	struct cframe_t final
-	{
-		matrix3 rotation;
-		vector3 position;
-	};
 }

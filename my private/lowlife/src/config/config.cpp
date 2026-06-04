@@ -146,7 +146,6 @@ namespace config
 		file << "    \"shake_x\": " << settings::aimbot::shake_x << ",\n";
 		file << "    \"shake_y\": " << settings::aimbot::shake_y << ",\n";
 		file << "    \"easing_style\": " << settings::aimbot::easing_style << ",\n";
-		file << "    \"multipoint\": " << (settings::aimbot::multipoint ? "true" : "false") << ",\n";
 		file << "    \"team_check\": " << (settings::aimbot::team_check ? "true" : "false") << "\n";
 		file << "  },\n";
 
@@ -240,7 +239,6 @@ namespace config
 		
 		file << "  \"hitbox_expander\": {\n";
 		file << "    \"enabled\": " << (settings::hitbox_expander::enabled ? "true" : "false") << ",\n";
-		file << "    \"target_part\": " << settings::hitbox_expander::target_part << ",\n";
 		file << "    \"size_x\": " << settings::hitbox_expander::size_x << ",\n";
 		file << "    \"size_y\": " << settings::hitbox_expander::size_y << ",\n";
 		file << "    \"size_z\": " << settings::hitbox_expander::size_z << "\n";
@@ -512,8 +510,6 @@ namespace config
 				settings::aimbot::shake_y = std::stof(value);
 			if (parse_json_value(section, "easing_style", value))
 				settings::aimbot::easing_style = std::stoi(value);
-			if (parse_json_value(section, "multipoint", value))
-				settings::aimbot::multipoint = (value == "true");
 			if (parse_json_value(section, "team_check", value))
 				settings::aimbot::team_check = (value == "true");
 		}
@@ -692,8 +688,6 @@ namespace config
 		{
 			if (parse_json_value(section, "enabled", value))
 				settings::hitbox_expander::enabled = (value == "true");
-			if (parse_json_value(section, "target_part", value))
-				settings::hitbox_expander::target_part = std::stoi(value);
 			if (parse_json_value(section, "size_x", value))
 				settings::hitbox_expander::size_x = std::stof(value);
 			if (parse_json_value(section, "size_y", value))

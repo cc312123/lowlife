@@ -39,7 +39,8 @@ void fly_function(const math::cframe& cframe, const math::vector3& velocity)
     if (prim.address == 0)
         return;
 
-    memory->write<math::cframe>(prim.address + Offsets::Primitive::Rotation, cframe);
+    memory->write<math::vector3>(prim.address + Offsets::Primitive::Position, cframe.position);
+    memory->write<math::matrix3>(prim.address + Offsets::Primitive::Rotation, cframe.rotation);
     memory->write<math::vector3>(prim.address + Offsets::Primitive::AssemblyLinearVelocity, velocity);
 }
 
@@ -54,11 +55,6 @@ namespace fly
         static bool is_hovering = false;
         static bool was_moving_last_frame = false;
         static math::vector3 hover_position{ 0.0f, 0.0f, 0.0f };
-
-        static std::uint64_t cached_hrp_address = 0;
-        static std::uint64_t cached_model_address = 0;
-        static std::uint64_t cached_camera_address = 0;
-        static std::uint32_t last_pid = 0;
         
         for (;;)
         {
@@ -116,58 +112,31 @@ namespace fly
             if (!key_pressed)
                 continue;
 
-            std::uint32_t current_pid = memory->get_process_id();
-            if (current_pid != last_pid)
-            {
-                cached_hrp_address = 0;
-                cached_model_address = 0;
-                cached_camera_address = 0;
-                last_pid = current_pid;
-            }
-
-            std::uint64_t local_player_addr = game::local_player.address;
-            std::uint64_t model_addr = 0;
-            if (local_player_addr != 0)
-            {
-                rbx::player_t local_player_obj = { local_player_addr };
-                model_addr = local_player_obj.get_model_instance().address;
-            }
-
-            if (model_addr != 0 && model_addr != cached_model_address)
-            {
-                rbx::model_instance_t model_instance = { model_addr };
-                cached_hrp_address = model_instance.find_first_child("HumanoidRootPart").address;
-                cached_model_address = model_addr;
-            }
-            else if (model_addr == 0)
-            {
-                cached_hrp_address = 0;
-                cached_model_address = 0;
-            }
-
-            if (cached_camera_address == 0 && game::workspace.address != 0)
-            {
-                cached_camera_address = game::workspace.find_first_child_by_class("Camera").address;
-            }
-            else if (game::workspace.address == 0)
-            {
-                cached_camera_address = 0;
-            }
-
-            if (local_player_addr == 0 || cached_model_address == 0 || cached_hrp_address == 0 || cached_camera_address == 0)
+            if (game::local_player.address == 0)
                 continue;
 
-            rbx::part_t part(cached_hrp_address);
+            rbx::player_t local_player_obj = { game::local_player.address };
+            rbx::model_instance_t model_instance = local_player_obj.get_model_instance();
+            if (model_instance.address == 0)
+                continue;
+
+            rbx::instance_t hrp = model_instance.find_first_child("HumanoidRootPart");
+            if (hrp.address == 0)
+                continue;
+
+            rbx::part_t part(hrp.address);
             rbx::primitive_t prim = part.get_primitive();
             if (prim.address == 0)
                 continue;
 
-            // Batch read of Position & Rotation!
-            math::cframe_t hrp_cframe = prim.get_cframe();
-            math::vector3 current_position = hrp_cframe.position;
-            math::matrix3 current_rotation = hrp_cframe.rotation;
+            math::vector3 current_position = prim.get_position();
+            math::matrix3 current_rotation = prim.get_rotation();
 
-            rbx::camera_t camera{ cached_camera_address };
+            rbx::instance_t camera_instance = game::workspace.find_first_child_by_class("Camera");
+            if (camera_instance.address == 0)
+                continue;
+
+            rbx::camera_t camera{ camera_instance.address };
             math::matrix3 camera_rotation = camera.get_rotation();
 
             math::vector3 move_direction(0.0f, 0.0f, 0.0f);
@@ -223,8 +192,8 @@ namespace fly
                     // CFrame mode (moving): write once per frame and update target position
                     hover_position = hover_position + (rotated_direction * (settings::expl::fly_speed / 165.0f));
                     
-                    math::cframe_t cf = { current_rotation, hover_position };
-                    prim.set_cframe(cf);
+                    memory->write<math::vector3>(prim.address + Offsets::Primitive::Position, hover_position);
+                    memory->write<math::matrix3>(prim.address + Offsets::Primitive::Rotation, current_rotation);
                     memory->write<math::vector3>(prim.address + Offsets::Primitive::AssemblyLinearVelocity, math::vector3(0.0f, 0.0f, 0.0f));
                 }
             }
@@ -237,8 +206,8 @@ namespace fly
                 }
 
                 // Hovering (stationary): Lock position and zero velocity
-                math::cframe_t cf = { current_rotation, hover_position };
-                prim.set_cframe(cf);
+                memory->write<math::vector3>(prim.address + Offsets::Primitive::Position, hover_position);
+                memory->write<math::matrix3>(prim.address + Offsets::Primitive::Rotation, current_rotation);
                 memory->write<math::vector3>(prim.address + Offsets::Primitive::AssemblyLinearVelocity, math::vector3(0.0f, 0.0f, 0.0f));
             }
         }

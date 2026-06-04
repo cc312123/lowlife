@@ -24,7 +24,6 @@
 namespace {
 	bool is_player_knocked(const cache::entity_t& player) {
 		if (player.is_knocked) return true;
-
 		if (player.humanoid.address != 0) {
 			try {
 				float health = const_cast<cache::entity_t&>(player).humanoid.get_health();
@@ -36,79 +35,27 @@ namespace {
 		
 		if (player.ko_address != 0) {
 			try {
-				if (memory->read<bool>(player.ko_address + Offsets::Misc::Value)) return true;
+				return memory->read<bool>(player.ko_address + Offsets::Misc::Value);
+			} catch (...) {
+				return false;
+			}
+		}
+		
+		if (player.instance.address != 0) {
+			try {
+				rbx::player_t player_instance(player.instance.address);
+				rbx::model_instance_t model_instance = player_instance.get_model_instance();
+				if (model_instance.address != 0) {
+					rbx::instance_t body_effects = model_instance.find_first_child("BodyEffects");
+					if (body_effects.address != 0) {
+						rbx::instance_t ko = body_effects.find_first_child("K.O");
+						if (ko.address != 0) {
+							return memory->read<bool>(ko.address + Offsets::Misc::Value);
+						}
+					}
+				}
 			} catch (...) {}
 		}
-
-		try {
-			if (player.humanoid.address != 0) {
-				bool platform_stand = memory->read<bool>(player.humanoid.address + Offsets::Humanoid::PlatformStand);
-				
-				bool state_knocked = false;
-				std::uint64_t state_ptr = memory->read<std::uint64_t>(player.humanoid.address + Offsets::Humanoid::HumanoidState);
-				if (state_ptr != 0) {
-					int state_id = memory->read<int>(state_ptr + Offsets::Humanoid::HumanoidStateID);
-					if (state_id == 0 || state_id == 1 || state_id == 8 || state_id == 9) {
-						state_knocked = true;
-					}
-				}
-
-				bool is_lying_down = false;
-				auto hrp_it = player.parts.find("HumanoidRootPart");
-				auto torso_it = player.parts.find("Torso");
-				if (torso_it == player.parts.end()) {
-					torso_it = player.parts.find("UpperTorso");
-				}
-
-				rbx::part_t orientation_part{};
-				if (torso_it != player.parts.end()) {
-					orientation_part = torso_it->second;
-				} else if (hrp_it != player.parts.end()) {
-					orientation_part = hrp_it->second;
-				}
-
-				if (orientation_part.address != 0) {
-					rbx::primitive_t primitive = orientation_part.get_primitive();
-					if (primitive.address != 0) {
-						math::matrix3 rot = primitive.get_rotation();
-						float up_y = std::abs(rot.m[4]);
-						if (up_y < 0.5f) {
-							is_lying_down = true;
-						}
-					}
-				}
-
-				bool height_check_knocked = false;
-				if (hrp_it != player.parts.end()) {
-					rbx::part_t hrp_part = hrp_it->second;
-					rbx::primitive_t hrp_prim = hrp_part.get_primitive();
-					if (hrp_prim.address != 0) {
-						math::vector3 hrp_pos = hrp_prim.get_position();
-						for (const auto& [part_name, part] : player.parts) {
-							if (part_name.find("Leg") != std::string::npos || part_name.find("Foot") != std::string::npos) {
-								rbx::part_t leg_part = part;
-								rbx::primitive_t leg_prim = leg_part.get_primitive();
-								if (leg_prim.address != 0) {
-									math::vector3 leg_pos = leg_prim.get_position();
-									float y_diff = hrp_pos.y - leg_pos.y;
-									if (std::abs(y_diff) < 1.2f) {
-										height_check_knocked = true;
-										break;
-									}
-								}
-							}
-						}
-					}
-				}
-
-				if (platform_stand || state_knocked) {
-					if (is_lying_down || height_check_knocked) {
-						return true;
-					}
-				}
-			}
-		} catch (...) {}
-		
 		return false;
 	}
 
@@ -622,7 +569,8 @@ namespace botter
 			math::vector3 position;
 			math::matrix3 rotation;
 			math::vector3 size;
-			float radius;
+			float r;
+			float r_sq;
 		};
 
 		std::vector<cached_part_t> cached_map_parts;
@@ -672,8 +620,7 @@ namespace botter
 			static const std::unordered_set<std::string> skip_names = {
 				"players", "debris", "effects", "visuals", "bullets", "blood", "sounds", 
 				"tools", "dropped", "casing", "ragdoll", "particles", "markers", "gui", 
-				"ui", "viewmodel", "camera", "raycast", "beams", "trails", "spells", "snow",
-				"accessory", "hair", "hat", "handle", "item", "drop", "head", "face", "cloth", "shoe", "pant", "shirt"
+				"ui", "viewmodel", "camera", "raycast", "beams", "trails", "spells", "snow"
 			};
 			
 			std::string lower_name = name;
@@ -707,12 +654,6 @@ namespace botter
 
 				std::string class_name = get_class_name_fast(child.address);
 
-				// Skip explicit tool, hopperbin, and accessory classes
-				if (class_name == "Tool" || class_name == "HopperBin" || class_name == "Accessory") continue;
-
-				// Skip local character
-				if (child.address == game::local_character.address) continue;
-
 				// Skip character models (players and NPCs)
 				if (class_name == "Model")
 				{
@@ -721,7 +662,7 @@ namespace botter
 						std::lock_guard<std::mutex> lock(cache::mtx);
 						if (cache::cached_players) {
 							for (const auto& player : *cache::cached_players) {
-								if (player.character_address == child.address || player.name == name) {
+								if (player.name == name) {
 									is_player_char = true;
 									break;
 								}
@@ -756,12 +697,14 @@ namespace botter
 								cp.position = prim.get_position();
 								cp.rotation = prim.get_rotation();
 								cp.size = prim.get_size();
-								cp.radius = std::sqrt(cp.size.x * cp.size.x + cp.size.y * cp.size.y + cp.size.z * cp.size.z) * 0.5f;
 
-								// Skip small objects/props
-								float max_dim = std::max({cp.size.x, cp.size.y, cp.size.z});
-								if (max_dim >= 1.0f && cp.size.x > 0.01f && cp.size.y > 0.01f && cp.size.z > 0.01f)
+								if (cp.size.x > 0.01f && cp.size.y > 0.01f && cp.size.z > 0.01f)
 								{
+									float hx = cp.size.x * 0.5f;
+									float hy = cp.size.y * 0.5f;
+									float hz = cp.size.z * 0.5f;
+									cp.r_sq = hx * hx + hy * hy + hz * hz;
+									cp.r = std::sqrt(cp.r_sq);
 									parts.push_back(cp);
 								}
 							}
@@ -834,26 +777,94 @@ namespace botter
 
 			math::vector3 delta = box.position - ray_origin;
 
-			
-			math::vector3 axes[3] = {
-				{ box.rotation.m[0], box.rotation.m[3], box.rotation.m[6] },
-				{ box.rotation.m[1], box.rotation.m[4], box.rotation.m[7] },
-				{ box.rotation.m[2], box.rotation.m[5], box.rotation.m[8] }
-			};
-
-			math::vector3 half_extents = box.size * 0.5f;
-
-			for (int i = 0; i < 3; ++i)
+			// Axis 0 (X)
 			{
-				float f = ray_dir.x * axes[i].x + ray_dir.y * axes[i].y + ray_dir.z * axes[i].z;
-				float e = delta.x * axes[i].x + delta.y * axes[i].y + delta.z * axes[i].z;
-
-				float ext = (i == 0) ? half_extents.x : ((i == 1) ? half_extents.y : half_extents.z);
+				float ax_x = box.rotation.m[0];
+				float ax_y = box.rotation.m[3];
+				float ax_z = box.rotation.m[6];
+				float f = ray_dir.x * ax_x + ray_dir.y * ax_y + ray_dir.z * ax_z;
+				float e = delta.x * ax_x + delta.y * ax_y + delta.z * ax_z;
+				float ext = box.size.x * 0.5f;
 
 				if (std::abs(f) > 0.0001f)
 				{
-					float t1 = (e - ext) / f;
-					float t2 = (e + ext) / f;
+					float inv_f = 1.0f / f;
+					float t1 = (e - ext) * inv_f;
+					float t2 = (e + ext) * inv_f;
+
+					if (t1 > t2)
+					{
+						std::swap(t1, t2);
+					}
+
+					t_min = std::max(t_min, t1);
+					t_max = std::min(t_max, t2);
+
+					if (t_min > t_max)
+					{
+						return false;
+					}
+				}
+				else
+				{
+					if (-e - ext > 0.0f || -e + ext < 0.0f)
+					{
+						return false;
+					}
+				}
+			}
+
+			// Axis 1 (Y)
+			{
+				float ay_x = box.rotation.m[1];
+				float ay_y = box.rotation.m[4];
+				float ay_z = box.rotation.m[7];
+				float f = ray_dir.x * ay_x + ray_dir.y * ay_y + ray_dir.z * ay_z;
+				float e = delta.x * ay_x + delta.y * ay_y + delta.z * ay_z;
+				float ext = box.size.y * 0.5f;
+
+				if (std::abs(f) > 0.0001f)
+				{
+					float inv_f = 1.0f / f;
+					float t1 = (e - ext) * inv_f;
+					float t2 = (e + ext) * inv_f;
+
+					if (t1 > t2)
+					{
+						std::swap(t1, t2);
+					}
+
+					t_min = std::max(t_min, t1);
+					t_max = std::min(t_max, t2);
+
+					if (t_min > t_max)
+					{
+						return false;
+					}
+				}
+				else
+				{
+					if (-e - ext > 0.0f || -e + ext < 0.0f)
+					{
+						return false;
+					}
+				}
+			}
+
+			// Axis 2 (Z)
+			{
+				float az_x = box.rotation.m[2];
+				float az_y = box.rotation.m[5];
+				float az_z = box.rotation.m[8];
+				float f = ray_dir.x * az_x + ray_dir.y * az_y + ray_dir.z * az_z;
+				float e = delta.x * az_x + delta.y * az_y + delta.z * az_z;
+				float ext = box.size.z * 0.5f;
+
+				if (std::abs(f) > 0.0001f)
+				{
+					float inv_f = 1.0f / f;
+					float t1 = (e - ext) * inv_f;
+					float t2 = (e + ext) * inv_f;
 
 					if (t1 > t2)
 					{
@@ -892,18 +903,48 @@ namespace botter
 		if (len < 0.001f) return false;
 
 		math::vector3 dir_norm = { dir.x / len, dir.y / len, dir.z / len };
-		math::vector3 mid = (start + end) * 0.5f;
-		float ray_radius = len * 0.5f;
+
+		float ray_min_x = std::min(start.x, end.x);
+		float ray_max_x = std::max(start.x, end.x);
+		float ray_min_y = std::min(start.y, end.y);
+		float ray_max_y = std::max(start.y, end.y);
+		float ray_min_z = std::min(start.z, end.z);
+		float ray_max_z = std::max(start.z, end.z);
+
+		float vx = dir.x;
+		float vy = dir.y;
+		float vz = dir.z;
+		float v_sq = vx * vx + vy * vy + vz * vz;
 
 		for (const auto& box : cached_map_parts)
 		{
-			// Fast distance-based bounding-sphere pre-filter
-			float dx = box.position.x - mid.x;
-			float dy = box.position.y - mid.y;
-			float dz = box.position.z - mid.z;
+			float r = box.r;
+			if (box.position.x + r < ray_min_x || box.position.x - r > ray_max_x ||
+				box.position.y + r < ray_min_y || box.position.y - r > ray_max_y ||
+				box.position.z + r < ray_min_z || box.position.z - r > ray_max_z)
+			{
+				continue;
+			}
+
+			float wx = box.position.x - start.x;
+			float wy = box.position.y - start.y;
+			float wz = box.position.z - start.z;
+			
+			float dot = wx * vx + wy * vy + wz * vz;
+			float t = dot / v_sq;
+			if (t < 0.0f) t = 0.0f;
+			else if (t > 1.0f) t = 1.0f;
+			
+			float cx = start.x + t * vx;
+			float cy = start.y + t * vy;
+			float cz = start.z + t * vz;
+			
+			float dx = box.position.x - cx;
+			float dy = box.position.y - cy;
+			float dz = box.position.z - cz;
+			
 			float dist_sq = dx * dx + dy * dy + dz * dz;
-			float max_dist = ray_radius + box.radius;
-			if (dist_sq > max_dist * max_dist)
+			if (dist_sq > box.r_sq)
 			{
 				continue;
 			}

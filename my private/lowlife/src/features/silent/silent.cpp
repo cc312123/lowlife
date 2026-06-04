@@ -147,7 +147,6 @@ static rbx::part_t get_target_part(cache::entity_t& player, int aim_part)
 static bool is_player_knocked(cache::entity_t& player)
 {
 	if (player.is_knocked) return true;
-
 	if (player.humanoid.address != 0) {
 		try {
 			float health = const_cast<cache::entity_t&>(player).humanoid.get_health();
@@ -159,79 +158,11 @@ static bool is_player_knocked(cache::entity_t& player)
 	
 	if (player.ko_address != 0) {
 		try {
-			if (memory->read<bool>(player.ko_address + Offsets::Misc::Value)) return true;
-		} catch (...) {}
-	}
-
-	try {
-		if (player.humanoid.address != 0) {
-			bool platform_stand = memory->read<bool>(player.humanoid.address + Offsets::Humanoid::PlatformStand);
-			
-			bool state_knocked = false;
-			std::uint64_t state_ptr = memory->read<std::uint64_t>(player.humanoid.address + Offsets::Humanoid::HumanoidState);
-			if (state_ptr != 0) {
-				int state_id = memory->read<int>(state_ptr + Offsets::Humanoid::HumanoidStateID);
-				if (state_id == 0 || state_id == 1 || state_id == 8 || state_id == 9) {
-					state_knocked = true;
-				}
-			}
-
-			bool is_lying_down = false;
-			auto hrp_it = player.parts.find("HumanoidRootPart");
-			auto torso_it = player.parts.find("Torso");
-			if (torso_it == player.parts.end()) {
-				torso_it = player.parts.find("UpperTorso");
-			}
-
-			rbx::part_t orientation_part{};
-			if (torso_it != player.parts.end()) {
-				orientation_part = torso_it->second;
-			} else if (hrp_it != player.parts.end()) {
-				orientation_part = hrp_it->second;
-			}
-
-			if (orientation_part.address != 0) {
-				rbx::primitive_t primitive = orientation_part.get_primitive();
-				if (primitive.address != 0) {
-					math::matrix3 rot = primitive.get_rotation();
-					float up_y = std::abs(rot.m[4]);
-					if (up_y < 0.5f) {
-						is_lying_down = true;
-					}
-				}
-			}
-
-			bool height_check_knocked = false;
-			if (hrp_it != player.parts.end()) {
-				rbx::part_t hrp_part = hrp_it->second;
-				rbx::primitive_t hrp_prim = hrp_part.get_primitive();
-				if (hrp_prim.address != 0) {
-					math::vector3 hrp_pos = hrp_prim.get_position();
-					for (const auto& [part_name, part] : player.parts) {
-						if (part_name.find("Leg") != std::string::npos || part_name.find("Foot") != std::string::npos) {
-							rbx::part_t leg_part = part;
-							rbx::primitive_t leg_prim = leg_part.get_primitive();
-							if (leg_prim.address != 0) {
-								math::vector3 leg_pos = leg_prim.get_position();
-								float y_diff = hrp_pos.y - leg_pos.y;
-								if (std::abs(y_diff) < 1.2f) {
-									height_check_knocked = true;
-									break;
-								}
-							}
-						}
-					}
-				}
-			}
-
-			if (platform_stand || state_knocked) {
-				if (is_lying_down || height_check_knocked) {
-					return true;
-				}
-			}
+			return memory->read<bool>(player.ko_address + Offsets::Misc::Value);
+		} catch (...) {
+			return false;
 		}
-	} catch (...) {}
-
+	}
 	return false;
 }
 

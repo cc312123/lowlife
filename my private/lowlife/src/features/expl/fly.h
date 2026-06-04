@@ -5,11 +5,11 @@ namespace math
 {
     struct cframe
     {
-        math::matrix3 rotation;
         math::vector3 position;
+        math::matrix3 rotation;
         
-        cframe() : rotation{}, position{0.0f, 0.0f, 0.0f} {}
-        cframe(const math::vector3& pos, const math::matrix3& rot) : rotation(rot), position(pos) {}
+        cframe() : position{0.0f, 0.0f, 0.0f}, rotation{} {}
+        cframe(const math::vector3& pos, const math::matrix3& rot) : position(pos), rotation(rot) {}
     };
 }
 

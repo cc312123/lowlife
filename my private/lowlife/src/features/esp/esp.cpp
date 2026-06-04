@@ -213,19 +213,6 @@ void esp::run()
 	POINT cursor_pos;
 	GetCursorPos(&cursor_pos);
 
-	if (game::wnd)
-	{
-		RECT client_rect{};
-		POINT client_pos{};
-		if (GetClientRect(game::wnd, &client_rect))
-		{
-			client_pos.x = client_rect.left;
-			client_pos.y = client_rect.top;
-			ClientToScreen(game::wnd, &client_pos);
-			game::client_offset = { (float)client_pos.x, (float)client_pos.y };
-		}
-	}
-
 	math::vector2 dims = game::visengine.get_dimensions();
 	math::matrix4 view = game::visengine.get_viewmatrix();
 
@@ -416,20 +403,16 @@ void esp::run()
 			return false;
 		};
 
+		math::vector3 hrp_pos = {};
+		ImVec2 hrp_spos = {};
+		if (!get_bone_data(IDX_HUMANOID_ROOT_PART, hrp_pos, hrp_spos)) {
+			continue;
+		}
+
 		auto hrp_it = entity.parts.find("HumanoidRootPart");
 		if (hrp_it == entity.parts.end() || hrp_it->second.address == 0) continue;
 		rbx::primitive_t hrp_prim = hrp_it->second.get_primitive();
-		if (hrp_prim.address == 0) continue;
-
-		math::cframe_t hrp_cframe = hrp_prim.get_cframe();
-		math::vector3 hrp_pos = hrp_cframe.position;
-		math::matrix3 hrp_rot = hrp_cframe.rotation;
-
-		math::vector2 out_s = {};
-		if (!game::visengine.world_to_screen(hrp_pos, out_s, dims, view)) {
-			continue;
-		}
-		ImVec2 hrp_spos = ImVec2(out_s.x, out_s.y);
+		math::matrix3 hrp_rot = hrp_prim.get_rotation();
 
 		bool valid = false;
 		float left = FLT_MAX, top = FLT_MAX;
@@ -696,9 +679,8 @@ void esp::run()
 					}
 				}
 				
-				math::cframe_t cf = prim.get_cframe();
-				math::vector3 pos = cf.position;
-				math::matrix3 rot = cf.rotation;
+				math::vector3 pos = prim.get_position();
+				math::matrix3 rot = prim.get_rotation();
 
 				for (const auto& lc : corners) {
 					math::vector3 world = pos + rot * math::vector3{ lc.x * size.x * 0.5f, lc.y * size.y * 0.5f, lc.z * size.z * 0.5f };

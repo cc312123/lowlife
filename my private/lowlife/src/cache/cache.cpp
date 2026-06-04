@@ -176,68 +176,45 @@ void cache::run()
 			if (needs_recache)
 			{
 				cached_model_addresses[player.address] = model_instance.address;
-				cached_entity.character_address = model_instance.address;
 				cached_entity.parts.clear();
 				cached_entity.ko_address = 0;
+				cached_entity.ko_check_count = 0;
 
 				if (model_instance.address != 0)
 				{
-					std::vector<rbx::instance_t> model_children = model_instance.get_children();
-					cached_model_children_counts[player.address] = model_children.size();
+					cached_model_children_counts[player.address] = model_instance.get_children().size();
 
-					rbx::instance_t body_effects{};
-					rbx::instance_t humanoid{};
-
-					for (rbx::instance_t& child : model_children)
-					{
-						if (child.address == 0) continue;
-
-						std::string name = child.get_name();
-						if (name == "BodyEffects")
-						{
-							body_effects = child;
-						}
-						else if (name == "Humanoid")
-						{
-							humanoid = child;
-						}
-
-						std::string part_class = child.get_class_name();
-						if (part_class.find("Part") != std::string::npos)
-						{
-							cached_entity.parts[name] = { child.address };
-						}
-					}
-
+					rbx::instance_t body_effects = model_instance.find_first_child("BodyEffects");
 					if (body_effects.address != 0)
 					{
-						std::vector<rbx::instance_t> be_children = body_effects.get_children();
-						for (rbx::instance_t& child : be_children)
+						rbx::instance_t ko = body_effects.find_first_child("K.O");
+						if (ko.address == 0) {
+							ko = body_effects.find_first_child("KO");
+						}
+						if (ko.address == 0) {
+							ko = body_effects.find_first_child("Dead");
+						}
+						if (ko.address != 0)
 						{
-							if (child.address == 0) continue;
-							std::string name = child.get_name();
-							if (name == "K.O" || name == "KO" || name == "Dead")
-							{
-								cached_entity.ko_address = child.address;
-								break;
-							}
+							cached_entity.ko_address = ko.address;
 						}
 					}
 
-					cached_entity.humanoid = { humanoid.address };
-					if (humanoid.address != 0)
+					for (rbx::part_t& part : model_instance.get_children<rbx::part_t>())
 					{
-						cached_entity.rig_type = cached_entity.humanoid.get_rig_type();
+						std::string part_class = part.get_class_name();
+						if (part_class.find("Part") != std::string::npos)
+						{
+							cached_entity.parts[part.get_name()] = part;
+						}
 					}
-					else
-					{
-						cached_entity.rig_type = 0;
-					}
+
+					cached_entity.humanoid = { model_instance.find_first_child("Humanoid").address };
+					cached_entity.rig_type = cached_entity.humanoid.get_rig_type();
 				}
 				else
 				{
 					cached_model_children_counts[player.address] = 0;
-					cached_entity.character_address = 0;
 					cached_entity.humanoid = { 0 };
 					cached_entity.rig_type = 0;
 				}
@@ -260,95 +237,40 @@ void cache::run()
 					cached_entity.max_health = 0.0f;
 				}
 
-				bool is_knocked_state = false;
+				if (cached_entity.ko_address == 0 && cached_entity.ko_check_count < 15)
+				{
+					cached_entity.ko_check_count++;
+					rbx::instance_t body_effects = model_instance.find_first_child("BodyEffects");
+					if (body_effects.address != 0)
+					{
+						rbx::instance_t ko = body_effects.find_first_child("K.O");
+						if (ko.address == 0) {
+							ko = body_effects.find_first_child("KO");
+						}
+						if (ko.address == 0) {
+							ko = body_effects.find_first_child("Dead");
+						}
+						if (ko.address != 0)
+						{
+							cached_entity.ko_address = ko.address;
+						}
+					}
+				}
+
 				if (cached_entity.ko_address != 0)
 				{
-					is_knocked_state = memory->read<bool>(cached_entity.ko_address + Offsets::Misc::Value);
+					cached_entity.is_knocked = memory->read<bool>(cached_entity.ko_address + Offsets::Misc::Value);
 				}
-				
-				if (!is_knocked_state)
+				else
 				{
-					if (cached_entity.health <= 0.0f)
-					{
-						is_knocked_state = true;
-					}
-					else if (cached_entity.humanoid.address != 0)
-					{
-						bool platform_stand = memory->read<bool>(cached_entity.humanoid.address + Offsets::Humanoid::PlatformStand);
-						
-						bool state_knocked = false;
-						std::uint64_t state_ptr = memory->read<std::uint64_t>(cached_entity.humanoid.address + Offsets::Humanoid::HumanoidState);
-						if (state_ptr != 0)
-						{
-							int state_id = memory->read<int>(state_ptr + Offsets::Humanoid::HumanoidStateID);
-							if (state_id == 0 || state_id == 1 || state_id == 8 || state_id == 9)
-							{
-								state_knocked = true;
-							}
-						}
-
-						bool is_lying_down = false;
-						auto hrp_it = cached_entity.parts.find("HumanoidRootPart");
-						auto torso_it = cached_entity.parts.find("Torso");
-						if (torso_it == cached_entity.parts.end()) {
-							torso_it = cached_entity.parts.find("UpperTorso");
-						}
-
-						rbx::part_t orientation_part{};
-						if (torso_it != cached_entity.parts.end()) {
-							orientation_part = torso_it->second;
-						} else if (hrp_it != cached_entity.parts.end()) {
-							orientation_part = hrp_it->second;
-						}
-
-						if (orientation_part.address != 0) {
-							rbx::primitive_t primitive = orientation_part.get_primitive();
-							if (primitive.address != 0) {
-								math::matrix3 rot = primitive.get_rotation();
-								float up_y = std::abs(rot.m[4]);
-								if (up_y < 0.5f) {
-									is_lying_down = true;
-								}
-							}
-						}
-
-						bool height_check_knocked = false;
-						if (hrp_it != cached_entity.parts.end()) {
-							rbx::primitive_t hrp_prim = hrp_it->second.get_primitive();
-							if (hrp_prim.address != 0) {
-								math::vector3 hrp_pos = hrp_prim.get_position();
-								for (const auto& [part_name, part] : cached_entity.parts) {
-									if (part_name.find("Leg") != std::string::npos || part_name.find("Foot") != std::string::npos) {
-										rbx::part_t non_const_part = part;
-										rbx::primitive_t leg_prim = non_const_part.get_primitive();
-										if (leg_prim.address != 0) {
-											math::vector3 leg_pos = leg_prim.get_position();
-											float y_diff = hrp_pos.y - leg_pos.y;
-											if (std::abs(y_diff) < 1.2f) {
-												height_check_knocked = true;
-												break;
-											}
-										}
-									}
-								}
-							}
-						}
-
-						if (platform_stand || state_knocked) {
-							if (is_lying_down || height_check_knocked) {
-								is_knocked_state = true;
-							}
-						}
-					}
+					cached_entity.is_knocked = (cached_entity.health <= 0.0f);
 				}
-				cached_entity.is_knocked = is_knocked_state;
 			}
 			else
 			{
 				cached_entity.health = 0.0f;
 				cached_entity.max_health = 0.0f;
 				cached_entity.is_knocked = false;
-				cached_entity.character_address = 0;
 			}
 
 			temp_cache.push_back(cached_entity);
@@ -383,6 +305,6 @@ void cache::run()
 			}
 		}
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		std::this_thread::sleep_for(std::chrono::milliseconds(30));
 	}
 }

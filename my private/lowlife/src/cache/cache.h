@@ -18,7 +18,6 @@ namespace cache
 		std::string tool_name;
 		std::int64_t user_id;
 		std::uint64_t ko_address{ 0 };
-		std::uint64_t character_address{ 0 };
 		std::string crew_id;
 
 		std::uint8_t rig_type;
@@ -30,6 +29,7 @@ namespace cache
 		float health{ 0.0f };
 		float max_health{ 0.0f };
 		bool is_knocked{ false };
+		int ko_check_count{ 0 };
 	};
 
 	inline cache::entity_t cached_local_player;
