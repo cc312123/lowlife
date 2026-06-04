@@ -60,6 +60,18 @@ namespace settings
 		inline float shake_x{ 0.0f };
 		inline float shake_y{ 0.0f };
 		inline int easing_style{ 0 }; 
+
+		inline int target_selection_mode{ 0 }; // 0 = Crosshair, 1 = 3D Distance, 2 = Health
+		inline bool smart_bone{ false };
+		inline bool bone_random_offset{ false };
+		inline float bone_random_offset_val{ 0.2f };
+		inline float latency_ms{ 50.0f };
+		inline bool projectile_prediction{ false };
+		inline float projectile_speed{ 1000.0f };
+		inline float projectile_gravity{ 196.2f };
+		inline bool adaptive_smoothing{ false };
+		inline float adaptive_smooth_min{ 2.0f };
+		inline float adaptive_smooth_max{ 10.0f };
 	}
 	namespace silent
 	{

@@ -2092,6 +2092,25 @@ void render_t::render_menu()
         ImGui::Checkbox("Wall Check", &settings::aimbot::wall_check);
         ImGui::Checkbox("Team Check", &settings::aimbot::team_check);
 
+        const char* selection_modes[] = { "Closest to Crosshair", "Closest 3D Proximity", "Lowest Health" };
+        ImGui::Combo("Target Selection Mode", &settings::aimbot::target_selection_mode, selection_modes, IM_ARRAYSIZE(selection_modes));
+        ImGui::Checkbox("Smart Bone Fallback", &settings::aimbot::smart_bone);
+        ImGui::Checkbox("Bone Random Offset", &settings::aimbot::bone_random_offset);
+        if (settings::aimbot::bone_random_offset) {
+            ImGui::SliderFloat("Offset Radius (Studs)", &settings::aimbot::bone_random_offset_val, 0.05f, 2.00f, "%.2f");
+        }
+        ImGui::SliderFloat("Latency Compensation (ms)", &settings::aimbot::latency_ms, 0.0f, 300.0f, "%.0f");
+        ImGui::Checkbox("Projectile Prediction", &settings::aimbot::projectile_prediction);
+        if (settings::aimbot::projectile_prediction) {
+            ImGui::SliderFloat("Bullet Speed", &settings::aimbot::projectile_speed, 100.0f, 6000.0f, "%.0f");
+            ImGui::SliderFloat("Bullet Gravity", &settings::aimbot::projectile_gravity, 0.0f, 500.0f, "%.1f");
+        }
+        ImGui::Checkbox("Adaptive Smoothing", &settings::aimbot::adaptive_smoothing);
+        if (settings::aimbot::adaptive_smoothing) {
+            ImGui::SliderFloat("Min Smoothness", &settings::aimbot::adaptive_smooth_min, 1.0f, 100.0f, "%.1f");
+            ImGui::SliderFloat("Max Smoothness", &settings::aimbot::adaptive_smooth_max, 1.0f, 200.0f, "%.1f");
+        }
+
         
         const char* easing_styles[] = {
             "Linear", "Sine (In)", "Sine (Out)", "Sine (InOut)", "Quad (In)", "Quad (Out)", "Quad (InOut)", "Cubic (In)", "Cubic (Out)", "Cubic (InOut)", "Elastic (Out)", "Bounce (Out)"

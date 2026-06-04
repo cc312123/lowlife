@@ -146,7 +146,18 @@ namespace config
 		file << "    \"shake_x\": " << settings::aimbot::shake_x << ",\n";
 		file << "    \"shake_y\": " << settings::aimbot::shake_y << ",\n";
 		file << "    \"easing_style\": " << settings::aimbot::easing_style << ",\n";
-		file << "    \"team_check\": " << (settings::aimbot::team_check ? "true" : "false") << "\n";
+		file << "    \"team_check\": " << (settings::aimbot::team_check ? "true" : "false") << ",\n";
+		file << "    \"target_selection_mode\": " << settings::aimbot::target_selection_mode << ",\n";
+		file << "    \"smart_bone\": " << (settings::aimbot::smart_bone ? "true" : "false") << ",\n";
+		file << "    \"bone_random_offset\": " << (settings::aimbot::bone_random_offset ? "true" : "false") << ",\n";
+		file << "    \"bone_random_offset_val\": " << settings::aimbot::bone_random_offset_val << ",\n";
+		file << "    \"latency_ms\": " << settings::aimbot::latency_ms << ",\n";
+		file << "    \"projectile_prediction\": " << (settings::aimbot::projectile_prediction ? "true" : "false") << ",\n";
+		file << "    \"projectile_speed\": " << settings::aimbot::projectile_speed << ",\n";
+		file << "    \"projectile_gravity\": " << settings::aimbot::projectile_gravity << ",\n";
+		file << "    \"adaptive_smoothing\": " << (settings::aimbot::adaptive_smoothing ? "true" : "false") << ",\n";
+		file << "    \"adaptive_smooth_min\": " << settings::aimbot::adaptive_smooth_min << ",\n";
+		file << "    \"adaptive_smooth_max\": " << settings::aimbot::adaptive_smooth_max << "\n";
 		file << "  },\n";
 
 		
@@ -512,6 +523,28 @@ namespace config
 				settings::aimbot::easing_style = std::stoi(value);
 			if (parse_json_value(section, "team_check", value))
 				settings::aimbot::team_check = (value == "true");
+			if (parse_json_value(section, "target_selection_mode", value))
+				settings::aimbot::target_selection_mode = std::stoi(value);
+			if (parse_json_value(section, "smart_bone", value))
+				settings::aimbot::smart_bone = (value == "true");
+			if (parse_json_value(section, "bone_random_offset", value))
+				settings::aimbot::bone_random_offset = (value == "true");
+			if (parse_json_value(section, "bone_random_offset_val", value))
+				settings::aimbot::bone_random_offset_val = std::stof(value);
+			if (parse_json_value(section, "latency_ms", value))
+				settings::aimbot::latency_ms = std::stof(value);
+			if (parse_json_value(section, "projectile_prediction", value))
+				settings::aimbot::projectile_prediction = (value == "true");
+			if (parse_json_value(section, "projectile_speed", value))
+				settings::aimbot::projectile_speed = std::stof(value);
+			if (parse_json_value(section, "projectile_gravity", value))
+				settings::aimbot::projectile_gravity = std::stof(value);
+			if (parse_json_value(section, "adaptive_smoothing", value))
+				settings::aimbot::adaptive_smoothing = (value == "true");
+			if (parse_json_value(section, "adaptive_smooth_min", value))
+				settings::aimbot::adaptive_smooth_min = std::stof(value);
+			if (parse_json_value(section, "adaptive_smooth_max", value))
+				settings::aimbot::adaptive_smooth_max = std::stof(value);
 		}
 
 		

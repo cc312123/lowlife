@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.0",
-    "latestChangelog":  "Initial high-performance release with external player caching and optimized rendering loops.",
+    "latestVersion":  "1.0.1",
+    "latestChangelog":  "Aimbot optimizations, cache scanning improvements, projectile prediction, adaptive smoothing, and mouse jitter fixes.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -10,7 +10,14 @@
                         "changelog":  "Initial high-performance release with external player caching and optimized rendering loops.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "57f0c9eab2cf7313c9de63b7d8339b7b"
+                    },
+                    {
+                        "version":  "1.0.1",
+                        "date":  "2026-06-04",
+                        "changelog":  "Aimbot optimizations, cache scanning improvements, projectile prediction, adaptive smoothing, and mouse jitter fixes.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "3ffa3396bf4f6dc22e0cf5681e98f305"
                     }
                 ],
-    "latestHash":  "57f0c9eab2cf7313c9de63b7d8339b7b"
+    "latestHash":  "3ffa3396bf4f6dc22e0cf5681e98f305"
 }
