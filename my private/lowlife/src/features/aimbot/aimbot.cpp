@@ -261,20 +261,14 @@ namespace rbx::aimbot {
             return closest;
         }
 
-        // Dynamically scans bones to find a visible target fallback or resolves to static selection
-        rbx::part_t get_best_bone(cache::entity_t& player, const math::vector3& camera_pos, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, std::string& chosen_bone_name) {
+        // Resolves the best bone without doing occlusion checks first
+        rbx::part_t get_best_bone_no_occlusion(cache::entity_t& player, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, std::string& chosen_bone_name) {
             if (player.parts.empty()) return rbx::part_t{};
-
-            const std::vector<std::string> bone_priority = {
-                "Head", "UpperTorso", "Torso", "LowerTorso", "HumanoidRootPart",
-                "LeftUpperArm", "RightUpperArm", "LeftUpperLeg", "RightUpperLeg"
-            };
 
             int aim_part = settings::aimbot::aimpart;
             chosen_bone_name = "";
             rbx::part_t target_part = {};
 
-            // 1. Try selected bone first
             switch (aim_part) {
             case 0:
                 if (auto it = player.parts.find("Head"); it != player.parts.end()) { chosen_bone_name = "Head"; target_part = it->second; }
@@ -335,43 +329,41 @@ namespace rbx::aimbot {
                 break;
             }
 
-            // If selected part is found, check if it's visible (or if wall check is disabled)
-            if (target_part.address != 0) {
-                bool is_visible = true;
-                if (settings::aimbot::wall_check) {
-                    math::vector3 pos = target_part.get_primitive().get_position();
-                    is_visible = !is_bone_occluded_cached(player.instance.address, chosen_bone_name, camera_pos, pos);
-                }
-                if (is_visible) {
-                    return target_part;
-                }
-            }
-
-            // 2. Fallback to Smart Bone dynamic scan if selected bone is occluded/not found
-            if (settings::aimbot::smart_bone) {
-                for (const auto& bone_name : bone_priority) {
-                    auto it = player.parts.find(bone_name);
-                    if (it != player.parts.end() && it->second.address != 0) {
-                        math::vector3 pos = it->second.get_primitive().get_position();
-                        if (settings::aimbot::wall_check) {
-                            if (!is_bone_occluded_cached(player.instance.address, bone_name, camera_pos, pos)) {
-                                chosen_bone_name = bone_name;
-                                return it->second;
-                            }
-                        } else {
-                            chosen_bone_name = bone_name;
-                            return it->second;
-                        }
-                    }
-                }
-            }
-
-            // 3. Fallback to selected bone even if occluded, or HumanoidRootPart as a last resort
             if (target_part.address != 0) {
                 return target_part;
             }
             if (auto it = player.parts.find("HumanoidRootPart"); it != player.parts.end()) { chosen_bone_name = "HumanoidRootPart"; return it->second; }
             return rbx::part_t{};
+        }
+
+        // Resolves the best bone with optional occlusion checking
+        rbx::part_t get_best_bone(cache::entity_t& player, const math::vector3& camera_pos, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, std::string& chosen_bone_name) {
+            rbx::part_t primary_part = get_best_bone_no_occlusion(player, cursor_pt, dims, view, chosen_bone_name);
+            if (primary_part.address == 0) return rbx::part_t{};
+
+            if (settings::aimbot::wall_check) {
+                math::vector3 pos = primary_part.get_primitive().get_position();
+                if (is_bone_occluded_cached(player.instance.address, chosen_bone_name, camera_pos, pos)) {
+                    if (settings::aimbot::smart_bone) {
+                        const std::vector<std::string> bone_priority = {
+                            "Head", "UpperTorso", "Torso", "LowerTorso", "HumanoidRootPart",
+                            "LeftUpperArm", "RightUpperArm", "LeftUpperLeg", "RightUpperLeg"
+                        };
+                        for (const auto& bone_name : bone_priority) {
+                            if (bone_name == chosen_bone_name) continue;
+                            auto it = player.parts.find(bone_name);
+                            if (it != player.parts.end() && it->second.address != 0) {
+                                math::vector3 bone_pos = it->second.get_primitive().get_position();
+                                if (!is_bone_occluded_cached(player.instance.address, bone_name, camera_pos, bone_pos)) {
+                                    chosen_bone_name = bone_name;
+                                    return it->second;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return primary_part;
         }
 
         bool is_target_cheap_valid(cache::entity_t& player, const std::string& local_crew_id) {
@@ -395,7 +387,7 @@ namespace rbx::aimbot {
             if (!is_target_cheap_valid(player, local_crew_id)) return false;
 
             std::string temp_name = "";
-            rbx::part_t target_part = get_best_bone(player, camera_pos, cursor_pt, dims, view, temp_name);
+            rbx::part_t target_part = get_best_bone_no_occlusion(player, cursor_pt, dims, view, temp_name);
             if (!target_part.address) return false;
 
             math::vector3 world_pos = target_part.get_primitive().get_position();
@@ -412,14 +404,34 @@ namespace rbx::aimbot {
 
             if (settings::aimbot::wall_check) {
                 if (is_bone_occluded_cached(player.instance.address, temp_name, camera_pos, world_pos)) {
-                    return false;
+                    if (settings::aimbot::smart_bone) {
+                        const std::vector<std::string> bone_priority = {
+                            "Head", "UpperTorso", "Torso", "LowerTorso", "HumanoidRootPart",
+                            "LeftUpperArm", "RightUpperArm", "LeftUpperLeg", "RightUpperLeg"
+                        };
+                        bool found_visible = false;
+                        for (const auto& bone_name : bone_priority) {
+                            if (bone_name == temp_name) continue;
+                            auto it = player.parts.find(bone_name);
+                            if (it != player.parts.end() && it->second.address != 0) {
+                                math::vector3 pos = it->second.get_primitive().get_position();
+                                if (!is_bone_occluded_cached(player.instance.address, bone_name, camera_pos, pos)) {
+                                    found_visible = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!found_visible) return false;
+                    } else {
+                        return false;
+                    }
                 }
             }
 
             return true;
         }
 
-        // Lock-free scans for best target using copied entities snapshots
+        // Lock-free scans for best target using sorted candidates and optimized visibility raycasts
         cache::entity_t find_best_target(
             std::vector<cache::entity_t>& players, 
             cache::entity_t& local_player, 
@@ -463,7 +475,7 @@ namespace rbx::aimbot {
                 if (!is_target_cheap_valid(player, local_crew_id)) continue;
 
                 std::string chosen_bone_name = "";
-                rbx::part_t target_part = get_best_bone(player, camera_pos, cursor_pt, dims, view, chosen_bone_name);
+                rbx::part_t target_part = get_best_bone_no_occlusion(player, cursor_pt, dims, view, chosen_bone_name);
                 if (!target_part.address) continue;
 
                 math::vector3 world_pos = target_part.get_primitive().get_position();
@@ -509,15 +521,43 @@ namespace rbx::aimbot {
                 return a.score < b.score;
             });
 
-            // Perform occlusion check on candidates in order of score
+            // Perform occlusion check on sorted candidates, stopping at the first visible one
             for (const auto& candidate : candidates) {
+                std::string actual_bone_name = candidate.part_name;
+                rbx::part_t actual_part = candidate.part;
+                
                 if (settings::aimbot::wall_check) {
-                    if (is_bone_occluded_cached(candidate.player.instance.address, candidate.part_name, camera_pos, candidate.world_pos)) {
-                        continue;
+                    if (is_bone_occluded_cached(candidate.player.instance.address, actual_bone_name, camera_pos, candidate.world_pos)) {
+                        if (settings::aimbot::smart_bone) {
+                            const std::vector<std::string> bone_priority = {
+                                "Head", "UpperTorso", "Torso", "LowerTorso", "HumanoidRootPart",
+                                "LeftUpperArm", "RightUpperArm", "LeftUpperLeg", "RightUpperLeg"
+                            };
+                            bool found_visible = false;
+                            for (const auto& bone_name : bone_priority) {
+                                if (bone_name == candidate.part_name) continue;
+                                auto it = candidate.player.parts.find(bone_name);
+                                if (it != candidate.player.parts.end() && it->second.address != 0) {
+                                    rbx::part_t temp_part = it->second;
+                                    math::vector3 pos = temp_part.get_primitive().get_position();
+                                    if (!is_bone_occluded_cached(candidate.player.instance.address, bone_name, camera_pos, pos)) {
+                                        actual_bone_name = bone_name;
+                                        actual_part = temp_part;
+                                        found_visible = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (!found_visible) {
+                                continue;
+                            }
+                        } else {
+                            continue;
+                        }
                     }
                 }
-                out_best_part = candidate.part;
-                out_best_part_name = candidate.part_name;
+                out_best_part = actual_part;
+                out_best_part_name = actual_bone_name;
                 return candidate.player;
             }
 
@@ -686,8 +726,6 @@ namespace rbx::aimbot {
             static std::uint64_t last_target_address = 0;
             if (target_address != last_target_address) {
                 last_target_address = target_address;
-                spring_vel_mouse_x = 0.0f;
-                spring_vel_mouse_y = 0.0f;
             }
 
             math::vector2 screen_pos = {};
@@ -745,10 +783,43 @@ namespace rbx::aimbot {
                 target_ref_y = center_y;
             }
 
-            float dx = screen_pos.x - target_ref_x;
-            float dy = screen_pos.y - target_ref_y;
-
+            float dx = 0.0f;
+            float dy = 0.0f;
             float sensitivity = std::clamp(settings::aimbot::mouse_sensitivity, 0.1f, 10.0f);
+
+            if (session_captured) {
+                // Angular-based relative mouse movement (First Person / Shift Lock)
+                rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
+                if (camera_inst.address != 0) {
+                    rbx::camera_t camera{ camera_inst.address };
+                    math::matrix3 current_rot = camera.get_rotation();
+                    math::vector3 camera_pos = camera.get_position();
+
+                    math::vector3 target_forward = normalize(vector3_sub(target_pos, camera_pos));
+                    math::vector3 current_forward = { -current_rot.m[2], -current_rot.m[5], -current_rot.m[8] };
+                    current_forward = normalize(current_forward);
+
+                    float current_yaw = 0.0f, current_pitch = 0.0f;
+                    float target_yaw = 0.0f, target_pitch = 0.0f;
+
+                    vector_to_angles(current_forward, current_yaw, current_pitch);
+                    vector_to_angles(target_forward, target_yaw, target_pitch);
+
+                    float yaw_diff = target_yaw - current_yaw;
+                    yaw_diff = std::atan2(std::sin(yaw_diff), std::cos(yaw_diff));
+
+                    float pitch_diff = target_pitch - current_pitch;
+                    pitch_diff = std::atan2(std::sin(pitch_diff), std::cos(pitch_diff));
+
+                    // Convert radian angular difference directly to mouse movement using Roblox mouse scale (0.0022)
+                    dx = yaw_diff / (sensitivity * 0.0022f);
+                    dy = -pitch_diff / (sensitivity * 0.0022f);
+                }
+            } else {
+                // Pixel-based relative movement (Third Person cursor aiming)
+                dx = screen_pos.x - target_ref_x;
+                dy = screen_pos.y - target_ref_y;
+            }
 
             if (settings::aimbot::mouse_smooth || settings::aimbot::adaptive_smoothing) {
                 float sx = std::clamp(settings::aimbot::mouse_smooth_x, 1.0f, 200.0f);
@@ -760,34 +831,21 @@ namespace rbx::aimbot {
                     sy = adaptive_factor;
                 }
 
-                // Map smooth factor to critically-damped spring physics
-                float stiffness_x = 350.0f / (sx * 0.5f + 1.0f);
-                float stiffness_y = 350.0f / (sy * 0.5f + 1.0f);
+                // Clean frame-rate independent LERP smoothing scaled by dt and easing functions
+                float t_x = std::clamp(dt * (45.0f / sx), 0.0f, 1.0f);
+                float t_y = std::clamp(dt * (45.0f / sy), 0.0f, 1.0f);
 
-                stiffness_x *= sensitivity;
-                stiffness_y *= sensitivity;
-                
-                // Calculate damping AFTER multiplying by sensitivity to ensure critical damping holds
-                float damping_x = 2.0f * std::sqrt(stiffness_x);
-                float damping_y = 2.0f * std::sqrt(stiffness_y);
+                float eased_t_x = apply_easing(settings::aimbot::easing_style, t_x);
+                float eased_t_y = apply_easing(settings::aimbot::easing_style, t_y);
 
-                float accel_x = stiffness_x * dx - damping_x * spring_vel_mouse_x;
-                float accel_y = stiffness_y * dy - damping_y * spring_vel_mouse_y;
-
-                spring_vel_mouse_x += accel_x * dt;
-                spring_vel_mouse_y += accel_y * dt;
-
-                float max_spring_vel = 2000.0f;
-                spring_vel_mouse_x = std::clamp(spring_vel_mouse_x, -max_spring_vel, max_spring_vel);
-                spring_vel_mouse_y = std::clamp(spring_vel_mouse_y, -max_spring_vel, max_spring_vel);
-
-                dx = spring_vel_mouse_x * dt;
-                dy = spring_vel_mouse_y * dt;
+                dx *= eased_t_x;
+                dy *= eased_t_y;
             } else {
-                dx *= sensitivity;
-                dy *= sensitivity;
-                spring_vel_mouse_x = 0.0f;
-                spring_vel_mouse_y = 0.0f;
+                // No smoothing: apply sensitivity scaling if in pixel mode (non-captured)
+                if (!session_captured) {
+                    dx *= sensitivity;
+                    dy *= sensitivity;
+                }
             }
 
             if (settings::aimbot::shake) {
@@ -989,7 +1047,7 @@ namespace rbx::aimbot {
                         target_pos_initialized = false;
                         locked_part_name = "";
                         update_target_offset(0);
-                        if (settings::aimbot::sticky_aim) {
+                        if (settings::aimbot::sticky_aim && settings::aimbot::keybind_mode != 2) {
                             needs_key_release = true;
                         }
                     }
@@ -1056,21 +1114,6 @@ namespace rbx::aimbot {
                 cursor_dist = vector2_distance(screen_pos.x, screen_pos.y, (float)cursor_pt.x, (float)cursor_pt.y);
             }
 
-            // Check if view matrix actually changed to avoid duplicate inputs within the same game render frame
-            bool view_changed = false;
-            for (int i = 0; i < 16; ++i) {
-                if (view.m[i] != last_view.m[i]) {
-                    view_changed = true;
-                    break;
-                }
-            }
-
-            if (target_pos_initialized && !view_changed) {
-                Sleep(1);
-                continue;
-            }
-
-            last_view = view;
             last_target_pos = target_pos;
 
             auto now = std::chrono::high_resolution_clock::now();
