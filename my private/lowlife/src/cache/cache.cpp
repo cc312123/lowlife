@@ -222,6 +222,17 @@ void cache::run()
 						}
 					}
 
+					auto head_it = cached_entity.parts.find("Head");
+					if (head_it != cached_entity.parts.end() && head_it->second.address != 0)
+					{
+						rbx::instance_t mesh = head_it->second.find_first_child_by_class("SpecialMesh");
+						cached_entity.head_mesh_address = mesh.address;
+					}
+					else
+					{
+						cached_entity.head_mesh_address = 0;
+					}
+
 					cached_entity.humanoid = { model_instance.find_first_child("Humanoid").address };
 					cached_entity.rig_type = cached_entity.humanoid.get_rig_type();
 				}

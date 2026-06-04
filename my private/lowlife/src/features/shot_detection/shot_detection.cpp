@@ -394,21 +394,27 @@ namespace shot_detection
 					}
 				}
 
-				if (current_tool_address == 0) {
-					rbx::instance_t tool_instance = {};
-					for (rbx::instance_t& child : model.get_children<rbx::instance_t>()) {
-						std::string child_class = child.get_class_name();
-						if (child_class == "Tool" || child_class == "HopperBin") {
-							tool_instance = child;
-							break;
-						}
-					}
-					current_tool_address = tool_instance.address;
+				static auto last_fail_scan_time = std::chrono::steady_clock::now();
+				auto now_time = std::chrono::steady_clock::now();
 
-					if (current_tool_address != last_tool_address) {
-						last_tool_address = current_tool_address;
-						last_ammo_val_address = 0;
-						last_ammo_value = -1;
+				if (current_tool_address == 0) {
+					if (std::chrono::duration_cast<std::chrono::milliseconds>(now_time - last_fail_scan_time).count() >= 250) {
+						last_fail_scan_time = now_time;
+						rbx::instance_t tool_instance = {};
+						for (rbx::instance_t& child : model.get_children<rbx::instance_t>()) {
+							std::string child_class = child.get_class_name();
+							if (child_class == "Tool" || child_class == "HopperBin") {
+								tool_instance = child;
+								break;
+							}
+						}
+						current_tool_address = tool_instance.address;
+
+						if (current_tool_address != last_tool_address) {
+							last_tool_address = current_tool_address;
+							last_ammo_val_address = 0;
+							last_ammo_value = -1;
+						}
 					}
 				}
 
@@ -431,42 +437,45 @@ namespace shot_detection
 				}
 
 				if (current_ammo_val_address == 0) {
-					rbx::instance_t tool_instance{ last_tool_address };
-					rbx::instance_t ammo_val_obj = {};
-					for (rbx::instance_t& child : tool_instance.get_children<rbx::instance_t>()) {
-						std::string cname = child.get_name();
-						std::string cclass = child.get_class_name();
-
-						if (cclass.find("Value") != std::string::npos) {
-							std::string target_ammo_name = settings::shot_detection::ammo_name;
-							std::string lower_cname = cname;
-							std::string lower_target_ammo = target_ammo_name;
-							std::transform(lower_cname.begin(), lower_cname.end(), lower_cname.begin(), ::tolower);
-							std::transform(lower_target_ammo.begin(), lower_target_ammo.end(), lower_target_ammo.begin(), ::tolower);
-
-							if (lower_cname == lower_target_ammo || cname == target_ammo_name) {
-								ammo_val_obj = child;
-								break;
-							}
-						}
-					}
-
-					if (ammo_val_obj.address == 0) {
+					if (std::chrono::duration_cast<std::chrono::milliseconds>(now_time - last_fail_scan_time).count() >= 250) {
+						last_fail_scan_time = now_time;
+						rbx::instance_t tool_instance{ last_tool_address };
+						rbx::instance_t ammo_val_obj = {};
 						for (rbx::instance_t& child : tool_instance.get_children<rbx::instance_t>()) {
 							std::string cname = child.get_name();
 							std::string cclass = child.get_class_name();
-							std::transform(cname.begin(), cname.end(), cname.begin(), ::tolower);
-							if (cclass.find("Value") != std::string::npos && 
-								(cname.find("ammo") != std::string::npos || cname.find("clip") != std::string::npos)) {
-								ammo_val_obj = child;
-								break;
+
+							if (cclass.find("Value") != std::string::npos) {
+								std::string target_ammo_name = settings::shot_detection::ammo_name;
+								std::string lower_cname = cname;
+								std::string lower_target_ammo = target_ammo_name;
+								std::transform(lower_cname.begin(), lower_cname.end(), lower_cname.begin(), ::tolower);
+								std::transform(lower_target_ammo.begin(), lower_target_ammo.end(), lower_target_ammo.begin(), ::tolower);
+
+								if (lower_cname == lower_target_ammo || cname == target_ammo_name) {
+									ammo_val_obj = child;
+									break;
+								}
 							}
 						}
-					}
 
-					current_ammo_val_address = ammo_val_obj.address;
-					last_ammo_val_address = current_ammo_val_address;
-					last_ammo_value = -1;
+						if (ammo_val_obj.address == 0) {
+							for (rbx::instance_t& child : tool_instance.get_children<rbx::instance_t>()) {
+								std::string cname = child.get_name();
+								std::string cclass = child.get_class_name();
+								std::transform(cname.begin(), cname.end(), cname.begin(), ::tolower);
+								if (cclass.find("Value") != std::string::npos && 
+									(cname.find("ammo") != std::string::npos || cname.find("clip") != std::string::npos)) {
+									ammo_val_obj = child;
+									break;
+								}
+							}
+						}
+
+						current_ammo_val_address = ammo_val_obj.address;
+						last_ammo_val_address = current_ammo_val_address;
+						last_ammo_value = -1;
+					}
 				}
 
 				if (last_ammo_val_address != 0) {

@@ -142,7 +142,7 @@ namespace fly
             math::vector3 current_position = prim.get_position();
             math::matrix3 current_rotation = prim.get_rotation();
 
-            rbx::instance_t camera_instance = game::workspace.find_first_child_by_class("Camera");
+            rbx::instance_t camera_instance = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
             if (camera_instance.address == 0) {
                 Sleep(10);
                 continue;

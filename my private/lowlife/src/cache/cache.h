@@ -24,6 +24,7 @@ namespace cache
 		
 		rbx::humanoid_t humanoid;
 		std::unordered_map<std::string, rbx::part_t> parts;
+		std::uint64_t head_mesh_address{ 0 };
 
 		// Optimized cached fields
 		float health{ 0.0f };

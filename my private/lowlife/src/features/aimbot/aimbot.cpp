@@ -9,6 +9,7 @@
 #include <chrono>
 #include <string>
 #include <unordered_set>
+#include <unordered_map>
 
 #include <memory/memory.h>
 #include <sdk/sdk.h>
@@ -201,6 +202,32 @@ namespace rbx::aimbot {
             }
         }
 
+        struct occlusion_cache_entry_t {
+            bool occluded;
+            std::chrono::steady_clock::time_point last_check_time;
+        };
+
+        bool is_bone_occluded_cached(std::uint64_t entity_address, const std::string& bone_name, const math::vector3& camera_pos, const math::vector3& bone_pos) {
+            static std::unordered_map<std::uint64_t, std::unordered_map<std::string, occlusion_cache_entry_t>> occlusion_cache;
+            auto now = std::chrono::steady_clock::now();
+            
+            if (occlusion_cache.size() > 200) {
+                occlusion_cache.clear();
+            }
+
+            auto& entity_map = occlusion_cache[entity_address];
+            auto it = entity_map.find(bone_name);
+            if (it != entity_map.end()) {
+                if (std::chrono::duration_cast<std::chrono::milliseconds>(now - it->second.last_check_time).count() < 50) {
+                    return it->second.occluded;
+                }
+            }
+
+            bool occluded = botter::is_occluded(camera_pos, bone_pos);
+            entity_map[bone_name] = { occluded, now };
+            return occluded;
+        }
+
         rbx::part_t get_closest_part(cache::entity_t& player, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view) {
             rbx::part_t closest = {};
             float min_dist = std::numeric_limits<float>::max();
@@ -249,7 +276,7 @@ namespace rbx::aimbot {
                     if (it != player.parts.end() && it->second.address != 0) {
                         math::vector3 pos = it->second.get_primitive().get_position();
                         if (settings::aimbot::wall_check) {
-                            if (!botter::is_occluded(camera_pos, pos)) {
+                            if (!is_bone_occluded_cached(player.instance.address, bone_name, camera_pos, pos)) {
                                 chosen_bone_name = bone_name;
                                 return it->second;
                             }
@@ -350,7 +377,7 @@ namespace rbx::aimbot {
             }
 
             if (settings::aimbot::wall_check) {
-                if (botter::is_occluded(camera_pos, world_pos)) {
+                if (is_bone_occluded_cached(player.instance.address, temp_name, camera_pos, world_pos)) {
                     return false;
                 }
             }
@@ -369,12 +396,15 @@ namespace rbx::aimbot {
             rbx::part_t& out_best_part,
             std::string& out_best_part_name
         ) {
-            cache::entity_t best = {};
-            rbx::part_t best_part = {};
-            std::string best_part_name = "";
+            struct target_candidate_t {
+                cache::entity_t player;
+                rbx::part_t part;
+                std::string part_name;
+                float score;
+                math::vector3 world_pos;
+            };
+            std::vector<target_candidate_t> candidates;
             
-            float best_score = std::numeric_limits<float>::max();
-
             float cursor_x = static_cast<float>(cursor_pt.x);
             float cursor_y = static_cast<float>(cursor_pt.y);
 
@@ -417,12 +447,6 @@ namespace rbx::aimbot {
 
                 if (settings::aimbot::fov_check && cursor_dist > settings::aimbot::fov) continue;
 
-                if (settings::aimbot::wall_check) {
-                    if (botter::is_occluded(camera_pos, world_pos)) {
-                        continue;
-                    }
-                }
-
                 float current_score = 0.0f;
                 switch (settings::aimbot::target_selection_mode) {
                 case 1: // 3D distance
@@ -437,17 +461,35 @@ namespace rbx::aimbot {
                     break;
                 }
 
-                if (current_score < best_score) {
-                    best_score = current_score;
-                    best = player;
-                    best_part = target_part;
-                    best_part_name = chosen_bone_name;
-                }
+                candidates.push_back({ player, target_part, chosen_bone_name, current_score, world_pos });
             }
 
-            out_best_part = best_part;
-            out_best_part_name = best_part_name;
-            return best;
+            if (candidates.empty()) {
+                out_best_part = rbx::part_t{};
+                out_best_part_name = "";
+                return cache::entity_t{};
+            }
+
+            // Sort candidates by score ascending (lowest score is best)
+            std::sort(candidates.begin(), candidates.end(), [](const target_candidate_t& a, const target_candidate_t& b) {
+                return a.score < b.score;
+            });
+
+            // Perform occlusion check on candidates in order of score
+            for (const auto& candidate : candidates) {
+                if (settings::aimbot::wall_check) {
+                    if (is_bone_occluded_cached(candidate.player.instance.address, candidate.part_name, camera_pos, candidate.world_pos)) {
+                        continue;
+                    }
+                }
+                out_best_part = candidate.part;
+                out_best_part_name = candidate.part_name;
+                return candidate.player;
+            }
+
+            out_best_part = rbx::part_t{};
+            out_best_part_name = "";
+            return cache::entity_t{};
         }
 
         // Advanced prediction equations compensating for speed, gravity, and latency
@@ -567,6 +609,13 @@ namespace rbx::aimbot {
         }
 
         void execute_mouse_aim(const math::vector3& target_pos, const POINT& cursor_pt, float dt, const math::vector2& dims, const math::matrix4& view, float screen_dist) {
+            static auto last_mouse_input_time = std::chrono::steady_clock::now();
+            auto current_time = std::chrono::steady_clock::now();
+            if (std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_mouse_input_time).count() < 8) {
+                return;
+            }
+            last_mouse_input_time = current_time;
+
             math::vector2 screen_pos = {};
             if (!game::visengine.world_to_screen(target_pos, screen_pos, dims, view)) return;
 
@@ -599,7 +648,8 @@ namespace rbx::aimbot {
             float center_x = (dims.x / 2.0f) + client_x;
             float center_y = (dims.y / 2.0f) + client_y;
 
-            if (cursor_hidden || (std::abs(target_ref_x - center_x) < 20.0f && std::abs(target_ref_y - center_y) < 20.0f)) {
+            bool right_click_held = (GetAsyncKeyState(VK_RBUTTON) & 0x8000);
+            if (cursor_hidden || right_click_held || (std::abs(target_ref_x - center_x) < 20.0f && std::abs(target_ref_y - center_y) < 20.0f)) {
                 target_ref_x = center_x;
                 target_ref_y = center_y;
             }

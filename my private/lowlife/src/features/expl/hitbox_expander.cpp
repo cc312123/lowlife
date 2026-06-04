@@ -239,15 +239,14 @@ namespace rbx::hitbox_expander
 				flags |= Offsets::PrimitiveFlags::CanQuery;
 				memory->write<std::uint8_t>(prim.address + Offsets::Primitive::Flags, flags);
 
-				// If target part is Head, scale SpecialMesh to keep normal visual size
 				bool has_mesh = false;
 				if (settings::hitbox_expander::target_part == 0)
 				{
-					rbx::instance_t mesh = part_it->second.find_first_child_by_class("SpecialMesh");
-					if (mesh.address)
+					std::uint64_t mesh_addr = player.head_mesh_address;
+					if (mesh_addr != 0)
 					{
 						has_mesh = true;
-						math::vector3 current_scale = memory->read<math::vector3>(mesh.address + Offsets::SpecialMesh::Scale);
+						math::vector3 current_scale = memory->read<math::vector3>(mesh_addr + Offsets::SpecialMesh::Scale);
 						
 						// If not stored yet, store it
 						auto it = original_head_scales.find(player.instance.address);
@@ -269,7 +268,7 @@ namespace rbx::hitbox_expander
 						target_scale.y = original_scale.y * (normal_size.y / new_size.y);
 						target_scale.z = original_scale.z * (normal_size.z / new_size.z);
 						
-						memory->write<math::vector3>(mesh.address + Offsets::SpecialMesh::Scale, target_scale);
+						memory->write<math::vector3>(mesh_addr + Offsets::SpecialMesh::Scale, target_scale);
 					}
 				}
 

@@ -6,6 +6,8 @@
 #include <game/game.h>
 #include <settings.h>
 #include <check/typing_check.h>
+#include <mutex>
+#include <cache/cache.h>
 
 namespace walkspeed
 {
@@ -25,16 +27,18 @@ namespace walkspeed
 
                 if (game::local_player.address != 0)
                 {
-                    rbx::player_t local_player_obj = { game::local_player.address };
-                    rbx::model_instance_t model_instance = local_player_obj.get_model_instance();
-                    if (model_instance.address != 0)
+                    std::uint64_t humanoid_address = 0;
                     {
-                        rbx::humanoid_t humanoid = { model_instance.find_first_child("Humanoid").address };
-                        if (humanoid.address != 0 && original_speed_set)
+                        std::lock_guard<std::mutex> lock(cache::mtx);
+                        if (cache::cached_local_player.instance.address == game::local_player.address)
                         {
-                            memory->write<float>(humanoid.address + Offsets::Humanoid::Walkspeed, original_speed);
-                            memory->write<float>(humanoid.address + Offsets::Humanoid::WalkspeedCheck, original_speed);
+                            humanoid_address = cache::cached_local_player.humanoid.address;
                         }
+                    }
+                    if (humanoid_address != 0 && original_speed_set)
+                    {
+                        memory->write<float>(humanoid_address + Offsets::Humanoid::Walkspeed, original_speed);
+                        memory->write<float>(humanoid_address + Offsets::Humanoid::WalkspeedCheck, original_speed);
                     }
                 }
                 Sleep(100);
@@ -63,16 +67,18 @@ namespace walkspeed
 
                 if (game::local_player.address != 0)
                 {
-                    rbx::player_t local_player_obj = { game::local_player.address };
-                    rbx::model_instance_t model_instance = local_player_obj.get_model_instance();
-                    if (model_instance.address != 0)
+                    std::uint64_t humanoid_address = 0;
                     {
-                        rbx::humanoid_t humanoid = { model_instance.find_first_child("Humanoid").address };
-                        if (humanoid.address != 0 && original_speed_set)
+                        std::lock_guard<std::mutex> lock(cache::mtx);
+                        if (cache::cached_local_player.instance.address == game::local_player.address)
                         {
-                            memory->write<float>(humanoid.address + Offsets::Humanoid::Walkspeed, original_speed);
-                            memory->write<float>(humanoid.address + Offsets::Humanoid::WalkspeedCheck, original_speed);
+                            humanoid_address = cache::cached_local_player.humanoid.address;
                         }
+                    }
+                    if (humanoid_address != 0 && original_speed_set)
+                    {
+                        memory->write<float>(humanoid_address + Offsets::Humanoid::Walkspeed, original_speed);
+                        memory->write<float>(humanoid_address + Offsets::Humanoid::WalkspeedCheck, original_speed);
                     }
                 }
                 Sleep(100);
@@ -91,8 +97,15 @@ namespace walkspeed
                 continue;
             }
 
-            rbx::humanoid_t humanoid = { model_instance.find_first_child("Humanoid").address };
-            if (humanoid.address == 0) {
+            std::uint64_t humanoid_address = 0;
+            {
+                std::lock_guard<std::mutex> lock(cache::mtx);
+                if (cache::cached_local_player.instance.address == game::local_player.address)
+                {
+                    humanoid_address = cache::cached_local_player.humanoid.address;
+                }
+            }
+            if (humanoid_address == 0) {
                 Sleep(50);
                 continue;
             }
@@ -120,7 +133,7 @@ namespace walkspeed
                 }
             case 2:
                 {
-                    float health = humanoid.get_health();
+                    float health = memory->read<float>(humanoid_address + Offsets::Humanoid::Health);
                     should_activate = (health < settings::expl::walkspeed_health_threshold);
                     break;
                 }
@@ -130,17 +143,17 @@ namespace walkspeed
             {
                 if (!original_speed_set)
                 {
-                    original_speed = memory->read<float>(humanoid.address + Offsets::Humanoid::Walkspeed);
+                    original_speed = memory->read<float>(humanoid_address + Offsets::Humanoid::Walkspeed);
                     original_speed_set = true;
                 }
 
-                float current_speed = memory->read<float>(humanoid.address + Offsets::Humanoid::Walkspeed);
+                float current_speed = memory->read<float>(humanoid_address + Offsets::Humanoid::Walkspeed);
                 if (current_speed != settings::expl::walkspeed_speed)
                 {
-                    for (int i = 0; i < 25000; i++)
+                    for (int i = 0; i < 50; i++)
                     {
-                        memory->write<float>(humanoid.address + Offsets::Humanoid::Walkspeed, settings::expl::walkspeed_speed);
-                        memory->write<float>(humanoid.address + Offsets::Humanoid::WalkspeedCheck, settings::expl::walkspeed_speed);
+                        memory->write<float>(humanoid_address + Offsets::Humanoid::Walkspeed, settings::expl::walkspeed_speed);
+                        memory->write<float>(humanoid_address + Offsets::Humanoid::WalkspeedCheck, settings::expl::walkspeed_speed);
                     }
                 }
             }
@@ -148,8 +161,8 @@ namespace walkspeed
             {
                 if (original_speed_set)
                 {
-                    memory->write<float>(humanoid.address + Offsets::Humanoid::Walkspeed, original_speed);
-                    memory->write<float>(humanoid.address + Offsets::Humanoid::WalkspeedCheck, original_speed);
+                    memory->write<float>(humanoid_address + Offsets::Humanoid::Walkspeed, original_speed);
+                    memory->write<float>(humanoid_address + Offsets::Humanoid::WalkspeedCheck, original_speed);
                 }
             }
             Sleep(1);
