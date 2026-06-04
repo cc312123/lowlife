@@ -23,6 +23,8 @@
 
 namespace {
 	bool is_player_knocked(const cache::entity_t& player) {
+		if (player.is_knocked) return true;
+
 		if (player.humanoid.address != 0) {
 			try {
 				float health = const_cast<cache::entity_t&>(player).humanoid.get_health();
@@ -34,27 +36,79 @@ namespace {
 		
 		if (player.ko_address != 0) {
 			try {
-				return memory->read<bool>(player.ko_address + Offsets::Misc::Value);
-			} catch (...) {
-				return false;
-			}
+				if (memory->read<bool>(player.ko_address + Offsets::Misc::Value)) return true;
+			} catch (...) {}
 		}
-		
-		if (player.instance.address != 0) {
-			try {
-				rbx::player_t player_instance(player.instance.address);
-				rbx::model_instance_t model_instance = player_instance.get_model_instance();
-				if (model_instance.address != 0) {
-					rbx::instance_t body_effects = model_instance.find_first_child("BodyEffects");
-					if (body_effects.address != 0) {
-						rbx::instance_t ko = body_effects.find_first_child("K.O");
-						if (ko.address != 0) {
-							return memory->read<bool>(ko.address + Offsets::Misc::Value);
+
+		try {
+			if (player.humanoid.address != 0) {
+				bool platform_stand = memory->read<bool>(player.humanoid.address + Offsets::Humanoid::PlatformStand);
+				
+				bool state_knocked = false;
+				std::uint64_t state_ptr = memory->read<std::uint64_t>(player.humanoid.address + Offsets::Humanoid::HumanoidState);
+				if (state_ptr != 0) {
+					int state_id = memory->read<int>(state_ptr + Offsets::Humanoid::HumanoidStateID);
+					if (state_id == 0 || state_id == 1 || state_id == 8 || state_id == 9) {
+						state_knocked = true;
+					}
+				}
+
+				bool is_lying_down = false;
+				auto hrp_it = player.parts.find("HumanoidRootPart");
+				auto torso_it = player.parts.find("Torso");
+				if (torso_it == player.parts.end()) {
+					torso_it = player.parts.find("UpperTorso");
+				}
+
+				rbx::part_t orientation_part{};
+				if (torso_it != player.parts.end()) {
+					orientation_part = torso_it->second;
+				} else if (hrp_it != player.parts.end()) {
+					orientation_part = hrp_it->second;
+				}
+
+				if (orientation_part.address != 0) {
+					rbx::primitive_t primitive = orientation_part.get_primitive();
+					if (primitive.address != 0) {
+						math::matrix3 rot = primitive.get_rotation();
+						float up_y = std::abs(rot.m[4]);
+						if (up_y < 0.5f) {
+							is_lying_down = true;
 						}
 					}
 				}
-			} catch (...) {}
-		}
+
+				bool height_check_knocked = false;
+				if (hrp_it != player.parts.end()) {
+					rbx::part_t hrp_part = hrp_it->second;
+					rbx::primitive_t hrp_prim = hrp_part.get_primitive();
+					if (hrp_prim.address != 0) {
+						math::vector3 hrp_pos = hrp_prim.get_position();
+						for (const auto& [part_name, part] : player.parts) {
+							if (part_name.find("Leg") != std::string::npos || part_name.find("Foot") != std::string::npos) {
+								rbx::part_t leg_part = part;
+								rbx::primitive_t leg_prim = leg_part.get_primitive();
+								if (leg_prim.address != 0) {
+									math::vector3 leg_pos = leg_prim.get_position();
+									float y_diff = hrp_pos.y - leg_pos.y;
+									if (std::abs(y_diff) < 1.2f) {
+										height_check_knocked = true;
+										break;
+									}
+								}
+							}
+						}
+					}
+				}
+
+				if (platform_stand || state_knocked) {
+					if (is_lying_down || height_check_knocked) {
+						return true;
+					}
+				}
+			}
+		} catch (...) {}
+		
 		return false;
 	}
 
@@ -568,6 +622,7 @@ namespace botter
 			math::vector3 position;
 			math::matrix3 rotation;
 			math::vector3 size;
+			float radius;
 		};
 
 		std::vector<cached_part_t> cached_map_parts;
@@ -617,7 +672,8 @@ namespace botter
 			static const std::unordered_set<std::string> skip_names = {
 				"players", "debris", "effects", "visuals", "bullets", "blood", "sounds", 
 				"tools", "dropped", "casing", "ragdoll", "particles", "markers", "gui", 
-				"ui", "viewmodel", "camera", "raycast", "beams", "trails", "spells", "snow"
+				"ui", "viewmodel", "camera", "raycast", "beams", "trails", "spells", "snow",
+				"accessory", "hair", "hat", "handle", "item", "drop", "head", "face", "cloth", "shoe", "pant", "shirt"
 			};
 			
 			std::string lower_name = name;
@@ -651,6 +707,12 @@ namespace botter
 
 				std::string class_name = get_class_name_fast(child.address);
 
+				// Skip explicit tool, hopperbin, and accessory classes
+				if (class_name == "Tool" || class_name == "HopperBin" || class_name == "Accessory") continue;
+
+				// Skip local character
+				if (child.address == game::local_character.address) continue;
+
 				// Skip character models (players and NPCs)
 				if (class_name == "Model")
 				{
@@ -659,7 +721,7 @@ namespace botter
 						std::lock_guard<std::mutex> lock(cache::mtx);
 						if (cache::cached_players) {
 							for (const auto& player : *cache::cached_players) {
-								if (player.name == name) {
+								if (player.character_address == child.address || player.name == name) {
 									is_player_char = true;
 									break;
 								}
@@ -694,8 +756,11 @@ namespace botter
 								cp.position = prim.get_position();
 								cp.rotation = prim.get_rotation();
 								cp.size = prim.get_size();
+								cp.radius = std::sqrt(cp.size.x * cp.size.x + cp.size.y * cp.size.y + cp.size.z * cp.size.z) * 0.5f;
 
-								if (cp.size.x > 0.01f && cp.size.y > 0.01f && cp.size.z > 0.01f)
+								// Skip small objects/props
+								float max_dim = std::max({cp.size.x, cp.size.y, cp.size.z});
+								if (max_dim >= 1.0f && cp.size.x > 0.01f && cp.size.y > 0.01f && cp.size.z > 0.01f)
 								{
 									parts.push_back(cp);
 								}
@@ -827,9 +892,22 @@ namespace botter
 		if (len < 0.001f) return false;
 
 		math::vector3 dir_norm = { dir.x / len, dir.y / len, dir.z / len };
+		math::vector3 mid = (start + end) * 0.5f;
+		float ray_radius = len * 0.5f;
 
 		for (const auto& box : cached_map_parts)
 		{
+			// Fast distance-based bounding-sphere pre-filter
+			float dx = box.position.x - mid.x;
+			float dy = box.position.y - mid.y;
+			float dz = box.position.z - mid.z;
+			float dist_sq = dx * dx + dy * dy + dz * dz;
+			float max_dist = ray_radius + box.radius;
+			if (dist_sq > max_dist * max_dist)
+			{
+				continue;
+			}
+
 			float dist = 0.0f;
 			if (ray_intersects_obb(start, dir_norm, len, box, dist))
 			{

@@ -239,6 +239,52 @@ namespace rbx::aimbot {
             return rbx::part_t{};
         }
 
+        rbx::part_t get_smart_target_part(const cache::entity_t& player, int aim_part, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, const math::vector3& camera_pos, bool camera_valid) {
+            rbx::part_t primary = get_target_part(player, aim_part, cursor_pt, dims, view);
+            if (!settings::aimbot::multipoint || !settings::aimbot::wall_check || !camera_valid) {
+                return primary;
+            }
+
+            if (primary.address) {
+                rbx::primitive_t primitive = primary.get_primitive();
+                math::vector3 world_pos = primitive.get_position();
+                if (!botter::is_occluded(camera_pos, world_pos)) {
+                    return primary;
+                }
+            }
+
+            const std::vector<std::string> scan_order = {
+                "Head", "UpperTorso", "Torso", "LowerTorso", "HumanoidRootPart",
+                "LeftUpperArm", "RightUpperArm", "LeftUpperLeg", "RightUpperLeg"
+            };
+
+            rbx::part_t best_visible = {};
+            float min_dist = std::numeric_limits<float>::max();
+            float cursor_x = static_cast<float>(cursor_pt.x);
+            float cursor_y = static_cast<float>(cursor_pt.y);
+
+            for (const auto& part_name : scan_order) {
+                auto it = player.parts.find(part_name);
+                if (it == player.parts.end() || !it->second.address) continue;
+                rbx::part_t part = it->second;
+                rbx::primitive_t primitive = part.get_primitive();
+                math::vector3 world_pos = primitive.get_position();
+
+                if (botter::is_occluded(camera_pos, world_pos)) continue;
+
+                math::vector2 screen_pos = {};
+                if (!game::visengine.world_to_screen(world_pos, screen_pos, dims, view)) continue;
+
+                float dist = vector2_distance(screen_pos.x, screen_pos.y, cursor_x, cursor_y);
+                if (dist < min_dist) {
+                    min_dist = dist;
+                    best_visible = part;
+                }
+            }
+
+            return best_visible.address ? best_visible : primary;
+        }
+
         bool is_on_same_team(const cache::entity_t& player) {
             if (cache::cached_local_player.crew_id.empty() || player.crew_id.empty()) return false;
             if (cache::cached_local_player.crew_id == "0" || player.crew_id == "0") return false;

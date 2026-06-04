@@ -2091,6 +2091,7 @@ void render_t::render_menu()
         ImGui::Checkbox("Knocked Check", &settings::aimbot::knocked_check);
         ImGui::Checkbox("Wall Check", &settings::aimbot::wall_check);
         ImGui::Checkbox("Team Check", &settings::aimbot::team_check);
+        ImGui::Checkbox("Smart Bone fallback (Multipoint)", &settings::aimbot::multipoint);
 
         
         const char* easing_styles[] = {

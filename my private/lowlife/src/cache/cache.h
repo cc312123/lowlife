@@ -18,6 +18,7 @@ namespace cache
 		std::string tool_name;
 		std::int64_t user_id;
 		std::uint64_t ko_address{ 0 };
+		std::uint64_t character_address{ 0 };
 		std::string crew_id;
 
 		std::uint8_t rig_type;

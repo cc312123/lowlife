@@ -60,6 +60,7 @@ namespace settings
 		inline float shake_x{ 0.0f };
 		inline float shake_y{ 0.0f };
 		inline int easing_style{ 0 }; 
+		inline bool multipoint{ false };
 	}
 	namespace silent
 	{
