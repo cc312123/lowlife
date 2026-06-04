@@ -617,16 +617,20 @@ namespace botter
 		}
 
 		bool should_skip_instance(const std::string& name) {
-			static const std::unordered_set<std::string> skip_names = {
-				"players", "debris", "effects", "visuals", "bullets", "blood", "sounds", 
-				"tools", "dropped", "casing", "ragdoll", "particles", "markers", "gui", 
-				"ui", "viewmodel", "camera", "raycast", "beams", "trails", "spells", "snow"
+			static const std::vector<std::string> skip_keywords = {
+				"player", "debris", "effect", "visual", "bullet", "blood", "sound", 
+				"tool", "dropped", "casing", "ragdoll", "particle", "marker", "gui", 
+				"ui", "viewmodel", "camera", "raycast", "beam", "trail", "spell", "snow",
+				"glass", "window", "fence", "grate", "foliage", "leaves", "leaf", "water", 
+				"cloud", "spawn", "barrier", "trash", "prop", "vegetation", "bush", 
+				"tree", "flower", "grass", "light", "lamp", "sign", "decal", "texture", 
+				"mesh", "handle", "accessory", "hat", "hair", "helmet", "armor", "clothing"
 			};
 			
 			std::string lower_name = name;
 			std::transform(lower_name.begin(), lower_name.end(), lower_name.begin(), ::tolower);
 			
-			for (const auto& skip : skip_names) {
+			for (const auto& skip : skip_keywords) {
 				if (lower_name.find(skip) != std::string::npos) {
 					return true;
 				}
@@ -684,9 +688,9 @@ namespace botter
 					try {
 						rbx::part_t part{ child.address };
 						
-						// Skip transparent/invisible parts (like invisible walls/clip brushes)
+						// Skip transparent/invisible parts (like glass windows, invisible walls, forcefields)
 						float transparency = memory->read<float>(part.address + Offsets::BasePart::Transparency);
-						if (transparency > 0.95f) continue;
+						if (transparency > 0.25f) continue;
 
 						rbx::primitive_t prim = part.get_primitive();
 						if (prim.address)
@@ -697,6 +701,9 @@ namespace botter
 								cp.position = prim.get_position();
 								cp.rotation = prim.get_rotation();
 								cp.size = prim.get_size();
+
+								// Skip parts that are extremely small in all dimensions (props, pebbles, debris)
+								if (cp.size.x < 0.5f && cp.size.y < 0.5f && cp.size.z < 0.5f) continue;
 
 								if (cp.size.x > 0.01f && cp.size.y > 0.01f && cp.size.z > 0.01f)
 								{

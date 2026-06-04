@@ -192,12 +192,21 @@ void cache::run()
 					if (body_effects.address != 0)
 					{
 						rbx::instance_t ko = body_effects.find_first_child("K.O");
-						if (ko.address == 0) {
-							ko = body_effects.find_first_child("KO");
+						if (ko.address == 0) ko = body_effects.find_first_child("KO");
+						if (ko.address == 0) ko = body_effects.find_first_child("Dead");
+						if (ko.address != 0)
+						{
+							cached_entity.ko_address = ko.address;
 						}
-						if (ko.address == 0) {
-							ko = body_effects.find_first_child("Dead");
-						}
+					}
+
+					if (cached_entity.ko_address == 0)
+					{
+						rbx::instance_t ko = model_instance.find_first_child("K.O");
+						if (ko.address == 0) ko = model_instance.find_first_child("KO");
+						if (ko.address == 0) ko = model_instance.find_first_child("Knocked");
+						if (ko.address == 0) ko = model_instance.find_first_child("Downed");
+						if (ko.address == 0) ko = model_instance.find_first_child("Dead");
 						if (ko.address != 0)
 						{
 							cached_entity.ko_address = ko.address;
@@ -254,19 +263,41 @@ void cache::run()
 					cached_entity.max_health = 0.0f;
 				}
 
-				if (cached_entity.ko_address == 0 && cached_entity.ko_check_count < 15)
+				bool perform_ko_check = false;
+				if (cached_entity.ko_address == 0)
 				{
-					cached_entity.ko_check_count++;
+					if (cached_entity.ko_check_count < 15)
+					{
+						cached_entity.ko_check_count++;
+						perform_ko_check = true;
+					}
+					else if (tick_count % 100 == 0)
+					{
+						perform_ko_check = true;
+					}
+				}
+
+				if (perform_ko_check)
+				{
 					rbx::instance_t body_effects = model_instance.find_first_child("BodyEffects");
 					if (body_effects.address != 0)
 					{
 						rbx::instance_t ko = body_effects.find_first_child("K.O");
-						if (ko.address == 0) {
-							ko = body_effects.find_first_child("KO");
+						if (ko.address == 0) ko = body_effects.find_first_child("KO");
+						if (ko.address == 0) ko = body_effects.find_first_child("Dead");
+						if (ko.address != 0)
+						{
+							cached_entity.ko_address = ko.address;
 						}
-						if (ko.address == 0) {
-							ko = body_effects.find_first_child("Dead");
-						}
+					}
+
+					if (cached_entity.ko_address == 0)
+					{
+						rbx::instance_t ko = model_instance.find_first_child("K.O");
+						if (ko.address == 0) ko = model_instance.find_first_child("KO");
+						if (ko.address == 0) ko = model_instance.find_first_child("Knocked");
+						if (ko.address == 0) ko = model_instance.find_first_child("Downed");
+						if (ko.address == 0) ko = model_instance.find_first_child("Dead");
 						if (ko.address != 0)
 						{
 							cached_entity.ko_address = ko.address;
@@ -274,13 +305,21 @@ void cache::run()
 					}
 				}
 
+				bool platform_stand = false;
+				bool is_sitting = false;
+				if (cached_entity.humanoid.address != 0)
+				{
+					platform_stand = memory->read<bool>(cached_entity.humanoid.address + Offsets::Humanoid::PlatformStand);
+					is_sitting = memory->read<bool>(cached_entity.humanoid.address + Offsets::Humanoid::Sit);
+				}
+
 				if (cached_entity.ko_address != 0)
 				{
-					cached_entity.is_knocked = memory->read<bool>(cached_entity.ko_address + Offsets::Misc::Value);
+					cached_entity.is_knocked = memory->read<bool>(cached_entity.ko_address + Offsets::Misc::Value) || (platform_stand && !is_sitting);
 				}
 				else
 				{
-					cached_entity.is_knocked = (cached_entity.health <= 0.0f);
+					cached_entity.is_knocked = (cached_entity.health <= 20.0f && platform_stand && !is_sitting) || (cached_entity.health <= 0.0f);
 				}
 			}
 			else

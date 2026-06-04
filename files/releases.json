@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.1",
-    "latestChangelog":  "Aimbot optimizations, cache scanning improvements, projectile prediction, adaptive smoothing, and mouse jitter fixes.",
+    "latestVersion":  "1.0.2",
+    "latestChangelog":  "Improved wall checks (ignoring transparent boundaries/foliage/small details) and knock checks (incorporating Humanoid PlatformStand/Sit states and additional KO signatures).",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -17,7 +17,14 @@
                         "changelog":  "Aimbot optimizations, cache scanning improvements, projectile prediction, adaptive smoothing, and mouse jitter fixes.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "3ffa3396bf4f6dc22e0cf5681e98f305"
+                    },
+                    {
+                        "version":  "1.0.2",
+                        "date":  "2026-06-04",
+                        "changelog":  "Improved wall checks (ignoring transparent boundaries/foliage/small details) and knock checks (incorporating Humanoid PlatformStand/Sit states and additional KO signatures).",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "e47c9fc7cfafe2293ac519930a8c6efe"
                     }
                 ],
-    "latestHash":  "3ffa3396bf4f6dc22e0cf5681e98f305"
+    "latestHash":  "e47c9fc7cfafe2293ac519930a8c6efe"
 }
