@@ -636,12 +636,17 @@ namespace rbx::aimbot {
             camera.write_rotation(target_matrix);
         }
 
-        void execute_mouse_aim(std::uint64_t target_address, const math::vector3& target_pos, const POINT& cursor_pt, float dt, const math::vector2& dims, const math::matrix4& view, float screen_dist) {
+        void execute_mouse_aim(std::uint64_t target_address, const math::vector3& target_pos, const POINT& cursor_pt, float loop_dt, const math::vector2& dims, const math::matrix4& view, float screen_dist) {
             static auto last_mouse_input_time = std::chrono::steady_clock::now();
             auto current_time = std::chrono::steady_clock::now();
-            if (std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_mouse_input_time).count() < 8) {
+            auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_mouse_input_time).count();
+            
+            // Rate limit to 125Hz (8ms interval) to prevent SendInput flooding and viewmatrix latency feedback
+            if (elapsed_ms < 8) {
                 return;
             }
+            float dt = elapsed_ms / 1000.0f;
+            if (dt > 0.1f) dt = 0.016f; // Clamp to avoid physics explosion on lag spikes
             last_mouse_input_time = current_time;
 
             static std::uint64_t last_target_address = 0;
@@ -685,11 +690,19 @@ namespace rbx::aimbot {
 
             bool right_click_held = (GetAsyncKeyState(VK_RBUTTON) & 0x8000);
             
-            // Check if mouse is captured (hidden, right-click, or locked to center)
-            bool is_camera_captured = cursor_hidden || right_click_held || 
-                                     (std::abs(target_ref_x - center_x) < 5.0f && std::abs(target_ref_y - center_y) < 5.0f);
+            // Check if mouse is captured using a sticky timer to handle transition frames
+            static bool sticky_captured = false;
+            static auto last_captured_time = std::chrono::steady_clock::now();
 
-            if (is_camera_captured) {
+            bool near_center = (std::abs(target_ref_x - center_x) < 5.0f && std::abs(target_ref_y - center_y) < 5.0f);
+            if (near_center || cursor_hidden || right_click_held) {
+                sticky_captured = true;
+                last_captured_time = current_time;
+            } else if (std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_captured_time).count() > 300) {
+                sticky_captured = false;
+            }
+
+            if (sticky_captured) {
                 target_ref_x = center_x;
                 target_ref_y = center_y;
             }

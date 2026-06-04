@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.4",
-    "latestChangelog":  "Critically-damped spring physics mouse smoothing and prediction filtering to eliminate aimbot jitter and random hopping.",
+    "latestVersion":  "1.0.5",
+    "latestChangelog":  "Fix mouse aim lock jitter with independent rate-limited time delta integration and sticky captured mouse detection.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -38,7 +38,14 @@
                         "changelog":  "Critically-damped spring physics mouse smoothing and prediction filtering to eliminate aimbot jitter and random hopping.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "bf3f9009bdebc13aa0975c426670cc8e"
+                    },
+                    {
+                        "version":  "1.0.5",
+                        "date":  "2026-06-04",
+                        "changelog":  "Fix mouse aim lock jitter with independent rate-limited time delta integration and sticky captured mouse detection.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "17aa5600f5d9e3a277d80d1a44067f62"
                     }
                 ],
-    "latestHash":  "bf3f9009bdebc13aa0975c426670cc8e"
+    "latestHash":  "17aa5600f5d9e3a277d80d1a44067f62"
 }
