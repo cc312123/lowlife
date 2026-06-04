@@ -377,7 +377,7 @@ namespace Offsets {
          inline constexpr uintptr_t LocaleId = 0x110;
          inline constexpr uintptr_t MaxZoomDistance = 0x330;
          inline constexpr uintptr_t MinZoomDistance = 0x334;
-         inline constexpr uintptr_t ModelInstance = 0x3a8;
+         inline constexpr uintptr_t ModelInstance = 0x280;
          inline constexpr uintptr_t Mouse = 0x1180;
          inline constexpr uintptr_t NameDisplayDistance = 0x368;
          inline constexpr uintptr_t Team = 0x2b0;
