@@ -239,6 +239,7 @@ namespace config
 		
 		file << "  \"hitbox_expander\": {\n";
 		file << "    \"enabled\": " << (settings::hitbox_expander::enabled ? "true" : "false") << ",\n";
+		file << "    \"target_part\": " << settings::hitbox_expander::target_part << ",\n";
 		file << "    \"size_x\": " << settings::hitbox_expander::size_x << ",\n";
 		file << "    \"size_y\": " << settings::hitbox_expander::size_y << ",\n";
 		file << "    \"size_z\": " << settings::hitbox_expander::size_z << "\n";
@@ -688,6 +689,8 @@ namespace config
 		{
 			if (parse_json_value(section, "enabled", value))
 				settings::hitbox_expander::enabled = (value == "true");
+			if (parse_json_value(section, "target_part", value))
+				settings::hitbox_expander::target_part = std::stoi(value);
 			if (parse_json_value(section, "size_x", value))
 				settings::hitbox_expander::size_x = std::stof(value);
 			if (parse_json_value(section, "size_y", value))
