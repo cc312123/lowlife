@@ -726,6 +726,8 @@ namespace rbx::aimbot {
             static std::uint64_t last_target_address = 0;
             if (target_address != last_target_address) {
                 last_target_address = target_address;
+                spring_vel_mouse_x = 0.0f;
+                spring_vel_mouse_y = 0.0f;
             }
 
             math::vector2 screen_pos = {};
@@ -812,7 +814,7 @@ namespace rbx::aimbot {
                     pitch_diff = std::atan2(std::sin(pitch_diff), std::cos(pitch_diff));
 
                     // Convert radian angular difference directly to mouse movement using Roblox mouse scale (0.0022)
-                    dx = yaw_diff / (sensitivity * 0.0022f);
+                    dx = -yaw_diff / (sensitivity * 0.0022f);
                     dy = -pitch_diff / (sensitivity * 0.0022f);
                 }
             } else {
@@ -831,21 +833,33 @@ namespace rbx::aimbot {
                     sy = adaptive_factor;
                 }
 
-                // Clean frame-rate independent LERP smoothing scaled by dt and easing functions
-                float t_x = std::clamp(dt * (45.0f / sx), 0.0f, 1.0f);
-                float t_y = std::clamp(dt * (45.0f / sy), 0.0f, 1.0f);
+                // Analytical critically-damped spring-damper system
+                // Restores stability under high input rates and latency-induced feedback loops.
+                float omega_x = 45.0f / sx;
+                float omega_y = 45.0f / sy;
 
-                float eased_t_x = apply_easing(settings::aimbot::easing_style, t_x);
-                float eased_t_y = apply_easing(settings::aimbot::easing_style, t_y);
+                float log_e_x = std::exp(-omega_x * dt);
+                float log_e_y = std::exp(-omega_y * dt);
 
-                dx *= eased_t_x;
-                dy *= eased_t_y;
+                float A_x = dx;
+                float B_x = -spring_vel_mouse_x + omega_x * dx;
+                float x_new_x = (A_x + B_x * dt) * log_e_x;
+                dx = dx - x_new_x;
+                spring_vel_mouse_x = omega_x * x_new_x - B_x * log_e_x;
+
+                float A_y = dy;
+                float B_y = -spring_vel_mouse_y + omega_y * dy;
+                float x_new_y = (A_y + B_y * dt) * log_e_y;
+                dy = dy - x_new_y;
+                spring_vel_mouse_y = omega_y * x_new_y - B_y * log_e_y;
             } else {
                 // No smoothing: apply sensitivity scaling if in pixel mode (non-captured)
                 if (!session_captured) {
                     dx *= sensitivity;
                     dy *= sensitivity;
                 }
+                spring_vel_mouse_x = 0.0f;
+                spring_vel_mouse_y = 0.0f;
             }
 
             if (settings::aimbot::shake) {
