@@ -182,35 +182,57 @@ void cache::run()
 
 				if (model_instance.address != 0)
 				{
-					cached_model_children_counts[player.address] = model_instance.get_children().size();
+					std::vector<rbx::instance_t> model_children = model_instance.get_children();
+					cached_model_children_counts[player.address] = model_children.size();
 
-					rbx::instance_t body_effects = model_instance.find_first_child("BodyEffects");
-					if (body_effects.address != 0)
+					rbx::instance_t body_effects{};
+					rbx::instance_t humanoid{};
+
+					for (rbx::instance_t& child : model_children)
 					{
-						rbx::instance_t ko = body_effects.find_first_child("K.O");
-						if (ko.address == 0) {
-							ko = body_effects.find_first_child("KO");
-						}
-						if (ko.address == 0) {
-							ko = body_effects.find_first_child("Dead");
-						}
-						if (ko.address != 0)
+						if (child.address == 0) continue;
+
+						std::string name = child.get_name();
+						if (name == "BodyEffects")
 						{
-							cached_entity.ko_address = ko.address;
+							body_effects = child;
 						}
-					}
+						else if (name == "Humanoid")
+						{
+							humanoid = child;
+						}
 
-					for (rbx::part_t& part : model_instance.get_children<rbx::part_t>())
-					{
-						std::string part_class = part.get_class_name();
+						std::string part_class = child.get_class_name();
 						if (part_class.find("Part") != std::string::npos)
 						{
-							cached_entity.parts[part.get_name()] = part;
+							cached_entity.parts[name] = { child.address };
 						}
 					}
 
-					cached_entity.humanoid = { model_instance.find_first_child("Humanoid").address };
-					cached_entity.rig_type = cached_entity.humanoid.get_rig_type();
+					if (body_effects.address != 0)
+					{
+						std::vector<rbx::instance_t> be_children = body_effects.get_children();
+						for (rbx::instance_t& child : be_children)
+						{
+							if (child.address == 0) continue;
+							std::string name = child.get_name();
+							if (name == "K.O" || name == "KO" || name == "Dead")
+							{
+								cached_entity.ko_address = child.address;
+								break;
+							}
+						}
+					}
+
+					cached_entity.humanoid = { humanoid.address };
+					if (humanoid.address != 0)
+					{
+						cached_entity.rig_type = cached_entity.humanoid.get_rig_type();
+					}
+					else
+					{
+						cached_entity.rig_type = 0;
+					}
 				}
 				else
 				{

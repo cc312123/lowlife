@@ -1,4 +1,4 @@
-﻿#include "walkspeed.h"
+#include "walkspeed.h"
 
 #include <memory/memory.h>
 #include <sdk/sdk.h>
@@ -11,6 +11,10 @@ namespace walkspeed
 {
     void run()
     {
+        static std::uint64_t cached_humanoid_address = 0;
+        static std::uint64_t cached_model_address = 0;
+        static std::uint32_t last_pid = 0;
+
         for (;;)
         {
             Sleep(1);
@@ -19,24 +23,43 @@ namespace walkspeed
             static bool was_disabled_by_typing = false;
             static bool previous_walkspeed_setting = false;
 
+            std::uint32_t current_pid = memory->get_process_id();
+            if (current_pid != last_pid)
+            {
+                cached_humanoid_address = 0;
+                cached_model_address = 0;
+                last_pid = current_pid;
+            }
+
+            std::uint64_t local_player_addr = game::local_player.address;
+            std::uint64_t model_addr = 0;
+            if (local_player_addr != 0)
+            {
+                rbx::player_t local_player_obj = { local_player_addr };
+                model_addr = local_player_obj.get_model_instance().address;
+            }
+
+            if (model_addr != 0 && model_addr != cached_model_address)
+            {
+                rbx::model_instance_t model_instance = { model_addr };
+                cached_humanoid_address = model_instance.find_first_child("Humanoid").address;
+                cached_model_address = model_addr;
+            }
+            else if (model_addr == 0)
+            {
+                cached_humanoid_address = 0;
+                cached_model_address = 0;
+            }
+
             if (check::textchatopen)
             {
                 was_disabled_by_typing = true;
                 original_speed_set = false;
 
-                if (game::local_player.address != 0)
+                if (local_player_addr != 0 && cached_humanoid_address != 0 && original_speed_set)
                 {
-                    rbx::player_t local_player_obj = { game::local_player.address };
-                    rbx::model_instance_t model_instance = local_player_obj.get_model_instance();
-                    if (model_instance.address != 0)
-                    {
-                        rbx::humanoid_t humanoid = { model_instance.find_first_child("Humanoid").address };
-                        if (humanoid.address != 0 && original_speed_set)
-                        {
-                            memory->write<float>(humanoid.address + Offsets::Humanoid::Walkspeed, original_speed);
-                            memory->write<float>(humanoid.address + Offsets::Humanoid::WalkspeedCheck, original_speed);
-                        }
-                    }
+                    memory->write<float>(cached_humanoid_address + Offsets::Humanoid::Walkspeed, original_speed);
+                    memory->write<float>(cached_humanoid_address + Offsets::Humanoid::WalkspeedCheck, original_speed);
                 }
                 continue;
             }
@@ -60,35 +83,18 @@ namespace walkspeed
             {
                 original_speed_set = false;
 
-                if (game::local_player.address != 0)
+                if (local_player_addr != 0 && cached_humanoid_address != 0 && original_speed_set)
                 {
-                    rbx::player_t local_player_obj = { game::local_player.address };
-                    rbx::model_instance_t model_instance = local_player_obj.get_model_instance();
-                    if (model_instance.address != 0)
-                    {
-                        rbx::humanoid_t humanoid = { model_instance.find_first_child("Humanoid").address };
-                        if (humanoid.address != 0 && original_speed_set)
-                        {
-                            memory->write<float>(humanoid.address + Offsets::Humanoid::Walkspeed, original_speed);
-                            memory->write<float>(humanoid.address + Offsets::Humanoid::WalkspeedCheck, original_speed);
-                        }
-                    }
+                    memory->write<float>(cached_humanoid_address + Offsets::Humanoid::Walkspeed, original_speed);
+                    memory->write<float>(cached_humanoid_address + Offsets::Humanoid::WalkspeedCheck, original_speed);
                 }
                 continue;
             }
 
-            rbx::player_t local_player_obj = { game::local_player.address };
-            if (local_player_obj.address == 0)
+            if (local_player_addr == 0 || cached_model_address == 0 || cached_humanoid_address == 0)
                 continue;
 
-            rbx::model_instance_t model_instance = local_player_obj.get_model_instance();
-            if (model_instance.address == 0)
-                continue;
-
-            rbx::humanoid_t humanoid = { model_instance.find_first_child("Humanoid").address };
-            if (humanoid.address == 0)
-                continue;
-
+            rbx::humanoid_t humanoid = { cached_humanoid_address };
             bool should_activate = false;
 
             switch (settings::expl::walkspeed_mode)
@@ -98,6 +104,7 @@ namespace walkspeed
                 break;
             case 1:
             {
+                rbx::model_instance_t model_instance = { cached_model_address };
                 rbx::instance_t body_effects = model_instance.find_first_child("BodyEffects");
                 if (body_effects.address != 0)
                 {
@@ -129,7 +136,7 @@ namespace walkspeed
                 float current_speed = memory->read<float>(humanoid.address + Offsets::Humanoid::Walkspeed);
                 if (current_speed != settings::expl::walkspeed_speed)
                 {
-                    for (int i = 0; i < 25000; i++)
+                    for (int i = 0; i < 10; i++)
                     {
                         memory->write<float>(humanoid.address + Offsets::Humanoid::Walkspeed, settings::expl::walkspeed_speed);
                         memory->write<float>(humanoid.address + Offsets::Humanoid::WalkspeedCheck, settings::expl::walkspeed_speed);

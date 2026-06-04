@@ -4,6 +4,8 @@
 #include <game/game.h>
 #include <algorithm>
 #include <cctype>
+#include <mutex>
+#include <unordered_map>
 
 std::string rbx::nameable_t::get_name()
 {
@@ -20,11 +22,28 @@ std::string rbx::nameable_t::get_name()
 std::string rbx::nameable_t::get_class_name()
 {
 	std::uint64_t class_descriptor = memory->read<std::uint64_t>(this->address + Offsets::Instance::ClassDescriptor);
+	if (!class_descriptor) return "unknown";
+
+	static std::unordered_map<std::uint64_t, std::string> class_name_cache;
+	static std::mutex cache_mutex;
+
+	{
+		std::lock_guard<std::mutex> lock(cache_mutex);
+		auto it = class_name_cache.find(class_descriptor);
+		if (it != class_name_cache.end())
+		{
+			return it->second;
+		}
+	}
+
 	std::uint64_t class_name = memory->read<std::uint64_t>(class_descriptor + Offsets::Instance::ClassName);
 
 	if (class_name)
 	{
-		return memory->read_string(class_name);
+		std::string name = memory->read_string(class_name);
+		std::lock_guard<std::mutex> lock(cache_mutex);
+		class_name_cache[class_descriptor] = name;
+		return name;
 	}
 
 	return "unknown";
@@ -224,6 +243,8 @@ bool rbx::primitive_t::set_can_collide(bool enable)
 	if (!primitive) return false;
 	
 	std::uint8_t flags = memory->read<std::uint8_t>(primitive + Offsets::Primitive::Flags);
+	bool current = (flags & Offsets::PrimitiveFlags::CanCollide) != 0;
+	if (current == enable) return enable;
 	
 	if (enable)
 		flags |= Offsets::PrimitiveFlags::CanCollide;
@@ -240,6 +261,8 @@ bool rbx::primitive_t::set_anchored(bool enable)
 	if (!primitive) return false;
 	
 	std::uint8_t flags = memory->read<std::uint8_t>(primitive + Offsets::Primitive::Flags);
+	bool current = (flags & Offsets::PrimitiveFlags::Anchored) != 0;
+	if (current == enable) return enable;
 	
 	if (enable)
 		flags |= Offsets::PrimitiveFlags::Anchored;
@@ -258,6 +281,18 @@ math::vector3 rbx::primitive_t::get_position()
 math::matrix3 rbx::primitive_t::get_rotation()
 {
 	return memory->read<math::matrix3>(this->address + Offsets::Primitive::Rotation);
+}
+
+math::cframe_t rbx::primitive_t::get_cframe()
+{
+	math::cframe_t buffer{};
+	Luck_ReadVirtualMemory(memory->get_process_handle(), reinterpret_cast<void*>(this->address + Offsets::Primitive::Rotation), &buffer, sizeof(math::cframe_t), nullptr);
+	return buffer;
+}
+
+void rbx::primitive_t::set_cframe(const math::cframe_t& cframe)
+{
+	Luck_WriteVirtualMemory(memory->get_process_handle(), reinterpret_cast<void*>(this->address + Offsets::Primitive::Rotation), const_cast<math::cframe_t*>(&cframe), sizeof(math::cframe_t), nullptr);
 }
 
 math::vector3 rbx::primitive_t::get_velocity()
@@ -287,23 +322,8 @@ bool rbx::visualengine_t::world_to_screen(const math::vector3& world, math::vect
 	clip.x /= clip.w;
 	clip.y /= clip.w;
 
-	out.x = (dims.x * 0.5f * clip.x) + (dims.x * 0.5f);
-	out.y = -(dims.y * 0.5f * clip.y) + (dims.y * 0.5f);
-
-	HWND roblox_window = game::wnd;
-	if (roblox_window)
-	{
-		RECT client_rect{};
-		POINT client_pos{};
-		if (GetClientRect(roblox_window, &client_rect))
-		{
-			client_pos.x = client_rect.left;
-			client_pos.y = client_rect.top;
-			ClientToScreen(roblox_window, &client_pos);
-			out.x += (float)client_pos.x;
-			out.y += (float)client_pos.y;
-		}
-	}
+	out.x = (dims.x * 0.5f * clip.x) + (dims.x * 0.5f) + game::client_offset.x;
+	out.y = -(dims.y * 0.5f * clip.y) + (dims.y * 0.5f) + game::client_offset.y;
 
 	return true;
 }

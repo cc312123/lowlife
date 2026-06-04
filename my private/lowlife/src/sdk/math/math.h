@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 namespace math
 {
@@ -65,5 +65,11 @@ namespace math
 				m[3][0] * v.x + m[3][1] * v.y + m[3][2] * v.z + m[3][3] * v.w
 			};
 		}
+	};
+
+	struct cframe_t final
+	{
+		matrix3 rotation;
+		vector3 position;
 	};
 }

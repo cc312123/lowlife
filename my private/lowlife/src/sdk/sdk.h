@@ -81,6 +81,8 @@ namespace rbx
 		void set_size(const math::vector3& size);
 		math::vector3 get_position();
 		math::matrix3 get_rotation();
+		math::cframe_t get_cframe();
+		void set_cframe(const math::cframe_t& cframe);
 		math::vector3 get_velocity();
 		bool get_can_collide();
 		bool set_can_collide(bool enable);
