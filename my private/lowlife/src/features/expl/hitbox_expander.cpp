@@ -4,6 +4,7 @@
 #include <chrono>
 #include <mutex>
 #include <unordered_map>
+#include <unordered_set>
 
 #include <memory/memory.h>
 #include <sdk/sdk.h>
@@ -20,6 +21,7 @@ namespace rbx::hitbox_expander
 	{
 		std::unordered_map<std::uint64_t, math::vector3> original_head_scales;
 		std::unordered_map<std::uint64_t, float> original_transparencies;
+		std::unordered_map<std::uint64_t, math::vector3> original_sizes;
 
 		void restore_transparency(rbx::part_t& part)
 		{
@@ -29,6 +31,57 @@ namespace rbx::hitbox_expander
 			{
 				memory->write<float>(part.address + Offsets::BasePart::Transparency, it->second);
 				original_transparencies.erase(it);
+			}
+		}
+
+		void restore_size(rbx::part_t& part)
+		{
+			if (!part.address) return;
+			auto it = original_sizes.find(part.address);
+			if (it != original_sizes.end())
+			{
+				rbx::primitive_t prim = part.get_primitive();
+				if (prim.address)
+				{
+					prim.set_size(it->second);
+				}
+				original_sizes.erase(it);
+			}
+		}
+
+		void clean_original_sizes()
+		{
+			std::shared_ptr<std::vector<cache::entity_t>> players_snapshot;
+			{
+				std::lock_guard<std::mutex> lock(cache::mtx);
+				players_snapshot = cache::cached_players;
+			}
+
+			if (players_snapshot)
+			{
+				std::unordered_set<std::uint64_t> active_part_addresses;
+				for (auto& player : *players_snapshot)
+				{
+					for (auto& part_pair : player.parts)
+					{
+						if (part_pair.second.address)
+						{
+							active_part_addresses.insert(part_pair.second.address);
+						}
+					}
+				}
+
+				for (auto it = original_sizes.begin(); it != original_sizes.end();)
+				{
+					if (active_part_addresses.find(it->first) == active_part_addresses.end())
+					{
+						it = original_sizes.erase(it);
+					}
+					else
+					{
+						++it;
+					}
+				}
 			}
 		}
 
@@ -47,12 +100,11 @@ namespace rbx::hitbox_expander
 			if (head_it != player.parts.end() && head_it->second.address)
 			{
 				restore_transparency(head_it->second);
+				restore_size(head_it->second);
+
 				rbx::primitive_t prim = head_it->second.get_primitive();
 				if (prim.address)
 				{
-					math::vector3 normal_size = (player.rig_type == 0) ? math::vector3{ 2.0f, 1.0f, 1.0f } : math::vector3{ 1.2f, 1.2f, 1.2f };
-					prim.set_size(normal_size);
-
 					// Restore original flags (Head: CanCollide=false, CanTouch=true, CanQuery=true)
 					std::uint8_t flags = memory->read<std::uint8_t>(prim.address + Offsets::Primitive::Flags);
 					flags &= ~Offsets::PrimitiveFlags::CanCollide;
@@ -79,12 +131,11 @@ namespace rbx::hitbox_expander
 			if (torso_it != player.parts.end() && torso_it->second.address)
 			{
 				restore_transparency(torso_it->second);
+				restore_size(torso_it->second);
+
 				rbx::primitive_t prim = torso_it->second.get_primitive();
 				if (prim.address)
 				{
-					math::vector3 normal_size = { 2.0f, 2.0f, 1.0f };
-					prim.set_size(normal_size);
-
 					// Restore original flags (Torso: CanCollide=true, CanTouch=true, CanQuery=true)
 					std::uint8_t flags = memory->read<std::uint8_t>(prim.address + Offsets::Primitive::Flags);
 					flags |= Offsets::PrimitiveFlags::CanCollide;
@@ -99,12 +150,11 @@ namespace rbx::hitbox_expander
 			if (upper_torso_it != player.parts.end() && upper_torso_it->second.address)
 			{
 				restore_transparency(upper_torso_it->second);
+				restore_size(upper_torso_it->second);
+
 				rbx::primitive_t prim = upper_torso_it->second.get_primitive();
 				if (prim.address)
 				{
-					math::vector3 normal_size = { 2.0f, 1.6f, 1.0f };
-					prim.set_size(normal_size);
-
 					// Restore original flags (UpperTorso: CanCollide=true, CanTouch=true, CanQuery=true)
 					std::uint8_t flags = memory->read<std::uint8_t>(prim.address + Offsets::Primitive::Flags);
 					flags |= Offsets::PrimitiveFlags::CanCollide;
@@ -119,12 +169,11 @@ namespace rbx::hitbox_expander
 			if (hrp_it != player.parts.end() && hrp_it->second.address)
 			{
 				restore_transparency(hrp_it->second);
+				restore_size(hrp_it->second);
+
 				rbx::primitive_t prim = hrp_it->second.get_primitive();
 				if (prim.address)
 				{
-					math::vector3 normal_size = { 2.0f, 2.0f, 1.0f };
-					prim.set_size(normal_size);
-
 					// Restore original flags (HumanoidRootPart: CanCollide=true, CanTouch=true, CanQuery=true)
 					std::uint8_t flags = memory->read<std::uint8_t>(prim.address + Offsets::Primitive::Flags);
 					flags |= Offsets::PrimitiveFlags::CanCollide;
@@ -174,6 +223,13 @@ namespace rbx::hitbox_expander
 			};
 
 			try {
+				// Store original size if not already stored
+				auto it = original_sizes.find(part_it->second.address);
+				if (it == original_sizes.end())
+				{
+					original_sizes[part_it->second.address] = prim.get_size();
+				}
+
 				prim.set_size(new_size);
 				
 				// Clear CanCollide (prevent barrier/flings), keep CanTouch and CanQuery (allow shooting/hits/touched)
@@ -264,6 +320,11 @@ namespace rbx::hitbox_expander
 		{
 			std::this_thread::sleep_for(std::chrono::milliseconds(1));
 			frame_counter++;
+
+			if (frame_counter % 1000 == 0)
+			{
+				clean_original_sizes();
+			}
 
 			// Typing Check Logic
 			if (check::textchatopen)
