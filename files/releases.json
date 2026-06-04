@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.3",
-    "latestChangelog":  "Performance optimization to resolve FPS drops, rate-limit triggerbot, and fix mouse aimbot camera jitter.",
+    "latestVersion":  "1.0.4",
+    "latestChangelog":  "Critically-damped spring physics mouse smoothing and prediction filtering to eliminate aimbot jitter and random hopping.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -31,7 +31,14 @@
                         "changelog":  "Performance optimization to resolve FPS drops, rate-limit triggerbot, and fix mouse aimbot camera jitter.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "93ba85d22705d98c1a1b0ac8fbdbb2f8"
+                    },
+                    {
+                        "version":  "1.0.4",
+                        "date":  "2026-06-04",
+                        "changelog":  "Critically-damped spring physics mouse smoothing and prediction filtering to eliminate aimbot jitter and random hopping.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "bf3f9009bdebc13aa0975c426670cc8e"
                     }
                 ],
-    "latestHash":  "93ba85d22705d98c1a1b0ac8fbdbb2f8"
+    "latestHash":  "bf3f9009bdebc13aa0975c426670cc8e"
 }

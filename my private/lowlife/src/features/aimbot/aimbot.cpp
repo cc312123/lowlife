@@ -493,13 +493,41 @@ namespace rbx::aimbot {
         }
 
         // Advanced prediction equations compensating for speed, gravity, and latency
-        math::vector3 apply_prediction(rbx::primitive_t primitive, const math::vector3& camera_pos, bool is_camera) {
+        math::vector3 apply_prediction(std::uint64_t entity_address, rbx::primitive_t primitive, const math::vector3& camera_pos, bool is_camera) {
             math::vector3 pos = primitive.get_position();
             math::vector3 vel = primitive.get_velocity();
 
             if (!std::isfinite(vel.x) || !std::isfinite(vel.y) || !std::isfinite(vel.z) ||
                 std::abs(vel.x) > MAX_VELOCITY || std::abs(vel.y) > MAX_VELOCITY || std::abs(vel.z) > MAX_VELOCITY)
                 return pos;
+
+            static std::unordered_map<std::uint64_t, math::vector3> smoothed_velocities;
+            static std::unordered_map<std::uint64_t, std::chrono::steady_clock::time_point> last_prediction_times;
+            
+            auto now = std::chrono::steady_clock::now();
+            
+            if (smoothed_velocities.size() > 200) {
+                smoothed_velocities.clear();
+                last_prediction_times.clear();
+            }
+
+            math::vector3& smooth_vel = smoothed_velocities[entity_address];
+            auto last_time_it = last_prediction_times.find(entity_address);
+            
+            if (last_time_it == last_prediction_times.end()) {
+                smooth_vel = vel;
+            } else {
+                float dt = std::chrono::duration<float>(now - last_time_it->second).count();
+                if (dt > 0.1f) dt = 0.016f;
+                
+                float alpha = 1.0f - std::exp(-10.0f * dt);
+                alpha = std::clamp(alpha, 0.0f, 1.0f);
+                smooth_vel.x += (vel.x - smooth_vel.x) * alpha;
+                smooth_vel.y += (vel.y - smooth_vel.y) * alpha;
+                smooth_vel.z += (vel.z - smooth_vel.z) * alpha;
+            }
+            
+            last_prediction_times[entity_address] = now;
 
             if (settings::aimbot::projectile_prediction) {
                 float dist = vector3_length(pos - camera_pos);
@@ -510,18 +538,18 @@ namespace rbx::aimbot {
                 float latency_sec = settings::aimbot::latency_ms / 1000.0f;
                 float total_time = travel_time + latency_sec;
 
-                pos.x += vel.x * total_time;
-                pos.y += vel.y * total_time;
-                pos.z += vel.z * total_time;
+                pos.x += smooth_vel.x * total_time;
+                pos.y += smooth_vel.y * total_time;
+                pos.z += smooth_vel.z * total_time;
 
                 pos.y += 0.5f * settings::aimbot::projectile_gravity * travel_time * travel_time;
             } else {
                 float px = is_camera ? settings::aimbot::camera_prediction_x : settings::aimbot::mouse_prediction_x;
                 float py = is_camera ? settings::aimbot::camera_prediction_y : settings::aimbot::mouse_prediction_y;
 
-                pos.x += vel.x * PREDICTION_SCALE * px;
-                pos.y += vel.y * PREDICTION_SCALE * py;
-                pos.z += vel.z * PREDICTION_SCALE * px;
+                pos.x += smooth_vel.x * PREDICTION_SCALE * px;
+                pos.y += smooth_vel.y * PREDICTION_SCALE * py;
+                pos.z += smooth_vel.z * PREDICTION_SCALE * px;
             }
             return pos;
         }
@@ -608,13 +636,20 @@ namespace rbx::aimbot {
             camera.write_rotation(target_matrix);
         }
 
-        void execute_mouse_aim(const math::vector3& target_pos, const POINT& cursor_pt, float dt, const math::vector2& dims, const math::matrix4& view, float screen_dist) {
+        void execute_mouse_aim(std::uint64_t target_address, const math::vector3& target_pos, const POINT& cursor_pt, float dt, const math::vector2& dims, const math::matrix4& view, float screen_dist) {
             static auto last_mouse_input_time = std::chrono::steady_clock::now();
             auto current_time = std::chrono::steady_clock::now();
             if (std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_mouse_input_time).count() < 8) {
                 return;
             }
             last_mouse_input_time = current_time;
+
+            static std::uint64_t last_target_address = 0;
+            if (target_address != last_target_address) {
+                last_target_address = target_address;
+                spring_vel_mouse_x = 0.0f;
+                spring_vel_mouse_y = 0.0f;
+            }
 
             math::vector2 screen_pos = {};
             if (!game::visengine.world_to_screen(target_pos, screen_pos, dims, view)) return;
@@ -649,7 +684,12 @@ namespace rbx::aimbot {
             float center_y = (dims.y / 2.0f) + client_y;
 
             bool right_click_held = (GetAsyncKeyState(VK_RBUTTON) & 0x8000);
-            if (cursor_hidden || right_click_held || (std::abs(target_ref_x - center_x) < 20.0f && std::abs(target_ref_y - center_y) < 20.0f)) {
+            
+            // Check if mouse is captured (hidden, right-click, or locked to center)
+            bool is_camera_captured = cursor_hidden || right_click_held || 
+                                     (std::abs(target_ref_x - center_x) < 5.0f && std::abs(target_ref_y - center_y) < 5.0f);
+
+            if (is_camera_captured) {
                 target_ref_x = center_x;
                 target_ref_y = center_y;
             }
@@ -658,8 +698,6 @@ namespace rbx::aimbot {
             float dy = screen_pos.y - target_ref_y;
 
             float sensitivity = std::clamp(settings::aimbot::mouse_sensitivity, 0.1f, 10.0f);
-            dx *= sensitivity;
-            dy *= sensitivity;
 
             if (settings::aimbot::mouse_smooth || settings::aimbot::adaptive_smoothing) {
                 float sx = std::clamp(settings::aimbot::mouse_smooth_x, 1.0f, 200.0f);
@@ -671,14 +709,33 @@ namespace rbx::aimbot {
                     sy = adaptive_factor;
                 }
 
-                float t_x = std::clamp(dt * (45.0f / sx), 0.0f, 1.0f);
-                float t_y = std::clamp(dt * (45.0f / sy), 0.0f, 1.0f);
+                // Map smooth factor to critically-damped spring physics
+                float stiffness_x = 350.0f / (sx * 0.5f + 1.0f);
+                float stiffness_y = 350.0f / (sy * 0.5f + 1.0f);
+                
+                float damping_x = 2.0f * std::sqrt(stiffness_x);
+                float damping_y = 2.0f * std::sqrt(stiffness_y);
 
-                float eased_t_x = apply_easing(settings::aimbot::easing_style, t_x);
-                float eased_t_y = apply_easing(settings::aimbot::easing_style, t_y);
+                stiffness_x *= sensitivity;
+                stiffness_y *= sensitivity;
 
-                dx *= eased_t_x;
-                dy *= eased_t_y;
+                float accel_x = stiffness_x * dx - damping_x * spring_vel_mouse_x;
+                float accel_y = stiffness_y * dy - damping_y * spring_vel_mouse_y;
+
+                spring_vel_mouse_x += accel_x * dt;
+                spring_vel_mouse_y += accel_y * dt;
+
+                float max_spring_vel = 2000.0f;
+                spring_vel_mouse_x = std::clamp(spring_vel_mouse_x, -max_spring_vel, max_spring_vel);
+                spring_vel_mouse_y = std::clamp(spring_vel_mouse_y, -max_spring_vel, max_spring_vel);
+
+                dx = spring_vel_mouse_x * dt;
+                dy = spring_vel_mouse_y * dt;
+            } else {
+                dx *= sensitivity;
+                dy *= sensitivity;
+                spring_vel_mouse_x = 0.0f;
+                spring_vel_mouse_y = 0.0f;
             }
 
             if (settings::aimbot::shake) {
@@ -937,7 +994,7 @@ namespace rbx::aimbot {
                                   (settings::aimbot::aimbot_type == 1 && settings::aimbot::mouse_prediction) ||
                                   (settings::aimbot::projectile_prediction);
             if (use_prediction) {
-                target_pos = apply_prediction(primitive, camera_pos, settings::aimbot::aimbot_type == 0);
+                target_pos = apply_prediction(target.instance.address, primitive, camera_pos, settings::aimbot::aimbot_type == 0);
             }
 
             // 7. Check if screen position of target pos is valid
@@ -947,7 +1004,7 @@ namespace rbx::aimbot {
                 cursor_dist = vector2_distance(screen_pos.x, screen_pos.y, (float)cursor_pt.x, (float)cursor_pt.y);
             }
 
-            // Check if view matrix or target position actually changed
+            // Check if view matrix actually changed to avoid duplicate inputs within the same game render frame
             bool view_changed = false;
             for (int i = 0; i < 16; ++i) {
                 if (view.m[i] != last_view.m[i]) {
@@ -956,11 +1013,7 @@ namespace rbx::aimbot {
                 }
             }
 
-            bool target_changed = (target_pos.x != last_target_pos.x || 
-                                   target_pos.y != last_target_pos.y || 
-                                   target_pos.z != last_target_pos.z);
-
-            if (target_pos_initialized && !view_changed && !target_changed) {
+            if (target_pos_initialized && !view_changed) {
                 Sleep(1);
                 continue;
             }
@@ -995,7 +1048,7 @@ namespace rbx::aimbot {
                 execute_camera_aim(filtered_target_pos, dt, cursor_dist);
             }
             else {
-                execute_mouse_aim(filtered_target_pos, cursor_pt, dt, dims, view, cursor_dist);
+                execute_mouse_aim(target.instance.address, filtered_target_pos, cursor_pt, dt, dims, view, cursor_dist);
             }
             Sleep(1);
         }
