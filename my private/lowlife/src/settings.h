@@ -60,13 +60,6 @@ namespace settings
 		inline float shake_x{ 0.0f };
 		inline float shake_y{ 0.0f };
 		inline int easing_style{ 0 }; 
-		inline int target_selection_mode{ 0 };
-		inline int smoothing_mode{ 0 };
-		inline float spring_stiffness{ 50.0f };
-		inline float spring_damping{ 10.0f };
-		inline float prediction_gravity{ 0.0f };
-		inline float prediction_latency{ 0.0f };
-		inline bool multipoint{ false };
 	}
 	namespace silent
 	{
