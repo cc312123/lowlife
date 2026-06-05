@@ -52,114 +52,7 @@ namespace rbx::aimbot {
         math::vector3 current_target_offset = { 0.0f, 0.0f, 0.0f };
         std::uint64_t last_locked_address = 0;
 
-        float apply_easing(int style, float t);
 
-        struct bezier_stroke_t {
-            bool active = false;
-            float elapsed = 0.0f;
-            float duration = 0.0f;
-            
-            math::vector2 start_offset = { 0.0f, 0.0f };
-            math::vector2 p1 = { 0.0f, 0.0f };
-            math::vector2 p2 = { 0.0f, 0.0f };
-            math::vector2 end_offset = { 0.0f, 0.0f };
-
-            math::vector2 start_angles_offset = { 0.0f, 0.0f };
-            math::vector2 cam_p1 = { 0.0f, 0.0f };
-            math::vector2 cam_p2 = { 0.0f, 0.0f };
-            math::vector2 end_angles_offset = { 0.0f, 0.0f };
-
-            void init_mouse(float dx, float dy, float smooth_x, float smooth_y) {
-                active = true;
-                elapsed = 0.0f;
-                start_offset = { dx, dy };
-                end_offset = { 0.0f, 0.0f };
-
-                float dist = std::sqrt(dx * dx + dy * dy);
-                float avg_smooth = (smooth_x + smooth_y) * 0.5f;
-                
-                // Human stroke duration scaling: base duration + smoothing scaling + distance scaling
-                duration = 0.05f + (avg_smooth * 0.003f) + (dist * 0.0002f);
-                duration = std::clamp(duration, 0.05f, 2.5f);
-
-                math::vector2 to_end = { -dx, -dy };
-                math::vector2 perp = { -to_end.y, to_end.x };
-
-                // Perpendicular curvature offset
-                float r1 = ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f);
-                float r2 = ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f);
-                
-                // Keep curves human-like (up to 15% deviation from linear path)
-                float curve_scale = 0.15f;
-
-                p1.x = start_offset.x + to_end.x * 0.33f + perp.x * r1 * curve_scale;
-                p1.y = start_offset.y + to_end.y * 0.33f + perp.y * r1 * curve_scale;
-
-                p2.x = start_offset.x + to_end.x * 0.66f + perp.x * r2 * curve_scale;
-                p2.y = start_offset.y + to_end.y * 0.66f + perp.y * r2 * curve_scale;
-            }
-
-            void init_camera(float yaw_diff, float pitch_diff, float smooth_x, float smooth_y) {
-                active = true;
-                elapsed = 0.0f;
-                start_angles_offset = { yaw_diff, pitch_diff };
-                end_angles_offset = { 0.0f, 0.0f };
-
-                float dist = std::sqrt(yaw_diff * yaw_diff + pitch_diff * pitch_diff);
-                float avg_smooth = (smooth_x + smooth_y) * 0.5f;
-                
-                // Camera angle duration scaling
-                duration = 0.05f + (avg_smooth * 0.003f) + (dist * 0.05f);
-                duration = std::clamp(duration, 0.05f, 2.5f);
-
-                math::vector2 to_end = { -yaw_diff, -pitch_diff };
-                math::vector2 perp = { -to_end.y, to_end.x };
-
-                float r1 = ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f);
-                float r2 = ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f);
-                float curve_scale = 0.15f;
-
-                cam_p1.x = start_angles_offset.x + to_end.x * 0.33f + perp.x * r1 * curve_scale;
-                cam_p1.y = start_angles_offset.y + to_end.y * 0.33f + perp.y * r1 * curve_scale;
-
-                cam_p2.x = start_angles_offset.x + to_end.x * 0.66f + perp.x * r2 * curve_scale;
-                cam_p2.y = start_angles_offset.y + to_end.y * 0.66f + perp.y * r2 * curve_scale;
-            }
-
-            math::vector2 evaluate_mouse(float t_raw, int style) {
-                // Style 8 is ease_out_cubic, which provides dynamic ease-out braking deceleration.
-                float t = apply_easing(style != 0 ? style : 8, t_raw);
-
-                float u = 1.0f - t;
-                float tt = t * t;
-                float uu = u * u;
-                float uuu = uu * u;
-                float ttt = tt * t;
-
-                math::vector2 p = {};
-                p.x = uuu * start_offset.x + 3.0f * uu * t * p1.x + 3.0f * u * tt * p2.x + ttt * end_offset.x;
-                p.y = uuu * start_offset.y + 3.0f * uu * t * p1.y + 3.0f * u * tt * p2.y + ttt * end_offset.y;
-                return p;
-            }
-
-            math::vector2 evaluate_camera(float t_raw, int style) {
-                float t = apply_easing(style != 0 ? style : 8, t_raw);
-
-                float u = 1.0f - t;
-                float tt = t * t;
-                float uu = u * u;
-                float uuu = uu * u;
-                float ttt = tt * t;
-
-                math::vector2 p = {};
-                p.x = uuu * start_angles_offset.x + 3.0f * uu * t * cam_p1.x + 3.0f * u * tt * cam_p2.x + ttt * end_angles_offset.x;
-                p.y = uuu * start_angles_offset.y + 3.0f * uu * t * cam_p1.y + 3.0f * u * tt * cam_p2.y + ttt * end_angles_offset.y;
-                return p;
-            }
-        };
-
-        bezier_stroke_t current_mouse_stroke;
-        bezier_stroke_t current_cam_stroke;
 
         void vector_to_angles(const math::vector3& forward, float& yaw, float& pitch) {
             pitch = std::asin(std::clamp(forward.y, -1.0f, 1.0f));
@@ -220,55 +113,7 @@ namespace rbx::aimbot {
 
         constexpr float M_PI_F = 3.14159265f;
 
-        float ease_linear(float t) { return t; }
-        float ease_in_sine(float t) { return 1.0f - std::cos(t * M_PI_F * 0.5f); }
-        float ease_out_sine(float t) { return std::sin(t * M_PI_F * 0.5f); }
-        float ease_in_out_sine(float t) { return -(std::cos(M_PI_F * t) - 1.0f) * 0.5f; }
-        float ease_in_quad(float t) { return t * t; }
-        float ease_out_quad(float t) { return 1.0f - (1.0f - t) * (1.0f - t); }
-        float ease_in_out_quad(float t) { return t < 0.5f ? 2.0f * t * t : 1.0f - std::pow(-2.0f * t + 2.0f, 2.0f) * 0.5f; }
-        float ease_in_cubic(float t) { return t * t * t; }
-        float ease_out_cubic(float t) { return 1.0f - std::pow(1.0f - t, 3.0f); }
-        float ease_in_out_cubic(float t) { return t < 0.5f ? 4.0f * t * t * t : 1.0f - std::pow(-2.0f * t + 2.0f, 3.0f) * 0.5f; }
-        float ease_out_elastic(float t) {
-            float c4 = (2.0f * M_PI_F) / 3.0f;
-            return t == 0.0f ? 0.0f : (t == 1.0f ? 1.0f : std::pow(2.0f, -10.0f * t) * std::sin((t * 10.0f - 0.75f) * c4) + 1.0f);
-        }
-        float ease_out_bounce(float t) {
-            float n1 = 7.5625f;
-            float d1 = 2.75f;
-            if (t < 1.0f / d1) {
-                return n1 * t * t;
-            } else if (t < 2.0f / d1) {
-                t -= 1.5f / d1;
-                return n1 * t * t + 0.75f;
-            } else if (t < 2.5f / d1) {
-                t -= 2.25f / d1;
-                return n1 * t * t + 0.9375f;
-            } else {
-                t -= 2.625f / d1;
-                return n1 * t * t + 0.984375f;
-            }
-        }
 
-        float apply_easing(int style, float t) {
-            t = std::clamp(t, 0.0f, 1.0f);
-            switch (style) {
-                case 0: return ease_linear(t);
-                case 1: return ease_in_sine(t);
-                case 2: return ease_out_sine(t);
-                case 3: return ease_in_out_sine(t);
-                case 4: return ease_in_quad(t);
-                case 5: return ease_out_quad(t);
-                case 6: return ease_in_out_quad(t);
-                case 7: return ease_in_cubic(t);
-                case 8: return ease_out_cubic(t);
-                case 9: return ease_in_out_cubic(t);
-                case 10: return ease_out_elastic(t);
-                case 11: return ease_out_bounce(t);
-                default: return t;
-            }
-        }
 
         bool is_knocked(const cache::entity_t& player) {
             return player.is_knocked;
@@ -290,7 +135,7 @@ namespace rbx::aimbot {
             // Factor scales from 0.0 (directly on crosshair) to 1.0 (far away)
             float factor = std::clamp(screen_dist_to_target / 150.0f, 0.0f, 1.0f);
             // Linear interpolation: slower tracking (max_s) when close, faster snap (min_s) when far
-            return max_s - (max_s - min_s) * factor;
+            return std::max(max_s - (max_s - min_s) * factor, 1.0f);
         }
 
         // Generates/updates persistent humanized targeting offset on target lock switches
@@ -767,20 +612,21 @@ namespace rbx::aimbot {
             static std::uint64_t last_cam_target_address = 0;
             if (target_address != last_cam_target_address) {
                 last_cam_target_address = target_address;
-                current_cam_stroke.active = false;
+                spring_vel_yaw = 0.0f;
+                spring_vel_pitch = 0.0f;
             }
 
             if (settings::aimbot::camera_smooth || settings::aimbot::adaptive_smoothing) {
-                float sx = std::clamp(settings::aimbot::camera_smooth_x, 0.0f, 200.0f);
-                float sy = std::clamp(settings::aimbot::camera_smooth_y, 0.0f, 200.0f);
+                float sx = std::clamp(settings::aimbot::camera_smooth_x, 1.0f, 200.0f);
+                float sy = std::clamp(settings::aimbot::camera_smooth_y, 1.0f, 200.0f);
 
                 if (settings::aimbot::adaptive_smoothing) {
                     float adaptive_factor = get_adaptive_smooth(screen_dist);
-                    sx = adaptive_factor;
-                    sy = adaptive_factor;
+                    sx = std::max(adaptive_factor, 1.0f);
+                    sy = std::max(adaptive_factor, 1.0f);
                 }
 
-                if (sx <= 0.01f && sy <= 0.01f) {
+                if (sx <= 1.01f && sy <= 1.01f) {
                     smoothed_forward = target_forward;
                 } else {
                     math::vector3 current_forward = { -current_rot.m[2], -current_rot.m[5], -current_rot.m[8] };
@@ -798,32 +644,27 @@ namespace rbx::aimbot {
                     float pitch_diff = target_pitch - current_pitch;
                     pitch_diff = std::atan2(std::sin(pitch_diff), std::cos(pitch_diff));
 
-                    // Reset or initialize Bezier stroke if not active or if difference is large
-                    if (!current_cam_stroke.active && (std::abs(yaw_diff) > 0.0001f || std::abs(pitch_diff) > 0.0001f)) {
-                        current_cam_stroke.init_camera(yaw_diff, pitch_diff, sx, sy);
-                    }
+                    // Analytical critically-damped spring-damper system for camera angles
+                    float omega_x = 45.0f / sx;
+                    float omega_y = 45.0f / sy;
 
-                    float final_yaw = current_yaw;
-                    float final_pitch = current_pitch;
+                    float log_e_x = std::exp(-omega_x * dt);
+                    float log_e_y = std::exp(-omega_y * dt);
 
-                    if (current_cam_stroke.active) {
-                        current_cam_stroke.elapsed += dt;
-                        float t_raw = current_cam_stroke.elapsed / current_cam_stroke.duration;
-                        if (t_raw >= 1.0f) {
-                            t_raw = 1.0f;
-                            current_cam_stroke.active = false;
-                        }
+                    float A_x = yaw_diff;
+                    float B_x = -spring_vel_yaw + omega_x * yaw_diff;
+                    float yaw_diff_new = (A_x + B_x * dt) * log_e_x;
+                    float move_yaw = yaw_diff - yaw_diff_new;
+                    spring_vel_yaw = omega_x * yaw_diff_new - B_x * log_e_x;
 
-                        math::vector2 rem_angles = current_cam_stroke.evaluate_camera(t_raw, settings::aimbot::easing_style);
-                        float move_yaw = yaw_diff - rem_angles.x;
-                        float move_pitch = pitch_diff - rem_angles.y;
+                    float A_y = pitch_diff;
+                    float B_y = -spring_vel_pitch + omega_y * pitch_diff;
+                    float pitch_diff_new = (A_y + B_y * dt) * log_e_y;
+                    float move_pitch = pitch_diff - pitch_diff_new;
+                    spring_vel_pitch = omega_y * pitch_diff_new - B_y * log_e_y;
 
-                        final_yaw = current_yaw + move_yaw;
-                        final_pitch = current_pitch + move_pitch;
-                    } else {
-                        final_yaw = target_yaw;
-                        final_pitch = target_pitch;
-                    }
+                    float final_yaw = current_yaw + move_yaw;
+                    float final_pitch = current_pitch + move_pitch;
 
                     // Add high-frequency human muscle micro-tremor
                     float dist = std::sqrt(yaw_diff * yaw_diff + pitch_diff * pitch_diff);
@@ -870,7 +711,8 @@ namespace rbx::aimbot {
             static std::uint64_t last_target_address = 0;
             if (target_address != last_target_address) {
                 last_target_address = target_address;
-                current_mouse_stroke.active = false;
+                spring_vel_mouse_x = 0.0f;
+                spring_vel_mouse_y = 0.0f;
             }
 
             math::vector2 screen_pos = {};
@@ -970,16 +812,16 @@ namespace rbx::aimbot {
             float move_step_y = 0.0f;
 
             if (settings::aimbot::mouse_smooth || settings::aimbot::adaptive_smoothing) {
-                float sx = std::clamp(settings::aimbot::mouse_smooth_x, 0.0f, 200.0f);
-                float sy = std::clamp(settings::aimbot::mouse_smooth_y, 0.0f, 200.0f);
+                float sx = std::clamp(settings::aimbot::mouse_smooth_x, 1.0f, 200.0f);
+                float sy = std::clamp(settings::aimbot::mouse_smooth_y, 1.0f, 200.0f);
 
                 if (settings::aimbot::adaptive_smoothing) {
                     float adaptive_factor = get_adaptive_smooth(screen_dist);
-                    sx = adaptive_factor;
-                    sy = adaptive_factor;
+                    sx = std::max(adaptive_factor, 1.0f);
+                    sy = std::max(adaptive_factor, 1.0f);
                 }
 
-                if (sx <= 0.01f && sy <= 0.01f) {
+                if (sx <= 1.01f && sy <= 1.01f) {
                     move_step_x = dx;
                     move_step_y = dy;
                     if (!session_captured) {
@@ -987,30 +829,32 @@ namespace rbx::aimbot {
                         move_step_y *= sensitivity;
                     }
                 } else {
-                    float dist = std::sqrt(dx * dx + dy * dy);
-                    
-                    // Reset/init Bezier if not active and distance is substantial
-                    if (!current_mouse_stroke.active && dist > 1.0f) {
-                        current_mouse_stroke.init_mouse(dx, dy, sx, sy);
-                    }
+                    // Analytical critically-damped spring-damper system
+                    float omega_x = 45.0f / sx;
+                    float omega_y = 45.0f / sy;
 
-                    if (current_mouse_stroke.active) {
-                        current_mouse_stroke.elapsed += dt;
-                        float t_raw = current_mouse_stroke.elapsed / current_mouse_stroke.duration;
-                        if (t_raw >= 1.0f) {
-                            t_raw = 1.0f;
-                            current_mouse_stroke.active = false;
-                        }
+                    float log_e_x = std::exp(-omega_x * dt);
+                    float log_e_y = std::exp(-omega_y * dt);
 
-                        math::vector2 rem_offset = current_mouse_stroke.evaluate_mouse(t_raw, settings::aimbot::easing_style);
-                        move_step_x = dx - rem_offset.x;
-                        move_step_y = dy - rem_offset.y;
-                    } else {
-                        move_step_x = dx;
-                        move_step_y = dy;
+                    float A_x = dx;
+                    float B_x = -spring_vel_mouse_x + omega_x * dx;
+                    float x_new_x = (A_x + B_x * dt) * log_e_x;
+                    move_step_x = dx - x_new_x;
+                    spring_vel_mouse_x = omega_x * x_new_x - B_x * log_e_x;
+
+                    float A_y = dy;
+                    float B_y = -spring_vel_mouse_y + omega_y * dy;
+                    float x_new_y = (A_y + B_y * dt) * log_e_y;
+                    move_step_y = dy - x_new_y;
+                    spring_vel_mouse_y = omega_y * x_new_y - B_y * log_e_y;
+
+                    if (!session_captured) {
+                        move_step_x *= sensitivity;
+                        move_step_y *= sensitivity;
                     }
 
                     // Add high-frequency human muscle micro-tremor
+                    float dist = std::sqrt(dx * dx + dy * dy);
                     float tremor_scale = std::clamp(dist / 12.0f, 0.0f, 1.0f);
                     float tremor = 0.15f * (settings::aimbot::shake ? std::abs(settings::aimbot::shake_x) : 0.8f);
                     move_step_x += ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f) * tremor * tremor_scale;
