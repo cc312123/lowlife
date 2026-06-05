@@ -685,6 +685,9 @@ namespace botter
 			{
 				if (!child.address || parts.size() >= 5000) continue;
 
+				// 100% reliably skip local character model
+				if (game::local_character.address != 0 && child.address == game::local_character.address) continue;
+
 				std::string name = child.get_name();
 				if (should_skip_instance(name)) continue;
 
@@ -707,7 +710,10 @@ namespace botter
 					}
 					if (is_player_char) continue;
 
-					if (child.find_first_child("Humanoid").address != 0) {
+					// Robust player character model detection
+					if (child.find_first_child("Humanoid").address != 0 ||
+						child.find_first_child_by_class("Humanoid").address != 0 ||
+						child.find_first_child("HumanoidRootPart").address != 0) {
 						continue;
 					}
 				}
@@ -762,6 +768,7 @@ namespace botter
 		void map_cache_loop()
 		{
 			std::uint64_t last_workspace = 0;
+			auto last_update_time = std::chrono::steady_clock::now();
 
 			while (true)
 			{
@@ -786,7 +793,11 @@ namespace botter
 					continue;
 				}
 
-				if (game::workspace.address == last_workspace && !cached_map_parts.empty())
+				auto now = std::chrono::steady_clock::now();
+				bool timeout = std::chrono::duration_cast<std::chrono::seconds>(now - last_update_time).count() >= 10;
+
+				// Periodically rescan map parts every 10 seconds to account for dynamic loading and stream updates
+				if (game::workspace.address == last_workspace && !cached_map_parts.empty() && !timeout)
 				{
 					continue;
 				}
@@ -799,6 +810,7 @@ namespace botter
 					std::lock_guard<std::mutex> lock(map_parts_mutex);
 					cached_map_parts = std::move(temp_parts);
 					last_workspace = game::workspace.address;
+					last_update_time = std::chrono::steady_clock::now();
 				}
 			}
 		}

@@ -1066,13 +1066,18 @@ namespace rbx::aimbot {
                         target = locked_target;
                         target_part = get_best_bone(target, camera_pos, cursor_pt, dims, view, locked_part_name);
                     } else {
+                        bool was_cheap_valid = is_target_cheap_valid(locked_target, local_crew_id);
+
                         locked_target = cache::entity_t{};
                         has_locked_target = false;
                         target_pos_initialized = false;
                         locked_part_name = "";
                         update_target_offset(0);
+
                         if (settings::aimbot::sticky_aim && settings::aimbot::keybind_mode != 2) {
-                            needs_key_release = true;
+                            if (!was_cheap_valid) {
+                                needs_key_release = true;
+                            }
                         }
                     }
                 }
