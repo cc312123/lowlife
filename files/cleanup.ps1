@@ -6,7 +6,8 @@
 # Must be executed in an Administrator PowerShell window.
 # ==============================================================================
 param (
-    [switch]$FullUninstall = $false
+    [switch]$FullUninstall = $false,
+    [switch]$NoAuditLog = $false
 )
 
 $ErrorActionPreference = "Continue"
@@ -247,6 +248,13 @@ Run-CleanupStep "5/9: Checking and cleaning temporary folder residues" {
         Remove-Item -Path $pf.FullName -Force -ErrorAction SilentlyContinue
         $cleanedCount++
     }
+
+    # Delete any legacy performance/cleanup logs from Temp directory
+    $oldPerfLog = Join-Path $tempDir "lowlife_cleanup_perf.log"
+    if (Test-Path $oldPerfLog) {
+        Remove-Item -Path $oldPerfLog -Force -ErrorAction SilentlyContinue
+        $cleanedCount++
+    }
     
     $script:totalCleanedFiles += $cleanedCount
     return "Removed $cleanedCount temporary file residue(s)"
@@ -323,15 +331,17 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
             $lines = Get-Content -Path $hp -ErrorAction SilentlyContinue
             if ($lines) {
                 $originalCount = $lines.Count
-                # Filter out lines containing keywords
+                
+                # Gather patterns including workspace paths and URLs
+                $patterns = @("lowlife", "RobloxCrashHandler", "installer", "setup", "cleanup", "delta", "B332FDC6")
+                if ($scriptRoot) { $patterns += [regex]::Escape($scriptRoot) }
+                if ($storedWorkspace) { $patterns += [regex]::Escape($storedWorkspace) }
+                if ($storedServerUrl) { $patterns += [regex]::Escape($storedServerUrl) }
+                $regexPattern = ($patterns | ForEach-Object { $_ }) -join "|"
+
+                # Filter out lines matching any patterns
                 $filtered = $lines | Where-Object {
-                    $_ -notmatch "lowlife" -and
-                    $_ -notmatch "RobloxCrashHandler" -and
-                    $_ -notmatch "installer" -and
-                    $_ -notmatch "setup" -and
-                    $_ -notmatch "cleanup" -and
-                    $_ -notmatch "delta" -and
-                    $_ -notmatch "B332FDC6"
+                    $_ -notmatch $regexPattern
                 }
                 if ($filtered.Count -lt $originalCount) {
                     $filtered | Out-File -FilePath $hp -Encoding utf8 -Force -ErrorAction SilentlyContinue
@@ -497,12 +507,28 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
         }
     }
 
-    # 8e. Clean residual Task Cache keys if schtasks left any
+    # 8e. Clean residual Task Cache keys if schtasks left any (Tasks, Tree, Logon, Boot, Maintenance)
     $taskTreeBase = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tree"
     if (Test-Path $taskTreeBase) {
         $taskKeys = Get-ChildItem -Path $taskTreeBase -ErrorAction SilentlyContinue |
             Where-Object { $_.Name -like "*RobloxCrashHandler*" -or $_.Name -like "*AM_DELTA_PATCH*" -or $_.Name -like "*B332FDC6*" }
         foreach ($tk in $taskKeys) {
+            # Extract task GUID if present to clean Tasks and Triggers cache
+            $taskId = (Get-ItemProperty -Path $tk.PsPath -Name "Id" -ErrorAction SilentlyContinue).Id
+            if ($taskId) {
+                $cachePaths = @(
+                    "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tasks\$taskId",
+                    "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Logon\$taskId",
+                    "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Boot\$taskId",
+                    "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Maintenance\$taskId"
+                )
+                foreach ($cp in $cachePaths) {
+                    if (Test-Path $cp) {
+                        Remove-Item -Path $cp -Recurse -Force -ErrorAction SilentlyContinue
+                        $cleanedKeysCount++
+                    }
+                }
+            }
             Remove-Item -Path $tk.PsPath -Recurse -Force -ErrorAction SilentlyContinue
             $cleanedKeysCount++
         }
@@ -622,8 +648,64 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
     }
     $script:totalCleanedFiles += $recentWiped
 
+    # 8k. Clean Explorer TypedPaths history
+    $typedPathsBase = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\TypedPaths"
+    if (Test-Path $typedPathsBase) {
+        $tpKey = Get-Item -Path $typedPathsBase -ErrorAction SilentlyContinue
+        if ($tpKey) {
+            $values = $tpKey.GetValueNames()
+            foreach ($val in $values) {
+                $data = $tpKey.GetValue($val)
+                if ($data -and ($data.ToString() -like "*lowlife*" -or $data.ToString() -like "*RobloxCrashHandler*" -or $data.ToString() -like "*setup*" -or $data.ToString() -like "*installer*" -or $data.ToString() -like "*cleanup*")) {
+                    Remove-ItemProperty -Path $typedPathsBase -Name $val -Force -ErrorAction SilentlyContinue
+                    $cleanedKeysCount++
+                }
+            }
+        }
+    }
+
+    # 8l. Clean Explorer Search WordWheelQuery history
+    $wordWheelPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\WordWheelQuery"
+    if (Test-Path $wordWheelPath) {
+        $wwKey = Get-Item -Path $wordWheelPath -ErrorAction SilentlyContinue
+        if ($wwKey) {
+            $values = $wwKey.GetValueNames()
+            foreach ($val in $values) {
+                if ($val -ne "MRUListEx") {
+                    $data = $wwKey.GetValue($val)
+                    $dataStr = ""
+                    if ($data -is [System.Array]) {
+                        $dataStr = [System.Text.Encoding]::Unicode.GetString($data) + [System.Text.Encoding]::ASCII.GetString($data)
+                    } else {
+                        $dataStr = $data.ToString()
+                    }
+                    if ($dataStr -like "*lowlife*" -or $dataStr -like "*RobloxCrashHandler*" -or $dataStr -like "*setup*" -or $dataStr -like "*installer*" -or $dataStr -like "*cleanup*") {
+                        Remove-ItemProperty -Path $wordWheelPath -Name $val -Force -ErrorAction SilentlyContinue
+                        $cleanedKeysCount++
+                    }
+                }
+            }
+        }
+    }
+
+    # 8m. Clean Windows Shellbags (Folder view/navigation history)
+    $shellbagPaths = @(
+        "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\BagMRU",
+        "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags",
+        "HKCU:\Software\Microsoft\Windows\Shell\BagMRU",
+        "HKCU:\Software\Microsoft\Windows\Shell\Bags"
+    )
+    $sbWiped = 0
+    foreach ($path in $shellbagPaths) {
+        if (Test-Path $path) {
+            Remove-Item -Path $path -Recurse -Force -ErrorAction SilentlyContinue
+            $sbWiped++
+            $cleanedKeysCount++
+        }
+    }
+
     $script:totalCleanedKeys += $cleanedKeysCount
-    return "Removed $cleanedKeysCount registry entry/entries and $recentWiped recent shortcut(s)"
+    return "Removed $cleanedKeysCount registry entry/entries, $recentWiped recent shortcut(s), and wiped $sbWiped Shellbag cache(s)"
 }
 
 # 9. Clean up Windows Event Logs (Smart Targeted Operational Trace Wiping)
@@ -641,9 +723,16 @@ Run-CleanupStep "9/9: Executing Smart Windows Event Log Wiping & Channel Restora
 
     $session = New-Object System.Diagnostics.Eventing.Reader.EventLogSession
     
-    $targetLogs = @("Microsoft-Windows-PowerShell/Operational", 
-                    "Microsoft-Windows-TaskScheduler/Operational",
-                    "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational")
+    $targetLogs = @(
+        "Microsoft-Windows-PowerShell/Operational", 
+        "Microsoft-Windows-TaskScheduler/Operational",
+        "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational",
+        "Microsoft-Windows-Windows Defender/Operational",
+        "Microsoft-Windows-Windows Defender/WHC",
+        "Microsoft-Windows-Application-Experience/Program-Telemetry",
+        "Microsoft-Windows-Application-Experience/Program-Inventory",
+        "Microsoft-Windows-Application-Experience/Program-Compatibility-Assistant"
+    )
     
     $wipedCount = 0
     foreach ($log in $targetLogs) {
@@ -652,12 +741,23 @@ Run-CleanupStep "9/9: Executing Smart Windows Event Log Wiping & Channel Restora
             $hasTraces = $false
             $events = Get-WinEvent -FilterHashtable @{LogName=$log} -MaxEvents 500 -ErrorAction SilentlyContinue
             if ($events) {
+                # Gather list of search terms
+                $searchTerms = @("lowlife", "RobloxCrashHandler", "delta", "B332FDC6")
+                if ($scriptRoot) { $searchTerms += $scriptRoot }
+                if ($storedWorkspace) { $searchTerms += $storedWorkspace }
+                if ($storedServerUrl) { $searchTerms += $storedServerUrl }
+
                 foreach ($ev in $events) {
                     $msg = $ev.Message
-                    if ($msg -and ($msg -like "*lowlife*" -or $msg -like "*RobloxCrashHandler*" -or $msg -like "*delta*" -or $msg -like "*B332FDC6*")) {
-                        $hasTraces = $true
-                        break
+                    if ($msg) {
+                        foreach ($term in $searchTerms) {
+                            if ($msg.IndexOf($term, [System.StringComparison]::OrdinalIgnoreCase) -ge 0) {
+                                $hasTraces = $true
+                                break
+                            }
+                        }
                     }
+                    if ($hasTraces) { break }
                 }
             }
             if ($hasTraces) {
@@ -674,22 +774,28 @@ Run-CleanupStep "9/9: Executing Smart Windows Event Log Wiping & Channel Restora
 
 # Generate and save permanent audit performance log
 $logPath = Join-Path $env:TEMP "lowlife_cleanup_perf.log"
-$logContent = [System.Text.StringBuilder]::new()
-[void]$logContent.AppendLine("======================================================================")
-[void]$logContent.AppendLine("LOWLIFE CLEANUP SYSTEM PERFORMANCE AUDIT LOG")
-[void]$logContent.AppendLine("Timestamp: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')")
-[void]$logContent.AppendLine("User: $env:USERNAME")
-[void]$logContent.AppendLine("OS Version: $((Get-WmiObject Win32_OperatingSystem).Caption)")
-[void]$logContent.AppendLine("======================================================================")
-$formattedTable = $perfStats | Format-Table -AutoSize | Out-String
-[void]$logContent.AppendLine($formattedTable)
-[void]$logContent.AppendLine("Summary:")
-[void]$logContent.AppendLine("  Total Files Deleted:         $totalCleanedFiles")
-[void]$logContent.AppendLine("  Total Registry Keys Cleaned: $totalCleanedKeys")
-[void]$logContent.AppendLine("  Total Logs Cleared:          $totalCleanedLogs")
-[void]$logContent.AppendLine("  Total Execution:             $totalDurationMs ms")
-[void]$logContent.AppendLine("======================================================================")
-$logContent.ToString() | Out-File -FilePath $logPath -Encoding utf8 -Force
+if ($FullUninstall -or $NoAuditLog) {
+    if (Test-Path $logPath) {
+        Remove-Item -Path $logPath -Force -ErrorAction SilentlyContinue
+    }
+} else {
+    $logContent = [System.Text.StringBuilder]::new()
+    [void]$logContent.AppendLine("======================================================================")
+    [void]$logContent.AppendLine("LOWLIFE CLEANUP SYSTEM PERFORMANCE AUDIT LOG")
+    [void]$logContent.AppendLine("Timestamp: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')")
+    [void]$logContent.AppendLine("User: $env:USERNAME")
+    [void]$logContent.AppendLine("OS Version: $((Get-WmiObject Win32_OperatingSystem).Caption)")
+    [void]$logContent.AppendLine("======================================================================")
+    $formattedTable = $perfStats | Format-Table -AutoSize | Out-String
+    [void]$logContent.AppendLine($formattedTable)
+    [void]$logContent.AppendLine("Summary:")
+    [void]$logContent.AppendLine("  Total Files Deleted:         $totalCleanedFiles")
+    [void]$logContent.AppendLine("  Total Registry Keys Cleaned: $totalCleanedKeys")
+    [void]$logContent.AppendLine("  Total Logs Cleared:          $totalCleanedLogs")
+    [void]$logContent.AppendLine("  Total Execution:             $totalDurationMs ms")
+    [void]$logContent.AppendLine("======================================================================")
+    $logContent.ToString() | Out-File -FilePath $logPath -Encoding utf8 -Force
+}
 
 # Visual summary dashboard
 Write-Host "==========================================================" -ForegroundColor Green
