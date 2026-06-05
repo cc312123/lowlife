@@ -179,16 +179,6 @@ namespace settings
 		inline bool infinite_ammo{ false };
 	}
 
-	namespace hitbox_expander
-	{
-		inline bool enabled{ false };
-		inline int target_part{ 0 };
-		inline float size_x{ 2.2f };
-		inline float size_y{ 2.2f };
-		inline float size_z{ 1.2f };
-		inline bool visualize{ false };
-	}
-
 	namespace dex_explorer
 	{
 		inline bool enabled{ false };

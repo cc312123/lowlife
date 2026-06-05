@@ -248,14 +248,6 @@ namespace config
 		file << "  },\n";
 
 		
-		file << "  \"hitbox_expander\": {\n";
-		file << "    \"enabled\": " << (settings::hitbox_expander::enabled ? "true" : "false") << ",\n";
-		file << "    \"size_x\": " << settings::hitbox_expander::size_x << ",\n";
-		file << "    \"size_y\": " << settings::hitbox_expander::size_y << ",\n";
-		file << "    \"size_z\": " << settings::hitbox_expander::size_z << "\n";
-		file << "  },\n";
-
-		
 		file << "  \"dex_explorer\": {\n";
 		file << "    \"enabled\": " << (settings::dex_explorer::enabled ? "true" : "false") << "\n";
 		file << "  },\n";
@@ -715,19 +707,7 @@ namespace config
 				settings::expl::infinite_ammo = (value == "true");
 		}
 
-		
-		section = extract_json_section(json_content, "hitbox_expander");
-		if (!section.empty())
-		{
-			if (parse_json_value(section, "enabled", value))
-				settings::hitbox_expander::enabled = (value == "true");
-			if (parse_json_value(section, "size_x", value))
-				settings::hitbox_expander::size_x = std::stof(value);
-			if (parse_json_value(section, "size_y", value))
-				settings::hitbox_expander::size_y = std::stof(value);
-			if (parse_json_value(section, "size_z", value))
-				settings::hitbox_expander::size_z = std::stof(value);
-		}
+
 
 		
 		section = extract_json_section(json_content, "dex_explorer");

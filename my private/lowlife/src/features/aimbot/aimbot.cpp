@@ -52,6 +52,115 @@ namespace rbx::aimbot {
         math::vector3 current_target_offset = { 0.0f, 0.0f, 0.0f };
         std::uint64_t last_locked_address = 0;
 
+        float apply_easing(int style, float t);
+
+        struct bezier_stroke_t {
+            bool active = false;
+            float elapsed = 0.0f;
+            float duration = 0.0f;
+            
+            math::vector2 start_offset = { 0.0f, 0.0f };
+            math::vector2 p1 = { 0.0f, 0.0f };
+            math::vector2 p2 = { 0.0f, 0.0f };
+            math::vector2 end_offset = { 0.0f, 0.0f };
+
+            math::vector2 start_angles_offset = { 0.0f, 0.0f };
+            math::vector2 cam_p1 = { 0.0f, 0.0f };
+            math::vector2 cam_p2 = { 0.0f, 0.0f };
+            math::vector2 end_angles_offset = { 0.0f, 0.0f };
+
+            void init_mouse(float dx, float dy, float smooth_x, float smooth_y) {
+                active = true;
+                elapsed = 0.0f;
+                start_offset = { dx, dy };
+                end_offset = { 0.0f, 0.0f };
+
+                float dist = std::sqrt(dx * dx + dy * dy);
+                float avg_smooth = (smooth_x + smooth_y) * 0.5f;
+                
+                // Human stroke duration scaling: base duration + smoothing scaling + distance scaling
+                duration = 0.05f + (avg_smooth * 0.003f) + (dist * 0.0002f);
+                duration = std::clamp(duration, 0.05f, 2.5f);
+
+                math::vector2 to_end = { -dx, -dy };
+                math::vector2 perp = { -to_end.y, to_end.x };
+
+                // Perpendicular curvature offset
+                float r1 = ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f);
+                float r2 = ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f);
+                
+                // Keep curves human-like (up to 15% deviation from linear path)
+                float curve_scale = 0.15f;
+
+                p1.x = start_offset.x + to_end.x * 0.33f + perp.x * r1 * curve_scale;
+                p1.y = start_offset.y + to_end.y * 0.33f + perp.y * r1 * curve_scale;
+
+                p2.x = start_offset.x + to_end.x * 0.66f + perp.x * r2 * curve_scale;
+                p2.y = start_offset.y + to_end.y * 0.66f + perp.y * r2 * curve_scale;
+            }
+
+            void init_camera(float yaw_diff, float pitch_diff, float smooth_x, float smooth_y) {
+                active = true;
+                elapsed = 0.0f;
+                start_angles_offset = { yaw_diff, pitch_diff };
+                end_angles_offset = { 0.0f, 0.0f };
+
+                float dist = std::sqrt(yaw_diff * yaw_diff + pitch_diff * pitch_diff);
+                float avg_smooth = (smooth_x + smooth_y) * 0.5f;
+                
+                // Camera angle duration scaling
+                duration = 0.05f + (avg_smooth * 0.003f) + (dist * 0.05f);
+                duration = std::clamp(duration, 0.05f, 2.5f);
+
+                math::vector2 to_end = { -yaw_diff, -pitch_diff };
+                math::vector2 perp = { -to_end.y, to_end.x };
+
+                float r1 = ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f);
+                float r2 = ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f);
+                float curve_scale = 0.15f;
+
+                cam_p1.x = start_angles_offset.x + to_end.x * 0.33f + perp.x * r1 * curve_scale;
+                cam_p1.y = start_angles_offset.y + to_end.y * 0.33f + perp.y * r1 * curve_scale;
+
+                cam_p2.x = start_angles_offset.x + to_end.x * 0.66f + perp.x * r2 * curve_scale;
+                cam_p2.y = start_angles_offset.y + to_end.y * 0.66f + perp.y * r2 * curve_scale;
+            }
+
+            math::vector2 evaluate_mouse(float t_raw, int style) {
+                // Style 8 is ease_out_cubic, which provides dynamic ease-out braking deceleration.
+                float t = apply_easing(style != 0 ? style : 8, t_raw);
+
+                float u = 1.0f - t;
+                float tt = t * t;
+                float uu = u * u;
+                float uuu = uu * u;
+                float ttt = tt * t;
+
+                math::vector2 p = {};
+                p.x = uuu * start_offset.x + 3.0f * uu * t * p1.x + 3.0f * u * tt * p2.x + ttt * end_offset.x;
+                p.y = uuu * start_offset.y + 3.0f * uu * t * p1.y + 3.0f * u * tt * p2.y + ttt * end_offset.y;
+                return p;
+            }
+
+            math::vector2 evaluate_camera(float t_raw, int style) {
+                float t = apply_easing(style != 0 ? style : 8, t_raw);
+
+                float u = 1.0f - t;
+                float tt = t * t;
+                float uu = u * u;
+                float uuu = uu * u;
+                float ttt = tt * t;
+
+                math::vector2 p = {};
+                p.x = uuu * start_angles_offset.x + 3.0f * uu * t * cam_p1.x + 3.0f * u * tt * cam_p2.x + ttt * end_angles_offset.x;
+                p.y = uuu * start_angles_offset.y + 3.0f * uu * t * cam_p1.y + 3.0f * u * tt * cam_p2.y + ttt * end_angles_offset.y;
+                return p;
+            }
+        };
+
+        bezier_stroke_t current_mouse_stroke;
+        bezier_stroke_t current_cam_stroke;
+
         void vector_to_angles(const math::vector3& forward, float& yaw, float& pitch) {
             pitch = std::asin(std::clamp(forward.y, -1.0f, 1.0f));
             yaw = std::atan2(-forward.x, -forward.z);
@@ -644,7 +753,7 @@ namespace rbx::aimbot {
             return result;
         }
 
-        void execute_camera_aim(const math::vector3& target_pos, float dt, float screen_dist) {
+        void execute_camera_aim(std::uint64_t target_address, const math::vector3& target_pos, float dt, float screen_dist) {
             rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
             if (!camera_inst.address) return;
 
@@ -654,6 +763,12 @@ namespace rbx::aimbot {
 
             math::vector3 target_forward = normalize(vector3_sub(target_pos, camera_pos));
             math::vector3 smoothed_forward = target_forward;
+
+            static std::uint64_t last_cam_target_address = 0;
+            if (target_address != last_cam_target_address) {
+                last_cam_target_address = target_address;
+                current_cam_stroke.active = false;
+            }
 
             if (settings::aimbot::camera_smooth || settings::aimbot::adaptive_smoothing) {
                 float sx = std::clamp(settings::aimbot::camera_smooth_x, 0.0f, 200.0f);
@@ -667,8 +782,6 @@ namespace rbx::aimbot {
 
                 if (sx <= 0.01f && sy <= 0.01f) {
                     smoothed_forward = target_forward;
-                    spring_vel_yaw = 0.0f;
-                    spring_vel_pitch = 0.0f;
                 } else {
                     math::vector3 current_forward = { -current_rot.m[2], -current_rot.m[5], -current_rot.m[8] };
                     current_forward = normalize(current_forward);
@@ -685,52 +798,51 @@ namespace rbx::aimbot {
                     float pitch_diff = target_pitch - current_pitch;
                     pitch_diff = std::atan2(std::sin(pitch_diff), std::cos(pitch_diff));
 
-                    // Wind Mouse / Force-Inertia camera tracking model
-                    float gravity = 15.0f / (sx + 0.1f);
-                    float drag = 0.3f + 0.05f * sx;
-
-                    float torque_x = yaw_diff * gravity;
-                    float torque_y = pitch_diff * gravity;
-
-                    float drag_x = -drag * spring_vel_yaw;
-                    float drag_y = -drag * spring_vel_pitch;
-
-                    float accel_x = torque_x + drag_x;
-                    float accel_y = torque_y + drag_y;
-
-                    // Update persistent angular velocity
-                    spring_vel_yaw += accel_x * dt * 60.0f;
-                    spring_vel_pitch += accel_y * dt * 60.0f;
-
-                    // Clamp to a natural human rotation speed limit (in radians/sec)
-                    float max_rot_speed = 30.0f / (sx + 1.0f);
-                    float current_speed = std::sqrt(spring_vel_yaw * spring_vel_yaw + spring_vel_pitch * spring_vel_pitch);
-                    if (current_speed > max_rot_speed && current_speed > 0.0001f) {
-                        spring_vel_yaw = (spring_vel_yaw / current_speed) * max_rot_speed;
-                        spring_vel_pitch = (spring_vel_pitch / current_speed) * max_rot_speed;
+                    // Reset or initialize Bezier stroke if not active or if difference is large
+                    if (!current_cam_stroke.active && (std::abs(yaw_diff) > 0.0001f || std::abs(pitch_diff) > 0.0001f)) {
+                        current_cam_stroke.init_camera(yaw_diff, pitch_diff, sx, sy);
                     }
 
-                    // Apply humanized ease styling modifier
-                    float eased_yaw_step = spring_vel_yaw * dt;
-                    float eased_pitch_step = spring_vel_pitch * dt;
+                    float final_yaw = current_yaw;
+                    float final_pitch = current_pitch;
 
-                    float final_yaw = current_yaw + eased_yaw_step;
-                    float final_pitch = current_pitch + eased_pitch_step;
+                    if (current_cam_stroke.active) {
+                        current_cam_stroke.elapsed += dt;
+                        float t_raw = current_cam_stroke.elapsed / current_cam_stroke.duration;
+                        if (t_raw >= 1.0f) {
+                            t_raw = 1.0f;
+                            current_cam_stroke.active = false;
+                        }
+
+                        math::vector2 rem_angles = current_cam_stroke.evaluate_camera(t_raw, settings::aimbot::easing_style);
+                        float move_yaw = yaw_diff - rem_angles.x;
+                        float move_pitch = pitch_diff - rem_angles.y;
+
+                        final_yaw = current_yaw + move_yaw;
+                        final_pitch = current_pitch + move_pitch;
+                    } else {
+                        final_yaw = target_yaw;
+                        final_pitch = target_pitch;
+                    }
+
+                    // Add high-frequency human muscle micro-tremor
+                    float dist = std::sqrt(yaw_diff * yaw_diff + pitch_diff * pitch_diff);
+                    float tremor_scale = std::clamp(dist / 0.1f, 0.0f, 1.0f);
+                    float tremor = 0.00015f * (settings::aimbot::shake ? std::abs(settings::aimbot::shake_x) : 0.8f);
+                    final_yaw += ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f) * tremor * tremor_scale;
+                    final_pitch += ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f) * tremor * tremor_scale;
 
                     smoothed_forward = angles_to_vector(final_yaw, final_pitch);
                     smoothed_forward = normalize(smoothed_forward);
                 }
-            } else {
-                spring_vel_yaw = 0.0f;
-                spring_vel_pitch = 0.0f;
             }
 
             if (settings::aimbot::shake) {
                 static float shake_time = 0.0f;
                 shake_time += dt * 8.0f; // Human hand tremor frequency
                 
-                float factor_x = settings::aimbot::shake_x * 0.001f;
-                float factor_y = settings::aimbot::shake_y * 0.001f;
+                float factor_x = settings::aimbot::shake_x * 0.0005f;
+                float factor_y = settings::aimbot::shake_y * 0.0005f;
                 
                 smoothed_forward.x += std::sin(shake_time) * factor_x;
                 smoothed_forward.y += std::cos(shake_time * 1.3f) * factor_y;
@@ -758,8 +870,7 @@ namespace rbx::aimbot {
             static std::uint64_t last_target_address = 0;
             if (target_address != last_target_address) {
                 last_target_address = target_address;
-                spring_vel_mouse_x = 0.0f;
-                spring_vel_mouse_y = 0.0f;
+                current_mouse_stroke.active = false;
             }
 
             math::vector2 screen_pos = {};
@@ -855,6 +966,9 @@ namespace rbx::aimbot {
                 dy = screen_pos.y - target_ref_y;
             }
 
+            float move_step_x = 0.0f;
+            float move_step_y = 0.0f;
+
             if (settings::aimbot::mouse_smooth || settings::aimbot::adaptive_smoothing) {
                 float sx = std::clamp(settings::aimbot::mouse_smooth_x, 0.0f, 200.0f);
                 float sy = std::clamp(settings::aimbot::mouse_smooth_y, 0.0f, 200.0f);
@@ -866,84 +980,53 @@ namespace rbx::aimbot {
                 }
 
                 if (sx <= 0.01f && sy <= 0.01f) {
-                    // No smoothing: apply sensitivity scaling if in pixel mode (non-captured)
+                    move_step_x = dx;
+                    move_step_y = dy;
                     if (!session_captured) {
-                        dx *= sensitivity;
-                        dy *= sensitivity;
+                        move_step_x *= sensitivity;
+                        move_step_y *= sensitivity;
                     }
-                    spring_vel_mouse_x = 0.0f;
-                    spring_vel_mouse_y = 0.0f;
                 } else {
                     float dist = std::sqrt(dx * dx + dy * dy);
-                    if (dist > 0.0001f) {
-                        // Wind Mouse / Organic Mouse Force-Inertia Solver
-                        
-                        // Generate smooth rolling wind forces to create natural human-like aiming curves
-                        static float wind_x = 0.0f;
-                        static float wind_y = 0.0f;
-                        
-                        // Slowly drift the wind direction and magnitude randomly
-                        wind_x += ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f) * 10.0f * dt;
-                        wind_y += ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f) * 10.0f * dt;
-                        
-                        // Limit maximum wind force
-                        wind_x = std::clamp(wind_x, -15.0f, 15.0f);
-                        wind_y = std::clamp(wind_y, -15.0f, 15.0f);
+                    
+                    // Reset/init Bezier if not active and distance is substantial
+                    if (!current_mouse_stroke.active && dist > 1.0f) {
+                        current_mouse_stroke.init_mouse(dx, dy, sx, sy);
+                    }
 
-                        // Attraction (gravity) force pulling toward target bone
-                        float gravity_x = 10.0f / (sx + 0.1f);
-                        float gravity_y = 10.0f / (sy + 0.1f);
-
-                        // Scale down gravity close to target to prevent robotic snaps and violent overshoot
-                        float ease_scale = std::clamp(dist / 30.0f, 0.1f, 1.0f);
-                        
-                        float fg_x = (dx / dist) * gravity_x * 8.0f * ease_scale;
-                        float fg_y = (dy / dist) * gravity_y * 8.0f * ease_scale;
-
-                        // Drag opposing current velocity
-                        float drag_x = - (0.25f + 0.05f * sx) * spring_vel_mouse_x;
-                        float drag_y = - (0.25f + 0.05f * sy) * spring_vel_mouse_y;
-
-                        float accel_x = fg_x + wind_x + drag_x;
-                        float accel_y = fg_y + wind_y + drag_y;
-
-                        // Integrate velocity
-                        spring_vel_mouse_x += accel_x * dt * 60.0f;
-                        spring_vel_mouse_y += accel_y * dt * 60.0f;
-
-                        // Clamp to human-like max speed
-                        float max_speed = 4000.0f / (sx + 1.0f);
-                        float speed = std::sqrt(spring_vel_mouse_x * spring_vel_mouse_x + spring_vel_mouse_y * spring_vel_mouse_y);
-                        if (speed > max_speed && speed > 0.0001f) {
-                            spring_vel_mouse_x = (spring_vel_mouse_x / speed) * max_speed;
-                            spring_vel_mouse_y = (spring_vel_mouse_y / speed) * max_speed;
+                    if (current_mouse_stroke.active) {
+                        current_mouse_stroke.elapsed += dt;
+                        float t_raw = current_mouse_stroke.elapsed / current_mouse_stroke.duration;
+                        if (t_raw >= 1.0f) {
+                            t_raw = 1.0f;
+                            current_mouse_stroke.active = false;
                         }
 
-                        // Apply final move delta for this frame
-                        dx = spring_vel_mouse_x * dt;
-                        dy = spring_vel_mouse_y * dt;
-
-                        // Add natural muscle micro-tremor when aiming (simulates real human grip tremor)
-                        float tremor = 0.08f * (settings::aimbot::shake ? std::abs(settings::aimbot::shake_x) : 0.6f);
-                        float tremor_scale = std::clamp(dist / 12.0f, 0.0f, 1.0f);
-                        dx += ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f) * tremor * tremor_scale;
-                        dy += ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f) * tremor * tremor_scale;
+                        math::vector2 rem_offset = current_mouse_stroke.evaluate_mouse(t_raw, settings::aimbot::easing_style);
+                        move_step_x = dx - rem_offset.x;
+                        move_step_y = dy - rem_offset.y;
                     } else {
-                        dx = 0.0f;
-                        dy = 0.0f;
-                        spring_vel_mouse_x = 0.0f;
-                        spring_vel_mouse_y = 0.0f;
+                        move_step_x = dx;
+                        move_step_y = dy;
                     }
+
+                    // Add high-frequency human muscle micro-tremor
+                    float tremor_scale = std::clamp(dist / 12.0f, 0.0f, 1.0f);
+                    float tremor = 0.15f * (settings::aimbot::shake ? std::abs(settings::aimbot::shake_x) : 0.8f);
+                    move_step_x += ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f) * tremor * tremor_scale;
+                    move_step_y += ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f) * tremor * tremor_scale;
                 }
             } else {
-                // No smoothing: apply sensitivity scaling if in pixel mode (non-captured)
+                move_step_x = dx;
+                move_step_y = dy;
                 if (!session_captured) {
-                    dx *= sensitivity;
-                    dy *= sensitivity;
+                    move_step_x *= sensitivity;
+                    move_step_y *= sensitivity;
                 }
-                spring_vel_mouse_x = 0.0f;
-                spring_vel_mouse_y = 0.0f;
             }
+
+            dx = move_step_x;
+            dy = move_step_y;
 
             if (settings::aimbot::shake) {
                 static float shake_time = 0.0f;
@@ -1237,7 +1320,7 @@ namespace rbx::aimbot {
             }
 
             if (settings::aimbot::aimbot_type == 0) {
-                execute_camera_aim(filtered_target_pos, dt, cursor_dist);
+                execute_camera_aim(target.instance.address, filtered_target_pos, dt, cursor_dist);
             }
             else {
                 execute_mouse_aim(target.instance.address, filtered_target_pos, cursor_pt, dt, dims, view, cursor_dist);

@@ -1116,97 +1116,86 @@ namespace botter
 					continue;
 				}
 
-				// -- TARGET BONES PROJECTION BOX CHECK --
+				// -- TARGET HRP PROJECTION BOX CHECK --
 				bool clicked_this_tick = false;
-				const std::vector<std::string> target_bones = {
-					"Head", "Torso", "UpperTorso", "LowerTorso",
-					"Left Arm", "LeftUpperArm", "LeftLowerArm", "LeftHand",
-					"Right Arm", "RightUpperArm", "RightLowerArm", "RightHand",
-					"Left Leg", "LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
-					"Right Leg", "RightUpperLeg", "RightLowerLeg", "RightFoot"
-				};
-
-				for (const auto& bone_name : target_bones)
+				auto hrp_it = player.parts.find("HumanoidRootPart");
+				if (hrp_it != player.parts.end())
 				{
-					auto bone_it = player.parts.find(bone_name);
-					if (bone_it == player.parts.end()) continue;
-
-					rbx::part_t part = bone_it->second;
-					if (!part.address) continue;
-
-					rbx::primitive_t prim = part.get_primitive();
-					if (!prim.address) continue;
-
-					math::vector3 pos = prim.get_position();
-					math::vector3 size = prim.get_size();
-					math::matrix3 rot = prim.get_rotation();
-
-					if (size.x < 0.01f || size.y < 0.01f || size.z < 0.01f) continue;
-
-					bool valid = false;
-					float left = FLT_MAX, top = FLT_MAX;
-					float right = -FLT_MAX, bottom = -FLT_MAX;
-
-					static math::vector3 local_corners[8] =
+					rbx::part_t part = hrp_it->second;
+					if (part.address)
 					{
-						{-1, -1, -1}, {1, -1, -1}, {-1, 1, -1},{1, 1, -1},
-						{-1, -1, 1}, {1, -1, 1}, {-1, 1, 1}, {1, 1, 1}
-					};
-
-					for (auto& corner : local_corners)
-					{
-						math::vector3 world = pos + rot * math::vector3
+						rbx::primitive_t prim = part.get_primitive();
+						if (prim.address)
 						{
-							corner.x * size.x * 0.5f,
-							corner.y * size.y * 0.5f,
-							corner.z * size.z * 0.5f
-						};
+							math::vector3 pos = prim.get_position();
+							math::vector3 size = { 4.0f, 6.0f, 2.0f };
+							math::matrix3 rot = prim.get_rotation();
 
-						math::vector2 out{};
-						if (game::visengine.world_to_screen(world, out, dims, view))
-						{
-							valid = true;
-							left = std::min(left, out.x);
-							top = std::min(top, out.y);
-							right = std::max(right, out.x);
-							bottom = std::max(bottom, out.y);
-						}
-					}
+							bool valid = false;
+							float left = FLT_MAX, top = FLT_MAX;
+							float right = -FLT_MAX, bottom = -FLT_MAX;
 
-					if (valid && left < right && top < bottom)
-					{
-						float scale = settings::botter::hitbox_size / 100.0f;
-						float width = right - left;
-						float height = bottom - top;
-						float delta_w = (width * scale - width) * 0.5f;
-						float delta_h = (height * scale - height) * 0.5f;
-						float target_left = left - delta_w;
-						float target_right = right + delta_w;
-						float target_top = top - delta_h;
-						float target_bottom = bottom + delta_h;
-
-						if (cursor_pt.x >= target_left && cursor_pt.x <= target_right &&
-							cursor_pt.y >= target_top && cursor_pt.y <= target_bottom)
-						{
-							if (settings::botter::wall_check && camera_inst.address != 0)
+							static math::vector3 local_corners[8] =
 							{
-								if (is_occluded(camera_pos, pos))
+								{-1, -1, -1}, {1, -1, -1}, {-1, 1, -1}, {1, 1, -1},
+								{-1, -1, 1}, {1, -1, 1}, {-1, 1, 1}, {1, 1, 1}
+							};
+
+							for (auto& corner : local_corners)
+							{
+								math::vector3 world = pos + rot * math::vector3
 								{
-									continue;
+									corner.x * size.x * 0.5f,
+									corner.y * size.y * 0.5f,
+									corner.z * size.z * 0.5f
+								};
+
+								math::vector2 out{};
+								if (game::visengine.world_to_screen(world, out, dims, view))
+								{
+									valid = true;
+									left = std::min(left, out.x);
+									top = std::min(top, out.y);
+									right = std::max(right, out.x);
+									bottom = std::max(bottom, out.y);
 								}
 							}
 
-							auto now = std::chrono::steady_clock::now();
-							auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_bot_click).count();
-							int cps = settings::botter::cps;
-							if (cps < 1) cps = 1;
-							if (duration >= (1000 / cps))
+							if (valid && left < right && top < bottom)
 							{
-								trigger_immediate_click();
-								last_bot_click = now;
-								clicked_this_tick = true;
+								float scale = settings::botter::hitbox_size / 100.0f;
+								float width = right - left;
+								float height = bottom - top;
+								float delta_w = (width * scale - width) * 0.5f;
+								float delta_h = (height * scale - height) * 0.5f;
+								float target_left = left - delta_w;
+								float target_right = right + delta_w;
+								float target_top = top - delta_h;
+								float target_bottom = bottom + delta_h;
+
+								if (cursor_pt.x >= target_left && cursor_pt.x <= target_right &&
+									cursor_pt.y >= target_top && cursor_pt.y <= target_bottom)
+								{
+									if (settings::botter::wall_check && camera_inst.address != 0)
+									{
+										if (is_occluded(camera_pos, pos))
+										{
+											continue;
+										}
+									}
+
+									auto now = std::chrono::steady_clock::now();
+									auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_bot_click).count();
+									int cps = settings::botter::cps;
+									if (cps < 1) cps = 1;
+									if (duration >= (1000 / cps))
+									{
+										trigger_immediate_click();
+										last_bot_click = now;
+										clicked_this_tick = true;
+									}
+								}
 							}
-							break;
 						}
 					}
 				}

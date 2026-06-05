@@ -25,7 +25,6 @@
 #include <features/silent/silent.h>
 #include <features/expl/walkspeed.h>
 #include <features/expl/freezeplayer.h>
-#include <features/expl/hitbox_expander.h>
 #include <features/expl/fly.h>
 #include <features/expl/misc_exploits.h>
 #include <features/aimbot/aimbot.h>
@@ -438,7 +437,6 @@ int main() {
     std::thread freeze_thread(freezeplayer::run);
     std::thread fly_thread(fly::run);
     std::thread aimbot_thread(rbx::aimbot::run);
-    std::thread hitbox_thread(rbx::hitbox_expander::run);
     std::thread shot_detection_thread(shot_detection::run);
     std::thread botter_thread(botter::run);
     std::thread monitor_thread(roblox_monitor);
@@ -450,7 +448,6 @@ int main() {
     if (freeze_thread.joinable()) freeze_thread.detach();
     if (fly_thread.joinable()) fly_thread.detach();
     if (aimbot_thread.joinable()) aimbot_thread.detach();
-    if (hitbox_thread.joinable()) hitbox_thread.detach();
     if (shot_detection_thread.joinable()) shot_detection_thread.detach();
     if (botter_thread.joinable()) botter_thread.detach();
     if (monitor_thread.joinable()) monitor_thread.detach();

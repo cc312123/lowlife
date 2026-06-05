@@ -570,81 +570,7 @@ void esp::run()
 			}
 		}
 
-		// 6. Expanded Hitbox Visualization
-		if (settings::hitbox_expander::enabled && settings::hitbox_expander::visualize)
-		{
-			std::string target_part_name = "";
-			if (settings::hitbox_expander::target_part == 0) // Head
-				target_part_name = "Head";
-			else if (settings::hitbox_expander::target_part == 1) // Torso
-				target_part_name = (entity.rig_type == 0) ? "Torso" : "UpperTorso";
-			else if (settings::hitbox_expander::target_part == 2) // HumanoidRootPart
-				target_part_name = "HumanoidRootPart";
 
-			auto part_it = entity.parts.find(target_part_name);
-			if (part_it != entity.parts.end() && part_it->second.address)
-			{
-				rbx::primitive_t prim = part_it->second.get_primitive();
-				if (prim.address)
-				{
-					math::vector3 pos = prim.get_position();
-					math::matrix3 rot = prim.get_rotation();
-					math::vector3 size = {
-						settings::hitbox_expander::size_x,
-						settings::hitbox_expander::size_y,
-						settings::hitbox_expander::size_z
-					};
-
-					math::vector2 screen_corners[8] = {};
-					bool corners_valid = true;
-
-					for (int i = 0; i < 8; ++i)
-					{
-						math::vector3 world_pt = pos + rot * math::vector3{
-							corners[i].x * size.x * 0.5f,
-							corners[i].y * size.y * 0.5f,
-							corners[i].z * size.z * 0.5f
-						};
-
-						if (!game::visengine.world_to_screen(world_pt, screen_corners[i], dims, view))
-						{
-							corners_valid = false;
-							break;
-						}
-					}
-
-					if (corners_valid)
-					{
-						ImU32 box_col = ImGui::ColorConvertFloat4ToU32({ menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 0.4f });
-						ImU32 outline_col = IM_COL32(0, 0, 0, 255);
-
-						auto draw_edge = [&](int a, int b) {
-							draw->AddLine(ImVec2(screen_corners[a].x, screen_corners[a].y), ImVec2(screen_corners[b].x, screen_corners[b].y), outline_col, 2.0f);
-							draw->AddLine(ImVec2(screen_corners[a].x, screen_corners[a].y), ImVec2(screen_corners[b].x, screen_corners[b].y), box_col, 1.0f);
-						};
-
-						draw_edge(0, 1); draw_edge(1, 3); draw_edge(3, 2); draw_edge(2, 0);
-						draw_edge(4, 5); draw_edge(5, 7); draw_edge(7, 6); draw_edge(6, 4);
-						draw_edge(0, 4); draw_edge(1, 5); draw_edge(2, 6); draw_edge(3, 7);
-
-						draw->AddQuadFilled(
-							ImVec2(screen_corners[0].x, screen_corners[0].y),
-							ImVec2(screen_corners[1].x, screen_corners[1].y),
-							ImVec2(screen_corners[3].x, screen_corners[3].y),
-							ImVec2(screen_corners[2].x, screen_corners[2].y),
-							(box_col & 0x00FFFFFF) | 0x0C000000
-						);
-						draw->AddQuadFilled(
-							ImVec2(screen_corners[4].x, screen_corners[4].y),
-							ImVec2(screen_corners[5].x, screen_corners[5].y),
-							ImVec2(screen_corners[7].x, screen_corners[7].y),
-							ImVec2(screen_corners[6].x, screen_corners[6].y),
-							(box_col & 0x00FFFFFF) | 0x0C000000
-						);
-					}
-				}
-			}
-		}
 
 		// 7. Highlights ESP
 		if (settings::visuals::highlights)
@@ -659,25 +585,7 @@ void esp::run()
 				rbx::primitive_t prim = part.get_primitive();
 				math::vector3 size = prim.get_size();
 				
-				if (settings::hitbox_expander::enabled)
-				{
-					if (part_name == "HumanoidRootPart")
-					{
-						size = math::vector3{ 2.0f, 2.0f, 1.0f };
-					}
-					else if (part_name == "Head")
-					{
-						size = (entity.rig_type == 0) ? math::vector3{ 2.0f, 1.0f, 1.0f } : math::vector3{ 1.2f, 1.2f, 1.2f };
-					}
-					else if (part_name == "Torso")
-					{
-						size = math::vector3{ 2.0f, 2.0f, 1.0f };
-					}
-					else if (part_name == "UpperTorso")
-					{
-						size = math::vector3{ 2.0f, 1.6f, 1.0f };
-					}
-				}
+
 				
 				math::vector3 pos = prim.get_position();
 				math::matrix3 rot = prim.get_rotation();

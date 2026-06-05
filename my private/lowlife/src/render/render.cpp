@@ -2653,25 +2653,7 @@ void render_t::render_menu()
         ImGui::BeginChild("Blatant & World", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true);
 
         ImGui::TextColored(menu::accent_color, "BLATANT");
-        ImGui::Checkbox("Hitbox Expander", &settings::hitbox_expander::enabled);
 
-        if (settings::hitbox_expander::enabled)
-        {
-            const char* hitbox_parts[] = { "Head", "Torso", "HumanoidRootPart" };
-            ImGui::Combo("Target Part", &settings::hitbox_expander::target_part, hitbox_parts, IM_ARRAYSIZE(hitbox_parts));
-
-            SliderFloatWithInput("Size X", &settings::hitbox_expander::size_x, 0.1f, 30.0f, "%.1f");
-            SliderFloatWithInput("Size Y", &settings::hitbox_expander::size_y, 0.1f, 30.0f, "%.1f");
-            SliderFloatWithInput("Size Z", &settings::hitbox_expander::size_z, 0.1f, 30.0f, "%.1f");
-            ImGui::Checkbox("Visualize Hitboxes", &settings::hitbox_expander::visualize);
-            
-            ImGui::Spacing();
-            ImGui::TextColored(ImVec4(1.0f, 0.64f, 0.0f, 1.0f), "Server Validation Notice:");
-            ImGui::TextWrapped("1. Keep sizes under 4.5 studs. Giant hitboxes fail server validation and register 0 damage.");
-            ImGui::TextWrapped("2. DO NOT use concurrent with Silent Aim. The expanded hitbox blocks silent projectiles in mid-air.");
-        }
-
-        ImGui::Spacing();
         ImGui::Checkbox("Infinite Bullets", &settings::expl::infinite_ammo);
 
         ImGui::Spacing();
