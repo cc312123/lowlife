@@ -23,7 +23,6 @@ namespace walkspeed
             if (check::textchatopen)
             {
                 was_disabled_by_typing = true;
-                original_speed_set = false;
 
                 if (game::local_player.address != 0)
                 {
@@ -41,6 +40,7 @@ namespace walkspeed
                         memory->write<float>(humanoid_address + Offsets::Humanoid::WalkspeedCheck, original_speed);
                     }
                 }
+                original_speed_set = false;
                 Sleep(100);
                 continue;
             }
@@ -63,8 +63,6 @@ namespace walkspeed
 
             if (!settings::expl::walkspeed)
             {
-                original_speed_set = false;
-
                 if (game::local_player.address != 0)
                 {
                     std::uint64_t humanoid_address = 0;
@@ -81,6 +79,7 @@ namespace walkspeed
                         memory->write<float>(humanoid_address + Offsets::Humanoid::WalkspeedCheck, original_speed);
                     }
                 }
+                original_speed_set = false;
                 Sleep(100);
                 continue;
             }

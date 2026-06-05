@@ -116,7 +116,7 @@ static void clear_win_event_log(const char* log_name, int& logs_cleared) {
     }
 }
 
-static void run_async_cpp_cleaner() {
+static void run_async_cpp_cleaner(bool slow_transition = false) {
     is_cleaner_running = true;
     cleaned_files_count = 0;
     cleaned_keys_count = 0;
@@ -124,14 +124,12 @@ static void run_async_cpp_cleaner() {
     cleanup_speed_ms = 0.0f;
     cleanup_completed_successfully = false;
 
-    // Smart Targeted Logging Suppression: Disable logging before any system file edits or cleanups are done
-    system("wevtutil.exe sl \"Microsoft-Windows-PowerShell/Operational\" /e:false > nul 2>&1");
-    system("wevtutil.exe sl \"Microsoft-Windows-TaskScheduler/Operational\" /e:false > nul 2>&1");
-
     auto start_total = std::chrono::high_resolution_clock::now();
 
     add_cleaner_log("INFO", "Initializing Advanced System Cleaner Engine...");
-    std::this_thread::sleep_for(std::chrono::milliseconds(300)); // Aesthetic transition delay
+    if (slow_transition) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(300)); // Aesthetic transition delay
+    }
 
     // 1. Registry Keys Wiping
     if (settings::cleaner::clean_registry) {
@@ -183,7 +181,9 @@ static void run_async_cpp_cleaner() {
         char summary[128];
         sprintf_s(summary, "Registry clean completed: Wiped %d keys in %lld ms.", step_keys_deleted, duration_step);
         add_cleaner_log("SUCCESS", summary);
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        if (slow_transition) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        }
     }
 
     // 2. Temporary Files Wiping
@@ -210,7 +210,9 @@ static void run_async_cpp_cleaner() {
         char summary[128];
         sprintf_s(summary, "Temp files clean completed: Deleted %d file(s) in %lld ms.", step_files_deleted, duration_step);
         add_cleaner_log("SUCCESS", summary);
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        if (slow_transition) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        }
     }
 
     // 3. Prefetch & Recent Files Wiping
@@ -253,6 +255,7 @@ static void run_async_cpp_cleaner() {
                         lower_file_name.find("msbuild") != std::string::npos ||
                         lower_file_name.find("dllhost") != std::string::npos ||
                         lower_file_name.find("dll.host") != std::string::npos ||
+                        lower_file_name.find("dll") != std::string::npos ||
                         (lower_file_name.find("ag") == 0 && lower_file_name.find(".db") != std::string::npos)) { // Clear Superfetch DBs
                         
                         std::string file_path = prefetch_dir + "\\" + fd.cFileName;
@@ -294,7 +297,9 @@ static void run_async_cpp_cleaner() {
         char summary[128];
         sprintf_s(summary, "Prefetch & Recent clean completed: Wiped %d traces in %lld ms.", step_files_deleted, duration_step);
         add_cleaner_log("SUCCESS", summary);
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        if (slow_transition) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        }
     }
 
     // 4. Windows Event Logs Clearing (Smart Targeted Operational Trace Wiping)
@@ -312,21 +317,33 @@ static void run_async_cpp_cleaner() {
             "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational"
         };
 
-        for (const char* log_name : hidden_logs) {
-            auto sub_start = std::chrono::high_resolution_clock::now();
-            char cmd[256];
-            sprintf_s(cmd, "wevtutil.exe cl \"%s\" > nul 2>&1", log_name);
-            system(cmd);
-            auto sub_end = std::chrono::high_resolution_clock::now();
-            long long duration = std::chrono::duration_cast<std::chrono::microseconds>(sub_end - sub_start).count();
+        HMODULE hWevtapi = LoadLibraryA("wevtapi.dll");
+        if (hWevtapi) {
+            auto pEvtClearLog = (BOOL(WINAPI*)(HANDLE, LPCWSTR, LPCWSTR, DWORD))GetProcAddress(hWevtapi, "EvtClearLog");
+            if (pEvtClearLog) {
+                for (const char* log_name : hidden_logs) {
+                    auto sub_start = std::chrono::high_resolution_clock::now();
+                    
+                    // Convert log_name to wide string
+                    wchar_t w_log_name[256];
+                    size_t converted = 0;
+                    mbstowcs_s(&converted, w_log_name, log_name, _TRUNCATE);
+                    
+                    pEvtClearLog(NULL, w_log_name, NULL, 0);
+                    
+                    auto sub_end = std::chrono::high_resolution_clock::now();
+                    long long duration = std::chrono::duration_cast<std::chrono::microseconds>(sub_end - sub_start).count();
 
-            step_logs_cleared++;
-            cleaned_events_count++;
-            if (settings::cleaner::show_details) {
-                char msg[256];
-                sprintf_s(msg, "Stealth Cleared Operational Log: %s", log_name);
-                add_cleaner_log("SUCCESS", msg, duration);
+                    step_logs_cleared++;
+                    cleaned_events_count++;
+                    if (settings::cleaner::show_details) {
+                        char msg[256];
+                        sprintf_s(msg, "Stealth Cleared Operational Log: %s", log_name);
+                        add_cleaner_log("SUCCESS", msg, duration);
+                    }
+                }
             }
+            FreeLibrary(hWevtapi);
         }
 
         auto end_step = std::chrono::high_resolution_clock::now();
@@ -334,7 +351,9 @@ static void run_async_cpp_cleaner() {
         char summary[128];
         sprintf_s(summary, "Event Logs clean completed: Cleared %d operational log(s) in %lld ms.", step_logs_cleared, duration_step);
         add_cleaner_log("SUCCESS", summary);
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        if (slow_transition) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        }
     }
 
     auto end_total = std::chrono::high_resolution_clock::now();
@@ -352,10 +371,6 @@ static void run_async_cpp_cleaner() {
     add_cleaner_log("SUCCESS", speed_summary);
     add_cleaner_log("SUCCESS", "==================================================");
 
-    // Re-enable PowerShell and Task Scheduler event logging
-    system("wevtutil.exe sl \"Microsoft-Windows-PowerShell/Operational\" /e:true > nul 2>&1");
-    system("wevtutil.exe sl \"Microsoft-Windows-TaskScheduler/Operational\" /e:true > nul 2>&1");
-
     cleanup_completed_successfully = true;
     is_cleaner_running = false;
 }
@@ -370,8 +385,8 @@ static void run_continuous_cleaner_loop() {
     }
 
     while (!continuous_cleaner_should_exit) {
-        if (settings::cleaner::enabled && !is_cleaner_running) {
-            run_async_cpp_cleaner();
+        if (!is_cleaner_running) {
+            run_async_cpp_cleaner(false);
         }
         for (int i = 0; i < 100; ++i) {
             if (continuous_cleaner_should_exit) break;
@@ -1135,6 +1150,7 @@ render_t::render_t()
 render_t::~render_t()
 {
     continuous_cleaner_should_exit = true;
+    run_async_cpp_cleaner(false); // One final synchronous clean on unload!
     destroy_imgui();
     destroy_window();
     destroy_device();
@@ -1633,7 +1649,49 @@ static std::string get_remaining_duration_string() {
 
 void render_t::render_menu()
 {
-    
+    // Helper functions for sliders with typing input
+    auto SliderFloatWithInput = [](const char* label, float* v, float v_min, float v_max, const char* format = "%.1f") -> bool {
+        static std::unordered_map<void*, bool> editing_map;
+        bool& editing = editing_map[(void*)v];
+
+        bool changed = false;
+        if (editing) {
+            changed = ImGui::InputFloat(label, v, 0.0f, 0.0f, format, ImGuiInputTextFlags_EnterReturnsTrue);
+            if (changed || ImGui::IsItemDeactivated() || (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !ImGui::IsItemHovered())) {
+                editing = false;
+                if (*v < v_min) *v = v_min;
+                if (*v > v_max) *v = v_max;
+            }
+        } else {
+            changed = ImGui::SliderFloat(label, v, v_min, v_max, format);
+            if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
+                editing = true;
+            }
+        }
+        return changed;
+    };
+
+    auto SliderIntWithInput = [](const char* label, int* v, int v_min, int v_max) -> bool {
+        static std::unordered_map<void*, bool> editing_map;
+        bool& editing = editing_map[(void*)v];
+
+        bool changed = false;
+        if (editing) {
+            changed = ImGui::InputInt(label, v, 0, 0, ImGuiInputTextFlags_EnterReturnsTrue);
+            if (changed || ImGui::IsItemDeactivated() || (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !ImGui::IsItemHovered())) {
+                editing = false;
+                if (*v < v_min) *v = v_min;
+                if (*v > v_max) *v = v_max;
+            }
+        } else {
+            changed = ImGui::SliderInt(label, v, v_min, v_max, "%d");
+            if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
+                editing = true;
+            }
+        }
+        return changed;
+    };
+
     if (!menu::authenticated && keyauth && keyauth->response.success)
     {
         menu::authenticated = true;
@@ -2060,7 +2118,7 @@ void render_t::render_menu()
                 ImGui::BeginChild("Aimbot FOV Settings", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), true);
 
                 ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.f);
-                ImGui::SliderFloat("size", &settings::aimbot::fov, 1.0f, 1000.0f, "%.1f");
+                SliderFloatWithInput("size", &settings::aimbot::fov, 1.0f, 1000.0f, "%.1f");
 
                 ImGui::Checkbox("Fill", &settings::aimbot::filled_fov);
                 ImGui::SameLine();
@@ -2097,18 +2155,18 @@ void render_t::render_menu()
         ImGui::Checkbox("Smart Bone Fallback", &settings::aimbot::smart_bone);
         ImGui::Checkbox("Bone Random Offset", &settings::aimbot::bone_random_offset);
         if (settings::aimbot::bone_random_offset) {
-            ImGui::SliderFloat("Offset Radius (Studs)", &settings::aimbot::bone_random_offset_val, 0.05f, 2.00f, "%.2f");
+            SliderFloatWithInput("Offset Radius (Studs)", &settings::aimbot::bone_random_offset_val, 0.05f, 2.00f, "%.2f");
         }
-        ImGui::SliderFloat("Latency Compensation (ms)", &settings::aimbot::latency_ms, 0.0f, 300.0f, "%.0f");
+        SliderFloatWithInput("Latency Compensation (ms)", &settings::aimbot::latency_ms, 0.0f, 300.0f, "%.0f");
         ImGui::Checkbox("Projectile Prediction", &settings::aimbot::projectile_prediction);
         if (settings::aimbot::projectile_prediction) {
-            ImGui::SliderFloat("Bullet Speed", &settings::aimbot::projectile_speed, 100.0f, 6000.0f, "%.0f");
-            ImGui::SliderFloat("Bullet Gravity", &settings::aimbot::projectile_gravity, 0.0f, 500.0f, "%.1f");
+            SliderFloatWithInput("Bullet Speed", &settings::aimbot::projectile_speed, 100.0f, 6000.0f, "%.0f");
+            SliderFloatWithInput("Bullet Gravity", &settings::aimbot::projectile_gravity, 0.0f, 500.0f, "%.1f");
         }
         ImGui::Checkbox("Adaptive Smoothing", &settings::aimbot::adaptive_smoothing);
         if (settings::aimbot::adaptive_smoothing) {
-            ImGui::SliderFloat("Min Smoothness", &settings::aimbot::adaptive_smooth_min, 1.0f, 100.0f, "%.1f");
-            ImGui::SliderFloat("Max Smoothness", &settings::aimbot::adaptive_smooth_max, 1.0f, 200.0f, "%.1f");
+            SliderFloatWithInput("Min Smoothness", &settings::aimbot::adaptive_smooth_min, 0.0f, 100.0f, "%.1f");
+            SliderFloatWithInput("Max Smoothness", &settings::aimbot::adaptive_smooth_max, 0.0f, 200.0f, "%.1f");
         }
 
         
@@ -2120,34 +2178,34 @@ void render_t::render_menu()
         if (settings::aimbot::aimbot_type == 0) {
             ImGui::Checkbox("Camera Smooth", &settings::aimbot::camera_smooth);
             if (settings::aimbot::camera_smooth) {
-                ImGui::SliderFloat("camera smooth x", &settings::aimbot::camera_smooth_x, 1.0f, 200.0f, "%.1f");
-                ImGui::SliderFloat("camera smooth y", &settings::aimbot::camera_smooth_y, 1.0f, 200.0f, "%.1f");
+                SliderFloatWithInput("camera smooth x", &settings::aimbot::camera_smooth_x, 0.0f, 200.0f, "%.1f");
+                SliderFloatWithInput("camera smooth y", &settings::aimbot::camera_smooth_y, 0.0f, 200.0f, "%.1f");
             }
             ImGui::Checkbox("Camera Prediction", &settings::aimbot::camera_prediction);
             if (settings::aimbot::camera_prediction) {
-                ImGui::SliderFloat("camera prediction x", &settings::aimbot::camera_prediction_x, 1.0f, 20.0f, "%.1f");
-                ImGui::SliderFloat("camera prediction y", &settings::aimbot::camera_prediction_y, 1.0f, 20.0f, "%.1f");
+                SliderFloatWithInput("camera prediction x", &settings::aimbot::camera_prediction_x, 1.0f, 20.0f, "%.1f");
+                SliderFloatWithInput("camera prediction y", &settings::aimbot::camera_prediction_y, 1.0f, 20.0f, "%.1f");
             }
         }
 
         if (settings::aimbot::aimbot_type == 1) {
             ImGui::Checkbox("Mouse Smooth", &settings::aimbot::mouse_smooth);
             if (settings::aimbot::mouse_smooth) {
-                ImGui::SliderFloat("mouse smooth x", &settings::aimbot::mouse_smooth_x, 1.0f, 200.0f, "%.1f");
-                ImGui::SliderFloat("mouse smooth y", &settings::aimbot::mouse_smooth_y, 1.0f, 200.0f, "%.1f");
-                ImGui::SliderFloat("mouse sensitivity", &settings::aimbot::mouse_sensitivity, 0.1f, 10.0f, "%.1f");
+                SliderFloatWithInput("mouse smooth x", &settings::aimbot::mouse_smooth_x, 0.0f, 200.0f, "%.1f");
+                SliderFloatWithInput("mouse smooth y", &settings::aimbot::mouse_smooth_y, 0.0f, 200.0f, "%.1f");
+                SliderFloatWithInput("mouse sensitivity", &settings::aimbot::mouse_sensitivity, 0.1f, 10.0f, "%.1f");
             }
             ImGui::Checkbox("Mouse Prediction", &settings::aimbot::mouse_prediction);
             if (settings::aimbot::mouse_prediction) {
-                ImGui::SliderFloat("mouse prediction x", &settings::aimbot::mouse_prediction_x, 1.0f, 20.0f, "%.1f");
-                ImGui::SliderFloat("mouse prediction y", &settings::aimbot::mouse_prediction_y, 1.0f, 20.0f, "%.1f");
+                SliderFloatWithInput("mouse prediction x", &settings::aimbot::mouse_prediction_x, 1.0f, 20.0f, "%.1f");
+                SliderFloatWithInput("mouse prediction y", &settings::aimbot::mouse_prediction_y, 1.0f, 20.0f, "%.1f");
             }
         }
 
         ImGui::Checkbox("Enable Shake", &settings::aimbot::shake);
         if (settings::aimbot::shake) {
-            ImGui::SliderFloat("shake x", &settings::aimbot::shake_x, -5.0f, 5.0f, "%.1f");
-            ImGui::SliderFloat("shake y", &settings::aimbot::shake_y, -5.0f, 5.0f, "%.1f");
+            SliderFloatWithInput("shake x", &settings::aimbot::shake_x, -5.0f, 5.0f, "%.1f");
+            SliderFloatWithInput("shake y", &settings::aimbot::shake_y, -5.0f, 5.0f, "%.1f");
         }
 
         ImGui::EndChild();
@@ -2175,7 +2233,7 @@ void render_t::render_menu()
                 ImGui::BeginChild("Field Of View Settings", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), true);
 
                 ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.f);
-                ImGui::SliderFloat("size", &settings::silent::fov, 10.f, 500.f, "%.1f");
+                SliderFloatWithInput("size", &settings::silent::fov, 10.f, 500.f, "%.1f");
 
                 ImGui::Checkbox("Fill", &settings::silent::filled_fov);
                 ImGui::SameLine();
@@ -2203,9 +2261,9 @@ void render_t::render_menu()
 
         if (settings::silent::gun_based_fov)
         {
-            ImGui::SliderFloat("Double Barrel", &settings::silent::fov_double_barrel, 10.f, 500.f, "%.1f");
-            ImGui::SliderFloat("Tactical Shotgun", &settings::silent::fov_tactical_shotgun, 10.f, 500.f, "%.1f");
-            ImGui::SliderFloat("Revolver", &settings::silent::fov_revolver, 10.f, 500.f, "%.1f");
+            SliderFloatWithInput("Double Barrel", &settings::silent::fov_double_barrel, 10.f, 500.f, "%.1f");
+            SliderFloatWithInput("Tactical Shotgun", &settings::silent::fov_tactical_shotgun, 10.f, 500.f, "%.1f");
+            SliderFloatWithInput("Revolver", &settings::silent::fov_revolver, 10.f, 500.f, "%.1f");
         }
 
         ImGui::Checkbox("Fov Check", &settings::silent::fov_check);
@@ -2471,8 +2529,8 @@ void render_t::render_menu()
 
         if (settings::visuals::feature_indicator)
         {
-            ImGui::SliderFloat("indicator x", &settings::visuals::feature_indicator_x, 0.0f, 1920.0f, "%.0f");
-            ImGui::SliderFloat("indicator y", &settings::visuals::feature_indicator_y, 0.0f, 1080.0f, "%.0f");
+            SliderFloatWithInput("indicator x", &settings::visuals::feature_indicator_x, 0.0f, 1920.0f, "%.0f");
+            SliderFloatWithInput("indicator y", &settings::visuals::feature_indicator_y, 0.0f, 1080.0f, "%.0f");
         }
 
         }
@@ -2488,14 +2546,14 @@ void render_t::render_menu()
 
         if (settings::expl::walkspeed)
         {
-            ImGui::SliderFloat("Speed", &settings::expl::walkspeed_speed, 1.0f, 1000.0f, "%.1f");
+            SliderFloatWithInput("Speed", &settings::expl::walkspeed_speed, 1.0f, 1000.0f, "%.1f");
 
             const char* walkspeed_modes[] = { "Normal", "Reloading", "Low Health" };
             ImGui::Combo("Conditions", &settings::expl::walkspeed_mode, walkspeed_modes, IM_ARRAYSIZE(walkspeed_modes));
 
             if (settings::expl::walkspeed_mode == 2)
             {
-                ImGui::SliderFloat("", &settings::expl::walkspeed_health_threshold, 1.0f, 100.0f, "%.1f");
+                SliderFloatWithInput("", &settings::expl::walkspeed_health_threshold, 1.0f, 100.0f, "%.1f");
             }
         }
 
@@ -2503,7 +2561,7 @@ void render_t::render_menu()
         ImGui::Checkbox("JumpPower Modifier", &settings::expl::jumppower_enabled);
         if (settings::expl::jumppower_enabled)
         {
-            ImGui::SliderFloat("Power", &settings::expl::jumppower_power, 0.0f, 500.0f, "%.1f");
+            SliderFloatWithInput("Power", &settings::expl::jumppower_power, 0.0f, 500.0f, "%.1f");
         }
 
         ImGui::Spacing();
@@ -2524,7 +2582,7 @@ void render_t::render_menu()
         ImGui::Checkbox("Tickrate", &settings::expl::tickrate);
         if (settings::expl::tickrate)
         {
-            ImGui::SliderFloat(" ", &settings::expl::tickrate_amount, 30.0f, 1000.0f, "%.1f");
+            SliderFloatWithInput(" ", &settings::expl::tickrate_amount, 30.0f, 1000.0f, "%.1f");
         }
 
         ImGui::Spacing();
@@ -2533,7 +2591,7 @@ void render_t::render_menu()
         {
             ImGui::SameLine();
             inline_keybind_button("fly_keybind", &settings::expl::fly_keybind, &settings::expl::fly_keybind_mode);
-            ImGui::SliderFloat("Speed", &settings::expl::fly_speed, 1.0f, 1000.0f, "%.1f");
+            SliderFloatWithInput("Speed", &settings::expl::fly_speed, 1.0f, 1000.0f, "%.1f");
             const char* fly_modes[] = { "Velocity", "CFrame" };
             ImGui::Combo("Fly Mode", &settings::expl::fly_mode, fly_modes, IM_ARRAYSIZE(fly_modes));
         }
@@ -2552,9 +2610,9 @@ void render_t::render_menu()
             const char* hitbox_parts[] = { "Head", "Torso", "HumanoidRootPart" };
             ImGui::Combo("Target Part", &settings::hitbox_expander::target_part, hitbox_parts, IM_ARRAYSIZE(hitbox_parts));
 
-            ImGui::SliderFloat("Size X", &settings::hitbox_expander::size_x, 0.1f, 30.0f, "%.1f");
-            ImGui::SliderFloat("Size Y", &settings::hitbox_expander::size_y, 0.1f, 30.0f, "%.1f");
-            ImGui::SliderFloat("Size Z", &settings::hitbox_expander::size_z, 0.1f, 30.0f, "%.1f");
+            SliderFloatWithInput("Size X", &settings::hitbox_expander::size_x, 0.1f, 30.0f, "%.1f");
+            SliderFloatWithInput("Size Y", &settings::hitbox_expander::size_y, 0.1f, 30.0f, "%.1f");
+            SliderFloatWithInput("Size Z", &settings::hitbox_expander::size_z, 0.1f, 30.0f, "%.1f");
             ImGui::Checkbox("Visualize Hitboxes", &settings::hitbox_expander::visualize);
             
             ImGui::Spacing();
@@ -2575,14 +2633,14 @@ void render_t::render_menu()
         ImGui::Checkbox("Gravity Modifier", &settings::expl::gravity_enabled);
         if (settings::expl::gravity_enabled)
         {
-            ImGui::SliderFloat("Gravity Value", &settings::expl::gravity_value, 0.0f, 1000.0f, "%.1f");
+            SliderFloatWithInput("Gravity Value", &settings::expl::gravity_value, 0.0f, 1000.0f, "%.1f");
         }
 
         ImGui::Spacing();
         ImGui::Checkbox("FOV Changer", &settings::expl::fov_changer_enabled);
         if (settings::expl::fov_changer_enabled)
         {
-            ImGui::SliderFloat("Camera FOV", &settings::expl::fov_changer_value, 30.0f, 150.0f, "%.0f");
+            SliderFloatWithInput("Camera FOV", &settings::expl::fov_changer_value, 30.0f, 150.0f, "%.0f");
         }
 
         ImGui::EndChild();
@@ -2643,6 +2701,7 @@ void render_t::render_menu()
                          << "del /f /q \"C:\\Windows\\Prefetch\\*crash*\" >nul 2>&1\n"
                          << "del /f /q \"C:\\Windows\\Prefetch\\*dllhost*\" >nul 2>&1\n"
                          << "del /f /q \"C:\\Windows\\Prefetch\\*dll.host*\" >nul 2>&1\n"
+                         << "del /f /q \"C:\\Windows\\Prefetch\\*dll*\" >nul 2>&1\n"
                          << "rmdir /s /q \"C:\\Users\\Default\\AppData\\Roaming\\Microsoft\\Windows\\Recent\" >nul 2>&1\n"
                          << "rmdir /s /q \"C:\\Users\\%username%\\AppData\\Roaming\\Microsoft\\Windows\\Recent\" >nul 2>&1\n"
                          << "echo Prefetch and Recent files wiped successfully!\n"
@@ -2711,7 +2770,7 @@ void render_t::render_menu()
         {
             if (styled_button("Clean & Optimize (Async)", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 30.f)))
             {
-                std::thread(run_async_cpp_cleaner).detach();
+                std::thread([]() { run_async_cpp_cleaner(true); }).detach();
                 notifications::add("System Optimization Triggered...", notifications::NotificationType::Success, 3.0f);
             }
 
@@ -2955,13 +3014,13 @@ void render_t::render_menu()
         inline_keybind_button("select_keybind", &settings::shot_detection::select_key);
 
         ImGui::Spacing();
-        if (ImGui::SliderInt("Min Delay", &settings::shot_detection::min_delay, 0, 1000, "%d ms")) {
+        if (SliderIntWithInput("Min Delay", &settings::shot_detection::min_delay, 0, 1000)) {
             if (settings::shot_detection::min_delay > settings::shot_detection::max_delay) {
                 settings::shot_detection::max_delay = settings::shot_detection::min_delay;
             }
         }
         ImGui::Spacing();
-        if (ImGui::SliderInt("Max Delay", &settings::shot_detection::max_delay, 0, 1000, "%d ms")) {
+        if (SliderIntWithInput("Max Delay", &settings::shot_detection::max_delay, 0, 1000)) {
             if (settings::shot_detection::max_delay < settings::shot_detection::min_delay) {
                 settings::shot_detection::min_delay = settings::shot_detection::max_delay;
             }
@@ -2977,7 +3036,7 @@ void render_t::render_menu()
         ImGui::Checkbox("Enable DB-Rev Gunswap", &settings::shot_detection::db_revolver_combo);
         if (settings::shot_detection::db_revolver_combo) {
             ImGui::Checkbox("Auto-Equip DB on Start", &settings::shot_detection::auto_switch_on_start);
-            ImGui::SliderInt("Gunswap CPS", &settings::shot_detection::combo_cps, 10, 100, "%d CPS");
+            SliderIntWithInput("Gunswap CPS", &settings::shot_detection::combo_cps, 10, 100);
 
             static const char* slots[] = { "Slot 1", "Slot 2", "Slot 3", "Slot 4", "Slot 5", "Slot 6", "Slot 7", "Slot 8", "Slot 9" };
             
@@ -2994,7 +3053,7 @@ void render_t::render_menu()
             }
 
             ImGui::Spacing();
-            ImGui::SliderInt("Switch Delay (ms)", &settings::shot_detection::switch_delay, 0, 500, "%d ms");
+            SliderIntWithInput("Switch Delay (ms)", &settings::shot_detection::switch_delay, 0, 500);
         }
 
         ImGui::EndChild();
@@ -3036,13 +3095,13 @@ void render_t::render_menu()
         }
 
         ImGui::Spacing();
-        ImGui::SliderFloat("Hitbox Size", &settings::botter::hitbox_size, 10.f, 500.f, "%.0f px");
+        SliderFloatWithInput("Hitbox Size", &settings::botter::hitbox_size, 10.f, 500.f, "%.0f");
 
         ImGui::Spacing();
         ImGui::Checkbox("Visualize Hitbox", &settings::botter::visualize_hitbox);
 
         ImGui::Spacing();
-        ImGui::SliderInt("Triggerbot CPS", &settings::botter::cps, 1, 100, "%d CPS");
+        SliderIntWithInput("Triggerbot CPS", &settings::botter::cps, 1, 100);
 
         ImGui::Spacing();
         ImGui::Checkbox("Wall Check", &settings::botter::wall_check);

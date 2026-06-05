@@ -24,21 +24,27 @@
 namespace {
 	bool is_player_knocked(const cache::entity_t& player) {
 		if (player.is_knocked) return true;
+		
 		if (player.humanoid.address != 0) {
 			try {
 				float health = const_cast<cache::entity_t&>(player).humanoid.get_health();
 				if (health <= 0.0f || !std::isfinite(health)) {
 					return true;
 				}
+				
+				bool platform_stand = memory->read<bool>(player.humanoid.address + Offsets::Humanoid::PlatformStand);
+				bool is_sitting = memory->read<bool>(player.humanoid.address + Offsets::Humanoid::Sit);
+				
+				if (player.ko_address != 0) {
+					if (memory->read<bool>(player.ko_address + Offsets::Misc::Value) || (platform_stand && !is_sitting)) {
+						return true;
+					}
+				} else {
+					if ((health <= 20.0f && platform_stand && !is_sitting)) {
+						return true;
+					}
+				}
 			} catch (...) {}
-		}
-		
-		if (player.ko_address != 0) {
-			try {
-				return memory->read<bool>(player.ko_address + Offsets::Misc::Value);
-			} catch (...) {
-				return false;
-			}
 		}
 		
 		if (player.instance.address != 0) {
@@ -46,11 +52,26 @@ namespace {
 				rbx::player_t player_instance(player.instance.address);
 				rbx::model_instance_t model_instance = player_instance.get_model_instance();
 				if (model_instance.address != 0) {
+					static const std::vector<std::string> ko_names = { "K.O", "KO", "Knocked", "Downed", "Dead" };
+					
 					rbx::instance_t body_effects = model_instance.find_first_child("BodyEffects");
 					if (body_effects.address != 0) {
-						rbx::instance_t ko = body_effects.find_first_child("K.O");
+						for (const auto& name : ko_names) {
+							rbx::instance_t ko = body_effects.find_first_child(name);
+							if (ko.address != 0) {
+								if (memory->read<bool>(ko.address + Offsets::Misc::Value)) {
+									return true;
+								}
+							}
+						}
+					}
+					
+					for (const auto& name : ko_names) {
+						rbx::instance_t ko = model_instance.find_first_child(name);
 						if (ko.address != 0) {
-							return memory->read<bool>(ko.address + Offsets::Misc::Value);
+							if (memory->read<bool>(ko.address + Offsets::Misc::Value)) {
+								return true;
+							}
 						}
 					}
 				}
@@ -294,7 +315,9 @@ namespace shot_detection
 						if (players_snapshot) {
 							for (const auto& player : *players_snapshot) {
 								if (player.instance.address == 0 || 
-									player.instance.address == cache::cached_local_player.instance.address)
+									player.instance.address == cache::cached_local_player.instance.address ||
+									player.instance.address == game::local_player.address ||
+									(player.name == cache::cached_local_player.name && !player.name.empty()))
 									continue;
 
 								if (settings::shot_detection::knocked_check && is_player_knocked(player))
@@ -1071,7 +1094,9 @@ namespace botter
 			for (auto& player : *players_snapshot)
 			{
 				if (player.instance.address == 0 ||
-					player.instance.address == cache::cached_local_player.instance.address)
+					player.instance.address == cache::cached_local_player.instance.address ||
+					player.instance.address == game::local_player.address ||
+					(player.name == cache::cached_local_player.name && !player.name.empty()))
 				{
 					continue;
 				}

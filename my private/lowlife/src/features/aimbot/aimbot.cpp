@@ -656,8 +656,8 @@ namespace rbx::aimbot {
             math::vector3 smoothed_forward = target_forward;
 
             if (settings::aimbot::camera_smooth || settings::aimbot::adaptive_smoothing) {
-                float sx = std::clamp(settings::aimbot::camera_smooth_x, 1.0f, 200.0f);
-                float sy = std::clamp(settings::aimbot::camera_smooth_y, 1.0f, 200.0f);
+                float sx = std::clamp(settings::aimbot::camera_smooth_x, 0.0f, 200.0f);
+                float sy = std::clamp(settings::aimbot::camera_smooth_y, 0.0f, 200.0f);
 
                 if (settings::aimbot::adaptive_smoothing) {
                     float adaptive_factor = get_adaptive_smooth(screen_dist);
@@ -665,32 +665,36 @@ namespace rbx::aimbot {
                     sy = adaptive_factor;
                 }
 
-                math::vector3 current_forward = { -current_rot.m[2], -current_rot.m[5], -current_rot.m[8] };
-                current_forward = normalize(current_forward);
+                if (sx <= 0.01f && sy <= 0.01f) {
+                    smoothed_forward = target_forward;
+                } else {
+                    math::vector3 current_forward = { -current_rot.m[2], -current_rot.m[5], -current_rot.m[8] };
+                    current_forward = normalize(current_forward);
 
-                float current_yaw = 0.0f, current_pitch = 0.0f;
-                float target_yaw = 0.0f, target_pitch = 0.0f;
+                    float current_yaw = 0.0f, current_pitch = 0.0f;
+                    float target_yaw = 0.0f, target_pitch = 0.0f;
 
-                vector_to_angles(current_forward, current_yaw, current_pitch);
-                vector_to_angles(target_forward, target_yaw, target_pitch);
+                    vector_to_angles(current_forward, current_yaw, current_pitch);
+                    vector_to_angles(target_forward, target_yaw, target_pitch);
 
-                float yaw_diff = target_yaw - current_yaw;
-                yaw_diff = std::atan2(std::sin(yaw_diff), std::cos(yaw_diff));
+                    float yaw_diff = target_yaw - current_yaw;
+                    yaw_diff = std::atan2(std::sin(yaw_diff), std::cos(yaw_diff));
 
-                float pitch_diff = target_pitch - current_pitch;
-                pitch_diff = std::atan2(std::sin(pitch_diff), std::cos(pitch_diff));
+                    float pitch_diff = target_pitch - current_pitch;
+                    pitch_diff = std::atan2(std::sin(pitch_diff), std::cos(pitch_diff));
 
-                float t_x = std::clamp(dt * (45.0f / sx), 0.0f, 1.0f);
-                float t_y = std::clamp(dt * (45.0f / sy), 0.0f, 1.0f);
+                    float t_x = (sx <= 0.01f) ? 1.0f : std::clamp(dt * (45.0f / sx), 0.0f, 1.0f);
+                    float t_y = (sy <= 0.01f) ? 1.0f : std::clamp(dt * (45.0f / sy), 0.0f, 1.0f);
 
-                float eased_t_x = apply_easing(settings::aimbot::easing_style, t_x);
-                float eased_t_y = apply_easing(settings::aimbot::easing_style, t_y);
+                    float eased_t_x = apply_easing(settings::aimbot::easing_style, t_x);
+                    float eased_t_y = apply_easing(settings::aimbot::easing_style, t_y);
 
-                float final_yaw = current_yaw + yaw_diff * eased_t_x;
-                float final_pitch = current_pitch + pitch_diff * eased_t_y;
+                    float final_yaw = current_yaw + yaw_diff * eased_t_x;
+                    float final_pitch = current_pitch + pitch_diff * eased_t_y;
 
-                smoothed_forward = angles_to_vector(final_yaw, final_pitch);
-                smoothed_forward = normalize(smoothed_forward);
+                    smoothed_forward = angles_to_vector(final_yaw, final_pitch);
+                    smoothed_forward = normalize(smoothed_forward);
+                }
             }
 
             if (settings::aimbot::shake) {
@@ -824,8 +828,8 @@ namespace rbx::aimbot {
             }
 
             if (settings::aimbot::mouse_smooth || settings::aimbot::adaptive_smoothing) {
-                float sx = std::clamp(settings::aimbot::mouse_smooth_x, 1.0f, 200.0f);
-                float sy = std::clamp(settings::aimbot::mouse_smooth_y, 1.0f, 200.0f);
+                float sx = std::clamp(settings::aimbot::mouse_smooth_x, 0.0f, 200.0f);
+                float sy = std::clamp(settings::aimbot::mouse_smooth_y, 0.0f, 200.0f);
 
                 if (settings::aimbot::adaptive_smoothing) {
                     float adaptive_factor = get_adaptive_smooth(screen_dist);
@@ -833,25 +837,35 @@ namespace rbx::aimbot {
                     sy = adaptive_factor;
                 }
 
-                // Analytical critically-damped spring-damper system
-                // Restores stability under high input rates and latency-induced feedback loops.
-                float omega_x = 45.0f / sx;
-                float omega_y = 45.0f / sy;
+                if (sx <= 0.01f && sy <= 0.01f) {
+                    // No smoothing: apply sensitivity scaling if in pixel mode (non-captured)
+                    if (!session_captured) {
+                        dx *= sensitivity;
+                        dy *= sensitivity;
+                    }
+                    spring_vel_mouse_x = 0.0f;
+                    spring_vel_mouse_y = 0.0f;
+                } else {
+                    // Analytical critically-damped spring-damper system
+                    // Restores stability under high input rates and latency-induced feedback loops.
+                    float omega_x = (sx <= 0.01f) ? 10000.0f : (45.0f / sx);
+                    float omega_y = (sy <= 0.01f) ? 10000.0f : (45.0f / sy);
 
-                float log_e_x = std::exp(-omega_x * dt);
-                float log_e_y = std::exp(-omega_y * dt);
+                    float log_e_x = std::exp(-omega_x * dt);
+                    float log_e_y = std::exp(-omega_y * dt);
 
-                float A_x = dx;
-                float B_x = -spring_vel_mouse_x + omega_x * dx;
-                float x_new_x = (A_x + B_x * dt) * log_e_x;
-                dx = dx - x_new_x;
-                spring_vel_mouse_x = omega_x * x_new_x - B_x * log_e_x;
+                    float A_x = dx;
+                    float B_x = -spring_vel_mouse_x + omega_x * dx;
+                    float x_new_x = (A_x + B_x * dt) * log_e_x;
+                    dx = dx - x_new_x;
+                    spring_vel_mouse_x = omega_x * x_new_x - B_x * log_e_x;
 
-                float A_y = dy;
-                float B_y = -spring_vel_mouse_y + omega_y * dy;
-                float x_new_y = (A_y + B_y * dt) * log_e_y;
-                dy = dy - x_new_y;
-                spring_vel_mouse_y = omega_y * x_new_y - B_y * log_e_y;
+                    float A_y = dy;
+                    float B_y = -spring_vel_mouse_y + omega_y * dy;
+                    float x_new_y = (A_y + B_y * dt) * log_e_y;
+                    dy = dy - x_new_y;
+                    spring_vel_mouse_y = omega_y * x_new_y - B_y * log_e_y;
+                }
             } else {
                 // No smoothing: apply sensitivity scaling if in pixel mode (non-captured)
                 if (!session_captured) {
