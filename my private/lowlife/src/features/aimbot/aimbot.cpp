@@ -667,6 +667,8 @@ namespace rbx::aimbot {
 
                 if (sx <= 0.01f && sy <= 0.01f) {
                     smoothed_forward = target_forward;
+                    spring_vel_yaw = 0.0f;
+                    spring_vel_pitch = 0.0f;
                 } else {
                     math::vector3 current_forward = { -current_rot.m[2], -current_rot.m[5], -current_rot.m[8] };
                     current_forward = normalize(current_forward);
@@ -683,18 +685,44 @@ namespace rbx::aimbot {
                     float pitch_diff = target_pitch - current_pitch;
                     pitch_diff = std::atan2(std::sin(pitch_diff), std::cos(pitch_diff));
 
-                    float t_x = (sx <= 0.01f) ? 1.0f : std::clamp(dt * (45.0f / sx), 0.0f, 1.0f);
-                    float t_y = (sy <= 0.01f) ? 1.0f : std::clamp(dt * (45.0f / sy), 0.0f, 1.0f);
+                    // Wind Mouse / Force-Inertia camera tracking model
+                    float gravity = 15.0f / (sx + 0.1f);
+                    float drag = 0.3f + 0.05f * sx;
 
-                    float eased_t_x = apply_easing(settings::aimbot::easing_style, t_x);
-                    float eased_t_y = apply_easing(settings::aimbot::easing_style, t_y);
+                    float torque_x = yaw_diff * gravity;
+                    float torque_y = pitch_diff * gravity;
 
-                    float final_yaw = current_yaw + yaw_diff * eased_t_x;
-                    float final_pitch = current_pitch + pitch_diff * eased_t_y;
+                    float drag_x = -drag * spring_vel_yaw;
+                    float drag_y = -drag * spring_vel_pitch;
+
+                    float accel_x = torque_x + drag_x;
+                    float accel_y = torque_y + drag_y;
+
+                    // Update persistent angular velocity
+                    spring_vel_yaw += accel_x * dt * 60.0f;
+                    spring_vel_pitch += accel_y * dt * 60.0f;
+
+                    // Clamp to a natural human rotation speed limit (in radians/sec)
+                    float max_rot_speed = 30.0f / (sx + 1.0f);
+                    float current_speed = std::sqrt(spring_vel_yaw * spring_vel_yaw + spring_vel_pitch * spring_vel_pitch);
+                    if (current_speed > max_rot_speed && current_speed > 0.0001f) {
+                        spring_vel_yaw = (spring_vel_yaw / current_speed) * max_rot_speed;
+                        spring_vel_pitch = (spring_vel_pitch / current_speed) * max_rot_speed;
+                    }
+
+                    // Apply humanized ease styling modifier
+                    float eased_yaw_step = spring_vel_yaw * dt;
+                    float eased_pitch_step = spring_vel_pitch * dt;
+
+                    float final_yaw = current_yaw + eased_yaw_step;
+                    float final_pitch = current_pitch + eased_pitch_step;
 
                     smoothed_forward = angles_to_vector(final_yaw, final_pitch);
                     smoothed_forward = normalize(smoothed_forward);
                 }
+            } else {
+                spring_vel_yaw = 0.0f;
+                spring_vel_pitch = 0.0f;
             }
 
             if (settings::aimbot::shake) {
@@ -846,25 +874,66 @@ namespace rbx::aimbot {
                     spring_vel_mouse_x = 0.0f;
                     spring_vel_mouse_y = 0.0f;
                 } else {
-                    // Analytical critically-damped spring-damper system
-                    // Restores stability under high input rates and latency-induced feedback loops.
-                    float omega_x = (sx <= 0.01f) ? 10000.0f : (45.0f / sx);
-                    float omega_y = (sy <= 0.01f) ? 10000.0f : (45.0f / sy);
+                    float dist = std::sqrt(dx * dx + dy * dy);
+                    if (dist > 0.0001f) {
+                        // Wind Mouse / Organic Mouse Force-Inertia Solver
+                        
+                        // Generate smooth rolling wind forces to create natural human-like aiming curves
+                        static float wind_x = 0.0f;
+                        static float wind_y = 0.0f;
+                        
+                        // Slowly drift the wind direction and magnitude randomly
+                        wind_x += ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f) * 10.0f * dt;
+                        wind_y += ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f) * 10.0f * dt;
+                        
+                        // Limit maximum wind force
+                        wind_x = std::clamp(wind_x, -15.0f, 15.0f);
+                        wind_y = std::clamp(wind_y, -15.0f, 15.0f);
 
-                    float log_e_x = std::exp(-omega_x * dt);
-                    float log_e_y = std::exp(-omega_y * dt);
+                        // Attraction (gravity) force pulling toward target bone
+                        float gravity_x = 10.0f / (sx + 0.1f);
+                        float gravity_y = 10.0f / (sy + 0.1f);
 
-                    float A_x = dx;
-                    float B_x = -spring_vel_mouse_x + omega_x * dx;
-                    float x_new_x = (A_x + B_x * dt) * log_e_x;
-                    dx = dx - x_new_x;
-                    spring_vel_mouse_x = omega_x * x_new_x - B_x * log_e_x;
+                        // Scale down gravity close to target to prevent robotic snaps and violent overshoot
+                        float ease_scale = std::clamp(dist / 30.0f, 0.1f, 1.0f);
+                        
+                        float fg_x = (dx / dist) * gravity_x * 8.0f * ease_scale;
+                        float fg_y = (dy / dist) * gravity_y * 8.0f * ease_scale;
 
-                    float A_y = dy;
-                    float B_y = -spring_vel_mouse_y + omega_y * dy;
-                    float x_new_y = (A_y + B_y * dt) * log_e_y;
-                    dy = dy - x_new_y;
-                    spring_vel_mouse_y = omega_y * x_new_y - B_y * log_e_y;
+                        // Drag opposing current velocity
+                        float drag_x = - (0.25f + 0.05f * sx) * spring_vel_mouse_x;
+                        float drag_y = - (0.25f + 0.05f * sy) * spring_vel_mouse_y;
+
+                        float accel_x = fg_x + wind_x + drag_x;
+                        float accel_y = fg_y + wind_y + drag_y;
+
+                        // Integrate velocity
+                        spring_vel_mouse_x += accel_x * dt * 60.0f;
+                        spring_vel_mouse_y += accel_y * dt * 60.0f;
+
+                        // Clamp to human-like max speed
+                        float max_speed = 4000.0f / (sx + 1.0f);
+                        float speed = std::sqrt(spring_vel_mouse_x * spring_vel_mouse_x + spring_vel_mouse_y * spring_vel_mouse_y);
+                        if (speed > max_speed && speed > 0.0001f) {
+                            spring_vel_mouse_x = (spring_vel_mouse_x / speed) * max_speed;
+                            spring_vel_mouse_y = (spring_vel_mouse_y / speed) * max_speed;
+                        }
+
+                        // Apply final move delta for this frame
+                        dx = spring_vel_mouse_x * dt;
+                        dy = spring_vel_mouse_y * dt;
+
+                        // Add natural muscle micro-tremor when aiming (simulates real human grip tremor)
+                        float tremor = 0.08f * (settings::aimbot::shake ? std::abs(settings::aimbot::shake_x) : 0.6f);
+                        float tremor_scale = std::clamp(dist / 12.0f, 0.0f, 1.0f);
+                        dx += ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f) * tremor * tremor_scale;
+                        dy += ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f) * tremor * tremor_scale;
+                    } else {
+                        dx = 0.0f;
+                        dy = 0.0f;
+                        spring_vel_mouse_x = 0.0f;
+                        spring_vel_mouse_y = 0.0f;
+                    }
                 }
             } else {
                 // No smoothing: apply sensitivity scaling if in pixel mode (non-captured)
