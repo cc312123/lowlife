@@ -32,6 +32,7 @@ typedef BOOL(WINAPI* SetWindowDisplayAffinityProc)(HWND, DWORD);
 #include <check/typing_check.h>
 #include <features/esp/esp.h>
 #include <features/silent/silent.h>
+#include <features/aimbot/aimbot.h>
 #include <features/explorer/dex_explorer.h>
 #include "visitor.h"
 #include "../resources/WeaponIcon.hpp"
@@ -3434,6 +3435,18 @@ void render_t::render_menu()
                         g_silent_aim_manual_locked = true;
                         g_silent_cached_target = current_player_state;
                         notifications::add("Target Lock Established: " + current_player_state.name, notifications::NotificationType::Success, 3.0f);
+                    }
+                }
+
+                bool is_aimbot_locked = (rbx::aimbot::g_aimbot_manual_locked && rbx::aimbot::g_aimbot_manual_target.instance.address == current_player_state.instance.address);
+                std::string secure_aimbot_lock_label = is_aimbot_locked ? "Release Aimbot Target Lock" : "Secure Aimbot Target Lock";
+                if (styled_button(secure_aimbot_lock_label.c_str(), ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 26.f))) {
+                    if (is_aimbot_locked) {
+                        rbx::aimbot::unlock_target();
+                        notifications::add("Released aimbot target lock.", notifications::NotificationType::Info, 2.0f);
+                    } else {
+                        rbx::aimbot::lock_target(current_player_state);
+                        notifications::add("Aimbot Target Lock Established: " + current_player_state.name, notifications::NotificationType::Success, 3.0f);
                     }
                 }
 

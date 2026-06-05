@@ -672,7 +672,7 @@ namespace botter
 
 		void gather_collidable_parts(rbx::instance_t parent, std::vector<cached_part_t>& parts, int depth = 0)
 		{
-			if (depth > 16 || !parent.address || parts.size() >= 5000) return;
+			if (depth > 16 || !parent.address || parts.size() >= 30000) return;
 
 			std::vector<rbx::instance_t> children;
 			try {
@@ -683,7 +683,7 @@ namespace botter
 
 			for (auto& child : children)
 			{
-				if (!child.address || parts.size() >= 5000) continue;
+				if (!child.address || parts.size() >= 30000) continue;
 
 				// 100% reliably skip local character model
 				if (game::local_character.address != 0 && child.address == game::local_character.address) continue;

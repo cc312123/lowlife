@@ -22,6 +22,9 @@
 #include "aimbot.h"
 
 namespace rbx::aimbot {
+    bool g_aimbot_manual_locked = false;
+    cache::entity_t g_aimbot_manual_target = {};
+
     namespace {
         constexpr float PREDICTION_SCALE = 0.016f;
         constexpr float MAX_VELOCITY = 1000.0f;
@@ -337,7 +340,7 @@ namespace rbx::aimbot {
             return true;
         }
 
-        bool is_target_valid(cache::entity_t& player, const std::string& local_crew_id, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, const math::vector3& camera_pos, bool skip_fov_check = false) {
+        bool is_target_valid(cache::entity_t& player, const std::string& local_crew_id, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, const math::vector3& camera_pos, bool skip_fov_check = false, bool skip_wall_check = false) {
             if (!is_target_cheap_valid(player, local_crew_id)) return false;
 
             std::string temp_name = "";
@@ -356,7 +359,7 @@ namespace rbx::aimbot {
                 if (dist > settings::aimbot::fov) return false;
             }
 
-            if (settings::aimbot::wall_check) {
+            if (settings::aimbot::wall_check && !skip_wall_check) {
                 if (is_bone_occluded_cached(player.instance.address, temp_name, camera_pos, world_pos)) {
                     if (settings::aimbot::smart_bone) {
                         const std::vector<std::string> bone_priority = {
@@ -1061,8 +1064,9 @@ namespace rbx::aimbot {
             {
                 std::lock_guard<std::mutex> lock(mtx);
                 if (has_locked_target && locked_target.instance.address != 0) {
-                    bool skip_fov = (settings::aimbot::sticky_aim);
-                    if (is_target_valid(locked_target, local_crew_id, cursor_pt, dims, view, camera_pos, skip_fov)) {
+                    bool skip_fov = (settings::aimbot::sticky_aim || g_aimbot_manual_locked);
+                    bool skip_wall = g_aimbot_manual_locked;
+                    if (is_target_valid(locked_target, local_crew_id, cursor_pt, dims, view, camera_pos, skip_fov, skip_wall)) {
                         target = locked_target;
                         target_part = get_best_bone(target, camera_pos, cursor_pt, dims, view, locked_part_name);
                     } else {
@@ -1074,8 +1078,10 @@ namespace rbx::aimbot {
                         locked_part_name = "";
                         update_target_offset(0);
 
-                        if (settings::aimbot::sticky_aim && settings::aimbot::keybind_mode != 2) {
-                            if (!was_cheap_valid) {
+                        if (!was_cheap_valid) {
+                            g_aimbot_manual_locked = false;
+                            g_aimbot_manual_target = cache::entity_t{};
+                            if (settings::aimbot::sticky_aim && settings::aimbot::keybind_mode != 2) {
                                 needs_key_release = true;
                             }
                         }
@@ -1086,27 +1092,38 @@ namespace rbx::aimbot {
             // 4. Find new best target if no locked target exists
             bool newly_locked = false;
             if (!has_locked_target) {
-                std::string chosen_part_name = "";
-                rbx::part_t chosen_part = {};
-                target = find_best_target(
-                    players_snapshot,
-                    local_player_snapshot,
-                    cursor_pt,
-                    dims,
-                    view,
-                    camera_pos,
-                    chosen_part,
-                    chosen_part_name
-                );
-
-                if (target.instance.address != 0) {
+                if (g_aimbot_manual_locked && g_aimbot_manual_target.instance.address != 0) {
                     std::lock_guard<std::mutex> lock(mtx);
-                    locked_target = target;
+                    locked_target = g_aimbot_manual_target;
                     has_locked_target = true;
                     target_pos_initialized = false;
-                    locked_part_name = chosen_part_name;
-                    target_part = chosen_part;
+                    target = locked_target;
+                    locked_part_name = "";
+                    target_part = get_best_bone(target, camera_pos, cursor_pt, dims, view, locked_part_name);
                     newly_locked = true;
+                } else {
+                    std::string chosen_part_name = "";
+                    rbx::part_t chosen_part = {};
+                    target = find_best_target(
+                        players_snapshot,
+                        local_player_snapshot,
+                        cursor_pt,
+                        dims,
+                        view,
+                        camera_pos,
+                        chosen_part,
+                        chosen_part_name
+                    );
+
+                    if (target.instance.address != 0) {
+                        std::lock_guard<std::mutex> lock(mtx);
+                        locked_target = target;
+                        has_locked_target = true;
+                        target_pos_initialized = false;
+                        locked_part_name = chosen_part_name;
+                        target_part = chosen_part;
+                        newly_locked = true;
+                    }
                 }
             }
 
@@ -1118,6 +1135,15 @@ namespace rbx::aimbot {
             if (target.instance.address == 0 || !target_part.address) {
                 Sleep(10);
                 continue;
+            }
+
+            // Skip aiming while manually locked target is behind a wall
+            if (settings::aimbot::wall_check && g_aimbot_manual_locked) {
+                math::vector3 raw_pos = target_part.get_primitive().get_position();
+                if (is_bone_occluded_cached(target.instance.address, locked_part_name.empty() ? "Head" : locked_part_name, camera_pos, raw_pos)) {
+                    Sleep(1);
+                    continue;
+                }
             }
 
             // 5. Get position and apply humanized bone offset
@@ -1189,5 +1215,27 @@ namespace rbx::aimbot {
         target_pos_initialized = false;
         locked_part_name = "";
         update_target_offset(0);
+        g_aimbot_manual_locked = false;
+        g_aimbot_manual_target = cache::entity_t{};
+    }
+
+    void lock_target(const cache::entity_t& target) {
+        std::lock_guard<std::mutex> lock(mtx);
+        locked_target = target;
+        has_locked_target = true;
+        g_aimbot_manual_locked = true;
+        g_aimbot_manual_target = target;
+        target_pos_initialized = false;
+        locked_part_name = "";
+    }
+
+    void unlock_target() {
+        std::lock_guard<std::mutex> lock(mtx);
+        locked_target = cache::entity_t{};
+        has_locked_target = false;
+        g_aimbot_manual_locked = false;
+        g_aimbot_manual_target = cache::entity_t{};
+        target_pos_initialized = false;
+        locked_part_name = "";
     }
 }
