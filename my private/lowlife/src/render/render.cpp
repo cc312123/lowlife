@@ -1664,8 +1664,17 @@ void render_t::render_menu()
             }
         } else {
             changed = ImGui::SliderFloat(label, v, v_min, v_max, format);
-            if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
-                editing = true;
+            if (ImGui::IsItemHovered()) {
+                if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
+                    editing = true;
+                } else if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
+                    ImVec2 rect_min = ImGui::GetItemRectMin();
+                    float slider_width = ImGui::CalcItemWidth();
+                    float click_x = ImGui::GetIO().MouseClickedPos[0].x;
+                    if (click_x >= rect_min.x + slider_width * 0.5f && click_x <= rect_min.x + slider_width) {
+                        editing = true;
+                    }
+                }
             }
         }
         return changed;
@@ -1685,8 +1694,17 @@ void render_t::render_menu()
             }
         } else {
             changed = ImGui::SliderInt(label, v, v_min, v_max, "%d");
-            if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
-                editing = true;
+            if (ImGui::IsItemHovered()) {
+                if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
+                    editing = true;
+                } else if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
+                    ImVec2 rect_min = ImGui::GetItemRectMin();
+                    float slider_width = ImGui::CalcItemWidth();
+                    float click_x = ImGui::GetIO().MouseClickedPos[0].x;
+                    if (click_x >= rect_min.x + slider_width * 0.5f && click_x <= rect_min.x + slider_width) {
+                        editing = true;
+                    }
+                }
             }
         }
         return changed;
