@@ -185,7 +185,6 @@
     <ClCompile Include="src\features\esp\esp.cpp" />
     <ClCompile Include="src\features\expl\fly.cpp" />
     <ClCompile Include="src\features\expl\freezeplayer.cpp" />
-    <ClCompile Include="src\features\expl\hitbox_expander.cpp" />
     <ClCompile Include="src\features\expl\walkspeed.cpp" />
     <ClCompile Include="src\features\expl\misc_exploits.cpp" />
     <ClCompile Include="src\features\explorer\dex_explorer.cpp" />
@@ -247,7 +246,6 @@
     <ClInclude Include="src\features\aimbot\aimbot.h" />
     <ClInclude Include="src\features\esp\esp.h" />
     <ClInclude Include="src\features\expl\freezeplayer.h" />
-    <ClInclude Include="src\features\expl\hitbox_expander.h" />
     <ClInclude Include="src\features\expl\walkspeed.h" />
     <ClInclude Include="src\features\expl\misc_exploits.h" />
     <ClInclude Include="src\features\explorer\dex_explorer.h" />

@@ -87,9 +87,6 @@
     <ClCompile Include="src\config\config.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\features\expl\hitbox_expander.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\features\explorer\dex_explorer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -225,9 +222,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\config\config.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\features\expl\hitbox_expander.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resources\iconsdex.h">
