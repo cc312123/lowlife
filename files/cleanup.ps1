@@ -87,6 +87,227 @@ $totalCleanedKeys = 0
 $totalCleanedLogs = 0
 $totalDurationMs = 0
 
+# Helper to get all user profiles (excluding Public, Default, and system accounts)
+function Get-UserProfilePaths {
+    Get-ChildItem -Path "C:\Users" -Directory -ErrorAction SilentlyContinue | 
+        Where-Object { $_.Name -notmatch '(?i)^(Public|Default|All Users|Default User)$' } |
+        ForEach-Object { $_.FullName }
+}
+
+# Helper function to clean specific registry hives (loaded or offline)
+function Clean-RegistryHive {
+    param (
+        [string]$BasePath,
+        [ref]$CleanedKeysCount
+    )
+
+    # 1. Target Accessibility configuration propert(ies)
+    $accessPath = Join-Path $BasePath "Software\Microsoft\Windows\CurrentVersion\Accessibility"
+    if (Test-Path $accessPath) {
+        $props = @('Configuration', 'ServerUrl', 'Workspace')
+        foreach ($prop in $props) {
+            if ((Get-ItemProperty -Path $accessPath -Name $prop -ErrorAction SilentlyContinue).$prop) {
+                Remove-ItemProperty -Path $accessPath -Name $prop -Force -ErrorAction SilentlyContinue
+                $CleanedKeysCount.Value++
+            }
+        }
+    }
+
+    # 2. Target Software\LOWLIFE key
+    $lowlifeKey = Join-Path $BasePath "Software\LOWLIFE"
+    if (Test-Path $lowlifeKey) {
+        Remove-Item -Path $lowlifeKey -Recurse -Force -ErrorAction SilentlyContinue
+        $CleanedKeysCount.Value++
+    }
+    
+    # Also clean up dynamically created Software keys matching the pattern in this hive
+    $softwareBase = Join-Path $BasePath "Software"
+    if (Test-Path $softwareBase) {
+        $matchedKeys = Get-ChildItem -Path $softwareBase -ErrorAction SilentlyContinue |
+            Where-Object { $_.Name -like "*AM_DELTA_PATCH*" -or $_.Name -like "*B332FDC6*" }
+        foreach ($mk in $matchedKeys) {
+            Remove-Item -Path $mk.PsPath -Recurse -Force -ErrorAction SilentlyContinue
+            $CleanedKeysCount.Value++
+        }
+    }
+
+    # 3. MUICache references (Search under multiple classes paths)
+    $muiCachePaths = @(
+        Join-Path $BasePath "Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\MuiCache",
+        Join-Path $BasePath "Local Settings\Software\Microsoft\Windows\Shell\MuiCache"
+    )
+    foreach ($mPath in $muiCachePaths) {
+        if (Test-Path $mPath) {
+            $muiCache = Get-Item -Path $mPath -ErrorAction SilentlyContinue
+            if ($muiCache) {
+                $valueNames = $muiCache.GetValueNames()
+                foreach ($val in $valueNames) {
+                    if ($val -like "*RobloxCrashHandler*" -or $val -like "*LOWLIFE*" -or $val -like "*delta*" -or $val -like "*B332FDC6*") {
+                        $muiCache.DeleteValue($val)
+                        $CleanedKeysCount.Value++
+                    }
+                }
+            }
+        }
+    }
+
+    # 4. UserAssist entries
+    $userAssistPath = Join-Path $BasePath "Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist"
+    if (Test-Path $userAssistPath) {
+        $subKeys = Get-ChildItem -Path $userAssistPath -ErrorAction SilentlyContinue
+        foreach ($subKey in $subKeys) {
+            $countPath = Join-Path $subKey.PsPath "Count"
+            if (Test-Path $countPath) {
+                $countKey = Get-Item -Path $countPath -ErrorAction SilentlyContinue
+                if ($countKey) {
+                    $values = $countKey.GetValueNames()
+                    foreach ($val in $values) {
+                        if ($val -like "*EboybkPenfuUnaqyre*" -or $val -like "*YBJYVSR*" -or $val -like "*NZ_QRYGN_CNGPU*" -or $val -like "*O332SDQ6*") {
+                            $countKey.DeleteValue($val)
+                            $CleanedKeysCount.Value++
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    # 5. AppCompatFlags Compatibility Store
+    $compatPath = Join-Path $BasePath "Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Compatibility Assistant\Store"
+    if (Test-Path $compatPath) {
+        $key = Get-Item -Path $compatPath -ErrorAction SilentlyContinue
+        if ($key) {
+            $valueNames = $key.GetValueNames()
+            foreach ($val in $valueNames) {
+                if ($val -like "*RobloxCrashHandler*" -or $val -like "*LOWLIFE*" -or $val -like "*delta*" -or $val -like "*B332FDC6*") {
+                    Remove-ItemProperty -Path $compatPath -Name $val -Force -ErrorAction SilentlyContinue
+                    $CleanedKeysCount.Value++
+                }
+            }
+        }
+    }
+
+    # 6. ComDlg32 OpenSavePidlMRU, LastVisitedPidlMRU, and RecentDocs
+    $comDlgPaths = @(
+        Join-Path $BasePath "Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSavePidlMRU",
+        Join-Path $BasePath "Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedPidlMRU",
+        Join-Path $BasePath "Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs"
+    )
+    foreach ($path in $comDlgPaths) {
+        if (Test-Path $path) {
+            $subkeys = Get-ChildItem -Path $path -Recurse -ErrorAction SilentlyContinue
+            $allKeys = @($path) + ($subkeys | ForEach-Object { $_.PsPath })
+            foreach ($k in $allKeys) {
+                $keyObj = Get-Item -Path $k -ErrorAction SilentlyContinue
+                if ($keyObj) {
+                    $values = $keyObj.GetValueNames()
+                    foreach ($val in $values) {
+                        if ($val -ne "MRUList") {
+                            try {
+                                $data = $keyObj.GetValue($val)
+                                $dataStr = ""
+                                if ($data -is [System.Array]) {
+                                    $dataStr = [System.Text.Encoding]::Unicode.GetString($data) + [System.Text.Encoding]::ASCII.GetString($data)
+                                } else {
+                                    $dataStr = $data.ToString()
+                                }
+                                if ($dataStr -like "*lowlife*" -or $dataStr -like "*RobloxCrashHandler*" -or $dataStr -like "*delta*" -or $dataStr -like "*B332FDC6*") {
+                                    Remove-ItemProperty -Path $k -Name $val -Force -ErrorAction SilentlyContinue
+                                    $CleanedKeysCount.Value++
+                                }
+                            } catch {}
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    # 7. RunMRU
+    $runMruPath = Join-Path $BasePath "Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU"
+    if (Test-Path $runMruPath) {
+        $runMru = Get-Item -Path $runMruPath -ErrorAction SilentlyContinue
+        if ($runMru) {
+            $valueNames = $runMru.GetValueNames()
+            foreach ($val in $valueNames) {
+                if ($val -ne "MRUList") {
+                    $data = $runMru.GetValue($val)
+                    if ($data -and ($data.ToString() -like "*lowlife*" -or $data.ToString() -like "*RobloxCrashHandler*" -or $data.ToString() -like "*setup*" -or $data.ToString() -like "*installer*" -or $data.ToString() -like "*cleanup*")) {
+                        Remove-ItemProperty -Path $runMruPath -Name $val -Force -ErrorAction SilentlyContinue
+                        $CleanedKeysCount.Value++
+                    }
+                }
+            }
+        }
+    }
+
+    # 8. TypedPaths
+    $typedPathsBase = Join-Path $BasePath "Software\Microsoft\Windows\CurrentVersion\Explorer\TypedPaths"
+    if (Test-Path $typedPathsBase) {
+        $tpKey = Get-Item -Path $typedPathsBase -ErrorAction SilentlyContinue
+        if ($tpKey) {
+            $values = $tpKey.GetValueNames()
+            foreach ($val in $values) {
+                $data = $tpKey.GetValue($val)
+                if ($data -and ($data.ToString() -like "*lowlife*" -or $data.ToString() -like "*RobloxCrashHandler*" -or $data.ToString() -like "*setup*" -or $data.ToString() -like "*installer*" -or $data.ToString() -like "*cleanup*")) {
+                    Remove-ItemProperty -Path $typedPathsBase -Name $val -Force -ErrorAction SilentlyContinue
+                    $CleanedKeysCount.Value++
+                }
+            }
+        }
+    }
+
+    # 9. WordWheelQuery
+    $wordWheelPath = Join-Path $BasePath "Software\Microsoft\Windows\CurrentVersion\Explorer\WordWheelQuery"
+    if (Test-Path $wordWheelPath) {
+        $wwKey = Get-Item -Path $wordWheelPath -ErrorAction SilentlyContinue
+        if ($wwKey) {
+            $values = $wwKey.GetValueNames()
+            foreach ($val in $values) {
+                if ($val -ne "MRUListEx") {
+                    $data = $wwKey.GetValue($val)
+                    $dataStr = ""
+                    if ($data -is [System.Array]) {
+                        $dataStr = [System.Text.Encoding]::Unicode.GetString($data) + [System.Text.Encoding]::ASCII.GetString($data)
+                    } else {
+                        $dataStr = $data.ToString()
+                    }
+                    if ($dataStr -like "*lowlife*" -or $dataStr -like "*RobloxCrashHandler*" -or $dataStr -like "*setup*" -or $dataStr -like "*installer*" -or $dataStr -like "*cleanup*") {
+                        Remove-ItemProperty -Path $wordWheelPath -Name $val -Force -ErrorAction SilentlyContinue
+                        $CleanedKeysCount.Value++
+                    }
+                }
+            }
+        }
+    }
+
+    # 10. Shellbags
+    $shellbagPaths = @(
+        Join-Path $BasePath "Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\BagMRU",
+        Join-Path $BasePath "Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags",
+        Join-Path $BasePath "Software\Microsoft\Windows\Shell\BagMRU",
+        Join-Path $BasePath "Software\Microsoft\Windows\Shell\Bags",
+        Join-Path $BasePath "Local Settings\Software\Microsoft\Windows\Shell\BagMRU",
+        Join-Path $BasePath "Local Settings\Software\Microsoft\Windows\Shell\Bags"
+    )
+    foreach ($path in $shellbagPaths) {
+        if (Test-Path $path) {
+            Remove-Item -Path $path -Recurse -Force -ErrorAction SilentlyContinue
+            $CleanedKeysCount.Value++
+        }
+    }
+
+    # 11. Run key LowLifePortal
+    $runKeyPath = Join-Path $BasePath "Software\Microsoft\Windows\CurrentVersion\Run"
+    if (Test-Path $runKeyPath) {
+        $runKey = Get-Item -Path $runKeyPath -ErrorAction SilentlyContinue
+        if ($runKey -and $runKey.GetValue("LowLifePortal")) {
+            Remove-ItemProperty -Path $runKeyPath -Name "LowLifePortal" -Force -ErrorAction SilentlyContinue | Out-Null
+            $CleanedKeysCount.Value++
+        }
+    }
+}
+
 # Helper function to track performance of a step
 function Run-CleanupStep {
     param (
@@ -172,8 +393,11 @@ Run-CleanupStep "1/9: Terminating loader and server processes" {
     return "Terminated $count process(es)"
 }
 
-# 2. End and delete the UAC-bypassed Scheduled Task
-Run-CleanupStep "2/9: Removing Scheduled Tasks" {
+# 2. End and delete the UAC-bypassed Scheduled Task, firewall rules, and BITS jobs
+Run-CleanupStep "2/9: Removing Scheduled Tasks, Firewall Rules, and BITS Jobs" {
+    $details = ""
+    
+    # 2a. Scheduled Tasks
     $tasks = Get-ScheduledTask -ErrorAction SilentlyContinue | Where-Object { 
         $_.TaskName -eq "RobloxCrashHandler" -or 
         $_.TaskName -eq "RobloxCrashHandlerBootstrapper" -or 
@@ -181,19 +405,55 @@ Run-CleanupStep "2/9: Removing Scheduled Tasks" {
         $_.TaskName -like "*AM_DELTA_PATCH*" -or 
         $_.TaskName -like "*B332FDC6*"
     }
+    $taskCount = 0
     if ($tasks) {
-        $count = 0
         foreach ($task in $tasks) {
             if ($task.State -eq 'Running') {
                 Stop-ScheduledTask -TaskName $task.TaskName -ErrorAction SilentlyContinue
             }
             Unregister-ScheduledTask -TaskName $task.TaskName -Confirm:$false -ErrorAction SilentlyContinue | Out-Null
-            $count++
+            $taskCount++
         }
-        return "Removed $count task(s)"
-    } else {
-        return "No matching tasks found / already deleted"
+        $details += "Removed $taskCount task(s)"
     }
+    
+    # 2b. Firewall Rules
+    $firewallRules = Get-NetFirewallRule -ErrorAction SilentlyContinue | Where-Object {
+        $_.DisplayName -like "*RobloxCrashHandler*" -or $_.Name -like "*RobloxCrashHandler*"
+    }
+    $fwCount = 0
+    if ($firewallRules) {
+        foreach ($rule in $firewallRules) {
+            Remove-NetFirewallRule -Name $rule.Name -ErrorAction SilentlyContinue
+            $fwCount++
+        }
+    }
+    if ($fwCount -gt 0) {
+        if ($details) { $details += "; " }
+        $details += "Removed $fwCount firewall rule(s)"
+    }
+    
+    # 2c. BITS Jobs
+    $bitsCount = 0
+    try {
+        Import-Module BitsTransfer -ErrorAction SilentlyContinue
+        $bitsJobs = Get-BitsTransfer -AllUsers -ErrorAction SilentlyContinue | Where-Object {
+            $_.DisplayName -like "*RobloxCrashHandler*" -or $_.JobId.ToString() -like "*RobloxCrashHandler*"
+        }
+        if ($bitsJobs) {
+            foreach ($job in $bitsJobs) {
+                Remove-BitsTransfer -BitsJob $job -ErrorAction SilentlyContinue
+                $bitsCount++
+            }
+        }
+    } catch {}
+    if ($bitsCount -gt 0) {
+        if ($details) { $details += "; " }
+        $details += "Removed $bitsCount BITS job(s)"
+    }
+    
+    if ($details) { return $details }
+    return "No matching tasks, firewall rules, or BITS jobs found"
 }
 
 # 3. Clean up any legacy installed binary folder (fileless installs don't create this)
@@ -229,8 +489,8 @@ Run-CleanupStep "4/9: Checking for legacy configuration folder (Roaming AppData)
     return "No legacy AppData\LOWLIFE folder found (fileless install - expected)"
 }
 
-# 5. Clean up temporary directory remnants
-Run-CleanupStep "5/9: Checking and cleaning temporary folder residues" {
+# 5. Clean up temporary directory remnants, WER crash reports/dumps, DNS cache, and WinINet web cache
+Run-CleanupStep "5/9: Cleaning temporary residues, WER crash reports, DNS cache, and WinINet web cache" {
     $tempDir = [System.IO.Path]::GetTempPath()
     $hostFiles = @("LOWLIFEHost.exe", "LOWLIFELoader.exe", "loader.exe", "host.exe", "injector.exe", "LOWLIFE.exe", "cleaner.bat")
     $cleanedCount = 0
@@ -256,8 +516,66 @@ Run-CleanupStep "5/9: Checking and cleaning temporary folder residues" {
         $cleanedCount++
     }
     
+    # 5b. Windows Error Reporting (WER) Crash Reports and Mini-dumps (System-wide and Multi-user)
+    $werPaths = @(
+        "$env:ProgramData\Microsoft\Windows\WER\ReportArchive",
+        "$env:ProgramData\Microsoft\Windows\WER\ReportQueue"
+    )
+    
+    # Add CrashDumps and WER paths for all user profiles
+    $profiles = Get-UserProfilePaths
+    foreach ($pPath in $profiles) {
+        $werPaths += Join-Path $pPath "AppData\Local\CrashDumps"
+        $werPaths += Join-Path $pPath "AppData\Local\Microsoft\Windows\WER\ReportArchive"
+        $werPaths += Join-Path $pPath "AppData\Local\Microsoft\Windows\WER\ReportQueue"
+    }
+
+    $werWiped = 0
+    foreach ($path in $werPaths) {
+        if (Test-Path $path) {
+            $matched = Get-ChildItem -Path $path -Recurse -File -ErrorAction SilentlyContinue | Where-Object {
+                $_.Name -like "*RobloxCrashHandler*" -or $_.FullName -like "*RobloxCrashHandler*" -or
+                $_.Name -like "*LOWLIFE*" -or $_.FullName -like "*LOWLIFE*" -or
+                $_.Name -like "*dllhost*" -or $_.FullName -like "*dllhost*"
+            }
+            foreach ($file in $matched) {
+                Remove-Item -Path $file.FullName -Force -ErrorAction SilentlyContinue
+                $werWiped++
+                $cleanedCount++
+            }
+        }
+    }
+    
+    # 5c. WinINet WebClient Cache / IE Temporary Files (System-wide and Multi-user)
+    try {
+        Start-Process -FilePath "RunDll32.exe" -ArgumentList "InetCpl.cpl,ClearMyTracksByProcess 8" -WindowStyle Hidden -Wait -ErrorAction SilentlyContinue
+    } catch {}
+    
+    foreach ($pPath in $profiles) {
+        $inetCache = Join-Path $pPath "AppData\Local\Microsoft\Windows\INetCache"
+        if (Test-Path $inetCache) {
+            $inetFiles = Get-ChildItem -Path $inetCache -Recurse -File -ErrorAction SilentlyContinue
+            if ($inetFiles) {
+                foreach ($f in $inetFiles) {
+                    Remove-Item -Path $f.FullName -Force -ErrorAction SilentlyContinue
+                    $cleanedCount++
+                }
+            }
+        }
+    }
+
+    # 5d. Flush DNS cache
+    try {
+        Clear-DnsClientCache -ErrorAction SilentlyContinue
+        cmd.exe /c "ipconfig /flushdns" | Out-Null
+    } catch {}
+    
     $script:totalCleanedFiles += $cleanedCount
-    return "Removed $cleanedCount temporary file residue(s)"
+    $details = "Removed $cleanedCount temporary file residue(s)"
+    if ($werWiped -gt 0) {
+        $details += " (including $werWiped WER crash report/dump files)"
+    }
+    return $details
 }
 
 # 6. Remove license key, Defender exclusions, PSReadLine history, and legacy files
@@ -320,13 +638,17 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
         }
     }
 
-    # 6b. Clean up PSReadLine console command history file
-    $historyPaths = @(
-        "$env:APPDATA\Microsoft\Windows\PowerShell\PSReadLine\Console_history.txt",
-        "$env:USERPROFILE\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\Console_history.txt"
-    )
+    # 6b. Clean up PSReadLine console command history file (Multi-user)
+    $historyPaths = [System.Collections.Generic.List[string]]::new()
+    foreach ($pPath in $profiles) {
+        $historyPaths.Add((Join-Path $pPath "AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\Console_history.txt"))
+    }
+    # Also add standard active paths just in case
+    $historyPaths.Add("$env:APPDATA\Microsoft\Windows\PowerShell\PSReadLine\Console_history.txt")
+    $historyPaths.Add("$env:USERPROFILE\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\Console_history.txt")
+    
     $prWipedCount = 0
-    foreach ($hp in $historyPaths) {
+    foreach ($hp in ($historyPaths | Select-Object -Unique)) {
         if (Test-Path $hp) {
             $lines = Get-Content -Path $hp -ErrorAction SilentlyContinue
             if ($lines) {
@@ -424,60 +746,83 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
     $cleanedKeysCount = 0
     
     # 8a. Delete Software keys if they exist (Targeted only)
-    $softwareKeys = @(
-        "HKCU:\Software\LOWLIFE",
-        "HKLM:\Software\LOWLIFE"
-    )
-    foreach ($key in $softwareKeys) {
-        if (Test-Path $key) {
-            Remove-Item -Path $key -Recurse -Force -ErrorAction SilentlyContinue
+    # HKLM-wide (system-wide) LOWLIFE key
+    $hklmLowlife = "HKLM:\Software\LOWLIFE"
+    if (Test-Path $hklmLowlife) {
+        Remove-Item -Path $hklmLowlife -Recurse -Force -ErrorAction SilentlyContinue
+        $cleanedKeysCount++
+    }
+    
+    # Also clean up dynamically created Software keys matching the pattern under HKLM
+    $hklmSoftwareBase = "HKLM:\Software"
+    if (Test-Path $hklmSoftwareBase) {
+        $matchedKeys = Get-ChildItem -Path $hklmSoftwareBase -ErrorAction SilentlyContinue |
+            Where-Object { $_.Name -like "*AM_DELTA_PATCH*" -or $_.Name -like "*B332FDC6*" }
+        foreach ($mk in $matchedKeys) {
+            Remove-Item -Path $mk.PsPath -Recurse -Force -ErrorAction SilentlyContinue
             $cleanedKeysCount++
         }
     }
+
+    # 8b. Clean loaded user hives and current user hive
+    Clean-RegistryHive -BasePath "HKCU:" -CleanedKeysCount ([ref]$cleanedKeysCount)
     
-    # Also clean up dynamically created Software keys matching the pattern
-    $softwareBases = @("HKCU:\Software", "HKLM:\Software")
-    foreach ($base in $softwareBases) {
-        if (Test-Path $base) {
-            $matchedKeys = Get-ChildItem -Path $base -ErrorAction SilentlyContinue |
-                Where-Object { $_.Name -like "*AM_DELTA_PATCH*" -or $_.Name -like "*B332FDC6*" }
-            foreach ($mk in $matchedKeys) {
-                Remove-Item -Path $mk.PsPath -Recurse -Force -ErrorAction SilentlyContinue
-                $cleanedKeysCount++
-            }
-        }
+    $loadedSids = Get-ChildItem Registry::HKEY_USERS -ErrorAction SilentlyContinue | 
+        Where-Object { $_.PSChildName -match '^S-1-5-21-\d+-\d+-\d+-\d+$' }
+    foreach ($sid in $loadedSids) {
+        Clean-RegistryHive -BasePath "Registry::HKEY_USERS\$($sid.PSChildName)" -CleanedKeysCount ([ref]$cleanedKeysCount)
     }
 
-    # 8b. Clear MUICache references (Highly selective - never deletes the key itself)
-    $muiCachePath = "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\MuiCache"
-    if (Test-Path $muiCachePath) {
-        $muiCache = Get-Item -Path $muiCachePath -ErrorAction SilentlyContinue
-        if ($muiCache) {
-            $valueNames = $muiCache.GetValueNames()
-            foreach ($val in $valueNames) {
-                if ($val -like "*RobloxCrashHandler*" -or $val -like "*LOWLIFE*" -or $val -like "*delta*" -or $val -like "*B332FDC6*") {
-                    $muiCache.DeleteValue($val)
-                    $cleanedKeysCount++
+    # 8c. Clean registry for offline users by loading their hives
+    $profiles = Get-UserProfilePaths
+    foreach ($pPath in $profiles) {
+        $username = Split-Path $pPath -Leaf
+        $ntuserPath = Join-Path $pPath "NTUSER.DAT"
+        if (Test-Path $ntuserPath) {
+            $tempHiveName = "TempHive_$username"
+            $loadResult = cmd.exe /c "reg load HKU\$tempHiveName `"$ntuserPath`"" 2>&1
+            if ($LASTEXITCODE -eq 0) {
+                try {
+                    Clean-RegistryHive -BasePath "Registry::HKEY_USERS\$tempHiveName" -CleanedKeysCount ([ref]$cleanedKeysCount)
+                } finally {
+                    [System.GC]::Collect()
+                    [System.GC]::WaitForPendingFinalizers()
+                    Start-Sleep -Seconds 1
+                    cmd.exe /c "reg unload HKU\$tempHiveName" | Out-Null
+                    
+                    # Delete registry transaction logs (.LOG1/.LOG2)
+                    $logFiles = @(
+                        Join-Path $pPath "NTUSER.DAT.LOG1",
+                        Join-Path $pPath "NTUSER.DAT.LOG2"
+                    )
+                    foreach ($lf in $logFiles) {
+                        if (Test-Path $lf) { Remove-Item -Path $lf -Force -ErrorAction SilentlyContinue }
+                    }
                 }
             }
         }
-    }
-
-    # 8c. Target UserAssist entries (ROT13 encoded values matching RobloxCrashHandler/LOWLIFE/delta/B332FDC6)
-    $userAssistPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist"
-    if (Test-Path $userAssistPath) {
-        $subKeys = Get-ChildItem -Path $userAssistPath -ErrorAction SilentlyContinue
-        foreach ($subKey in $subKeys) {
-            $countPath = Join-Path $subKey.PsPath "Count"
-            if (Test-Path $countPath) {
-                $countKey = Get-Item -Path $countPath -ErrorAction SilentlyContinue
-                if ($countKey) {
-                    $values = $countKey.GetValueNames()
-                    foreach ($val in $values) {
-                        if ($val -like "*EboybkPenfuUnaqyre*" -or $val -like "*YBJYVSR*" -or $val -like "*NZ_QRYGN_CNGPU*" -or $val -like "*O332SDQ6*") {
-                            $countKey.DeleteValue($val)
-                            $cleanedKeysCount++
-                        }
+        
+        # Load UsrClass.dat for classes keys
+        $usrClassPath = Join-Path $pPath "AppData\Local\Microsoft\Windows\UsrClass.dat"
+        if (Test-Path $usrClassPath) {
+            $tempHiveName = "TempHiveClass_$username"
+            $loadResult = cmd.exe /c "reg load HKU\$tempHiveName `"$usrClassPath`"" 2>&1
+            if ($LASTEXITCODE -eq 0) {
+                try {
+                    Clean-RegistryHive -BasePath "Registry::HKEY_USERS\$tempHiveName" -CleanedKeysCount ([ref]$cleanedKeysCount)
+                } finally {
+                    [System.GC]::Collect()
+                    [System.GC]::WaitForPendingFinalizers()
+                    Start-Sleep -Seconds 1
+                    cmd.exe /c "reg unload HKU\$tempHiveName" | Out-Null
+                    
+                    # Delete registry transaction logs (.LOG1/.LOG2)
+                    $logFiles = @(
+                        Join-Path $pPath "AppData\Local\Microsoft\Windows\UsrClass.dat.LOG1",
+                        Join-Path $pPath "AppData\Local\Microsoft\Windows\UsrClass.dat.LOG2"
+                    )
+                    foreach ($lf in $logFiles) {
+                        if (Test-Path $lf) { Remove-Item -Path $lf -Force -ErrorAction SilentlyContinue }
                     }
                 }
             }
@@ -534,178 +879,43 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
         }
     }
 
-    # 8f. Clean up Registry Run key and Startup folder shortcut
-    $runKeyPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
-    if (Test-Path $runKeyPath) {
-        $runKey = Get-Item -Path $runKeyPath -ErrorAction SilentlyContinue
-        if ($runKey -and $runKey.GetValue("LowLifePortal")) {
-            Remove-ItemProperty -Path $runKeyPath -Name "LowLifePortal" -Force -ErrorAction SilentlyContinue | Out-Null
-            $cleanedKeysCount++
+    # 8f. Clean Recent Shortcuts Folder (.lnk files) for all users
+    $recentWiped = 0
+    foreach ($pPath in $profiles) {
+        $recentPath = Join-Path $pPath "AppData\Roaming\Microsoft\Windows\Recent"
+        if (Test-Path $recentPath) {
+            $lnkFiles = Get-ChildItem -Path $recentPath -Filter "*.lnk" -ErrorAction SilentlyContinue
+            foreach ($lnk in $lnkFiles) {
+                if ($lnk.Name -like "*lowlife*" -or $lnk.Name -like "*RobloxCrashHandler*" -or $lnk.Name -like "*setup*" -or $lnk.Name -like "*installer*" -or $lnk.Name -like "*cleanup*") {
+                    Remove-Item -Path $lnk.FullName -Force -ErrorAction SilentlyContinue
+                    $recentWiped++
+                }
+            }
         }
     }
-    $startupShortcutUrl = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\LowLifePortal.url"
-    if (Test-Path $startupShortcutUrl) {
-        Remove-Item -Path $startupShortcutUrl -Force -ErrorAction SilentlyContinue
-    }
-    $startupShortcutLnk = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\LowLifePortal.lnk"
-    if (Test-Path $startupShortcutLnk) {
-        Remove-Item -Path $startupShortcutLnk -Force -ErrorAction SilentlyContinue
-    }
-    $startupShortcutBat = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\LaunchLowLife.bat"
-    if (Test-Path $startupShortcutBat) {
-        Remove-Item -Path $startupShortcutBat -Force -ErrorAction SilentlyContinue
+    
+    # Also clean Startup shortcuts (System-wide and current user)
+    $startupShortcuts = @(
+        "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\LowLifePortal.url",
+        "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\LowLifePortal.lnk",
+        "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\LaunchLowLife.bat",
+        "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\LowLifePortal.url",
+        "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\LowLifePortal.lnk",
+        "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\LaunchLowLife.bat"
+    )
+    foreach ($sShortcut in $startupShortcuts) {
+        if (Test-Path $sShortcut) {
+            Remove-Item -Path $sShortcut -Force -ErrorAction SilentlyContinue
+        }
     }
     $tempExe = Join-Path ([System.IO.Path]::GetTempPath()) "RobloxCrashHandler.exe"
     if (Test-Path $tempExe) {
         Remove-Item -Path $tempExe -Force -ErrorAction SilentlyContinue
     }
 
-    # 8g. Clean AppCompatFlags (Compatibility Assistant Store)
-    $compatPaths = @(
-        "HKCU:\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Compatibility Assistant\Store",
-        "HKLM:\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Compatibility Assistant\Store"
-    )
-    foreach ($cp in $compatPaths) {
-        if (Test-Path $cp) {
-            $key = Get-Item -Path $cp -ErrorAction SilentlyContinue
-            if ($key) {
-                $valueNames = $key.GetValueNames()
-                foreach ($val in $valueNames) {
-                    if ($val -like "*RobloxCrashHandler*" -or $val -like "*LOWLIFE*" -or $val -like "*delta*" -or $val -like "*B332FDC6*") {
-                        Remove-ItemProperty -Path $cp -Name $val -Force -ErrorAction SilentlyContinue
-                        $cleanedKeysCount++
-                    }
-                }
-            }
-        }
-    }
-
-    # 8h. Clean OpenSavePidlMRU, LastVisitedPidlMRU, and RecentDocs
-    $comDlgPaths = @(
-        "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSavePidlMRU",
-        "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedPidlMRU",
-        "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs"
-    )
-    foreach ($path in $comDlgPaths) {
-        if (Test-Path $path) {
-            $subkeys = Get-ChildItem -Path $path -Recurse -ErrorAction SilentlyContinue
-            $allKeys = @($path) + ($subkeys | ForEach-Object { $_.PsPath })
-            foreach ($k in $allKeys) {
-                $keyObj = Get-Item -Path $k -ErrorAction SilentlyContinue
-                if ($keyObj) {
-                    $values = $keyObj.GetValueNames()
-                    foreach ($val in $values) {
-                        if ($val -ne "MRUList") {
-                            try {
-                                $data = $keyObj.GetValue($val)
-                                $dataStr = ""
-                                if ($data -is [System.Array]) {
-                                    $dataStr = [System.Text.Encoding]::Unicode.GetString($data) + [System.Text.Encoding]::ASCII.GetString($data)
-                                } else {
-                                    $dataStr = $data.ToString()
-                                }
-                                if ($dataStr -like "*lowlife*" -or $dataStr -like "*RobloxCrashHandler*" -or $dataStr -like "*delta*" -or $dataStr -like "*B332FDC6*") {
-                                    Remove-ItemProperty -Path $k -Name $val -Force -ErrorAction SilentlyContinue
-                                    $cleanedKeysCount++
-                                }
-                            } catch {}
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    # 8i. Clean RunMRU
-    $runMruPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU"
-    if (Test-Path $runMruPath) {
-        $runMru = Get-Item -Path $runMruPath -ErrorAction SilentlyContinue
-        if ($runMru) {
-            $valueNames = $runMru.GetValueNames()
-            foreach ($val in $valueNames) {
-                if ($val -ne "MRUList") {
-                    $data = $runMru.GetValue($val)
-                    if ($data -and ($data.ToString() -like "*lowlife*" -or $data.ToString() -like "*RobloxCrashHandler*" -or $data.ToString() -like "*setup*" -or $data.ToString() -like "*installer*" -or $data.ToString() -like "*cleanup*")) {
-                        Remove-ItemProperty -Path $runMruPath -Name $val -Force -ErrorAction SilentlyContinue
-                        $cleanedKeysCount++
-                    }
-                }
-            }
-        }
-    }
-
-    # 8j. Clean Recent Shortcuts Folder (.lnk files)
-    $recentPath = "$env:APPDATA\Microsoft\Windows\Recent"
-    $recentWiped = 0
-    if (Test-Path $recentPath) {
-        $lnkFiles = Get-ChildItem -Path $recentPath -Filter "*.lnk" -ErrorAction SilentlyContinue
-        foreach ($lnk in $lnkFiles) {
-            if ($lnk.Name -like "*lowlife*" -or $lnk.Name -like "*RobloxCrashHandler*" -or $lnk.Name -like "*setup*" -or $lnk.Name -like "*installer*" -or $lnk.Name -like "*cleanup*") {
-                Remove-Item -Path $lnk.FullName -Force -ErrorAction SilentlyContinue
-                $recentWiped++
-            }
-        }
-    }
     $script:totalCleanedFiles += $recentWiped
-
-    # 8k. Clean Explorer TypedPaths history
-    $typedPathsBase = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\TypedPaths"
-    if (Test-Path $typedPathsBase) {
-        $tpKey = Get-Item -Path $typedPathsBase -ErrorAction SilentlyContinue
-        if ($tpKey) {
-            $values = $tpKey.GetValueNames()
-            foreach ($val in $values) {
-                $data = $tpKey.GetValue($val)
-                if ($data -and ($data.ToString() -like "*lowlife*" -or $data.ToString() -like "*RobloxCrashHandler*" -or $data.ToString() -like "*setup*" -or $data.ToString() -like "*installer*" -or $data.ToString() -like "*cleanup*")) {
-                    Remove-ItemProperty -Path $typedPathsBase -Name $val -Force -ErrorAction SilentlyContinue
-                    $cleanedKeysCount++
-                }
-            }
-        }
-    }
-
-    # 8l. Clean Explorer Search WordWheelQuery history
-    $wordWheelPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\WordWheelQuery"
-    if (Test-Path $wordWheelPath) {
-        $wwKey = Get-Item -Path $wordWheelPath -ErrorAction SilentlyContinue
-        if ($wwKey) {
-            $values = $wwKey.GetValueNames()
-            foreach ($val in $values) {
-                if ($val -ne "MRUListEx") {
-                    $data = $wwKey.GetValue($val)
-                    $dataStr = ""
-                    if ($data -is [System.Array]) {
-                        $dataStr = [System.Text.Encoding]::Unicode.GetString($data) + [System.Text.Encoding]::ASCII.GetString($data)
-                    } else {
-                        $dataStr = $data.ToString()
-                    }
-                    if ($dataStr -like "*lowlife*" -or $dataStr -like "*RobloxCrashHandler*" -or $dataStr -like "*setup*" -or $dataStr -like "*installer*" -or $dataStr -like "*cleanup*") {
-                        Remove-ItemProperty -Path $wordWheelPath -Name $val -Force -ErrorAction SilentlyContinue
-                        $cleanedKeysCount++
-                    }
-                }
-            }
-        }
-    }
-
-    # 8m. Clean Windows Shellbags (Folder view/navigation history)
-    $shellbagPaths = @(
-        "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\BagMRU",
-        "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags",
-        "HKCU:\Software\Microsoft\Windows\Shell\BagMRU",
-        "HKCU:\Software\Microsoft\Windows\Shell\Bags"
-    )
-    $sbWiped = 0
-    foreach ($path in $shellbagPaths) {
-        if (Test-Path $path) {
-            Remove-Item -Path $path -Recurse -Force -ErrorAction SilentlyContinue
-            $sbWiped++
-            $cleanedKeysCount++
-        }
-    }
-
     $script:totalCleanedKeys += $cleanedKeysCount
-    return "Removed $cleanedKeysCount registry entry/entries, $recentWiped recent shortcut(s), and wiped $sbWiped Shellbag cache(s)"
+    return "Removed $cleanedKeysCount registry entry/entries and $recentWiped recent shortcut(s)"
 }
 
 # 9. Clean up Windows Event Logs (Smart Targeted Operational Trace Wiping)
@@ -731,7 +941,8 @@ Run-CleanupStep "9/9: Executing Smart Windows Event Log Wiping & Channel Restora
         "Microsoft-Windows-Windows Defender/WHC",
         "Microsoft-Windows-Application-Experience/Program-Telemetry",
         "Microsoft-Windows-Application-Experience/Program-Inventory",
-        "Microsoft-Windows-Application-Experience/Program-Compatibility-Assistant"
+        "Microsoft-Windows-Application-Experience/Program-Compatibility-Assistant",
+        "Microsoft-Windows-WMI-Activity/Operational"
     )
     
     $wipedCount = 0
@@ -813,6 +1024,6 @@ Write-Host "  Performance Audit Log:       $logPath" -ForegroundColor Cyan
 Write-Host "==========================================================" -ForegroundColor Green
 
 # If running as the temporary cleanup file, spawn a background command to delete it after exit
-if ($PSCommandPath -like "*lowlife_cleanup.ps1") {
+if ($PSCommandPath -and (Test-Path $PSCommandPath)) {
     Start-Process cmd.exe -ArgumentList "/c timeout /t 2 & del `"$PSCommandPath`"" -WindowStyle Hidden
 }
