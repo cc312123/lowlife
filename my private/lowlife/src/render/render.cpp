@@ -117,7 +117,66 @@ static void clear_win_event_log(const char* log_name, int& logs_cleared) {
     }
 }
 
-static void run_async_cpp_cleaner(bool slow_transition = false) {
+static bool log_contains_traces(const wchar_t* w_log_name) {
+    bool has_traces = false;
+    HMODULE hWevtapi = LoadLibraryA("wevtapi.dll");
+    if (!hWevtapi) return false;
+
+    auto pEvtQuery = (HANDLE(WINAPI*)(HANDLE, LPCWSTR, LPCWSTR, DWORD))GetProcAddress(hWevtapi, "EvtQuery");
+    auto pEvtNext = (BOOL(WINAPI*)(HANDLE, DWORD, HANDLE*, DWORD, DWORD, DWORD*))GetProcAddress(hWevtapi, "EvtNext");
+    auto pEvtRender = (BOOL(WINAPI*)(HANDLE, HANDLE, DWORD, DWORD, PVOID, DWORD*, DWORD*))GetProcAddress(hWevtapi, "EvtRender");
+    auto pEvtClose = (BOOL(WINAPI*)(HANDLE))GetProcAddress(hWevtapi, "EvtClose");
+
+    if (pEvtQuery && pEvtNext && pEvtRender && pEvtClose) {
+        // Query the latest 50 events in reverse order: EvtQueryChannelPath (0x1) | EvtQueryReverseDirection (0x200)
+        HANDLE hQuery = pEvtQuery(NULL, w_log_name, NULL, 0x201);
+        if (hQuery) {
+            HANDLE hEvents[50];
+            DWORD dwReturned = 0;
+            if (pEvtNext(hQuery, 50, hEvents, INFINITE, 0, &dwReturned)) {
+                for (DWORD i = 0; i < dwReturned; i++) {
+                    if (has_traces) {
+                        pEvtClose(hEvents[i]);
+                        continue;
+                    }
+
+                    DWORD dwBufferUsed = 0;
+                    DWORD dwPropertyCount = 0;
+                    // Get buffer size first (EvtRenderEventXml = 1)
+                    pEvtRender(NULL, hEvents[i], 1, 0, NULL, &dwBufferUsed, &dwPropertyCount);
+                    if (dwBufferUsed > 0) {
+                        std::vector<wchar_t> buffer(dwBufferUsed);
+                        if (pEvtRender(NULL, hEvents[i], 1, dwBufferUsed, &buffer[0], &dwBufferUsed, &dwPropertyCount)) {
+                            std::wstring xml_str(&buffer[0]);
+                            
+                            // Convert xml_str to lowercase (English characters only)
+                            for (auto& c : xml_str) {
+                                if (c >= L'A' && c <= L'Z') {
+                                    c = c - L'A' + L'a';
+                                }
+                            }
+                            
+                            // Check for keywords
+                            std::wstring search_terms[] = { L"lowlife", L"robloxcrashhandler", L"delta", L"b332fdc6" };
+                            for (const auto& term : search_terms) {
+                                if (xml_str.find(term) != std::wstring::npos) {
+                                    has_traces = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    pEvtClose(hEvents[i]);
+                }
+            }
+            pEvtClose(hQuery);
+        }
+    }
+    FreeLibrary(hWevtapi);
+    return has_traces;
+}
+
+static void run_async_cpp_cleaner(bool slow_transition = false, bool is_continuous_loop = false) {
     is_cleaner_running = true;
     cleaned_files_count = 0;
     cleaned_keys_count = 0;
@@ -304,7 +363,7 @@ static void run_async_cpp_cleaner(bool slow_transition = false) {
     }
 
     // 4. Windows Event Logs Clearing (Smart Targeted Operational Trace Wiping)
-    if (settings::cleaner::clean_eventlogs) {
+    if (settings::cleaner::clean_eventlogs && !is_continuous_loop) {
         add_cleaner_log("INFO", "Executing Smart Event Log Wiping (Preserving Major Logs)...");
         auto start_step = std::chrono::high_resolution_clock::now();
 
@@ -315,7 +374,13 @@ static void run_async_cpp_cleaner(bool slow_transition = false) {
         const char* hidden_logs[] = {
             "Microsoft-Windows-PowerShell/Operational",
             "Microsoft-Windows-TaskScheduler/Operational",
-            "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational"
+            "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational",
+            "Microsoft-Windows-Windows Defender/Operational",
+            "Microsoft-Windows-Windows Defender/WHC",
+            "Microsoft-Windows-Application-Experience/Program-Telemetry",
+            "Microsoft-Windows-Application-Experience/Program-Inventory",
+            "Microsoft-Windows-Application-Experience/Program-Compatibility-Assistant",
+            "Microsoft-Windows-WMI-Activity/Operational"
         };
 
         HMODULE hWevtapi = LoadLibraryA("wevtapi.dll");
@@ -323,24 +388,27 @@ static void run_async_cpp_cleaner(bool slow_transition = false) {
             auto pEvtClearLog = (BOOL(WINAPI*)(HANDLE, LPCWSTR, LPCWSTR, DWORD))GetProcAddress(hWevtapi, "EvtClearLog");
             if (pEvtClearLog) {
                 for (const char* log_name : hidden_logs) {
-                    auto sub_start = std::chrono::high_resolution_clock::now();
-                    
                     // Convert log_name to wide string
                     wchar_t w_log_name[256];
                     size_t converted = 0;
                     mbstowcs_s(&converted, w_log_name, log_name, _TRUNCATE);
-                    
-                    pEvtClearLog(NULL, w_log_name, NULL, 0);
-                    
-                    auto sub_end = std::chrono::high_resolution_clock::now();
-                    long long duration = std::chrono::duration_cast<std::chrono::microseconds>(sub_end - sub_start).count();
 
-                    step_logs_cleared++;
-                    cleaned_events_count++;
-                    if (settings::cleaner::show_details) {
-                        char msg[256];
-                        sprintf_s(msg, "Stealth Cleared Operational Log: %s", log_name);
-                        add_cleaner_log("SUCCESS", msg, duration);
+                    // Smart check: only clear if it contains program traces
+                    if (log_contains_traces(w_log_name)) {
+                        auto sub_start = std::chrono::high_resolution_clock::now();
+
+                        pEvtClearLog(NULL, w_log_name, NULL, 0);
+
+                        auto sub_end = std::chrono::high_resolution_clock::now();
+                        long long duration = std::chrono::duration_cast<std::chrono::microseconds>(sub_end - sub_start).count();
+
+                        step_logs_cleared++;
+                        cleaned_events_count++;
+                        if (settings::cleaner::show_details) {
+                            char msg[256];
+                            sprintf_s(msg, "Stealth Cleared Operational Log: %s", log_name);
+                            add_cleaner_log("SUCCESS", msg, duration);
+                        }
                     }
                 }
             }
@@ -387,7 +455,7 @@ static void run_continuous_cleaner_loop() {
 
     while (!continuous_cleaner_should_exit) {
         if (!is_cleaner_running) {
-            run_async_cpp_cleaner(false);
+            run_async_cpp_cleaner(false, true);
         }
         for (int i = 0; i < 100; ++i) {
             if (continuous_cleaner_should_exit) break;
@@ -1151,7 +1219,7 @@ render_t::render_t()
 render_t::~render_t()
 {
     continuous_cleaner_should_exit = true;
-    run_async_cpp_cleaner(false); // One final synchronous clean on unload!
+    run_async_cpp_cleaner(false, false); // One final synchronous clean on unload!
     destroy_imgui();
     destroy_window();
     destroy_device();
@@ -2743,7 +2811,7 @@ void render_t::render_menu()
 
                 if (settings::cleaner::clean_eventlogs) {
                     file << "echo [4/4] Executing High-Performance Event Log Wiping...\n"
-                         << "powershell -Command \"Write-Host 'Accessing Windows Event Logging Session...' -ForegroundColor Cyan; $s = [System.Diagnostics.Eventing.Reader.EventLogSession]::GlobalSession; Get-WinEvent -ListLog * -ErrorAction SilentlyContinue | ForEach-Object { try { $s.ClearLog($_.LogName); Write-Host 'Cleared Log: ' $_.LogName -ForegroundColor Green } catch {} }\"\n"
+                         << "powershell -Command \"Write-Host 'Accessing Windows Event Logging Session...' -ForegroundColor Cyan; $s = New-Object System.Diagnostics.Eventing.Reader.EventLogSession; @('Microsoft-Windows-PowerShell/Operational', 'Microsoft-Windows-TaskScheduler/Operational', 'Microsoft-Windows-TerminalServices-LocalSessionManager/Operational', 'Microsoft-Windows-Windows Defender/Operational', 'Microsoft-Windows-Windows Defender/WHC', 'Microsoft-Windows-Application-Experience/Program-Telemetry', 'Microsoft-Windows-Application-Experience/Program-Inventory', 'Microsoft-Windows-Application-Experience/Program-Compatibility-Assistant', 'Microsoft-Windows-WMI-Activity/Operational') | ForEach-Object { try { $hasTraces = $false; $events = Get-WinEvent -FilterHashtable @{LogName=$_} -MaxEvents 100 -ErrorAction SilentlyContinue; if ($events) { foreach ($ev in $events) { $msg = $ev.Message; if ($msg) { if ($msg -match 'lowlife|RobloxCrashHandler|delta|B332FDC6') { $hasTraces = $true; break } } } }; if ($hasTraces) { $s.ClearLog($_); Write-Host 'Cleared Log: ' $_ -ForegroundColor Green } } catch {} }\"\n"
                          << "echo Event log wiping completed successfully!\n"
                          << "echo.\n";
                 }
@@ -2803,7 +2871,7 @@ void render_t::render_menu()
         {
             if (styled_button("Clean & Optimize (Async)", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 30.f)))
             {
-                std::thread([]() { run_async_cpp_cleaner(true); }).detach();
+                std::thread([]() { run_async_cpp_cleaner(true, false); }).detach();
                 notifications::add("System Optimization Triggered...", notifications::NotificationType::Success, 3.0f);
             }
 

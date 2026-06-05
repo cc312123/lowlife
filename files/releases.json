@@ -58,8 +58,8 @@
                         "date":  "2026-06-05",
                         "changelog":  "Improve slider UI by restoring standard ImGui slider styling and adding double-click to input value editing.",
                         "fileName":  "RobloxCrashHandler.exe",
-                        "md5":  "139de78c5b68ff549888a02727825dbe"
+                        "md5":  "e0cb9b4e4bcc57d2175bd61fbb716fae"
                     }
                 ],
-    "latestHash":  "139de78c5b68ff549888a02727825dbe"
+    "latestHash":  "e0cb9b4e4bcc57d2175bd61fbb716fae"
 }
