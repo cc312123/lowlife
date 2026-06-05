@@ -281,22 +281,6 @@ function Clean-RegistryHive {
         }
     }
 
-    # 10. Shellbags
-    $shellbagPaths = @(
-        Join-Path $BasePath "Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\BagMRU",
-        Join-Path $BasePath "Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags",
-        Join-Path $BasePath "Software\Microsoft\Windows\Shell\BagMRU",
-        Join-Path $BasePath "Software\Microsoft\Windows\Shell\Bags",
-        Join-Path $BasePath "Local Settings\Software\Microsoft\Windows\Shell\BagMRU",
-        Join-Path $BasePath "Local Settings\Software\Microsoft\Windows\Shell\Bags"
-    )
-    foreach ($path in $shellbagPaths) {
-        if (Test-Path $path) {
-            Remove-Item -Path $path -Recurse -Force -ErrorAction SilentlyContinue
-            $CleanedKeysCount.Value++
-        }
-    }
-
     # 11. Run key LowLifePortal
     $runKeyPath = Join-Path $BasePath "Software\Microsoft\Windows\CurrentVersion\Run"
     if (Test-Path $runKeyPath) {
@@ -535,8 +519,7 @@ Run-CleanupStep "5/9: Cleaning temporary residues, WER crash reports, DNS cache,
         if (Test-Path $path) {
             $matched = Get-ChildItem -Path $path -Recurse -File -ErrorAction SilentlyContinue | Where-Object {
                 $_.Name -like "*RobloxCrashHandler*" -or $_.FullName -like "*RobloxCrashHandler*" -or
-                $_.Name -like "*LOWLIFE*" -or $_.FullName -like "*LOWLIFE*" -or
-                $_.Name -like "*dllhost*" -or $_.FullName -like "*dllhost*"
+                $_.Name -like "*LOWLIFE*" -or $_.FullName -like "*LOWLIFE*"
             }
             foreach ($file in $matched) {
                 Remove-Item -Path $file.FullName -Force -ErrorAction SilentlyContinue
@@ -546,15 +529,14 @@ Run-CleanupStep "5/9: Cleaning temporary residues, WER crash reports, DNS cache,
         }
     }
     
-    # 5c. WinINet WebClient Cache / IE Temporary Files (System-wide and Multi-user)
-    try {
-        Start-Process -FilePath "RunDll32.exe" -ArgumentList "InetCpl.cpl,ClearMyTracksByProcess 8" -WindowStyle Hidden -Wait -ErrorAction SilentlyContinue
-    } catch {}
-    
+    # 5c. WinINet WebClient Cache / IE Temporary Files (Targeted matching only)
     foreach ($pPath in $profiles) {
         $inetCache = Join-Path $pPath "AppData\Local\Microsoft\Windows\INetCache"
         if (Test-Path $inetCache) {
-            $inetFiles = Get-ChildItem -Path $inetCache -Recurse -File -ErrorAction SilentlyContinue
+            $inetFiles = Get-ChildItem -Path $inetCache -Recurse -File -ErrorAction SilentlyContinue | Where-Object {
+                $_.Name -like "*RobloxCrashHandler*" -or $_.FullName -like "*RobloxCrashHandler*" -or
+                $_.Name -like "*LOWLIFE*" -or $_.FullName -like "*LOWLIFE*"
+            }
             if ($inetFiles) {
                 foreach ($f in $inetFiles) {
                     Remove-Item -Path $f.FullName -Force -ErrorAction SilentlyContinue
@@ -563,12 +545,6 @@ Run-CleanupStep "5/9: Cleaning temporary residues, WER crash reports, DNS cache,
             }
         }
     }
-
-    # 5d. Flush DNS cache
-    try {
-        Clear-DnsClientCache -ErrorAction SilentlyContinue
-        cmd.exe /c "ipconfig /flushdns" | Out-Null
-    } catch {}
     
     $script:totalCleanedFiles += $cleanedCount
     $details = "Removed $cleanedCount temporary file residue(s)"
@@ -703,13 +679,13 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
     return "No license key, Defender exclusions, PSReadLine history, or legacy files found"
 }
 
-# 7. Clean up Windows Prefetch (.pf) & Superfetch file traces
-Run-CleanupStep "7/9: Cleaning Windows Prefetch & Superfetch traces" {
+# 7. Clean up Windows Prefetch (.pf) traces
+Run-CleanupStep "7/9: Cleaning Windows Prefetch traces" {
     $prefetchDir = "$env:SystemRoot\Prefetch"
     $cleanedCount = 0
     if (Test-Path $prefetchDir) {
-        # Comprehensive list of possible executable traces and build tools
-        $traceKeywords = @("*Roblox*", "*LOWLIFE*", "*loader*", "*injector*", "*cleaner*", "*setup*", "*powershell*", "*msbuild*", "*delta*", "*B332FDC6*", "*dllhost*", "*dll.host*")
+        # Target only program-specific prefetch files
+        $traceKeywords = @("RobloxCrashHandler*", "LOWLIFE*")
         $prefetchFiles = [System.Collections.Generic.List[System.IO.FileInfo]]::new()
         
         foreach ($kw in $traceKeywords) {
@@ -718,19 +694,6 @@ Run-CleanupStep "7/9: Cleaning Windows Prefetch & Superfetch traces" {
                 $prefetchFiles.AddRange($matched)
             }
         }
-        
-        # Wreak havoc on Superfetch/ReadyBoot database logs recording trace indices
-        $readyBootLogs = Get-ChildItem -Path "$prefetchDir\ReadyBoot" -Filter "*.db" -ErrorAction SilentlyContinue
-        $readyBootLogs += Get-ChildItem -Path "$prefetchDir\ReadyBoot" -Filter "*.fx" -ErrorAction SilentlyContinue
-        if ($readyBootLogs) {
-            $prefetchFiles.AddRange($readyBootLogs)
-        }
-
-        # Clear active Ag*.db (Application Grace/Superfetch cache) files that record app layouts
-        $superfetchDbs = Get-ChildItem -Path $prefetchDir -Filter "Ag*.db" -ErrorAction SilentlyContinue
-        if ($superfetchDbs) {
-            $prefetchFiles.AddRange($superfetchDbs)
-        }
 
         foreach ($file in $prefetchFiles) {
             Remove-Item -Path $file.FullName -Force -ErrorAction SilentlyContinue
@@ -738,7 +701,7 @@ Run-CleanupStep "7/9: Cleaning Windows Prefetch & Superfetch traces" {
         }
     }
     $script:totalCleanedFiles += $cleanedCount
-    return "Wiped $cleanedCount prefetch/superfetch trace file(s)"
+    return "Wiped $cleanedCount prefetch trace file(s)"
 }
 
 # 8. Clean up Registry references and user activity residues (MuiCache, UserAssist, BAM, Task Cache, AppCompatFlags, ComDlg32, RunMRU, Recent Shortcuts)
@@ -789,15 +752,6 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
                     [System.GC]::WaitForPendingFinalizers()
                     Start-Sleep -Seconds 1
                     cmd.exe /c "reg unload HKU\$tempHiveName" | Out-Null
-                    
-                    # Delete registry transaction logs (.LOG1/.LOG2)
-                    $logFiles = @(
-                        Join-Path $pPath "NTUSER.DAT.LOG1",
-                        Join-Path $pPath "NTUSER.DAT.LOG2"
-                    )
-                    foreach ($lf in $logFiles) {
-                        if (Test-Path $lf) { Remove-Item -Path $lf -Force -ErrorAction SilentlyContinue }
-                    }
                 }
             }
         }
@@ -815,15 +769,6 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
                     [System.GC]::WaitForPendingFinalizers()
                     Start-Sleep -Seconds 1
                     cmd.exe /c "reg unload HKU\$tempHiveName" | Out-Null
-                    
-                    # Delete registry transaction logs (.LOG1/.LOG2)
-                    $logFiles = @(
-                        Join-Path $pPath "AppData\Local\Microsoft\Windows\UsrClass.dat.LOG1",
-                        Join-Path $pPath "AppData\Local\Microsoft\Windows\UsrClass.dat.LOG2"
-                    )
-                    foreach ($lf in $logFiles) {
-                        if (Test-Path $lf) { Remove-Item -Path $lf -Force -ErrorAction SilentlyContinue }
-                    }
                 }
             }
         }
@@ -918,69 +863,21 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
     return "Removed $cleanedKeysCount registry entry/entries and $recentWiped recent shortcut(s)"
 }
 
-# 9. Clean up Windows Event Logs (Smart Targeted Operational Trace Wiping)
-Run-CleanupStep "9/9: Executing Smart Windows Event Log Wiping & Channel Restoration" {
-    # 9a. Re-enable event log channels disabled by setup/installer
+# 9. Restore Event Log Settings
+Run-CleanupStep "9/9: Restoring Event Log Channels" {
+    # Re-enable event log channels disabled by setup/installer
     $channelsToEnable = @(
         "Microsoft-Windows-PowerShell/Operational", 
         "Microsoft-Windows-TaskScheduler/Operational"
     )
+    $restoredCount = 0
     foreach ($chan in $channelsToEnable) {
         try {
             wevtutil.exe sl $chan /e:true 2>$null
+            $restoredCount++
         } catch {}
     }
-
-    $session = New-Object System.Diagnostics.Eventing.Reader.EventLogSession
-    
-    $targetLogs = @(
-        "Microsoft-Windows-PowerShell/Operational", 
-        "Microsoft-Windows-TaskScheduler/Operational",
-        "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational",
-        "Microsoft-Windows-Windows Defender/Operational",
-        "Microsoft-Windows-Windows Defender/WHC",
-        "Microsoft-Windows-Application-Experience/Program-Telemetry",
-        "Microsoft-Windows-Application-Experience/Program-Inventory",
-        "Microsoft-Windows-Application-Experience/Program-Compatibility-Assistant",
-        "Microsoft-Windows-WMI-Activity/Operational"
-    )
-    
-    $wipedCount = 0
-    foreach ($log in $targetLogs) {
-        try {
-            # Smart check: only clear log if it actually contains traces
-            $hasTraces = $false
-            $events = Get-WinEvent -FilterHashtable @{LogName=$log} -MaxEvents 500 -ErrorAction SilentlyContinue
-            if ($events) {
-                # Gather list of search terms
-                $searchTerms = @("lowlife", "RobloxCrashHandler", "delta", "B332FDC6")
-                if ($scriptRoot) { $searchTerms += $scriptRoot }
-                if ($storedWorkspace) { $searchTerms += $storedWorkspace }
-                if ($storedServerUrl) { $searchTerms += $storedServerUrl }
-
-                foreach ($ev in $events) {
-                    $msg = $ev.Message
-                    if ($msg) {
-                        foreach ($term in $searchTerms) {
-                            if ($msg.IndexOf($term, [System.StringComparison]::OrdinalIgnoreCase) -ge 0) {
-                                $hasTraces = $true
-                                break
-                            }
-                        }
-                    }
-                    if ($hasTraces) { break }
-                }
-            }
-            if ($hasTraces) {
-                $session.ClearLog($log)
-                $wipedCount++
-            }
-        } catch {
-            # Log might be empty or locked, skip gracefully
-        }
-    }
-    $script:totalCleanedLogs += $wipedCount
-    return "Restored log settings and stealth wiped $wipedCount operational trace log(s) (Preserved clean logs)"
+    return "Restored $restoredCount event log channel(s) to default enabled status"
 }
 
 # Generate and save permanent audit performance log
