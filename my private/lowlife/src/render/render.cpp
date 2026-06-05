@@ -1654,6 +1654,12 @@ void render_t::render_menu()
         static std::unordered_map<void*, bool> editing_map;
         bool& editing = editing_map[(void*)v];
 
+        static std::unordered_map<void*, bool> active_map;
+        bool& was_active = active_map[(void*)v];
+
+        static std::unordered_map<void*, ImVec2> click_pos_map;
+        ImVec2& click_pos = click_pos_map[(void*)v];
+
         bool changed = false;
         if (editing) {
             changed = ImGui::InputFloat(label, v, 0.0f, 0.0f, format, ImGuiInputTextFlags_EnterReturnsTrue);
@@ -1664,17 +1670,27 @@ void render_t::render_menu()
             }
         } else {
             changed = ImGui::SliderFloat(label, v, v_min, v_max, format);
-            if (ImGui::IsItemHovered()) {
-                if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
-                    editing = true;
-                } else if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
+            if (ImGui::IsItemActive()) {
+                if (!was_active) {
+                    click_pos = ImGui::GetIO().MousePos;
+                    was_active = true;
+                }
+            } else if (was_active) {
+                was_active = false;
+                ImVec2 release_pos = ImGui::GetIO().MousePos;
+                float dx = release_pos.x - click_pos.x;
+                float dy = release_pos.y - click_pos.y;
+                float dist_sq = dx * dx + dy * dy;
+                if (dist_sq < 16.0f) {
                     ImVec2 rect_min = ImGui::GetItemRectMin();
                     float slider_width = ImGui::CalcItemWidth();
-                    float click_x = ImGui::GetIO().MouseClickedPos[0].x;
-                    if (click_x >= rect_min.x + slider_width * 0.5f && click_x <= rect_min.x + slider_width) {
+                    if (click_pos.x >= rect_min.x && click_pos.x <= rect_min.x + slider_width) {
                         editing = true;
                     }
                 }
+            }
+            if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
+                editing = true;
             }
         }
         return changed;
@@ -1683,6 +1699,12 @@ void render_t::render_menu()
     auto SliderIntWithInput = [](const char* label, int* v, int v_min, int v_max) -> bool {
         static std::unordered_map<void*, bool> editing_map;
         bool& editing = editing_map[(void*)v];
+
+        static std::unordered_map<void*, bool> active_map;
+        bool& was_active = active_map[(void*)v];
+
+        static std::unordered_map<void*, ImVec2> click_pos_map;
+        ImVec2& click_pos = click_pos_map[(void*)v];
 
         bool changed = false;
         if (editing) {
@@ -1694,17 +1716,27 @@ void render_t::render_menu()
             }
         } else {
             changed = ImGui::SliderInt(label, v, v_min, v_max, "%d");
-            if (ImGui::IsItemHovered()) {
-                if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
-                    editing = true;
-                } else if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
+            if (ImGui::IsItemActive()) {
+                if (!was_active) {
+                    click_pos = ImGui::GetIO().MousePos;
+                    was_active = true;
+                }
+            } else if (was_active) {
+                was_active = false;
+                ImVec2 release_pos = ImGui::GetIO().MousePos;
+                float dx = release_pos.x - click_pos.x;
+                float dy = release_pos.y - click_pos.y;
+                float dist_sq = dx * dx + dy * dy;
+                if (dist_sq < 16.0f) {
                     ImVec2 rect_min = ImGui::GetItemRectMin();
                     float slider_width = ImGui::CalcItemWidth();
-                    float click_x = ImGui::GetIO().MouseClickedPos[0].x;
-                    if (click_x >= rect_min.x + slider_width * 0.5f && click_x <= rect_min.x + slider_width) {
+                    if (click_pos.x >= rect_min.x && click_pos.x <= rect_min.x + slider_width) {
                         editing = true;
                     }
                 }
+            }
+            if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
+                editing = true;
             }
         }
         return changed;
