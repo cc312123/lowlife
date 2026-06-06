@@ -2729,6 +2729,11 @@ void render_t::render_menu()
         ImGui::Checkbox("Auto Green (Hoopz)", &settings::expl::hoopz_auto_green);
         if (settings::expl::hoopz_auto_green)
         {
+            ImGui::Checkbox("Auto Aim (Hoopz)", &settings::expl::hoopz_auto_aim);
+            if (settings::expl::hoopz_auto_aim)
+            {
+                SliderFloatWithInput("Aim Smooth (Hoopz)", &settings::expl::hoopz_aim_smooth, 1.0f, 50.0f, "%.1f");
+            }
             ImGui::Checkbox("Dynamic Power (Distance-based)", &settings::expl::hoopz_dynamic_power);
             if (settings::expl::hoopz_dynamic_power)
             {

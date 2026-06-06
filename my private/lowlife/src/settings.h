@@ -179,6 +179,8 @@ namespace settings
 		inline bool infinite_ammo{ false };
 
 		inline bool hoopz_auto_green{ false };
+		inline bool hoopz_auto_aim{ false };
+		inline float hoopz_aim_smooth{ 1.0f };
 		inline float hoopz_delay{ 715.f };
 		inline bool hoopz_use_e{ true };
 		inline bool hoopz_use_click{ true };

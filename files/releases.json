@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.11",
-    "latestChangelog":  "Add Auto Green (Hoopz) with dynamic distance-based delay. Improve silent aim activation checks by including mouse click and manual lock states.",
+    "latestVersion":  "1.0.12",
+    "latestChangelog":  "Add Auto Aim (Hoopz) camera alignment and snapping with configurable smooth factor for perfect shooting trajectory coordination.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -87,7 +87,14 @@
                         "changelog":  "Add Auto Green (Hoopz) with dynamic distance-based delay. Improve silent aim activation checks by including mouse click and manual lock states.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "ef377a526e805e33d00ec5e15adccc9f"
+                    },
+                    {
+                        "version":  "1.0.12",
+                        "date":  "2026-06-06",
+                        "changelog":  "Add Auto Aim (Hoopz) camera alignment and snapping with configurable smooth factor for perfect shooting trajectory coordination.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "131c94cf70126479396a99c3c2517b1d"
                     }
                 ],
-    "latestHash":  "ef377a526e805e33d00ec5e15adccc9f"
+    "latestHash":  "131c94cf70126479396a99c3c2517b1d"
 }
