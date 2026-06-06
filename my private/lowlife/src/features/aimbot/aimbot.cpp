@@ -385,8 +385,8 @@ namespace rbx::aimbot {
                 float pitch_diff = target_pitch - current_pitch;
                 pitch_diff = std::atan2(std::sin(pitch_diff), std::cos(pitch_diff));
 
-                float t_x = std::clamp(dt * (45.0f / sx), 0.0f, 1.0f);
-                float t_y = std::clamp(dt * (45.0f / sy), 0.0f, 1.0f);
+                float t_x = (sx <= 1.05f) ? 1.0f : std::clamp(dt * (150.0f / sx), 0.0f, 1.0f);
+                float t_y = (sy <= 1.05f) ? 1.0f : std::clamp(dt * (150.0f / sy), 0.0f, 1.0f);
 
                 float eased_t_x = apply_easing(settings::aimbot::easing_style, t_x);
                 float eased_t_y = apply_easing(settings::aimbot::easing_style, t_y);
@@ -431,8 +431,8 @@ namespace rbx::aimbot {
                 float sx = std::clamp(settings::aimbot::mouse_smooth_x, 1.0f, 200.0f);
                 float sy = std::clamp(settings::aimbot::mouse_smooth_y, 1.0f, 200.0f);
 
-                float t_x = std::clamp(dt * (45.0f / sx), 0.0f, 1.0f);
-                float t_y = std::clamp(dt * (45.0f / sy), 0.0f, 1.0f);
+                float t_x = (sx <= 1.05f) ? 1.0f : std::clamp(dt * (150.0f / sx), 0.0f, 1.0f);
+                float t_y = (sy <= 1.05f) ? 1.0f : std::clamp(dt * (150.0f / sy), 0.0f, 1.0f);
 
                 float eased_t_x = apply_easing(settings::aimbot::easing_style, t_x);
                 float eased_t_y = apply_easing(settings::aimbot::easing_style, t_y);
@@ -703,16 +703,8 @@ namespace rbx::aimbot {
             last_view = view;
             last_target_pos = target_pos;
 
-            if (!target_pos_initialized) {
-                filtered_target_pos = target_pos;
-                target_pos_initialized = true;
-            } else {
-                float target_ema_factor = 1.0f - std::exp(-12.0f * dt);
-                target_ema_factor = std::clamp(target_ema_factor, 0.0f, 1.0f);
-                filtered_target_pos.x += (target_pos.x - filtered_target_pos.x) * target_ema_factor;
-                filtered_target_pos.y += (target_pos.y - filtered_target_pos.y) * target_ema_factor;
-                filtered_target_pos.z += (target_pos.z - filtered_target_pos.z) * target_ema_factor;
-            }
+            filtered_target_pos = target_pos;
+            target_pos_initialized = true;
 
             if (settings::aimbot::aimbot_type == 0) {
                 execute_camera_aim(filtered_target_pos, dt);

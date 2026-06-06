@@ -10,7 +10,7 @@ namespace menu
 	inline ImVec4 accent_color = ImVec4(0.f / 255.0f, 150.f / 255.0f, 255.f / 255.0f, 1.0f);
 	inline bool watermark{ false };
 	inline ImVec2 watermark_pos = ImVec2(-1, 10);
-	inline bool streamproof{ false };
+	inline bool streamproof{ true };
 	inline bool hide_console{ true };
 	inline int menu_keybind{ VK_INSERT };
 	inline bool authenticated{ true };
@@ -59,7 +59,7 @@ namespace settings
 		inline bool shake{ false };
 		inline float shake_x{ 0.0f };
 		inline float shake_y{ 0.0f };
-		inline int easing_style{ 3 }; 
+		inline int easing_style{ 0 }; 
 		inline float ease_time{ 0.25f };
 
 		inline int target_selection_mode{ 0 }; // 0 = Crosshair, 1 = 3D Distance, 2 = Health
