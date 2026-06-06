@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.13",
-    "latestChangelog":  "Completely remove Hoopz Auto Green and Auto Aim features.",
+    "latestVersion":  "1.0.14",
+    "latestChangelog":  "Revert aimbot lock stabilization changes and retain semi-blatant smoothing speed.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -101,7 +101,14 @@
                         "changelog":  "Completely remove Hoopz Auto Green and Auto Aim features.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "2e92bb5e77df89207cf6bbb982775640"
+                    },
+                    {
+                        "version":  "1.0.14",
+                        "date":  "2026-06-06",
+                        "changelog":  "Revert aimbot lock stabilization changes and retain semi-blatant smoothing speed.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "89191828409fa2b608cca38dc06adab1"
                     }
                 ],
-    "latestHash":  "2e92bb5e77df89207cf6bbb982775640"
+    "latestHash":  "89191828409fa2b608cca38dc06adab1"
 }
