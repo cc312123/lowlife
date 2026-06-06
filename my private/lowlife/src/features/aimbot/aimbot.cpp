@@ -802,8 +802,8 @@ namespace rbx::aimbot {
                     pitch_diff = std::atan2(std::sin(pitch_diff), std::cos(pitch_diff));
 
                     // Convert radian angular difference directly to mouse movement using Roblox mouse scale (0.0022)
-                    dx = -yaw_diff / (sensitivity * 0.0022f);
-                    dy = -pitch_diff / (sensitivity * 0.0022f);
+                    dx = -yaw_diff / 0.0022f;
+                    dy = -pitch_diff / 0.0022f;
                 }
             } else {
                 // Pixel-based relative movement (Third Person cursor aiming)
@@ -825,12 +825,8 @@ namespace rbx::aimbot {
                 }
 
                 if (sx <= 1.01f && sy <= 1.01f) {
-                    move_step_x = dx;
-                    move_step_y = dy;
-                    if (!session_captured) {
-                        move_step_x *= sensitivity;
-                        move_step_y *= sensitivity;
-                    }
+                    move_step_x = dx * sensitivity;
+                    move_step_y = dy * sensitivity;
                 } else {
                     // Analytical critically-damped spring-damper system
                     float omega_x = 45.0f / sx;
@@ -851,10 +847,8 @@ namespace rbx::aimbot {
                     move_step_y = dy - x_new_y;
                     spring_vel_mouse_y = omega_y * x_new_y - B_y * log_e_y;
 
-                    if (!session_captured) {
-                        move_step_x *= sensitivity;
-                        move_step_y *= sensitivity;
-                    }
+                    move_step_x *= sensitivity;
+                    move_step_y *= sensitivity;
 
                     // Add high-frequency human muscle micro-tremor
                     float dist = std::sqrt(dx * dx + dy * dy);
@@ -866,10 +860,8 @@ namespace rbx::aimbot {
             } else {
                 move_step_x = dx;
                 move_step_y = dy;
-                if (!session_captured) {
-                    move_step_x *= sensitivity;
-                    move_step_y *= sensitivity;
-                }
+                move_step_x *= sensitivity;
+                move_step_y *= sensitivity;
             }
 
             dx = move_step_x;
