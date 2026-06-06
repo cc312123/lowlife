@@ -128,8 +128,8 @@
                         "date":  "2026-06-06",
                         "changelog":  "Replace spring physics with standard LERP-based smoothing for natural glide velocity; completely remove easing-based snapping.",
                         "fileName":  "RobloxCrashHandler.exe",
-                        "md5":  "2d3e312e2983e2216f74716a914513dc"
+                        "md5":  "01cb8f1a4280e25004349999c5bf90ba"
                     }
                 ],
-    "latestHash":  "2d3e312e2983e2216f74716a914513dc"
+    "latestHash":  "01cb8f1a4280e25004349999c5bf90ba"
 }

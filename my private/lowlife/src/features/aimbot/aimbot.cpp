@@ -873,12 +873,12 @@ namespace rbx::aimbot {
             static auto last_near_center_time = std::chrono::steady_clock::now();
             auto current_time = std::chrono::steady_clock::now();
 
-            bool near_center = (std::abs(target_ref_x - center_x) < 10.0f && std::abs(target_ref_y - center_y) < 10.0f);
+            bool near_center = (std::abs(target_ref_x - center_x) < 50.0f && std::abs(target_ref_y - center_y) < 50.0f);
             if (near_center || cursor_hidden || right_click_held) {
                 session_captured = true;
                 last_near_center_time = current_time;
             } else if (!cursor_hidden && !right_click_held) {
-                if (std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_near_center_time).count() > 150) {
+                if (std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_near_center_time).count() > 500) {
                     session_captured = false;
                 }
             }
