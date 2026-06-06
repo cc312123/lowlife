@@ -65,8 +65,8 @@
                         "date":  "2026-06-05",
                         "changelog":  "Fix triggerbot local player filtering, exclude local player from triggerbot hitbox visuals, and correct mouse sensitivity scaling math under first person/mouse lock.",
                         "fileName":  "RobloxCrashHandler.exe",
-                        "md5":  "72f2c3d2bc369e9c5cd68f4acd48ea88"
+                        "md5":  "f59ecd1b1fdde49af808a6beb9dc073b"
                     }
                 ],
-    "latestHash":  "72f2c3d2bc369e9c5cd68f4acd48ea88"
+    "latestHash":  "f59ecd1b1fdde49af808a6beb9dc073b"
 }

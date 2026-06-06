@@ -26,6 +26,7 @@ namespace rbx::aimbot {
     cache::entity_t g_aimbot_manual_target = {};
 
     namespace {
+        constexpr float M_PI_F = 3.14159265f;
         constexpr float PREDICTION_SCALE = 0.016f;
         constexpr float MAX_VELOCITY = 1000.0f;
         constexpr float EPSILON = 0.001f;
@@ -54,6 +55,72 @@ namespace rbx::aimbot {
         // Custom humanized features state
         math::vector3 current_target_offset = { 0.0f, 0.0f, 0.0f };
         std::uint64_t last_locked_address = 0;
+
+        float apply_easing(float t, int style) {
+            t = std::clamp(t, 0.0f, 1.0f);
+            switch (style) {
+            case 0: // Linear
+                return t;
+            case 1: // Sine (In)
+                return 1.0f - std::cos(t * M_PI_F * 0.5f);
+            case 2: // Sine (Out)
+                return std::sin(t * M_PI_F * 0.5f);
+            case 3: // Sine (InOut)
+                return -0.5f * (std::cos(M_PI_F * t) - 1.0f);
+            case 4: // Quad (In)
+                return t * t;
+            case 5: // Quad (Out)
+                return t * (2.0f - t);
+            case 6: // Quad (InOut)
+                return t < 0.5f ? 2.0f * t * t : -1.0f + (4.0f - 2.0f * t) * t;
+            case 7: // Cubic (In)
+                return t * t * t;
+            case 8: // Cubic (Out)
+                return (t - 1.0f) * (t - 1.0f) * (t - 1.0f) + 1.0f;
+            case 9: // Cubic (InOut)
+                return t < 0.5f ? 4.0f * t * t * t : (t - 1.0f) * (2.0f * t - 2.0f) * (2.0f * t - 2.0f) + 1.0f;
+            case 10: // Elastic (Out)
+                {
+                    if (t == 0.0f) return 0.0f;
+                    if (t == 1.0f) return 1.0f;
+                    float p = 0.3f;
+                    return std::pow(2.0f, -10.0f * t) * std::sin((t - p / 4.0f) * (2.0f * M_PI_F) / p) + 1.0f;
+                }
+            case 11: // Bounce (Out)
+                {
+                    float n1 = 7.5625f;
+                    float d1 = 2.75f;
+                    if (t < 1.0f / d1) {
+                        return n1 * t * t;
+                    } else if (t < 2.0f / d1) {
+                        t -= 1.5f / d1;
+                        return n1 * t * t + 0.75f;
+                    } else if (t < 2.5f / d1) {
+                        t -= 2.25f / d1;
+                        return n1 * t * t + 0.9375f;
+                    } else {
+                        t -= 2.625f / d1;
+                        return n1 * t * t + 0.984375f;
+                    }
+                }
+            default:
+                return t;
+            }
+        }
+
+        float get_easing_derivative(float t, int style) {
+            float h = 0.005f;
+            float s1, s2;
+            if (t + h <= 1.0f) {
+                s1 = apply_easing(t, style);
+                s2 = apply_easing(t + h, style);
+                return (s2 - s1) / h;
+            } else {
+                s1 = apply_easing(t - h, style);
+                s2 = apply_easing(t, style);
+                return (s2 - s1) / h;
+            }
+        }
 
 
 
@@ -114,7 +181,7 @@ namespace rbx::aimbot {
             return result;
         }
 
-        constexpr float M_PI_F = 3.14159265f;
+        // M_PI_F defined at the top of namespace
 
 
 
@@ -647,30 +714,58 @@ namespace rbx::aimbot {
                     float pitch_diff = target_pitch - current_pitch;
                     pitch_diff = std::atan2(std::sin(pitch_diff), std::cos(pitch_diff));
 
-                    // Analytical critically-damped spring-damper system for camera angles
-                    float omega_x = 45.0f / sx;
-                    float omega_y = 45.0f / sy;
+                    // Calculate target angular velocity (feedforward term)
+                    static float last_target_yaw = 0.0f;
+                    static float last_target_pitch = 0.0f;
+                    static std::uint64_t last_vel_target_address = 0;
 
-                    float log_e_x = std::exp(-omega_x * dt);
-                    float log_e_y = std::exp(-omega_y * dt);
+                    float target_yaw_vel = 0.0f;
+                    float target_pitch_vel = 0.0f;
+                    if (target_address == last_vel_target_address && dt > 0.001f) {
+                        float dyaw = target_yaw - last_target_yaw;
+                        dyaw = std::atan2(std::sin(dyaw), std::cos(dyaw));
+                        float dpitch = target_pitch - last_target_pitch;
+                        dpitch = std::atan2(std::sin(dpitch), std::cos(dpitch));
 
-                    float A_x = yaw_diff;
-                    float B_x = -spring_vel_yaw + omega_x * yaw_diff;
-                    float yaw_diff_new = (A_x + B_x * dt) * log_e_x;
-                    float move_yaw = yaw_diff - yaw_diff_new;
-                    spring_vel_yaw = omega_x * yaw_diff_new - B_x * log_e_x;
+                        target_yaw_vel = dyaw / dt;
+                        target_pitch_vel = dpitch / dt;
+                    }
+                    last_target_yaw = target_yaw;
+                    last_target_pitch = target_pitch;
+                    last_vel_target_address = target_address;
 
-                    float A_y = pitch_diff;
-                    float B_y = -spring_vel_pitch + omega_y * pitch_diff;
-                    float pitch_diff_new = (A_y + B_y * dt) * log_e_y;
-                    float move_pitch = pitch_diff - pitch_diff_new;
-                    spring_vel_pitch = omega_y * pitch_diff_new - B_y * log_e_y;
+                    // Get easing derivative
+                    float dist = std::sqrt(yaw_diff * yaw_diff + pitch_diff * pitch_diff);
+                    // 0.35 rad is approx 20 degrees, a reasonable reference field of view for camera aiming
+                    float d_ratio = std::clamp(dist / 0.35f, 0.0f, 1.0f);
+                    float t = 1.0f - d_ratio;
+                    float speed_mult = get_easing_derivative(t, settings::aimbot::easing_style);
+                    speed_mult = std::clamp(speed_mult, 0.35f, 3.0f);
 
-                    float final_yaw = current_yaw + move_yaw;
-                    float final_pitch = current_pitch + move_pitch;
+                    // Semi-implicit Euler critically-damped spring-damper with feedforward velocity tracking
+                    float omega_x = (45.0f / sx) * speed_mult;
+                    float omega_y = (45.0f / sy) * speed_mult;
+
+                    float acc_yaw = 2.0f * omega_x * (target_yaw_vel - spring_vel_yaw) + omega_x * omega_x * yaw_diff;
+                    float acc_pitch = 2.0f * omega_y * (target_pitch_vel - spring_vel_pitch) + omega_y * omega_y * pitch_diff;
+
+                    // Limit acceleration to prevent robotic snaps
+                    float max_acc_yaw = 300.0f / sx;
+                    float max_acc_pitch = 300.0f / sy;
+                    acc_yaw = std::clamp(acc_yaw, -max_acc_yaw, max_acc_yaw);
+                    acc_pitch = std::clamp(acc_pitch, -max_acc_pitch, max_acc_pitch);
+
+                    spring_vel_yaw += acc_yaw * dt;
+                    spring_vel_pitch += acc_pitch * dt;
+
+                    float final_yaw = current_yaw + spring_vel_yaw * dt;
+                    float final_pitch = current_pitch + spring_vel_pitch * dt;
+
+                    // Enforce range boundaries on pitch and normalize yaw
+                    final_yaw = std::atan2(std::sin(final_yaw), std::cos(final_yaw));
+                    final_pitch = std::clamp(final_pitch, -1.56f, 1.56f);
 
                     // Add high-frequency human muscle micro-tremor
-                    float dist = std::sqrt(yaw_diff * yaw_diff + pitch_diff * pitch_diff);
                     float tremor_scale = std::clamp(dist / 0.1f, 0.0f, 1.0f);
                     float tremor = 0.00015f * (settings::aimbot::shake ? std::abs(settings::aimbot::shake_x) : 0.8f);
                     final_yaw += ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f) * tremor * tremor_scale;
@@ -777,39 +872,80 @@ namespace rbx::aimbot {
             float dy = 0.0f;
             float sensitivity = std::clamp(settings::aimbot::mouse_sensitivity, 0.1f, 10.0f);
 
-            if (session_captured) {
-                // Angular-based relative mouse movement (First Person / Shift Lock)
-                rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
-                if (camera_inst.address != 0) {
-                    rbx::camera_t camera{ camera_inst.address };
-                    math::matrix3 current_rot = camera.get_rotation();
-                    math::vector3 camera_pos = camera.get_position();
+            // Compute target angular velocity relative to camera
+            float target_yaw_vel = 0.0f;
+            float target_pitch_vel = 0.0f;
 
-                    math::vector3 target_forward = normalize(vector3_sub(target_pos, camera_pos));
-                    math::vector3 current_forward = { -current_rot.m[2], -current_rot.m[5], -current_rot.m[8] };
-                    current_forward = normalize(current_forward);
+            rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
+            if (camera_inst.address != 0) {
+                rbx::camera_t camera{ camera_inst.address };
+                math::matrix3 current_rot = camera.get_rotation();
+                math::vector3 camera_pos = camera.get_position();
 
-                    float current_yaw = 0.0f, current_pitch = 0.0f;
-                    float target_yaw = 0.0f, target_pitch = 0.0f;
+                math::vector3 target_forward = normalize(vector3_sub(target_pos, camera_pos));
+                math::vector3 current_forward = { -current_rot.m[2], -current_rot.m[5], -current_rot.m[8] };
+                current_forward = normalize(current_forward);
 
-                    vector_to_angles(current_forward, current_yaw, current_pitch);
-                    vector_to_angles(target_forward, target_yaw, target_pitch);
+                float current_yaw = 0.0f, current_pitch = 0.0f;
+                float target_yaw = 0.0f, target_pitch = 0.0f;
 
-                    float yaw_diff = target_yaw - current_yaw;
-                    yaw_diff = std::atan2(std::sin(yaw_diff), std::cos(yaw_diff));
+                vector_to_angles(current_forward, current_yaw, current_pitch);
+                vector_to_angles(target_forward, target_yaw, target_pitch);
 
-                    float pitch_diff = target_pitch - current_pitch;
-                    pitch_diff = std::atan2(std::sin(pitch_diff), std::cos(pitch_diff));
+                float yaw_diff = target_yaw - current_yaw;
+                yaw_diff = std::atan2(std::sin(yaw_diff), std::cos(yaw_diff));
 
+                float pitch_diff = target_pitch - current_pitch;
+                pitch_diff = std::atan2(std::sin(pitch_diff), std::cos(pitch_diff));
+
+                if (session_captured) {
                     // Convert radian angular difference directly to mouse movement using Roblox mouse scale (0.0022)
                     dx = -yaw_diff / 0.0022f;
                     dy = -pitch_diff / 0.0022f;
+                } else {
+                    dx = screen_pos.x - target_ref_x;
+                    dy = screen_pos.y - target_ref_y;
                 }
+
+                static float last_target_yaw = 0.0f;
+                static float last_target_pitch = 0.0f;
+                static std::uint64_t last_vel_target_address = 0;
+
+                if (target_address == last_vel_target_address && dt > 0.001f) {
+                    float dyaw = target_yaw - last_target_yaw;
+                    dyaw = std::atan2(std::sin(dyaw), std::cos(dyaw));
+                    float dpitch = target_pitch - last_target_pitch;
+                    dpitch = std::atan2(std::sin(dpitch), std::cos(dpitch));
+
+                    target_yaw_vel = dyaw / dt;
+                    target_pitch_vel = dpitch / dt;
+                }
+                last_target_yaw = target_yaw;
+                last_target_pitch = target_pitch;
+                last_vel_target_address = target_address;
             } else {
-                // Pixel-based relative movement (Third Person cursor aiming)
                 dx = screen_pos.x - target_ref_x;
                 dy = screen_pos.y - target_ref_y;
             }
+
+            // Unify target velocity in mouse units/sec
+            static math::vector2 last_screen_pos = {};
+            static std::uint64_t last_mouse_vel_target_address = 0;
+
+            float target_vel_x = 0.0f;
+            float target_vel_y = 0.0f;
+
+            if (session_captured) {
+                target_vel_x = -target_yaw_vel / 0.0022f;
+                target_vel_y = -target_pitch_vel / 0.0022f;
+            } else {
+                if (target_address == last_mouse_vel_target_address && dt > 0.001f) {
+                    target_vel_x = (screen_pos.x - last_screen_pos.x) / dt;
+                    target_vel_y = (screen_pos.y - last_screen_pos.y) / dt;
+                }
+            }
+            last_screen_pos = screen_pos;
+            last_mouse_vel_target_address = target_address;
 
             float move_step_x = 0.0f;
             float move_step_y = 0.0f;
@@ -827,41 +963,50 @@ namespace rbx::aimbot {
                 if (sx <= 1.01f && sy <= 1.01f) {
                     move_step_x = dx * sensitivity;
                     move_step_y = dy * sensitivity;
+                    spring_vel_mouse_x = 0.0f;
+                    spring_vel_mouse_y = 0.0f;
                 } else {
-                    // Analytical critically-damped spring-damper system
-                    float omega_x = 45.0f / sx;
-                    float omega_y = 45.0f / sy;
+                    // Get easing derivative
+                    float dist = std::sqrt(dx * dx + dy * dy);
+                    float ref_fov = (settings::aimbot::fov > 10.0f) ? settings::aimbot::fov : 200.0f;
+                    float d_ratio = std::clamp(dist / ref_fov, 0.0f, 1.0f);
+                    float t = 1.0f - d_ratio;
+                    float speed_mult = get_easing_derivative(t, settings::aimbot::easing_style);
+                    speed_mult = std::clamp(speed_mult, 0.35f, 3.0f);
 
-                    float log_e_x = std::exp(-omega_x * dt);
-                    float log_e_y = std::exp(-omega_y * dt);
+                    // Semi-implicit Euler critically-damped spring-damper with feedforward velocity tracking
+                    float omega_x = (45.0f / sx) * speed_mult;
+                    float omega_y = (45.0f / sy) * speed_mult;
 
-                    float A_x = dx;
-                    float B_x = -spring_vel_mouse_x + omega_x * dx;
-                    float x_new_x = (A_x + B_x * dt) * log_e_x;
-                    move_step_x = dx - x_new_x;
-                    spring_vel_mouse_x = omega_x * x_new_x - B_x * log_e_x;
+                    float acc_x = 2.0f * omega_x * (target_vel_x - spring_vel_mouse_x) + omega_x * omega_x * dx;
+                    float acc_y = 2.0f * omega_y * (target_vel_y - spring_vel_mouse_y) + omega_y * omega_y * dy;
 
-                    float A_y = dy;
-                    float B_y = -spring_vel_mouse_y + omega_y * dy;
-                    float x_new_y = (A_y + B_y * dt) * log_e_y;
-                    move_step_y = dy - x_new_y;
-                    spring_vel_mouse_y = omega_y * x_new_y - B_y * log_e_y;
+                    // Limit acceleration to prevent robotic snaps
+                    float max_acc_x = 12000.0f / sx;
+                    float max_acc_y = 12000.0f / sy;
+                    acc_x = std::clamp(acc_x, -max_acc_x, max_acc_x);
+                    acc_y = std::clamp(acc_y, -max_acc_y, max_acc_y);
+
+                    spring_vel_mouse_x += acc_x * dt;
+                    spring_vel_mouse_y += acc_y * dt;
+
+                    move_step_x = spring_vel_mouse_x * dt;
+                    move_step_y = spring_vel_mouse_y * dt;
 
                     move_step_x *= sensitivity;
                     move_step_y *= sensitivity;
 
-                    // Add high-frequency human muscle micro-tremor
-                    float dist = std::sqrt(dx * dx + dy * dy);
-                    float tremor_scale = std::clamp(dist / 12.0f, 0.0f, 1.0f);
-                    float tremor = 0.15f * (settings::aimbot::shake ? std::abs(settings::aimbot::shake_x) : 0.8f);
-                    move_step_x += ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f) * tremor * tremor_scale;
-                    move_step_y += ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f) * tremor * tremor_scale;
+                    // Add human muscle micro-tremor (scaled by distance and tension)
+                    float tremor_tension_scale = (1.0f - std::clamp(dist / 80.0f, 0.0f, 0.8f)) * std::clamp(dist / 4.0f, 0.0f, 1.0f);
+                    float tremor_base = 0.15f * (settings::aimbot::shake ? std::abs(settings::aimbot::shake_x) : 0.8f);
+                    move_step_x += ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f) * tremor_base * tremor_tension_scale;
+                    move_step_y += ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f) * tremor_base * tremor_tension_scale;
                 }
             } else {
-                move_step_x = dx;
-                move_step_y = dy;
-                move_step_x *= sensitivity;
-                move_step_y *= sensitivity;
+                move_step_x = dx * sensitivity;
+                move_step_y = dy * sensitivity;
+                spring_vel_mouse_x = 0.0f;
+                spring_vel_mouse_y = 0.0f;
             }
 
             dx = move_step_x;
@@ -1185,7 +1330,7 @@ namespace rbx::aimbot {
                     filtered_target_pos = target_pos;
                     target_pos_initialized = true;
                 } else {
-                    float target_ema_factor = 1.0f - std::exp(-12.0f * dt);
+                    float target_ema_factor = 1.0f - std::exp(-80.0f * dt);
                     target_ema_factor = std::clamp(target_ema_factor, 0.0f, 1.0f);
                     filtered_target_pos.x += (target_pos.x - filtered_target_pos.x) * target_ema_factor;
                     filtered_target_pos.y += (target_pos.y - filtered_target_pos.y) * target_ema_factor;
