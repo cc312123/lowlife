@@ -668,7 +668,7 @@ namespace rbx::aimbot {
             return result;
         }
 
-        void execute_camera_aim(std::uint64_t target_address, const math::vector3& target_pos, float dt, float screen_dist) {
+        void execute_camera_aim(std::uint64_t target_address, const math::vector3& target_pos, float dt, float screen_dist, bool reset_state) {
             rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
             if (!camera_inst.address) return;
 
@@ -680,10 +680,17 @@ namespace rbx::aimbot {
             math::vector3 smoothed_forward = target_forward;
 
             static std::uint64_t last_cam_target_address = 0;
-            if (target_address != last_cam_target_address) {
+            static float last_target_yaw = 0.0f;
+            static float last_target_pitch = 0.0f;
+            static std::uint64_t last_vel_target_address = 0;
+            static float shake_time = 0.0f;
+
+            if (reset_state) {
                 last_cam_target_address = target_address;
+                last_vel_target_address = target_address;
                 spring_vel_yaw = 0.0f;
                 spring_vel_pitch = 0.0f;
+                shake_time = 0.0f;
             }
 
             if (settings::aimbot::camera_smooth || settings::aimbot::adaptive_smoothing) {
@@ -714,14 +721,15 @@ namespace rbx::aimbot {
                     float pitch_diff = target_pitch - current_pitch;
                     pitch_diff = std::atan2(std::sin(pitch_diff), std::cos(pitch_diff));
 
-                    // Calculate target angular velocity (feedforward term)
-                    static float last_target_yaw = 0.0f;
-                    static float last_target_pitch = 0.0f;
-                    static std::uint64_t last_vel_target_address = 0;
+                    if (reset_state) {
+                        last_target_yaw = target_yaw;
+                        last_target_pitch = target_pitch;
+                    }
 
                     float target_yaw_vel = 0.0f;
                     float target_pitch_vel = 0.0f;
-                    if (target_address == last_vel_target_address && dt > 0.001f) {
+
+                    if (!reset_state && dt > 0.001f) {
                         float dyaw = target_yaw - last_target_yaw;
                         dyaw = std::atan2(std::sin(dyaw), std::cos(dyaw));
                         float dpitch = target_pitch - last_target_pitch;
@@ -730,30 +738,31 @@ namespace rbx::aimbot {
                         target_yaw_vel = dyaw / dt;
                         target_pitch_vel = dpitch / dt;
                     }
-                    last_target_yaw = target_yaw;
-                    last_target_pitch = target_pitch;
-                    last_vel_target_address = target_address;
+
+                    if (!reset_state) {
+                        last_target_yaw = target_yaw;
+                        last_target_pitch = target_pitch;
+                    }
+
+                    // Soft saturation of the angle error to prevent robotic snaps and eliminate hard acceleration clamping
+                    constexpr float max_angle_error = 0.15f; 
+                    float yaw_diff_soft = max_angle_error * std::tanh(yaw_diff / max_angle_error);
+                    float pitch_diff_soft = max_angle_error * std::tanh(pitch_diff / max_angle_error);
 
                     // Get easing derivative
                     float dist = std::sqrt(yaw_diff * yaw_diff + pitch_diff * pitch_diff);
                     // 0.35 rad is approx 20 degrees, a reasonable reference field of view for camera aiming
                     float d_ratio = std::clamp(dist / 0.35f, 0.0f, 1.0f);
-                    float t = 1.0f - d_ratio;
-                    float speed_mult = get_easing_derivative(t, settings::aimbot::easing_style);
+                    float t_val = 1.0f - d_ratio;
+                    float speed_mult = get_easing_derivative(t_val, settings::aimbot::easing_style);
                     speed_mult = std::clamp(speed_mult, 0.35f, 3.0f);
 
                     // Semi-implicit Euler critically-damped spring-damper with feedforward velocity tracking
                     float omega_x = (45.0f / sx) * speed_mult;
                     float omega_y = (45.0f / sy) * speed_mult;
 
-                    float acc_yaw = 2.0f * omega_x * (target_yaw_vel - spring_vel_yaw) + omega_x * omega_x * yaw_diff;
-                    float acc_pitch = 2.0f * omega_y * (target_pitch_vel - spring_vel_pitch) + omega_y * omega_y * pitch_diff;
-
-                    // Limit acceleration to prevent robotic snaps
-                    float max_acc_yaw = 300.0f / sx;
-                    float max_acc_pitch = 300.0f / sy;
-                    acc_yaw = std::clamp(acc_yaw, -max_acc_yaw, max_acc_yaw);
-                    acc_pitch = std::clamp(acc_pitch, -max_acc_pitch, max_acc_pitch);
+                    float acc_yaw = 2.0f * omega_x * (target_yaw_vel - spring_vel_yaw) + omega_x * omega_x * yaw_diff_soft;
+                    float acc_pitch = 2.0f * omega_y * (target_pitch_vel - spring_vel_pitch) + omega_y * omega_y * pitch_diff_soft;
 
                     spring_vel_yaw += acc_yaw * dt;
                     spring_vel_pitch += acc_pitch * dt;
@@ -777,7 +786,6 @@ namespace rbx::aimbot {
             }
 
             if (settings::aimbot::shake) {
-                static float shake_time = 0.0f;
                 shake_time += dt * 8.0f; // Human hand tremor frequency
                 
                 float factor_x = settings::aimbot::shake_x * 0.0005f;
@@ -793,7 +801,7 @@ namespace rbx::aimbot {
             camera.write_rotation(target_matrix);
         }
 
-        void execute_mouse_aim(std::uint64_t target_address, const math::vector3& target_pos, const POINT& cursor_pt, float loop_dt, const math::vector2& dims, const math::matrix4& view, float screen_dist) {
+        void execute_mouse_aim(std::uint64_t target_address, const math::vector3& target_pos, const POINT& cursor_pt, float loop_dt, const math::vector2& dims, const math::matrix4& view, float screen_dist, bool reset_state) {
             static auto last_mouse_input_time = std::chrono::steady_clock::now();
             auto current_time = std::chrono::steady_clock::now();
             auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_mouse_input_time).count();
@@ -807,10 +815,26 @@ namespace rbx::aimbot {
             last_mouse_input_time = current_time;
 
             static std::uint64_t last_target_address = 0;
-            if (target_address != last_target_address) {
+            static bool session_captured = false;
+            static auto last_near_center_time = std::chrono::steady_clock::now();
+            static float last_target_yaw = 0.0f;
+            static float last_target_pitch = 0.0f;
+            static std::uint64_t last_vel_target_address = 0;
+            static math::vector2 last_screen_pos = {};
+            static std::uint64_t last_mouse_vel_target_address = 0;
+            static float shake_time = 0.0f;
+            static float accum_x = 0.0f;
+            static float accum_y = 0.0f;
+
+            if (reset_state) {
                 last_target_address = target_address;
+                last_vel_target_address = target_address;
+                last_mouse_vel_target_address = target_address;
                 spring_vel_mouse_x = 0.0f;
                 spring_vel_mouse_y = 0.0f;
+                accum_x = 0.0f;
+                accum_y = 0.0f;
+                shake_time = 0.0f;
             }
 
             math::vector2 screen_pos = {};
@@ -847,17 +871,11 @@ namespace rbx::aimbot {
 
             bool right_click_held = (GetAsyncKeyState(VK_RBUTTON) & 0x8000);
             
-            // Check if mouse is captured using a sticky session-based timer to handle transitions robustly
-            static bool session_captured = false;
-            static auto last_near_center_time = std::chrono::steady_clock::now();
-
             bool near_center = (std::abs(target_ref_x - center_x) < 10.0f && std::abs(target_ref_y - center_y) < 10.0f);
             if (near_center || cursor_hidden || right_click_held) {
                 session_captured = true;
                 last_near_center_time = current_time;
             } else if (!cursor_hidden && !right_click_held) {
-                // If cursor is visible, right-click not held, and we have been far from the center for more than 150ms,
-                // we are sure the user has freed their cursor (e.g. menu is open).
                 if (std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_near_center_time).count() > 150) {
                     session_captured = false;
                 }
@@ -872,7 +890,6 @@ namespace rbx::aimbot {
             float dy = 0.0f;
             float sensitivity = std::clamp(settings::aimbot::mouse_sensitivity, 0.1f, 10.0f);
 
-            // Compute target angular velocity relative to camera
             float target_yaw_vel = 0.0f;
             float target_pitch_vel = 0.0f;
 
@@ -898,20 +915,20 @@ namespace rbx::aimbot {
                 float pitch_diff = target_pitch - current_pitch;
                 pitch_diff = std::atan2(std::sin(pitch_diff), std::cos(pitch_diff));
 
-                if (session_captured) {
-                    // Convert radian angular difference directly to mouse movement using Roblox mouse scale (0.0022)
-                    dx = -yaw_diff / 0.0022f;
-                    dy = -pitch_diff / 0.0022f;
-                } else {
-                    dx = screen_pos.x - target_ref_x;
-                    dy = screen_pos.y - target_ref_y;
+                if (reset_state) {
+                    last_target_yaw = target_yaw;
+                    last_target_pitch = target_pitch;
                 }
 
-                static float last_target_yaw = 0.0f;
-                static float last_target_pitch = 0.0f;
-                static std::uint64_t last_vel_target_address = 0;
+                if (session_captured) {
+                    dx = -yaw_diff / (0.0022f * sensitivity);
+                    dy = -pitch_diff / (0.0022f * sensitivity);
+                } else {
+                    dx = (screen_pos.x - target_ref_x) / sensitivity;
+                    dy = (screen_pos.y - target_ref_y) / sensitivity;
+                }
 
-                if (target_address == last_vel_target_address && dt > 0.001f) {
+                if (!reset_state && dt > 0.001f) {
                     float dyaw = target_yaw - last_target_yaw;
                     dyaw = std::atan2(std::sin(dyaw), std::cos(dyaw));
                     float dpitch = target_pitch - last_target_pitch;
@@ -920,32 +937,36 @@ namespace rbx::aimbot {
                     target_yaw_vel = dyaw / dt;
                     target_pitch_vel = dpitch / dt;
                 }
-                last_target_yaw = target_yaw;
-                last_target_pitch = target_pitch;
-                last_vel_target_address = target_address;
-            } else {
-                dx = screen_pos.x - target_ref_x;
-                dy = screen_pos.y - target_ref_y;
-            }
 
-            // Unify target velocity in mouse units/sec
-            static math::vector2 last_screen_pos = {};
-            static std::uint64_t last_mouse_vel_target_address = 0;
+                if (!reset_state) {
+                    last_target_yaw = target_yaw;
+                    last_target_pitch = target_pitch;
+                }
+            } else {
+                dx = (screen_pos.x - target_ref_x) / sensitivity;
+                dy = (screen_pos.y - target_ref_y) / sensitivity;
+            }
 
             float target_vel_x = 0.0f;
             float target_vel_y = 0.0f;
 
+            if (reset_state) {
+                last_screen_pos = screen_pos;
+            }
+
             if (session_captured) {
-                target_vel_x = -target_yaw_vel / 0.0022f;
-                target_vel_y = -target_pitch_vel / 0.0022f;
+                target_vel_x = -target_yaw_vel / (0.0022f * sensitivity);
+                target_vel_y = -target_pitch_vel / (0.0022f * sensitivity);
             } else {
-                if (target_address == last_mouse_vel_target_address && dt > 0.001f) {
-                    target_vel_x = (screen_pos.x - last_screen_pos.x) / dt;
-                    target_vel_y = (screen_pos.y - last_screen_pos.y) / dt;
+                if (!reset_state && dt > 0.001f) {
+                    target_vel_x = ((screen_pos.x - last_screen_pos.x) / dt) / sensitivity;
+                    target_vel_y = ((screen_pos.y - last_screen_pos.y) / dt) / sensitivity;
                 }
             }
-            last_screen_pos = screen_pos;
-            last_mouse_vel_target_address = target_address;
+
+            if (!reset_state) {
+                last_screen_pos = screen_pos;
+            }
 
             float move_step_x = 0.0f;
             float move_step_y = 0.0f;
@@ -966,26 +987,24 @@ namespace rbx::aimbot {
                     spring_vel_mouse_x = 0.0f;
                     spring_vel_mouse_y = 0.0f;
                 } else {
-                    // Get easing derivative
                     float dist = std::sqrt(dx * dx + dy * dy);
                     float ref_fov = (settings::aimbot::fov > 10.0f) ? settings::aimbot::fov : 200.0f;
-                    float d_ratio = std::clamp(dist / ref_fov, 0.0f, 1.0f);
-                    float t = 1.0f - d_ratio;
-                    float speed_mult = get_easing_derivative(t, settings::aimbot::easing_style);
+                    float ref_fov_mouse = ref_fov / sensitivity;
+                    float d_ratio = std::clamp(dist / ref_fov_mouse, 0.0f, 1.0f);
+                    float t_val = 1.0f - d_ratio;
+                    float speed_mult = get_easing_derivative(t_val, settings::aimbot::easing_style);
                     speed_mult = std::clamp(speed_mult, 0.35f, 3.0f);
 
-                    // Semi-implicit Euler critically-damped spring-damper with feedforward velocity tracking
                     float omega_x = (45.0f / sx) * speed_mult;
                     float omega_y = (45.0f / sy) * speed_mult;
 
-                    float acc_x = 2.0f * omega_x * (target_vel_x - spring_vel_mouse_x) + omega_x * omega_x * dx;
-                    float acc_y = 2.0f * omega_y * (target_vel_y - spring_vel_mouse_y) + omega_y * omega_y * dy;
+                    // Soft saturation of the mouse error in mouse units to prevent snap overshoots
+                    constexpr float max_mouse_error = 50.0f;
+                    float dx_soft = max_mouse_error * std::tanh(dx / max_mouse_error);
+                    float dy_soft = max_mouse_error * std::tanh(dy / max_mouse_error);
 
-                    // Limit acceleration to prevent robotic snaps
-                    float max_acc_x = 12000.0f / sx;
-                    float max_acc_y = 12000.0f / sy;
-                    acc_x = std::clamp(acc_x, -max_acc_x, max_acc_x);
-                    acc_y = std::clamp(acc_y, -max_acc_y, max_acc_y);
+                    float acc_x = 2.0f * omega_x * (target_vel_x - spring_vel_mouse_x) + omega_x * omega_x * dx_soft;
+                    float acc_y = 2.0f * omega_y * (target_vel_y - spring_vel_mouse_y) + omega_y * omega_y * dy_soft;
 
                     spring_vel_mouse_x += acc_x * dt;
                     spring_vel_mouse_y += acc_y * dt;
@@ -997,10 +1016,10 @@ namespace rbx::aimbot {
                     move_step_y *= sensitivity;
 
                     // Add human muscle micro-tremor (scaled by distance and tension)
-                    float tremor_tension_scale = (1.0f - std::clamp(dist / 80.0f, 0.0f, 0.8f)) * std::clamp(dist / 4.0f, 0.0f, 1.0f);
+                    float tremor_tension_scale = (1.0f - std::clamp(dist / (80.0f / sensitivity), 0.0f, 0.8f)) * std::clamp(dist / (4.0f / sensitivity), 0.0f, 1.0f);
                     float tremor_base = 0.15f * (settings::aimbot::shake ? std::abs(settings::aimbot::shake_x) : 0.8f);
-                    move_step_x += ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f) * tremor_base * tremor_tension_scale;
-                    move_step_y += ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f) * tremor_base * tremor_tension_scale;
+                    move_step_x += ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f) * tremor_base * tremor_tension_scale * sensitivity;
+                    move_step_y += ((static_cast<float>(rand()) / RAND_MAX) * 2.0f - 1.0f) * tremor_base * tremor_tension_scale * sensitivity;
                 }
             } else {
                 move_step_x = dx * sensitivity;
@@ -1013,7 +1032,6 @@ namespace rbx::aimbot {
             dy = move_step_y;
 
             if (settings::aimbot::shake) {
-                static float shake_time = 0.0f;
                 shake_time += dt * 8.0f;
                 
                 float sx = std::abs(settings::aimbot::shake_x);
@@ -1026,9 +1044,6 @@ namespace rbx::aimbot {
             float max_mouse_delta = 80.0f;
             dx = std::clamp(dx, -max_mouse_delta, max_mouse_delta);
             dy = std::clamp(dy, -max_mouse_delta, max_mouse_delta);
-
-            static float accum_x = 0.0f;
-            static float accum_y = 0.0f;
 
             if (std::isfinite(dx) && std::isfinite(dy)) {
                 accum_x += dx;
@@ -1322,6 +1337,7 @@ namespace rbx::aimbot {
             if (dt > 0.1f) dt = 0.016f;
 
             bool is_smooth_enabled = (settings::aimbot::aimbot_type == 0) ? settings::aimbot::camera_smooth : settings::aimbot::mouse_smooth;
+            bool was_initialized = target_pos_initialized;
             if (!is_smooth_enabled && !settings::aimbot::adaptive_smoothing) {
                 filtered_target_pos = target_pos;
                 target_pos_initialized = true;
@@ -1338,11 +1354,15 @@ namespace rbx::aimbot {
                 }
             }
 
+            static std::uint64_t last_run_target_address = 0;
+            bool reset_state = !was_initialized || (target.instance.address != last_run_target_address);
+            last_run_target_address = target.instance.address;
+
             if (settings::aimbot::aimbot_type == 0) {
-                execute_camera_aim(target.instance.address, filtered_target_pos, dt, cursor_dist);
+                execute_camera_aim(target.instance.address, filtered_target_pos, dt, cursor_dist, reset_state);
             }
             else {
-                execute_mouse_aim(target.instance.address, filtered_target_pos, cursor_pt, dt, dims, view, cursor_dist);
+                execute_mouse_aim(target.instance.address, filtered_target_pos, cursor_pt, dt, dims, view, cursor_dist, reset_state);
             }
             Sleep(1);
         }

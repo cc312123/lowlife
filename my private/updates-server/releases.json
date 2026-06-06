@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.8",
-    "latestChangelog":  "Fix triggerbot local player filtering, exclude local player from triggerbot hitbox visuals, and correct mouse sensitivity scaling math under first person/mouse lock.",
+    "latestVersion":  "1.0.9",
+    "latestChangelog":  "Fix aimbot smoothing wandering/flicking by resetting tracking states on target acquisition, implementing soft-saturation error mapping, and correct 1-to-1 mouse sensitivity feedback scaling.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -66,7 +66,14 @@
                         "changelog":  "Fix triggerbot local player filtering, exclude local player from triggerbot hitbox visuals, and correct mouse sensitivity scaling math under first person/mouse lock.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "f59ecd1b1fdde49af808a6beb9dc073b"
+                    },
+                    {
+                        "version":  "1.0.9",
+                        "date":  "2026-06-06",
+                        "changelog":  "Fix aimbot smoothing wandering/flicking by resetting tracking states on target acquisition, implementing soft-saturation error mapping, and correct 1-to-1 mouse sensitivity feedback scaling.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "5e92674186d8a20c75b82748e492db6c"
                     }
                 ],
-    "latestHash":  "f59ecd1b1fdde49af808a6beb9dc073b"
+    "latestHash":  "5e92674186d8a20c75b82748e492db6c"
 }
