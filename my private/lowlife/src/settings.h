@@ -41,17 +41,17 @@ namespace settings
 		inline int aimpart{ 0 };
 		inline bool team_check{ false };
 		
-		inline bool mouse_smooth{ false };
-		inline float mouse_smooth_x{ 1.0f };
-		inline float mouse_smooth_y{ 1.0f };
+		inline bool mouse_smooth{ true };
+		inline float mouse_smooth_x{ 15.0f };
+		inline float mouse_smooth_y{ 15.0f };
 		inline float mouse_sensitivity{ 1.0f };
 		inline bool mouse_prediction{ false };
 		inline float mouse_prediction_x{ 1.0f };
 		inline float mouse_prediction_y{ 1.0f };
 		
-		inline bool camera_smooth{ false };
-		inline float camera_smooth_x{ 1.0f };
-		inline float camera_smooth_y{ 1.0f };
+		inline bool camera_smooth{ true };
+		inline float camera_smooth_x{ 15.0f };
+		inline float camera_smooth_y{ 15.0f };
 		inline bool camera_prediction{ false };
 		inline float camera_prediction_x{ 1.0f };
 		inline float camera_prediction_y{ 1.0f };
@@ -59,8 +59,8 @@ namespace settings
 		inline bool shake{ false };
 		inline float shake_x{ 0.0f };
 		inline float shake_y{ 0.0f };
-		inline int easing_style{ 0 }; 
-		inline float ease_time{ 0.5f };
+		inline int easing_style{ 3 }; 
+		inline float ease_time{ 0.25f };
 
 		inline int target_selection_mode{ 0 }; // 0 = Crosshair, 1 = 3D Distance, 2 = Health
 		inline bool smart_bone{ false };
