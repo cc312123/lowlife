@@ -2201,7 +2201,12 @@ void render_t::render_menu()
         return;
     }
 
-    ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.06f, 0.06f, 0.08f, 0.45f));
+    if (menu::custom_background_loaded && menu::background_texture) {
+        ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.06f, 0.06f, 0.08f, 0.10f));
+        ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.20f, 0.20f, 0.25f, 0.15f));
+    } else {
+        ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.06f, 0.06f, 0.08f, 0.45f));
+    }
 
     static float glow_time = 0.0f;
     glow_time += ImGui::GetIO().DeltaTime * 1.5f; 
@@ -2223,7 +2228,7 @@ void render_t::render_menu()
     } else {
         draw_list->AddRectFilled(ImVec2(window_pos.x + 4, window_pos.y + 4), ImVec2(window_pos.x + window_size.x - 4, window_pos.y + window_size.y - 4), IM_COL32(18, 18, 22, 255), 8.0f);
     }
-    draw_list->AddRect(ImVec2(window_pos.x + 4, window_pos.y + 4), ImVec2(window_pos.x + window_size.x - 4, window_pos.y + window_size.y - 4), IM_COL32(45, 45, 52, 255), 8.0f);
+    draw_list->AddRect(ImVec2(window_pos.x + 4, window_pos.y + 4), ImVec2(window_pos.x + window_size.x - 4, window_pos.y + window_size.y - 4), (menu::custom_background_loaded && menu::background_texture) ? IM_COL32(45, 45, 52, 100) : IM_COL32(45, 45, 52, 255), 8.0f);
 
     
     struct Jewel {
@@ -3783,7 +3788,7 @@ void render_t::render_menu()
     }
 
     ImGui::End();
-    ImGui::PopStyleColor(1);
+    ImGui::PopStyleColor((menu::custom_background_loaded && menu::background_texture) ? 2 : 1);
     ImGui::PopStyleVar();
 
     
