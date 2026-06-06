@@ -1,8 +1,6 @@
 #define IMGUI_DEFINE_MATH_OPERATORS
 #define NOMINMAX
 #include <render/render.h>
-#include <wincodec.h>
-#pragma comment(lib, "windowscodecs.lib")
 #include <mutex>
 #include <atomic>
 #include <ctime>
@@ -1220,191 +1218,11 @@ render_t::render_t()
 
 render_t::~render_t()
 {
-    unload_background_texture();
     continuous_cleaner_should_exit = true;
     run_async_cpp_cleaner(false, false); // One final synchronous clean on unload!
     destroy_imgui();
     destroy_window();
     destroy_device();
-}
-
-bool render_t::load_background_texture(const std::string& path)
-{
-    unload_background_texture();
-
-    if (path.empty())
-        return false;
-
-    std::ifstream file(path, std::ios::binary);
-    if (!file.is_open())
-        return false;
-
-    std::vector<unsigned char> data((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-    file.close();
-
-    if (data.empty())
-        return false;
-
-    if (!detail || !detail->device)
-        return false;
-
-    static bool com_initialized = false;
-    if (!com_initialized)
-    {
-        CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
-        com_initialized = true;
-    }
-
-    IWICImagingFactory* pFactory = nullptr;
-    HRESULT hr = CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pFactory));
-    if (FAILED(hr))
-        return false;
-
-    IWICStream* pStream = nullptr;
-    hr = pFactory->CreateStream(&pStream);
-    if (FAILED(hr))
-    {
-        pFactory->Release();
-        return false;
-    }
-
-    hr = pStream->InitializeFromMemory((BYTE*)data.data(), (DWORD)data.size());
-    if (FAILED(hr))
-    {
-        pStream->Release();
-        pFactory->Release();
-        return false;
-    }
-
-    IWICBitmapDecoder* pDecoder = nullptr;
-    hr = pFactory->CreateDecoderFromStream(pStream, nullptr, WICDecodeMetadataCacheOnLoad, &pDecoder);
-    if (FAILED(hr))
-    {
-        pStream->Release();
-        pFactory->Release();
-        return false;
-    }
-
-    IWICBitmapFrameDecode* pFrame = nullptr;
-    hr = pDecoder->GetFrame(0, &pFrame);
-    if (FAILED(hr))
-    {
-        pDecoder->Release();
-        pStream->Release();
-        pFactory->Release();
-        return false;
-    }
-
-    IWICFormatConverter* pConverter = nullptr;
-    hr = pFactory->CreateFormatConverter(&pConverter);
-    if (FAILED(hr))
-    {
-        pFrame->Release();
-        pDecoder->Release();
-        pStream->Release();
-        pFactory->Release();
-        return false;
-    }
-
-    hr = pConverter->Initialize(pFrame, GUID_WICPixelFormat32bppRGBA, WICBitmapDitherTypeNone, nullptr, 0.0, WICBitmapPaletteTypeCustom);
-    if (FAILED(hr))
-    {
-        pConverter->Release();
-        pFrame->Release();
-        pDecoder->Release();
-        pStream->Release();
-        pFactory->Release();
-        return false;
-    }
-
-    UINT width = 0, height = 0;
-    hr = pConverter->GetSize(&width, &height);
-    if (FAILED(hr))
-    {
-        pConverter->Release();
-        pFrame->Release();
-        pDecoder->Release();
-        pStream->Release();
-        pFactory->Release();
-        return false;
-    }
-
-    UINT stride = width * 4;
-    UINT bufferSize = stride * height;
-    std::vector<BYTE> buffer(bufferSize);
-
-    hr = pConverter->CopyPixels(nullptr, stride, bufferSize, buffer.data());
-    if (FAILED(hr))
-    {
-        pConverter->Release();
-        pFrame->Release();
-        pDecoder->Release();
-        pStream->Release();
-        pFactory->Release();
-        return false;
-    }
-
-    D3D11_TEXTURE2D_DESC desc = {};
-    desc.Width = width;
-    desc.Height = height;
-    desc.MipLevels = 1;
-    desc.ArraySize = 1;
-    desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    desc.SampleDesc.Count = 1;
-    desc.Usage = D3D11_USAGE_DEFAULT;
-    desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-    desc.CPUAccessFlags = 0;
-
-    D3D11_SUBRESOURCE_DATA subResource = {};
-    subResource.pSysMem = buffer.data();
-    subResource.SysMemPitch = stride;
-    subResource.SysMemSlicePitch = 0;
-
-    ID3D11Texture2D* pTexture = nullptr;
-    hr = detail->device->CreateTexture2D(&desc, &subResource, &pTexture);
-    if (FAILED(hr))
-    {
-        pConverter->Release();
-        pFrame->Release();
-        pDecoder->Release();
-        pStream->Release();
-        pFactory->Release();
-        return false;
-    }
-
-    D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-    srvDesc.Format = desc.Format;
-    srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-    srvDesc.Texture2D.MipLevels = desc.MipLevels;
-    srvDesc.Texture2D.MostDetailedMip = 0;
-
-    ID3D11ShaderResourceView* pSRV = nullptr;
-    hr = detail->device->CreateShaderResourceView(pTexture, &srvDesc, &pSRV);
-    pTexture->Release();
-
-    pConverter->Release();
-    pFrame->Release();
-    pDecoder->Release();
-    pStream->Release();
-    pFactory->Release();
-
-    if (FAILED(hr))
-        return false;
-
-    menu::background_texture = (void*)pSRV;
-    menu::custom_background_loaded = true;
-    return true;
-}
-
-void render_t::unload_background_texture()
-{
-    if (menu::background_texture)
-    {
-        ID3D11ShaderResourceView* pSRV = (ID3D11ShaderResourceView*)menu::background_texture;
-        pSRV->Release();
-        menu::background_texture = nullptr;
-    }
-    menu::custom_background_loaded = false;
 }
 
 bool render_t::create_window()
@@ -2201,12 +2019,7 @@ void render_t::render_menu()
         return;
     }
 
-    if (menu::custom_background_loaded && menu::background_texture) {
-        ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.06f, 0.06f, 0.08f, 0.10f));
-        ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.20f, 0.20f, 0.25f, 0.15f));
-    } else {
-        ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.06f, 0.06f, 0.08f, 0.45f));
-    }
+    ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.06f, 0.06f, 0.08f, 0.45f));
 
     static float glow_time = 0.0f;
     glow_time += ImGui::GetIO().DeltaTime * 1.5f; 
@@ -2223,12 +2036,8 @@ void render_t::render_menu()
     draw_list->AddRect(window_pos, ImVec2(window_pos.x + window_size.x, window_pos.y + window_size.y), IM_COL32(40, 40, 48, 255), 10.0f, 0, 1.0f);
 
     
-    if (menu::custom_background_loaded && menu::background_texture) {
-        draw_list->AddImageRounded((ImTextureID)menu::background_texture, ImVec2(window_pos.x + 4, window_pos.y + 4), ImVec2(window_pos.x + window_size.x - 4, window_pos.y + window_size.y - 4), ImVec2(0.f, 0.f), ImVec2(1.f, 1.f), IM_COL32(255, 255, 255, 255), 8.0f);
-    } else {
-        draw_list->AddRectFilled(ImVec2(window_pos.x + 4, window_pos.y + 4), ImVec2(window_pos.x + window_size.x - 4, window_pos.y + window_size.y - 4), IM_COL32(18, 18, 22, 255), 8.0f);
-    }
-    draw_list->AddRect(ImVec2(window_pos.x + 4, window_pos.y + 4), ImVec2(window_pos.x + window_size.x - 4, window_pos.y + window_size.y - 4), (menu::custom_background_loaded && menu::background_texture) ? IM_COL32(45, 45, 52, 100) : IM_COL32(45, 45, 52, 255), 8.0f);
+    draw_list->AddRectFilled(ImVec2(window_pos.x + 4, window_pos.y + 4), ImVec2(window_pos.x + window_size.x - 4, window_pos.y + window_size.y - 4), IM_COL32(18, 18, 22, 255), 8.0f);
+    draw_list->AddRect(ImVec2(window_pos.x + 4, window_pos.y + 4), ImVec2(window_pos.x + window_size.x - 4, window_pos.y + window_size.y - 4), IM_COL32(45, 45, 52, 255), 8.0f);
 
     
     struct Jewel {
@@ -3026,46 +2835,6 @@ void render_t::render_menu()
         ImGui::Checkbox("Hide Console", &menu::hide_console);
         ImGui::Checkbox("Dex Explorer", &settings::dex_explorer::enabled);
         ImGui::Checkbox("Update Log", &menu::update_log);
-
-        ImGui::Spacing();
-        ImGui::Separator();
-        ImGui::Spacing();
-        ImGui::TextColored(menu::accent_color, "CUSTOM BACKGROUND");
-        ImGui::Separator();
-        ImGui::Spacing();
-
-        static char bg_path[260] = "";
-        static std::string last_bg_path = "";
-        if (last_bg_path != menu::background_path) {
-            strcpy_s(bg_path, menu::background_path.c_str());
-            last_bg_path = menu::background_path;
-        }
-
-        ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - 70.f);
-        ImGui::InputText("##bg_path", bg_path, IM_ARRAYSIZE(bg_path));
-        ImGui::SameLine();
-        if (styled_button("Load", ImVec2(55.f, 25.f))) {
-            menu::background_path = bg_path;
-            if (load_background_texture(menu::background_path)) {
-                notifications::add("Background Loaded", notifications::NotificationType::Success, 3.0f);
-            } else {
-                notifications::add("Failed to Load Background", notifications::NotificationType::Error, 3.0f);
-            }
-        }
-        
-        if (menu::custom_background_loaded) {
-            if (styled_button("Remove Background", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 25.f))) {
-                unload_background_texture();
-                menu::background_path = "";
-                bg_path[0] = '\0';
-                last_bg_path = "";
-                notifications::add("Background Removed", notifications::NotificationType::Info, 3.0f);
-            }
-        }
-
-        ImGui::Spacing();
-        ImGui::Separator();
-        ImGui::Spacing();
         ImGui::TextColored(menu::accent_color, "SYSTEM CLEANER CONFIG");
         ImGui::Separator();
         ImGui::Spacing();
@@ -3281,14 +3050,6 @@ void render_t::render_menu()
             if (styled_button("Load", ImVec2(100, 0)))
             {
                 config::load_config(config_list[selected_config_index].name);
-                if (!menu::background_path.empty())
-                {
-                    load_background_texture(menu::background_path);
-                }
-                else
-                {
-                    unload_background_texture();
-                }
             }
 
             ImGui::SameLine();
@@ -3788,7 +3549,7 @@ void render_t::render_menu()
     }
 
     ImGui::End();
-    ImGui::PopStyleColor((menu::custom_background_loaded && menu::background_texture) ? 2 : 1);
+    ImGui::PopStyleColor(1);
     ImGui::PopStyleVar();
 
     
