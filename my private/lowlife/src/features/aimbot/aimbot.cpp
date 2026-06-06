@@ -47,10 +47,49 @@ namespace rbx::aimbot {
         float accum_x = 0.0f;
         float accum_y = 0.0f;
 
+        // Critically damped spring physics velocities
+        float camera_yaw_velocity = 0.0f;
+        float camera_pitch_velocity = 0.0f;
+        float mouse_yaw_velocity = 0.0f;
+        float mouse_pitch_velocity = 0.0f;
+        float mouse_x_velocity = 0.0f;
+        float mouse_y_velocity = 0.0f;
 
+        // Organic shake hand jitter state
+        float jitter_vel_x = 0.0f;
+        float jitter_vel_y = 0.0f;
+        float jitter_vel_z = 0.0f;
+        float jitter_offset_x = 0.0f;
+        float jitter_offset_y = 0.0f;
+        float jitter_offset_z = 0.0f;
+
+        // Target history for robust calculated velocity
+        struct target_history_t {
+            math::vector3 last_pos = { 0.0f, 0.0f, 0.0f };
+            std::chrono::steady_clock::time_point last_time;
+            bool has_history = false;
+        };
+        std::unordered_map<std::uint64_t, target_history_t> target_histories;
 
         // Persistent bone random offset (per-lock)
         math::vector3 current_bone_offset = { 0.0f, 0.0f, 0.0f };
+
+        float get_roblox_sensitivity() {
+            std::uint64_t mouseservice_address = 0;
+            if (game::datamodel.address != 0) {
+                mouseservice_address = game::datamodel.find_first_child_by_class("MouseService").address;
+            }
+            if (mouseservice_address != 0) {
+                std::uint64_t sens_ptr = memory->read<std::uint64_t>(mouseservice_address + Offsets::MouseService::SensitivityPointer);
+                if (sens_ptr != 0 && sens_ptr != 0xFFFFFFFFFFFFFFFF) {
+                    double sens = memory->read<double>(sens_ptr);
+                    if (std::isfinite(sens) && sens > 0.0001 && sens < 100.0) {
+                        return static_cast<float>(sens);
+                    }
+                }
+            }
+            return settings::aimbot::mouse_sensitivity;
+        }
 
         float apply_easing(int style, float t) {
             if (style <= 0) return 1.0f;
@@ -698,18 +737,64 @@ namespace rbx::aimbot {
 
         math::vector3 apply_prediction(std::uint64_t entity_address, rbx::primitive_t primitive, const math::vector3& target_pos, const math::vector3& camera_pos, bool is_camera) {
             math::vector3 pos = target_pos;
-            math::vector3 vel = primitive.get_velocity();
+            math::vector3 raw_vel = primitive.get_velocity();
+
+            auto now = std::chrono::steady_clock::now();
+
+            if (target_histories.size() > 500) {
+                target_histories.clear();
+            }
+
+            target_history_t& hist = target_histories[entity_address];
+            math::vector3 calculated_vel = { 0.0f, 0.0f, 0.0f };
+
+            if (hist.has_history) {
+                float time_diff = std::chrono::duration<float>(now - hist.last_time).count();
+                if (time_diff > 0.001f && time_diff < 0.1f) {
+                    calculated_vel.x = (target_pos.x - hist.last_pos.x) / time_diff;
+                    calculated_vel.y = (target_pos.y - hist.last_pos.y) / time_diff;
+                    calculated_vel.z = (target_pos.z - hist.last_pos.z) / time_diff;
+                }
+            }
+
+            hist.last_pos = target_pos;
+            hist.last_time = now;
+            hist.has_history = true;
+
+            math::vector3 vel = { 0.0f, 0.0f, 0.0f };
+
+            bool raw_vel_valid = std::isfinite(raw_vel.x) && std::isfinite(raw_vel.y) && std::isfinite(raw_vel.z) &&
+                                 std::abs(raw_vel.x) < MAX_VELOCITY && std::abs(raw_vel.y) < MAX_VELOCITY && std::abs(raw_vel.z) < MAX_VELOCITY;
+
+            bool calc_vel_valid = std::isfinite(calculated_vel.x) && std::isfinite(calculated_vel.y) && std::isfinite(calculated_vel.z) &&
+                                  std::abs(calculated_vel.x) < MAX_VELOCITY && std::abs(calculated_vel.y) < MAX_VELOCITY && std::abs(calculated_vel.z) < MAX_VELOCITY;
+
+            if (raw_vel_valid && calc_vel_valid) {
+                float raw_speed = std::sqrt(raw_vel.x * raw_vel.x + raw_vel.y * raw_vel.y + raw_vel.z * raw_vel.z);
+                float calc_speed = std::sqrt(calculated_vel.x * calculated_vel.x + calculated_vel.y * calculated_vel.y + calculated_vel.z * calculated_vel.z);
+
+                if (raw_speed < 0.1f && calc_speed > 0.5f) {
+                    vel = calculated_vel;
+                } else {
+                    vel.x = raw_vel.x * 0.7f + calculated_vel.x * 0.3f;
+                    vel.y = raw_vel.y * 0.7f + calculated_vel.y * 0.3f;
+                    vel.z = raw_vel.z * 0.7f + calculated_vel.z * 0.3f;
+                }
+            } else if (raw_vel_valid) {
+                vel = raw_vel;
+            } else if (calc_vel_valid) {
+                vel = calculated_vel;
+            }
 
             if (!std::isfinite(vel.x) || !std::isfinite(vel.y) || !std::isfinite(vel.z) ||
-                std::abs(vel.x) > MAX_VELOCITY || std::abs(vel.y) > MAX_VELOCITY || std::abs(vel.z) > MAX_VELOCITY)
+                std::abs(vel.x) > MAX_VELOCITY || std::abs(vel.y) > MAX_VELOCITY || std::abs(vel.z) > MAX_VELOCITY) {
                 return pos;
+            }
 
             static std::unordered_map<std::uint64_t, math::vector3> smoothed_velocities;
             static std::unordered_map<std::uint64_t, std::chrono::steady_clock::time_point> last_prediction_times;
 
-            auto now = std::chrono::steady_clock::now();
-
-            if (smoothed_velocities.size() > 200) {
+            if (smoothed_velocities.size() > 500) {
                 smoothed_velocities.clear();
                 last_prediction_times.clear();
             }
@@ -723,7 +808,7 @@ namespace rbx::aimbot {
                 float dt = std::chrono::duration<float>(now - last_time_it->second).count();
                 if (dt > 0.1f) dt = 0.016f;
 
-                float alpha = 1.0f - std::exp(-10.0f * dt);
+                float alpha = 1.0f - std::exp(-15.0f * dt);
                 alpha = std::clamp(alpha, 0.0f, 1.0f);
                 smooth_vel.x += (vel.x - smooth_vel.x) * alpha;
                 smooth_vel.y += (vel.y - smooth_vel.y) * alpha;
@@ -812,15 +897,45 @@ namespace rbx::aimbot {
                     sy = sx;
                 }
 
-                // Smooth exponential dampening factor
-                float factor_x = 1.0f - std::exp(-(1.5f / sx) * 60.0f * dt);
-                float factor_y = 1.0f - std::exp(-(1.5f / sy) * 60.0f * dt);
+                if (settings::aimbot::easing_style == 12) { // Spring mode
+                    float omega_x = (40.0f / sx) * ease_factor;
+                    float omega_y = (40.0f / sy) * ease_factor;
 
-                factor_x = std::clamp(factor_x, 0.0f, 1.0f);
-                factor_y = std::clamp(factor_y, 0.0f, 1.0f);
+                    if (reset_state) {
+                        camera_yaw_velocity = 0.0f;
+                        camera_pitch_velocity = 0.0f;
+                    }
 
-                final_yaw = current_yaw + yaw_diff * factor_x;
-                final_pitch = current_pitch + pitch_diff * factor_y;
+                    // Yaw spring
+                    float err_x = yaw_diff;
+                    float A_x = err_x;
+                    float B_x = camera_yaw_velocity + omega_x * A_x;
+                    float exp_x = std::exp(-omega_x * dt);
+                    float new_error_x = (A_x + B_x * dt) * exp_x;
+                    camera_yaw_velocity = (B_x - omega_x * (A_x + B_x * dt)) * exp_x;
+                    float step_x = err_x - new_error_x;
+                    final_yaw = current_yaw + step_x;
+
+                    // Pitch spring
+                    float err_y = pitch_diff;
+                    float A_y = err_y;
+                    float B_y = camera_pitch_velocity + omega_y * A_y;
+                    float exp_y = std::exp(-omega_y * dt);
+                    float new_error_y = (A_y + B_y * dt) * exp_y;
+                    camera_pitch_velocity = (B_y - omega_y * (A_y + B_y * dt)) * exp_y;
+                    float step_y = err_y - new_error_y;
+                    final_pitch = current_pitch + step_y;
+                } else {
+                    // Smooth exponential dampening factor
+                    float factor_x = 1.0f - std::exp(-(1.5f / sx) * 60.0f * dt);
+                    float factor_y = 1.0f - std::exp(-(1.5f / sy) * 60.0f * dt);
+
+                    factor_x = std::clamp(factor_x * ease_factor, 0.0f, 1.0f);
+                    factor_y = std::clamp(factor_y * ease_factor, 0.0f, 1.0f);
+
+                    final_yaw = current_yaw + yaw_diff * factor_x;
+                    final_pitch = current_pitch + pitch_diff * factor_y;
+                }
             }
 
             final_yaw = std::atan2(std::sin(final_yaw), std::cos(final_yaw));
@@ -890,7 +1005,8 @@ namespace rbx::aimbot {
 
             float dx = 0.0f;
             float dy = 0.0f;
-            float sensitivity = std::clamp(settings::aimbot::mouse_sensitivity, 0.1f, 10.0f);
+            float sensitivity = get_roblox_sensitivity();
+            sensitivity = std::clamp(sensitivity, 0.01f, 20.0f);
 
             if (session_captured) {
                 rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
@@ -930,17 +1046,44 @@ namespace rbx::aimbot {
                         sy = sx;
                     }
 
-                    float factor_x = 1.0f - std::exp(-(1.5f / sx) * 60.0f * dt);
-                    float factor_y = 1.0f - std::exp(-(1.5f / sy) * 60.0f * dt);
+                    if (settings::aimbot::easing_style == 12) { // Spring mode
+                        float omega_x = (40.0f / sx) * ease_factor;
+                        float omega_y = (40.0f / sy) * ease_factor;
 
-                    factor_x = std::clamp(factor_x, 0.0f, 1.0f);
-                    factor_y = std::clamp(factor_y, 0.0f, 1.0f);
+                        if (reset_state) {
+                            mouse_yaw_velocity = 0.0f;
+                            mouse_pitch_velocity = 0.0f;
+                        }
 
-                    float step_yaw = err_yaw * factor_x;
-                    float step_pitch = err_pitch * factor_y;
+                        float A_x = err_yaw;
+                        float B_x = mouse_yaw_velocity + omega_x * A_x;
+                        float exp_x = std::exp(-omega_x * dt);
+                        float new_error_x = (A_x + B_x * dt) * exp_x;
+                        mouse_yaw_velocity = (B_x - omega_x * (A_x + B_x * dt)) * exp_x;
+                        float step_yaw = err_yaw - new_error_x;
 
-                    dx = -step_yaw / (0.0022f * sensitivity);
-                    dy = -step_pitch / (0.0022f * sensitivity);
+                        float A_y = err_pitch;
+                        float B_y = mouse_pitch_velocity + omega_y * A_y;
+                        float exp_y = std::exp(-omega_y * dt);
+                        float new_error_y = (A_y + B_y * dt) * exp_y;
+                        mouse_pitch_velocity = (B_y - omega_y * (A_y + B_y * dt)) * exp_y;
+                        float step_pitch = err_pitch - new_error_y;
+
+                        dx = -step_yaw / (0.0022f * sensitivity);
+                        dy = -step_pitch / (0.0022f * sensitivity);
+                    } else {
+                        float factor_x = 1.0f - std::exp(-(1.5f / sx) * 60.0f * dt);
+                        float factor_y = 1.0f - std::exp(-(1.5f / sy) * 60.0f * dt);
+
+                        factor_x = std::clamp(factor_x * ease_factor, 0.0f, 1.0f);
+                        factor_y = std::clamp(factor_y * ease_factor, 0.0f, 1.0f);
+
+                        float step_yaw = err_yaw * factor_x;
+                        float step_pitch = err_pitch * factor_y;
+
+                        dx = -step_yaw / (0.0022f * sensitivity);
+                        dy = -step_pitch / (0.0022f * sensitivity);
+                    }
                 } else {
                     dx = -err_yaw / (0.0022f * sensitivity);
                     dy = -err_pitch / (0.0022f * sensitivity);
@@ -966,17 +1109,44 @@ namespace rbx::aimbot {
                         sy = sx;
                     }
 
-                    float factor_x = 1.0f - std::exp(-(1.5f / sx) * 60.0f * dt);
-                    float factor_y = 1.0f - std::exp(-(1.5f / sy) * 60.0f * dt);
+                    if (settings::aimbot::easing_style == 12) { // Spring mode
+                        float omega_x = (40.0f / sx) * ease_factor;
+                        float omega_y = (40.0f / sy) * ease_factor;
 
-                    factor_x = std::clamp(factor_x, 0.0f, 1.0f);
-                    factor_y = std::clamp(factor_y, 0.0f, 1.0f);
+                        if (reset_state) {
+                            mouse_x_velocity = 0.0f;
+                            mouse_y_velocity = 0.0f;
+                        }
 
-                    float step_x = err_x * factor_x;
-                    float step_y = err_y * factor_y;
+                        float A_x = err_x;
+                        float B_x = mouse_x_velocity + omega_x * A_x;
+                        float exp_x = std::exp(-omega_x * dt);
+                        float new_error_x = (A_x + B_x * dt) * exp_x;
+                        mouse_x_velocity = (B_x - omega_x * (A_x + B_x * dt)) * exp_x;
+                        float step_x = err_x - new_error_x;
 
-                    dx = step_x;
-                    dy = step_y;
+                        float A_y = err_y;
+                        float B_y = mouse_y_velocity + omega_y * A_y;
+                        float exp_y = std::exp(-omega_y * dt);
+                        float new_error_y = (A_y + B_y * dt) * exp_y;
+                        mouse_y_velocity = (B_y - omega_y * (A_y + B_y * dt)) * exp_y;
+                        float step_y = err_y - new_error_y;
+
+                        dx = step_x;
+                        dy = step_y;
+                    } else {
+                        float factor_x = 1.0f - std::exp(-(1.5f / sx) * 60.0f * dt);
+                        float factor_y = 1.0f - std::exp(-(1.5f / sy) * 60.0f * dt);
+
+                        factor_x = std::clamp(factor_x * ease_factor, 0.0f, 1.0f);
+                        factor_y = std::clamp(factor_y * ease_factor, 0.0f, 1.0f);
+
+                        float step_x = err_x * factor_x;
+                        float step_y = err_y * factor_y;
+
+                        dx = step_x;
+                        dy = step_y;
+                    }
                 } else {
                     dx = err_x;
                     dy = err_y;
@@ -1258,17 +1428,6 @@ namespace rbx::aimbot {
                 target_pos = apply_prediction(target.instance.address, primitive, target_pos, camera_pos, settings::aimbot::aimbot_type == 0);
             }
 
-            if (settings::aimbot::shake) {
-                float time = std::chrono::duration<float>(std::chrono::steady_clock::now().time_since_epoch()).count();
-                float offset_x = (std::sin(time * 15.0f) * 0.7f + std::sin(time * 23.5f) * 0.3f) * settings::aimbot::shake_x;
-                float offset_y = (std::cos(time * 12.0f) * 0.7f + std::cos(time * 27.2f) * 0.3f) * settings::aimbot::shake_y;
-                float offset_z = (std::sin(time * 18.2f) * 0.7f + std::cos(time * 21.1f) * 0.3f) * settings::aimbot::shake_x;
-
-                target_pos.x += offset_x * 0.05f;
-                target_pos.y += offset_y * 0.05f;
-                target_pos.z += offset_z * 0.05f;
-            }
-
             last_target_pos = target_pos;
 
             auto now = std::chrono::high_resolution_clock::now();
@@ -1276,6 +1435,39 @@ namespace rbx::aimbot {
             last_tick = now;
 
             if (dt > 0.1f) dt = 0.016f;
+
+            if (settings::aimbot::shake) {
+                float rx = (((float)rand() / RAND_MAX) * 2.0f - 1.0f);
+                float ry = (((float)rand() / RAND_MAX) * 2.0f - 1.0f);
+                float rz = (((float)rand() / RAND_MAX) * 2.0f - 1.0f);
+
+                jitter_vel_x += rx * settings::aimbot::shake_x * 20.0f * dt;
+                jitter_vel_y += ry * settings::aimbot::shake_y * 20.0f * dt;
+                jitter_vel_z += rz * settings::aimbot::shake_x * 20.0f * dt;
+
+                jitter_vel_x -= jitter_vel_x * 8.0f * dt;
+                jitter_vel_y -= jitter_vel_y * 8.0f * dt;
+                jitter_vel_z -= jitter_vel_z * 8.0f * dt;
+
+                jitter_offset_x += jitter_vel_x * dt;
+                jitter_offset_y += jitter_vel_y * dt;
+                jitter_offset_z += jitter_vel_z * dt;
+
+                jitter_offset_x -= jitter_offset_x * 4.0f * dt;
+                jitter_offset_y -= jitter_offset_y * 4.0f * dt;
+                jitter_offset_z -= jitter_offset_z * 4.0f * dt;
+
+                target_pos.x += jitter_offset_x * 0.1f;
+                target_pos.y += jitter_offset_y * 0.1f;
+                target_pos.z += jitter_offset_z * 0.1f;
+            } else {
+                jitter_vel_x = 0.0f;
+                jitter_vel_y = 0.0f;
+                jitter_vel_z = 0.0f;
+                jitter_offset_x = 0.0f;
+                jitter_offset_y = 0.0f;
+                jitter_offset_z = 0.0f;
+            }
 
             filtered_target_pos = target_pos;
             target_pos_initialized = true;
@@ -1318,6 +1510,13 @@ namespace rbx::aimbot {
         accum_x = 0.0f;
         accum_y = 0.0f;
 
+        camera_yaw_velocity = 0.0f;
+        camera_pitch_velocity = 0.0f;
+        mouse_yaw_velocity = 0.0f;
+        mouse_pitch_velocity = 0.0f;
+        mouse_x_velocity = 0.0f;
+        mouse_y_velocity = 0.0f;
+
         current_bone_offset = { 0.0f, 0.0f, 0.0f };
     }
 
@@ -1330,6 +1529,13 @@ namespace rbx::aimbot {
         target_pos_initialized = false;
         locked_part_name = "";
 
+        camera_yaw_velocity = 0.0f;
+        camera_pitch_velocity = 0.0f;
+        mouse_yaw_velocity = 0.0f;
+        mouse_pitch_velocity = 0.0f;
+        mouse_x_velocity = 0.0f;
+        mouse_y_velocity = 0.0f;
+
         current_bone_offset = { 0.0f, 0.0f, 0.0f };
     }
 
@@ -1341,6 +1547,13 @@ namespace rbx::aimbot {
         g_aimbot_manual_target = cache::entity_t{};
         target_pos_initialized = false;
         locked_part_name = "";
+
+        camera_yaw_velocity = 0.0f;
+        camera_pitch_velocity = 0.0f;
+        mouse_yaw_velocity = 0.0f;
+        mouse_pitch_velocity = 0.0f;
+        mouse_x_velocity = 0.0f;
+        mouse_y_velocity = 0.0f;
 
         current_bone_offset = { 0.0f, 0.0f, 0.0f };
     }

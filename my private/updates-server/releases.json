@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.17",
-    "latestChangelog":  "Replace spring physics with standard LERP-based smoothing for natural glide velocity; completely remove easing-based snapping.",
+    "latestVersion":  "1.0.18",
+    "latestChangelog":  "Modernize target lock system: dynamic Roblox mouse sensitivity scaling, robust calculated velocity tracking with EMA filtering, physics-accurate critically damped springs (Easing Style 12), and organic hand jitter shake.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -129,7 +129,14 @@
                         "changelog":  "Replace spring physics with standard LERP-based smoothing for natural glide velocity; completely remove easing-based snapping.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "01cb8f1a4280e25004349999c5bf90ba"
+                    },
+                    {
+                        "version":  "1.0.18",
+                        "date":  "2026-06-06",
+                        "changelog":  "Modernize target lock system: dynamic Roblox mouse sensitivity scaling, robust calculated velocity tracking with EMA filtering, physics-accurate critically damped springs (Easing Style 12), and organic hand jitter shake.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "8eced05ddcdfeb017f077cd5e098327c"
                     }
                 ],
-    "latestHash":  "01cb8f1a4280e25004349999c5bf90ba"
+    "latestHash":  "8eced05ddcdfeb017f077cd5e098327c"
 }
