@@ -935,8 +935,8 @@ namespace rbx::aimbot {
                     speed_mult = std::clamp(speed_mult, 0.35f, 3.0f);
 
                     // Semi-implicit Euler critically-damped spring-damper with feedforward velocity tracking
-                    float omega_x = (45.0f / sx) * speed_mult;
-                    float omega_y = (45.0f / sy) * speed_mult;
+                    float omega_x = (350.0f / sx) * speed_mult;
+                    float omega_y = (350.0f / sy) * speed_mult;
 
                     float acc_yaw = 2.0f * omega_x * (target_yaw_vel - spring_vel_yaw) + omega_x * omega_x * yaw_diff_soft;
                     float acc_pitch = 2.0f * omega_y * (target_pitch_vel - spring_vel_pitch) + omega_y * omega_y * pitch_diff_soft;
@@ -1172,8 +1172,8 @@ namespace rbx::aimbot {
                     float speed_mult = get_easing_derivative(t_val, settings::aimbot::easing_style);
                     speed_mult = std::clamp(speed_mult, 0.35f, 3.0f);
 
-                    float omega_x = (45.0f / sx) * speed_mult;
-                    float omega_y = (45.0f / sy) * speed_mult;
+                    float omega_x = (350.0f / sx) * speed_mult;
+                    float omega_y = (350.0f / sy) * speed_mult;
 
                     // Soft saturation of the mouse error in mouse units to prevent snap overshoots
                     constexpr float max_mouse_error = 50.0f;

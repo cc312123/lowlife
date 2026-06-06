@@ -244,16 +244,7 @@ namespace config
 		file << "    \"gravity_value\": " << settings::expl::gravity_value << ",\n";
 		file << "    \"fov_changer_enabled\": " << (settings::expl::fov_changer_enabled ? "true" : "false") << ",\n";
 		file << "    \"fov_changer_value\": " << settings::expl::fov_changer_value << ",\n";
-		file << "    \"infinite_ammo\": " << (settings::expl::infinite_ammo ? "true" : "false") << ",\n";
-		file << "    \"hoopz_auto_green\": " << (settings::expl::hoopz_auto_green ? "true" : "false") << ",\n";
-		file << "    \"hoopz_auto_aim\": " << (settings::expl::hoopz_auto_aim ? "true" : "false") << ",\n";
-		file << "    \"hoopz_aim_smooth\": " << settings::expl::hoopz_aim_smooth << ",\n";
-		file << "    \"hoopz_delay\": " << settings::expl::hoopz_delay << ",\n";
-		file << "    \"hoopz_use_e\": " << (settings::expl::hoopz_use_e ? "true" : "false") << ",\n";
-		file << "    \"hoopz_use_click\": " << (settings::expl::hoopz_use_click ? "true" : "false") << ",\n";
-		file << "    \"hoopz_dynamic_power\": " << (settings::expl::hoopz_dynamic_power ? "true" : "false") << ",\n";
-		file << "    \"hoopz_base_delay\": " << settings::expl::hoopz_base_delay << ",\n";
-		file << "    \"hoopz_distance_scale\": " << settings::expl::hoopz_distance_scale << "\n";
+		file << "    \"infinite_ammo\": " << (settings::expl::infinite_ammo ? "true" : "false") << "\n";
 		file << "  },\n";
 
 		
@@ -714,24 +705,6 @@ namespace config
 				settings::expl::fov_changer_value = std::stof(value);
 			if (parse_json_value(section, "infinite_ammo", value))
 				settings::expl::infinite_ammo = (value == "true");
-			if (parse_json_value(section, "hoopz_auto_green", value))
-				settings::expl::hoopz_auto_green = (value == "true");
-			if (parse_json_value(section, "hoopz_auto_aim", value))
-				settings::expl::hoopz_auto_aim = (value == "true");
-			if (parse_json_value(section, "hoopz_aim_smooth", value))
-				settings::expl::hoopz_aim_smooth = std::stof(value);
-			if (parse_json_value(section, "hoopz_delay", value))
-				settings::expl::hoopz_delay = std::stof(value);
-			if (parse_json_value(section, "hoopz_use_e", value))
-				settings::expl::hoopz_use_e = (value == "true");
-			if (parse_json_value(section, "hoopz_use_click", value))
-				settings::expl::hoopz_use_click = (value == "true");
-			if (parse_json_value(section, "hoopz_dynamic_power", value))
-				settings::expl::hoopz_dynamic_power = (value == "true");
-			if (parse_json_value(section, "hoopz_base_delay", value))
-				settings::expl::hoopz_base_delay = std::stof(value);
-			if (parse_json_value(section, "hoopz_distance_scale", value))
-				settings::expl::hoopz_distance_scale = std::stof(value);
 		}
 
 

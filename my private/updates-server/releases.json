@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.12",
-    "latestChangelog":  "Add Auto Aim (Hoopz) camera alignment and snapping with configurable smooth factor for perfect shooting trajectory coordination.",
+    "latestVersion":  "1.0.13",
+    "latestChangelog":  "Completely remove Hoopz Auto Green and Auto Aim features.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -94,7 +94,14 @@
                         "changelog":  "Add Auto Aim (Hoopz) camera alignment and snapping with configurable smooth factor for perfect shooting trajectory coordination.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "131c94cf70126479396a99c3c2517b1d"
+                    },
+                    {
+                        "version":  "1.0.13",
+                        "date":  "2026-06-06",
+                        "changelog":  "Completely remove Hoopz Auto Green and Auto Aim features.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "11ce79a168dc53be364bc47bb7c386e2"
                     }
                 ],
-    "latestHash":  "131c94cf70126479396a99c3c2517b1d"
+    "latestHash":  "11ce79a168dc53be364bc47bb7c386e2"
 }
