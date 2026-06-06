@@ -178,6 +178,10 @@ namespace settings
 		inline float fov_changer_value{ 70.0f };
 
 		inline bool infinite_ammo{ false };
+
+		inline bool legit_teleport{ false };
+		inline float legit_teleport_speed{ 150.0f };
+		inline int legit_teleport_delay{ 15 };
 	}
 
 	namespace dex_explorer

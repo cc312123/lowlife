@@ -2718,6 +2718,14 @@ void render_t::render_menu()
             ImGui::Combo("Fly Mode", &settings::expl::fly_mode, fly_modes, IM_ARRAYSIZE(fly_modes));
         }
 
+        ImGui::Spacing();
+        ImGui::Checkbox("Legit Teleport", &settings::expl::legit_teleport);
+        if (settings::expl::legit_teleport)
+        {
+            SliderFloatWithInput("Glide Speed", &settings::expl::legit_teleport_speed, 10.0f, 1000.0f, "%.0f");
+            SliderIntWithInput("Step Delay (ms)", &settings::expl::legit_teleport_delay, 5, 100);
+        }
+
         ImGui::EndChild();
 
         ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() * 0.5f + 8.f, 78.f));
@@ -3483,13 +3491,26 @@ void render_t::render_menu()
                 ImGui::Text("Graphical Shell Interventions:");
                 ImGui::Spacing();
 
-                
+                ImGui::Checkbox("Legit Teleport Mode", &settings::expl::legit_teleport);
+                if (settings::expl::legit_teleport)
+                {
+                    ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - 20.f);
+                    SliderFloatWithInput("Glide Speed##Target", &settings::expl::legit_teleport_speed, 10.0f, 1000.0f, "%.0f");
+                    SliderIntWithInput("Step Delay (ms)##Target", &settings::expl::legit_teleport_delay, 5, 100);
+                    ImGui::PopItemWidth();
+                    ImGui::Spacing();
+                }
+
                 if (styled_button("Teleport To Target Location", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 26.f))) {
                     if (enemy_hrp_it != current_player_state.parts.end()) {
                         math::vector3 target_pos = enemy_hrp_it->second.get_primitive().get_position();
                         target_pos.y += 2.0f; 
                         TeleportTo(target_pos);
-                        notifications::add("Teleported directly to: " + current_player_state.name, notifications::NotificationType::Success, 3.0f);
+                        if (settings::expl::legit_teleport) {
+                            notifications::add("Gliding smoothly to: " + current_player_state.name, notifications::NotificationType::Success, 3.0f);
+                        } else {
+                            notifications::add("Teleported directly to: " + current_player_state.name, notifications::NotificationType::Success, 3.0f);
+                        }
                     } else {
                         notifications::add("Failed: RootPart coordinates missing!", notifications::NotificationType::Error, 3.0f);
                     }
