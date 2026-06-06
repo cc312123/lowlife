@@ -1058,9 +1058,16 @@ namespace rbx::aimbot {
                 if (has_locked_target && locked_target.instance.address != 0) {
                     bool skip_fov = (settings::aimbot::sticky_aim || g_aimbot_manual_locked);
                     bool skip_wall = g_aimbot_manual_locked;
-                    if (is_target_valid(locked_target, local_crew_id, cursor_pt, dims, view, camera_pos, skip_fov, skip_wall)) {
-                        target = locked_target;
-                        target_part = get_best_bone(target, camera_pos, cursor_pt, dims, view, locked_part_name);
+
+                    // First, check if the target is still valid excluding visibility (alive, within FOV, etc.)
+                    if (is_target_valid(locked_target, local_crew_id, cursor_pt, dims, view, camera_pos, skip_fov, true)) {
+                        // Now check if they are actually visible
+                        if (is_target_valid(locked_target, local_crew_id, cursor_pt, dims, view, camera_pos, skip_fov, skip_wall)) {
+                            target = locked_target;
+                            target_part = get_best_bone(target, camera_pos, cursor_pt, dims, view, locked_part_name);
+                        } else {
+                            // Target is behind a wall. Keep the lock, but do not assign target/target_part to suspend aiming.
+                        }
                     } else {
                         bool was_cheap_valid = is_target_cheap_valid(locked_target, local_crew_id);
 
