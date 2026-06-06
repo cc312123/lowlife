@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.7",
-    "latestChangelog":  "Improve slider UI by restoring standard ImGui slider styling and adding double-click to input value editing.",
+    "latestVersion":  "1.0.8",
+    "latestChangelog":  "Fix triggerbot local player filtering, exclude local player from triggerbot hitbox visuals, and correct mouse sensitivity scaling math under first person/mouse lock.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -57,6 +57,13 @@
                         "version":  "1.0.7",
                         "date":  "2026-06-05",
                         "changelog":  "Improve slider UI by restoring standard ImGui slider styling and adding double-click to input value editing.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "0b4af281bd2b095f9b5b853777d439fc"
+                    },
+                    {
+                        "version":  "1.0.8",
+                        "date":  "2026-06-05",
+                        "changelog":  "Fix triggerbot local player filtering, exclude local player from triggerbot hitbox visuals, and correct mouse sensitivity scaling math under first person/mouse lock.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "0b4af281bd2b095f9b5b853777d439fc"
                     }
