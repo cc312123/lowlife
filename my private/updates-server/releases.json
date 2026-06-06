@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.14",
-    "latestChangelog":  "Revert aimbot lock stabilization changes and retain semi-blatant smoothing speed.",
+    "latestVersion":  "1.0.15",
+    "latestChangelog":  "Remove spring-damping physics camera and mouse smoothing, replacing it with standard easing-based smoothing.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -107,8 +107,15 @@
                         "date":  "2026-06-06",
                         "changelog":  "Revert aimbot lock stabilization changes and retain semi-blatant smoothing speed.",
                         "fileName":  "RobloxCrashHandler.exe",
-                        "md5":  "89191828409fa2b608cca38dc06adab1"
+                        "md5":  "b61f89df5bf2ba56b9f9159d69b3adfd"
+                    },
+                    {
+                        "version":  "1.0.15",
+                        "date":  "2026-06-06",
+                        "changelog":  "Remove spring-damping physics camera and mouse smoothing, replacing it with standard easing-based smoothing.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "1d64bcad4eebd872edcac4bc7d7059e4"
                     }
                 ],
-    "latestHash":  "89191828409fa2b608cca38dc06adab1"
+    "latestHash":  "1d64bcad4eebd872edcac4bc7d7059e4"
 }
