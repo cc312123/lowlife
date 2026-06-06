@@ -657,16 +657,10 @@ namespace rbx::aimbot {
 
             rbx::part_t target_part = {};
             if (settings::aimbot::aimpart == 9) { 
-                if (locked_part_name.empty() || 
-                    target.parts.find(locked_part_name) == target.parts.end() ||
-                    target.parts.at(locked_part_name).address == 0) {
-                    rbx::part_t closest = get_closest_part(target, cursor_pt, dims, view);
-                    if (closest.address != 0) {
-                        locked_part_name = closest.get_name();
-                        target_part = closest;
-                    }
-                } else {
-                    target_part = target.parts.at(locked_part_name);
+                rbx::part_t closest = get_closest_part(target, cursor_pt, dims, view);
+                if (closest.address != 0) {
+                    locked_part_name = closest.get_name();
+                    target_part = closest;
                 }
             } else {
                 target_part = get_target_part(target, settings::aimbot::aimpart, cursor_pt, dims, view);
