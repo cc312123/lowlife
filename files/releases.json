@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.10",
-    "latestChangelog":  "Improve closest point precision using exact analytical 3D OBB distance minimization and client-relative unprojection. Enhance the hit part system with R6 prioritized fallbacks and closest visible part acquisition.",
+    "latestVersion":  "1.0.11",
+    "latestChangelog":  "Add Auto Green (Hoopz) with dynamic distance-based delay. Improve silent aim activation checks by including mouse click and manual lock states.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -80,7 +80,14 @@
                         "changelog":  "Improve closest point precision using exact analytical 3D OBB distance minimization and client-relative unprojection. Enhance the hit part system with R6 prioritized fallbacks and closest visible part acquisition.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "9dde2a29d3a25e2cc922c23f1184b598"
+                    },
+                    {
+                        "version":  "1.0.11",
+                        "date":  "2026-06-06",
+                        "changelog":  "Add Auto Green (Hoopz) with dynamic distance-based delay. Improve silent aim activation checks by including mouse click and manual lock states.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "ef377a526e805e33d00ec5e15adccc9f"
                     }
                 ],
-    "latestHash":  "9dde2a29d3a25e2cc922c23f1184b598"
+    "latestHash":  "ef377a526e805e33d00ec5e15adccc9f"
 }

@@ -348,7 +348,10 @@ static bool should_silent_aim_be_active()
 	if (!settings::silent::enabled)
 		return false;
 
-	return g_silent_aim_locked;
+	if (g_silent_aim_locked || g_silent_aim_manual_locked || (GetAsyncKeyState(VK_LBUTTON) & 0x8000))
+		return true;
+
+	return false;
 }
 
 static void update_silent_aim_key_state()
@@ -468,7 +471,7 @@ void rbx::silent::silent_aim_1()
 			}
 		}
 
-		if (!should_silent_aim_be_active())
+		if (!settings::silent::enabled)
 		{
 			std::this_thread::sleep_for(std::chrono::milliseconds(100));
 			g_silent_data_ready = false;
@@ -809,7 +812,7 @@ void rbx::silent::silent_aim_2()
 		if (!should_silent_aim_be_active())
 		{
 			mouse_service_initialized = false;
-			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+			std::this_thread::sleep_for(std::chrono::milliseconds(5));
 			if (g_silent_cached_target.instance.address != 0)
 				g_silent_target_needs_reset = true;
 			continue;

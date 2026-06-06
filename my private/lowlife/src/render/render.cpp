@@ -2726,6 +2726,25 @@ void render_t::render_menu()
         ImGui::Checkbox("Infinite Bullets", &settings::expl::infinite_ammo);
 
         ImGui::Spacing();
+        ImGui::Checkbox("Auto Green (Hoopz)", &settings::expl::hoopz_auto_green);
+        if (settings::expl::hoopz_auto_green)
+        {
+            ImGui::Checkbox("Dynamic Power (Distance-based)", &settings::expl::hoopz_dynamic_power);
+            if (settings::expl::hoopz_dynamic_power)
+            {
+                SliderFloatWithInput("Base Delay (ms)", &settings::expl::hoopz_base_delay, 200.0f, 1000.0f, "%.0f");
+                SliderFloatWithInput("Distance Multiplier", &settings::expl::hoopz_distance_scale, 0.0f, 20.0f, "%.1f");
+            }
+            else
+            {
+                SliderFloatWithInput("Release Delay (ms)", &settings::expl::hoopz_delay, 500.0f, 1000.0f, "%.0f");
+            }
+            ImGui::Checkbox("Release 'E' Key", &settings::expl::hoopz_use_e);
+            ImGui::SameLine();
+            ImGui::Checkbox("Release Left Click", &settings::expl::hoopz_use_click);
+        }
+
+        ImGui::Spacing();
         ImGui::Separator();
         ImGui::Spacing();
 
