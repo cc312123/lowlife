@@ -47,6 +47,17 @@ namespace rbx::aimbot {
         float accum_x = 0.0f;
         float accum_y = 0.0f;
 
+        // Critically damped spring physics velocities
+        float camera_yaw_velocity = 0.0f;
+        float camera_pitch_velocity = 0.0f;
+        float mouse_yaw_velocity = 0.0f;
+        float mouse_pitch_velocity = 0.0f;
+        float mouse_x_velocity = 0.0f;
+        float mouse_y_velocity = 0.0f;
+
+        // Persistent bone random offset (per-lock)
+        math::vector3 current_bone_offset = { 0.0f, 0.0f, 0.0f };
+
         float apply_easing(int style, float t) {
             if (style <= 0) return 1.0f;
             if (t >= 1.0f) return 1.0f;
@@ -792,30 +803,44 @@ namespace rbx::aimbot {
             float pitch_diff = target_pitch - current_pitch;
             pitch_diff = std::atan2(std::sin(pitch_diff), std::cos(pitch_diff));
 
-            float factor_x = 1.0f;
-            float factor_y = 1.0f;
+            if (reset_state) {
+                camera_yaw_velocity = 0.0f;
+                camera_pitch_velocity = 0.0f;
+            }
+
+            float final_yaw = target_yaw;
+            float final_pitch = target_pitch;
 
             if (settings::aimbot::camera_smooth) {
                 float sx = std::clamp(settings::aimbot::camera_smooth_x, 1.0f, 200.0f);
                 float sy = std::clamp(settings::aimbot::camera_smooth_y, 1.0f, 200.0f);
 
-                if (sx > 1.01f || sy > 1.01f) {
-                    float speed_x = 10.0f / sx;
-                    float speed_y = 10.0f / sy;
-
-                    factor_x = 1.0f - std::exp(-speed_x * 60.0f * dt);
-                    factor_y = 1.0f - std::exp(-speed_y * 60.0f * dt);
-
-                    factor_x = std::clamp(factor_x, 0.0f, 1.0f);
-                    factor_y = std::clamp(factor_y, 0.0f, 1.0f);
+                if (settings::aimbot::adaptive_smoothing) {
+                    float total_diff = std::sqrt(yaw_diff * yaw_diff + pitch_diff * pitch_diff);
+                    float max_expected_diff = 0.5f; // approx 28 degrees
+                    float ratio = std::clamp(total_diff / max_expected_diff, 0.0f, 1.0f);
+                    sx = settings::aimbot::adaptive_smooth_min + ratio * (settings::aimbot::adaptive_smooth_max - settings::aimbot::adaptive_smooth_min);
+                    sy = sx;
                 }
+
+                float omega_x = (40.0f / sx) * ease_factor;
+                float omega_y = (40.0f / sy) * ease_factor;
+
+                float actual_target_yaw = current_yaw + yaw_diff;
+                float actual_target_pitch = current_pitch + pitch_diff;
+
+                float A_x = current_yaw - actual_target_yaw;
+                float B_x = camera_yaw_velocity + omega_x * A_x;
+                float exp_x = std::exp(-omega_x * dt);
+                final_yaw = (A_x + B_x * dt) * exp_x + actual_target_yaw;
+                camera_yaw_velocity = (B_x - omega_x * (A_x + B_x * dt)) * exp_x;
+
+                float A_y = current_pitch - actual_target_pitch;
+                float B_y = camera_pitch_velocity + omega_y * A_y;
+                float exp_y = std::exp(-omega_y * dt);
+                final_pitch = (A_y + B_y * dt) * exp_y + actual_target_pitch;
+                camera_pitch_velocity = (B_y - omega_y * (A_y + B_y * dt)) * exp_y;
             }
-
-            factor_x *= ease_factor;
-            factor_y *= ease_factor;
-
-            float final_yaw = current_yaw + yaw_diff * factor_x;
-            float final_pitch = current_pitch + pitch_diff * factor_y;
 
             final_yaw = std::atan2(std::sin(final_yaw), std::cos(final_yaw));
             final_pitch = std::clamp(final_pitch, -1.56f, 1.56f);
@@ -831,6 +856,10 @@ namespace rbx::aimbot {
             if (reset_state) {
                 accum_x = 0.0f;
                 accum_y = 0.0f;
+                mouse_yaw_velocity = 0.0f;
+                mouse_pitch_velocity = 0.0f;
+                mouse_x_velocity = 0.0f;
+                mouse_y_velocity = 0.0f;
             }
 
             HWND roblox_wnd = game::wnd;
@@ -912,33 +941,42 @@ namespace rbx::aimbot {
                 float err_pitch = target_pitch - actual_pitch;
                 err_pitch = std::atan2(std::sin(err_pitch), std::cos(err_pitch));
 
-                float factor_x = 1.0f;
-                float factor_y = 1.0f;
-
                 if (settings::aimbot::mouse_smooth) {
                     float sx = std::clamp(settings::aimbot::mouse_smooth_x, 1.0f, 200.0f);
                     float sy = std::clamp(settings::aimbot::mouse_smooth_y, 1.0f, 200.0f);
 
-                    if (sx > 1.01f || sy > 1.01f) {
-                        float speed_x = 10.0f / sx;
-                        float speed_y = 10.0f / sy;
-
-                        factor_x = 1.0f - std::exp(-speed_x * 60.0f * dt);
-                        factor_y = 1.0f - std::exp(-speed_y * 60.0f * dt);
-
-                        factor_x = std::clamp(factor_x, 0.0f, 1.0f);
-                        factor_y = std::clamp(factor_y, 0.0f, 1.0f);
+                    if (settings::aimbot::adaptive_smoothing) {
+                        float total_diff = std::sqrt(err_yaw * err_yaw + err_pitch * err_pitch);
+                        float max_expected_diff = 0.5f; // approx 28 degrees
+                        float ratio = std::clamp(total_diff / max_expected_diff, 0.0f, 1.0f);
+                        sx = settings::aimbot::adaptive_smooth_min + ratio * (settings::aimbot::adaptive_smooth_max - settings::aimbot::adaptive_smooth_min);
+                        sy = sx;
                     }
+
+                    float omega_x = (40.0f / sx) * ease_factor;
+                    float omega_y = (40.0f / sy) * ease_factor;
+
+                    float A_x = err_yaw;
+                    float B_x = mouse_yaw_velocity + omega_x * A_x;
+                    float exp_x = std::exp(-omega_x * dt);
+                    float new_error_yaw = (A_x + B_x * dt) * exp_x;
+                    mouse_yaw_velocity = (B_x - omega_x * (A_x + B_x * dt)) * exp_x;
+
+                    float A_y = err_pitch;
+                    float B_y = mouse_pitch_velocity + omega_y * A_y;
+                    float exp_y = std::exp(-omega_y * dt);
+                    float new_error_pitch = (A_y + B_y * dt) * exp_y;
+                    mouse_pitch_velocity = (B_y - omega_y * (A_y + B_y * dt)) * exp_y;
+
+                    float step_yaw = err_yaw - new_error_yaw;
+                    float step_pitch = err_pitch - new_error_pitch;
+
+                    dx = -step_yaw / (0.0022f * sensitivity);
+                    dy = -step_pitch / (0.0022f * sensitivity);
+                } else {
+                    dx = -err_yaw / (0.0022f * sensitivity);
+                    dy = -err_pitch / (0.0022f * sensitivity);
                 }
-
-                factor_x *= ease_factor;
-                factor_y *= ease_factor;
-
-                float step_yaw = err_yaw * factor_x;
-                float step_pitch = err_pitch * factor_y;
-
-                dx = -step_yaw / (0.0022f * sensitivity);
-                dy = -step_pitch / (0.0022f * sensitivity);
 
             } else {
                 math::vector2 screen_pos = {};
@@ -947,33 +985,43 @@ namespace rbx::aimbot {
                 float err_x = screen_pos.x - target_ref_x;
                 float err_y = screen_pos.y - target_ref_y;
 
-                float factor_x = 1.0f;
-                float factor_y = 1.0f;
-
                 if (settings::aimbot::mouse_smooth) {
                     float sx = std::clamp(settings::aimbot::mouse_smooth_x, 1.0f, 200.0f);
                     float sy = std::clamp(settings::aimbot::mouse_smooth_y, 1.0f, 200.0f);
 
-                    if (sx > 1.01f || sy > 1.01f) {
-                        float speed_x = 10.0f / sx;
-                        float speed_y = 10.0f / sy;
-
-                        factor_x = 1.0f - std::exp(-speed_x * 60.0f * dt);
-                        factor_y = 1.0f - std::exp(-speed_y * 60.0f * dt);
-
-                        factor_x = std::clamp(factor_x, 0.0f, 1.0f);
-                        factor_y = std::clamp(factor_y, 0.0f, 1.0f);
+                    if (settings::aimbot::adaptive_smoothing) {
+                        float total_diff = std::sqrt(err_x * err_x + err_y * err_y);
+                        float fov = settings::aimbot::fov;
+                        if (fov < 1.0f) fov = 200.0f;
+                        float ratio = std::clamp(total_diff / fov, 0.0f, 1.0f);
+                        sx = settings::aimbot::adaptive_smooth_min + ratio * (settings::aimbot::adaptive_smooth_max - settings::aimbot::adaptive_smooth_min);
+                        sy = sx;
                     }
+
+                    float omega_x = (40.0f / sx) * ease_factor;
+                    float omega_y = (40.0f / sy) * ease_factor;
+
+                    float A_x = err_x;
+                    float B_x = mouse_x_velocity + omega_x * A_x;
+                    float exp_x = std::exp(-omega_x * dt);
+                    float new_error_x = (A_x + B_x * dt) * exp_x;
+                    mouse_x_velocity = (B_x - omega_x * (A_x + B_x * dt)) * exp_x;
+
+                    float A_y = err_y;
+                    float B_y = mouse_y_velocity + omega_y * A_y;
+                    float exp_y = std::exp(-omega_y * dt);
+                    float new_error_y = (A_y + B_y * dt) * exp_y;
+                    mouse_y_velocity = (B_y - omega_y * (A_y + B_y * dt)) * exp_y;
+
+                    float step_x = err_x - new_error_x;
+                    float step_y = err_y - new_error_y;
+
+                    dx = step_x;
+                    dy = step_y;
+                } else {
+                    dx = err_x;
+                    dy = err_y;
                 }
-
-                factor_x *= ease_factor;
-                factor_y *= ease_factor;
-
-                float step_x = err_x * factor_x;
-                float step_y = err_y * factor_y;
-
-                dx = step_x;
-                dy = step_y;
             }
 
             constexpr float max_mouse_delta = 100.0f;
@@ -1220,14 +1268,46 @@ namespace rbx::aimbot {
                 }
             }
 
+            bool was_initialized = target_pos_initialized;
+            static std::uint64_t last_run_target_address = 0;
+            bool reset_state = !was_initialized || (target.instance.address != last_run_target_address);
+            last_run_target_address = target.instance.address;
+
             rbx::primitive_t primitive = target_part.get_primitive();
             math::vector3 target_pos = get_closest_point_on_part(target_part, camera_pos, ray_dir);
+
+            if (reset_state) {
+                if (settings::aimbot::bone_random_offset) {
+                    float val = settings::aimbot::bone_random_offset_val;
+                    float rx = (((float)rand() / RAND_MAX) * 2.0f - 1.0f) * val;
+                    float ry = (((float)rand() / RAND_MAX) * 2.0f - 1.0f) * val;
+                    float rz = (((float)rand() / RAND_MAX) * 2.0f - 1.0f) * val;
+                    current_bone_offset = { rx, ry, rz };
+                } else {
+                    current_bone_offset = { 0.0f, 0.0f, 0.0f };
+                }
+            }
+
+            target_pos.x += current_bone_offset.x;
+            target_pos.y += current_bone_offset.y;
+            target_pos.z += current_bone_offset.z;
 
             bool use_prediction = (settings::aimbot::aimbot_type == 0 && settings::aimbot::camera_prediction) ||
                                    (settings::aimbot::aimbot_type == 1 && settings::aimbot::mouse_prediction) ||
                                    (settings::aimbot::projectile_prediction);
             if (use_prediction) {
                 target_pos = apply_prediction(target.instance.address, primitive, target_pos, camera_pos, settings::aimbot::aimbot_type == 0);
+            }
+
+            if (settings::aimbot::shake) {
+                float time = std::chrono::duration<float>(std::chrono::steady_clock::now().time_since_epoch()).count();
+                float offset_x = (std::sin(time * 15.0f) * 0.7f + std::sin(time * 23.5f) * 0.3f) * settings::aimbot::shake_x;
+                float offset_y = (std::cos(time * 12.0f) * 0.7f + std::cos(time * 27.2f) * 0.3f) * settings::aimbot::shake_y;
+                float offset_z = (std::sin(time * 18.2f) * 0.7f + std::cos(time * 21.1f) * 0.3f) * settings::aimbot::shake_x;
+
+                target_pos.x += offset_x * 0.05f;
+                target_pos.y += offset_y * 0.05f;
+                target_pos.z += offset_z * 0.05f;
             }
 
             last_target_pos = target_pos;
@@ -1238,13 +1318,8 @@ namespace rbx::aimbot {
 
             if (dt > 0.1f) dt = 0.016f;
 
-            bool was_initialized = target_pos_initialized;
             filtered_target_pos = target_pos;
             target_pos_initialized = true;
-
-            static std::uint64_t last_run_target_address = 0;
-            bool reset_state = !was_initialized || (target.instance.address != last_run_target_address);
-            last_run_target_address = target.instance.address;
 
             if (reset_state) {
                 lock_start_time = std::chrono::steady_clock::now();
@@ -1283,6 +1358,14 @@ namespace rbx::aimbot {
         g_aimbot_manual_target = cache::entity_t{};
         accum_x = 0.0f;
         accum_y = 0.0f;
+
+        camera_yaw_velocity = 0.0f;
+        camera_pitch_velocity = 0.0f;
+        mouse_yaw_velocity = 0.0f;
+        mouse_pitch_velocity = 0.0f;
+        mouse_x_velocity = 0.0f;
+        mouse_y_velocity = 0.0f;
+        current_bone_offset = { 0.0f, 0.0f, 0.0f };
     }
 
     void lock_target(const cache::entity_t& target) {
@@ -1293,6 +1376,14 @@ namespace rbx::aimbot {
         g_aimbot_manual_target = target;
         target_pos_initialized = false;
         locked_part_name = "";
+
+        camera_yaw_velocity = 0.0f;
+        camera_pitch_velocity = 0.0f;
+        mouse_yaw_velocity = 0.0f;
+        mouse_pitch_velocity = 0.0f;
+        mouse_x_velocity = 0.0f;
+        mouse_y_velocity = 0.0f;
+        current_bone_offset = { 0.0f, 0.0f, 0.0f };
     }
 
     void unlock_target() {
@@ -1303,6 +1394,14 @@ namespace rbx::aimbot {
         g_aimbot_manual_target = cache::entity_t{};
         target_pos_initialized = false;
         locked_part_name = "";
+
+        camera_yaw_velocity = 0.0f;
+        camera_pitch_velocity = 0.0f;
+        mouse_yaw_velocity = 0.0f;
+        mouse_pitch_velocity = 0.0f;
+        mouse_x_velocity = 0.0f;
+        mouse_y_velocity = 0.0f;
+        current_bone_offset = { 0.0f, 0.0f, 0.0f };
     }
 
     void render() {

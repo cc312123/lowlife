@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.15",
-    "latestChangelog":  "Remove spring-damping physics camera and mouse smoothing, replacing it with standard easing-based smoothing.",
+    "latestVersion":  "1.0.16",
+    "latestChangelog":  "Completely rewrite the aimbot tracking and smoothing logic using critically damped spring physics, adaptive smoothing, organic shaking, and randomized bone offsets.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -115,7 +115,14 @@
                         "changelog":  "Remove spring-damping physics camera and mouse smoothing, replacing it with standard easing-based smoothing.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "ff7db5e7363bcbb73e63de9f0f0c658a"
+                    },
+                    {
+                        "version":  "1.0.16",
+                        "date":  "2026-06-06",
+                        "changelog":  "Completely rewrite the aimbot tracking and smoothing logic using critically damped spring physics, adaptive smoothing, organic shaking, and randomized bone offsets.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "3e176b825e42adc12bb354065c40235a"
                     }
                 ],
-    "latestHash":  "ff7db5e7363bcbb73e63de9f0f0c658a"
+    "latestHash":  "3e176b825e42adc12bb354065c40235a"
 }
