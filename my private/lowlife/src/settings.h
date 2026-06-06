@@ -18,6 +18,9 @@ namespace menu
 	inline std::string correct_key{ "lowlife_private" };
 	inline bool update_log{ false };
 	inline float update_log_height{ 80.f };
+	inline std::string background_path{ "" };
+	inline bool custom_background_loaded{ false };
+	inline void* background_texture{ nullptr };
 }
 
 namespace settings

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <memory>
 #include <vector>
 #include <string>
@@ -31,6 +31,8 @@ public:
 	void render_notifications();
 	void render_feature_indicator();
 	void end_render();
+	bool load_background_texture(const std::string& path);
+	void unload_background_texture();
 
 	bool create_device();
 	bool create_window();

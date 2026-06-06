@@ -109,7 +109,8 @@ namespace config
 		file << "    \"streamproof\": " << (menu::streamproof ? "true" : "false") << ",\n";
 		file << "    \"hide_console\": " << (menu::hide_console ? "true" : "false") << ",\n";
 		file << "    \"menu_keybind\": " << menu::menu_keybind << ",\n";
-		file << "    \"update_log\": " << (menu::update_log ? "true" : "false") << "\n";
+		file << "    \"update_log\": " << (menu::update_log ? "true" : "false") << ",\n";
+		file << "    \"background_path\": \"" << escape_json_string(menu::background_path) << "\"\n";
 		file << "  },\n";
 
 		
@@ -444,6 +445,8 @@ namespace config
 				menu::menu_keybind = std::stoi(value);
 			if (parse_json_value(section, "update_log", value))
 				menu::update_log = (value == "true");
+			if (parse_json_value(section, "background_path", value))
+				menu::background_path = value;
 		}
 
 		
