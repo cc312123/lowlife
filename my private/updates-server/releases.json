@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.9",
-    "latestChangelog":  "Fix aimbot smoothing wandering/flicking by resetting tracking states on target acquisition, implementing soft-saturation error mapping, and correct 1-to-1 mouse sensitivity feedback scaling.",
+    "latestVersion":  "1.0.10",
+    "latestChangelog":  "Improve closest point precision using exact analytical 3D OBB distance minimization and client-relative unprojection. Enhance the hit part system with R6 prioritized fallbacks and closest visible part acquisition.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -73,7 +73,14 @@
                         "changelog":  "Fix aimbot smoothing wandering/flicking by resetting tracking states on target acquisition, implementing soft-saturation error mapping, and correct 1-to-1 mouse sensitivity feedback scaling.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "5e92674186d8a20c75b82748e492db6c"
+                    },
+                    {
+                        "version":  "1.0.10",
+                        "date":  "2026-06-06",
+                        "changelog":  "Improve closest point precision using exact analytical 3D OBB distance minimization and client-relative unprojection. Enhance the hit part system with R6 prioritized fallbacks and closest visible part acquisition.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "9dde2a29d3a25e2cc922c23f1184b598"
                     }
                 ],
-    "latestHash":  "5e92674186d8a20c75b82748e492db6c"
+    "latestHash":  "9dde2a29d3a25e2cc922c23f1184b598"
 }

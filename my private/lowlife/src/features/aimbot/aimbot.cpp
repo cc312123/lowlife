@@ -177,8 +177,169 @@ namespace rbx::aimbot {
             math::matrix3 result = {};
             result.m[0] = right.x; result.m[1] = up.x; result.m[2] = -forward.x;
             result.m[3] = right.y; result.m[4] = up.y; result.m[5] = -forward.y;
+            result.m[6] = right.x; result.m[7] = up.y; result.m[8] = -forward.z; // Wait, let's look at original look_at row layout:
+            // result.m[0] = right.x; result.m[1] = up.x; result.m[2] = -forward.x;
+            // result.m[3] = right.y; result.m[4] = up.y; result.m[5] = -forward.y;
+            // result.m[6] = right.z; result.m[7] = up.z; result.m[8] = -forward.z;
+            result.m[0] = right.x; result.m[1] = up.x; result.m[2] = -forward.x;
+            result.m[3] = right.y; result.m[4] = up.y; result.m[5] = -forward.y;
             result.m[6] = right.z; result.m[7] = up.z; result.m[8] = -forward.z;
             return result;
+        }
+
+        math::vector3 get_closest_point_on_part(rbx::part_t part, const math::vector3& camera_pos, const math::vector3& ray_dir) {
+            rbx::primitive_t primitive = part.get_primitive();
+            if (primitive.address == 0) return { 0, 0, 0 };
+
+            math::vector3 center = primitive.get_position();
+            math::matrix3 rot = primitive.get_rotation();
+            math::vector3 size = primitive.get_size();
+
+            if (!std::isfinite(size.x) || !std::isfinite(size.y) || !std::isfinite(size.z) ||
+                size.x < 0.0f || size.y < 0.0f || size.z < 0.0f) {
+                return center;
+            }
+
+            // Transform camera position to local space of the part
+            math::vector3 local_cam = {
+                rot.m[0] * (camera_pos.x - center.x) + rot.m[3] * (camera_pos.y - center.y) + rot.m[6] * (camera_pos.z - center.z),
+                rot.m[1] * (camera_pos.x - center.x) + rot.m[4] * (camera_pos.y - center.y) + rot.m[7] * (camera_pos.z - center.z),
+                rot.m[2] * (camera_pos.x - center.x) + rot.m[5] * (camera_pos.y - center.y) + rot.m[8] * (camera_pos.z - center.z)
+            };
+
+            // Transform ray direction to local space
+            math::vector3 local_ray_dir = {
+                rot.m[0] * ray_dir.x + rot.m[3] * ray_dir.y + rot.m[6] * ray_dir.z,
+                rot.m[1] * ray_dir.x + rot.m[4] * ray_dir.y + rot.m[7] * ray_dir.z,
+                rot.m[2] * ray_dir.x + rot.m[5] * ray_dir.y + rot.m[8] * ray_dir.z
+            };
+
+            float h[3] = { size.x * 0.5f, size.y * 0.5f, size.z * 0.5f };
+            float C[3] = { local_cam.x, local_cam.y, local_cam.z };
+            float D[3] = { local_ray_dir.x, local_ray_dir.y, local_ray_dir.z };
+
+            // Collect critical t values where the ray crosses the box planes
+            // Max 7 critical t values (0.0 plus 2 per axis)
+            float t_values[7];
+            int t_count = 0;
+            t_values[t_count++] = 0.0f;
+
+            for (int i = 0; i < 3; ++i) {
+                if (std::abs(D[i]) > 1e-6f) {
+                    float t1 = (-h[i] - C[i]) / D[i];
+                    float t2 = (h[i] - C[i]) / D[i];
+                    if (t1 > 0.0f) t_values[t_count++] = t1;
+                    if (t2 > 0.0f) t_values[t_count++] = t2;
+                }
+            }
+
+            // Insertion sort for the t_values array
+            for (int i = 1; i < t_count; ++i) {
+                float key = t_values[i];
+                int j = i - 1;
+                while (j >= 0 && t_values[j] > key) {
+                    t_values[j + 1] = t_values[j];
+                    j = j - 1;
+                }
+                t_values[j + 1] = key;
+            }
+
+            float best_t = 0.0f;
+            float min_dist_sq = -1.0f;
+
+            // Helper lambda to evaluate distance at a candidate t
+            auto evaluate_t = [&](float t) {
+                if (t < 0.0f) t = 0.0f;
+                float px = C[0] + t * D[0];
+                float py = C[1] + t * D[1];
+                float pz = C[2] + t * D[2];
+
+                float bx = std::clamp(px, -h[0], h[0]);
+                float by = std::clamp(py, -h[1], h[1]);
+                float bz = std::clamp(pz, -h[2], h[2]);
+
+                float dx = px - bx;
+                float dy = py - by;
+                float dz = pz - bz;
+                float dist_sq = dx * dx + dy * dy + dz * dz;
+
+                if (min_dist_sq < 0.0f || dist_sq < min_dist_sq) {
+                    min_dist_sq = dist_sq;
+                    best_t = t;
+                }
+            };
+
+            // Evaluate boundary points of intervals
+            for (int i = 0; i < t_count; ++i) {
+                evaluate_t(t_values[i]);
+            }
+
+            // Evaluate local quadratic minimum in each interval
+            for (int j = 0; j < t_count; ++j) {
+                float t_start = t_values[j];
+                float t_end = (j < t_count - 1) ? t_values[j + 1] : (t_values[j] + 1e5f);
+                float t_mid = t_start + 0.5f * (t_end - t_start);
+
+                float a = 0.0f;
+                float b = 0.0f;
+                for (int i = 0; i < 3; ++i) {
+                    float p_mid = C[i] + t_mid * D[i];
+                    if (p_mid < -h[i]) {
+                        a += D[i] * D[i];
+                        b += D[i] * (C[i] + h[i]);
+                    } else if (p_mid > h[i]) {
+                        a += D[i] * D[i];
+                        b += D[i] * (C[i] - h[i]);
+                    }
+                }
+
+                if (a > 1e-6f) {
+                    float t_star = -b / a;
+                    if (t_star >= t_start && t_star <= t_end) {
+                        evaluate_t(t_star);
+                    }
+                }
+            }
+
+            float best_px = C[0] + best_t * D[0];
+            float best_py = C[1] + best_t * D[1];
+            float best_pz = C[2] + best_t * D[2];
+
+            math::vector3 closest_local = {
+                std::clamp(best_px, -h[0], h[0]),
+                std::clamp(best_py, -h[1], h[1]),
+                std::clamp(best_pz, -h[2], h[2])
+            };
+
+            math::vector3 closest_world = {
+                center.x + (rot.m[0] * closest_local.x + rot.m[1] * closest_local.y + rot.m[2] * closest_local.z),
+                center.y + (rot.m[3] * closest_local.x + rot.m[4] * closest_local.y + rot.m[5] * closest_local.z),
+                center.z + (rot.m[6] * closest_local.x + rot.m[7] * closest_local.y + rot.m[8] * closest_local.z)
+            };
+
+            return closest_world;
+        }
+
+        math::vector3 get_camera_ray_dir(const POINT& cursor_pt, const math::vector2& dims, const math::matrix3& cam_rot, float rad_fov) {
+            float half_w = dims.x * 0.5f;
+            float half_h = dims.y * 0.5f;
+
+            POINT client_pt = cursor_pt;
+            HWND roblox_window = game::wnd;
+            if (roblox_window) {
+                ScreenToClient(roblox_window, &client_pt);
+            }
+
+            float cx = 0.0f;
+            float cy = 0.0f;
+            if (half_h > 0.001f) {
+                cx = (static_cast<float>(client_pt.x) - half_w) / half_h * std::tan(rad_fov * 0.5f);
+                cy = -(static_cast<float>(client_pt.y) - half_h) / half_h * std::tan(rad_fov * 0.5f);
+            }
+
+            math::vector3 dir_cam = { cx, cy, -1.0f };
+            math::vector3 dir_world = cam_rot * dir_cam;
+            return normalize(dir_world);
         }
 
         // M_PI_F defined at the top of namespace
@@ -252,7 +413,7 @@ namespace rbx::aimbot {
             return occluded;
         }
 
-        rbx::part_t get_closest_part(cache::entity_t& player, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view) {
+        rbx::part_t get_closest_part(cache::entity_t& player, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, const math::vector3& camera_pos, const math::vector3& ray_dir, bool check_visibility = false) {
             rbx::part_t closest = {};
             float min_dist = std::numeric_limits<float>::max();
             float cursor_x = static_cast<float>(cursor_pt.x);
@@ -272,10 +433,14 @@ namespace rbx::aimbot {
                 if (valid_hitparts.find(pair.first) == valid_hitparts.end()) continue;
                 rbx::part_t part = pair.second;
                 if (!part.address) continue;
-                rbx::primitive_t primitive = part.get_primitive();
-                math::vector3 world_pos = primitive.get_position();
+                math::vector3 closest_pt = get_closest_point_on_part(part, camera_pos, ray_dir);
+
+                if (check_visibility && is_bone_occluded_cached(player.instance.address, pair.first, camera_pos, closest_pt)) {
+                    continue;
+                }
+
                 math::vector2 screen_pos = {};
-                if (!game::visengine.world_to_screen(world_pos, screen_pos, dims, view)) continue;
+                if (!game::visengine.world_to_screen(closest_pt, screen_pos, dims, view)) continue;
                 float dist = vector2_distance(screen_pos.x, screen_pos.y, cursor_x, cursor_y);
                 if (dist < min_dist) {
                     min_dist = dist;
@@ -286,7 +451,7 @@ namespace rbx::aimbot {
         }
 
         // Resolves the best bone without doing occlusion checks first
-        rbx::part_t get_best_bone_no_occlusion(cache::entity_t& player, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, std::string& chosen_bone_name) {
+        rbx::part_t get_best_bone_no_occlusion(cache::entity_t& player, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, const math::vector3& camera_pos, const math::vector3& ray_dir, std::string& chosen_bone_name) {
             if (player.parts.empty()) return rbx::part_t{};
 
             int aim_part = settings::aimbot::aimpart;
@@ -344,7 +509,13 @@ namespace rbx::aimbot {
                 break;
             case 9:
                 {
-                    rbx::part_t closest = get_closest_part(player, cursor_pt, dims, view);
+                    rbx::part_t closest = {};
+                    if (settings::aimbot::wall_check) {
+                        closest = get_closest_part(player, cursor_pt, dims, view, camera_pos, ray_dir, true);
+                    }
+                    if (closest.address == 0) {
+                        closest = get_closest_part(player, cursor_pt, dims, view, camera_pos, ray_dir, false);
+                    }
                     if (closest.address != 0) {
                         chosen_bone_name = closest.get_name();
                         target_part = closest;
@@ -361,23 +532,24 @@ namespace rbx::aimbot {
         }
 
         // Resolves the best bone with optional occlusion checking
-        rbx::part_t get_best_bone(cache::entity_t& player, const math::vector3& camera_pos, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, std::string& chosen_bone_name) {
-            rbx::part_t primary_part = get_best_bone_no_occlusion(player, cursor_pt, dims, view, chosen_bone_name);
+        rbx::part_t get_best_bone(cache::entity_t& player, const math::vector3& camera_pos, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, const math::vector3& ray_dir, std::string& chosen_bone_name) {
+            rbx::part_t primary_part = get_best_bone_no_occlusion(player, cursor_pt, dims, view, camera_pos, ray_dir, chosen_bone_name);
             if (primary_part.address == 0) return rbx::part_t{};
 
             if (settings::aimbot::wall_check) {
-                math::vector3 pos = primary_part.get_primitive().get_position();
+                math::vector3 pos = get_closest_point_on_part(primary_part, camera_pos, ray_dir);
                 if (is_bone_occluded_cached(player.instance.address, chosen_bone_name, camera_pos, pos)) {
                     if (settings::aimbot::smart_bone) {
                         const std::vector<std::string> bone_priority = {
                             "Head", "UpperTorso", "Torso", "LowerTorso", "HumanoidRootPart",
-                            "LeftUpperArm", "RightUpperArm", "LeftUpperLeg", "RightUpperLeg"
+                            "LeftUpperArm", "Left Arm", "RightUpperArm", "Right Arm",
+                            "LeftUpperLeg", "Left Leg", "RightUpperLeg", "Right Leg"
                         };
                         for (const auto& bone_name : bone_priority) {
                             if (bone_name == chosen_bone_name) continue;
                             auto it = player.parts.find(bone_name);
                             if (it != player.parts.end() && it->second.address != 0) {
-                                math::vector3 bone_pos = it->second.get_primitive().get_position();
+                                math::vector3 bone_pos = get_closest_point_on_part(it->second, camera_pos, ray_dir);
                                 if (!is_bone_occluded_cached(player.instance.address, bone_name, camera_pos, bone_pos)) {
                                     chosen_bone_name = bone_name;
                                     return it->second;
@@ -407,14 +579,14 @@ namespace rbx::aimbot {
             return true;
         }
 
-        bool is_target_valid(cache::entity_t& player, const std::string& local_crew_id, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, const math::vector3& camera_pos, bool skip_fov_check = false, bool skip_wall_check = false) {
+        bool is_target_valid(cache::entity_t& player, const std::string& local_crew_id, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, const math::vector3& camera_pos, const math::vector3& ray_dir, bool skip_fov_check = false, bool skip_wall_check = false) {
             if (!is_target_cheap_valid(player, local_crew_id)) return false;
 
             std::string temp_name = "";
-            rbx::part_t target_part = get_best_bone_no_occlusion(player, cursor_pt, dims, view, temp_name);
+            rbx::part_t target_part = get_best_bone_no_occlusion(player, cursor_pt, dims, view, camera_pos, ray_dir, temp_name);
             if (!target_part.address) return false;
 
-            math::vector3 world_pos = target_part.get_primitive().get_position();
+            math::vector3 world_pos = get_closest_point_on_part(target_part, camera_pos, ray_dir);
 
             if (settings::aimbot::fov_check && !skip_fov_check) {
                 math::vector2 screen_pos = {};
@@ -431,14 +603,15 @@ namespace rbx::aimbot {
                     if (settings::aimbot::smart_bone) {
                         const std::vector<std::string> bone_priority = {
                             "Head", "UpperTorso", "Torso", "LowerTorso", "HumanoidRootPart",
-                            "LeftUpperArm", "RightUpperArm", "LeftUpperLeg", "RightUpperLeg"
+                            "LeftUpperArm", "Left Arm", "RightUpperArm", "Right Arm",
+                            "LeftUpperLeg", "Left Leg", "RightUpperLeg", "Right Leg"
                         };
                         bool found_visible = false;
                         for (const auto& bone_name : bone_priority) {
                             if (bone_name == temp_name) continue;
                             auto it = player.parts.find(bone_name);
                             if (it != player.parts.end() && it->second.address != 0) {
-                                math::vector3 pos = it->second.get_primitive().get_position();
+                                math::vector3 pos = get_closest_point_on_part(it->second, camera_pos, ray_dir);
                                 if (!is_bone_occluded_cached(player.instance.address, bone_name, camera_pos, pos)) {
                                     found_visible = true;
                                     break;
@@ -463,6 +636,7 @@ namespace rbx::aimbot {
             const math::vector2& dims, 
             const math::matrix4& view, 
             const math::vector3& camera_pos,
+            const math::vector3& ray_dir,
             rbx::part_t& out_best_part,
             std::string& out_best_part_name
         ) {
@@ -499,10 +673,10 @@ namespace rbx::aimbot {
                 if (!is_target_cheap_valid(player, local_crew_id)) continue;
 
                 std::string chosen_bone_name = "";
-                rbx::part_t target_part = get_best_bone_no_occlusion(player, cursor_pt, dims, view, chosen_bone_name);
+                rbx::part_t target_part = get_best_bone_no_occlusion(player, cursor_pt, dims, view, camera_pos, ray_dir, chosen_bone_name);
                 if (!target_part.address) continue;
 
-                math::vector3 world_pos = target_part.get_primitive().get_position();
+                math::vector3 world_pos = get_closest_point_on_part(target_part, camera_pos, ray_dir);
                 math::vector2 screen_pos = {};
 
                 bool on_screen = game::visengine.world_to_screen(world_pos, screen_pos, dims, view);
@@ -549,13 +723,15 @@ namespace rbx::aimbot {
             for (const auto& candidate : candidates) {
                 std::string actual_bone_name = candidate.part_name;
                 rbx::part_t actual_part = candidate.part;
+                math::vector3 actual_world_pos = candidate.world_pos;
                 
                 if (settings::aimbot::wall_check) {
-                    if (is_bone_occluded_cached(candidate.player.instance.address, actual_bone_name, camera_pos, candidate.world_pos)) {
+                    if (is_bone_occluded_cached(candidate.player.instance.address, actual_bone_name, camera_pos, actual_world_pos)) {
                         if (settings::aimbot::smart_bone) {
                             const std::vector<std::string> bone_priority = {
                                 "Head", "UpperTorso", "Torso", "LowerTorso", "HumanoidRootPart",
-                                "LeftUpperArm", "RightUpperArm", "LeftUpperLeg", "RightUpperLeg"
+                                "LeftUpperArm", "Left Arm", "RightUpperArm", "Right Arm",
+                                "LeftUpperLeg", "Left Leg", "RightUpperLeg", "Right Leg"
                             };
                             bool found_visible = false;
                             for (const auto& bone_name : bone_priority) {
@@ -563,10 +739,11 @@ namespace rbx::aimbot {
                                 auto it = candidate.player.parts.find(bone_name);
                                 if (it != candidate.player.parts.end() && it->second.address != 0) {
                                     rbx::part_t temp_part = it->second;
-                                    math::vector3 pos = temp_part.get_primitive().get_position();
+                                    math::vector3 pos = get_closest_point_on_part(temp_part, camera_pos, ray_dir);
                                     if (!is_bone_occluded_cached(candidate.player.instance.address, bone_name, camera_pos, pos)) {
                                         actual_bone_name = bone_name;
                                         actual_part = temp_part;
+                                        actual_world_pos = pos;
                                         found_visible = true;
                                         break;
                                     }
@@ -591,8 +768,8 @@ namespace rbx::aimbot {
         }
 
         // Advanced prediction equations compensating for speed, gravity, and latency
-        math::vector3 apply_prediction(std::uint64_t entity_address, rbx::primitive_t primitive, const math::vector3& camera_pos, bool is_camera) {
-            math::vector3 pos = primitive.get_position();
+        math::vector3 apply_prediction(std::uint64_t entity_address, rbx::primitive_t primitive, const math::vector3& target_pos, const math::vector3& camera_pos, bool is_camera) {
+            math::vector3 pos = target_pos;
             math::vector3 vel = primitive.get_velocity();
 
             if (!std::isfinite(vel.x) || !std::isfinite(vel.y) || !std::isfinite(vel.z) ||
@@ -1178,13 +1355,24 @@ namespace rbx::aimbot {
                 local_player_snapshot = cache::cached_local_player;
             }
 
-            // Get camera position
+            // Get camera position and calculate ray dir
             math::vector3 camera_pos = {};
+            math::matrix3 camera_rot = {};
+            float camera_fov = 1.22f; // Default ~70 deg in rad
             rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
             if (camera_inst.address != 0) {
                 rbx::camera_t camera{ camera_inst.address };
                 camera_pos = camera.get_position();
+                camera_rot = camera.get_rotation();
+                camera_fov = memory->read<float>(camera_inst.address + Offsets::Camera::FieldOfView);
+                if (camera_fov < 0.001f || camera_fov > 3.14f) {
+                    camera_fov = 1.22f; // Sanity fallback
+                }
+            } else {
+                camera_rot = { 1, 0, 0, 0, 1, 0, 0, 0, 1 };
             }
+
+            math::vector3 ray_dir = get_camera_ray_dir(cursor_pt, dims, camera_rot, camera_fov);
 
             // 2. Validate current locked target from our local snapshot
             bool target_alive = false;
@@ -1220,11 +1408,11 @@ namespace rbx::aimbot {
                     bool skip_wall = g_aimbot_manual_locked;
 
                     // First, check if the target is still valid excluding visibility (alive, within FOV, etc.)
-                    if (is_target_valid(locked_target, local_crew_id, cursor_pt, dims, view, camera_pos, skip_fov, true)) {
+                    if (is_target_valid(locked_target, local_crew_id, cursor_pt, dims, view, camera_pos, ray_dir, skip_fov, true)) {
                         // Now check if they are actually visible
-                        if (is_target_valid(locked_target, local_crew_id, cursor_pt, dims, view, camera_pos, skip_fov, skip_wall)) {
+                        if (is_target_valid(locked_target, local_crew_id, cursor_pt, dims, view, camera_pos, ray_dir, skip_fov, skip_wall)) {
                             target = locked_target;
-                            target_part = get_best_bone(target, camera_pos, cursor_pt, dims, view, locked_part_name);
+                            target_part = get_best_bone(target, camera_pos, cursor_pt, dims, view, ray_dir, locked_part_name);
                         } else {
                             // Target is behind a wall. Keep the lock, but do not assign target/target_part to suspend aiming.
                         }
@@ -1258,7 +1446,7 @@ namespace rbx::aimbot {
                     target_pos_initialized = false;
                     target = locked_target;
                     locked_part_name = "";
-                    target_part = get_best_bone(target, camera_pos, cursor_pt, dims, view, locked_part_name);
+                    target_part = get_best_bone(target, camera_pos, cursor_pt, dims, view, ray_dir, locked_part_name);
                     newly_locked = true;
                 } else {
                     std::string chosen_part_name = "";
@@ -1270,6 +1458,7 @@ namespace rbx::aimbot {
                         dims,
                         view,
                         camera_pos,
+                        ray_dir,
                         chosen_part,
                         chosen_part_name
                     );
@@ -1298,7 +1487,7 @@ namespace rbx::aimbot {
 
             // Skip aiming while manually locked target is behind a wall
             if (settings::aimbot::wall_check && g_aimbot_manual_locked) {
-                math::vector3 raw_pos = target_part.get_primitive().get_position();
+                math::vector3 raw_pos = get_closest_point_on_part(target_part, camera_pos, ray_dir);
                 if (is_bone_occluded_cached(target.instance.address, locked_part_name.empty() ? "Head" : locked_part_name, camera_pos, raw_pos)) {
                     Sleep(1);
                     continue;
@@ -1307,7 +1496,7 @@ namespace rbx::aimbot {
 
             // 5. Get position and apply humanized bone offset
             rbx::primitive_t primitive = target_part.get_primitive();
-            math::vector3 target_pos = primitive.get_position();
+            math::vector3 target_pos = get_closest_point_on_part(target_part, camera_pos, ray_dir);
             
             target_pos.x += current_target_offset.x;
             target_pos.y += current_target_offset.y;
@@ -1318,7 +1507,7 @@ namespace rbx::aimbot {
                                   (settings::aimbot::aimbot_type == 1 && settings::aimbot::mouse_prediction) ||
                                   (settings::aimbot::projectile_prediction);
             if (use_prediction) {
-                target_pos = apply_prediction(target.instance.address, primitive, camera_pos, settings::aimbot::aimbot_type == 0);
+                target_pos = apply_prediction(target.instance.address, primitive, target_pos, camera_pos, settings::aimbot::aimbot_type == 0);
             }
 
             // 7. Check if screen position of target pos is valid
