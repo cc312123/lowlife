@@ -320,6 +320,10 @@ namespace shot_detection
 									(player.name == cache::cached_local_player.name && !player.name.empty()))
 									continue;
 
+								if (game::local_character.address != 0 && player.model_address != 0 &&
+									player.model_address == game::local_character.address)
+									continue;
+
 								if (settings::shot_detection::knocked_check && is_player_knocked(player))
 									continue;
 
@@ -1109,6 +1113,12 @@ namespace botter
 					player.instance.address == cache::cached_local_player.instance.address ||
 					player.instance.address == game::local_player.address ||
 					(player.name == cache::cached_local_player.name && !player.name.empty()))
+				{
+					continue;
+				}
+
+				if (game::local_character.address != 0 && player.model_address != 0 &&
+					player.model_address == game::local_character.address)
 				{
 					continue;
 				}

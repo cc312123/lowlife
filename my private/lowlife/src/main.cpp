@@ -290,9 +290,33 @@ static bool initialize_roblox_objects() noexcept {
     game::local_player = { local_player };
 
     rbx::player_t lp_obj{ local_player };
+    std::string lp_name = lp_obj.get_name();
+
+    // Dynamically resolve correct ModelInstance/Character offset at runtime
+    bool found_model_instance_offset = false;
+    for (uintptr_t offset = 0x100; offset <= 0x600; offset += 8) {
+        uintptr_t potential_char = memory->read<uintptr_t>(local_player + offset);
+        if (potential_char != 0 && (potential_char & 0x7) == 0 && potential_char > 0x10000) {
+            rbx::nameable_t inst{ potential_char };
+            std::string name = inst.get_name();
+            std::string class_name = inst.get_class_name();
+            if (class_name == "Model" && name == lp_name) {
+                Offsets::Player::ModelInstance = offset;
+                found_model_instance_offset = true;
+                sprintf_s(buffer, "[SCAN] Dynamically resolved Player::ModelInstance offset to 0x%llx", offset);
+                print_colored_bot_message(buffer, true);
+                break;
+            }
+        }
+    }
+
+    if (!found_model_instance_offset) {
+        print_colored_bot_message("[SCAN] Warning: Failed to dynamically resolve ModelInstance offset. Using fallback 0x3a8.", false);
+        Offsets::Player::ModelInstance = 0x3a8;
+    }
+
     game::local_character = { lp_obj.get_model_instance().address };
 
-    
     sprintf_s(buffer, "base -> 0x%llx | datamodel -> 0x%llx | visengine -> 0x%llx",
         module_base, real_dm, game::visengine.address);
     print_colored_bot_message(buffer, true);
@@ -303,6 +327,20 @@ static bool initialize_roblox_objects() noexcept {
 
     sprintf_s(buffer, "local_character -> 0x%llx", game::local_character.address);
     print_colored_bot_message(buffer, true);
+
+    // Debug print local player name
+    sprintf_s(buffer, "local_player name -> %s", lp_name.c_str());
+    print_colored_bot_message(buffer, true);
+
+    // Debug print all players in the player list
+    auto player_list = game::players.get_children();
+    sprintf_s(buffer, "player count -> %d", (int)player_list.size());
+    print_colored_bot_message(buffer, true);
+    for (auto& p : player_list) {
+        rbx::player_t p_obj{ p.address };
+        sprintf_s(buffer, "player in list -> %s | char -> 0x%llx", p_obj.get_name().c_str(), p_obj.get_model_instance().address);
+        print_colored_bot_message(buffer, true);
+    }
 
     return real_dm != 0 && workspace != 0 && players != 0 && local_player != 0;
 }
@@ -330,6 +368,8 @@ static std::string get_roblox_version(HANDLE process_handle) noexcept {
 }
 
 int main() {
+    setvbuf(stdout, NULL, _IONBF, 0);
+    setvbuf(stderr, NULL, _IONBF, 0);
     timeBeginPeriod(1);
     
     globals::cleanup_requested = false;

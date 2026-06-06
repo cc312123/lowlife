@@ -512,19 +512,31 @@ void esp::run()
 		// 4. Triggerbot Hitbox Visualization
 		if (settings::botter::autoclicker_enabled && settings::botter::visualize_hitbox)
 		{
-			float scale = settings::botter::hitbox_size / 100.0f;
-			float width = right - left;
-			float height = bottom - top;
-			float delta_w = (width * scale - width) * 0.5f;
-			float delta_h = (height * scale - height) * 0.5f;
-			float hl = left - delta_w;
-			float hr = right + delta_w;
-			float ht = top - delta_h;
-			float hb = bottom + delta_h;
+			bool is_local = (entity.instance.address == game::local_player.address ||
+							 entity.instance.address == cache::cached_local_player.instance.address ||
+							 (entity.name == cache::cached_local_player.name && !entity.name.empty()));
+			if (game::local_character.address != 0 && entity.model_address != 0 &&
+				entity.model_address == game::local_character.address)
+			{
+				is_local = true;
+			}
 
-			ImU32 hit_col = ImGui::ColorConvertFloat4ToU32(menu::accent_color);
-			draw->AddRect(ImVec2(hl, ht), ImVec2(hr, hb), hit_col, 4.0f, 0, 1.0f);
-			draw->AddRectFilled(ImVec2(hl, ht), ImVec2(hr, hb), (hit_col & 0x00FFFFFF) | 0x1A000000, 4.0f);
+			if (!is_local)
+			{
+				float scale = settings::botter::hitbox_size / 100.0f;
+				float width = right - left;
+				float height = bottom - top;
+				float delta_w = (width * scale - width) * 0.5f;
+				float delta_h = (height * scale - height) * 0.5f;
+				float hl = left - delta_w;
+				float hr = right + delta_w;
+				float ht = top - delta_h;
+				float hb = bottom + delta_h;
+
+				ImU32 hit_col = ImGui::ColorConvertFloat4ToU32(menu::accent_color);
+				draw->AddRect(ImVec2(hl, ht), ImVec2(hr, hb), hit_col, 4.0f, 0, 1.0f);
+				draw->AddRectFilled(ImVec2(hl, ht), ImVec2(hr, hb), (hit_col & 0x00FFFFFF) | 0x1A000000, 4.0f);
+			}
 		}
 
 		// 5. Skeleton ESP

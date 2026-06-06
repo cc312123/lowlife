@@ -21,6 +21,11 @@
 struct Offset {
     uintptr_t value;
     Offset(const char* path, uintptr_t val);
+    operator uintptr_t() const { return value; }
+    Offset& operator=(uintptr_t val) {
+        value = val;
+        return *this;
+    }
 };
 
 namespace Offsets {
@@ -28,583 +33,583 @@ namespace Offsets {
     bool Update(const std::string& current_version);
     std::unordered_map<std::string, uintptr_t*>& GetRegistry();
     namespace AirProperties {
-         inline constexpr uintptr_t AirDensity = 0x18;
-         inline constexpr uintptr_t GlobalWind = 0x3c;
+         inline Offset AirDensity = { "AirProperties::AirDensity", 0x18 };
+         inline Offset GlobalWind = { "AirProperties::GlobalWind", 0x3c };
     }
 
     namespace AnimationTrack {
-         inline constexpr uintptr_t Animation = 0xd0;
-         inline constexpr uintptr_t Animator = 0x118;
-         inline constexpr uintptr_t IsPlaying = 0xa10;
-         inline constexpr uintptr_t Looped = 0xf5;
-         inline constexpr uintptr_t Speed = 0xe4;
-         inline constexpr uintptr_t TimePosition = 0xe8;
+         inline Offset Animation = { "AnimationTrack::Animation", 0xd0 };
+         inline Offset Animator = { "AnimationTrack::Animator", 0x118 };
+         inline Offset IsPlaying = { "AnimationTrack::IsPlaying", 0xa10 };
+         inline Offset Looped = { "AnimationTrack::Looped", 0xf5 };
+         inline Offset Speed = { "AnimationTrack::Speed", 0xe4 };
+         inline Offset TimePosition = { "AnimationTrack::TimePosition", 0xe8 };
     }
 
     namespace Animator {
-         inline constexpr uintptr_t ActiveAnimations = 0x868;
+         inline Offset ActiveAnimations = { "Animator::ActiveAnimations", 0x868 };
     }
 
     namespace Atmosphere {
-         inline constexpr uintptr_t Color = 0xd0;
-         inline constexpr uintptr_t Decay = 0xdc;
-         inline constexpr uintptr_t Density = 0xe8;
-         inline constexpr uintptr_t Glare = 0xec;
-         inline constexpr uintptr_t Haze = 0xf0;
-         inline constexpr uintptr_t Offset = 0xf4;
+         inline Offset Color = { "Atmosphere::Color", 0xd0 };
+         inline Offset Decay = { "Atmosphere::Decay", 0xdc };
+         inline Offset Density = { "Atmosphere::Density", 0xe8 };
+         inline Offset Glare = { "Atmosphere::Glare", 0xec };
+         inline Offset Haze = { "Atmosphere::Haze", 0xf0 };
+         inline Offset Offset = { "Atmosphere::Offset", 0xf4 };
     }
 
     namespace Attachment {
-         inline constexpr uintptr_t Position = 0xdc;
+         inline Offset Position = { "Attachment::Position", 0xdc };
     }
 
     namespace BasePart {
-         inline constexpr uintptr_t CastShadow = 0xf5;
-         inline constexpr uintptr_t Color3 = 0x194;
-         inline constexpr uintptr_t Locked = 0xf6;
-         inline constexpr uintptr_t Massless = 0xf7;
-         inline constexpr uintptr_t Primitive = 0x148;
-         inline constexpr uintptr_t Reflectance = 0xec;
-         inline constexpr uintptr_t Shape = 0x1b1;
-         inline constexpr uintptr_t Transparency = 0xf0;
+         inline Offset CastShadow = { "BasePart::CastShadow", 0xf5 };
+         inline Offset Color3 = { "BasePart::Color3", 0x194 };
+         inline Offset Locked = { "BasePart::Locked", 0xf6 };
+         inline Offset Massless = { "BasePart::Massless", 0xf7 };
+         inline Offset Primitive = { "BasePart::Primitive", 0x148 };
+         inline Offset Reflectance = { "BasePart::Reflectance", 0xec };
+         inline Offset Shape = { "BasePart::Shape", 0x1b1 };
+         inline Offset Transparency = { "BasePart::Transparency", 0xf0 };
     }
 
     namespace Beam {
-         inline constexpr uintptr_t Attachment0 = 0x170;
-         inline constexpr uintptr_t Attachment1 = 0x180;
-         inline constexpr uintptr_t Brightness = 0x190;
-         inline constexpr uintptr_t CurveSize0 = 0x194;
-         inline constexpr uintptr_t CurveSize1 = 0x198;
-         inline constexpr uintptr_t LightEmission = 0x19c;
-         inline constexpr uintptr_t LightInfluence = 0x1a0;
-         inline constexpr uintptr_t Texture = 0x150;
-         inline constexpr uintptr_t TextureLength = 0x1ac;
-         inline constexpr uintptr_t TextureSpeed = 0x1b4;
-         inline constexpr uintptr_t Width0 = 0x1b8;
-         inline constexpr uintptr_t Width1 = 0x1bc;
-         inline constexpr uintptr_t ZOffset = 0x1c0;
+         inline Offset Attachment0 = { "Beam::Attachment0", 0x170 };
+         inline Offset Attachment1 = { "Beam::Attachment1", 0x180 };
+         inline Offset Brightness = { "Beam::Brightness", 0x190 };
+         inline Offset CurveSize0 = { "Beam::CurveSize0", 0x194 };
+         inline Offset CurveSize1 = { "Beam::CurveSize1", 0x198 };
+         inline Offset LightEmission = { "Beam::LightEmission", 0x19c };
+         inline Offset LightInfluence = { "Beam::LightInfluence", 0x1a0 };
+         inline Offset Texture = { "Beam::Texture", 0x150 };
+         inline Offset TextureLength = { "Beam::TextureLength", 0x1ac };
+         inline Offset TextureSpeed = { "Beam::TextureSpeed", 0x1b4 };
+         inline Offset Width0 = { "Beam::Width0", 0x1b8 };
+         inline Offset Width1 = { "Beam::Width1", 0x1bc };
+         inline Offset ZOffset = { "Beam::ZOffset", 0x1c0 };
     }
 
     namespace BloomEffect {
-         inline constexpr uintptr_t Enabled = 0xc8;
-         inline constexpr uintptr_t Intensity = 0xd0;
-         inline constexpr uintptr_t Size = 0xd4;
-         inline constexpr uintptr_t Threshold = 0xd8;
+         inline Offset Enabled = { "BloomEffect::Enabled", 0xc8 };
+         inline Offset Intensity = { "BloomEffect::Intensity", 0xd0 };
+         inline Offset Size = { "BloomEffect::Size", 0xd4 };
+         inline Offset Threshold = { "BloomEffect::Threshold", 0xd8 };
     }
 
     namespace BlurEffect {
-         inline constexpr uintptr_t Enabled = 0xc8;
-         inline constexpr uintptr_t Size = 0xd0;
+         inline Offset Enabled = { "BlurEffect::Enabled", 0xc8 };
+         inline Offset Size = { "BlurEffect::Size", 0xd0 };
     }
 
     namespace ByteCode {
-         inline constexpr uintptr_t Pointer = 0x10;
-         inline constexpr uintptr_t Size = 0x20;
+         inline Offset Pointer = { "ByteCode::Pointer", 0x10 };
+         inline Offset Size = { "ByteCode::Size", 0x20 };
     }
 
     namespace Camera {
-         inline constexpr uintptr_t CameraSubject = 0xe8;
-         inline constexpr uintptr_t CameraType = 0x158;
-         inline constexpr uintptr_t FieldOfView = 0x160;
-         inline constexpr uintptr_t ImagePlaneDepth = 0x2f0;
-         inline constexpr uintptr_t Position = 0x11c;
-         inline constexpr uintptr_t Rotation = 0xf8;
-         inline constexpr uintptr_t Viewport = 0x2ac;
-         inline constexpr uintptr_t ViewportSize = 0x2e8;
+         inline Offset CameraSubject = { "Camera::CameraSubject", 0xe8 };
+         inline Offset CameraType = { "Camera::CameraType", 0x158 };
+         inline Offset FieldOfView = { "Camera::FieldOfView", 0x160 };
+         inline Offset ImagePlaneDepth = { "Camera::ImagePlaneDepth", 0x2f0 };
+         inline Offset Position = { "Camera::Position", 0x11c };
+         inline Offset Rotation = { "Camera::Rotation", 0xf8 };
+         inline Offset Viewport = { "Camera::Viewport", 0x2ac };
+         inline Offset ViewportSize = { "Camera::ViewportSize", 0x2e8 };
     }
 
     namespace CharacterMesh {
-         inline constexpr uintptr_t BaseTextureId = 0xe0;
-         inline constexpr uintptr_t BodyPart = 0x160;
-         inline constexpr uintptr_t MeshId = 0x110;
-         inline constexpr uintptr_t OverlayTextureId = 0x140;
+         inline Offset BaseTextureId = { "CharacterMesh::BaseTextureId", 0xe0 };
+         inline Offset BodyPart = { "CharacterMesh::BodyPart", 0x160 };
+         inline Offset MeshId = { "CharacterMesh::MeshId", 0x110 };
+         inline Offset OverlayTextureId = { "CharacterMesh::OverlayTextureId", 0x140 };
     }
 
     namespace ClickDetector {
-         inline constexpr uintptr_t MaxActivationDistance = 0x100;
-         inline constexpr uintptr_t MouseIcon = 0xe0;
+         inline Offset MaxActivationDistance = { "ClickDetector::MaxActivationDistance", 0x100 };
+         inline Offset MouseIcon = { "ClickDetector::MouseIcon", 0xe0 };
     }
 
     namespace Clothing {
-         inline constexpr uintptr_t Color3 = 0x128;
-         inline constexpr uintptr_t Template = 0x108;
+         inline Offset Color3 = { "Clothing::Color3", 0x128 };
+         inline Offset Template = { "Clothing::Template", 0x108 };
     }
 
     namespace ColorCorrectionEffect {
-         inline constexpr uintptr_t Brightness = 0xdc;
-         inline constexpr uintptr_t Contrast = 0xe0;
-         inline constexpr uintptr_t Enabled = 0xc8;
-         inline constexpr uintptr_t TintColor = 0xd0;
+         inline Offset Brightness = { "ColorCorrectionEffect::Brightness", 0xdc };
+         inline Offset Contrast = { "ColorCorrectionEffect::Contrast", 0xe0 };
+         inline Offset Enabled = { "ColorCorrectionEffect::Enabled", 0xc8 };
+         inline Offset TintColor = { "ColorCorrectionEffect::TintColor", 0xd0 };
     }
 
     namespace ColorGradingEffect {
-         inline constexpr uintptr_t Enabled = 0xc8;
-         inline constexpr uintptr_t TonemapperPreset = 0xd0;
+         inline Offset Enabled = { "ColorGradingEffect::Enabled", 0xc8 };
+         inline Offset TonemapperPreset = { "ColorGradingEffect::TonemapperPreset", 0xd0 };
     }
 
     namespace DataModel {
-         inline constexpr uintptr_t CreatorId = 0x190;
-         inline constexpr uintptr_t GameId = 0x198;
-         inline constexpr uintptr_t GameLoaded = 0x638;
-         inline constexpr uintptr_t JobId = 0x138;
-         inline constexpr uintptr_t PlaceId = 0x1a0;
-         inline constexpr uintptr_t PlaceVersion = 0x1bc;
-         inline constexpr uintptr_t PrimitiveCount = 0x480;
-         inline constexpr uintptr_t ScriptContext = 0x440;
-         inline constexpr uintptr_t ServerIP = 0x620;
-         inline constexpr uintptr_t ToRenderView1 = 0x1d8;
-         inline constexpr uintptr_t ToRenderView2 = 0x8;
-         inline constexpr uintptr_t ToRenderView3 = 0x28;
-         inline constexpr uintptr_t Workspace = 0x178;
+         inline Offset CreatorId = { "DataModel::CreatorId", 0x190 };
+         inline Offset GameId = { "DataModel::GameId", 0x198 };
+         inline Offset GameLoaded = { "DataModel::GameLoaded", 0x638 };
+         inline Offset JobId = { "DataModel::JobId", 0x138 };
+         inline Offset PlaceId = { "DataModel::PlaceId", 0x1a0 };
+         inline Offset PlaceVersion = { "DataModel::PlaceVersion", 0x1bc };
+         inline Offset PrimitiveCount = { "DataModel::PrimitiveCount", 0x480 };
+         inline Offset ScriptContext = { "DataModel::ScriptContext", 0x440 };
+         inline Offset ServerIP = { "DataModel::ServerIP", 0x620 };
+         inline Offset ToRenderView1 = { "DataModel::ToRenderView1", 0x1d8 };
+         inline Offset ToRenderView2 = { "DataModel::ToRenderView2", 0x8 };
+         inline Offset ToRenderView3 = { "DataModel::ToRenderView3", 0x28 };
+         inline Offset Workspace = { "DataModel::Workspace", 0x178 };
     }
 
     namespace DepthOfFieldEffect {
-         inline constexpr uintptr_t Enabled = 0xc8;
-         inline constexpr uintptr_t FarIntensity = 0xd0;
-         inline constexpr uintptr_t FocusDistance = 0xd4;
-         inline constexpr uintptr_t InFocusRadius = 0xd8;
-         inline constexpr uintptr_t NearIntensity = 0xdc;
+         inline Offset Enabled = { "DepthOfFieldEffect::Enabled", 0xc8 };
+         inline Offset FarIntensity = { "DepthOfFieldEffect::FarIntensity", 0xd0 };
+         inline Offset FocusDistance = { "DepthOfFieldEffect::FocusDistance", 0xd4 };
+         inline Offset InFocusRadius = { "DepthOfFieldEffect::InFocusRadius", 0xd8 };
+         inline Offset NearIntensity = { "DepthOfFieldEffect::NearIntensity", 0xdc };
     }
 
     namespace DragDetector {
-         inline constexpr uintptr_t ActivatedCursorIcon = 0x1d8;
-         inline constexpr uintptr_t CursorIcon = 0xe0;
-         inline constexpr uintptr_t MaxActivationDistance = 0x100;
-         inline constexpr uintptr_t MaxDragAngle = 0x2c0;
-         inline constexpr uintptr_t MaxDragTranslation = 0x284;
-         inline constexpr uintptr_t MaxForce = 0x2c4;
-         inline constexpr uintptr_t MaxTorque = 0x2c8;
-         inline constexpr uintptr_t MinDragAngle = 0x2cc;
-         inline constexpr uintptr_t MinDragTranslation = 0x290;
-         inline constexpr uintptr_t ReferenceInstance = 0x208;
-         inline constexpr uintptr_t Responsiveness = 0x2d8;
+         inline Offset ActivatedCursorIcon = { "DragDetector::ActivatedCursorIcon", 0x1d8 };
+         inline Offset CursorIcon = { "DragDetector::CursorIcon", 0xe0 };
+         inline Offset MaxActivationDistance = { "DragDetector::MaxActivationDistance", 0x100 };
+         inline Offset MaxDragAngle = { "DragDetector::MaxDragAngle", 0x2c0 };
+         inline Offset MaxDragTranslation = { "DragDetector::MaxDragTranslation", 0x284 };
+         inline Offset MaxForce = { "DragDetector::MaxForce", 0x2c4 };
+         inline Offset MaxTorque = { "DragDetector::MaxTorque", 0x2c8 };
+         inline Offset MinDragAngle = { "DragDetector::MinDragAngle", 0x2cc };
+         inline Offset MinDragTranslation = { "DragDetector::MinDragTranslation", 0x290 };
+         inline Offset ReferenceInstance = { "DragDetector::ReferenceInstance", 0x208 };
+         inline Offset Responsiveness = { "DragDetector::Responsiveness", 0x2d8 };
     }
 
     namespace FakeDataModel {
-         inline constexpr uintptr_t Pointer = 0x78ff228;
-         inline constexpr uintptr_t RealDataModel = 0x1d0;
+         inline Offset Pointer = { "FakeDataModel::Pointer", 0x78ff228 };
+         inline Offset RealDataModel = { "FakeDataModel::RealDataModel", 0x1d0 };
     }
 
     namespace GuiBase2D {
-         inline constexpr uintptr_t AbsolutePosition = 0x110;
-         inline constexpr uintptr_t AbsoluteRotation = 0x188;
-         inline constexpr uintptr_t AbsoluteSize = 0x118;
+         inline Offset AbsolutePosition = { "GuiBase2D::AbsolutePosition", 0x110 };
+         inline Offset AbsoluteRotation = { "GuiBase2D::AbsoluteRotation", 0x188 };
+         inline Offset AbsoluteSize = { "GuiBase2D::AbsoluteSize", 0x118 };
     }
 
     namespace GuiObject {
-         inline constexpr uintptr_t BackgroundColor3 = 0x540;
-         inline constexpr uintptr_t BackgroundTransparency = 0x54c;
-         inline constexpr uintptr_t BorderColor3 = 0x54c;
-         inline constexpr uintptr_t Image = 0x988;
-         inline constexpr uintptr_t LayoutOrder = 0x580;
-         inline constexpr uintptr_t Position = 0x510;
-         inline constexpr uintptr_t RichText = 0xb58;
-         inline constexpr uintptr_t Rotation = 0x188;
-         inline constexpr uintptr_t ScreenGui_Enabled = 0x4c4;
-         inline constexpr uintptr_t Size = 0x530;
-         inline constexpr uintptr_t Text = 0xda0;
-         inline constexpr uintptr_t TextColor3 = 0xe50;
-         inline constexpr uintptr_t Visible = 0x5ad;
-         inline constexpr uintptr_t ZIndex = 0x19b;
+         inline Offset BackgroundColor3 = { "GuiObject::BackgroundColor3", 0x540 };
+         inline Offset BackgroundTransparency = { "GuiObject::BackgroundTransparency", 0x54c };
+         inline Offset BorderColor3 = { "GuiObject::BorderColor3", 0x54c };
+         inline Offset Image = { "GuiObject::Image", 0x988 };
+         inline Offset LayoutOrder = { "GuiObject::LayoutOrder", 0x580 };
+         inline Offset Position = { "GuiObject::Position", 0x510 };
+         inline Offset RichText = { "GuiObject::RichText", 0xb58 };
+         inline Offset Rotation = { "GuiObject::Rotation", 0x188 };
+         inline Offset ScreenGui_Enabled = { "GuiObject::ScreenGui_Enabled", 0x4c4 };
+         inline Offset Size = { "GuiObject::Size", 0x530 };
+         inline Offset Text = { "GuiObject::Text", 0xda0 };
+         inline Offset TextColor3 = { "GuiObject::TextColor3", 0xe50 };
+         inline Offset Visible = { "GuiObject::Visible", 0x5ad };
+         inline Offset ZIndex = { "GuiObject::ZIndex", 0x19b };
     }
 
     namespace Humanoid {
-         inline constexpr uintptr_t AutoJumpEnabled = 0x1e0;
-         inline constexpr uintptr_t AutoRotate = 0x1e1;
-         inline constexpr uintptr_t AutomaticScalingEnabled = 0x1e2;
-         inline constexpr uintptr_t BreakJointsOnDeath = 0x1e3;
-         inline constexpr uintptr_t CameraOffset = 0x140;
-         inline constexpr uintptr_t DisplayDistanceType = 0x18c;
-         inline constexpr uintptr_t DisplayName = 0xd0;
-         inline constexpr uintptr_t EvaluateStateMachine = 0x1e4;
-         inline constexpr uintptr_t FloorMaterial = 0x190;
-         inline constexpr uintptr_t Health = 0x194;
-         inline constexpr uintptr_t HealthDisplayDistance = 0x198;
-         inline constexpr uintptr_t HealthDisplayType = 0x19c;
-         inline constexpr uintptr_t HipHeight = 0x1a0;
-         inline constexpr uintptr_t HumanoidRootPart = 0x480;
-         inline constexpr uintptr_t HumanoidState = 0x8a0;
-         inline constexpr uintptr_t HumanoidStateID = 0x20;
-         inline constexpr uintptr_t IsWalking = 0x91f;
-         inline constexpr uintptr_t Jump = 0x1e6;
-         inline constexpr uintptr_t JumpHeight = 0x1ac;
-         inline constexpr uintptr_t JumpPower = 0x1b0;
-         inline constexpr uintptr_t MaxHealth = 0x1b4;
-         inline constexpr uintptr_t MaxSlopeAngle = 0x1b8;
-         inline constexpr uintptr_t MoveDirection = 0x158;
-         inline constexpr uintptr_t MoveToPart = 0x130;
-         inline constexpr uintptr_t MoveToPoint = 0x17c;
-         inline constexpr uintptr_t NameDisplayDistance = 0x1bc;
-         inline constexpr uintptr_t NameOcclusion = 0x1c0;
-         inline constexpr uintptr_t PlatformStand = 0x1e8;
-         inline constexpr uintptr_t PlatformStatePointer = 0x42F95762;
-         inline constexpr uintptr_t RequiresNeck = 0x1e9;
-         inline constexpr uintptr_t RigType = 0x1cc;
-         inline constexpr uintptr_t SeatPart = 0x120;
-         inline constexpr uintptr_t Sit = 0x1e9;
-         inline constexpr uintptr_t TargetPoint = 0x164;
-         inline constexpr uintptr_t UseJumpPower = 0x1ec;
-         inline constexpr uintptr_t WalkTimer = 0x410;
-         inline constexpr uintptr_t Walkspeed = 0x1dc;
-         inline constexpr uintptr_t WalkspeedCheck = 0x3c4;
+         inline Offset AutoJumpEnabled = { "Humanoid::AutoJumpEnabled", 0x1e0 };
+         inline Offset AutoRotate = { "Humanoid::AutoRotate", 0x1e1 };
+         inline Offset AutomaticScalingEnabled = { "Humanoid::AutomaticScalingEnabled", 0x1e2 };
+         inline Offset BreakJointsOnDeath = { "Humanoid::BreakJointsOnDeath", 0x1e3 };
+         inline Offset CameraOffset = { "Humanoid::CameraOffset", 0x140 };
+         inline Offset DisplayDistanceType = { "Humanoid::DisplayDistanceType", 0x18c };
+         inline Offset DisplayName = { "Humanoid::DisplayName", 0xd0 };
+         inline Offset EvaluateStateMachine = { "Humanoid::EvaluateStateMachine", 0x1e4 };
+         inline Offset FloorMaterial = { "Humanoid::FloorMaterial", 0x190 };
+         inline Offset Health = { "Humanoid::Health", 0x194 };
+         inline Offset HealthDisplayDistance = { "Humanoid::HealthDisplayDistance", 0x198 };
+         inline Offset HealthDisplayType = { "Humanoid::HealthDisplayType", 0x19c };
+         inline Offset HipHeight = { "Humanoid::HipHeight", 0x1a0 };
+         inline Offset HumanoidRootPart = { "Humanoid::HumanoidRootPart", 0x480 };
+         inline Offset HumanoidState = { "Humanoid::HumanoidState", 0x8a0 };
+         inline Offset HumanoidStateID = { "Humanoid::HumanoidStateID", 0x20 };
+         inline Offset IsWalking = { "Humanoid::IsWalking", 0x91f };
+         inline Offset Jump = { "Humanoid::Jump", 0x1e6 };
+         inline Offset JumpHeight = { "Humanoid::JumpHeight", 0x1ac };
+         inline Offset JumpPower = { "Humanoid::JumpPower", 0x1b0 };
+         inline Offset MaxHealth = { "Humanoid::MaxHealth", 0x1b4 };
+         inline Offset MaxSlopeAngle = { "Humanoid::MaxSlopeAngle", 0x1b8 };
+         inline Offset MoveDirection = { "Humanoid::MoveDirection", 0x158 };
+         inline Offset MoveToPart = { "Humanoid::MoveToPart", 0x130 };
+         inline Offset MoveToPoint = { "Humanoid::MoveToPoint", 0x17c };
+         inline Offset NameDisplayDistance = { "Humanoid::NameDisplayDistance", 0x1bc };
+         inline Offset NameOcclusion = { "Humanoid::NameOcclusion", 0x1c0 };
+         inline Offset PlatformStand = { "Humanoid::PlatformStand", 0x1e8 };
+         inline Offset PlatformStatePointer = { "Humanoid::PlatformStatePointer", 0x42F95762 };
+         inline Offset RequiresNeck = { "Humanoid::RequiresNeck", 0x1e9 };
+         inline Offset RigType = { "Humanoid::RigType", 0x1cc };
+         inline Offset SeatPart = { "Humanoid::SeatPart", 0x120 };
+         inline Offset Sit = { "Humanoid::Sit", 0x1e9 };
+         inline Offset TargetPoint = { "Humanoid::TargetPoint", 0x164 };
+         inline Offset UseJumpPower = { "Humanoid::UseJumpPower", 0x1ec };
+         inline Offset WalkTimer = { "Humanoid::WalkTimer", 0x410 };
+         inline Offset Walkspeed = { "Humanoid::Walkspeed", 0x1dc };
+         inline Offset WalkspeedCheck = { "Humanoid::WalkspeedCheck", 0x3c4 };
     }
 
     namespace Instance {
-         inline constexpr uintptr_t AttributeContainer = 0x48;
-         inline constexpr uintptr_t AttributeList = 0x18;
-         inline constexpr uintptr_t AttributeToNext = 0x58;
-         inline constexpr uintptr_t AttributeToValue = 0x18;
-         inline constexpr uintptr_t ChildrenEnd = 0x8;
-         inline constexpr uintptr_t ChildrenStart = 0x78;
-         inline constexpr uintptr_t ClassBase = 0x4920;
-         inline constexpr uintptr_t ClassDescriptor = 0x18;
-         inline constexpr uintptr_t ClassName = 0x8;
-         inline constexpr uintptr_t Name = 0xb0;
-         inline constexpr uintptr_t Parent = 0x70;
-         inline constexpr uintptr_t This = 0x8;
+         inline Offset AttributeContainer = { "Instance::AttributeContainer", 0x48 };
+         inline Offset AttributeList = { "Instance::AttributeList", 0x18 };
+         inline Offset AttributeToNext = { "Instance::AttributeToNext", 0x58 };
+         inline Offset AttributeToValue = { "Instance::AttributeToValue", 0x18 };
+         inline Offset ChildrenEnd = { "Instance::ChildrenEnd", 0x8 };
+         inline Offset ChildrenStart = { "Instance::ChildrenStart", 0x78 };
+         inline Offset ClassBase = { "Instance::ClassBase", 0x4920 };
+         inline Offset ClassDescriptor = { "Instance::ClassDescriptor", 0x18 };
+         inline Offset ClassName = { "Instance::ClassName", 0x8 };
+         inline Offset Name = { "Instance::Name", 0xb0 };
+         inline Offset Parent = { "Instance::Parent", 0x70 };
+         inline Offset This = { "Instance::This", 0x8 };
     }
 
     namespace Lighting {
-         inline constexpr uintptr_t Ambient = 0xe0;
-         inline constexpr uintptr_t Brightness = 0x128;
-         inline constexpr uintptr_t ClockTime = 0x1c0;
-         inline constexpr uintptr_t ColorShift_Bottom = 0xf8;
-         inline constexpr uintptr_t ColorShift_Top = 0xec;
-         inline constexpr uintptr_t EnvironmentDiffuseScale = 0x12c;
-         inline constexpr uintptr_t EnvironmentSpecularScale = 0x130;
-         inline constexpr uintptr_t ExposureCompensation = 0x134;
-         inline constexpr uintptr_t FogColor = 0x104;
-         inline constexpr uintptr_t FogEnd = 0x13c;
-         inline constexpr uintptr_t FogStart = 0x140;
-         inline constexpr uintptr_t GeographicLatitude = 0x198;
-         inline constexpr uintptr_t GlobalShadows = 0x150;
-         inline constexpr uintptr_t GradientBottom = 0x19c;
-         inline constexpr uintptr_t GradientTop = 0x158;
-         inline constexpr uintptr_t LightColor = 0x164;
-         inline constexpr uintptr_t LightDirection = 0x170;
-         inline constexpr uintptr_t MoonPosition = 0x18c;
-         inline constexpr uintptr_t OutdoorAmbient = 0x110;
-         inline constexpr uintptr_t Sky = 0x1e0;
-         inline constexpr uintptr_t Source = 0x17c;
-         inline constexpr uintptr_t SunPosition = 0x180;
+         inline Offset Ambient = { "Lighting::Ambient", 0xe0 };
+         inline Offset Brightness = { "Lighting::Brightness", 0x128 };
+         inline Offset ClockTime = { "Lighting::ClockTime", 0x1c0 };
+         inline Offset ColorShift_Bottom = { "Lighting::ColorShift_Bottom", 0xf8 };
+         inline Offset ColorShift_Top = { "Lighting::ColorShift_Top", 0xec };
+         inline Offset EnvironmentDiffuseScale = { "Lighting::EnvironmentDiffuseScale", 0x12c };
+         inline Offset EnvironmentSpecularScale = { "Lighting::EnvironmentSpecularScale", 0x130 };
+         inline Offset ExposureCompensation = { "Lighting::ExposureCompensation", 0x134 };
+         inline Offset FogColor = { "Lighting::FogColor", 0x104 };
+         inline Offset FogEnd = { "Lighting::FogEnd", 0x13c };
+         inline Offset FogStart = { "Lighting::FogStart", 0x140 };
+         inline Offset GeographicLatitude = { "Lighting::GeographicLatitude", 0x198 };
+         inline Offset GlobalShadows = { "Lighting::GlobalShadows", 0x150 };
+         inline Offset GradientBottom = { "Lighting::GradientBottom", 0x19c };
+         inline Offset GradientTop = { "Lighting::GradientTop", 0x158 };
+         inline Offset LightColor = { "Lighting::LightColor", 0x164 };
+         inline Offset LightDirection = { "Lighting::LightDirection", 0x170 };
+         inline Offset MoonPosition = { "Lighting::MoonPosition", 0x18c };
+         inline Offset OutdoorAmbient = { "Lighting::OutdoorAmbient", 0x110 };
+         inline Offset Sky = { "Lighting::Sky", 0x1e0 };
+         inline Offset Source = { "Lighting::Source", 0x17c };
+         inline Offset SunPosition = { "Lighting::SunPosition", 0x180 };
     }
 
     namespace LocalScript {
-         inline constexpr uintptr_t ByteCode = 0x1a8;
-         inline constexpr uintptr_t GUID = 0xe8;
-         inline constexpr uintptr_t Hash = 0x1b8;
+         inline Offset ByteCode = { "LocalScript::ByteCode", 0x1a8 };
+         inline Offset GUID = { "LocalScript::GUID", 0xe8 };
+         inline Offset Hash = { "LocalScript::Hash", 0x1b8 };
     }
 
     namespace MaterialColors {
-         inline constexpr uintptr_t Asphalt = 0x30;
-         inline constexpr uintptr_t Basalt = 0x27;
-         inline constexpr uintptr_t Brick = 0xf;
-         inline constexpr uintptr_t Cobblestone = 0x33;
-         inline constexpr uintptr_t Concrete = 0xc;
-         inline constexpr uintptr_t CrackedLava = 0x2d;
-         inline constexpr uintptr_t Glacier = 0x1b;
-         inline constexpr uintptr_t Grass = 0x6;
-         inline constexpr uintptr_t Ground = 0x2a;
-         inline constexpr uintptr_t Ice = 0x36;
-         inline constexpr uintptr_t LeafyGrass = 0x39;
-         inline constexpr uintptr_t Limestone = 0x3f;
-         inline constexpr uintptr_t Mud = 0x24;
-         inline constexpr uintptr_t Pavement = 0x42;
-         inline constexpr uintptr_t Rock = 0x18;
-         inline constexpr uintptr_t Salt = 0x3c;
-         inline constexpr uintptr_t Sand = 0x12;
-         inline constexpr uintptr_t Sandstone = 0x21;
-         inline constexpr uintptr_t Slate = 0x9;
-         inline constexpr uintptr_t Snow = 0x1e;
-         inline constexpr uintptr_t WoodPlanks = 0x15;
+         inline Offset Asphalt = { "MaterialColors::Asphalt", 0x30 };
+         inline Offset Basalt = { "MaterialColors::Basalt", 0x27 };
+         inline Offset Brick = { "MaterialColors::Brick", 0xf };
+         inline Offset Cobblestone = { "MaterialColors::Cobblestone", 0x33 };
+         inline Offset Concrete = { "MaterialColors::Concrete", 0xc };
+         inline Offset CrackedLava = { "MaterialColors::CrackedLava", 0x2d };
+         inline Offset Glacier = { "MaterialColors::Glacier", 0x1b };
+         inline Offset Grass = { "MaterialColors::Grass", 0x6 };
+         inline Offset Ground = { "MaterialColors::Ground", 0x2a };
+         inline Offset Ice = { "MaterialColors::Ice", 0x36 };
+         inline Offset LeafyGrass = { "MaterialColors::LeafyGrass", 0x39 };
+         inline Offset Limestone = { "MaterialColors::Limestone", 0x3f };
+         inline Offset Mud = { "MaterialColors::Mud", 0x24 };
+         inline Offset Pavement = { "MaterialColors::Pavement", 0x42 };
+         inline Offset Rock = { "MaterialColors::Rock", 0x18 };
+         inline Offset Salt = { "MaterialColors::Salt", 0x3c };
+         inline Offset Sand = { "MaterialColors::Sand", 0x12 };
+         inline Offset Sandstone = { "MaterialColors::Sandstone", 0x21 };
+         inline Offset Slate = { "MaterialColors::Slate", 0x9 };
+         inline Offset Snow = { "MaterialColors::Snow", 0x1e };
+         inline Offset WoodPlanks = { "MaterialColors::WoodPlanks", 0x15 };
     }
 
     namespace MeshPart {
-         inline constexpr uintptr_t MeshId = 0x300;
-         inline constexpr uintptr_t Texture = 0x330;
+         inline Offset MeshId = { "MeshPart::MeshId", 0x300 };
+         inline Offset Texture = { "MeshPart::Texture", 0x330 };
     }
 
     namespace Misc {
-         inline constexpr uintptr_t Adornee = 0x108;
-         inline constexpr uintptr_t AnimationId = 0xd0;
-         inline constexpr uintptr_t StringLength = 0x10;
-         inline constexpr uintptr_t Value = 0xd0;
+         inline Offset Adornee = { "Misc::Adornee", 0x108 };
+         inline Offset AnimationId = { "Misc::AnimationId", 0xd0 };
+         inline Offset StringLength = { "Misc::StringLength", 0x10 };
+         inline Offset Value = { "Misc::Value", 0xd0 };
     }
 
     namespace Model {
-         inline constexpr uintptr_t PrimaryPart = 0x278;
-         inline constexpr uintptr_t Scale = 0x164;
+         inline Offset PrimaryPart = { "Model::PrimaryPart", 0x278 };
+         inline Offset Scale = { "Model::Scale", 0x164 };
     }
 
     namespace ModuleScript {
-         inline constexpr uintptr_t ByteCode = 0x150;
-         inline constexpr uintptr_t GUID = 0xe8;
-         inline constexpr uintptr_t Hash = 0x160;
-         inline constexpr uintptr_t IsCoreScript = 0x0;
+         inline Offset ByteCode = { "ModuleScript::ByteCode", 0x150 };
+         inline Offset GUID = { "ModuleScript::GUID", 0xe8 };
+         inline Offset Hash = { "ModuleScript::Hash", 0x160 };
+         inline Offset IsCoreScript = { "ModuleScript::IsCoreScript", 0x0 };
     }
 
     namespace MouseService {
-         inline constexpr uintptr_t InputObject = 0x108;
-         inline constexpr uintptr_t InputObject2 = 0x118;
-         inline constexpr uintptr_t MousePosition = 0xec;
-         inline constexpr uintptr_t SensitivityPointer = 0x307;
+         inline Offset InputObject = { "MouseService::InputObject", 0x108 };
+         inline Offset InputObject2 = { "MouseService::InputObject2", 0x118 };
+         inline Offset MousePosition = { "MouseService::MousePosition", 0xec };
+         inline Offset SensitivityPointer = { "MouseService::SensitivityPointer", 0x307 };
     }
 
     namespace ParticleEmitter {
-         inline constexpr uintptr_t Acceleration = 0x1f0;
-         inline constexpr uintptr_t Brightness = 0x22c;
-         inline constexpr uintptr_t Drag = 0x230;
-         inline constexpr uintptr_t Lifetime = 0x204;
-         inline constexpr uintptr_t LightEmission = 0x248;
-         inline constexpr uintptr_t LightInfluence = 0x24c;
-         inline constexpr uintptr_t Rate = 0x258;
-         inline constexpr uintptr_t RotSpeed = 0x20c;
-         inline constexpr uintptr_t Rotation = 0x214;
-         inline constexpr uintptr_t Speed = 0x21c;
-         inline constexpr uintptr_t SpreadAngle = 0x224;
-         inline constexpr uintptr_t Texture = 0x1d0;
-         inline constexpr uintptr_t TimeScale = 0x26c;
-         inline constexpr uintptr_t VelocityInheritance = 0x270;
-         inline constexpr uintptr_t ZOffset = 0x274;
+         inline Offset Acceleration = { "ParticleEmitter::Acceleration", 0x1f0 };
+         inline Offset Brightness = { "ParticleEmitter::Brightness", 0x22c };
+         inline Offset Drag = { "ParticleEmitter::Drag", 0x230 };
+         inline Offset Lifetime = { "ParticleEmitter::Lifetime", 0x204 };
+         inline Offset LightEmission = { "ParticleEmitter::LightEmission", 0x248 };
+         inline Offset LightInfluence = { "ParticleEmitter::LightInfluence", 0x24c };
+         inline Offset Rate = { "ParticleEmitter::Rate", 0x258 };
+         inline Offset RotSpeed = { "ParticleEmitter::RotSpeed", 0x20c };
+         inline Offset Rotation = { "ParticleEmitter::Rotation", 0x214 };
+         inline Offset Speed = { "ParticleEmitter::Speed", 0x21c };
+         inline Offset SpreadAngle = { "ParticleEmitter::SpreadAngle", 0x224 };
+         inline Offset Texture = { "ParticleEmitter::Texture", 0x1d0 };
+         inline Offset TimeScale = { "ParticleEmitter::TimeScale", 0x26c };
+         inline Offset VelocityInheritance = { "ParticleEmitter::VelocityInheritance", 0x270 };
+         inline Offset ZOffset = { "ParticleEmitter::ZOffset", 0x274 };
     }
 
     namespace Player {
-         inline constexpr uintptr_t AccountAge = 0x32c;
-         inline constexpr uintptr_t CameraMode = 0x338;
-         inline constexpr uintptr_t DisplayName = 0x130;
-         inline constexpr uintptr_t HealthDisplayDistance = 0x358;
-         inline constexpr uintptr_t LocalPlayer = 0x138;
-         inline constexpr uintptr_t LocaleId = 0x110;
-         inline constexpr uintptr_t MaxZoomDistance = 0x330;
-         inline constexpr uintptr_t MinZoomDistance = 0x334;
-         inline constexpr uintptr_t ModelInstance = 0x280;
-         inline constexpr uintptr_t Mouse = 0x1180;
-         inline constexpr uintptr_t NameDisplayDistance = 0x368;
-         inline constexpr uintptr_t Team = 0x2b0;
-         inline constexpr uintptr_t TeamColor = 0x374;
-         inline constexpr uintptr_t UserId = 0x2d8;
+         inline Offset AccountAge = { "Player::AccountAge", 0x32c };
+         inline Offset CameraMode = { "Player::CameraMode", 0x338 };
+         inline Offset DisplayName = { "Player::DisplayName", 0x130 };
+         inline Offset HealthDisplayDistance = { "Player::HealthDisplayDistance", 0x358 };
+         inline Offset LocalPlayer = { "Player::LocalPlayer", 0x138 };
+         inline Offset LocaleId = { "Player::LocaleId", 0x110 };
+         inline Offset MaxZoomDistance = { "Player::MaxZoomDistance", 0x330 };
+         inline Offset MinZoomDistance = { "Player::MinZoomDistance", 0x334 };
+         inline Offset ModelInstance = { "Player::ModelInstance", 0x280 };
+         inline Offset Mouse = { "Player::Mouse", 0x1180 };
+         inline Offset NameDisplayDistance = { "Player::NameDisplayDistance", 0x368 };
+         inline Offset Team = { "Player::Team", 0x2b0 };
+         inline Offset TeamColor = { "Player::TeamColor", 0x374 };
+         inline Offset UserId = { "Player::UserId", 0x2d8 };
     }
 
     namespace PlayerConfigurer {
-         inline constexpr uintptr_t Pointer = 0x0;
+         inline Offset Pointer = { "PlayerConfigurer::Pointer", 0x0 };
     }
 
     namespace PlayerMouse {
-         inline constexpr uintptr_t Icon = 0xe0;
-         inline constexpr uintptr_t Workspace = 0x168;
+         inline Offset Icon = { "PlayerMouse::Icon", 0xe0 };
+         inline Offset Workspace = { "PlayerMouse::Workspace", 0x168 };
     }
 
     namespace Primitive {
-         inline constexpr uintptr_t AssemblyAngularVelocity = 0x104;
-         inline constexpr uintptr_t AssemblyLinearVelocity = 0xf8;
-         inline constexpr uintptr_t Flags = 0x1b6;
-         inline constexpr uintptr_t Material = 0x0;
-         inline constexpr uintptr_t Owner = 0x200;
-         inline constexpr uintptr_t Position = 0xec;
-         inline constexpr uintptr_t Rotation = 0xc8;
-         inline constexpr uintptr_t Size = 0x1b8;
-         inline constexpr uintptr_t Validate = 0x6;
+         inline Offset AssemblyAngularVelocity = { "Primitive::AssemblyAngularVelocity", 0x104 };
+         inline Offset AssemblyLinearVelocity = { "Primitive::AssemblyLinearVelocity", 0xf8 };
+         inline Offset Flags = { "Primitive::Flags", 0x1b6 };
+         inline Offset Material = { "Primitive::Material", 0x0 };
+         inline Offset Owner = { "Primitive::Owner", 0x200 };
+         inline Offset Position = { "Primitive::Position", 0xec };
+         inline Offset Rotation = { "Primitive::Rotation", 0xc8 };
+         inline Offset Size = { "Primitive::Size", 0x1b8 };
+         inline Offset Validate = { "Primitive::Validate", 0x6 };
     }
 
     namespace PrimitiveFlags {
-         inline constexpr uintptr_t Anchored = 0x2;
-         inline constexpr uintptr_t CanCollide = 0x8;
-         inline constexpr uintptr_t CanQuery = 0x20;
-         inline constexpr uintptr_t CanTouch = 0x10;
+         inline Offset Anchored = { "PrimitiveFlags::Anchored", 0x2 };
+         inline Offset CanCollide = { "PrimitiveFlags::CanCollide", 0x8 };
+         inline Offset CanQuery = { "PrimitiveFlags::CanQuery", 0x20 };
+         inline Offset CanTouch = { "PrimitiveFlags::CanTouch", 0x10 };
     }
 
     namespace ProximityPrompt {
-         inline constexpr uintptr_t ActionText = 0xc8;
-         inline constexpr uintptr_t Enabled = 0x14e;
-         inline constexpr uintptr_t GamepadKeyCode = 0x134;
-         inline constexpr uintptr_t HoldDuration = 0x138;
-         inline constexpr uintptr_t KeyCode = 0x13c;
-         inline constexpr uintptr_t MaxActivationDistance = 0x140;
-         inline constexpr uintptr_t ObjectText = 0xe8;
-         inline constexpr uintptr_t RequiresLineOfSight = 0x14f;
+         inline Offset ActionText = { "ProximityPrompt::ActionText", 0xc8 };
+         inline Offset Enabled = { "ProximityPrompt::Enabled", 0x14e };
+         inline Offset GamepadKeyCode = { "ProximityPrompt::GamepadKeyCode", 0x134 };
+         inline Offset HoldDuration = { "ProximityPrompt::HoldDuration", 0x138 };
+         inline Offset KeyCode = { "ProximityPrompt::KeyCode", 0x13c };
+         inline Offset MaxActivationDistance = { "ProximityPrompt::MaxActivationDistance", 0x140 };
+         inline Offset ObjectText = { "ProximityPrompt::ObjectText", 0xe8 };
+         inline Offset RequiresLineOfSight = { "ProximityPrompt::RequiresLineOfSight", 0x14f };
     }
 
     namespace RenderJob {
-         inline constexpr uintptr_t FakeDataModel = 0x38;
-         inline constexpr uintptr_t RealDataModel = 0x1c0;
-         inline constexpr uintptr_t RenderView = 0x1d0;
+         inline Offset FakeDataModel = { "RenderJob::FakeDataModel", 0x38 };
+         inline Offset RealDataModel = { "RenderJob::RealDataModel", 0x1c0 };
+         inline Offset RenderView = { "RenderJob::RenderView", 0x1d0 };
     }
 
     namespace RenderView {
-         inline constexpr uintptr_t DeviceD3D11 = 0x8;
-         inline constexpr uintptr_t LightingValid = 0x150;
-         inline constexpr uintptr_t SkyValid = 0x28d;
-         inline constexpr uintptr_t VisualEngine = 0x10;
+         inline Offset DeviceD3D11 = { "RenderView::DeviceD3D11", 0x8 };
+         inline Offset LightingValid = { "RenderView::LightingValid", 0x150 };
+         inline Offset SkyValid = { "RenderView::SkyValid", 0x28d };
+         inline Offset VisualEngine = { "RenderView::VisualEngine", 0x10 };
     }
 
     namespace RunService {
-         inline constexpr uintptr_t HeartbeatFPS = 0xb8;
-         inline constexpr uintptr_t HeartbeatTask = 0xf8;
+         inline Offset HeartbeatFPS = { "RunService::HeartbeatFPS", 0xb8 };
+         inline Offset HeartbeatTask = { "RunService::HeartbeatTask", 0xf8 };
     }
 
     namespace Script {
-         inline constexpr uintptr_t ByteCode = 0x1a8;
-         inline constexpr uintptr_t GUID = 0xe8;
-         inline constexpr uintptr_t Hash = 0x1b8;
+         inline Offset ByteCode = { "Script::ByteCode", 0x1a8 };
+         inline Offset GUID = { "Script::GUID", 0xe8 };
+         inline Offset Hash = { "Script::Hash", 0x1b8 };
     }
 
     namespace ScriptContext {
-         inline constexpr uintptr_t RequireBypass = 0x0;
+         inline Offset RequireBypass = { "ScriptContext::RequireBypass", 0x0 };
     }
 
     namespace Seat {
-         inline constexpr uintptr_t Occupant = 0x220;
+         inline Offset Occupant = { "Seat::Occupant", 0x220 };
     }
 
     namespace Sky {
-         inline constexpr uintptr_t MoonAngularSize = 0x25c;
-         inline constexpr uintptr_t MoonTextureId = 0xe0;
-         inline constexpr uintptr_t SkyboxBk = 0x110;
-         inline constexpr uintptr_t SkyboxDn = 0x140;
-         inline constexpr uintptr_t SkyboxFt = 0x170;
-         inline constexpr uintptr_t SkyboxLf = 0x1a0;
-         inline constexpr uintptr_t SkyboxOrientation = 0x250;
-         inline constexpr uintptr_t SkyboxRt = 0x1d0;
-         inline constexpr uintptr_t SkyboxUp = 0x200;
-         inline constexpr uintptr_t StarCount = 0x260;
-         inline constexpr uintptr_t SunAngularSize = 0x254;
-         inline constexpr uintptr_t SunTextureId = 0x230;
+         inline Offset MoonAngularSize = { "Sky::MoonAngularSize", 0x25c };
+         inline Offset MoonTextureId = { "Sky::MoonTextureId", 0xe0 };
+         inline Offset SkyboxBk = { "Sky::SkyboxBk", 0x110 };
+         inline Offset SkyboxDn = { "Sky::SkyboxDn", 0x140 };
+         inline Offset SkyboxFt = { "Sky::SkyboxFt", 0x170 };
+         inline Offset SkyboxLf = { "Sky::SkyboxLf", 0x1a0 };
+         inline Offset SkyboxOrientation = { "Sky::SkyboxOrientation", 0x250 };
+         inline Offset SkyboxRt = { "Sky::SkyboxRt", 0x1d0 };
+         inline Offset SkyboxUp = { "Sky::SkyboxUp", 0x200 };
+         inline Offset StarCount = { "Sky::StarCount", 0x260 };
+         inline Offset SunAngularSize = { "Sky::SunAngularSize", 0x254 };
+         inline Offset SunTextureId = { "Sky::SunTextureId", 0x230 };
     }
 
     namespace Sound {
-         inline constexpr uintptr_t Looped = 0x155;
-         inline constexpr uintptr_t PlaybackSpeed = 0x134;
-         inline constexpr uintptr_t RollOffMaxDistance = 0x138;
-         inline constexpr uintptr_t RollOffMinDistance = 0x13c;
-         inline constexpr uintptr_t SoundGroup = 0x100;
-         inline constexpr uintptr_t SoundId = 0xe0;
-         inline constexpr uintptr_t Volume = 0x148;
+         inline Offset Looped = { "Sound::Looped", 0x155 };
+         inline Offset PlaybackSpeed = { "Sound::PlaybackSpeed", 0x134 };
+         inline Offset RollOffMaxDistance = { "Sound::RollOffMaxDistance", 0x138 };
+         inline Offset RollOffMinDistance = { "Sound::RollOffMinDistance", 0x13c };
+         inline Offset SoundGroup = { "Sound::SoundGroup", 0x100 };
+         inline Offset SoundId = { "Sound::SoundId", 0xe0 };
+         inline Offset Volume = { "Sound::Volume", 0x148 };
     }
 
     namespace SpawnLocation {
-         inline constexpr uintptr_t AllowTeamChangeOnTouch = 0x1f8;
-         inline constexpr uintptr_t Enabled = 0x1f9;
-         inline constexpr uintptr_t ForcefieldDuration = 0x1f0;
-         inline constexpr uintptr_t Neutral = 0x1fa;
-         inline constexpr uintptr_t TeamColor = 0x1f4;
+         inline Offset AllowTeamChangeOnTouch = { "SpawnLocation::AllowTeamChangeOnTouch", 0x1f8 };
+         inline Offset Enabled = { "SpawnLocation::Enabled", 0x1f9 };
+         inline Offset ForcefieldDuration = { "SpawnLocation::ForcefieldDuration", 0x1f0 };
+         inline Offset Neutral = { "SpawnLocation::Neutral", 0x1fa };
+         inline Offset TeamColor = { "SpawnLocation::TeamColor", 0x1f4 };
     }
 
     namespace SpecialMesh {
-         inline constexpr uintptr_t MeshId = 0x108;
-         inline constexpr uintptr_t Scale = 0xdc;
+         inline Offset MeshId = { "SpecialMesh::MeshId", 0x108 };
+         inline Offset Scale = { "SpecialMesh::Scale", 0xdc };
     }
 
     namespace StatsItem {
-         inline constexpr uintptr_t Value = 0xc8;
+         inline Offset Value = { "StatsItem::Value", 0xc8 };
     }
 
     namespace SunRaysEffect {
-         inline constexpr uintptr_t Enabled = 0xc8;
-         inline constexpr uintptr_t Intensity = 0xd0;
-         inline constexpr uintptr_t Spread = 0xd4;
+         inline Offset Enabled = { "SunRaysEffect::Enabled", 0xc8 };
+         inline Offset Intensity = { "SunRaysEffect::Intensity", 0xd0 };
+         inline Offset Spread = { "SunRaysEffect::Spread", 0xd4 };
     }
 
     namespace SurfaceAppearance {
-         inline constexpr uintptr_t AlphaMode = 0x2a0;
-         inline constexpr uintptr_t Color = 0x288;
-         inline constexpr uintptr_t ColorMap = 0xe0;
-         inline constexpr uintptr_t EmissiveMaskContent = 0x110;
-         inline constexpr uintptr_t EmissiveStrength = 0x2a4;
-         inline constexpr uintptr_t EmissiveTint = 0x294;
-         inline constexpr uintptr_t MetalnessMap = 0x140;
-         inline constexpr uintptr_t NormalMap = 0x170;
-         inline constexpr uintptr_t RoughnessMap = 0x1a0;
+         inline Offset AlphaMode = { "SurfaceAppearance::AlphaMode", 0x2a0 };
+         inline Offset Color = { "SurfaceAppearance::Color", 0x288 };
+         inline Offset ColorMap = { "SurfaceAppearance::ColorMap", 0xe0 };
+         inline Offset EmissiveMaskContent = { "SurfaceAppearance::EmissiveMaskContent", 0x110 };
+         inline Offset EmissiveStrength = { "SurfaceAppearance::EmissiveStrength", 0x2a4 };
+         inline Offset EmissiveTint = { "SurfaceAppearance::EmissiveTint", 0x294 };
+         inline Offset MetalnessMap = { "SurfaceAppearance::MetalnessMap", 0x140 };
+         inline Offset NormalMap = { "SurfaceAppearance::NormalMap", 0x170 };
+         inline Offset RoughnessMap = { "SurfaceAppearance::RoughnessMap", 0x1a0 };
     }
 
     namespace TaskScheduler {
-         inline constexpr uintptr_t JobEnd = 0xd0;
-         inline constexpr uintptr_t JobName = 0x18;
-         inline constexpr uintptr_t JobStart = 0xc8;
-         inline constexpr uintptr_t MaxFPS = 0xb0;
-         inline constexpr uintptr_t Pointer = 0x7e90548;
+         inline Offset JobEnd = { "TaskScheduler::JobEnd", 0xd0 };
+         inline Offset JobName = { "TaskScheduler::JobName", 0x18 };
+         inline Offset JobStart = { "TaskScheduler::JobStart", 0xc8 };
+         inline Offset MaxFPS = { "TaskScheduler::MaxFPS", 0xb0 };
+         inline Offset Pointer = { "TaskScheduler::Pointer", 0x7e90548 };
     }
 
     namespace Team {
-         inline constexpr uintptr_t BrickColor = 0xd0;
+         inline Offset BrickColor = { "Team::BrickColor", 0xd0 };
     }
 
     namespace Terrain {
-         inline constexpr uintptr_t GrassLength = 0x1f8;
-         inline constexpr uintptr_t MaterialColors = 0x2a8;
-         inline constexpr uintptr_t WaterColor = 0x1e8;
-         inline constexpr uintptr_t WaterReflectance = 0x200;
-         inline constexpr uintptr_t WaterTransparency = 0x204;
-         inline constexpr uintptr_t WaterWaveSize = 0x208;
-         inline constexpr uintptr_t WaterWaveSpeed = 0x20c;
+         inline Offset GrassLength = { "Terrain::GrassLength", 0x1f8 };
+         inline Offset MaterialColors = { "Terrain::MaterialColors", 0x2a8 };
+         inline Offset WaterColor = { "Terrain::WaterColor", 0x1e8 };
+         inline Offset WaterReflectance = { "Terrain::WaterReflectance", 0x200 };
+         inline Offset WaterTransparency = { "Terrain::WaterTransparency", 0x204 };
+         inline Offset WaterWaveSize = { "Terrain::WaterWaveSize", 0x208 };
+         inline Offset WaterWaveSpeed = { "Terrain::WaterWaveSpeed", 0x20c };
     }
 
     namespace Textures {
-         inline constexpr uintptr_t Decal_Texture = 0x198;
-         inline constexpr uintptr_t Texture_Texture = 0x198;
+         inline Offset Decal_Texture = { "Textures::Decal_Texture", 0x198 };
+         inline Offset Texture_Texture = { "Textures::Texture_Texture", 0x198 };
     }
 
     namespace Tool {
-         inline constexpr uintptr_t CanBeDropped = 0x4c8;
-         inline constexpr uintptr_t Enabled = 0x4c9;
-         inline constexpr uintptr_t Grip = 0x4bc;
-         inline constexpr uintptr_t ManualActivationOnly = 0x4ca;
-         inline constexpr uintptr_t RequiresHandle = 0x4cb;
-         inline constexpr uintptr_t TextureId = 0x370;
-         inline constexpr uintptr_t Tooltip = 0x478;
+         inline Offset CanBeDropped = { "Tool::CanBeDropped", 0x4c8 };
+         inline Offset Enabled = { "Tool::Enabled", 0x4c9 };
+         inline Offset Grip = { "Tool::Grip", 0x4bc };
+         inline Offset ManualActivationOnly = { "Tool::ManualActivationOnly", 0x4ca };
+         inline Offset RequiresHandle = { "Tool::RequiresHandle", 0x4cb };
+         inline Offset TextureId = { "Tool::TextureId", 0x370 };
+         inline Offset Tooltip = { "Tool::Tooltip", 0x478 };
     }
 
     namespace UnionOperation {
-         inline constexpr uintptr_t AssetId = 0x2f8;
+         inline Offset AssetId = { "UnionOperation::AssetId", 0x2f8 };
     }
 
     namespace UserInputService {
-         inline constexpr uintptr_t WindowInputState = 0x2d8;
+         inline Offset WindowInputState = { "UserInputService::WindowInputState", 0x2d8 };
     }
 
     namespace VehicleSeat {
-         inline constexpr uintptr_t MaxSpeed = 0x238;
-         inline constexpr uintptr_t SteerFloat = 0x240;
-         inline constexpr uintptr_t ThrottleFloat = 0x248;
-         inline constexpr uintptr_t Torque = 0x24c;
-         inline constexpr uintptr_t TurnSpeed = 0x250;
+         inline Offset MaxSpeed = { "VehicleSeat::MaxSpeed", 0x238 };
+         inline Offset SteerFloat = { "VehicleSeat::SteerFloat", 0x240 };
+         inline Offset ThrottleFloat = { "VehicleSeat::ThrottleFloat", 0x248 };
+         inline Offset Torque = { "VehicleSeat::Torque", 0x24c };
+         inline Offset TurnSpeed = { "VehicleSeat::TurnSpeed", 0x250 };
     }
 
     namespace VisualEngine {
-         inline constexpr uintptr_t Dimensions = 0xab0;
-         inline constexpr uintptr_t FakeDataModel = 0xa90;
-         inline constexpr uintptr_t Pointer = 0x801dfb0;
-         inline constexpr uintptr_t RenderView = 0xbb0;
-         inline constexpr uintptr_t ViewMatrix = 0x150;
+         inline Offset Dimensions = { "VisualEngine::Dimensions", 0xab0 };
+         inline Offset FakeDataModel = { "VisualEngine::FakeDataModel", 0xa90 };
+         inline Offset Pointer = { "VisualEngine::Pointer", 0x801dfb0 };
+         inline Offset RenderView = { "VisualEngine::RenderView", 0xbb0 };
+         inline Offset ViewMatrix = { "VisualEngine::ViewMatrix", 0x150 };
     }
 
     namespace Weld {
-         inline constexpr uintptr_t Part0 = 0x130;
-         inline constexpr uintptr_t Part1 = 0x140;
+         inline Offset Part0 = { "Weld::Part0", 0x130 };
+         inline Offset Part1 = { "Weld::Part1", 0x140 };
     }
 
     namespace WeldConstraint {
-         inline constexpr uintptr_t Part0 = 0xd0;
-         inline constexpr uintptr_t Part1 = 0xe0;
+         inline Offset Part0 = { "WeldConstraint::Part0", 0xd0 };
+         inline Offset Part1 = { "WeldConstraint::Part1", 0xe0 };
     }
 
     namespace WindowInputState {
-         inline constexpr uintptr_t CapsLock = 0x40;
-         inline constexpr uintptr_t CurrentTextBox = 0x48;
+         inline Offset CapsLock = { "WindowInputState::CapsLock", 0x40 };
+         inline Offset CurrentTextBox = { "WindowInputState::CurrentTextBox", 0x48 };
     }
 
     namespace Workspace {
-         inline constexpr uintptr_t CurrentCamera = 0x4b0;
-         inline constexpr uintptr_t DistributedGameTime = 0x4d0;
-         inline constexpr uintptr_t ReadOnlyGravity = 0x9f0;
-         inline constexpr uintptr_t World = 0x408;
+         inline Offset CurrentCamera = { "Workspace::CurrentCamera", 0x4b0 };
+         inline Offset DistributedGameTime = { "Workspace::DistributedGameTime", 0x4d0 };
+         inline Offset ReadOnlyGravity = { "Workspace::ReadOnlyGravity", 0x9f0 };
+         inline Offset World = { "Workspace::World", 0x408 };
     }
 
     namespace World {
-         inline constexpr uintptr_t AirProperties = 0x218;
-         inline constexpr uintptr_t FallenPartsDestroyHeight = 0x208;
-         inline constexpr uintptr_t Gravity = 0x210;
-         inline constexpr uintptr_t Primitives = 0x280;
-         inline constexpr uintptr_t worldStepsPerSec = 0x678;
+         inline Offset AirProperties = { "World::AirProperties", 0x218 };
+         inline Offset FallenPartsDestroyHeight = { "World::FallenPartsDestroyHeight", 0x208 };
+         inline Offset Gravity = { "World::Gravity", 0x210 };
+         inline Offset Primitives = { "World::Primitives", 0x280 };
+         inline Offset worldStepsPerSec = { "World::worldStepsPerSec", 0x678 };
     }
 
 }

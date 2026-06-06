@@ -135,6 +135,7 @@ void cache::run()
 				cache::entity_t entity{};
 
 				entity.instance = { player.address };
+				entity.model_address = 0;
 				entity.name = player.get_name();
 				entity.display_name = memory->read_string(player.address + Offsets::Player::DisplayName);
 				if (entity.display_name.empty() || entity.display_name == "Unknown")
@@ -180,6 +181,7 @@ void cache::run()
 			if (needs_recache)
 			{
 				cached_model_addresses[player.address] = model_instance.address;
+				cached_entity.model_address = model_instance.address;
 				cached_entity.parts.clear();
 				cached_entity.ko_address = 0;
 				cached_entity.ko_check_count = 0;

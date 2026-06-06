@@ -13,6 +13,7 @@ namespace cache
 	struct entity_t final
 	{
 		rbx::instance_t instance;
+		std::uint64_t model_address{ 0 };
 		std::string name;
 		std::string display_name;
 		std::string tool_name;
