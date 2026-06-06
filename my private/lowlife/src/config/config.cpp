@@ -146,6 +146,7 @@ namespace config
 		file << "    \"shake_x\": " << settings::aimbot::shake_x << ",\n";
 		file << "    \"shake_y\": " << settings::aimbot::shake_y << ",\n";
 		file << "    \"easing_style\": " << settings::aimbot::easing_style << ",\n";
+		file << "    \"ease_time\": " << settings::aimbot::ease_time << ",\n";
 		file << "    \"team_check\": " << (settings::aimbot::team_check ? "true" : "false") << ",\n";
 		file << "    \"target_selection_mode\": " << settings::aimbot::target_selection_mode << ",\n";
 		file << "    \"smart_bone\": " << (settings::aimbot::smart_bone ? "true" : "false") << ",\n";
@@ -513,6 +514,8 @@ namespace config
 				settings::aimbot::shake_y = std::stof(value);
 			if (parse_json_value(section, "easing_style", value))
 				settings::aimbot::easing_style = std::stoi(value);
+			if (parse_json_value(section, "ease_time", value))
+				settings::aimbot::ease_time = std::stof(value);
 			if (parse_json_value(section, "team_check", value))
 				settings::aimbot::team_check = (value == "true");
 			if (parse_json_value(section, "target_selection_mode", value))

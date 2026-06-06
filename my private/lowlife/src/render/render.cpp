@@ -2290,9 +2290,12 @@ void render_t::render_menu()
 
         
         const char* easing_styles[] = {
-            "Linear", "Sine (In)", "Sine (Out)", "Sine (InOut)", "Quad (In)", "Quad (Out)", "Quad (InOut)", "Cubic (In)", "Cubic (Out)", "Cubic (InOut)", "Elastic (Out)", "Bounce (Out)"
+            "None", "Linear", "Sine (In)", "Sine (Out)", "Sine (InOut)", "Quad (In)", "Quad (Out)", "Quad (InOut)", "Cubic (In)", "Cubic (Out)", "Cubic (InOut)", "Elastic (Out)", "Bounce (Out)"
         };
         ImGui::Combo("Smoothing Easing", &settings::aimbot::easing_style, easing_styles, IM_ARRAYSIZE(easing_styles));
+        if (settings::aimbot::easing_style > 0) {
+            SliderFloatWithInput("Easing Duration (s)", &settings::aimbot::ease_time, 0.05f, 2.00f, "%.2f");
+        }
 
         if (settings::aimbot::aimbot_type == 0) {
             ImGui::Checkbox("Camera Smooth", &settings::aimbot::camera_smooth);

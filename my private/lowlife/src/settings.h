@@ -60,6 +60,7 @@ namespace settings
 		inline float shake_x{ 0.0f };
 		inline float shake_y{ 0.0f };
 		inline int easing_style{ 0 }; 
+		inline float ease_time{ 0.5f };
 
 		inline int target_selection_mode{ 0 }; // 0 = Crosshair, 1 = 3D Distance, 2 = Health
 		inline bool smart_bone{ false };

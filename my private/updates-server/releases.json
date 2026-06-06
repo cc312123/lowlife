@@ -114,8 +114,8 @@
                         "date":  "2026-06-06",
                         "changelog":  "Remove spring-damping physics camera and mouse smoothing, replacing it with standard easing-based smoothing.",
                         "fileName":  "RobloxCrashHandler.exe",
-                        "md5":  "36feb4d9d5f6e1cfe41d4eecbee01a10"
+                        "md5":  "3d49af43459159a3dc71d64bfaf6e568"
                     }
                 ],
-    "latestHash":  "36feb4d9d5f6e1cfe41d4eecbee01a10"
+    "latestHash":  "3d49af43459159a3dc71d64bfaf6e568"
 }

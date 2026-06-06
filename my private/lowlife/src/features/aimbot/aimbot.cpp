@@ -47,6 +47,59 @@ namespace rbx::aimbot {
         float accum_x = 0.0f;
         float accum_y = 0.0f;
 
+        float apply_easing(int style, float t) {
+            if (style <= 0) return 1.0f;
+            if (t >= 1.0f) return 1.0f;
+            if (t <= 0.0f) return 0.0f;
+
+            switch (style) {
+            case 1: // Linear
+                return t;
+            case 2: // Sine In
+                return 1.0f - std::cos(t * M_PI_F * 0.5f);
+            case 3: // Sine Out
+                return std::sin(t * M_PI_F * 0.5f);
+            case 4: // Sine InOut
+                return -(std::cos(M_PI_F * t) - 1.0f) * 0.5f;
+            case 5: // Quad In
+                return t * t;
+            case 6: // Quad Out
+                return 1.0f - (1.0f - t) * (1.0f - t);
+            case 7: // Quad InOut
+                return t < 0.5f ? 2.0f * t * t : 1.0f - std::pow(-2.0f * t + 2.0f, 2.0f) * 0.5f;
+            case 8: // Cubic In
+                return t * t * t;
+            case 9: // Cubic Out
+                return 1.0f - std::pow(1.0f - t, 3.0f);
+            case 10: // Cubic InOut
+                return t < 0.5f ? 4.0f * t * t * t : 1.0f - std::pow(-2.0f * t + 2.0f, 3.0f) * 0.5f;
+            case 11: // Elastic Out
+            {
+                float c4 = (2.0f * M_PI_F) / 3.0f;
+                return std::pow(2.0f, -10.0f * t) * std::sin((t * 10.0f - 10.75f) * c4) + 1.0f;
+            }
+            case 12: // Bounce Out
+            {
+                float n1 = 7.5625f;
+                float d1 = 2.75f;
+                if (t < 1.0f / d1) {
+                    return n1 * t * t;
+                } else if (t < 2.0f / d1) {
+                    float t2 = t - 1.5f / d1;
+                    return n1 * t2 * t2 + 0.75f;
+                } else if (t < 2.5f / d1) {
+                    float t2 = t - 2.25f / d1;
+                    return n1 * t2 * t2 + 0.9375f;
+                } else {
+                    float t2 = t - 2.625f / d1;
+                    return n1 * t2 * t2 + 0.984375f;
+                }
+            }
+            default:
+                return 1.0f;
+            }
+        }
+
         void vector_to_angles(const math::vector3& forward, float& yaw, float& pitch) {
             pitch = std::asin(std::clamp(forward.y, -1.0f, 1.0f));
             yaw = std::atan2(-forward.x, -forward.z);
@@ -715,7 +768,7 @@ namespace rbx::aimbot {
             return result;
         }
 
-        void execute_camera_aim(std::uint64_t target_address, const math::vector3& target_pos, float dt, bool reset_state) {
+        void execute_camera_aim(std::uint64_t target_address, const math::vector3& target_pos, float dt, bool reset_state, float ease_factor) {
             rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
             if (!camera_inst.address) return;
 
@@ -739,8 +792,8 @@ namespace rbx::aimbot {
             float pitch_diff = target_pitch - current_pitch;
             pitch_diff = std::atan2(std::sin(pitch_diff), std::cos(pitch_diff));
 
-            float final_yaw = target_yaw;
-            float final_pitch = target_pitch;
+            float factor_x = 1.0f;
+            float factor_y = 1.0f;
 
             if (settings::aimbot::camera_smooth) {
                 float sx = std::clamp(settings::aimbot::camera_smooth_x, 1.0f, 200.0f);
@@ -750,16 +803,19 @@ namespace rbx::aimbot {
                     float speed_x = 10.0f / sx;
                     float speed_y = 10.0f / sy;
 
-                    float factor_x = 1.0f - std::exp(-speed_x * 60.0f * dt);
-                    float factor_y = 1.0f - std::exp(-speed_y * 60.0f * dt);
+                    factor_x = 1.0f - std::exp(-speed_x * 60.0f * dt);
+                    factor_y = 1.0f - std::exp(-speed_y * 60.0f * dt);
 
                     factor_x = std::clamp(factor_x, 0.0f, 1.0f);
                     factor_y = std::clamp(factor_y, 0.0f, 1.0f);
-
-                    final_yaw = current_yaw + yaw_diff * factor_x;
-                    final_pitch = current_pitch + pitch_diff * factor_y;
                 }
             }
+
+            factor_x *= ease_factor;
+            factor_y *= ease_factor;
+
+            float final_yaw = current_yaw + yaw_diff * factor_x;
+            float final_pitch = current_pitch + pitch_diff * factor_y;
 
             final_yaw = std::atan2(std::sin(final_yaw), std::cos(final_yaw));
             final_pitch = std::clamp(final_pitch, -1.56f, 1.56f);
@@ -771,7 +827,7 @@ namespace rbx::aimbot {
             camera.write_rotation(target_matrix);
         }
 
-        void execute_mouse_aim(std::uint64_t target_address, const math::vector3& target_pos, const POINT& cursor_pt, float dt, const math::vector2& dims, const math::matrix4& view, bool reset_state) {
+        void execute_mouse_aim(std::uint64_t target_address, const math::vector3& target_pos, const POINT& cursor_pt, float dt, const math::vector2& dims, const math::matrix4& view, bool reset_state, float ease_factor) {
             if (reset_state) {
                 accum_x = 0.0f;
                 accum_y = 0.0f;
@@ -856,8 +912,8 @@ namespace rbx::aimbot {
                 float err_pitch = target_pitch - actual_pitch;
                 err_pitch = std::atan2(std::sin(err_pitch), std::cos(err_pitch));
 
-                float step_yaw = err_yaw;
-                float step_pitch = err_pitch;
+                float factor_x = 1.0f;
+                float factor_y = 1.0f;
 
                 if (settings::aimbot::mouse_smooth) {
                     float sx = std::clamp(settings::aimbot::mouse_smooth_x, 1.0f, 200.0f);
@@ -867,16 +923,19 @@ namespace rbx::aimbot {
                         float speed_x = 10.0f / sx;
                         float speed_y = 10.0f / sy;
 
-                        float factor_x = 1.0f - std::exp(-speed_x * 60.0f * dt);
-                        float factor_y = 1.0f - std::exp(-speed_y * 60.0f * dt);
+                        factor_x = 1.0f - std::exp(-speed_x * 60.0f * dt);
+                        factor_y = 1.0f - std::exp(-speed_y * 60.0f * dt);
 
                         factor_x = std::clamp(factor_x, 0.0f, 1.0f);
                         factor_y = std::clamp(factor_y, 0.0f, 1.0f);
-
-                        step_yaw = err_yaw * factor_x;
-                        step_pitch = err_pitch * factor_y;
                     }
                 }
+
+                factor_x *= ease_factor;
+                factor_y *= ease_factor;
+
+                float step_yaw = err_yaw * factor_x;
+                float step_pitch = err_pitch * factor_y;
 
                 dx = -step_yaw / (0.0022f * sensitivity);
                 dy = -step_pitch / (0.0022f * sensitivity);
@@ -888,8 +947,8 @@ namespace rbx::aimbot {
                 float err_x = screen_pos.x - target_ref_x;
                 float err_y = screen_pos.y - target_ref_y;
 
-                float step_x = err_x;
-                float step_y = err_y;
+                float factor_x = 1.0f;
+                float factor_y = 1.0f;
 
                 if (settings::aimbot::mouse_smooth) {
                     float sx = std::clamp(settings::aimbot::mouse_smooth_x, 1.0f, 200.0f);
@@ -899,16 +958,19 @@ namespace rbx::aimbot {
                         float speed_x = 10.0f / sx;
                         float speed_y = 10.0f / sy;
 
-                        float factor_x = 1.0f - std::exp(-speed_x * 60.0f * dt);
-                        float factor_y = 1.0f - std::exp(-speed_y * 60.0f * dt);
+                        factor_x = 1.0f - std::exp(-speed_x * 60.0f * dt);
+                        factor_y = 1.0f - std::exp(-speed_y * 60.0f * dt);
 
                         factor_x = std::clamp(factor_x, 0.0f, 1.0f);
                         factor_y = std::clamp(factor_y, 0.0f, 1.0f);
-
-                        step_x = err_x * factor_x;
-                        step_y = err_y * factor_y;
                     }
                 }
+
+                factor_x *= ease_factor;
+                factor_y *= ease_factor;
+
+                float step_x = err_x * factor_x;
+                float step_y = err_y * factor_y;
 
                 dx = step_x;
                 dy = step_y;
@@ -966,6 +1028,7 @@ namespace rbx::aimbot {
         static auto last_tick = std::chrono::high_resolution_clock::now();
         static math::matrix4 last_view = {};
         static math::vector3 last_target_pos = {};
+        static auto lock_start_time = std::chrono::steady_clock::now();
 
         while (true) {
             if (!settings::aimbot::enabled ||
@@ -1183,11 +1246,24 @@ namespace rbx::aimbot {
             bool reset_state = !was_initialized || (target.instance.address != last_run_target_address);
             last_run_target_address = target.instance.address;
 
+            if (reset_state) {
+                lock_start_time = std::chrono::steady_clock::now();
+            }
+
+            float ease_factor = 1.0f;
+            if (settings::aimbot::easing_style > 0) {
+                float elapsed = std::chrono::duration<float>(std::chrono::steady_clock::now() - lock_start_time).count();
+                float duration = (settings::aimbot::ease_time > 0.001f) ? settings::aimbot::ease_time : 0.5f;
+                float progress = elapsed / duration;
+                if (progress > 1.0f) progress = 1.0f;
+                ease_factor = apply_easing(settings::aimbot::easing_style, progress);
+            }
+
             if (settings::aimbot::aimbot_type == 0) {
-                execute_camera_aim(target.instance.address, filtered_target_pos, dt, reset_state);
+                execute_camera_aim(target.instance.address, filtered_target_pos, dt, reset_state, ease_factor);
             }
             else {
-                execute_mouse_aim(target.instance.address, filtered_target_pos, cursor_pt, dt, dims, view, reset_state);
+                execute_mouse_aim(target.instance.address, filtered_target_pos, cursor_pt, dt, dims, view, reset_state, ease_factor);
             }
             Sleep(1);
         }
