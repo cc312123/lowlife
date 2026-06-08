@@ -946,6 +946,28 @@ namespace botter
 			intersection_distance = t_min;
 			return true;
 		}
+
+		bool is_point_inside_obb(const math::vector3& p, const cached_part_t& box)
+		{
+			math::vector3 delta = p - box.position;
+			for (int i = 0; i < 3; ++i)
+			{
+				float ax_x = box.rotation.m[i];
+				float ax_y = box.rotation.m[i + 3];
+				float ax_z = box.rotation.m[i + 6];
+				float dist = delta.x * ax_x + delta.y * ax_y + delta.z * ax_z;
+				float ext = 0.0f;
+				if (i == 0) ext = box.size.x * 0.5f;
+				else if (i == 1) ext = box.size.y * 0.5f;
+				else ext = box.size.z * 0.5f;
+
+				if (std::abs(dist) > ext)
+				{
+					return false;
+				}
+			}
+			return true;
+		}
 	} 
 
 	
@@ -973,6 +995,10 @@ namespace botter
 
 		for (const auto& box : cached_map_parts)
 		{
+			if (is_point_inside_obb(start, box) || is_point_inside_obb(end, box))
+			{
+				continue;
+			}
 			float r = box.r;
 			if (box.position.x + r < ray_min_x || box.position.x - r > ray_max_x ||
 				box.position.y + r < ray_min_y || box.position.y - r > ray_max_y ||

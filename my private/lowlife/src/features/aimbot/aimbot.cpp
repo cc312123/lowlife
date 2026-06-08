@@ -45,6 +45,9 @@ namespace rbx::aimbot {
         float virtual_pitch = 0.0f;
         bool virtual_angles_initialized = false;
 
+        float accum_x = 0.0f;
+        float accum_y = 0.0f;
+
         void vector_to_angles(const math::vector3& forward, float& yaw, float& pitch) {
             pitch = std::asin(std::clamp(forward.y, -1.0f, 1.0f));
             yaw = std::atan2(-forward.x, -forward.z);
@@ -471,9 +474,6 @@ namespace rbx::aimbot {
             dx = std::clamp(dx, -max_mouse_delta, max_mouse_delta);
             dy = std::clamp(dy, -max_mouse_delta, max_mouse_delta);
 
-            static float accum_x = 0.0f;
-            static float accum_y = 0.0f;
-
             if (std::isfinite(dx) && std::isfinite(dy)) {
                 accum_x += dx;
                 accum_y += dy;
@@ -531,6 +531,7 @@ namespace rbx::aimbot {
             last_tick = now;
 
             if (dt > 0.1f) dt = 0.016f;
+            else if (dt < 0.0005f) dt = 0.0005f;
 
             if (!settings::aimbot::enabled ||
                 (settings::aimbot::aimbot_type < 0 || settings::aimbot::aimbot_type > 1) ||
@@ -543,6 +544,8 @@ namespace rbx::aimbot {
                 target_pos_initialized = false; 
                 virtual_angles_initialized = false; 
                 locked_part_name = "";
+                accum_x = 0.0f;
+                accum_y = 0.0f;
                 continue;
             }
 
@@ -558,6 +561,8 @@ namespace rbx::aimbot {
                 target_pos_initialized = false; 
                 virtual_angles_initialized = false; 
                 locked_part_name = "";
+                accum_x = 0.0f;
+                accum_y = 0.0f;
                 continue;
             }
 
@@ -639,6 +644,8 @@ namespace rbx::aimbot {
                         needs_key_release = true; 
                         target_pos_initialized = false; 
                         locked_part_name = "";
+                        accum_x = 0.0f;
+                        accum_y = 0.0f;
                     }
                 }
                 else if (has_locked_target && locked_target.instance.address != 0) {
@@ -650,6 +657,8 @@ namespace rbx::aimbot {
                         has_locked_target = false;
                         target_pos_initialized = false; 
                         locked_part_name = "";
+                        accum_x = 0.0f;
+                        accum_y = 0.0f;
                     }
                 }
                 else {
@@ -657,6 +666,8 @@ namespace rbx::aimbot {
                     has_locked_target = false;
                     target_pos_initialized = false; 
                     locked_part_name = "";
+                    accum_x = 0.0f;
+                    accum_y = 0.0f;
                 }
             }
 
@@ -667,6 +678,8 @@ namespace rbx::aimbot {
                     has_locked_target = true;
                     target_pos_initialized = false; 
                     locked_part_name = "";
+                    accum_x = 0.0f;
+                    accum_y = 0.0f;
                 }
             }
 
@@ -694,26 +707,6 @@ namespace rbx::aimbot {
                 target_pos = apply_prediction(primitive, settings::aimbot::aimbot_type == 0);
             }
 
-            // Check if view matrix or target position actually changed
-            bool view_changed = false;
-            for (int i = 0; i < 16; ++i) {
-                if (view.m[i] != last_view.m[i]) {
-                    view_changed = true;
-                    break;
-                }
-            }
-
-            bool target_changed = (target_pos.x != last_target_pos.x || 
-                                   target_pos.y != last_target_pos.y || 
-                                   target_pos.z != last_target_pos.z);
-
-            if (target_pos_initialized && !view_changed && !target_changed) {
-                continue;
-            }
-
-            last_view = view;
-            last_target_pos = target_pos;
-
             filtered_target_pos = target_pos;
             target_pos_initialized = true;
 
@@ -738,6 +731,8 @@ namespace rbx::aimbot {
         locked_part_name = "";
         g_aimbot_manual_locked = false;
         g_aimbot_manual_target = {};
+        accum_x = 0.0f;
+        accum_y = 0.0f;
     }
 
     void lock_target(const cache::entity_t& target) {
@@ -748,6 +743,8 @@ namespace rbx::aimbot {
         g_aimbot_manual_target = target;
         target_pos_initialized = false;
         locked_part_name = "";
+        accum_x = 0.0f;
+        accum_y = 0.0f;
     }
 
     void unlock_target() {
@@ -758,6 +755,8 @@ namespace rbx::aimbot {
         g_aimbot_manual_target = {};
         target_pos_initialized = false;
         locked_part_name = "";
+        accum_x = 0.0f;
+        accum_y = 0.0f;
     }
 
     void render() {
