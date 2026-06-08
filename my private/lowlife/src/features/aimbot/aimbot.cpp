@@ -269,18 +269,35 @@ namespace rbx::aimbot {
             }
 
             if (settings::aimbot::wall_check) {
-                rbx::part_t target_part = get_target_part(player, settings::aimbot::aimpart, cursor_pt, dims, view);
-                if (target_part.address) {
-                    rbx::primitive_t primitive = target_part.get_primitive();
-                    math::vector3 world_pos = primitive.get_position();
+                rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
+                if (camera_inst.address != 0) {
+                    rbx::camera_t camera{ camera_inst.address };
+                    math::vector3 camera_pos = camera.get_position();
+                    
+                    bool any_part_visible = false;
+                    const std::unordered_set<std::string> target_parts_to_check = {
+                        "Head", "Torso", "UpperTorso", "LowerTorso",
+                        "Left Arm", "LeftUpperArm", "LeftLowerArm", "LeftHand",
+                        "Right Arm", "RightUpperArm", "RightLowerArm", "RightHand",
+                        "Left Leg", "LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
+                        "Right Leg", "RightUpperLeg", "RightLowerLeg", "RightFoot",
+                        "HumanoidRootPart"
+                    };
 
-                    rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
-                    if (camera_inst.address != 0) {
-                        rbx::camera_t camera{ camera_inst.address };
-                        math::vector3 camera_pos = camera.get_position();
-                        if (botter::is_occluded(camera_pos, world_pos)) {
-                            return false;
+                    for (const auto& pair : player.parts) {
+                        if (target_parts_to_check.find(pair.first) == target_parts_to_check.end()) continue;
+                        rbx::part_t part = pair.second;
+                        if (!part.address) continue;
+                        rbx::primitive_t primitive = part.get_primitive();
+                        if (!primitive.address) continue;
+                        math::vector3 world_pos = primitive.get_position();
+                        if (!botter::is_occluded(camera_pos, world_pos)) {
+                            any_part_visible = true;
+                            break;
                         }
+                    }
+                    if (!any_part_visible) {
+                        return false;
                     }
                 }
             }

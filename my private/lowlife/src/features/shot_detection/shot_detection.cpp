@@ -1200,7 +1200,32 @@ namespace botter
 								{
 									if (settings::botter::wall_check && camera_inst.address != 0)
 									{
-										if (is_occluded(camera_pos, pos))
+										bool any_part_visible = false;
+										const std::unordered_set<std::string> target_parts_to_check = {
+											"Head", "Torso", "UpperTorso", "LowerTorso",
+											"Left Arm", "LeftUpperArm", "LeftLowerArm", "LeftHand",
+											"Right Arm", "RightUpperArm", "RightLowerArm", "RightHand",
+											"Left Leg", "LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
+											"Right Leg", "RightUpperLeg", "RightLowerLeg", "RightFoot",
+											"HumanoidRootPart"
+										};
+										
+										for (const auto& pair : player.parts)
+										{
+											if (target_parts_to_check.find(pair.first) == target_parts_to_check.end()) continue;
+											rbx::part_t part = pair.second;
+											if (!part.address) continue;
+											rbx::primitive_t primitive = part.get_primitive();
+											if (!primitive.address) continue;
+											math::vector3 world_pos = primitive.get_position();
+											if (!is_occluded(camera_pos, world_pos))
+											{
+												any_part_visible = true;
+												break;
+											}
+										}
+										
+										if (!any_part_visible)
 										{
 											continue;
 										}

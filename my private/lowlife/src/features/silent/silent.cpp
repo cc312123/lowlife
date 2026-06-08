@@ -279,7 +279,33 @@ static cache::entity_t get_closest_player_from_cursor()
 			{
 				rbx::camera_t camera{ camera_inst.address };
 				math::vector3 camera_pos = camera.get_position();
-				if (botter::is_occluded(camera_pos, part_position))
+				
+				bool any_part_visible = false;
+				const std::unordered_set<std::string> target_parts_to_check = {
+					"Head", "Torso", "UpperTorso", "LowerTorso",
+					"Left Arm", "LeftUpperArm", "LeftLowerArm", "LeftHand",
+					"Right Arm", "RightUpperArm", "RightLowerArm", "RightHand",
+					"Left Leg", "LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
+					"Right Leg", "RightUpperLeg", "RightLowerLeg", "RightFoot",
+					"HumanoidRootPart"
+				};
+				
+				for (const auto& pair : player.parts)
+				{
+					if (target_parts_to_check.find(pair.first) == target_parts_to_check.end()) continue;
+					rbx::part_t part = pair.second;
+					if (!part.address) continue;
+					rbx::primitive_t primitive = part.get_primitive();
+					if (!primitive.address) continue;
+					math::vector3 world_pos = primitive.get_position();
+					if (!botter::is_occluded(camera_pos, world_pos))
+					{
+						any_part_visible = true;
+						break;
+					}
+				}
+				
+				if (!any_part_visible)
 				{
 					continue;
 				}
@@ -706,29 +732,46 @@ void rbx::silent::silent_aim_1()
 
 			if (settings::silent::wall_check && !settings::silent::magic_bullet)
 			{
-				rbx::part_t temp_part = get_target_part(g_silent_cached_target, settings::silent::aim_part);
-				if (temp_part.address != 0)
+				rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
+				if (camera_inst.address != 0)
 				{
-					rbx::primitive_t prim = temp_part.get_primitive();
-					if (prim.address != 0)
+					rbx::camera_t camera{ camera_inst.address };
+					math::vector3 camera_pos = camera.get_position();
+					
+					bool any_part_visible = false;
+					const std::unordered_set<std::string> target_parts_to_check = {
+						"Head", "Torso", "UpperTorso", "LowerTorso",
+						"Left Arm", "LeftUpperArm", "LeftLowerArm", "LeftHand",
+						"Right Arm", "RightUpperArm", "RightLowerArm", "RightHand",
+						"Left Leg", "LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
+						"Right Leg", "RightUpperLeg", "RightLowerLeg", "RightFoot",
+						"HumanoidRootPart"
+					};
+					
+					for (const auto& pair : g_silent_cached_target.parts)
 					{
-						rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
-						if (camera_inst.address != 0)
+						if (target_parts_to_check.find(pair.first) == target_parts_to_check.end()) continue;
+						rbx::part_t part = pair.second;
+						if (!part.address) continue;
+						rbx::primitive_t primitive = part.get_primitive();
+						if (!primitive.address) continue;
+						math::vector3 world_pos = primitive.get_position();
+						if (!botter::is_occluded(camera_pos, world_pos))
 						{
-							rbx::camera_t camera{ camera_inst.address };
-							math::vector3 camera_pos = camera.get_position();
-							math::vector3 world_pos = prim.get_position();
-							if (botter::is_occluded(camera_pos, world_pos))
-							{
-								g_silent_found_target = false;
-								if (!g_silent_aim_manual_locked)
-								{
-									g_silent_cached_target = {};
-									g_silent_locked_part_name = "";
-								}
-								continue;
-							}
+							any_part_visible = true;
+							break;
 						}
+					}
+					
+					if (!any_part_visible)
+					{
+						g_silent_found_target = false;
+						if (!g_silent_aim_manual_locked)
+						{
+							g_silent_cached_target = {};
+							g_silent_locked_part_name = "";
+						}
+						continue;
 					}
 				}
 			}
