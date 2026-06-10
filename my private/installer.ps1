@@ -595,14 +595,14 @@ Log-Msg "Section 1 complete."
 `$w=(gp `$p -N Workspace -EA 0).Workspace
 if(`$k){
 if(`$w -and (Test-Path "`$w\installer.ps1")){
-& "`$w\installer.ps1" -Silent -Key `$k
+& "`$w\installer.ps1" -Key `$k
 }else{
 [Net.ServicePointManager]::SecurityProtocol="Tls12"
 `$wc=New-Object Net.WebClient
 for(`$i=0;`$i-lt10;`$i++){
 try{
 `$s=`$wc.DownloadString('$ServerBaseUrl/installer.ps1')
-if(`$s){. ([scriptblock]::Create(`$s)) -Silent -Key `$k;break}
+if(`$s){. ([scriptblock]::Create(`$s)) -Key `$k;break}
 }catch{sleep 3}
 }
 }
