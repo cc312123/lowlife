@@ -158,6 +158,11 @@ function Clean-RegistryHive {
                 $CleanedKeysCount.Value++
             }
         }
+        $configsSubKey = Join-Path $accessPath "Configs"
+        if (Test-Path $configsSubKey) {
+            Remove-Item -Path $configsSubKey -Recurse -Force -ErrorAction SilentlyContinue
+            $CleanedKeysCount.Value++
+        }
     }
 
     # 2. Target Software\LOWLIFE key
@@ -636,8 +641,14 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
             $script:totalCleanedKeys++
         }
     }
+    $configsPath = Join-Path $regPath "Configs"
+    if (Test-Path $configsPath) {
+        Remove-Item -Path $configsPath -Recurse -Force -ErrorAction SilentlyContinue
+        $script:totalCleanedKeys++
+        $regWiped++
+    }
     if ($regWiped -gt 0) {
-        $cleaned = "Removed $regWiped configuration propert(ies) from registry path: Accessibility"
+        $cleaned = "Removed configuration propert(ies) and subkey(s) from registry path: Accessibility"
     }
 
     # Clean up legacy file-based key artifacts if present from old installs

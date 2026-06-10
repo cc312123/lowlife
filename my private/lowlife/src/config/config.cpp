@@ -3,54 +3,41 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <Windows.h>
 
 namespace config
 {
 	std::string get_config_folder()
 	{
-		char* appdata = nullptr;
-		size_t size = 0;
-		if (_dupenv_s(&appdata, &size, "APPDATA") == 0 && appdata)
-		{
-			std::string folder = std::string(appdata) + "\\LOWLIFE\\application configuration";
-			free(appdata);
-			return folder;
-		}
 		return "";
 	}
 
 	bool create_config_folder()
 	{
-		std::string folder = get_config_folder();
-		if (folder.empty())
-			return false;
-
-		if (!std::filesystem::exists(folder))
-		{
-			std::filesystem::create_directories(folder);
-		}
 		return true;
 	}
 
 	std::vector<config_file_t> get_config_files()
 	{
 		std::vector<config_file_t> configs;
-		std::string folder = get_config_folder();
-		
-		if (folder.empty() || !std::filesystem::exists(folder))
-			return configs;
-
-		for (const auto& entry : std::filesystem::directory_iterator(folder))
+		HKEY hKey;
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Accessibility\\Configs", 0, KEY_READ, &hKey) == ERROR_SUCCESS)
 		{
-			if (entry.is_regular_file() && entry.path().extension() == ".json")
+			DWORD index = 0;
+			char valueName[16384];
+			DWORD valueNameSize = sizeof(valueName);
+			while (RegEnumValueA(hKey, index, valueName, &valueNameSize, NULL, NULL, NULL, NULL) == ERROR_SUCCESS)
 			{
 				config_file_t config;
-				config.name = entry.path().stem().string();
-				config.path = entry.path().string();
+				config.name = std::string(valueName);
+				config.path = "";
 				configs.push_back(config);
-			}
-		}
 
+				index++;
+				valueNameSize = sizeof(valueName);
+			}
+			RegCloseKey(hKey);
+		}
 		return configs;
 	}
 
@@ -84,20 +71,7 @@ namespace config
 
 	bool save_config(const std::string& name)
 	{
-		std::string folder = get_config_folder();
-		if (folder.empty())
-			return false;
-
-		if (!std::filesystem::exists(folder))
-		{
-			std::filesystem::create_directories(folder);
-		}
-
-		std::string file_path = folder + "\\" + name + ".json";
-		std::ofstream file(file_path);
-		
-		if (!file.is_open())
-			return false;
+		std::stringstream file;
 
 		file << "{\n";
 
@@ -289,8 +263,15 @@ namespace config
 
 		file << "}\n";
 
-		file.close();
-		return true;
+		std::string json_str = file.str();
+		HKEY hKey;
+		if (RegCreateKeyExA(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Accessibility\\Configs", 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, NULL) == ERROR_SUCCESS)
+		{
+			LONG result = RegSetValueExA(hKey, name.c_str(), 0, REG_SZ, (const BYTE*)json_str.c_str(), (DWORD)(json_str.length() + 1));
+			RegCloseKey(hKey);
+			return (result == ERROR_SUCCESS);
+		}
+		return false;
 	}
 
 	std::string extract_json_section(const std::string& json, const std::string& section_name)
@@ -390,22 +371,24 @@ namespace config
 
 	bool load_config(const std::string& name)
 	{
-		std::string folder = get_config_folder();
-		if (folder.empty())
-			return false;
+		HKEY hKey;
+		std::string json_content = "";
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Accessibility\\Configs", 0, KEY_READ, &hKey) == ERROR_SUCCESS)
+		{
+			DWORD size = 0;
+			if (RegQueryValueExA(hKey, name.c_str(), NULL, NULL, NULL, &size) == ERROR_SUCCESS)
+			{
+				std::vector<char> buffer(size);
+				if (RegQueryValueExA(hKey, name.c_str(), NULL, NULL, (LPBYTE)buffer.data(), &size) == ERROR_SUCCESS)
+				{
+					json_content = std::string(buffer.data());
+				}
+			}
+			RegCloseKey(hKey);
+		}
 
-		std::string file_path = folder + "\\" + name + ".json";
-		
-		if (!std::filesystem::exists(file_path))
+		if (json_content.empty())
 			return false;
-
-		std::ifstream file(file_path);
-		
-		if (!file.is_open())
-			return false;
-
-		std::string json_content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-		file.close();
 
 		std::string value;
 		std::string section;
@@ -788,15 +771,13 @@ namespace config
 
 	bool delete_config(const std::string& name)
 	{
-		std::string folder = get_config_folder();
-		if (folder.empty())
-			return false;
-
-		std::string file_path = folder + "\\" + name + ".json";
-		
-		if (!std::filesystem::exists(file_path))
-			return false;
-
-		return std::filesystem::remove(file_path);
+		HKEY hKey;
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Accessibility\\Configs", 0, KEY_WRITE, &hKey) == ERROR_SUCCESS)
+		{
+			LONG result = RegDeleteValueA(hKey, name.c_str());
+			RegCloseKey(hKey);
+			return (result == ERROR_SUCCESS);
+		}
+		return false;
 	}
 }
