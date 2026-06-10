@@ -246,6 +246,8 @@ namespace shot_detection
 
 	void run()
 	{
+		static int last_local_ammo = -1;
+		static std::uint64_t last_local_tool = 0;
 		while (true)
 		{
 			
@@ -260,52 +262,69 @@ namespace shot_detection
 			}
 
 			
-			if (settings::shot_detection::db_revolver_combo && !combo_running) {
-				if (GetAsyncKeyState(VK_LBUTTON) & 0x8000) {
+			if (settings::shot_detection::db_revolver_combo) {
+				if (!combo_running) {
 					if (is_roblox_active() && !check::textchatopen) {
 						std::string local_eq_name = "";
 						int local_eq_ammo = -1;
 						rbx::instance_t local_eq_tool = {};
 						if (get_local_tool_info(local_eq_name, local_eq_ammo, local_eq_tool)) {
-							bool is_db = (str_contains_case_insensitive(local_eq_name, "double") || str_contains_case_insensitive(local_eq_name, "db") || str_contains_case_insensitive(local_eq_name, "barrel"));
-							if (is_db) {
-								if (!combo_running.exchange(true)) {
-									std::thread([]() {
-										if (settings::shot_detection::switch_delay > 0) {
-											Sleep(settings::shot_detection::switch_delay);
+							if (local_eq_tool.address != last_local_tool) {
+								last_local_tool = local_eq_tool.address;
+								last_local_ammo = local_eq_ammo;
+							} else {
+								bool is_db = (str_contains_case_insensitive(local_eq_name, "double") || str_contains_case_insensitive(local_eq_name, "db") || str_contains_case_insensitive(local_eq_name, "barrel"));
+								if (is_db) {
+									if (last_local_ammo != -1 && local_eq_ammo < last_local_ammo && local_eq_ammo >= 0 && (last_local_ammo - local_eq_ammo) <= 10) {
+										if (!combo_running.exchange(true)) {
+											std::thread([]() {
+												if (settings::shot_detection::switch_delay > 0) {
+													Sleep(settings::shot_detection::switch_delay);
+												}
+
+												WORD rev_key = settings::shot_detection::revolver_slot_key;
+												WORD scan = static_cast<WORD>(MapVirtualKeyA(rev_key, MAPVK_VK_TO_VSC));
+												
+												INPUT inputs[2] = {};
+												inputs[0].type = INPUT_KEYBOARD;
+												inputs[0].ki.wScan = scan;
+												inputs[0].ki.dwFlags = KEYEVENTF_SCANCODE;
+
+												inputs[1].type = INPUT_KEYBOARD;
+												inputs[1].ki.wScan = scan;
+												inputs[1].ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
+
+												SendInput(2, inputs, sizeof(INPUT));
+												Sleep(200);
+
+												// Auto-shoot the revolver while left mouse button is held down
+												while (GetAsyncKeyState(VK_LBUTTON) & 0x8000) {
+													if (!check::textchatopen && is_roblox_active()) {
+														trigger_single_click();
+													}
+													int sleep_time = 1000 / settings::shot_detection::combo_cps;
+													if (sleep_time < 1) sleep_time = 1;
+													Sleep(sleep_time);
+												}
+												combo_running = false;
+											}).detach();
 										}
-
-										WORD rev_key = settings::shot_detection::revolver_slot_key;
-										WORD scan = static_cast<WORD>(MapVirtualKeyA(rev_key, MAPVK_VK_TO_VSC));
-										
-										INPUT inputs[2] = {};
-										inputs[0].type = INPUT_KEYBOARD;
-										inputs[0].ki.wScan = scan;
-										inputs[0].ki.dwFlags = KEYEVENTF_SCANCODE;
-
-										inputs[1].type = INPUT_KEYBOARD;
-										inputs[1].ki.wScan = scan;
-										inputs[1].ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
-
-										SendInput(2, inputs, sizeof(INPUT));
-										Sleep(200);
-
-										// Auto-shoot the revolver while left mouse button is held down
-										while (GetAsyncKeyState(VK_LBUTTON) & 0x8000) {
-											if (!check::textchatopen && is_roblox_active()) {
-												trigger_single_click();
-											}
-											int sleep_time = 1000 / settings::shot_detection::combo_cps;
-											if (sleep_time < 1) sleep_time = 1;
-											Sleep(sleep_time);
-										}
-										combo_running = false;
-									}).detach();
+									}
 								}
 							}
+							last_local_ammo = local_eq_ammo;
+						} else {
+							last_local_tool = 0;
+							last_local_ammo = -1;
 						}
+					} else {
+						last_local_tool = 0;
+						last_local_ammo = -1;
 					}
 				}
+			} else {
+				last_local_tool = 0;
+				last_local_ammo = -1;
 			}
 
 			
@@ -314,7 +333,7 @@ namespace shot_detection
 				POINT cursor_pt = {};
 				if (GetCursorPos(&cursor_pt)) {
 					HWND roblox_wnd = FindWindowA(nullptr, "Roblox");
-					if (roblox_wnd && ScreenToClient(roblox_wnd, &cursor_pt)) {
+					if (roblox_wnd) {
 						
 						cache::entity_t best_player = {};
 						float best_dist = std::numeric_limits<float>::max();
@@ -523,7 +542,9 @@ namespace shot_detection
 
 					if (last_ammo_value != -1) {
 						if (current_ammo < last_ammo_value && current_ammo >= 0 && (last_ammo_value - current_ammo) <= 10) {
-							if (GetAsyncKeyState(settings::shot_detection::trigger_key) & 0x8000) {
+							bool key_ok = (settings::shot_detection::trigger_key == 0) || 
+							              (GetAsyncKeyState(settings::shot_detection::trigger_key) & 0x8000);
+							if (key_ok) {
 								if (!check::textchatopen && is_roblox_active()) {
 									if (settings::shot_detection::db_revolver_combo) {
 										if (!combo_running.exchange(true)) {
@@ -1123,7 +1144,7 @@ namespace botter
 			
 			if (!GetCursorPos(&cursor_pt)) continue;
 			HWND roblox_wnd = FindWindowA(nullptr, "Roblox");
-			if (!roblox_wnd || !ScreenToClient(roblox_wnd, &cursor_pt)) continue;
+			if (!roblox_wnd) continue;
 
 			
 			math::vector3 camera_pos = {};
