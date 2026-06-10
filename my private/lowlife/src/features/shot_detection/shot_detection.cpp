@@ -441,53 +441,14 @@ namespace shot_detection
 					continue;
 				}
 
-				std::uint64_t current_tool_address = 0;
-				if (last_tool_address != 0) {
-					try {
-						std::uint64_t parent = memory->read<std::uint64_t>(last_tool_address + Offsets::Instance::Parent);
-						if (parent == model.address) {
-							current_tool_address = last_tool_address;
-						}
-					} catch (...) {
-						current_tool_address = 0;
-					}
-				}
-
 				static auto last_fail_scan_time = std::chrono::steady_clock::now();
 				auto now_time = std::chrono::steady_clock::now();
-
-				if (current_tool_address == 0) {
-					if (std::chrono::duration_cast<std::chrono::milliseconds>(now_time - last_fail_scan_time).count() >= 250) {
-						last_fail_scan_time = now_time;
-						rbx::instance_t tool_instance = {};
-						for (rbx::instance_t& child : model.get_children<rbx::instance_t>()) {
-							std::string child_class = child.get_class_name();
-							if (child_class == "Tool" || child_class == "HopperBin") {
-								tool_instance = child;
-								break;
-							}
-						}
-						current_tool_address = tool_instance.address;
-
-						if (current_tool_address != last_tool_address) {
-							last_tool_address = current_tool_address;
-							last_ammo_val_address = 0;
-							last_ammo_value = -1;
-						}
-					}
-				}
-
-				if (last_tool_address == 0) {
-					last_ammo_value = -1;
-					last_ammo_val_address = 0;
-					continue;
-				}
 
 				std::uint64_t current_ammo_val_address = 0;
 				if (last_ammo_val_address != 0) {
 					try {
 						std::uint64_t parent = memory->read<std::uint64_t>(last_ammo_val_address + Offsets::Instance::Parent);
-						if (parent == last_tool_address) {
+						if (parent == model.address) {
 							current_ammo_val_address = last_ammo_val_address;
 						}
 					} catch (...) {
@@ -498,9 +459,8 @@ namespace shot_detection
 				if (current_ammo_val_address == 0) {
 					if (std::chrono::duration_cast<std::chrono::milliseconds>(now_time - last_fail_scan_time).count() >= 250) {
 						last_fail_scan_time = now_time;
-						rbx::instance_t tool_instance{ last_tool_address };
 						rbx::instance_t ammo_val_obj = {};
-						for (rbx::instance_t& child : tool_instance.get_children<rbx::instance_t>()) {
+						for (rbx::instance_t& child : model.get_children<rbx::instance_t>()) {
 							std::string cname = child.get_name();
 							std::string cclass = child.get_class_name();
 
@@ -519,7 +479,7 @@ namespace shot_detection
 						}
 
 						if (ammo_val_obj.address == 0) {
-							for (rbx::instance_t& child : tool_instance.get_children<rbx::instance_t>()) {
+							for (rbx::instance_t& child : model.get_children<rbx::instance_t>()) {
 								std::string cname = child.get_name();
 								std::string cclass = child.get_class_name();
 								std::transform(cname.begin(), cname.end(), cname.begin(), ::tolower);

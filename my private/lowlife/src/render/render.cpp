@@ -3118,6 +3118,9 @@ void render_t::render_menu()
         ImGui::Checkbox("Knocked Check", &settings::shot_detection::knocked_check);
 
         ImGui::Spacing();
+        SliderFloatWithInput("Selection Hitbox", &settings::shot_detection::select_hitbox, 10.0f, 1000.0f, "%.0f px");
+
+        ImGui::Spacing();
         ImGui::Separator();
         ImGui::Spacing();
 
@@ -3163,6 +3166,74 @@ void render_t::render_menu()
         ImGui::Text("Ammo Object Name:");
         if (ImGui::InputText("##ammo_obj_name", ammo_input_buf, IM_ARRAYSIZE(ammo_input_buf))) {
             settings::shot_detection::ammo_name = ammo_input_buf;
+        }
+
+        ImGui::Spacing();
+        if (styled_button("Auto-Detect Hitbox", ImVec2(ImGui::GetContentRegionAvail().x - 10.f, 26.f))) {
+            POINT cursor_pt = {};
+            if (GetCursorPos(&cursor_pt)) {
+                HWND roblox_wnd = FindWindowA(nullptr, "Roblox");
+                if (roblox_wnd && ScreenToClient(roblox_wnd, &cursor_pt)) {
+                    cache::entity_t closest_player = {};
+                    float closest_dist = std::numeric_limits<float>::max();
+                    float measured_size = 150.0f; // default fallback
+
+                    std::shared_ptr<std::vector<cache::entity_t>> snapshot_ptr;
+                    {
+                        std::lock_guard<std::mutex> lock(cache::mtx);
+                        snapshot_ptr = cache::cached_players;
+                    }
+
+                    if (snapshot_ptr) {
+                        for (const auto& player : *snapshot_ptr) {
+                            if (player.instance.address == 0 || 
+                                player.instance.address == cache::cached_local_player.instance.address ||
+                                player.instance.address == game::local_player.address)
+                                continue;
+
+                            rbx::part_t head_part = {};
+                            if (auto it = player.parts.find("Head"); it != player.parts.end()) {
+                                head_part = it->second;
+                            }
+                            if (!head_part.address) continue;
+
+                            rbx::primitive_t primitive = head_part.get_primitive();
+                            math::vector3 world_pos = primitive.get_position();
+                            math::vector2 screen_pos = {};
+
+                            if (game::visengine.world_to_screen(world_pos, screen_pos, 
+                                game::visengine.get_dimensions(), game::visengine.get_viewmatrix())) {
+                                
+                                float dist = std::sqrt((screen_pos.x - cursor_pt.x) * (screen_pos.x - cursor_pt.x) + 
+                                                       (screen_pos.y - cursor_pt.y) * (screen_pos.y - cursor_pt.y));
+                                if (dist < closest_dist) {
+                                    closest_dist = dist;
+                                    closest_player = player;
+                                    
+                                    math::vector3 world_pos_offset = world_pos;
+                                    world_pos_offset.x += 1.0f; 
+                                    math::vector2 screen_pos_offset = {};
+                                    if (game::visengine.world_to_screen(world_pos_offset, screen_pos_offset, 
+                                        game::visengine.get_dimensions(), game::visengine.get_viewmatrix())) {
+                                        measured_size = std::abs(screen_pos_offset.x - screen_pos.x) * 2.5f; 
+                                        if (measured_size < 15.0f) measured_size = 15.0f;
+                                        if (measured_size > 400.0f) measured_size = 400.0f;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (closest_player.instance.address != 0) {
+                        settings::shot_detection::select_hitbox = measured_size;
+                        char notify_buf[128];
+                        sprintf_s(notify_buf, "Detected Hitbox for %s: %.0f px", closest_player.name.c_str(), measured_size);
+                        notifications::add(notify_buf, notifications::NotificationType::Success, 3.0f);
+                    } else {
+                        notifications::add("No players found to detect hitbox!", notifications::NotificationType::Warning, 3.0f);
+                    }
+                }
+            }
         }
 
         ImGui::EndChild();
