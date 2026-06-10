@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 /* =============================================================
 /*                       RbxDumperV2                            
 /*               https://imtheo.lol/Offsets                     
@@ -29,7 +29,7 @@ struct Offset {
 };
 
 namespace Offsets {
-    inline std::string ClientVersion = "version-ad5d3e2906444472";
+    inline std::string ClientVersion = "version-76173e47a79145c7";
     bool Update(const std::string& current_version);
     std::unordered_map<std::string, uintptr_t*>& GetRegistry();
     namespace AirProperties {
@@ -47,7 +47,7 @@ namespace Offsets {
     }
 
     namespace Animator {
-         inline Offset ActiveAnimations = { "Animator::ActiveAnimations", 0x868 };
+         inline Offset ActiveAnimations = { "Animator::ActiveAnimations", 0x880 };
     }
 
     namespace Atmosphere {
@@ -75,19 +75,19 @@ namespace Offsets {
     }
 
     namespace Beam {
-         inline Offset Attachment0 = { "Beam::Attachment0", 0x170 };
-         inline Offset Attachment1 = { "Beam::Attachment1", 0x180 };
-         inline Offset Brightness = { "Beam::Brightness", 0x190 };
-         inline Offset CurveSize0 = { "Beam::CurveSize0", 0x194 };
-         inline Offset CurveSize1 = { "Beam::CurveSize1", 0x198 };
-         inline Offset LightEmission = { "Beam::LightEmission", 0x19c };
-         inline Offset LightInfluence = { "Beam::LightInfluence", 0x1a0 };
-         inline Offset Texture = { "Beam::Texture", 0x150 };
-         inline Offset TextureLength = { "Beam::TextureLength", 0x1ac };
-         inline Offset TextureSpeed = { "Beam::TextureSpeed", 0x1b4 };
-         inline Offset Width0 = { "Beam::Width0", 0x1b8 };
-         inline Offset Width1 = { "Beam::Width1", 0x1bc };
-         inline Offset ZOffset = { "Beam::ZOffset", 0x1c0 };
+         inline Offset Attachment0 = { "Beam::Attachment0", 0x178 };
+         inline Offset Attachment1 = { "Beam::Attachment1", 0x188 };
+         inline Offset Brightness = { "Beam::Brightness", 0x198 };
+         inline Offset CurveSize0 = { "Beam::CurveSize0", 0x19c };
+         inline Offset CurveSize1 = { "Beam::CurveSize1", 0x1a0 };
+         inline Offset LightEmission = { "Beam::LightEmission", 0x1a4 };
+         inline Offset LightInfluence = { "Beam::LightInfluence", 0x1a8 };
+         inline Offset Texture = { "Beam::Texture", 0x158 };
+         inline Offset TextureLength = { "Beam::TextureLength", 0x1b4 };
+         inline Offset TextureSpeed = { "Beam::TextureSpeed", 0x1bc };
+         inline Offset Width0 = { "Beam::Width0", 0x1c0 };
+         inline Offset Width1 = { "Beam::Width1", 0x1c4 };
+         inline Offset ZOffset = { "Beam::ZOffset", 0x1c8 };
     }
 
     namespace BloomEffect {
@@ -150,13 +150,13 @@ namespace Offsets {
     namespace DataModel {
          inline Offset CreatorId = { "DataModel::CreatorId", 0x190 };
          inline Offset GameId = { "DataModel::GameId", 0x198 };
-         inline Offset GameLoaded = { "DataModel::GameLoaded", 0x638 };
+         inline Offset GameLoaded = { "DataModel::GameLoaded", 0x670 };
          inline Offset JobId = { "DataModel::JobId", 0x138 };
          inline Offset PlaceId = { "DataModel::PlaceId", 0x1a0 };
          inline Offset PlaceVersion = { "DataModel::PlaceVersion", 0x1bc };
-         inline Offset PrimitiveCount = { "DataModel::PrimitiveCount", 0x480 };
+         inline Offset PrimitiveCount = { "DataModel::PrimitiveCount", 0x4a0 };
          inline Offset ScriptContext = { "DataModel::ScriptContext", 0x440 };
-         inline Offset ServerIP = { "DataModel::ServerIP", 0x620 };
+         inline Offset ServerIP = { "DataModel::ServerIP", 0x658 };
          inline Offset ToRenderView1 = { "DataModel::ToRenderView1", 0x1d8 };
          inline Offset ToRenderView2 = { "DataModel::ToRenderView2", 0x8 };
          inline Offset ToRenderView3 = { "DataModel::ToRenderView3", 0x28 };
@@ -186,8 +186,8 @@ namespace Offsets {
     }
 
     namespace FakeDataModel {
-         inline Offset Pointer = { "FakeDataModel::Pointer", 0x78ff228 };
-         inline Offset RealDataModel = { "FakeDataModel::RealDataModel", 0x1d0 };
+         inline Offset Pointer = { "FakeDataModel::Pointer", 0x7a39ad8 };
+         inline Offset RealDataModel = { "FakeDataModel::RealDataModel", 0x1d8 };
     }
 
     namespace GuiBase2D {
@@ -203,7 +203,7 @@ namespace Offsets {
          inline Offset Image = { "GuiObject::Image", 0x988 };
          inline Offset LayoutOrder = { "GuiObject::LayoutOrder", 0x580 };
          inline Offset Position = { "GuiObject::Position", 0x510 };
-         inline Offset RichText = { "GuiObject::RichText", 0xb58 };
+         inline Offset RichText = { "GuiObject::RichText", 0xb50 };
          inline Offset Rotation = { "GuiObject::Rotation", 0x188 };
          inline Offset ScreenGui_Enabled = { "GuiObject::ScreenGui_Enabled", 0x4c4 };
          inline Offset Size = { "GuiObject::Size", 0x530 };
@@ -242,7 +242,7 @@ namespace Offsets {
          inline Offset NameDisplayDistance = { "Humanoid::NameDisplayDistance", 0x1bc };
          inline Offset NameOcclusion = { "Humanoid::NameOcclusion", 0x1c0 };
          inline Offset PlatformStand = { "Humanoid::PlatformStand", 0x1e8 };
-         inline Offset PlatformStatePointer = { "Humanoid::PlatformStatePointer", 0x42F95762 };
+         inline Offset PlatformStatePointer = { "Humanoid::PlatformStatePointer", 0x42f9576e };
          inline Offset RequiresNeck = { "Humanoid::RequiresNeck", 0x1e9 };
          inline Offset RigType = { "Humanoid::RigType", 0x1cc };
          inline Offset SeatPart = { "Humanoid::SeatPart", 0x120 };
@@ -261,7 +261,7 @@ namespace Offsets {
          inline Offset AttributeToValue = { "Instance::AttributeToValue", 0x18 };
          inline Offset ChildrenEnd = { "Instance::ChildrenEnd", 0x8 };
          inline Offset ChildrenStart = { "Instance::ChildrenStart", 0x78 };
-         inline Offset ClassBase = { "Instance::ClassBase", 0x4920 };
+         inline Offset ClassBase = { "Instance::ClassBase", 0xd50 };
          inline Offset ClassDescriptor = { "Instance::ClassDescriptor", 0x18 };
          inline Offset ClassName = { "Instance::ClassName", 0x8 };
          inline Offset Name = { "Instance::Name", 0xb0 };
@@ -325,13 +325,13 @@ namespace Offsets {
     }
 
     namespace MeshPart {
-         inline Offset MeshId = { "MeshPart::MeshId", 0x300 };
-         inline Offset Texture = { "MeshPart::Texture", 0x330 };
+         inline Offset MeshId = { "MeshPart::MeshId", 0x2f8 };
+         inline Offset Texture = { "MeshPart::Texture", 0x328 };
     }
 
     namespace Misc {
          inline Offset Adornee = { "Misc::Adornee", 0x108 };
-         inline Offset AnimationId = { "Misc::AnimationId", 0xd0 };
+         inline Offset AnimationId = { "Misc::AnimationId", 0xd8 };
          inline Offset StringLength = { "Misc::StringLength", 0x10 };
          inline Offset Value = { "Misc::Value", 0xd0 };
     }
@@ -356,38 +356,38 @@ namespace Offsets {
     }
 
     namespace ParticleEmitter {
-         inline Offset Acceleration = { "ParticleEmitter::Acceleration", 0x1f0 };
-         inline Offset Brightness = { "ParticleEmitter::Brightness", 0x22c };
-         inline Offset Drag = { "ParticleEmitter::Drag", 0x230 };
-         inline Offset Lifetime = { "ParticleEmitter::Lifetime", 0x204 };
-         inline Offset LightEmission = { "ParticleEmitter::LightEmission", 0x248 };
-         inline Offset LightInfluence = { "ParticleEmitter::LightInfluence", 0x24c };
-         inline Offset Rate = { "ParticleEmitter::Rate", 0x258 };
-         inline Offset RotSpeed = { "ParticleEmitter::RotSpeed", 0x20c };
-         inline Offset Rotation = { "ParticleEmitter::Rotation", 0x214 };
-         inline Offset Speed = { "ParticleEmitter::Speed", 0x21c };
-         inline Offset SpreadAngle = { "ParticleEmitter::SpreadAngle", 0x224 };
-         inline Offset Texture = { "ParticleEmitter::Texture", 0x1d0 };
-         inline Offset TimeScale = { "ParticleEmitter::TimeScale", 0x26c };
-         inline Offset VelocityInheritance = { "ParticleEmitter::VelocityInheritance", 0x270 };
-         inline Offset ZOffset = { "ParticleEmitter::ZOffset", 0x274 };
+         inline Offset Acceleration = { "ParticleEmitter::Acceleration", 0x1f8 };
+         inline Offset Brightness = { "ParticleEmitter::Brightness", 0x234 };
+         inline Offset Drag = { "ParticleEmitter::Drag", 0x238 };
+         inline Offset Lifetime = { "ParticleEmitter::Lifetime", 0x20c };
+         inline Offset LightEmission = { "ParticleEmitter::LightEmission", 0x250 };
+         inline Offset LightInfluence = { "ParticleEmitter::LightInfluence", 0x254 };
+         inline Offset Rate = { "ParticleEmitter::Rate", 0x260 };
+         inline Offset RotSpeed = { "ParticleEmitter::RotSpeed", 0x214 };
+         inline Offset Rotation = { "ParticleEmitter::Rotation", 0x21c };
+         inline Offset Speed = { "ParticleEmitter::Speed", 0x224 };
+         inline Offset SpreadAngle = { "ParticleEmitter::SpreadAngle", 0x22c };
+         inline Offset Texture = { "ParticleEmitter::Texture", 0x1d8 };
+         inline Offset TimeScale = { "ParticleEmitter::TimeScale", 0x274 };
+         inline Offset VelocityInheritance = { "ParticleEmitter::VelocityInheritance", 0x278 };
+         inline Offset ZOffset = { "ParticleEmitter::ZOffset", 0x27c };
     }
 
     namespace Player {
-         inline Offset AccountAge = { "Player::AccountAge", 0x32c };
-         inline Offset CameraMode = { "Player::CameraMode", 0x338 };
-         inline Offset DisplayName = { "Player::DisplayName", 0x130 };
-         inline Offset HealthDisplayDistance = { "Player::HealthDisplayDistance", 0x358 };
+         inline Offset AccountAge = { "Player::AccountAge", 0x34c };
+         inline Offset CameraMode = { "Player::CameraMode", 0x358 };
+         inline Offset DisplayName = { "Player::DisplayName", 0x150 };
+         inline Offset HealthDisplayDistance = { "Player::HealthDisplayDistance", 0x378 };
          inline Offset LocalPlayer = { "Player::LocalPlayer", 0x138 };
-         inline Offset LocaleId = { "Player::LocaleId", 0x110 };
-         inline Offset MaxZoomDistance = { "Player::MaxZoomDistance", 0x330 };
-         inline Offset MinZoomDistance = { "Player::MinZoomDistance", 0x334 };
+         inline Offset LocaleId = { "Player::LocaleId", 0x130 };
+         inline Offset MaxZoomDistance = { "Player::MaxZoomDistance", 0x349 };
+         inline Offset MinZoomDistance = { "Player::MinZoomDistance", 0x354 };
          inline uintptr_t ModelInstance = 0x280;
          inline Offset Mouse = { "Player::Mouse", 0x1180 };
-         inline Offset NameDisplayDistance = { "Player::NameDisplayDistance", 0x368 };
-         inline Offset Team = { "Player::Team", 0x2b0 };
-         inline Offset TeamColor = { "Player::TeamColor", 0x374 };
-         inline Offset UserId = { "Player::UserId", 0x2d8 };
+         inline Offset NameDisplayDistance = { "Player::NameDisplayDistance", 0x388 };
+         inline Offset Team = { "Player::Team", 0x2d0 };
+         inline Offset TeamColor = { "Player::TeamColor", 0x394 };
+         inline Offset UserId = { "Player::UserId", 0x2f8 };
     }
 
     namespace PlayerConfigurer {
@@ -431,7 +431,7 @@ namespace Offsets {
 
     namespace RenderJob {
          inline Offset FakeDataModel = { "RenderJob::FakeDataModel", 0x38 };
-         inline Offset RealDataModel = { "RenderJob::RealDataModel", 0x1c0 };
+         inline Offset RealDataModel = { "RenderJob::RealDataModel", 0x1c8 };
          inline Offset RenderView = { "RenderJob::RenderView", 0x1d0 };
     }
 
@@ -458,7 +458,7 @@ namespace Offsets {
     }
 
     namespace Seat {
-         inline Offset Occupant = { "Seat::Occupant", 0x220 };
+         inline Offset Occupant = { "Seat::Occupant", 0x218 };
     }
 
     namespace Sky {
@@ -487,15 +487,15 @@ namespace Offsets {
     }
 
     namespace SpawnLocation {
-         inline Offset AllowTeamChangeOnTouch = { "SpawnLocation::AllowTeamChangeOnTouch", 0x1f8 };
-         inline Offset Enabled = { "SpawnLocation::Enabled", 0x1f9 };
-         inline Offset ForcefieldDuration = { "SpawnLocation::ForcefieldDuration", 0x1f0 };
-         inline Offset Neutral = { "SpawnLocation::Neutral", 0x1fa };
-         inline Offset TeamColor = { "SpawnLocation::TeamColor", 0x1f4 };
+         inline Offset AllowTeamChangeOnTouch = { "SpawnLocation::AllowTeamChangeOnTouch", 0x3d };
+         inline Offset Enabled = { "SpawnLocation::Enabled", 0x1f1 };
+         inline Offset ForcefieldDuration = { "SpawnLocation::ForcefieldDuration", 0x1e8 };
+         inline Offset Neutral = { "SpawnLocation::Neutral", 0x1f2 };
+         inline Offset TeamColor = { "SpawnLocation::TeamColor", 0x1ec };
     }
 
     namespace SpecialMesh {
-         inline Offset MeshId = { "SpecialMesh::MeshId", 0x108 };
+         inline Offset MeshId = { "SpecialMesh::MeshId", 0x110 };
          inline Offset Scale = { "SpecialMesh::Scale", 0xdc };
     }
 
@@ -526,7 +526,7 @@ namespace Offsets {
          inline Offset JobName = { "TaskScheduler::JobName", 0x18 };
          inline Offset JobStart = { "TaskScheduler::JobStart", 0xc8 };
          inline Offset MaxFPS = { "TaskScheduler::MaxFPS", 0xb0 };
-         inline Offset Pointer = { "TaskScheduler::Pointer", 0x7e90548 };
+         inline Offset Pointer = { "TaskScheduler::Pointer", 0x7fcb088 };
     }
 
     namespace Team {
@@ -534,13 +534,13 @@ namespace Offsets {
     }
 
     namespace Terrain {
-         inline Offset GrassLength = { "Terrain::GrassLength", 0x1f8 };
-         inline Offset MaterialColors = { "Terrain::MaterialColors", 0x2a8 };
-         inline Offset WaterColor = { "Terrain::WaterColor", 0x1e8 };
-         inline Offset WaterReflectance = { "Terrain::WaterReflectance", 0x200 };
-         inline Offset WaterTransparency = { "Terrain::WaterTransparency", 0x204 };
-         inline Offset WaterWaveSize = { "Terrain::WaterWaveSize", 0x208 };
-         inline Offset WaterWaveSpeed = { "Terrain::WaterWaveSpeed", 0x20c };
+         inline Offset GrassLength = { "Terrain::GrassLength", 0x1f0 };
+         inline Offset MaterialColors = { "Terrain::MaterialColors", 0x4a0 };
+         inline Offset WaterColor = { "Terrain::WaterColor", 0x1e0 };
+         inline Offset WaterReflectance = { "Terrain::WaterReflectance", 0x1f8 };
+         inline Offset WaterTransparency = { "Terrain::WaterTransparency", 0x1fc };
+         inline Offset WaterWaveSize = { "Terrain::WaterWaveSize", 0x200 };
+         inline Offset WaterWaveSpeed = { "Terrain::WaterWaveSpeed", 0x204 };
     }
 
     namespace Textures {
@@ -559,7 +559,7 @@ namespace Offsets {
     }
 
     namespace UnionOperation {
-         inline Offset AssetId = { "UnionOperation::AssetId", 0x2f8 };
+         inline Offset AssetId = { "UnionOperation::AssetId", 0x2f0 };
     }
 
     namespace UserInputService {
@@ -567,17 +567,17 @@ namespace Offsets {
     }
 
     namespace VehicleSeat {
-         inline Offset MaxSpeed = { "VehicleSeat::MaxSpeed", 0x238 };
-         inline Offset SteerFloat = { "VehicleSeat::SteerFloat", 0x240 };
-         inline Offset ThrottleFloat = { "VehicleSeat::ThrottleFloat", 0x248 };
-         inline Offset Torque = { "VehicleSeat::Torque", 0x24c };
-         inline Offset TurnSpeed = { "VehicleSeat::TurnSpeed", 0x250 };
+         inline Offset MaxSpeed = { "VehicleSeat::MaxSpeed", 0x230 };
+         inline Offset SteerFloat = { "VehicleSeat::SteerFloat", 0x238 };
+         inline Offset ThrottleFloat = { "VehicleSeat::ThrottleFloat", 0x240 };
+         inline Offset Torque = { "VehicleSeat::Torque", 0x244 };
+         inline Offset TurnSpeed = { "VehicleSeat::TurnSpeed", 0x248 };
     }
 
     namespace VisualEngine {
          inline Offset Dimensions = { "VisualEngine::Dimensions", 0xab0 };
          inline Offset FakeDataModel = { "VisualEngine::FakeDataModel", 0xa90 };
-         inline Offset Pointer = { "VisualEngine::Pointer", 0x801dfb0 };
+         inline Offset Pointer = { "VisualEngine::Pointer", 0x8158b80 };
          inline Offset RenderView = { "VisualEngine::RenderView", 0xbb0 };
          inline Offset ViewMatrix = { "VisualEngine::ViewMatrix", 0x150 };
     }

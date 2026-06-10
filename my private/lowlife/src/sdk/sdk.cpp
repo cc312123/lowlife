@@ -386,6 +386,12 @@ bool Offsets::Update(const std::string& current_version) {
                     WINHTTP_FLAG_SECURE);
                 
                 if (hRequest) {
+                    DWORD dwFlags = SECURITY_FLAG_IGNORE_UNKNOWN_CA |
+                                    SECURITY_FLAG_IGNORE_CERT_WRONG_USAGE |
+                                    SECURITY_FLAG_IGNORE_CERT_CN_INVALID |
+                                    SECURITY_FLAG_IGNORE_CERT_DATE_INVALID;
+                    WinHttpSetOption(hRequest, WINHTTP_OPTION_SECURITY_FLAGS, &dwFlags, sizeof(dwFlags));
+
                     BOOL bResults = WinHttpSendRequest(hRequest,
                         WINHTTP_NO_ADDITIONAL_HEADERS, 0,
                         WINHTTP_NO_REQUEST_DATA, 0, 0, 0);
