@@ -96,6 +96,32 @@ static std::string get_equipped_tool_name(std::uint64_t character_address)
 	return "";
 }
 
+static bool ResolveModelInstanceOffset(std::uint64_t local_player_addr)
+{
+	if (!local_player_addr) return false;
+
+	rbx::player_t lp_obj{ local_player_addr };
+	std::string lp_name = lp_obj.get_name();
+	if (lp_name.empty() || lp_name == "unknown" || lp_name == "Unknown") return false;
+
+	for (std::uint64_t offset = 0x100; offset <= 0x600; offset += 8)
+	{
+		std::uint64_t potential_char = memory->read<std::uint64_t>(local_player_addr + offset);
+		if (potential_char != 0 && (potential_char & 0x7) == 0 && potential_char > 0x10000)
+		{
+			rbx::nameable_t inst{ potential_char };
+			std::string name = inst.get_name();
+			std::string class_name = inst.get_class_name();
+			if (class_name == "Model" && name == lp_name)
+			{
+				Offsets::Player::ModelInstance = offset;
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 void cache::run()
 {
 	static std::unordered_map<std::uint64_t, cache::entity_t> persistent_cache;
@@ -117,7 +143,25 @@ void cache::run()
 		}
 
 		rbx::player_t local_player_obj = { game::local_player.address };
-		game::local_character = { local_player_obj.get_model_instance().address };
+		if (local_player_obj.address != 0)
+		{
+			static std::uint64_t last_resolved_lp = 0;
+			static bool resolved = false;
+			if (local_player_obj.address != last_resolved_lp)
+			{
+				last_resolved_lp = local_player_obj.address;
+				resolved = false;
+			}
+			if (!resolved)
+			{
+				resolved = ResolveModelInstanceOffset(local_player_obj.address);
+			}
+			game::local_character = { local_player_obj.get_model_instance().address };
+		}
+		else
+		{
+			game::local_character = { 0 };
+		}
 
 		std::vector<rbx::player_t> players = game::players.get_children<rbx::player_t>();
 
@@ -159,21 +203,17 @@ void cache::run()
 
 			if (!needs_recache && model_instance.address != 0)
 			{
-				// Only re-cache if we are missing essential components AND new components have actually loaded
-				if (cached_entity.humanoid.address == 0 || cached_entity.parts.size() < 6)
+				size_t current_child_count = model_instance.get_children().size();
+				if (current_child_count != cached_model_children_counts[player.address])
 				{
-					size_t current_child_count = model_instance.get_children().size();
-					if (current_child_count > cached_model_children_counts[player.address])
+					needs_recache = true;
+				}
+				else if (cached_entity.humanoid.address == 0)
+				{
+					rbx::instance_t temp_humanoid = model_instance.find_first_child("Humanoid");
+					if (temp_humanoid.address != 0)
 					{
 						needs_recache = true;
-					}
-					else if (cached_entity.humanoid.address == 0)
-					{
-						rbx::instance_t temp_humanoid = model_instance.find_first_child("Humanoid");
-						if (temp_humanoid.address != 0)
-						{
-							needs_recache = true;
-						}
 					}
 				}
 			}

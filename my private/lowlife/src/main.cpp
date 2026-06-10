@@ -311,8 +311,8 @@ static bool initialize_roblox_objects() noexcept {
     }
 
     if (!found_model_instance_offset) {
-        print_colored_bot_message("[SCAN] Warning: Failed to dynamically resolve ModelInstance offset. Using fallback 0x3a8.", false);
-        Offsets::Player::ModelInstance = 0x3a8;
+        sprintf_s(buffer, "[SCAN] Warning: Failed to dynamically resolve ModelInstance offset. Keeping current value: 0x%llx", (uintptr_t)Offsets::Player::ModelInstance);
+        print_colored_bot_message(buffer, false);
     }
 
     game::local_character = { lp_obj.get_model_instance().address };
@@ -342,7 +342,7 @@ static bool initialize_roblox_objects() noexcept {
         print_colored_bot_message(buffer, true);
     }
 
-    return real_dm != 0 && workspace != 0 && players != 0 && local_player != 0;
+    return real_dm != 0 && workspace != 0 && players != 0 && local_player != 0 && game::local_character.address != 0;
 }
 
 static void roblox_monitor() noexcept {

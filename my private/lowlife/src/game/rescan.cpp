@@ -248,6 +248,12 @@ GameState CaptureCurrentState() {
 }
 bool PerformSmartRescan(GameState::StateType expectedState) {
     try {
+        // Clear old global variables to prevent stale/garbage pointers if the rescan fails or is in lobby
+        game::workspace = { 0 };
+        game::players = { 0 };
+        game::local_player = { 0 };
+        game::local_character = { 0 };
+
         static auto lastProcessCheck = std::chrono::steady_clock::now();
         auto now = std::chrono::steady_clock::now();
         auto timeSinceProcessCheck = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastProcessCheck);
@@ -297,6 +303,7 @@ bool PerformSmartRescan(GameState::StateType expectedState) {
         game::datamodel = datamodel;
 
         if (!datamodel.address) {
+            game::datamodel = { 0 };
             return false;
         }
 
@@ -319,6 +326,15 @@ bool PerformSmartRescan(GameState::StateType expectedState) {
                 }
             }
         }
+
+        if (expectedState == GameState::StateType::IN_GAME && !game::local_player.address) {
+            game::datamodel = { 0 };
+            game::workspace = { 0 };
+            game::players = { 0 };
+            game::local_player = { 0 };
+            game::local_character = { 0 };
+            return false;
+        }
         
         game::visengine = { memory->read<std::uint64_t>(memory->get_module_address() + Offsets::VisualEngine::Pointer) };
 
@@ -329,6 +345,11 @@ bool PerformSmartRescan(GameState::StateType expectedState) {
 
     }
     catch (...) {
+        game::datamodel = { 0 };
+        game::workspace = { 0 };
+        game::players = { 0 };
+        game::local_player = { 0 };
+        game::local_character = { 0 };
         AutoRescan::consecutiveFailures++;
         AutoRescan::consecutiveSuccesses = 0;
         return false;
