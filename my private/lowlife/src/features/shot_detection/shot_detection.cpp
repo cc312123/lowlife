@@ -314,7 +314,7 @@ namespace shot_detection
 				POINT cursor_pt = {};
 				if (GetCursorPos(&cursor_pt)) {
 					HWND roblox_wnd = FindWindowA(nullptr, "Roblox");
-					if (roblox_wnd) {
+					if (roblox_wnd && ScreenToClient(roblox_wnd, &cursor_pt)) {
 						
 						cache::entity_t best_player = {};
 						float best_dist = std::numeric_limits<float>::max();
@@ -1123,7 +1123,7 @@ namespace botter
 			
 			if (!GetCursorPos(&cursor_pt)) continue;
 			HWND roblox_wnd = FindWindowA(nullptr, "Roblox");
-			if (!roblox_wnd) continue;
+			if (!roblox_wnd || !ScreenToClient(roblox_wnd, &cursor_pt)) continue;
 
 			
 			math::vector3 camera_pos = {};
