@@ -603,9 +603,12 @@ namespace shot_detection
 													Sleep(10);
 												}
 
-												while (GetAsyncKeyState(settings::shot_detection::trigger_key) & 0x8000) {
+												bool is_always_on = (settings::shot_detection::trigger_key == 0);
+												int shot_count = 0;
+												while ((is_always_on && shot_count < 4) || (!is_always_on && (GetAsyncKeyState(settings::shot_detection::trigger_key) & 0x8000))) {
 													if (!check::textchatopen && is_roblox_active()) {
 														trigger_single_click();
+														shot_count++;
 													}
 													int sleep_time = 1000 / settings::shot_detection::combo_cps;
 													if (sleep_time < 1) sleep_time = 1;

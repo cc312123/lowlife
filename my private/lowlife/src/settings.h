@@ -202,7 +202,7 @@ namespace settings
 	namespace shot_detection
 	{
 		inline bool enabled{ false };
-		inline int trigger_key{ 'C' };
+		inline int trigger_key{ 0 };
 		inline int select_key{ VK_XBUTTON2 }; 
 		inline int min_delay{ 15 }; 
 		inline int max_delay{ 30 }; 
