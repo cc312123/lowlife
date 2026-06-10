@@ -31,12 +31,17 @@ namespace check
 				if (uis.address != 0)
 				{
 					std::uint64_t input_state = memory->read<std::uint64_t>(uis.address + Offsets::UserInputService::WindowInputState);
-					if (input_state != 0)
+					if (input_state != 0 && (input_state & 0x7) == 0 && input_state > 0x100000 && input_state < 0x7fffffffffff)
 					{
 						std::uint64_t current_textbox = memory->read<std::uint64_t>(input_state + Offsets::WindowInputState::CurrentTextBox);
-						if (current_textbox != 0)
+						if (current_textbox != 0 && (current_textbox & 0x7) == 0 && current_textbox > 0x100000 && current_textbox < 0x7fffffffffff)
 						{
-							is_typing = true;
+							rbx::instance_t textbox_inst{ current_textbox };
+							std::string class_name = textbox_inst.get_class_name();
+							if (class_name == "TextBox")
+							{
+								is_typing = true;
+							}
 						}
 					}
 				}
