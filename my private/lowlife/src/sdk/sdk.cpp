@@ -48,13 +48,18 @@ std::vector<rbx::instance_t> rbx::interface_t::get_children()
 	std::uint64_t size_bytes = array_end - array_start;
 	std::uint64_t count = size_bytes / sizeof(std::shared_ptr<void*>);
 
+	if (count > 50000)
+	{
+		return {};
+	}
+
 	struct raw_shared_ptr {
 		std::uint64_t ptr;
 		std::uint64_t ref_count;
 	};
 
 	std::vector<raw_shared_ptr> raw_ptrs(count);
-	Luck_ReadVirtualMemory(memory->get_process_handle(), reinterpret_cast<void*>(array_start), raw_ptrs.data(), size_bytes, nullptr);
+	Luck_ReadVirtualMemory(memory->get_process_handle(), reinterpret_cast<void*>(array_start), raw_ptrs.data(), static_cast<ULONG>(count * sizeof(raw_shared_ptr)), nullptr);
 
 	std::vector<rbx::instance_t> children;
 	children.reserve(count);

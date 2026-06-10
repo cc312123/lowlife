@@ -135,7 +135,7 @@ std::vector<T> rbx::interface_t::get_children()
 	};
 
 	std::vector<raw_shared_ptr> raw_ptrs(count);
-	Luck_ReadVirtualMemory(memory->get_process_handle(), reinterpret_cast<void*>(array_start), raw_ptrs.data(), size_bytes, nullptr);
+	Luck_ReadVirtualMemory(memory->get_process_handle(), reinterpret_cast<void*>(array_start), raw_ptrs.data(), static_cast<ULONG>(count * sizeof(raw_shared_ptr)), nullptr);
 
 	std::vector<T> children;
 	children.reserve(count);
