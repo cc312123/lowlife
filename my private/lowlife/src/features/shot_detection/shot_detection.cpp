@@ -89,9 +89,43 @@ namespace shot_detection
 	{
 		bool select_key_was_pressed = false;
 		int last_ammo_value = -1;
-		std::uint64_t last_tool_address = 0;
-		std::uint64_t last_ammo_val_address = 0;
 		std::uint64_t last_target_model_address = 0;
+		std::uint64_t last_ammo_val_address = 0;
+		bool is_autoclicking = false;
+
+		bool is_roblox_active() {
+			HWND roblox_wnd = FindWindowA(nullptr, "Roblox");
+			return roblox_wnd && (GetForegroundWindow() == roblox_wnd);
+		}
+
+		void trigger_single_click() {
+			INPUT input = {};
+			input.type = INPUT_MOUSE;
+			input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+			SendInput(1, &input, sizeof(INPUT));
+			
+			Sleep(15); 
+			
+			input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
+			SendInput(1, &input, sizeof(INPUT));
+		}
+
+		float vector2_distance(float ax, float ay, float bx, float by) {
+			float dx = ax - bx;
+			float dy = ay - by;
+			return std::sqrt(dx * dx + dy * dy);
+		}
+
+		int get_random_delay() {
+			int min_d = settings::shot_detection::min_delay;
+			int max_d = settings::shot_detection::max_delay;
+			if (min_d > max_d) std::swap(min_d, max_d);
+			if (min_d == max_d) return min_d;
+			
+			static thread_local std::mt19937 generator(std::random_device{}());
+			std::uniform_int_distribution<int> distribution(min_d, max_d);
+			return distribution(generator);
+		}
 
 		rbx::instance_t find_ammo_val_recursive(rbx::instance_t parent, const std::string& target_name, int depth = 0) {
 			if (depth > 6 || parent.address == 0) return {};
@@ -151,250 +185,30 @@ namespace shot_detection
 
 			return {};
 		}
-
-		enum ComboState {
-			COMBO_IDLE,
-			COMBO_EQUIP_DB,
-			COMBO_SHOOT_DB,
-			COMBO_SWITCH_TO_REV,
-			COMBO_SHOOT_REV,
-			COMBO_FINISHED
-		};
-
-		ComboState combo_state = COMBO_IDLE;
-		int db_ammo_start = -1;
-		int rev_ammo_start = -1;
-		int rev_shots_fired = 0;
-		std::chrono::steady_clock::time_point last_click_time = std::chrono::steady_clock::now();
-
-		bool is_roblox_active() {
-			HWND roblox_wnd = FindWindowA(nullptr, "Roblox");
-			return roblox_wnd && (GetForegroundWindow() == roblox_wnd);
-		}
-
-		bool str_contains_case_insensitive(const std::string& str, const std::string& target) {
-			if (str.empty() || target.empty()) return false;
-			std::string s_lower = str;
-			std::string t_lower = target;
-			std::transform(s_lower.begin(), s_lower.end(), s_lower.begin(), ::tolower);
-			std::transform(t_lower.begin(), t_lower.end(), t_lower.begin(), ::tolower);
-			return s_lower.find(t_lower) != std::string::npos;
-		}
-
-		void simulate_keypress(WORD key) {
-			INPUT input = {};
-			WORD scan = static_cast<WORD>(MapVirtualKeyA(key, MAPVK_VK_TO_VSC));
-			
-			input.type = INPUT_KEYBOARD;
-			input.ki.wVk = 0;
-			input.ki.wScan = scan;
-			input.ki.dwFlags = KEYEVENTF_SCANCODE;
-			SendInput(1, &input, sizeof(INPUT));
-			
-			Sleep(5); 
-			
-			input.ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
-			SendInput(1, &input, sizeof(INPUT));
-		}
-
-		void trigger_single_click() {
-			INPUT input = {};
-			input.type = INPUT_MOUSE;
-			input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
-			SendInput(1, &input, sizeof(INPUT));
-			
-			Sleep(15); 
-			
-			input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
-			SendInput(1, &input, sizeof(INPUT));
-		}
-
-		bool get_local_tool_info(std::string& name_out, int& ammo_out, rbx::instance_t& tool_instance_out) {
-			if (!game::local_player.address) return false;
-			
-			rbx::player_t lp{ game::local_player.address };
-			rbx::model_instance_t lp_char = lp.get_model_instance();
-			if (lp_char.address == 0) return false;
-			
-			rbx::instance_t tool_instance = {};
-			for (rbx::instance_t& child : lp_char.get_children<rbx::instance_t>()) {
-				std::string child_class = child.get_class_name();
-				if (child_class == "Tool" || child_class == "HopperBin") {
-					tool_instance = child;
-					break;
-				}
-			}
-			
-			if (tool_instance.address == 0) return false;
-			
-			tool_instance_out = tool_instance;
-			name_out = tool_instance.get_name();
-			
-			rbx::instance_t ammo_val_obj = {};
-			for (rbx::instance_t& child : tool_instance.get_children<rbx::instance_t>()) {
-				std::string cname = child.get_name();
-				std::string cclass = child.get_class_name();
-				if (cclass.find("Value") != std::string::npos) {
-					std::string target_ammo_name = settings::shot_detection::ammo_name;
-					std::string lower_cname = cname;
-					std::string lower_target_ammo = target_ammo_name;
-					std::transform(lower_cname.begin(), lower_cname.end(), lower_cname.begin(), ::tolower);
-					std::transform(lower_target_ammo.begin(), lower_target_ammo.end(), lower_target_ammo.begin(), ::tolower);
-					if (lower_cname == lower_target_ammo || cname == target_ammo_name) {
-						ammo_val_obj = child;
-						break;
-					}
-				}
-			}
-			
-			if (ammo_val_obj.address == 0) {
-				for (rbx::instance_t& child : tool_instance.get_children<rbx::instance_t>()) {
-					std::string cname = child.get_name();
-					std::string cclass = child.get_class_name();
-					std::transform(cname.begin(), cname.end(), cname.begin(), ::tolower);
-					if (cclass.find("Value") != std::string::npos && 
-						(cname.find("ammo") != std::string::npos || cname.find("clip") != std::string::npos)) {
-						ammo_val_obj = child;
-						break;
-					}
-				}
-			}
-			
-			if (ammo_val_obj.address != 0) {
-				ammo_out = memory->read<int>(ammo_val_obj.address + Offsets::Misc::Value);
-				return true;
-			}
-			
-			ammo_out = -1;
-			return true;
-		}
-
-		float vector2_distance(float ax, float ay, float bx, float by) {
-			float dx = ax - bx;
-			float dy = ay - by;
-			return std::sqrt(dx * dx + dy * dy);
-		}
-		int get_random_delay() {
-			int min_d = settings::shot_detection::min_delay;
-			int max_d = settings::shot_detection::max_delay;
-			if (min_d > max_d) std::swap(min_d, max_d);
-			if (min_d == max_d) return min_d;
-			
-			static thread_local std::mt19937 generator(std::random_device{}());
-			std::uniform_int_distribution<int> distribution(min_d, max_d);
-			return distribution(generator);
-		}
-
-		void simulate_click(int delay_ms) {
-			if (delay_ms > 0) {
-				Sleep(delay_ms);
-			}
-
-			INPUT input = {};
-			input.type = INPUT_MOUSE;
-			input.mi.dx = 0;
-			input.mi.dy = 0;
-			input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
-			SendInput(1, &input, sizeof(INPUT));
-
-			Sleep(15); 
-
-			input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
-			SendInput(1, &input, sizeof(INPUT));
-		}
 	}
 
 	void run()
 	{
-		static int last_local_ammo = -1;
-		static std::uint64_t last_local_tool = 0;
 		while (true)
 		{
-			
 			Sleep(2);
 
 			if (!settings::shot_detection::enabled || !game::workspace.address) {
 				settings::shot_detection::target_address = 0;
 				settings::shot_detection::target_name = "None";
 				last_ammo_value = -1;
-				last_tool_address = 0;
+				last_target_model_address = 0;
+				last_ammo_val_address = 0;
+				is_autoclicking = false;
 				continue;
 			}
 
-			
-			if (settings::shot_detection::db_revolver_combo) {
-				if (!combo_running) {
-					if (is_roblox_active() && !check::textchatopen) {
-						std::string local_eq_name = "";
-						int local_eq_ammo = -1;
-						rbx::instance_t local_eq_tool = {};
-						if (get_local_tool_info(local_eq_name, local_eq_ammo, local_eq_tool)) {
-							if (local_eq_tool.address != last_local_tool) {
-								last_local_tool = local_eq_tool.address;
-								last_local_ammo = local_eq_ammo;
-							} else {
-								bool is_db = (str_contains_case_insensitive(local_eq_name, "double") || str_contains_case_insensitive(local_eq_name, "db") || str_contains_case_insensitive(local_eq_name, "barrel"));
-								if (is_db) {
-									if (last_local_ammo != -1 && local_eq_ammo < last_local_ammo && local_eq_ammo >= 0 && (last_local_ammo - local_eq_ammo) <= 10) {
-										if (!combo_running.exchange(true)) {
-											std::thread([]() {
-												if (settings::shot_detection::switch_delay > 0) {
-													Sleep(settings::shot_detection::switch_delay);
-												}
-
-												WORD rev_key = settings::shot_detection::revolver_slot_key;
-												WORD scan = static_cast<WORD>(MapVirtualKeyA(rev_key, MAPVK_VK_TO_VSC));
-												
-												INPUT inputs[2] = {};
-												inputs[0].type = INPUT_KEYBOARD;
-												inputs[0].ki.wScan = scan;
-												inputs[0].ki.dwFlags = KEYEVENTF_SCANCODE;
-
-												inputs[1].type = INPUT_KEYBOARD;
-												inputs[1].ki.wScan = scan;
-												inputs[1].ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
-
-												SendInput(2, inputs, sizeof(INPUT));
-												Sleep(200);
-
-												// Auto-shoot the revolver while left mouse button is held down
-												while (GetAsyncKeyState(VK_LBUTTON) & 0x8000) {
-													if (!check::textchatopen && is_roblox_active()) {
-														trigger_single_click();
-													}
-													int sleep_time = 1000 / settings::shot_detection::combo_cps;
-													if (sleep_time < 1) sleep_time = 1;
-													Sleep(sleep_time);
-												}
-												combo_running = false;
-											}).detach();
-										}
-									}
-								}
-							}
-							last_local_ammo = local_eq_ammo;
-						} else {
-							last_local_tool = 0;
-							last_local_ammo = -1;
-						}
-					} else {
-						last_local_tool = 0;
-						last_local_ammo = -1;
-					}
-				}
-			} else {
-				last_local_tool = 0;
-				last_local_ammo = -1;
-			}
-
-			
 			bool select_pressed = GetAsyncKeyState(settings::shot_detection::select_key) & 0x8000;
 			if (select_pressed && !select_key_was_pressed) {
 				POINT cursor_pt = {};
 				if (GetCursorPos(&cursor_pt)) {
 					HWND roblox_wnd = FindWindowA(nullptr, "Roblox");
 					if (roblox_wnd) {
-						
 						cache::entity_t best_player = {};
 						float best_dist = std::numeric_limits<float>::max();
 
@@ -419,7 +233,6 @@ namespace shot_detection
 								if (settings::shot_detection::knocked_check && is_player_knocked(player))
 									continue;
 
-								
 								rbx::part_t target_part = {};
 								if (auto it = player.parts.find("Head"); it != player.parts.end()) {
 									target_part = it->second;
@@ -449,7 +262,9 @@ namespace shot_detection
 							settings::shot_detection::target_address = best_player.instance.address;
 							settings::shot_detection::target_name = best_player.name;
 							last_ammo_value = -1;
-							last_tool_address = 0;
+							last_target_model_address = 0;
+							last_ammo_val_address = 0;
+							is_autoclicking = false;
 
 							char notification_buf[256];
 							sprintf_s(notification_buf, "Target Locked: %s", best_player.name.c_str());
@@ -460,9 +275,7 @@ namespace shot_detection
 			}
 			select_key_was_pressed = select_pressed;
 
-						
 			if (settings::shot_detection::target_address != 0) {
-				
 				cache::entity_t target_entity = {};
 				bool found_in_cache = false;
 				std::shared_ptr<std::vector<cache::entity_t>> players_snapshot;
@@ -482,24 +295,22 @@ namespace shot_detection
 				}
 
 				if (!found_in_cache || (settings::shot_detection::knocked_check && is_player_knocked(target_entity))) {
-					
 					settings::shot_detection::target_address = 0;
 					settings::shot_detection::target_name = "None";
 					last_ammo_value = -1;
-					last_tool_address = 0;
-					last_ammo_val_address = 0;
 					last_target_model_address = 0;
+					last_ammo_val_address = 0;
+					is_autoclicking = false;
 					continue;
 				}
 
-				
 				rbx::player_t target_player_obj{ target_entity.instance.address };
 				rbx::model_instance_t model = target_player_obj.get_model_instance();
 				if (model.address == 0) {
 					last_ammo_value = -1;
-					last_tool_address = 0;
-					last_ammo_val_address = 0;
 					last_target_model_address = 0;
+					last_ammo_val_address = 0;
+					is_autoclicking = false;
 					continue;
 				}
 
@@ -507,6 +318,7 @@ namespace shot_detection
 					last_target_model_address = model.address;
 					last_ammo_val_address = 0;
 					last_ammo_value = -1;
+					is_autoclicking = false;
 				}
 
 				static auto last_fail_scan_time = std::chrono::steady_clock::now();
@@ -540,88 +352,9 @@ namespace shot_detection
 
 					if (last_ammo_value != -1) {
 						if (current_ammo < last_ammo_value && current_ammo >= 0 && (last_ammo_value - current_ammo) <= 10) {
-							bool key_ok = (settings::shot_detection::trigger_key == 0) || 
-							              (GetAsyncKeyState(settings::shot_detection::trigger_key) & 0x8000);
-							if (key_ok) {
-								if (!check::textchatopen && is_roblox_active()) {
-									if (settings::shot_detection::db_revolver_combo) {
-										if (!combo_running.exchange(true)) {
-											std::thread([]() {
-												int delay_ms = get_random_delay();
-												if (delay_ms > 0) {
-													Sleep(delay_ms);
-												}
-
-												std::string eq_name = "";
-												int eq_ammo = -1;
-												rbx::instance_t eq_tool = {};
-												bool has_tool = get_local_tool_info(eq_name, eq_ammo, eq_tool);
-
-												bool has_db = has_tool && (str_contains_case_insensitive(eq_name, "double") || str_contains_case_insensitive(eq_name, "db") || str_contains_case_insensitive(eq_name, "barrel"));
-												if (!has_db && settings::shot_detection::auto_switch_on_start) {
-													simulate_keypress(settings::shot_detection::db_slot_key);
-													Sleep(200); 
-													has_tool = get_local_tool_info(eq_name, eq_ammo, eq_tool);
-													has_db = has_tool && (str_contains_case_insensitive(eq_name, "double") || str_contains_case_insensitive(eq_name, "db") || str_contains_case_insensitive(eq_name, "barrel"));
-												}
-
-												if (has_db) {
-													INPUT click_down = {};
-													click_down.type = INPUT_MOUSE;
-													click_down.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
-													SendInput(1, &click_down, sizeof(INPUT));
-
-													Sleep(15); 
-
-													INPUT click_up = {};
-													click_up.type = INPUT_MOUSE;
-													click_up.mi.dwFlags = MOUSEEVENTF_LEFTUP;
-													SendInput(1, &click_up, sizeof(INPUT));
-
-													if (settings::shot_detection::switch_delay > 0) {
-														Sleep(settings::shot_detection::switch_delay);
-													}
-
-													WORD rev_key = settings::shot_detection::revolver_slot_key;
-													WORD scan = static_cast<WORD>(MapVirtualKeyA(rev_key, MAPVK_VK_TO_VSC));
-													INPUT key_down = {};
-													key_down.type = INPUT_KEYBOARD;
-													key_down.ki.wScan = scan;
-													key_down.ki.dwFlags = KEYEVENTF_SCANCODE;
-													SendInput(1, &key_down, sizeof(INPUT));
-
-													Sleep(5);
-
-													INPUT key_up = {};
-													key_up.type = INPUT_KEYBOARD;
-													key_up.ki.wScan = scan;
-													key_up.ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
-													SendInput(1, &key_up, sizeof(INPUT));
-													
-													Sleep(10);
-												}
-
-												bool is_always_on = (settings::shot_detection::trigger_key == 0);
-												int shot_count = 0;
-												while ((is_always_on && shot_count < 4) || (!is_always_on && (GetAsyncKeyState(settings::shot_detection::trigger_key) & 0x8000))) {
-													if (!check::textchatopen && is_roblox_active()) {
-														trigger_single_click();
-														shot_count++;
-													}
-													int sleep_time = 1000 / settings::shot_detection::combo_cps;
-													if (sleep_time < 1) sleep_time = 1;
-													Sleep(sleep_time);
-												}
-
-												combo_running = false;
-											}).detach();
-										}
-									} else {
-										std::thread([]() {
-											simulate_click(get_random_delay());
-										}).detach();
-									}
-								}
+							bool c_held = GetAsyncKeyState('C') & 0x8000;
+							if (c_held) {
+								is_autoclicking = true;
 							}
 						}
 					}
@@ -629,6 +362,22 @@ namespace shot_detection
 				} else {
 					last_ammo_value = -1;
 				}
+
+				if (is_autoclicking) {
+					bool c_held = GetAsyncKeyState('C') & 0x8000;
+					if (c_held) {
+						if (is_roblox_active() && !check::textchatopen) {
+							trigger_single_click();
+							int delay_ms = get_random_delay();
+							if (delay_ms < 1) delay_ms = 1;
+							Sleep(delay_ms);
+						}
+					} else {
+						is_autoclicking = false;
+					}
+				}
+			} else {
+				is_autoclicking = false;
 			}
 		}
 	}
