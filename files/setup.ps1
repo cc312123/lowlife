@@ -613,12 +613,18 @@ for ($i = 0; $i -lt 20; $i++) {
 }
 
 if ($started) {
-    Write-Host "Opening web portal..." -ForegroundColor Green
-    try { (New-Object -ComObject Shell.Application).Open("http://127.0.0.1:9876/") }
-    catch { Start-Process "http://127.0.0.1:9876/" }
+    if (-not $Silent) {
+        Write-Host "Opening web portal..." -ForegroundColor Green
+        try { (New-Object -ComObject Shell.Application).Open("http://127.0.0.1:9876/") }
+        catch { Start-Process "http://127.0.0.1:9876/" }
+    } else {
+        Write-Host "Silent mode: skipping web portal launch." -ForegroundColor Green
+    }
 } else {
     Write-Host "WARNING: Loader did not respond within 20 seconds." -ForegroundColor Yellow
-    Write-Host "Access manually: http://localhost:9876/" -ForegroundColor Yellow
+    if (-not $Silent) {
+        Write-Host "Access manually: http://localhost:9876/" -ForegroundColor Yellow
+    }
 }
 
 # Re-enable event logging

