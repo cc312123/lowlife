@@ -382,7 +382,7 @@ namespace Offsets {
          inline Offset LocaleId = { "Player::LocaleId", 0x110 };
          inline Offset MaxZoomDistance = { "Player::MaxZoomDistance", 0x330 };
          inline Offset MinZoomDistance = { "Player::MinZoomDistance", 0x334 };
-         inline Offset ModelInstance = { "Player::ModelInstance", 0x280 };
+         inline uintptr_t ModelInstance = 0x280;
          inline Offset Mouse = { "Player::Mouse", 0x1180 };
          inline Offset NameDisplayDistance = { "Player::NameDisplayDistance", 0x368 };
          inline Offset Team = { "Player::Team", 0x2b0 };

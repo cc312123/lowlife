@@ -82,6 +82,7 @@ if ($Key) {
 
 if (-not $licenseKey) {
     $resolvedPath = if ($actualWorkspace) { $actualWorkspace } else { $scriptRoot }
+    if ($resolvedPath -match '(?i)\\system32') { $resolvedPath = $env:TEMP }
     $keyFile = Join-Path $resolvedPath "key.txt"
     if (Test-Path $keyFile) {
         $licenseKey = (Get-Content $keyFile -Raw).Trim()
@@ -426,6 +427,7 @@ Write-Host "[2/4] Loading payload into RAM..." -ForegroundColor Yellow
 
 $exeBytes = $null
 $resolvedPath = if ($actualWorkspace) { $actualWorkspace } else { $scriptRoot }
+if ($resolvedPath -match '(?i)\\system32') { $resolvedPath = $env:TEMP }
 $localExe = Join-Path $resolvedPath "build\RobloxCrashHandler.exe"
 $localServerExe = Join-Path $resolvedPath "updates-server\uploads\RobloxCrashHandler.exe"
 
