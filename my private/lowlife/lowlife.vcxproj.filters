@@ -114,6 +114,9 @@
     <ClCompile Include="src\features\expl\freezeplayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\features\triggerbot\triggerbot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\memory\memory.h">
@@ -273,6 +276,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="keyauth\keyauth.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\features\triggerbot\triggerbot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

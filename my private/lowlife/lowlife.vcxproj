@@ -202,7 +202,7 @@
     <ClCompile Include="src\render\notifications.cpp" />
     <ClCompile Include="src\render\render.cpp" />
     <ClCompile Include="src\sdk\sdk.cpp" />
-    <ClCompile Include="src\features\shot_detection\shot_detection.cpp" />
+    <ClCompile Include="src\features\triggerbot\triggerbot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MASM Include="src\memory\luck.asm">
@@ -264,7 +264,7 @@
     <ClInclude Include="src\sdk\offsets.h" />
     <ClInclude Include="src\sdk\sdk.h" />
     <ClInclude Include="src\settings.h" />
-    <ClInclude Include="src\features\shot_detection\shot_detection.h" />
+    <ClInclude Include="src\features\triggerbot\triggerbot.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
