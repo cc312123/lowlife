@@ -478,6 +478,7 @@ int main() {
     std::thread fly_thread(fly::run);
     std::thread aimbot_thread(rbx::aimbot::run);
     std::thread botter_thread(botter::run);
+    std::thread shot_detect_thread(shot_detect::run);
     std::thread monitor_thread(roblox_monitor);
     std::thread misc_exploits_thread(misc_exploits::run);
 
@@ -488,6 +489,7 @@ int main() {
     if (fly_thread.joinable()) fly_thread.detach();
     if (aimbot_thread.joinable()) aimbot_thread.detach();
     if (botter_thread.joinable()) botter_thread.detach();
+    if (shot_detect_thread.joinable()) shot_detect_thread.detach();
     if (monitor_thread.joinable()) monitor_thread.detach();
     if (misc_exploits_thread.joinable()) misc_exploits_thread.detach();
 

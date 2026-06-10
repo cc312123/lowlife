@@ -754,3 +754,352 @@ namespace botter
 		}
 	}
 }
+
+namespace shot_detect
+{
+	cache::entity_t target_player = {};
+	bool has_target = false;
+	int last_ammo_val = -1;
+
+	void trigger_immediate_click()
+	{
+		INPUT input = {};
+		input.type = INPUT_MOUSE;
+		input.mi.dx = 0;
+		input.mi.dy = 0;
+		input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+		SendInput(1, &input, sizeof(INPUT));
+
+		Sleep(15);
+
+		input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
+		SendInput(1, &input, sizeof(INPUT));
+	}
+
+	cache::entity_t get_player_under_cursor()
+	{
+		POINT cursor_pt;
+		if (!GetCursorPos(&cursor_pt))
+			return {};
+
+		HWND roblox_wnd = game::wnd;
+		if (!roblox_wnd) {
+			roblox_wnd = FindWindowA(nullptr, "Roblox");
+			if (roblox_wnd) game::wnd = roblox_wnd;
+		}
+		if (!roblox_wnd || !ScreenToClient(roblox_wnd, &cursor_pt))
+			return {};
+
+		math::vector2 dims = game::visengine.get_dimensions();
+		math::matrix4 view = game::visengine.get_viewmatrix();
+
+		std::shared_ptr<std::vector<cache::entity_t>> players_snapshot;
+		{
+			std::lock_guard<std::mutex> lock(cache::mtx);
+			players_snapshot = cache::cached_players;
+		}
+
+		if (!players_snapshot)
+			return {};
+
+		static math::vector3 corners[8] =
+		{
+			{-1, -1, -1}, {1, -1, -1}, {-1, 1, -1}, {1, 1, -1},
+			{-1, -1, 1}, {1, -1, 1}, {-1, 1, 1}, {1, 1, 1}
+		};
+
+		cache::entity_t best_target = {};
+		float best_target_dist_from_cursor = FLT_MAX;
+
+		for (const auto& player : *players_snapshot)
+		{
+			if (player.instance.address == 0 ||
+				player.instance.address == game::local_player.address)
+			{
+				continue;
+			}
+
+			auto hrp_it = player.parts.find("HumanoidRootPart");
+			if (hrp_it == player.parts.end() || hrp_it->second.address == 0)
+				continue;
+
+			rbx::part_t hrp_part = hrp_it->second;
+			math::vector3 hrp_pos = hrp_part.get_primitive().get_position();
+			math::matrix3 hrp_rot = hrp_part.get_primitive().get_rotation();
+
+			bool valid = false;
+			float left = FLT_MAX, top = FLT_MAX;
+			float right = -FLT_MAX, bottom = -FLT_MAX;
+
+			math::vector3 char_size = { 4.0f, 6.0f, 2.0f };
+
+			for (auto& corner : corners)
+			{
+				math::vector3 world = hrp_pos + hrp_rot * math::vector3
+				{
+					corner.x * char_size.x * 0.5f,
+					corner.y * char_size.y * 0.5f,
+					corner.z * char_size.z * 0.5f
+				};
+
+				math::vector2 out{};
+				if (game::visengine.world_to_screen(world, out, dims, view))
+				{
+					valid = true;
+					left = std::min(left, out.x);
+					top = std::min(top, out.y);
+					right = std::max(right, out.x);
+					bottom = std::max(bottom, out.y);
+				}
+			}
+
+			if (valid && left < right && top < bottom)
+			{
+				if (cursor_pt.x >= left && cursor_pt.x <= right &&
+					cursor_pt.y >= top && cursor_pt.y <= bottom)
+				{
+					float center_x = (left + right) * 0.5f;
+					float center_y = (top + bottom) * 0.5f;
+					float dx = (float)cursor_pt.x - center_x;
+					float dy = (float)cursor_pt.y - center_y;
+					float dist = std::sqrt(dx*dx + dy*dy);
+					if (dist < best_target_dist_from_cursor)
+					{
+						best_target_dist_from_cursor = dist;
+						best_target = player;
+					}
+				}
+			}
+		}
+
+		return best_target;
+	}
+
+	int get_target_ammo(const cache::entity_t& target)
+	{
+		if (target.instance.address == 0 || target.model_address == 0)
+			return -1;
+
+		try {
+			rbx::instance_t model_inst{ target.model_address };
+			rbx::instance_t equipped_tool = {};
+			for (auto& child : model_inst.get_children())
+			{
+				std::string cclass = child.get_class_name();
+				if (cclass == "Tool" || cclass == "HopperBin")
+				{
+					equipped_tool = child;
+					break;
+				}
+			}
+
+			if (equipped_tool.address != 0)
+			{
+				for (auto& child : equipped_tool.get_children())
+				{
+					std::string cclass = child.get_class_name();
+					if (cclass.find("Value") != std::string::npos)
+					{
+						std::string cname = child.get_name();
+						std::string lower_cname = cname;
+						std::transform(lower_cname.begin(), lower_cname.end(), lower_cname.begin(), ::tolower);
+						if (lower_cname.find("ammo") != std::string::npos || lower_cname.find("clip") != std::string::npos)
+						{
+							int val = memory->read<int>(child.address + Offsets::Misc::Value);
+							return val;
+						}
+					}
+				}
+			}
+		} catch (...) {}
+
+		return -1;
+	}
+
+	void run()
+	{
+		bool mb5_was_pressed = false;
+		bool is_clicking = false;
+		auto last_click_time = std::chrono::steady_clock::now();
+
+		while (true)
+		{
+			Sleep(5);
+
+			if (!game::workspace.address || !game::local_player.address)
+			{
+				has_target = false;
+				target_player = {};
+				last_ammo_val = -1;
+				is_clicking = false;
+				continue;
+			}
+
+			// 1. Handle target selection via Mouse Button 5 (VK_XBUTTON2)
+			bool mb5_is_pressed = (GetAsyncKeyState(VK_XBUTTON2) & 0x8000) != 0;
+			if (mb5_is_pressed && !mb5_was_pressed)
+			{
+				cache::entity_t target = get_player_under_cursor();
+				if (target.instance.address != 0)
+				{
+					target_player = target;
+					has_target = true;
+					last_ammo_val = -1;
+					is_clicking = false;
+					notifications::add("Shot Detect Target: " + target.display_name, notifications::NotificationType::Success, 3.0f);
+				}
+				else
+				{
+					// Fallback: check closest player within 120px
+					POINT cursor_pt;
+					if (GetCursorPos(&cursor_pt))
+					{
+						HWND roblox_wnd = game::wnd;
+						if (!roblox_wnd) roblox_wnd = FindWindowA(nullptr, "Roblox");
+						if (roblox_wnd && ScreenToClient(roblox_wnd, &cursor_pt))
+						{
+							math::vector2 dims = game::visengine.get_dimensions();
+							math::matrix4 view = game::visengine.get_viewmatrix();
+
+							std::shared_ptr<std::vector<cache::entity_t>> players_snapshot;
+							{
+								std::lock_guard<std::mutex> lock(cache::mtx);
+								players_snapshot = cache::cached_players;
+							}
+
+							if (players_snapshot)
+							{
+								cache::entity_t closest_player = {};
+								float min_dist = 120.0f;
+
+								for (const auto& player : *players_snapshot)
+								{
+									if (player.instance.address == 0 || player.instance.address == game::local_player.address)
+										continue;
+
+									auto hrp_it = player.parts.find("HumanoidRootPart");
+									if (hrp_it == player.parts.end() || hrp_it->second.address == 0)
+										continue;
+
+									rbx::part_t hrp_part = hrp_it->second;
+									math::vector3 world_pos = hrp_part.get_primitive().get_position();
+									math::vector2 screen_pos = {};
+									if (game::visengine.world_to_screen(world_pos, screen_pos, dims, view))
+									{
+										float dx = (float)cursor_pt.x - screen_pos.x;
+										float dy = (float)cursor_pt.y - screen_pos.y;
+										float dist = std::sqrt(dx*dx + dy*dy);
+										if (dist < min_dist)
+										{
+											min_dist = dist;
+											closest_player = player;
+										}
+									}
+								}
+
+								if (closest_player.instance.address != 0)
+								{
+									target_player = closest_player;
+									has_target = true;
+									last_ammo_val = -1;
+									is_clicking = false;
+									notifications::add("Shot Detect Target: " + closest_player.display_name, notifications::NotificationType::Success, 3.0f);
+								}
+								else
+								{
+									target_player = {};
+									has_target = false;
+									last_ammo_val = -1;
+									is_clicking = false;
+									notifications::add("Released Shot Detect Target", notifications::NotificationType::Info, 2.0f);
+								}
+							}
+						}
+					}
+				}
+			}
+			mb5_was_pressed = mb5_is_pressed;
+
+			// 2. Handle Autoclicker Triggered by Key C and target ammo decrease
+			if (settings::shot_detect::enabled && has_target)
+			{
+				bool c_is_pressed = (GetAsyncKeyState('C') & 0x8000) != 0;
+				if (c_is_pressed)
+				{
+					bool target_still_valid = false;
+					cache::entity_t current_target_state = {};
+					{
+						std::lock_guard<std::mutex> lock(cache::mtx);
+						if (cache::cached_players)
+						{
+							for (const auto& player : *cache::cached_players)
+							{
+								if (player.instance.address == target_player.instance.address)
+								{
+									current_target_state = player;
+									target_still_valid = true;
+									break;
+								}
+							}
+						}
+					}
+
+					if (target_still_valid)
+					{
+						target_player = current_target_state;
+
+						int current_ammo = get_target_ammo(current_target_state);
+						if (current_ammo != -1)
+						{
+							if (last_ammo_val != -1)
+							{
+								if (current_ammo < last_ammo_val)
+								{
+									is_clicking = true;
+								}
+							}
+							last_ammo_val = current_ammo;
+						}
+					}
+					else
+					{
+						has_target = false;
+						is_clicking = false;
+						last_ammo_val = -1;
+					}
+				}
+				else
+				{
+					is_clicking = false;
+					last_ammo_val = -1;
+				}
+
+				if (is_clicking)
+				{
+					if (settings::shot_detect::click_mode == 0) // Continuous
+					{
+						auto now = std::chrono::steady_clock::now();
+						auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_click_time).count();
+						int cps = settings::shot_detect::cps;
+						if (cps < 1) cps = 1;
+						if (duration >= (1000 / cps))
+						{
+							trigger_immediate_click();
+							last_click_time = now;
+						}
+					}
+					else // Single Click
+					{
+						trigger_immediate_click();
+						is_clicking = false;
+					}
+				}
+			}
+			else
+			{
+				is_clicking = false;
+				last_ammo_val = -1;
+			}
+		}
+	}
+}

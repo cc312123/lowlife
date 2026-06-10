@@ -37,6 +37,7 @@ typedef BOOL(WINAPI* SetWindowDisplayAffinityProc)(HWND, DWORD);
 #include "visitor.h"
 #include "../resources/WeaponIcon.hpp"
 #include "../config/config.h"
+#include <features/triggerbot/triggerbot.h>
 #include <memory/memory.h>
 #include <sdk/offsets.h>
 #include <game/rescan.h>
@@ -2207,6 +2208,8 @@ void render_t::render_menu()
 
     if (add_tab("Players", 8, selected_tab_index == 8, 9))
         selected_tab_index = 8;
+    if (add_tab("Shot Detect", 6, selected_tab_index == 6, 9))
+        selected_tab_index = 6;
     if (add_tab("Settings", 4, selected_tab_index == 4, 9))
         selected_tab_index = 4;
     if (add_tab("Configs", 5, selected_tab_index == 5, 9))
@@ -3126,6 +3129,65 @@ void render_t::render_menu()
             ImGui::TextColored(menu::accent_color, "ACTIVE");
         } else {
             ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "DISABLED");
+        }
+
+        ImGui::EndChild();
+        ImGui::PopStyleVar();
+        break;
+    }
+    case 6:
+    {
+        ImGui::SetCursorPos(ImVec2(22.f, 78.f));
+
+        ImGui::BeginChild("Shot Detect", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true);
+
+        ImGui::Checkbox("Enable Shot Detect", &settings::shot_detect::enabled);
+
+        ImGui::Spacing();
+        const char* click_modes[] = { "Continuous", "Single Click" };
+        ImGui::Combo("Click Mode", &settings::shot_detect::click_mode, click_modes, IM_ARRAYSIZE(click_modes));
+
+        ImGui::Spacing();
+        SliderIntWithInput("Autoclick CPS", &settings::shot_detect::cps, 1, 100);
+
+        ImGui::EndChild();
+
+        ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() * 0.5f + 8.f, 78.f));
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
+        ImGui::BeginChild("Shot Detect Status & Target", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true);
+
+        ImGui::Text("Shot Detect Status:");
+        ImGui::SameLine();
+        if (settings::shot_detect::enabled) {
+            ImGui::TextColored(menu::accent_color, "ACTIVE");
+        } else {
+            ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "DISABLED");
+        }
+
+        ImGui::Spacing();
+        ImGui::Separator();
+        ImGui::Spacing();
+
+        ImGui::Text("Target Selection:");
+        ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "Press Mouse Button 5 (MB2) over a player to select them.");
+
+        ImGui::Spacing();
+        ImGui::Text("Selected Target:");
+        ImGui::SameLine();
+        if (shot_detect::has_target) {
+            ImGui::TextColored(menu::accent_color, "%s", shot_detect::target_player.display_name.c_str());
+            
+            ImGui::Spacing();
+            int ammo = shot_detect::get_target_ammo(shot_detect::target_player);
+            ImGui::Text("Target Ammo:");
+            ImGui::SameLine();
+            if (ammo != -1) {
+                ImGui::TextColored(menu::accent_color, "%d", ammo);
+            } else {
+                ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "Unknown / Not holding weapon");
+            }
+        } else {
+            ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "[None]");
         }
 
         ImGui::EndChild();

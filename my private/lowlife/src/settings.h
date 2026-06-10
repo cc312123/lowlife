@@ -214,6 +214,13 @@ namespace settings
 		inline bool team_check{ false };
 	}
 
+	namespace shot_detect
+	{
+		inline bool enabled{ false };
+		inline int click_mode{ 0 }; // 0 = Continuous, 1 = Single Click
+		inline int cps{ 20 };
+	}
+
 	namespace player_relations
 	{
 		

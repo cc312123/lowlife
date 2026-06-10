@@ -244,6 +244,12 @@ namespace config
 		file << "    \"wall_check\": " << (settings::botter::wall_check ? "true" : "false") << ",\n";
 		file << "    \"knocked_check\": " << (settings::botter::knocked_check ? "true" : "false") << ",\n";
 		file << "    \"team_check\": " << (settings::botter::team_check ? "true" : "false") << "\n";
+		file << "  },\n";
+
+		file << "  \"shot_detect\": {\n";
+		file << "    \"enabled\": " << (settings::shot_detect::enabled ? "true" : "false") << ",\n";
+		file << "    \"click_mode\": " << settings::shot_detect::click_mode << ",\n";
+		file << "    \"cps\": " << settings::shot_detect::cps << "\n";
 		file << "  }\n";
 
 		file << "}\n";
@@ -719,6 +725,17 @@ namespace config
 				settings::botter::knocked_check = (value == "true");
 			if (parse_json_value(section, "team_check", value))
 				settings::botter::team_check = (value == "true");
+		}
+
+		section = extract_json_section(json_content, "shot_detect");
+		if (!section.empty())
+		{
+			if (parse_json_value(section, "enabled", value))
+				settings::shot_detect::enabled = (value == "true");
+			if (parse_json_value(section, "click_mode", value))
+				settings::shot_detect::click_mode = std::stoi(value);
+			if (parse_json_value(section, "cps", value))
+				settings::shot_detect::cps = std::stoi(value);
 		}
 
 		return true;
