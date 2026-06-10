@@ -143,7 +143,7 @@ namespace shot_detection
 			input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
 			SendInput(1, &input, sizeof(INPUT));
 			
-			Sleep(1); 
+			Sleep(15); 
 			
 			input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
 			SendInput(1, &input, sizeof(INPUT));
@@ -269,26 +269,39 @@ namespace shot_detection
 						if (get_local_tool_info(local_eq_name, local_eq_ammo, local_eq_tool)) {
 							bool is_db = (str_contains_case_insensitive(local_eq_name, "double") || str_contains_case_insensitive(local_eq_name, "db") || str_contains_case_insensitive(local_eq_name, "barrel"));
 							if (is_db) {
-								
-								if (settings::shot_detection::switch_delay > 0) {
-									Sleep(settings::shot_detection::switch_delay);
+								if (!combo_running.exchange(true)) {
+									std::thread([]() {
+										if (settings::shot_detection::switch_delay > 0) {
+											Sleep(settings::shot_detection::switch_delay);
+										}
+
+										WORD rev_key = settings::shot_detection::revolver_slot_key;
+										WORD scan = static_cast<WORD>(MapVirtualKeyA(rev_key, MAPVK_VK_TO_VSC));
+										
+										INPUT inputs[2] = {};
+										inputs[0].type = INPUT_KEYBOARD;
+										inputs[0].ki.wScan = scan;
+										inputs[0].ki.dwFlags = KEYEVENTF_SCANCODE;
+
+										inputs[1].type = INPUT_KEYBOARD;
+										inputs[1].ki.wScan = scan;
+										inputs[1].ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
+
+										SendInput(2, inputs, sizeof(INPUT));
+										Sleep(200);
+
+										// Auto-shoot the revolver while left mouse button is held down
+										while (GetAsyncKeyState(VK_LBUTTON) & 0x8000) {
+											if (!check::textchatopen && is_roblox_active()) {
+												trigger_single_click();
+											}
+											int sleep_time = 1000 / settings::shot_detection::combo_cps;
+											if (sleep_time < 1) sleep_time = 1;
+											Sleep(sleep_time);
+										}
+										combo_running = false;
+									}).detach();
 								}
-
-								
-								WORD rev_key = settings::shot_detection::revolver_slot_key;
-								WORD scan = static_cast<WORD>(MapVirtualKeyA(rev_key, MAPVK_VK_TO_VSC));
-								
-								INPUT inputs[2] = {};
-								inputs[0].type = INPUT_KEYBOARD;
-								inputs[0].ki.wScan = scan;
-								inputs[0].ki.dwFlags = KEYEVENTF_SCANCODE;
-
-								inputs[1].type = INPUT_KEYBOARD;
-								inputs[1].ki.wScan = scan;
-								inputs[1].ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
-
-								SendInput(2, inputs, sizeof(INPUT));
-								Sleep(200); 
 							}
 						}
 					}
@@ -538,6 +551,8 @@ namespace shot_detection
 													click_down.type = INPUT_MOUSE;
 													click_down.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
 													SendInput(1, &click_down, sizeof(INPUT));
+
+													Sleep(15); 
 
 													INPUT click_up = {};
 													click_up.type = INPUT_MOUSE;
@@ -1165,7 +1180,7 @@ namespace botter
 				}
 
 				// -- TARGET HRP PROJECTION BOX CHECK --
-				bool clicked_this_tick = false;
+				clicked_this_tick = false;
 				auto hrp_it = player.parts.find("HumanoidRootPart");
 				if (hrp_it != player.parts.end())
 				{

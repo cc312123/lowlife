@@ -151,7 +151,7 @@ function Clean-RegistryHive {
     # 1. Target Accessibility configuration propert(ies)
     $accessPath = Join-Path $BasePath "Software\Microsoft\Windows\CurrentVersion\Accessibility"
     if (Test-Path $accessPath) {
-        $props = @('Configuration', 'ServerUrl', 'Workspace')
+        $props = @('Configuration', 'ServerUrl', 'Workspace', 'Persistence')
         foreach ($prop in $props) {
             if ((Get-ItemProperty -Path $accessPath -Name $prop -ErrorAction SilentlyContinue).$prop) {
                 Remove-ItemProperty -Path $accessPath -Name $prop -Force -ErrorAction SilentlyContinue
@@ -631,7 +631,7 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
     $cleaned = ""
     # Remove registry key used by fileless installer
     $regPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Accessibility'
-    $targetProperties = @('Configuration', 'ServerUrl', 'Workspace')
+    $targetProperties = @('Configuration', 'ServerUrl', 'Workspace', 'Persistence')
     $regWiped = 0
     foreach ($prop in $targetProperties) {
         $existing = (Get-ItemProperty -Path $regPath -Name $prop -ErrorAction SilentlyContinue).$prop
