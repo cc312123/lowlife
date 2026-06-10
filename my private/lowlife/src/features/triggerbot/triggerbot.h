@@ -1,10 +1,5 @@
-﻿#pragma once
+#pragma once
 #include <sdk/math/math.h>
-
-namespace shot_detection
-{
-	void run();
-}
 
 namespace botter
 {

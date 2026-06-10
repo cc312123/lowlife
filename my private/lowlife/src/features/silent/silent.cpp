@@ -15,7 +15,7 @@
 #include <game/game.h>
 #include <settings.h>
 #include <check/typing_check.h>
-#include "../shot_detection/shot_detection.h"
+#include "../triggerbot/triggerbot.h"
 #include "silent.h"
 
 std::uint64_t c_silent_helper::cached_input_object = 0;

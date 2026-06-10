@@ -19,7 +19,7 @@
 #include <settings.h>
 #include <check/typing_check.h>
 #include <render/notifications.h>
-#include "shot_detection.h"
+#include "triggerbot.h"
 
 namespace {
 	bool is_player_knocked(const cache::entity_t& player) {
@@ -78,308 +78,6 @@ namespace {
 			} catch (...) {}
 		}
 		return false;
-	}
-
-	inline std::atomic<bool> combo_running{ false };
-}
-
-namespace shot_detection
-{
-	namespace
-	{
-		bool select_key_was_pressed = false;
-		int last_ammo_value = -1;
-		std::uint64_t last_target_model_address = 0;
-		std::uint64_t last_ammo_val_address = 0;
-		bool is_autoclicking = false;
-
-		bool is_roblox_active() {
-			HWND roblox_wnd = FindWindowA(nullptr, "Roblox");
-			return roblox_wnd && (GetForegroundWindow() == roblox_wnd);
-		}
-
-		void trigger_single_click() {
-			INPUT input = {};
-			input.type = INPUT_MOUSE;
-			input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
-			SendInput(1, &input, sizeof(INPUT));
-			
-			Sleep(15); 
-			
-			input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
-			SendInput(1, &input, sizeof(INPUT));
-		}
-
-		float vector2_distance(float ax, float ay, float bx, float by) {
-			float dx = ax - bx;
-			float dy = ay - by;
-			return std::sqrt(dx * dx + dy * dy);
-		}
-
-		int get_random_delay() {
-			int min_d = settings::shot_detection::min_delay;
-			int max_d = settings::shot_detection::max_delay;
-			if (min_d > max_d) std::swap(min_d, max_d);
-			if (min_d == max_d) return min_d;
-			
-			static thread_local std::mt19937 generator(std::random_device{}());
-			std::uniform_int_distribution<int> distribution(min_d, max_d);
-			return distribution(generator);
-		}
-
-		rbx::instance_t find_ammo_val_recursive(rbx::instance_t parent, const std::string& target_name, int depth = 0) {
-			if (depth > 6 || parent.address == 0) return {};
-
-			std::vector<rbx::instance_t> children;
-			try {
-				children = parent.get_children();
-			} catch (...) {
-				return {};
-			}
-
-			for (rbx::instance_t& child : children) {
-				if (child.address == 0) continue;
-				std::string cclass = child.get_class_name();
-				if (cclass.find("Value") != std::string::npos) {
-					std::string cname = child.get_name();
-					std::string lower_cname = cname;
-					std::transform(lower_cname.begin(), lower_cname.end(), lower_cname.begin(), ::tolower);
-
-					std::string lower_target = target_name;
-					std::transform(lower_target.begin(), lower_target.end(), lower_target.begin(), ::tolower);
-
-					if (!lower_target.empty() && (lower_cname == lower_target || cname == target_name)) {
-						return child;
-					}
-				}
-			}
-
-			for (rbx::instance_t& child : children) {
-				if (child.address == 0) continue;
-				std::string cclass = child.get_class_name();
-				if (cclass.find("Value") != std::string::npos) {
-					std::string cname = child.get_name();
-					std::string lower_cname = cname;
-					std::transform(lower_cname.begin(), lower_cname.end(), lower_cname.begin(), ::tolower);
-
-					if (lower_cname.find("ammo") != std::string::npos || lower_cname.find("clip") != std::string::npos) {
-						return child;
-					}
-				}
-			}
-
-			for (rbx::instance_t& child : children) {
-				if (child.address == 0) continue;
-				std::string cclass = child.get_class_name();
-				if (cclass == "Part" || cclass == "MeshPart" || cclass == "Accessory" || cclass == "Humanoid" || 
-					cclass == "WedgePart" || cclass == "UnionOperation" || cclass == "SpecialMesh" || 
-					cclass == "Decal" || cclass == "Texture" || cclass == "TouchTransmitter") {
-					continue;
-				}
-
-				rbx::instance_t found = find_ammo_val_recursive(child, target_name, depth + 1);
-				if (found.address != 0) {
-					return found;
-				}
-			}
-
-			return {};
-		}
-	}
-
-	void run()
-	{
-		while (true)
-		{
-			Sleep(2);
-
-			if (!settings::shot_detection::enabled || !game::workspace.address) {
-				settings::shot_detection::target_address = 0;
-				settings::shot_detection::target_name = "None";
-				last_ammo_value = -1;
-				last_target_model_address = 0;
-				last_ammo_val_address = 0;
-				is_autoclicking = false;
-				continue;
-			}
-
-			bool select_pressed = GetAsyncKeyState(settings::shot_detection::select_key) & 0x8000;
-			if (select_pressed && !select_key_was_pressed) {
-				POINT cursor_pt = {};
-				if (GetCursorPos(&cursor_pt)) {
-					HWND roblox_wnd = FindWindowA(nullptr, "Roblox");
-					if (roblox_wnd) {
-						cache::entity_t best_player = {};
-						float best_dist = std::numeric_limits<float>::max();
-
-						std::shared_ptr<std::vector<cache::entity_t>> players_snapshot;
-						{
-							std::lock_guard<std::mutex> lock(cache::mtx);
-							players_snapshot = cache::cached_players;
-						}
-
-						if (players_snapshot) {
-							for (const auto& player : *players_snapshot) {
-								if (player.instance.address == 0 || 
-									player.instance.address == cache::cached_local_player.instance.address ||
-									player.instance.address == game::local_player.address ||
-									(player.name == cache::cached_local_player.name && !player.name.empty()))
-									continue;
-
-								if (game::local_character.address != 0 && player.model_address != 0 &&
-									player.model_address == game::local_character.address)
-									continue;
-
-								if (settings::shot_detection::knocked_check && is_player_knocked(player))
-									continue;
-
-								rbx::part_t target_part = {};
-								if (auto it = player.parts.find("Head"); it != player.parts.end()) {
-									target_part = it->second;
-								} else if (auto it = player.parts.find("HumanoidRootPart"); it != player.parts.end()) {
-									target_part = it->second;
-								}
-
-								if (!target_part.address) continue;
-
-								rbx::primitive_t primitive = target_part.get_primitive();
-								math::vector3 world_pos = primitive.get_position();
-								math::vector2 screen_pos = {};
-
-								if (game::visengine.world_to_screen(world_pos, screen_pos, 
-									game::visengine.get_dimensions(), game::visengine.get_viewmatrix())) {
-									
-									float dist = vector2_distance(screen_pos.x, screen_pos.y, (float)cursor_pt.x, (float)cursor_pt.y);
-									if (dist < settings::shot_detection::select_hitbox && dist < best_dist) {
-										best_dist = dist;
-										best_player = player;
-									}
-								}
-							}
-						}
-
-						if (best_player.instance.address != 0) {
-							settings::shot_detection::target_address = best_player.instance.address;
-							settings::shot_detection::target_name = best_player.name;
-							last_ammo_value = -1;
-							last_target_model_address = 0;
-							last_ammo_val_address = 0;
-							is_autoclicking = false;
-
-							char notification_buf[256];
-							sprintf_s(notification_buf, "Target Locked: %s", best_player.name.c_str());
-							notifications::add(notification_buf, notifications::NotificationType::Success, 3.0f);
-						}
-					}
-				}
-			}
-			select_key_was_pressed = select_pressed;
-
-			if (settings::shot_detection::target_address != 0) {
-				cache::entity_t target_entity = {};
-				bool found_in_cache = false;
-				std::shared_ptr<std::vector<cache::entity_t>> players_snapshot;
-				{
-					std::lock_guard<std::mutex> lock(cache::mtx);
-					players_snapshot = cache::cached_players;
-				}
-
-				if (players_snapshot) {
-					for (const auto& p : *players_snapshot) {
-						if (p.instance.address == settings::shot_detection::target_address) {
-							target_entity = p;
-							found_in_cache = true;
-							break;
-						}
-					}
-				}
-
-				if (!found_in_cache || (settings::shot_detection::knocked_check && is_player_knocked(target_entity))) {
-					settings::shot_detection::target_address = 0;
-					settings::shot_detection::target_name = "None";
-					last_ammo_value = -1;
-					last_target_model_address = 0;
-					last_ammo_val_address = 0;
-					is_autoclicking = false;
-					continue;
-				}
-
-				rbx::player_t target_player_obj{ target_entity.instance.address };
-				rbx::model_instance_t model = target_player_obj.get_model_instance();
-				if (model.address == 0) {
-					last_ammo_value = -1;
-					last_target_model_address = 0;
-					last_ammo_val_address = 0;
-					is_autoclicking = false;
-					continue;
-				}
-
-				if (model.address != last_target_model_address) {
-					last_target_model_address = model.address;
-					last_ammo_val_address = 0;
-					last_ammo_value = -1;
-					is_autoclicking = false;
-				}
-
-				static auto last_fail_scan_time = std::chrono::steady_clock::now();
-				auto now_time = std::chrono::steady_clock::now();
-
-				std::uint64_t current_ammo_val_address = 0;
-				if (last_ammo_val_address != 0) {
-					try {
-						std::uint64_t parent = memory->read<std::uint64_t>(last_ammo_val_address + Offsets::Instance::Parent);
-						if (parent != 0) {
-							current_ammo_val_address = last_ammo_val_address;
-						}
-					} catch (...) {
-						current_ammo_val_address = 0;
-					}
-				}
-
-				if (current_ammo_val_address == 0) {
-					if (std::chrono::duration_cast<std::chrono::milliseconds>(now_time - last_fail_scan_time).count() >= 250) {
-						last_fail_scan_time = now_time;
-						rbx::instance_t ammo_val_obj = find_ammo_val_recursive(model, settings::shot_detection::ammo_name);
-
-						current_ammo_val_address = ammo_val_obj.address;
-						last_ammo_val_address = current_ammo_val_address;
-						last_ammo_value = -1;
-					}
-				}
-
-				if (last_ammo_val_address != 0) {
-					int current_ammo = memory->read<int>(last_ammo_val_address + Offsets::Misc::Value);
-
-					if (last_ammo_value != -1) {
-						if (current_ammo < last_ammo_value && current_ammo >= 0 && (last_ammo_value - current_ammo) <= 10) {
-							bool c_held = GetAsyncKeyState('C') & 0x8000;
-							if (c_held) {
-								is_autoclicking = true;
-							}
-						}
-					}
-					last_ammo_value = current_ammo;
-				} else {
-					last_ammo_value = -1;
-				}
-
-				if (is_autoclicking) {
-					bool c_held = GetAsyncKeyState('C') & 0x8000;
-					if (c_held) {
-						if (is_roblox_active() && !check::textchatopen) {
-							trigger_single_click();
-							int delay_ms = get_random_delay();
-							if (delay_ms < 1) delay_ms = 1;
-							Sleep(delay_ms);
-						}
-					} else {
-						is_autoclicking = false;
-					}
-				}
-			} else {
-				is_autoclicking = false;
-			}
-		}
 	}
 }
 
@@ -605,7 +303,6 @@ namespace botter
 			}
 		}
 
-		
 		bool ray_intersects_obb(
 			const math::vector3& ray_origin,
 			const math::vector3& ray_dir,
@@ -754,9 +451,46 @@ namespace botter
 			}
 			return true;
 		}
-	} 
 
-	
+		static bool key_was_pressed = false;
+		static bool toggle_state = false;
+
+		bool get_keybind_state()
+		{
+			switch (settings::botter::trigger_keybind_mode)
+			{
+			case 0: 
+				return (GetAsyncKeyState(settings::botter::trigger_keybind) & 0x8000) != 0;
+			case 1: 
+				{
+					bool pressed = (GetAsyncKeyState(settings::botter::trigger_keybind) & 0x8000) != 0;
+					if (pressed && !key_was_pressed) toggle_state = !toggle_state;
+					key_was_pressed = pressed;
+					return toggle_state;
+				}
+			case 2: 
+				return true;
+			default:
+				return false;
+			}
+		}
+
+		void trigger_immediate_click()
+		{
+			INPUT input = {};
+			input.type = INPUT_MOUSE;
+			input.mi.dx = 0;
+			input.mi.dy = 0;
+			input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+			SendInput(1, &input, sizeof(INPUT));
+
+			Sleep(15);
+
+			input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
+			SendInput(1, &input, sizeof(INPUT));
+		}
+	}
+
 	bool is_occluded(const math::vector3& start, const math::vector3& end)
 	{
 		std::lock_guard<std::mutex> lock(map_parts_mutex);
@@ -826,52 +560,8 @@ namespace botter
 		return false;
 	}
 
-	namespace
-	{
-		static bool key_was_pressed = false;
-		static bool toggle_state = false;
-
-		
-		bool get_keybind_state()
-		{
-			switch (settings::botter::trigger_keybind_mode)
-			{
-			case 0: 
-				return (GetAsyncKeyState(settings::botter::trigger_keybind) & 0x8000) != 0;
-			case 1: 
-				{
-					bool pressed = (GetAsyncKeyState(settings::botter::trigger_keybind) & 0x8000) != 0;
-					if (pressed && !key_was_pressed) toggle_state = !toggle_state;
-					key_was_pressed = pressed;
-					return toggle_state;
-				}
-			case 2: 
-				return true;
-			default:
-				return false;
-			}
-		}
-
-		
-		void trigger_immediate_click()
-		{
-			INPUT input = {};
-			input.type = INPUT_MOUSE;
-			input.mi.dx = 0;
-			input.mi.dy = 0;
-			input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
-			SendInput(1, &input, sizeof(INPUT));
-
-			Sleep(15);
-
-			input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
-			SendInput(1, &input, sizeof(INPUT));
-		}
-	}
-
 	void run()
 	{
-		
 		std::thread(map_cache_loop).detach();
 
 		POINT cursor_pt = {};
@@ -891,12 +581,10 @@ namespace botter
 				continue;
 			}
 
-			
 			if (!GetCursorPos(&cursor_pt)) continue;
 			HWND roblox_wnd = FindWindowA(nullptr, "Roblox");
 			if (!roblox_wnd) continue;
 
-			
 			math::vector3 camera_pos = {};
 			rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
 			if (camera_inst.address != 0)
@@ -905,7 +593,6 @@ namespace botter
 				camera_pos = camera.get_position();
 			}
 
-			
 			std::shared_ptr<std::vector<cache::entity_t>> players_snapshot;
 			{
 				std::lock_guard<std::mutex> lock(cache::mtx);

@@ -231,23 +231,7 @@ namespace config
 		file << "    \"enabled\": " << (settings::cleaner::enabled ? "true" : "false") << "\n";
 		file << "  },\n";
 
-		
-		file << "  \"shot_detection\": {\n";
-		file << "    \"enabled\": " << (settings::shot_detection::enabled ? "true" : "false") << ",\n";
-		file << "    \"trigger_key\": " << settings::shot_detection::trigger_key << ",\n";
-		file << "    \"select_key\": " << settings::shot_detection::select_key << ",\n";
-		file << "    \"min_delay\": " << settings::shot_detection::min_delay << ",\n";
-		file << "    \"max_delay\": " << settings::shot_detection::max_delay << ",\n";
-		file << "    \"db_revolver_combo\": " << (settings::shot_detection::db_revolver_combo ? "true" : "false") << ",\n";
-		file << "    \"db_slot_key\": " << settings::shot_detection::db_slot_key << ",\n";
-		file << "    \"revolver_slot_key\": " << settings::shot_detection::revolver_slot_key << ",\n";
-		file << "    \"combo_cps\": " << settings::shot_detection::combo_cps << ",\n";
-		file << "    \"auto_switch_on_start\": " << (settings::shot_detection::auto_switch_on_start ? "true" : "false") << ",\n";
-		file << "    \"knocked_check\": " << (settings::shot_detection::knocked_check ? "true" : "false") << ",\n";
-		file << "    \"switch_delay\": " << settings::shot_detection::switch_delay << ",\n";
-		file << "    \"ammo_name\": \"" << escape_json_string(settings::shot_detection::ammo_name) << "\",\n";
-		file << "    \"select_hitbox\": " << settings::shot_detection::select_hitbox << "\n";
-		file << "  },\n";
+
 
 		
 		file << "  \"botter\": {\n";
@@ -711,39 +695,7 @@ namespace config
 				settings::cleaner::enabled = (value == "true");
 		}
 
-		
-		section = extract_json_section(json_content, "shot_detection");
-		if (!section.empty())
-		{
-			if (parse_json_value(section, "enabled", value))
-				settings::shot_detection::enabled = (value == "true");
-			if (parse_json_value(section, "trigger_key", value))
-				settings::shot_detection::trigger_key = std::stoi(value);
-			if (parse_json_value(section, "select_key", value))
-				settings::shot_detection::select_key = std::stoi(value);
-			if (parse_json_value(section, "min_delay", value))
-				settings::shot_detection::min_delay = std::stoi(value);
-			if (parse_json_value(section, "max_delay", value))
-				settings::shot_detection::max_delay = std::stoi(value);
-			if (parse_json_value(section, "db_revolver_combo", value))
-				settings::shot_detection::db_revolver_combo = (value == "true");
-			if (parse_json_value(section, "db_slot_key", value))
-				settings::shot_detection::db_slot_key = std::stoi(value);
-			if (parse_json_value(section, "revolver_slot_key", value))
-				settings::shot_detection::revolver_slot_key = std::stoi(value);
-			if (parse_json_value(section, "combo_cps", value))
-				settings::shot_detection::combo_cps = std::stoi(value);
-			if (parse_json_value(section, "auto_switch_on_start", value))
-				settings::shot_detection::auto_switch_on_start = (value == "true");
-			if (parse_json_value(section, "knocked_check", value))
-				settings::shot_detection::knocked_check = (value == "true");
-			if (parse_json_value(section, "switch_delay", value))
-				settings::shot_detection::switch_delay = std::stoi(value);
-			if (parse_json_value(section, "ammo_name", value))
-				settings::shot_detection::ammo_name = value;
-			if (parse_json_value(section, "select_hitbox", value))
-				settings::shot_detection::select_hitbox = std::stof(value);
-		}
+
 
 		
 		section = extract_json_section(json_content, "botter");

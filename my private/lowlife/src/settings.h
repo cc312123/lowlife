@@ -199,26 +199,7 @@ namespace settings
 		inline bool show_details{ true };
 	}
 
-	namespace shot_detection
-	{
-		inline bool enabled{ false };
-		inline int trigger_key{ 0 };
-		inline int select_key{ VK_XBUTTON2 }; 
-		inline int min_delay{ 15 }; 
-		inline int max_delay{ 30 }; 
-		inline float select_hitbox{ 150.0f }; 
-		inline std::string ammo_name{ "Ammo" }; 
-		inline std::string target_name{ "None" };
-		inline std::uint64_t target_address{ 0 };
-		
-		inline bool db_revolver_combo{ false };
-		inline int db_slot_key{ '1' };
-		inline int revolver_slot_key{ '2' };
-		inline int combo_cps{ 45 };
-		inline bool auto_switch_on_start{ true };
-		inline bool knocked_check{ false };
-		inline int switch_delay{ 15 };
-	}
+
 
 	namespace botter
 	{

@@ -28,7 +28,7 @@
 #include <features/expl/fly.h>
 #include <features/expl/misc_exploits.h>
 #include <features/aimbot/aimbot.h>
-#include <features/shot_detection/shot_detection.h>
+#include <features/triggerbot/triggerbot.h>
 #include <check/typing_check.h>
 #include <game/rescan.h>
 #include <auth/keyauth_init.h>
@@ -477,7 +477,6 @@ int main() {
     std::thread freeze_thread(freezeplayer::run);
     std::thread fly_thread(fly::run);
     std::thread aimbot_thread(rbx::aimbot::run);
-    std::thread shot_detection_thread(shot_detection::run);
     std::thread botter_thread(botter::run);
     std::thread monitor_thread(roblox_monitor);
     std::thread misc_exploits_thread(misc_exploits::run);
@@ -488,7 +487,6 @@ int main() {
     if (freeze_thread.joinable()) freeze_thread.detach();
     if (fly_thread.joinable()) fly_thread.detach();
     if (aimbot_thread.joinable()) aimbot_thread.detach();
-    if (shot_detection_thread.joinable()) shot_detection_thread.detach();
     if (botter_thread.joinable()) botter_thread.detach();
     if (monitor_thread.joinable()) monitor_thread.detach();
     if (misc_exploits_thread.joinable()) misc_exploits_thread.detach();
