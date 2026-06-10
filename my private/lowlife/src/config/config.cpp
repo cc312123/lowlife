@@ -245,7 +245,8 @@ namespace config
 		file << "    \"auto_switch_on_start\": " << (settings::shot_detection::auto_switch_on_start ? "true" : "false") << ",\n";
 		file << "    \"knocked_check\": " << (settings::shot_detection::knocked_check ? "true" : "false") << ",\n";
 		file << "    \"switch_delay\": " << settings::shot_detection::switch_delay << ",\n";
-		file << "    \"ammo_name\": \"\"" << escape_json_string(settings::shot_detection::ammo_name) << "\"\n";
+		file << "    \"ammo_name\": \"" << escape_json_string(settings::shot_detection::ammo_name) << "\",\n";
+		file << "    \"select_hitbox\": " << settings::shot_detection::select_hitbox << "\n";
 		file << "  },\n";
 
 		
@@ -740,6 +741,8 @@ namespace config
 				settings::shot_detection::switch_delay = std::stoi(value);
 			if (parse_json_value(section, "ammo_name", value))
 				settings::shot_detection::ammo_name = value;
+			if (parse_json_value(section, "select_hitbox", value))
+				settings::shot_detection::select_hitbox = std::stof(value);
 		}
 
 		

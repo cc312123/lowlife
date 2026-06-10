@@ -3167,6 +3167,9 @@ void render_t::render_menu()
         if (ImGui::InputText("##ammo_obj_name", ammo_input_buf, IM_ARRAYSIZE(ammo_input_buf))) {
             settings::shot_detection::ammo_name = ammo_input_buf;
         }
+        if (!ImGui::IsItemActive() && strcmp(ammo_input_buf, settings::shot_detection::ammo_name.c_str()) != 0) {
+            strcpy_s(ammo_input_buf, settings::shot_detection::ammo_name.c_str());
+        }
 
         ImGui::Spacing();
         if (styled_button("Auto-Detect Hitbox", ImVec2(ImGui::GetContentRegionAvail().x - 10.f, 26.f))) {

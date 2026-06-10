@@ -91,6 +91,66 @@ namespace shot_detection
 		int last_ammo_value = -1;
 		std::uint64_t last_tool_address = 0;
 		std::uint64_t last_ammo_val_address = 0;
+		std::uint64_t last_target_model_address = 0;
+
+		rbx::instance_t find_ammo_val_recursive(rbx::instance_t parent, const std::string& target_name, int depth = 0) {
+			if (depth > 6 || parent.address == 0) return {};
+
+			std::vector<rbx::instance_t> children;
+			try {
+				children = parent.get_children();
+			} catch (...) {
+				return {};
+			}
+
+			for (rbx::instance_t& child : children) {
+				if (child.address == 0) continue;
+				std::string cclass = child.get_class_name();
+				if (cclass.find("Value") != std::string::npos) {
+					std::string cname = child.get_name();
+					std::string lower_cname = cname;
+					std::transform(lower_cname.begin(), lower_cname.end(), lower_cname.begin(), ::tolower);
+
+					std::string lower_target = target_name;
+					std::transform(lower_target.begin(), lower_target.end(), lower_target.begin(), ::tolower);
+
+					if (!lower_target.empty() && (lower_cname == lower_target || cname == target_name)) {
+						return child;
+					}
+				}
+			}
+
+			for (rbx::instance_t& child : children) {
+				if (child.address == 0) continue;
+				std::string cclass = child.get_class_name();
+				if (cclass.find("Value") != std::string::npos) {
+					std::string cname = child.get_name();
+					std::string lower_cname = cname;
+					std::transform(lower_cname.begin(), lower_cname.end(), lower_cname.begin(), ::tolower);
+
+					if (lower_cname.find("ammo") != std::string::npos || lower_cname.find("clip") != std::string::npos) {
+						return child;
+					}
+				}
+			}
+
+			for (rbx::instance_t& child : children) {
+				if (child.address == 0) continue;
+				std::string cclass = child.get_class_name();
+				if (cclass == "Part" || cclass == "MeshPart" || cclass == "Accessory" || cclass == "Humanoid" || 
+					cclass == "WedgePart" || cclass == "UnionOperation" || cclass == "SpecialMesh" || 
+					cclass == "Decal" || cclass == "Texture" || cclass == "TouchTransmitter") {
+					continue;
+				}
+
+				rbx::instance_t found = find_ammo_val_recursive(child, target_name, depth + 1);
+				if (found.address != 0) {
+					return found;
+				}
+			}
+
+			return {};
+		}
 
 		enum ComboState {
 			COMBO_IDLE,
@@ -400,7 +460,7 @@ namespace shot_detection
 			}
 			select_key_was_pressed = select_pressed;
 
-			
+						
 			if (settings::shot_detection::target_address != 0) {
 				
 				cache::entity_t target_entity = {};
@@ -428,6 +488,7 @@ namespace shot_detection
 					last_ammo_value = -1;
 					last_tool_address = 0;
 					last_ammo_val_address = 0;
+					last_target_model_address = 0;
 					continue;
 				}
 
@@ -438,7 +499,14 @@ namespace shot_detection
 					last_ammo_value = -1;
 					last_tool_address = 0;
 					last_ammo_val_address = 0;
+					last_target_model_address = 0;
 					continue;
+				}
+
+				if (model.address != last_target_model_address) {
+					last_target_model_address = model.address;
+					last_ammo_val_address = 0;
+					last_ammo_value = -1;
 				}
 
 				static auto last_fail_scan_time = std::chrono::steady_clock::now();
@@ -448,7 +516,7 @@ namespace shot_detection
 				if (last_ammo_val_address != 0) {
 					try {
 						std::uint64_t parent = memory->read<std::uint64_t>(last_ammo_val_address + Offsets::Instance::Parent);
-						if (parent == model.address) {
+						if (parent != 0) {
 							current_ammo_val_address = last_ammo_val_address;
 						}
 					} catch (...) {
@@ -459,37 +527,7 @@ namespace shot_detection
 				if (current_ammo_val_address == 0) {
 					if (std::chrono::duration_cast<std::chrono::milliseconds>(now_time - last_fail_scan_time).count() >= 250) {
 						last_fail_scan_time = now_time;
-						rbx::instance_t ammo_val_obj = {};
-						for (rbx::instance_t& child : model.get_children<rbx::instance_t>()) {
-							std::string cname = child.get_name();
-							std::string cclass = child.get_class_name();
-
-							if (cclass.find("Value") != std::string::npos) {
-								std::string target_ammo_name = settings::shot_detection::ammo_name;
-								std::string lower_cname = cname;
-								std::string lower_target_ammo = target_ammo_name;
-								std::transform(lower_cname.begin(), lower_cname.end(), lower_cname.begin(), ::tolower);
-								std::transform(lower_target_ammo.begin(), lower_target_ammo.end(), lower_target_ammo.begin(), ::tolower);
-
-								if (lower_cname == lower_target_ammo || cname == target_ammo_name) {
-									ammo_val_obj = child;
-									break;
-								}
-							}
-						}
-
-						if (ammo_val_obj.address == 0) {
-							for (rbx::instance_t& child : model.get_children<rbx::instance_t>()) {
-								std::string cname = child.get_name();
-								std::string cclass = child.get_class_name();
-								std::transform(cname.begin(), cname.end(), cname.begin(), ::tolower);
-								if (cclass.find("Value") != std::string::npos && 
-									(cname.find("ammo") != std::string::npos || cname.find("clip") != std::string::npos)) {
-									ammo_val_obj = child;
-									break;
-								}
-							}
-						}
+						rbx::instance_t ammo_val_obj = find_ammo_val_recursive(model, settings::shot_detection::ammo_name);
 
 						current_ammo_val_address = ammo_val_obj.address;
 						last_ammo_val_address = current_ammo_val_address;
