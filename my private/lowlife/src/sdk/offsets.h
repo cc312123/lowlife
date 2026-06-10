@@ -1,13 +1,13 @@
-﻿#pragma once
+#pragma once
 /* =============================================================
 /*                       RbxDumperV2                            
 /*               https://imtheo.lol/Offsets                     
 /* -------------------------------------------------------------
 /*  Dumped By       : theo (https://imtheo.lol)                 
-/*  Roblox Version  : version-ad5d3e2906444472
+/*  Roblox Version  : version-76173e47a79145c7
 /*  Dumper Version  : 2.1.7
-/*  Dumped At       : 21:59 03/06/2026 (GMT)
-/*  Total Offsets   : 381
+/*  Dumped At       : 18:55 09/06/2026 (GMT)
+/*  Total Offsets   : 390
 /* -------------------------------------------------------------
 /*  Join the discord!                                           
 /*  https://discord.gg/rbxoffsets                               
@@ -32,6 +32,7 @@ namespace Offsets {
     inline std::string ClientVersion = "version-76173e47a79145c7";
     bool Update(const std::string& current_version);
     std::unordered_map<std::string, uintptr_t*>& GetRegistry();
+
     namespace AirProperties {
          inline Offset AirDensity = { "AirProperties::AirDensity", 0x18 };
          inline Offset GlobalWind = { "AirProperties::GlobalWind", 0x3c };
@@ -242,7 +243,7 @@ namespace Offsets {
          inline Offset NameDisplayDistance = { "Humanoid::NameDisplayDistance", 0x1bc };
          inline Offset NameOcclusion = { "Humanoid::NameOcclusion", 0x1c0 };
          inline Offset PlatformStand = { "Humanoid::PlatformStand", 0x1e8 };
-         inline Offset PlatformStatePointer = { "Humanoid::PlatformStatePointer", 0x42f9576e };
+         inline Offset PlatformStatePointer = { "Humanoid::PlatformStatePointer", 0x0 };
          inline Offset RequiresNeck = { "Humanoid::RequiresNeck", 0x1e9 };
          inline Offset RigType = { "Humanoid::RigType", 0x1cc };
          inline Offset SeatPart = { "Humanoid::SeatPart", 0x120 };
@@ -324,6 +325,21 @@ namespace Offsets {
          inline Offset WoodPlanks = { "MaterialColors::WoodPlanks", 0x15 };
     }
 
+    namespace MeshContentProvider {
+         inline Offset AssetID = { "MeshContentProvider::AssetID", 0x10 };
+         inline Offset Cache = { "MeshContentProvider::Cache", 0xe8 };
+         inline Offset LRUCache = { "MeshContentProvider::LRUCache", 0x20 };
+         inline Offset MeshData = { "MeshContentProvider::MeshData", 0x40 };
+         inline Offset ToMeshData = { "MeshContentProvider::ToMeshData", 0x40 };
+    }
+
+    namespace MeshData {
+         inline Offset FaceEnd = { "MeshData::FaceEnd", 0x38 };
+         inline Offset FaceStart = { "MeshData::FaceStart", 0x30 };
+         inline Offset VertexEnd = { "MeshData::VertexEnd", 0x8 };
+         inline Offset VertexStart = { "MeshData::VertexStart", 0x0 };
+    }
+
     namespace MeshPart {
          inline Offset MeshId = { "MeshPart::MeshId", 0x2f8 };
          inline Offset Texture = { "MeshPart::Texture", 0x328 };
@@ -382,7 +398,7 @@ namespace Offsets {
          inline Offset LocaleId = { "Player::LocaleId", 0x130 };
          inline Offset MaxZoomDistance = { "Player::MaxZoomDistance", 0x349 };
          inline Offset MinZoomDistance = { "Player::MinZoomDistance", 0x354 };
-         inline uintptr_t ModelInstance = 0x280;
+         inline Offset ModelInstance = { "Player::ModelInstance", 0x3c8 };
          inline Offset Mouse = { "Player::Mouse", 0x1180 };
          inline Offset NameDisplayDistance = { "Player::NameDisplayDistance", 0x388 };
          inline Offset Team = { "Player::Team", 0x2d0 };
@@ -613,4 +629,3 @@ namespace Offsets {
     }
 
 }
-
