@@ -3201,7 +3201,57 @@ void render_t::render_menu()
         ImGui::Spacing();
 
         ImGui::Text("Target Selection:");
-        ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "Press Mouse Button 5 (MB2) over a player to select them.");
+        
+        std::shared_ptr<std::vector<cache::entity_t>> snapshot_ptr;
+        {
+            std::lock_guard<std::mutex> lock(cache::mtx);
+            snapshot_ptr = cache::cached_players;
+        }
+
+        std::string combo_preview = "[None]";
+        if (shot_detect::has_target && shot_detect::target_player.instance.address != 0) {
+            combo_preview = shot_detect::target_player.display_name;
+            if (combo_preview != shot_detect::target_player.name) {
+                combo_preview += " (@" + shot_detect::target_player.name + ")";
+            }
+        }
+
+        ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - 10.f);
+        if (ImGui::BeginCombo("##ShotDetectCombo", combo_preview.c_str())) {
+            bool is_none_selected = !shot_detect::has_target;
+            if (ImGui::Selectable("[None]", is_none_selected)) {
+                shot_detect::target_player = {};
+                shot_detect::has_target = false;
+                shot_detect::last_ammo_val = -1;
+            }
+
+            if (snapshot_ptr) {
+                for (const auto& player : *snapshot_ptr) {
+                    if (player.instance.address == 0 || player.instance.address == cache::cached_local_player.instance.address)
+                        continue;
+
+                    std::string label = player.display_name;
+                    if (label != player.name) {
+                        label += " (@" + player.name + ")";
+                    }
+
+                    bool is_selected = (shot_detect::has_target && shot_detect::target_player.instance.address == player.instance.address);
+                    if (ImGui::Selectable(label.c_str(), is_selected)) {
+                        shot_detect::target_player = player;
+                        shot_detect::has_target = true;
+                        shot_detect::last_ammo_val = -1;
+                    }
+                    if (is_selected) {
+                        ImGui::SetItemDefaultFocus();
+                    }
+                }
+            }
+            ImGui::EndCombo();
+        }
+        ImGui::PopItemWidth();
+
+        ImGui::Spacing();
+        ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "Alternative: Press Mouse Button 5 (MB2) over a player to select them.");
 
         ImGui::Spacing();
         ImGui::Text("Selected Target:");
