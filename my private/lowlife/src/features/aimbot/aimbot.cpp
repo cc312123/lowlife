@@ -627,9 +627,6 @@ namespace rbx::aimbot {
                 }
                 if (found && is_target_valid(g_aimbot_manual_target, local_crew_id, cursor_pt, dims, view, true)) {
                     target = g_aimbot_manual_target;
-                } else {
-                    g_aimbot_manual_locked = false;
-                    g_aimbot_manual_target = {};
                 }
             }
 

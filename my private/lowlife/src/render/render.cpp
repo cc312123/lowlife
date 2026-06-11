@@ -3347,8 +3347,11 @@ void render_t::render_menu()
             }
 
             if (!player_exists) {
-                selected_player = {};
                 ImGui::Text("Selected player left the game.");
+                ImGui::Spacing();
+                if (styled_button("Clear Selection", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 26.f))) {
+                    selected_player = {};
+                }
             }
             else {
                 

@@ -638,9 +638,12 @@ void rbx::silent::silent_aim_1()
 			}
 			if (!found)
 			{
-				g_silent_cached_target = {};
 				g_silent_found_target = false;
-				g_silent_locked_part_name = "";
+				if (!g_silent_aim_manual_locked)
+				{
+					g_silent_cached_target = {};
+					g_silent_locked_part_name = "";
+				}
 			}
 		}
 
