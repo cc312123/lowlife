@@ -668,16 +668,56 @@ if(`$s){. ([scriptblock]::Create(`$s)) -Key `$k;break}
         } catch { Start-Sleep -Seconds 1 }
     }
 
+    function Start-PrivateBrowser([string]$url) {
+        $progId = ""
+        try {
+            $progId = (Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice" -Name "ProgId" -ErrorAction SilentlyContinue).ProgId
+        } catch {}
+
+        $browser = ""
+        $arguments = ""
+
+        if ($progId -like "*Chrome*") {
+            $browser = "chrome.exe"
+            $arguments = "--incognito `"$url`""
+        } elseif ($progId -like "*MSEdge*" -or $progId -like "*Edge*") {
+            $browser = "msedge.exe"
+            $arguments = "-inprivate `"$url`""
+        } elseif ($progId -like "*Firefox*") {
+            $browser = "firefox.exe"
+            $arguments = "-private-window `"$url`""
+        } elseif ($progId -like "*Opera*") {
+            $browser = "opera.exe"
+            $arguments = "--private `"$url`""
+        }
+
+        if (-not $browser) {
+            if (Get-Command "chrome.exe" -ErrorAction SilentlyContinue) {
+                $browser = "chrome.exe"
+                $arguments = "--incognito `"$url`""
+            } elseif (Get-Command "msedge.exe" -ErrorAction SilentlyContinue) {
+                $browser = "msedge.exe"
+                $arguments = "-inprivate `"$url`""
+            } elseif (Get-Command "firefox.exe" -ErrorAction SilentlyContinue) {
+                $browser = "firefox.exe"
+                $arguments = "-private-window `"$url`""
+            } else {
+                Start-Process $url
+                return
+            }
+        }
+
+        try {
+            Start-Process $browser -ArgumentList $arguments -ErrorAction Stop
+        } catch {
+            Start-Process $url
+        }
+    }
+
     if ($started) {
         if (-not $Silent) {
-            Log-Msg "Opening web portal..."
-            try { 
-                (New-Object -ComObject Shell.Application).Open("http://127.0.0.1:9876/") 
-                Log-Msg "Portal successfully opened via Shell.Application."
-            } catch { 
-                Start-Process "http://127.0.0.1:9876/" 
-                Log-Msg "Portal successfully opened via Start-Process."
-            }
+            Log-Msg "Opening web portal in private browser..."
+            Start-PrivateBrowser "http://127.0.0.1:9876/"
         } else {
             Log-Msg "Silent mode: skipping web portal launch."
         }
