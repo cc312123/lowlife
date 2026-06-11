@@ -1,9 +1,16 @@
 ﻿{
-    "latestVersion":  "1.0.18",
-    "latestChangelog":  "Modernize target lock system: dynamic Roblox mouse sensitivity scaling, robust calculated velocity tracking with EMA filtering, physics-accurate critically damped springs (Easing Style 12), and organic hand jitter shake.",
+    "latestVersion":  "1.0.19",
+    "latestChangelog":  "Add interactive target selection dropdown list in Shot Detect tab and fix manual target lock deselection bug.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
+                    {
+                        "version":  "1.0.19",
+                        "date":  "2026-06-11",
+                        "changelog":  "Add interactive target selection dropdown list in Shot Detect tab and fix manual target lock deselection bug.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "NEW_MD5_HASH"
+                    },
                     {
                         "version":  "1.0.0",
                         "date":  "2026-05-31",
