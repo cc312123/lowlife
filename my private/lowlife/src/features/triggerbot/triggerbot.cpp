@@ -840,14 +840,17 @@ namespace shot_detect
 	void press_slot_key(int slot)
 	{
 		if (slot < 1 || slot > 9) return;
-		char key = '0' + slot;
+		WORD vk = '0' + slot; // '1' = 0x31, etc.
 
 		INPUT inputs[2] = {};
 		inputs[0].type = INPUT_KEYBOARD;
-		inputs[0].ki.wVk = key;
+		inputs[0].ki.wVk = vk;
+		inputs[0].ki.wScan = MapVirtualKeyA(vk, MAPVK_VK_TO_VSC);
+		inputs[0].ki.dwFlags = 0;
 		
 		inputs[1].type = INPUT_KEYBOARD;
-		inputs[1].ki.wVk = key;
+		inputs[1].ki.wVk = vk;
+		inputs[1].ki.wScan = inputs[0].ki.wScan;
 		inputs[1].ki.dwFlags = KEYEVENTF_KEYUP;
 
 		SendInput(2, inputs, sizeof(INPUT));
@@ -874,23 +877,27 @@ namespace shot_detect
 			std::transform(lower_tool.begin(), lower_tool.end(), lower_tool.begin(), ::tolower);
 
 			// We check if current tool is DB/Double-Barrel
-			bool is_db = (lower_tool.find("double") != std::string::npos || lower_tool.find("db") != std::string::npos);
+			bool is_db = (lower_tool.find("double") != std::string::npos || 
+			              lower_tool.find("db") != std::string::npos || 
+			              lower_tool.find("barrel") != std::string::npos);
 
 			if (is_db)
 			{
 				int ammo = get_local_ammo();
 				if (ammo != -1)
 				{
-					if (last_tool == current_tool && last_local_ammo != -1)
+					// If the weapon is reloaded or newly equipped, update the last ammo cache
+					if (last_tool != current_tool || last_local_ammo == -1 || ammo > last_local_ammo)
 					{
-						if (ammo < last_local_ammo)
-						{
-							// Fired! Swap to revolver slot after configured delay
-							Sleep(settings::shot_detect::gunswap_delay);
-							press_slot_key(settings::shot_detect::revolver_slot);
-						}
+						last_local_ammo = ammo;
 					}
-					last_local_ammo = ammo;
+					else if (ammo < last_local_ammo)
+					{
+						// Fired! Swap to revolver slot after configured delay
+						Sleep(settings::shot_detect::gunswap_delay);
+						press_slot_key(settings::shot_detect::revolver_slot);
+						last_local_ammo = ammo;
+					}
 				}
 				last_tool = current_tool;
 			}
