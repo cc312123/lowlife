@@ -727,7 +727,31 @@ void rbx::silent::silent_aim_1()
 
 		if (g_silent_found_target && g_silent_cached_target.instance.address != 0 && game::visengine.address)
 		{
-			if (settings::silent::knocked_check && is_player_knocked(g_silent_cached_target))
+			bool target_invalid = false;
+			if (settings::silent::knocked_check)
+			{
+				if (is_player_knocked(g_silent_cached_target))
+				{
+					target_invalid = true;
+				}
+			}
+			else
+			{
+				if (g_silent_cached_target.humanoid.address != 0)
+				{
+					try
+					{
+						float health = const_cast<cache::entity_t&>(g_silent_cached_target).humanoid.get_health();
+						if (health <= 0.0f || !std::isfinite(health))
+						{
+							target_invalid = true;
+						}
+					}
+					catch (...) {}
+				}
+			}
+
+			if (target_invalid)
 			{
 				g_silent_found_target = false;
 				if (!g_silent_aim_manual_locked)

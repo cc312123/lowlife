@@ -524,13 +524,7 @@ namespace rbx::aimbot {
                 float step_x = dx * eased_t_x;
                 float step_y = dy * eased_t_y;
 
-                // Apply minimum step of 1 pixel in the direction of movement to prevent sub-pixel stepping stutter when close to target
-                if (std::abs(dx) > 0.01f && std::abs(step_x) < 1.0f) {
-                    step_x = (dx > 0.0f) ? 1.0f : -1.0f;
-                }
-                if (std::abs(dy) > 0.01f && std::abs(step_y) < 1.0f) {
-                    step_y = (dy > 0.0f) ? 1.0f : -1.0f;
-                }
+
 
                 dx = step_x;
                 dy = step_y;
@@ -728,7 +722,7 @@ namespace rbx::aimbot {
 
             if (target.instance.address == 0) {
                 if (settings::aimbot::sticky_aim && has_locked_target && locked_target.instance.address != 0) {
-                    // Sticky lock: check relations and team check. Keep target locked through walls, knock, and FOV.
+                    // Sticky lock: check relations, team check, and knocked/death status. Keep target locked through walls and FOV.
                     bool relation_invalid = false;
                     auto rel_it = settings::player_relations::relations.find(locked_target.name);
                     if (rel_it != settings::player_relations::relations.end() && rel_it->second == 1) {
@@ -736,6 +730,23 @@ namespace rbx::aimbot {
                     }
                     if (settings::aimbot::team_check && is_on_same_team(locked_target, local_crew_id)) {
                         relation_invalid = true;
+                    }
+
+                    // Release target if they are knocked/dead
+                    if (settings::aimbot::knocked_check) {
+                        if (is_knocked(locked_target)) {
+                            relation_invalid = true;
+                        }
+                    } else {
+                        // If knock check is off, stay locked until they die (health <= 0)
+                        if (locked_target.humanoid.address != 0) {
+                            try {
+                                float health = const_cast<cache::entity_t&>(locked_target).humanoid.get_health();
+                                if (health <= 0.0f || !std::isfinite(health)) {
+                                    relation_invalid = true;
+                                }
+                            } catch (...) {}
+                        }
                     }
 
                     if (!relation_invalid) {
