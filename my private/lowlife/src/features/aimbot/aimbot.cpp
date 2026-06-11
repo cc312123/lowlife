@@ -399,10 +399,36 @@ namespace rbx::aimbot {
                 vector_to_angles(current_forward, current_yaw, current_pitch);
                 vector_to_angles(target_forward, target_yaw, target_pitch);
 
-                float yaw_diff = target_yaw - current_yaw;
+                static float last_written_yaw = 0.0f;
+                static float last_written_pitch = 0.0f;
+
+                if (!virtual_angles_initialized) {
+                    virtual_yaw = current_yaw;
+                    virtual_pitch = current_pitch;
+                    last_written_yaw = current_yaw;
+                    last_written_pitch = current_pitch;
+                    virtual_angles_initialized = true;
+                } else {
+                    // Detect manual camera rotation changes from user mouse or script override
+                    float manual_yaw_diff = current_yaw - last_written_yaw;
+                    manual_yaw_diff = std::atan2(std::sin(manual_yaw_diff), std::cos(manual_yaw_diff));
+
+                    float manual_pitch_diff = current_pitch - last_written_pitch;
+                    manual_pitch_diff = std::atan2(std::sin(manual_pitch_diff), std::cos(manual_pitch_diff));
+
+                    // Propagate user manual movements to the virtual tracking state
+                    if (std::abs(manual_yaw_diff) > 0.0001f) {
+                        virtual_yaw += manual_yaw_diff;
+                    }
+                    if (std::abs(manual_pitch_diff) > 0.0001f) {
+                        virtual_pitch += manual_pitch_diff;
+                    }
+                }
+
+                float yaw_diff = target_yaw - virtual_yaw;
                 yaw_diff = std::atan2(std::sin(yaw_diff), std::cos(yaw_diff));
 
-                float pitch_diff = target_pitch - current_pitch;
+                float pitch_diff = target_pitch - virtual_pitch;
                 pitch_diff = std::atan2(std::sin(pitch_diff), std::cos(pitch_diff));
 
                 float t_x = (sx <= 1.05f) ? 1.0f : std::clamp(dt * (150.0f / sx), 0.0f, 1.0f);
@@ -411,10 +437,13 @@ namespace rbx::aimbot {
                 float eased_t_x = apply_easing(settings::aimbot::easing_style, t_x);
                 float eased_t_y = apply_easing(settings::aimbot::easing_style, t_y);
 
-                float final_yaw = current_yaw + yaw_diff * eased_t_x;
-                float final_pitch = current_pitch + pitch_diff * eased_t_y;
+                virtual_yaw += yaw_diff * eased_t_x;
+                virtual_pitch += pitch_diff * eased_t_y;
 
-                smoothed_forward = angles_to_vector(final_yaw, final_pitch);
+                last_written_yaw = virtual_yaw;
+                last_written_pitch = virtual_pitch;
+
+                smoothed_forward = angles_to_vector(virtual_yaw, virtual_pitch);
                 smoothed_forward = normalize(smoothed_forward);
             }
 
@@ -440,8 +469,21 @@ namespace rbx::aimbot {
             math::vector2 screen_pos = {};
             if (!game::visengine.world_to_screen(target_pos, screen_pos, dims, view)) return;
 
-            float dx = screen_pos.x - static_cast<float>(cursor_pt.x);
-            float dy = screen_pos.y - static_cast<float>(cursor_pt.y);
+            float center_x = dims.x / 2.0f;
+            float center_y = dims.y / 2.0f;
+
+            float ref_x = static_cast<float>(cursor_pt.x);
+            float ref_y = static_cast<float>(cursor_pt.y);
+
+            // In shift-lock or first-person, the mouse cursor is centered.
+            // If the cursor is close to the center, use the exact center to prevent jitter/stutter.
+            if (std::abs(ref_x - center_x) < 15.0f && std::abs(ref_y - center_y) < 15.0f) {
+                ref_x = center_x;
+                ref_y = center_y;
+            }
+
+            float dx = screen_pos.x - ref_x;
+            float dy = screen_pos.y - ref_y;
 
             float sensitivity = std::clamp(settings::aimbot::mouse_sensitivity, 0.1f, 10.0f);
             dx *= sensitivity;
@@ -457,8 +499,19 @@ namespace rbx::aimbot {
                 float eased_t_x = apply_easing(settings::aimbot::easing_style, t_x);
                 float eased_t_y = apply_easing(settings::aimbot::easing_style, t_y);
 
-                dx *= eased_t_x;
-                dy *= eased_t_y;
+                float step_x = dx * eased_t_x;
+                float step_y = dy * eased_t_y;
+
+                // Apply minimum step of 1 pixel in the direction of movement to prevent sub-pixel stepping stutter when close to target
+                if (std::abs(dx) > 0.01f && std::abs(step_x) < 1.0f) {
+                    step_x = (dx > 0.0f) ? 1.0f : -1.0f;
+                }
+                if (std::abs(dy) > 0.01f && std::abs(step_y) < 1.0f) {
+                    step_y = (dy > 0.0f) ? 1.0f : -1.0f;
+                }
+
+                dx = step_x;
+                dy = step_y;
             }
 
             if (settings::aimbot::shake) {
@@ -528,6 +581,12 @@ namespace rbx::aimbot {
 
             auto now = std::chrono::high_resolution_clock::now();
             float dt = std::chrono::duration<float>(now - last_tick).count();
+            
+            // Limit update rate to ~144Hz to avoid flooding Windows/game with mouse input deltas,
+            // which causes input processing queue lag and stuttering.
+            if (dt < 0.007f) {
+                continue;
+            }
             last_tick = now;
 
             if (dt > 0.1f) dt = 0.016f;
@@ -625,21 +684,44 @@ namespace rbx::aimbot {
                         break;
                     }
                 }
-                if (found && is_target_valid(g_aimbot_manual_target, local_crew_id, cursor_pt, dims, view, true)) {
-                    target = g_aimbot_manual_target;
+                if (found) {
+                    bool relation_invalid = false;
+                    auto rel_it = settings::player_relations::relations.find(g_aimbot_manual_target.name);
+                    if (rel_it != settings::player_relations::relations.end() && rel_it->second == 1) {
+                        relation_invalid = true;
+                    }
+                    if (settings::aimbot::team_check && is_on_same_team(g_aimbot_manual_target, local_crew_id)) {
+                        relation_invalid = true;
+                    }
+
+                    if (!relation_invalid) {
+                        if (settings::aimbot::sticky_aim) {
+                            target = g_aimbot_manual_target;
+                        } else if (is_target_valid(g_aimbot_manual_target, local_crew_id, cursor_pt, dims, view, true)) {
+                            target = g_aimbot_manual_target;
+                        }
+                    }
                 }
             }
 
             if (target.instance.address == 0) {
                 if (settings::aimbot::sticky_aim && has_locked_target && locked_target.instance.address != 0) {
-                    if (is_target_valid(locked_target, local_crew_id, cursor_pt, dims, view, true)) {
-                        target = locked_target;  
+                    // Sticky lock: check relations and team check. Keep target locked through walls, knock, and FOV.
+                    bool relation_invalid = false;
+                    auto rel_it = settings::player_relations::relations.find(locked_target.name);
+                    if (rel_it != settings::player_relations::relations.end() && rel_it->second == 1) {
+                        relation_invalid = true;
                     }
-                    else {
+                    if (settings::aimbot::team_check && is_on_same_team(locked_target, local_crew_id)) {
+                        relation_invalid = true;
+                    }
+
+                    if (!relation_invalid) {
+                        target = locked_target;
+                    } else {
                         locked_target = cache::entity_t{};
                         has_locked_target = false;
-                        needs_key_release = true; 
-                        target_pos_initialized = false; 
+                        target_pos_initialized = false;
                         locked_part_name = "";
                         accum_x = 0.0f;
                         accum_y = 0.0f;
