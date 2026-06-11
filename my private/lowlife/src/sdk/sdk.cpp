@@ -4,6 +4,8 @@
 #include <game/game.h>
 #include <algorithm>
 #include <cctype>
+#include <mutex>
+#include <unordered_map>
 
 std::string rbx::nameable_t::get_name()
 {
@@ -19,15 +21,44 @@ std::string rbx::nameable_t::get_name()
 
 std::string rbx::nameable_t::get_class_name()
 {
-	std::uint64_t class_descriptor = memory->read<std::uint64_t>(this->address + Offsets::Instance::ClassDescriptor);
-	std::uint64_t class_name = memory->read<std::uint64_t>(class_descriptor + Offsets::Instance::ClassName);
+	if (this->address == 0) return "unknown";
 
-	if (class_name)
+	static std::unordered_map<std::uint64_t, std::string> class_cache;
+	static std::mutex class_cache_mutex;
+	static std::uint32_t last_cache_pid = 0;
+
+	std::uint64_t class_descriptor = memory->read<std::uint64_t>(this->address + Offsets::Instance::ClassDescriptor);
+	if (class_descriptor == 0) return "unknown";
+
 	{
-		return memory->read_string(class_name);
+		std::lock_guard<std::mutex> lock(class_cache_mutex);
+		std::uint32_t current_pid = memory->get_process_id();
+		if (current_pid != last_cache_pid)
+		{
+			class_cache.clear();
+			last_cache_pid = current_pid;
+		}
+
+		auto it = class_cache.find(class_descriptor);
+		if (it != class_cache.end())
+		{
+			return it->second;
+		}
 	}
 
-	return "unknown";
+	std::uint64_t class_name = memory->read<std::uint64_t>(class_descriptor + Offsets::Instance::ClassName);
+	std::string name = "unknown";
+	if (class_name)
+	{
+		name = memory->read_string(class_name);
+	}
+
+	{
+		std::lock_guard<std::mutex> lock(class_cache_mutex);
+		class_cache[class_descriptor] = name;
+	}
+
+	return name;
 }
 
 std::vector<rbx::instance_t> rbx::interface_t::get_children()
@@ -74,6 +105,26 @@ std::vector<rbx::instance_t> rbx::interface_t::get_children()
 	}
 
 	return children;
+}
+
+size_t rbx::interface_t::get_children_count()
+{
+	rbx::instance_t* base = static_cast<rbx::instance_t*>(this);
+	if (base->address == 0) return 0;
+
+	std::uint64_t start = memory->read<std::uint64_t>(base->address + Offsets::Instance::ChildrenStart);
+	if (start == 0) return 0;
+
+	std::uint64_t array_start = memory->read<std::uint64_t>(start);
+	std::uint64_t array_end = memory->read<std::uint64_t>(start + Offsets::Instance::ChildrenEnd);
+
+	if (array_start == 0 || array_end == 0 || array_start >= array_end)
+	{
+		return 0;
+	}
+
+	std::uint64_t size_bytes = array_end - array_start;
+	return size_bytes / sizeof(std::shared_ptr<void*>);
 }
 
 rbx::instance_t rbx::interface_t::find_first_child(std::string_view str)
@@ -201,7 +252,36 @@ float rbx::humanoid_t::get_max_health()
 
 rbx::primitive_t rbx::part_t::get_primitive()
 {
-	return { memory->read<std::uint64_t>(this->address + Offsets::BasePart::Primitive) };
+	static std::unordered_map<std::uint64_t, std::uint64_t> primitive_cache;
+	static std::mutex primitive_cache_mutex;
+	static std::chrono::steady_clock::time_point last_clear = std::chrono::steady_clock::now();
+
+	if (this->address == 0) return { 0 };
+
+	auto now = std::chrono::steady_clock::now();
+	{
+		std::lock_guard<std::mutex> lock(primitive_cache_mutex);
+		if (std::chrono::duration_cast<std::chrono::seconds>(now - last_clear).count() > 5)
+		{
+			primitive_cache.clear();
+			last_clear = now;
+		}
+
+		auto it = primitive_cache.find(this->address);
+		if (it != primitive_cache.end())
+		{
+			return { it->second };
+		}
+	}
+
+	std::uint64_t prim_address = memory->read<std::uint64_t>(this->address + Offsets::BasePart::Primitive);
+
+	{
+		std::lock_guard<std::mutex> lock(primitive_cache_mutex);
+		primitive_cache[this->address] = prim_address;
+	}
+
+	return { prim_address };
 }
 
 math::vector3 rbx::primitive_t::get_size()

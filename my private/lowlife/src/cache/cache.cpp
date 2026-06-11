@@ -3,6 +3,7 @@
 #include <game/game.h>
 #include <unordered_map>
 #include <unordered_set>
+#include <mutex>
 #include <settings.h>
 
 
@@ -55,6 +56,20 @@ static std::string get_equipped_tool_name(std::uint64_t character_address)
 		size_t res;
 	};
 
+	static std::unordered_map<std::uint64_t, std::string> class_desc_name_cache;
+	static std::mutex class_desc_name_cache_mutex;
+	static std::uint32_t last_cache_pid = 0;
+
+	{
+		std::lock_guard<std::mutex> lock(class_desc_name_cache_mutex);
+		std::uint32_t current_pid = memory->get_process_id();
+		if (current_pid != last_cache_pid)
+		{
+			class_desc_name_cache.clear();
+			last_cache_pid = current_pid;
+		}
+	}
+
 	for (std::uint64_t i = 0; i < count; ++i)
 	{
 		std::uint64_t child_address = ptr_buf[i].ptr;
@@ -64,27 +79,47 @@ static std::string get_equipped_tool_name(std::uint64_t character_address)
 		std::uint64_t class_descriptor = memory->read<std::uint64_t>(child_address + Offsets::Instance::ClassDescriptor);
 		if (class_descriptor == 0) continue;
 
-		// Class name address
-		std::uint64_t class_name_addr = memory->read<std::uint64_t>(class_descriptor + Offsets::Instance::ClassName);
-		if (class_name_addr == 0) continue;
-
-		// Read class name string structure
-		msvc_string_layout layout{};
-		Luck_ReadVirtualMemory(memory->get_process_handle(), reinterpret_cast<void*>(class_name_addr), &layout, sizeof(msvc_string_layout), nullptr);
-		if (layout.size == 0 || layout.size > 255) continue;
-
-		char stack_buf[16];
-		const char* class_str = nullptr;
-		if (layout.size < 16) {
-			layout.u.buf[layout.size] = '\0';
-			class_str = layout.u.buf;
-		} else {
-			Luck_ReadVirtualMemory(memory->get_process_handle(), layout.u.ptr, stack_buf, 15, nullptr);
-			stack_buf[15] = '\0';
-			class_str = stack_buf;
+		std::string class_str = "";
+		bool found = false;
+		{
+			std::lock_guard<std::mutex> lock(class_desc_name_cache_mutex);
+			auto it = class_desc_name_cache.find(class_descriptor);
+			if (it != class_desc_name_cache.end())
+			{
+				class_str = it->second;
+				found = true;
+			}
 		}
 
-		if (strcmp(class_str, "Tool") == 0 || strcmp(class_str, "HopperBin") == 0)
+		if (!found)
+		{
+			// Class name address
+			std::uint64_t class_name_addr = memory->read<std::uint64_t>(class_descriptor + Offsets::Instance::ClassName);
+			if (class_name_addr != 0)
+			{
+				// Read class name string structure
+				msvc_string_layout layout{};
+				Luck_ReadVirtualMemory(memory->get_process_handle(), reinterpret_cast<void*>(class_name_addr), &layout, sizeof(msvc_string_layout), nullptr);
+				if (layout.size > 0 && layout.size <= 255)
+				{
+					char stack_buf[16];
+					if (layout.size < 16) {
+						layout.u.buf[layout.size] = '\0';
+						class_str = layout.u.buf;
+					} else {
+						Luck_ReadVirtualMemory(memory->get_process_handle(), layout.u.ptr, stack_buf, 15, nullptr);
+						stack_buf[15] = '\0';
+						class_str = stack_buf;
+					}
+				}
+			}
+			{
+				std::lock_guard<std::mutex> lock(class_desc_name_cache_mutex);
+				class_desc_name_cache[class_descriptor] = class_str;
+			}
+		}
+
+		if (class_str == "Tool" || class_str == "HopperBin")
 		{
 			std::uint64_t name_ptr = memory->read<std::uint64_t>(child_address + Offsets::Instance::Name);
 			if (name_ptr) {
@@ -163,7 +198,26 @@ void cache::run()
 			game::local_character = { 0 };
 		}
 
-		std::vector<rbx::player_t> players = game::players.get_children<rbx::player_t>();
+		static std::vector<rbx::player_t> players;
+		static size_t last_players_count = 0;
+		static std::uint32_t last_players_pid = 0;
+
+		if (current_pid != last_players_pid)
+		{
+			players.clear();
+			last_players_count = 0;
+			last_players_pid = current_pid;
+		}
+
+		if (tick_count % 30 == 0 || players.empty())
+		{
+			size_t current_players_count = game::players.get_children_count();
+			if (current_players_count != last_players_count || players.empty())
+			{
+				players = game::players.get_children<rbx::player_t>();
+				last_players_count = current_players_count;
+			}
+		}
 
 		std::vector<cache::entity_t> temp_cache;
 		std::unordered_set<std::uint64_t> active_addresses;
@@ -203,17 +257,20 @@ void cache::run()
 
 			if (!needs_recache && model_instance.address != 0)
 			{
-				size_t current_child_count = model_instance.get_children().size();
+				size_t current_child_count = model_instance.get_children_count();
 				if (current_child_count != cached_model_children_counts[player.address])
 				{
 					needs_recache = true;
 				}
 				else if (cached_entity.humanoid.address == 0)
 				{
-					rbx::instance_t temp_humanoid = model_instance.find_first_child("Humanoid");
-					if (temp_humanoid.address != 0)
+					if ((tick_count + (player.address >> 3)) % 15 == 0)
 					{
-						needs_recache = true;
+						rbx::instance_t temp_humanoid = model_instance.find_first_child("Humanoid");
+						if (temp_humanoid.address != 0)
+						{
+							needs_recache = true;
+						}
 					}
 				}
 			}
@@ -228,7 +285,7 @@ void cache::run()
 
 				if (model_instance.address != 0)
 				{
-					cached_model_children_counts[player.address] = model_instance.get_children().size();
+					cached_model_children_counts[player.address] = model_instance.get_children_count();
 
 					rbx::instance_t body_effects = model_instance.find_first_child("BodyEffects");
 					if (body_effects.address != 0)
@@ -291,11 +348,14 @@ void cache::run()
 			{
 				if (player.address == game::local_player.address)
 				{
-					cached_entity.tool_name = get_equipped_tool_name(model_instance.address);
+					if (tick_count % 5 == 0 || cached_entity.tool_name.empty())
+					{
+						cached_entity.tool_name = get_equipped_tool_name(model_instance.address);
+					}
 				}
 				else if (settings::visuals::tool)
 				{
-					if (tick_count % 15 == 0 || cached_entity.tool_name.empty())
+					if ((tick_count + (player.address >> 3)) % 15 == 0 || cached_entity.tool_name.empty())
 					{
 						cached_entity.tool_name = get_equipped_tool_name(model_instance.address);
 					}
@@ -324,7 +384,7 @@ void cache::run()
 						cached_entity.ko_check_count++;
 						perform_ko_check = true;
 					}
-					else if (tick_count % 100 == 0)
+					else if ((tick_count + (player.address >> 3)) % 100 == 0)
 					{
 						perform_ko_check = true;
 					}

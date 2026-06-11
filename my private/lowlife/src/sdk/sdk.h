@@ -34,6 +34,7 @@ namespace rbx
 		std::vector<T> get_children();
 
 		std::vector<rbx::instance_t> get_children();
+		size_t get_children_count();
 		rbx::instance_t find_first_child(std::string_view str);
 		rbx::instance_t find_first_child_by_class(std::string_view str);
 	};
