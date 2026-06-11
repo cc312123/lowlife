@@ -1058,9 +1058,6 @@ namespace shot_detect
 
 			if (!game::workspace.address || !game::local_player.address)
 			{
-				has_target = false;
-				target_player = {};
-				last_ammo_val = -1;
 				is_clicking = false;
 				continue;
 			}
