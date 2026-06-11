@@ -1135,14 +1135,6 @@ namespace shot_detect
 									is_clicking = false;
 									notifications::add("Shot Detect Target: " + closest_player.display_name, notifications::NotificationType::Success, 3.0f);
 								}
-								else
-								{
-									target_player = {};
-									has_target = false;
-									last_ammo_val = -1;
-									is_clicking = false;
-									notifications::add("Released Shot Detect Target", notifications::NotificationType::Info, 2.0f);
-								}
 							}
 						}
 					}
