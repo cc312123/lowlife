@@ -3263,10 +3263,12 @@ void render_t::render_menu()
             int ammo = shot_detect::get_target_ammo(shot_detect::target_player);
             ImGui::Text("Target Ammo:");
             ImGui::SameLine();
-            if (ammo != -1) {
+            if (ammo >= 0) {
                 ImGui::TextColored(menu::accent_color, "%d", ammo);
+            } else if (ammo == -2) {
+                ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "Holding tool (No ammo)");
             } else {
-                ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "Unknown / Not holding weapon");
+                ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "no tool held");
             }
         } else {
             ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "[None]");

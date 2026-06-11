@@ -1036,10 +1036,11 @@ namespace shot_detect
 						}
 					}
 				}
+				return -2; // Holding tool, but no ammo found
 			}
 		} catch (...) {}
 
-		return -1;
+		return -1; // No tool held
 	}
 
 	void run()
@@ -1178,9 +1179,9 @@ namespace shot_detect
 						target_player = current_target_state;
 
 						int current_ammo = get_target_ammo(current_target_state);
-						if (current_ammo != -1)
+						if (current_ammo >= 0)
 						{
-							if (last_ammo_val != -1)
+							if (last_ammo_val >= 0)
 							{
 								if (current_ammo < last_ammo_val)
 								{
@@ -1212,10 +1213,14 @@ namespace shot_detect
 							}
 							last_ammo_val = current_ammo;
 						}
+						else
+						{
+							is_clicking = false;
+							last_ammo_val = -1;
+						}
 					}
 					else
 					{
-						has_target = false;
 						is_clicking = false;
 						last_ammo_val = -1;
 					}

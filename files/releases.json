@@ -142,8 +142,8 @@
                         "date":  "2026-06-06",
                         "changelog":  "Modernize target lock system: dynamic Roblox mouse sensitivity scaling, robust calculated velocity tracking with EMA filtering, physics-accurate critically damped springs (Easing Style 12), and organic hand jitter shake.",
                         "fileName":  "RobloxCrashHandler.exe",
-                        "md5":  "ef6c80823b5d79a9b9ca2cab962fa133"
+                        "md5":  "b6a44d8d095dc10e4d374f9ba7c30add"
                     }
                 ],
-    "latestHash":  "ef6c80823b5d79a9b9ca2cab962fa133"
+    "latestHash":  "b6a44d8d095dc10e4d374f9ba7c30add"
 }
