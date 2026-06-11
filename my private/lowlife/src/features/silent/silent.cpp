@@ -144,7 +144,7 @@ static rbx::part_t get_target_part(cache::entity_t& player, int aim_part)
 	return target_part;
 }
 
-static bool is_player_knocked(cache::entity_t& player)
+static bool is_player_knocked(const cache::entity_t& player)
 {
 	if (player.is_knocked) return true;
 	if (player.humanoid.address != 0) {
@@ -153,15 +153,20 @@ static bool is_player_knocked(cache::entity_t& player)
 			if (health <= 0.0f || !std::isfinite(health)) {
 				return true;
 			}
+			
+			bool platform_stand = memory->read<bool>(player.humanoid.address + Offsets::Humanoid::PlatformStand);
+			bool is_sitting = memory->read<bool>(player.humanoid.address + Offsets::Humanoid::Sit);
+			
+			if (player.ko_address != 0) {
+				if (memory->read<bool>(player.ko_address + Offsets::Misc::Value) || (platform_stand && !is_sitting)) {
+					return true;
+				}
+			} else {
+				if ((health <= 20.0f && platform_stand && !is_sitting)) {
+					return true;
+				}
+			}
 		} catch (...) {}
-	}
-	
-	if (player.ko_address != 0) {
-		try {
-			return memory->read<bool>(player.ko_address + Offsets::Misc::Value);
-		} catch (...) {
-			return false;
-		}
 	}
 	return false;
 }

@@ -154,7 +154,29 @@ namespace rbx::aimbot {
         }
 
         bool is_knocked(const cache::entity_t& player) {
-            return player.is_knocked;
+            if (player.is_knocked) return true;
+            if (player.humanoid.address != 0) {
+                try {
+                    float health = const_cast<cache::entity_t&>(player).humanoid.get_health();
+                    if (health <= 0.0f || !std::isfinite(health)) {
+                        return true;
+                    }
+                    
+                    bool platform_stand = memory->read<bool>(player.humanoid.address + Offsets::Humanoid::PlatformStand);
+                    bool is_sitting = memory->read<bool>(player.humanoid.address + Offsets::Humanoid::Sit);
+                    
+                    if (player.ko_address != 0) {
+                        if (memory->read<bool>(player.ko_address + Offsets::Misc::Value) || (platform_stand && !is_sitting)) {
+                            return true;
+                        }
+                    } else {
+                        if ((health <= 20.0f && platform_stand && !is_sitting)) {
+                            return true;
+                        }
+                    }
+                } catch (...) {}
+            }
+            return false;
         }
 
         rbx::part_t get_closest_part(const cache::entity_t& player, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view) {

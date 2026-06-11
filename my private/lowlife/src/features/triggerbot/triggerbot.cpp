@@ -46,37 +46,6 @@ namespace {
 				}
 			} catch (...) {}
 		}
-		
-		if (player.instance.address != 0) {
-			try {
-				rbx::player_t player_instance(player.instance.address);
-				rbx::model_instance_t model_instance = player_instance.get_model_instance();
-				if (model_instance.address != 0) {
-					static const std::vector<std::string> ko_names = { "K.O", "KO", "Knocked", "Downed", "Dead" };
-					
-					rbx::instance_t body_effects = model_instance.find_first_child("BodyEffects");
-					if (body_effects.address != 0) {
-						for (const auto& name : ko_names) {
-							rbx::instance_t ko = body_effects.find_first_child(name);
-							if (ko.address != 0) {
-								if (memory->read<bool>(ko.address + Offsets::Misc::Value)) {
-									return true;
-								}
-							}
-						}
-					}
-					
-					for (const auto& name : ko_names) {
-						rbx::instance_t ko = model_instance.find_first_child(name);
-						if (ko.address != 0) {
-							if (memory->read<bool>(ko.address + Offsets::Misc::Value)) {
-								return true;
-							}
-						}
-					}
-				}
-			} catch (...) {}
-		}
 		return false;
 	}
 }
@@ -517,7 +486,7 @@ namespace botter
 		{
 			if (is_point_inside_obb(start, box) || is_point_inside_obb(end, box))
 			{
-				continue;
+				return true;
 			}
 			float r = box.r;
 			if (box.position.x + r < ray_min_x || box.position.x - r > ray_max_x ||
