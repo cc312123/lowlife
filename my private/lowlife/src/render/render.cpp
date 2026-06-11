@@ -3142,13 +3142,45 @@ void render_t::render_menu()
         ImGui::BeginChild("Shot Detect", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true);
 
         ImGui::Checkbox("Enable Shot Detect", &settings::shot_detect::enabled);
+        if (settings::shot_detect::enabled)
+        {
+            ImGui::SameLine();
+            inline_keybind_button("shot_detect_keybind", &settings::shot_detect::trigger_keybind, &settings::shot_detect::trigger_keybind_mode);
+        }
 
         ImGui::Spacing();
         const char* click_modes[] = { "Continuous", "Single Click" };
         ImGui::Combo("Click Mode", &settings::shot_detect::click_mode, click_modes, IM_ARRAYSIZE(click_modes));
 
         ImGui::Spacing();
-        SliderIntWithInput("Autoclick CPS", &settings::shot_detect::cps, 1, 100);
+        ImGui::Checkbox("Randomize Delay", &settings::shot_detect::randomize_delay);
+
+        ImGui::Spacing();
+        if (settings::shot_detect::randomize_delay)
+        {
+            SliderIntWithInput("Min Delay (ms)", &settings::shot_detect::min_delay, 1, 1000);
+            ImGui::Spacing();
+            SliderIntWithInput("Max Delay (ms)", &settings::shot_detect::max_delay, 1, 1000);
+        }
+        else
+        {
+            SliderIntWithInput("Autoclick CPS", &settings::shot_detect::cps, 1, 100);
+        }
+
+        ImGui::Spacing();
+        ImGui::Separator();
+        ImGui::Spacing();
+
+        ImGui::Checkbox("Enable Gun Swap", &settings::shot_detect::gunswap_enabled);
+        if (settings::shot_detect::gunswap_enabled)
+        {
+            ImGui::Spacing();
+            SliderIntWithInput("DB Slot", &settings::shot_detect::db_slot, 1, 9);
+            ImGui::Spacing();
+            SliderIntWithInput("Revolver Slot", &settings::shot_detect::revolver_slot, 1, 9);
+            ImGui::Spacing();
+            SliderIntWithInput("Swap Delay (ms)", &settings::shot_detect::gunswap_delay, 10, 500);
+        }
 
         ImGui::EndChild();
 

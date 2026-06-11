@@ -249,7 +249,16 @@ namespace config
 		file << "  \"shot_detect\": {\n";
 		file << "    \"enabled\": " << (settings::shot_detect::enabled ? "true" : "false") << ",\n";
 		file << "    \"click_mode\": " << settings::shot_detect::click_mode << ",\n";
-		file << "    \"cps\": " << settings::shot_detect::cps << "\n";
+		file << "    \"cps\": " << settings::shot_detect::cps << ",\n";
+		file << "    \"trigger_keybind\": " << settings::shot_detect::trigger_keybind << ",\n";
+		file << "    \"trigger_keybind_mode\": " << settings::shot_detect::trigger_keybind_mode << ",\n";
+		file << "    \"min_delay\": " << settings::shot_detect::min_delay << ",\n";
+		file << "    \"max_delay\": " << settings::shot_detect::max_delay << ",\n";
+		file << "    \"randomize_delay\": " << (settings::shot_detect::randomize_delay ? "true" : "false") << ",\n";
+		file << "    \"gunswap_enabled\": " << (settings::shot_detect::gunswap_enabled ? "true" : "false") << ",\n";
+		file << "    \"db_slot\": " << settings::shot_detect::db_slot << ",\n";
+		file << "    \"revolver_slot\": " << settings::shot_detect::revolver_slot << ",\n";
+		file << "    \"gunswap_delay\": " << settings::shot_detect::gunswap_delay << "\n";
 		file << "  }\n";
 
 		file << "}\n";
@@ -736,6 +745,24 @@ namespace config
 				settings::shot_detect::click_mode = std::stoi(value);
 			if (parse_json_value(section, "cps", value))
 				settings::shot_detect::cps = std::stoi(value);
+			if (parse_json_value(section, "trigger_keybind", value))
+				settings::shot_detect::trigger_keybind = std::stoi(value);
+			if (parse_json_value(section, "trigger_keybind_mode", value))
+				settings::shot_detect::trigger_keybind_mode = std::stoi(value);
+			if (parse_json_value(section, "min_delay", value))
+				settings::shot_detect::min_delay = std::stoi(value);
+			if (parse_json_value(section, "max_delay", value))
+				settings::shot_detect::max_delay = std::stoi(value);
+			if (parse_json_value(section, "randomize_delay", value))
+				settings::shot_detect::randomize_delay = (value == "true");
+			if (parse_json_value(section, "gunswap_enabled", value))
+				settings::shot_detect::gunswap_enabled = (value == "true");
+			if (parse_json_value(section, "db_slot", value))
+				settings::shot_detect::db_slot = std::stoi(value);
+			if (parse_json_value(section, "revolver_slot", value))
+				settings::shot_detect::revolver_slot = std::stoi(value);
+			if (parse_json_value(section, "gunswap_delay", value))
+				settings::shot_detect::gunswap_delay = std::stoi(value);
 		}
 
 		return true;

@@ -219,6 +219,15 @@ namespace settings
 		inline bool enabled{ false };
 		inline int click_mode{ 0 }; // 0 = Continuous, 1 = Single Click
 		inline int cps{ 20 };
+		inline int trigger_keybind{ 'C' };
+		inline int trigger_keybind_mode{ 0 }; // 0 = Hold, 1 = Toggle, 2 = Always
+		inline int min_delay{ 50 };
+		inline int max_delay{ 150 };
+		inline bool randomize_delay{ false };
+		inline bool gunswap_enabled{ false };
+		inline int db_slot{ 1 };
+		inline int revolver_slot{ 2 };
+		inline int gunswap_delay{ 50 };
 	}
 
 	namespace player_relations

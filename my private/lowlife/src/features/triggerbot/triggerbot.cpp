@@ -776,6 +776,132 @@ namespace shot_detect
 		SendInput(1, &input, sizeof(INPUT));
 	}
 
+	bool get_keybind_state()
+	{
+		switch (settings::shot_detect::trigger_keybind_mode)
+		{
+		case 0: 
+			return (GetAsyncKeyState(settings::shot_detect::trigger_keybind) & 0x8000) != 0;
+		case 1: 
+			{
+				static bool key_was_pressed = false;
+				static bool toggle_state = false;
+				bool pressed = (GetAsyncKeyState(settings::shot_detect::trigger_keybind) & 0x8000) != 0;
+				if (pressed && !key_was_pressed) toggle_state = !toggle_state;
+				key_was_pressed = pressed;
+				return toggle_state;
+			}
+		case 2: 
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	int get_local_ammo()
+	{
+		if (cache::cached_local_player.instance.address == 0 || game::local_character.address == 0)
+			return -1;
+		try {
+			rbx::instance_t model_inst{ game::local_character.address };
+			rbx::instance_t equipped_tool = {};
+			for (auto& child : model_inst.get_children())
+			{
+				std::string cclass = child.get_class_name();
+				if (cclass == "Tool" || cclass == "HopperBin")
+				{
+					equipped_tool = child;
+					break;
+				}
+			}
+
+			if (equipped_tool.address != 0)
+			{
+				for (auto& child : equipped_tool.get_children())
+				{
+					std::string cclass = child.get_class_name();
+					if (cclass.find("Value") != std::string::npos)
+					{
+						std::string cname = child.get_name();
+						std::string lower_cname = cname;
+						std::transform(lower_cname.begin(), lower_cname.end(), lower_cname.begin(), ::tolower);
+						if (lower_cname.find("ammo") != std::string::npos || lower_cname.find("clip") != std::string::npos)
+						{
+							int val = memory->read<int>(child.address + Offsets::Misc::Value);
+							return val;
+						}
+					}
+				}
+			}
+		} catch (...) {}
+		return -1;
+	}
+
+	void press_slot_key(int slot)
+	{
+		if (slot < 1 || slot > 9) return;
+		char key = '0' + slot;
+
+		INPUT inputs[2] = {};
+		inputs[0].type = INPUT_KEYBOARD;
+		inputs[0].ki.wVk = key;
+		
+		inputs[1].type = INPUT_KEYBOARD;
+		inputs[1].ki.wVk = key;
+		inputs[1].ki.dwFlags = KEYEVENTF_KEYUP;
+
+		SendInput(2, inputs, sizeof(INPUT));
+	}
+
+	void gun_swap_loop()
+	{
+		int last_local_ammo = -1;
+		std::string last_tool = "";
+
+		while (true)
+		{
+			Sleep(10);
+
+			if (!settings::shot_detect::gunswap_enabled || !game::local_character.address)
+			{
+				last_local_ammo = -1;
+				last_tool = "";
+				continue;
+			}
+
+			std::string current_tool = cache::cached_local_player.tool_name;
+			std::string lower_tool = current_tool;
+			std::transform(lower_tool.begin(), lower_tool.end(), lower_tool.begin(), ::tolower);
+
+			// We check if current tool is DB/Double-Barrel
+			bool is_db = (lower_tool.find("double") != std::string::npos || lower_tool.find("db") != std::string::npos);
+
+			if (is_db)
+			{
+				int ammo = get_local_ammo();
+				if (ammo != -1)
+				{
+					if (last_tool == current_tool && last_local_ammo != -1)
+					{
+						if (ammo < last_local_ammo)
+						{
+							// Fired! Swap to revolver slot after configured delay
+							Sleep(settings::shot_detect::gunswap_delay);
+							press_slot_key(settings::shot_detect::revolver_slot);
+						}
+					}
+					last_local_ammo = ammo;
+				}
+				last_tool = current_tool;
+			}
+			else
+			{
+				last_local_ammo = -1;
+				last_tool = current_tool;
+			}
+		}
+	}
+
 	cache::entity_t get_player_under_cursor()
 	{
 		POINT cursor_pt;
@@ -918,9 +1044,12 @@ namespace shot_detect
 
 	void run()
 	{
+		std::thread(gun_swap_loop).detach();
+
 		bool mb5_was_pressed = false;
 		bool is_clicking = false;
 		auto last_click_time = std::chrono::steady_clock::now();
+		int current_delay = 100;
 
 		while (true)
 		{
@@ -1020,11 +1149,11 @@ namespace shot_detect
 			}
 			mb5_was_pressed = mb5_is_pressed;
 
-			// 2. Handle Autoclicker Triggered by Key C and target ammo decrease
+			// 2. Handle Autoclicker Triggered by Key Bind and target ammo decrease
 			if (settings::shot_detect::enabled && has_target)
 			{
-				bool c_is_pressed = (GetAsyncKeyState('C') & 0x8000) != 0;
-				if (c_is_pressed)
+				bool key_active = get_keybind_state();
+				if (key_active)
 				{
 					bool target_still_valid = false;
 					cache::entity_t current_target_state = {};
@@ -1055,7 +1184,30 @@ namespace shot_detect
 							{
 								if (current_ammo < last_ammo_val)
 								{
-									is_clicking = true;
+									if (!is_clicking)
+									{
+										is_clicking = true;
+										if (settings::shot_detect::randomize_delay)
+										{
+											int min_val = settings::shot_detect::min_delay;
+											int max_val = settings::shot_detect::max_delay;
+											if (min_val > max_val) std::swap(min_val, max_val);
+											if (min_val < 1) min_val = 1;
+											if (max_val < 1) max_val = 1;
+
+											std::random_device rd;
+											std::mt19937 gen(rd());
+											std::uniform_int_distribution<> distrib(min_val, max_val);
+											current_delay = distrib(gen);
+										}
+										else
+										{
+											int cps = settings::shot_detect::cps;
+											if (cps < 1) cps = 1;
+											current_delay = 1000 / cps;
+										}
+										last_click_time = std::chrono::steady_clock::now();
+									}
 								}
 							}
 							last_ammo_val = current_ammo;
@@ -1075,25 +1227,48 @@ namespace shot_detect
 				}
 
 				if (is_clicking)
-				{
-					if (settings::shot_detect::click_mode == 0) // Continuous
 					{
-						auto now = std::chrono::steady_clock::now();
-						auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_click_time).count();
-						int cps = settings::shot_detect::cps;
-						if (cps < 1) cps = 1;
-						if (duration >= (1000 / cps))
+						if (settings::shot_detect::click_mode == 0) // Continuous
 						{
-							trigger_immediate_click();
-							last_click_time = now;
+							auto now = std::chrono::steady_clock::now();
+							auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_click_time).count();
+							if (duration >= current_delay)
+							{
+								trigger_immediate_click();
+								last_click_time = now;
+
+								if (settings::shot_detect::randomize_delay)
+								{
+									int min_val = settings::shot_detect::min_delay;
+									int max_val = settings::shot_detect::max_delay;
+									if (min_val > max_val) std::swap(min_val, max_val);
+									if (min_val < 1) min_val = 1;
+									if (max_val < 1) max_val = 1;
+
+									std::random_device rd;
+									std::mt19937 gen(rd());
+									std::uniform_int_distribution<> distrib(min_val, max_val);
+									current_delay = distrib(gen);
+								}
+								else
+								{
+									int cps = settings::shot_detect::cps;
+									if (cps < 1) cps = 1;
+									current_delay = 1000 / cps;
+								}
+							}
+						}
+						else // Single Click
+						{
+							auto now = std::chrono::steady_clock::now();
+							auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_click_time).count();
+							if (duration >= current_delay)
+							{
+								trigger_immediate_click();
+								is_clicking = false;
+							}
 						}
 					}
-					else // Single Click
-					{
-						trigger_immediate_click();
-						is_clicking = false;
-					}
-				}
 			}
 			else
 			{
