@@ -179,6 +179,37 @@ namespace rbx::aimbot {
             return false;
         }
 
+        bool is_player_visible(const cache::entity_t& player) {
+            rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
+            if (camera_inst.address != 0) {
+                rbx::camera_t camera{ camera_inst.address };
+                math::vector3 camera_pos = camera.get_position();
+                
+                const std::unordered_set<std::string> target_parts_to_check = {
+                    "Head", "Torso", "UpperTorso", "LowerTorso",
+                    "Left Arm", "LeftUpperArm", "LeftLowerArm", "LeftHand",
+                    "Right Arm", "RightUpperArm", "RightLowerArm", "RightHand",
+                    "Left Leg", "LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
+                    "Right Leg", "RightUpperLeg", "RightLowerLeg", "RightFoot",
+                    "HumanoidRootPart"
+                };
+
+                for (const auto& pair : player.parts) {
+                    if (target_parts_to_check.find(pair.first) == target_parts_to_check.end()) continue;
+                    rbx::part_t part = pair.second;
+                    if (!part.address) continue;
+                    rbx::primitive_t primitive = part.get_primitive();
+                    if (!primitive.address) continue;
+                    math::vector3 world_pos = primitive.get_position();
+                    if (!botter::is_occluded(camera_pos, world_pos)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return true;
+        }
+
         rbx::part_t get_closest_part(const cache::entity_t& player, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view) {
             rbx::part_t closest = {};
             float min_dist = std::numeric_limits<float>::max();
@@ -293,38 +324,8 @@ namespace rbx::aimbot {
                 if (dist > settings::aimbot::fov) return false;
             }
 
-            if (settings::aimbot::wall_check) {
-                rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
-                if (camera_inst.address != 0) {
-                    rbx::camera_t camera{ camera_inst.address };
-                    math::vector3 camera_pos = camera.get_position();
-                    
-                    bool any_part_visible = false;
-                    const std::unordered_set<std::string> target_parts_to_check = {
-                        "Head", "Torso", "UpperTorso", "LowerTorso",
-                        "Left Arm", "LeftUpperArm", "LeftLowerArm", "LeftHand",
-                        "Right Arm", "RightUpperArm", "RightLowerArm", "RightHand",
-                        "Left Leg", "LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
-                        "Right Leg", "RightUpperLeg", "RightLowerLeg", "RightFoot",
-                        "HumanoidRootPart"
-                    };
-
-                    for (const auto& pair : player.parts) {
-                        if (target_parts_to_check.find(pair.first) == target_parts_to_check.end()) continue;
-                        rbx::part_t part = pair.second;
-                        if (!part.address) continue;
-                        rbx::primitive_t primitive = part.get_primitive();
-                        if (!primitive.address) continue;
-                        math::vector3 world_pos = primitive.get_position();
-                        if (!botter::is_occluded(camera_pos, world_pos)) {
-                            any_part_visible = true;
-                            break;
-                        }
-                    }
-                    if (!any_part_visible) {
-                        return false;
-                    }
-                }
+            if (settings::aimbot::wall_check && !is_player_visible(player)) {
+                return false;
             }
 
             return true;
@@ -729,6 +730,11 @@ namespace rbx::aimbot {
                         relation_invalid = true;
                     }
                     if (settings::aimbot::team_check && is_on_same_team(locked_target, local_crew_id)) {
+                        relation_invalid = true;
+                    }
+
+                    // Release target if they go behind a wall and wall check is enabled
+                    if (settings::aimbot::wall_check && !is_player_visible(locked_target)) {
                         relation_invalid = true;
                     }
 
