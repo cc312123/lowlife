@@ -636,7 +636,7 @@ void rbx::silent::silent_aim_1()
 		}
 
 		
-		if (g_silent_found_target && g_silent_cached_target.instance.address != 0)
+		if (g_silent_cached_target.instance.address != 0)
 		{
 			bool found = false;
 			std::shared_ptr<std::vector<cache::entity_t>> players_snapshot;
@@ -659,17 +659,24 @@ void rbx::silent::silent_aim_1()
 			if (!found)
 			{
 				g_silent_found_target = false;
-				if (!g_silent_aim_manual_locked)
-				{
-					g_silent_cached_target = {};
-					g_silent_locked_part_name = "";
-				}
+				g_silent_cached_target = {};
+				g_silent_locked_part_name = "";
 			}
 		}
 
 		bool always_mode = (settings::silent::keybind_mode == 2);
 		
-		if (!g_silent_found_target || g_silent_cached_target.instance.address == 0)
+		bool should_find_new = false;
+		if (always_mode || !settings::silent::sticky_aim)
+		{
+			should_find_new = (!g_silent_found_target || g_silent_cached_target.instance.address == 0);
+		}
+		else
+		{
+			should_find_new = (g_silent_cached_target.instance.address == 0);
+		}
+
+		if (should_find_new)
 		{
 			target = get_closest_player_from_cursor();
 			
@@ -730,8 +737,11 @@ void rbx::silent::silent_aim_1()
 						g_silent_found_target = false;
 						if (!g_silent_aim_manual_locked)
 						{
-							g_silent_cached_target = {};
-							g_silent_locked_part_name = "";
+							if (!settings::silent::sticky_aim)
+							{
+								g_silent_cached_target = {};
+								g_silent_locked_part_name = "";
+							}
 						}
 						target = {};
 						continue;
@@ -773,8 +783,11 @@ void rbx::silent::silent_aim_1()
 				g_silent_found_target = false;
 				if (!g_silent_aim_manual_locked)
 				{
-					g_silent_cached_target = {};
-					g_silent_locked_part_name = "";
+					if (!settings::silent::sticky_aim)
+					{
+						g_silent_cached_target = {};
+						g_silent_locked_part_name = "";
+					}
 				}
 				continue;
 			}
@@ -817,8 +830,11 @@ void rbx::silent::silent_aim_1()
 						g_silent_found_target = false;
 						if (!g_silent_aim_manual_locked)
 						{
-							g_silent_cached_target = {};
-							g_silent_locked_part_name = "";
+							if (!settings::silent::sticky_aim)
+							{
+								g_silent_cached_target = {};
+								g_silent_locked_part_name = "";
+							}
 						}
 						continue;
 					}

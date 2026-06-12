@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.19",
-    "latestChangelog":  "Add interactive target selection dropdown list in Shot Detect tab and fix manual target lock deselection bug.",
+    "latestVersion":  "1.0.20",
+    "latestChangelog":  "Fix target switching when Sticky Aim is enabled for both Mouse Aimbot and Silent Aimbot.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -143,7 +143,14 @@
                         "changelog":  "Add interactive target selection dropdown list in Shot Detect tab and fix manual target lock deselection bug.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "bcd06064fae9396d2325a14947e25d2f"
+                    },
+                    {
+                        "version":  "1.0.20",
+                        "date":  "2026-06-12",
+                        "changelog":  "Fix target switching when Sticky Aim is enabled for both Mouse Aimbot and Silent Aimbot.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "ab2e669b7c2121a10d098bed5ebfb415"
                     }
                 ],
-    "latestHash":  "bcd06064fae9396d2325a14947e25d2f"
+    "latestHash":  "ab2e669b7c2121a10d098bed5ebfb415"
 }

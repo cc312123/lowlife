@@ -735,13 +735,7 @@ namespace rbx::aimbot {
                                 }
                             } catch (...) {}
                         }
-
-                        locked_target = cache::entity_t{};
-                        has_locked_target = false;
-                        target_pos_initialized = false;
-                        locked_part_name = "";
-                        accum_x = 0.0f;
-                        accum_y = 0.0f;
+                        // Keep locked_target and has_locked_target active so we do not switch targets.
                     }
                 }
                 else {
@@ -755,14 +749,17 @@ namespace rbx::aimbot {
             }
 
             if (target.instance.address == 0) {
-                target = find_best_target(local_crew_id, cursor_pt, dims, view, local_player_addr);
-                if (target.instance.address != 0) {
-                    locked_target = target;
-                    has_locked_target = true;
-                    target_pos_initialized = false; 
-                    locked_part_name = "";
-                    accum_x = 0.0f;
-                    accum_y = 0.0f;
+                // If sticky aim is enabled and we already have a locked target, do NOT find a new target
+                if (!(settings::aimbot::sticky_aim && has_locked_target && locked_target.instance.address != 0)) {
+                    target = find_best_target(local_crew_id, cursor_pt, dims, view, local_player_addr);
+                    if (target.instance.address != 0) {
+                        locked_target = target;
+                        has_locked_target = true;
+                        target_pos_initialized = false; 
+                        locked_part_name = "";
+                        accum_x = 0.0f;
+                        accum_y = 0.0f;
+                    }
                 }
             }
 
