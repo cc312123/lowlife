@@ -258,7 +258,8 @@ namespace config
 		file << "    \"gunswap_enabled\": " << (settings::shot_detect::gunswap_enabled ? "true" : "false") << ",\n";
 		file << "    \"db_slot\": " << settings::shot_detect::db_slot << ",\n";
 		file << "    \"revolver_slot\": " << settings::shot_detect::revolver_slot << ",\n";
-		file << "    \"gunswap_delay\": " << settings::shot_detect::gunswap_delay << "\n";
+		file << "    \"gunswap_delay\": " << settings::shot_detect::gunswap_delay << ",\n";
+		file << "    \"always_start_with_db\": " << (settings::shot_detect::always_start_with_db ? "true" : "false") << "\n";
 		file << "  }\n";
 
 		file << "}\n";
@@ -763,6 +764,8 @@ namespace config
 				settings::shot_detect::revolver_slot = std::stoi(value);
 			if (parse_json_value(section, "gunswap_delay", value))
 				settings::shot_detect::gunswap_delay = std::stoi(value);
+			if (parse_json_value(section, "always_start_with_db", value))
+				settings::shot_detect::always_start_with_db = (value == "true");
 		}
 
 		return true;

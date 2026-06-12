@@ -767,6 +767,31 @@ namespace shot_detect
 		}
 	}
 
+	int read_value_instance(rbx::instance_t child)
+	{
+		std::string cclass = child.get_class_name();
+		if (cclass == "IntValue")
+		{
+			return (int)memory->read<std::int64_t>(child.address + Offsets::Misc::Value);
+		}
+		else if (cclass == "NumberValue" || cclass == "DoubleValue")
+		{
+			double val = memory->read<double>(child.address + Offsets::Misc::Value);
+			return (int)val;
+		}
+		else if (cclass == "StringValue")
+		{
+			std::string s_val = memory->read_string(child.address + Offsets::Misc::Value);
+			if (!s_val.empty())
+			{
+				try {
+					return std::stoi(s_val);
+				} catch (...) {}
+			}
+		}
+		return memory->read<int>(child.address + Offsets::Misc::Value);
+	}
+
 	int get_local_ammo()
 	{
 		if (cache::cached_local_player.instance.address == 0 || game::local_character.address == 0)
@@ -796,7 +821,7 @@ namespace shot_detect
 						std::transform(lower_cname.begin(), lower_cname.end(), lower_cname.begin(), ::tolower);
 						if (lower_cname.find("ammo") != std::string::npos || lower_cname.find("clip") != std::string::npos)
 						{
-							int val = memory->read<int>(child.address + Offsets::Misc::Value);
+							int val = read_value_instance(child);
 							return val;
 						}
 					}
@@ -829,6 +854,8 @@ namespace shot_detect
 	{
 		int last_local_ammo = -1;
 		std::string last_tool = "";
+		bool db_force_equipped = false;
+		bool has_swapped_to_revolver = false;
 
 		while (true)
 		{
@@ -838,8 +865,13 @@ namespace shot_detect
 			{
 				last_local_ammo = -1;
 				last_tool = "";
+				db_force_equipped = false;
+				has_swapped_to_revolver = false;
 				continue;
 			}
+
+			bool sd_active = settings::shot_detect::enabled && has_target && get_keybind_state();
+			bool should_start_with_db = settings::shot_detect::always_start_with_db && sd_active;
 
 			std::string current_tool = cache::cached_local_player.tool_name;
 			std::string lower_tool = current_tool;
@@ -850,6 +882,22 @@ namespace shot_detect
 			              lower_tool.find("db") != std::string::npos || 
 			              lower_tool.find("barrel") != std::string::npos);
 
+			if (should_start_with_db)
+			{
+				if (!is_db && !db_force_equipped)
+				{
+					press_slot_key(settings::shot_detect::db_slot);
+					db_force_equipped = true;
+					has_swapped_to_revolver = false;
+					Sleep(150);
+					continue;
+				}
+			}
+			else
+			{
+				db_force_equipped = false;
+			}
+
 			if (is_db)
 			{
 				int ammo = get_local_ammo();
@@ -859,12 +907,24 @@ namespace shot_detect
 					if (last_tool != current_tool || last_local_ammo == -1 || ammo > last_local_ammo)
 					{
 						last_local_ammo = ammo;
+						has_swapped_to_revolver = false;
 					}
-					else if (ammo < last_local_ammo)
+					else if (ammo < last_local_ammo && !has_swapped_to_revolver)
 					{
+						has_swapped_to_revolver = true;
+
 						// Fired! Swap to revolver slot after configured delay
 						Sleep(settings::shot_detect::gunswap_delay);
-						press_slot_key(settings::shot_detect::revolver_slot);
+						
+						// Verify we are not already holding revolver before pressing slot key
+						std::string check_tool = cache::cached_local_player.tool_name;
+						std::transform(check_tool.begin(), check_tool.end(), check_tool.begin(), ::tolower);
+						bool is_revolver = (check_tool.find("revolver") != std::string::npos || 
+						                    check_tool.find("rev") != std::string::npos);
+						if (!is_revolver)
+						{
+							press_slot_key(settings::shot_detect::revolver_slot);
+						}
 						last_local_ammo = ammo;
 					}
 				}
@@ -1007,7 +1067,7 @@ namespace shot_detect
 						std::transform(lower_cname.begin(), lower_cname.end(), lower_cname.begin(), ::tolower);
 						if (lower_cname.find("ammo") != std::string::npos || lower_cname.find("clip") != std::string::npos)
 						{
-							int val = memory->read<int>(child.address + Offsets::Misc::Value);
+							int val = read_value_instance(child);
 							return val;
 						}
 					}

@@ -3180,6 +3180,8 @@ void render_t::render_menu()
             SliderIntWithInput("Revolver Slot", &settings::shot_detect::revolver_slot, 1, 9);
             ImGui::Spacing();
             SliderIntWithInput("Swap Delay (ms)", &settings::shot_detect::gunswap_delay, 10, 500);
+            ImGui::Spacing();
+            ImGui::Checkbox("Always Start with DB", &settings::shot_detect::always_start_with_db);
         }
 
         ImGui::EndChild();
