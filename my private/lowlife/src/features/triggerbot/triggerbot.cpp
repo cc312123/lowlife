@@ -1180,7 +1180,7 @@ namespace shot_detect
 						}
 						else
 						{
-							is_clicking = false;
+							// Keep clicking at the same speed (CPS) if it was already active, even when tools are swapped/unequipped
 							last_ammo_val = -1;
 						}
 					}
