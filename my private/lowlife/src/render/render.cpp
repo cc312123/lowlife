@@ -3164,7 +3164,12 @@ void render_t::render_menu()
         }
         else
         {
-            SliderIntWithInput("Autoclick CPS", &settings::shot_detect::cps, 1, 100);
+            SliderIntWithInput("Reaction Delay (ms)", &settings::shot_detect::click_delay, 1, 1000);
+            if (settings::shot_detect::click_mode == 0)
+            {
+                ImGui::Spacing();
+                SliderIntWithInput("Autoclick CPS", &settings::shot_detect::cps, 1, 100);
+            }
         }
 
         ImGui::Spacing();

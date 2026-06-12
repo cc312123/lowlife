@@ -225,6 +225,7 @@ namespace settings
 		inline int min_delay{ 50 };
 		inline int max_delay{ 150 };
 		inline bool randomize_delay{ false };
+		inline int click_delay{ 100 };
 		inline bool gunswap_enabled{ false };
 		inline int db_slot{ 1 };
 		inline int revolver_slot{ 2 };

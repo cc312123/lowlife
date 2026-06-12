@@ -60,7 +60,306 @@ namespace botter
 			math::vector3 size;
 			float r;
 			float r_sq;
+			int type; // 0 = standard Box/Part, 1 = WedgePart, 2 = CornerWedgePart
 		};
+
+		float dot(const math::vector3& a, const math::vector3& b)
+		{
+			return a.x * b.x + a.y * b.y + a.z * b.z;
+		}
+
+		bool get_inequality_interval(float a, float b, float t_start, float t_end, float& out_start, float& out_end)
+		{
+			if (std::abs(a) < 1e-5f)
+			{
+				if (b <= 0.0f)
+				{
+					out_start = t_start;
+					out_end = t_end;
+					return true;
+				}
+				return false;
+			}
+
+			if (a > 0.0f)
+			{
+				float limit = -b / a;
+				if (t_start > limit) return false;
+				out_start = t_start;
+				out_end = std::min(t_end, limit);
+				return true;
+			}
+			else
+			{
+				float limit = -b / a;
+				if (limit > t_end) return false;
+				out_start = std::max(t_start, limit);
+				out_end = t_end;
+				return true;
+			}
+		}
+
+		bool ray_intersects_obb_get_t(
+			const math::vector3& ray_origin,
+			const math::vector3& ray_dir,
+			float ray_length,
+			const cached_part_t& box,
+			float& out_t_min,
+			float& out_t_max
+		) {
+			float t_min = 0.0f;
+			float t_max = ray_length;
+
+			math::vector3 delta = box.position - ray_origin;
+
+			// Axis 0 (X)
+			{
+				float ax_x = box.rotation.m[0];
+				float ax_y = box.rotation.m[3];
+				float ax_z = box.rotation.m[6];
+				float f = ray_dir.x * ax_x + ray_dir.y * ax_y + ray_dir.z * ax_z;
+				float e = delta.x * ax_x + delta.y * ax_y + delta.z * ax_z;
+				float ext = box.size.x * 0.5f;
+
+				if (std::abs(f) > 0.0001f)
+				{
+					float inv_f = 1.0f / f;
+					float t1 = (e - ext) * inv_f;
+					float t2 = (e + ext) * inv_f;
+
+					if (t1 > t2)
+					{
+						std::swap(t1, t2);
+					}
+
+					t_min = std::max(t_min, t1);
+					t_max = std::min(t_max, t2);
+
+					if (t_min > t_max)
+					{
+						return false;
+					}
+				}
+				else
+				{
+					if (-e - ext > 0.0f || -e + ext < 0.0f)
+					{
+						return false;
+					}
+				}
+			}
+
+			// Axis 1 (Y)
+			{
+				float ay_x = box.rotation.m[1];
+				float ay_y = box.rotation.m[4];
+				float ay_z = box.rotation.m[7];
+				float f = ray_dir.x * ay_x + ray_dir.y * ay_y + ray_dir.z * ay_z;
+				float e = delta.x * ay_x + delta.y * ay_y + delta.z * ay_z;
+				float ext = box.size.y * 0.5f;
+
+				if (std::abs(f) > 0.0001f)
+				{
+					float inv_f = 1.0f / f;
+					float t1 = (e - ext) * inv_f;
+					float t2 = (e + ext) * inv_f;
+
+					if (t1 > t2)
+					{
+						std::swap(t1, t2);
+					}
+
+					t_min = std::max(t_min, t1);
+					t_max = std::min(t_max, t2);
+
+					if (t_min > t_max)
+					{
+						return false;
+					}
+				}
+				else
+				{
+					if (-e - ext > 0.0f || -e + ext < 0.0f)
+					{
+						return false;
+					}
+				}
+			}
+
+			// Axis 2 (Z)
+			{
+				float az_x = box.rotation.m[2];
+				float az_y = box.rotation.m[5];
+				float az_z = box.rotation.m[8];
+				float f = ray_dir.x * az_x + ray_dir.y * az_y + ray_dir.z * az_z;
+				float e = delta.x * az_x + delta.y * az_y + delta.z * az_z;
+				float ext = box.size.z * 0.5f;
+
+				if (std::abs(f) > 0.0001f)
+				{
+					float inv_f = 1.0f / f;
+					float t1 = (e - ext) * inv_f;
+					float t2 = (e + ext) * inv_f;
+
+					if (t1 > t2)
+					{
+						std::swap(t1, t2);
+					}
+
+					t_min = std::max(t_min, t1);
+					t_max = std::min(t_max, t2);
+
+					if (t_min > t_max)
+					{
+						return false;
+					}
+				}
+				else
+				{
+					if (-e - ext > 0.0f || -e + ext < 0.0f)
+					{
+						return false;
+					}
+				}
+			}
+
+			out_t_min = t_min;
+			out_t_max = t_max;
+			return true;
+		}
+
+		bool ray_intersects_part(
+			const math::vector3& ray_origin,
+			const math::vector3& ray_dir,
+			float ray_length,
+			const cached_part_t& box,
+			float& intersection_distance
+		) {
+			float t_entry = 0.0f;
+			float t_exit = ray_length;
+
+			if (!ray_intersects_obb_get_t(ray_origin, ray_dir, ray_length, box, t_entry, t_exit))
+			{
+				return false;
+			}
+
+			if (box.type == 0) // Standard box
+			{
+				intersection_distance = t_entry;
+				return true;
+			}
+
+			// Clamp segment to active ray range
+			t_entry = std::max(0.0f, t_entry);
+			t_exit = std::min(ray_length, t_exit);
+			if (t_entry > t_exit)
+			{
+				return false;
+			}
+
+			math::vector3 delta_0 = ray_origin - box.position;
+			math::vector3 axis_x = { box.rotation.m[0], box.rotation.m[3], box.rotation.m[6] };
+			math::vector3 axis_y = { box.rotation.m[1], box.rotation.m[4], box.rotation.m[7] };
+			math::vector3 axis_z = { box.rotation.m[2], box.rotation.m[5], box.rotation.m[8] };
+
+			float x_0 = dot(delta_0, axis_x);
+			float x_d = dot(ray_dir, axis_x);
+			float y_0 = dot(delta_0, axis_y);
+			float y_d = dot(ray_dir, axis_y);
+			float z_0 = dot(delta_0, axis_z);
+			float z_d = dot(ray_dir, axis_z);
+
+			if (box.type == 1) // WedgePart
+			{
+				// Inequality: y <= z * (size.y / size.z)
+				// y - z * (size.y / size.z) <= 0
+				float scale = box.size.y / box.size.z;
+				float a = y_d - z_d * scale;
+				float b = y_0 - z_0 * scale;
+
+				float out_start = 0.0f;
+				float out_end = 0.0f;
+				if (get_inequality_interval(a, b, t_entry, t_exit, out_start, out_end))
+				{
+					intersection_distance = out_start;
+					return true;
+				}
+				return false;
+			}
+			else if (box.type == 2) // CornerWedgePart
+			{
+				// Inequality 1: y <= x * (size.y / size.x)
+				// y - x * (size.y / size.x) <= 0
+				float scale_x = box.size.y / box.size.x;
+				float a1 = y_d - x_d * scale_x;
+				float b1 = y_0 - x_0 * scale_x;
+
+				// Inequality 2: y <= -z * (size.y / size.z)
+				// y + z * (size.y / size.z) <= 0
+				float scale_z = box.size.y / box.size.z;
+				float a2 = y_d + z_d * scale_z;
+				float b2 = y_0 + z_0 * scale_z;
+
+				float start1 = 0.0f, end1 = 0.0f;
+				float start2 = 0.0f, end2 = 0.0f;
+
+				if (get_inequality_interval(a1, b1, t_entry, t_exit, start1, end1) &&
+					get_inequality_interval(a2, b2, t_entry, t_exit, start2, end2))
+				{
+					float intersect_start = std::max(start1, start2);
+					float intersect_end = std::min(end1, end2);
+					if (intersect_start <= intersect_end)
+					{
+						intersection_distance = intersect_start;
+						return true;
+					}
+				}
+				return false;
+			}
+
+			return false;
+		}
+
+		bool is_point_inside_obb(const math::vector3& p, const cached_part_t& box);
+
+		bool is_point_inside_part(const math::vector3& p, const cached_part_t& box)
+		{
+			if (!is_point_inside_obb(p, box))
+			{
+				return false;
+			}
+
+			if (box.type == 1) // WedgePart
+			{
+				math::vector3 delta = p - box.position;
+				float local_y = delta.x * box.rotation.m[1] + delta.y * box.rotation.m[4] + delta.z * box.rotation.m[7];
+				float local_z = delta.x * box.rotation.m[2] + delta.y * box.rotation.m[5] + delta.z * box.rotation.m[8];
+
+				// Wedge slope rises from front (-Z) to back (+Z)
+				float slope_y = local_z * (box.size.y / box.size.z);
+				if (local_y > slope_y + 0.05f)
+				{
+					return false;
+				}
+			}
+			else if (box.type == 2) // CornerWedgePart
+			{
+				math::vector3 delta = p - box.position;
+				float local_x = delta.x * box.rotation.m[0] + delta.y * box.rotation.m[3] + delta.z * box.rotation.m[6];
+				float local_y = delta.x * box.rotation.m[1] + delta.y * box.rotation.m[4] + delta.z * box.rotation.m[7];
+				float local_z = delta.x * box.rotation.m[2] + delta.y * box.rotation.m[5] + delta.z * box.rotation.m[8];
+
+				// CornerWedge peak is at (+X, +Y, -Z)
+				float slope_y_x = local_x * (box.size.y / box.size.x);
+				float slope_y_z = -local_z * (box.size.y / box.size.z);
+				if (local_y > slope_y_x + 0.05f || local_y > slope_y_z + 0.05f)
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
 
 		std::vector<cached_part_t> cached_map_parts;
 		std::mutex map_parts_mutex;
@@ -207,6 +506,15 @@ namespace botter
 									float hz = cp.size.z * 0.5f;
 									cp.r_sq = hx * hx + hy * hy + hz * hz;
 									cp.r = std::sqrt(cp.r_sq);
+
+									int part_type = 0;
+									if (class_name == "WedgePart") {
+										part_type = 1;
+									} else if (class_name == "CornerWedgePart") {
+										part_type = 2;
+									}
+									cp.type = part_type;
+
 									parts.push_back(cp);
 								}
 							}
@@ -484,7 +792,7 @@ namespace botter
 
 		for (const auto& box : cached_map_parts)
 		{
-			if (is_point_inside_obb(start, box) || is_point_inside_obb(end, box))
+			if (is_point_inside_part(start, box) || is_point_inside_part(end, box))
 			{
 				return true;
 			}
@@ -500,8 +808,8 @@ namespace botter
 			float wy = box.position.y - start.y;
 			float wz = box.position.z - start.z;
 			
-			float dot = wx * vx + wy * vy + wz * vz;
-			float t = dot / v_sq;
+			float dot_val = wx * vx + wy * vy + wz * vz;
+			float t = dot_val / v_sq;
 			if (t < 0.0f) t = 0.0f;
 			else if (t > 1.0f) t = 1.0f;
 			
@@ -520,7 +828,7 @@ namespace botter
 			}
 
 			float dist = 0.0f;
-			if (ray_intersects_obb(start, dir_norm, len, box, dist))
+			if (ray_intersects_part(start, dir_norm, len, box, dist))
 			{
 				return true; 
 			}
@@ -1103,6 +1411,7 @@ namespace shot_detect
 
 		bool mb5_was_pressed = false;
 		bool is_clicking = false;
+		bool is_first_click = true;
 		auto last_click_time = std::chrono::steady_clock::now();
 		int current_delay = 100;
 
@@ -1231,6 +1540,7 @@ namespace shot_detect
 									if (!is_clicking)
 									{
 										is_clicking = true;
+										is_first_click = true;
 										if (settings::shot_detect::randomize_delay)
 										{
 											int min_val = settings::shot_detect::min_delay;
@@ -1246,9 +1556,7 @@ namespace shot_detect
 										}
 										else
 										{
-											int cps = settings::shot_detect::cps;
-											if (cps < 1) cps = 1;
-											current_delay = 1000 / cps;
+											current_delay = settings::shot_detect::click_delay;
 										}
 										last_click_time = std::chrono::steady_clock::now();
 									}
@@ -1275,16 +1583,19 @@ namespace shot_detect
 				}
 
 				if (is_clicking)
+				{
+					if (settings::shot_detect::click_mode == 0) // Continuous
 					{
-						if (settings::shot_detect::click_mode == 0) // Continuous
+						auto now = std::chrono::steady_clock::now();
+						auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_click_time).count();
+						if (duration >= current_delay)
 						{
-							auto now = std::chrono::steady_clock::now();
-							auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_click_time).count();
-							if (duration >= current_delay)
-							{
-								trigger_immediate_click();
-								last_click_time = now;
+							trigger_immediate_click();
+							last_click_time = now;
 
+							if (is_first_click)
+							{
+								is_first_click = false;
 								if (settings::shot_detect::randomize_delay)
 								{
 									int min_val = settings::shot_detect::min_delay;
@@ -1305,18 +1616,35 @@ namespace shot_detect
 									current_delay = 1000 / cps;
 								}
 							}
-						}
-						else // Single Click
-						{
-							auto now = std::chrono::steady_clock::now();
-							auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_click_time).count();
-							if (duration >= current_delay)
+							else
 							{
-								trigger_immediate_click();
-								is_clicking = false;
+								if (settings::shot_detect::randomize_delay)
+								{
+									int min_val = settings::shot_detect::min_delay;
+									int max_val = settings::shot_detect::max_delay;
+									if (min_val > max_val) std::swap(min_val, max_val);
+									if (min_val < 1) min_val = 1;
+									if (max_val < 1) max_val = 1;
+
+									std::random_device rd;
+									std::mt19937 gen(rd());
+									std::uniform_int_distribution<> distrib(min_val, max_val);
+									current_delay = distrib(gen);
+								}
 							}
 						}
 					}
+					else // Single Click
+					{
+						auto now = std::chrono::steady_clock::now();
+						auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_click_time).count();
+						if (duration >= current_delay)
+						{
+							trigger_immediate_click();
+							is_clicking = false;
+						}
+					}
+				}
 			}
 			else
 			{

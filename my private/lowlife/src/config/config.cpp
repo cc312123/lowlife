@@ -255,6 +255,7 @@ namespace config
 		file << "    \"min_delay\": " << settings::shot_detect::min_delay << ",\n";
 		file << "    \"max_delay\": " << settings::shot_detect::max_delay << ",\n";
 		file << "    \"randomize_delay\": " << (settings::shot_detect::randomize_delay ? "true" : "false") << ",\n";
+		file << "    \"click_delay\": " << settings::shot_detect::click_delay << ",\n";
 		file << "    \"gunswap_enabled\": " << (settings::shot_detect::gunswap_enabled ? "true" : "false") << ",\n";
 		file << "    \"db_slot\": " << settings::shot_detect::db_slot << ",\n";
 		file << "    \"revolver_slot\": " << settings::shot_detect::revolver_slot << ",\n";
@@ -756,6 +757,8 @@ namespace config
 				settings::shot_detect::max_delay = std::stoi(value);
 			if (parse_json_value(section, "randomize_delay", value))
 				settings::shot_detect::randomize_delay = (value == "true");
+			if (parse_json_value(section, "click_delay", value))
+				settings::shot_detect::click_delay = std::stoi(value);
 			if (parse_json_value(section, "gunswap_enabled", value))
 				settings::shot_detect::gunswap_enabled = (value == "true");
 			if (parse_json_value(section, "db_slot", value))
