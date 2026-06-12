@@ -2309,12 +2309,6 @@ void render_t::render_menu()
             SliderFloatWithInput("shake y", &settings::aimbot::shake_y, -5.0f, 5.0f, "%.1f");
         }
 
-        ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 5.f);
-        ImGui::Separator();
-        ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 5.f);
-        ImGui::Checkbox("No Spread & Recoil", &settings::expl::no_spread_recoil);
-
-
         ImGui::EndChild();
         ImGui::PopStyleVar();
         break;

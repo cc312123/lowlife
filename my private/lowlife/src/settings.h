@@ -183,7 +183,6 @@ namespace settings
 		inline float legit_teleport_speed{ 150.0f };
 		inline int legit_teleport_delay{ 15 };
 
-		inline bool no_spread_recoil{ false };
 	}
 
 	namespace dex_explorer

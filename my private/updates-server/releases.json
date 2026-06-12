@@ -142,8 +142,8 @@
                         "date":  "2026-06-11",
                         "changelog":  "Add interactive target selection dropdown list in Shot Detect tab and fix manual target lock deselection bug.",
                         "fileName":  "RobloxCrashHandler.exe",
-                        "md5":  "c336f5821cd04230f0a42fca815a3e47"
+                        "md5":  "a297f5aaec6de432b8c7b47d64a610d3"
                     }
                 ],
-    "latestHash":  "c336f5821cd04230f0a42fca815a3e47"
+    "latestHash":  "a297f5aaec6de432b8c7b47d64a610d3"
 }
