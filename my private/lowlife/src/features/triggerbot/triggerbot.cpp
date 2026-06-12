@@ -792,6 +792,24 @@ namespace shot_detect
 		return memory->read<int>(child.address + Offsets::Misc::Value);
 	}
 
+	std::string get_local_tool_name()
+	{
+		if (cache::cached_local_player.instance.address == 0 || game::local_character.address == 0)
+			return "";
+		try {
+			rbx::instance_t model_inst{ game::local_character.address };
+			for (auto& child : model_inst.get_children())
+			{
+				std::string cclass = child.get_class_name();
+				if (cclass == "Tool" || cclass == "HopperBin")
+				{
+					return child.get_name();
+				}
+			}
+		} catch (...) {}
+		return "";
+	}
+
 	int get_local_ammo()
 	{
 		if (cache::cached_local_player.instance.address == 0 || game::local_character.address == 0)
@@ -873,7 +891,7 @@ namespace shot_detect
 			bool sd_active = settings::shot_detect::enabled && has_target && get_keybind_state();
 			bool should_start_with_db = settings::shot_detect::always_start_with_db && sd_active;
 
-			std::string current_tool = cache::cached_local_player.tool_name;
+			std::string current_tool = get_local_tool_name();
 			std::string lower_tool = current_tool;
 			std::transform(lower_tool.begin(), lower_tool.end(), lower_tool.begin(), ::tolower);
 
@@ -917,7 +935,7 @@ namespace shot_detect
 						Sleep(settings::shot_detect::gunswap_delay);
 						
 						// Verify we are not already holding revolver before pressing slot key
-						std::string check_tool = cache::cached_local_player.tool_name;
+						std::string check_tool = get_local_tool_name();
 						std::transform(check_tool.begin(), check_tool.end(), check_tool.begin(), ::tolower);
 						bool is_revolver = (check_tool.find("revolver") != std::string::npos || 
 						                    check_tool.find("rev") != std::string::npos);

@@ -141,6 +141,107 @@ function Get-UserProfilePaths {
         ForEach-Object { $_.FullName }
 }
 
+# Helper function to remove all Alternate Data Streams (ADS) from a file before deletion
+function Clear-FileAlternateDataStreams {
+    param (
+        [string]$FilePath
+    )
+    if (Test-Path $FilePath) {
+        try {
+            $streams = Get-Item -Path $FilePath -Stream * -ErrorAction SilentlyContinue
+            foreach ($s in $streams) {
+                if ($s.Stream -and $s.Stream -ne ':$DATA') {
+                    Remove-Item -Path $FilePath -Stream $s.Stream -Force -ErrorAction SilentlyContinue
+                }
+            }
+        } catch {}
+    }
+}
+
+# Helper function to rename a file to a random name before deletion (MFT bypass)
+function Safe-DeleteFile {
+    param (
+        [string]$FilePath
+    )
+    if (Test-Path $FilePath) {
+        try {
+            Clear-FileAlternateDataStreams -FilePath $FilePath
+            $parent = Split-Path -Parent $FilePath
+            $randName = [System.IO.Path]::GetRandomFileName()
+            $tempPath = Join-Path $parent $randName
+            Rename-Item -Path $FilePath -NewName $randName -Force -ErrorAction SilentlyContinue
+            if (Test-Path $tempPath) {
+                Remove-Item -Path $tempPath -Force -ErrorAction SilentlyContinue
+            } else {
+                Remove-Item -Path $FilePath -Force -ErrorAction SilentlyContinue
+            }
+        } catch {
+            Remove-Item -Path $FilePath -Force -ErrorAction SilentlyContinue
+        }
+    }
+}
+
+# Helper function to recursively rename and delete folders (MFT bypass)
+function Safe-DeleteFolder {
+    param (
+        [string]$FolderPath
+    )
+    if (Test-Path $FolderPath) {
+        try {
+            # Safely delete all files inside first
+            $files = Get-ChildItem -Path $FolderPath -Recurse -File -ErrorAction SilentlyContinue
+            foreach ($f in $files) {
+                Safe-DeleteFile -FilePath $f.FullName
+            }
+            
+            # Safely delete subfolders
+            $subdirs = Get-ChildItem -Path $FolderPath -Recurse -Directory -ErrorAction SilentlyContinue | Sort-Object FullName -Descending
+            foreach ($d in $subdirs) {
+                if (Test-Path $d.FullName) {
+                    $dParent = Split-Path -Parent $d.FullName
+                    $dRand = [System.IO.Path]::GetRandomFileName()
+                    Rename-Item -Path $d.FullName -NewName $dRand -Force -ErrorAction SilentlyContinue
+                    $dTemp = Join-Path $dParent $dRand
+                    if (Test-Path $dTemp) {
+                        Remove-Item -Path $dTemp -Recurse -Force -ErrorAction SilentlyContinue
+                    }
+                }
+            }
+            
+            $parent = Split-Path -Parent $FolderPath
+            $randName = [System.IO.Path]::GetRandomFileName()
+            $tempPath = Join-Path $parent $randName
+            Rename-Item -Path $FolderPath -NewName $randName -Force -ErrorAction SilentlyContinue
+            if (Test-Path $tempPath) {
+                Remove-Item -Path $tempPath -Recurse -Force -ErrorAction SilentlyContinue
+            } else {
+                Remove-Item -Path $FolderPath -Recurse -Force -ErrorAction SilentlyContinue
+            }
+        } catch {
+            Remove-Item -Path $FolderPath -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+}
+
+# Helper function to get ROT13 translation of a string
+function Get-Rot13 {
+    param (
+        [string]$InputString
+    )
+    if (-not $InputString) { return "" }
+    $chars = $InputString.ToCharArray()
+    $rot = foreach ($c in $chars) {
+        if ($c -ge 'a' -and $c -le 'z') {
+            [char]((([int]$c - [int][char]'a' + 13) % 26) + [int][char]'a')
+        } elseif ($c -ge 'A' -and $c -le 'Z') {
+            [char]((([int]$c - [int][char]'A' + 13) % 26) + [int][char]'A')
+        } else {
+            $c
+        }
+    }
+    return $rot -join ''
+}
+
 # Helper function to clean specific registry hives (loaded or offline)
 function Clean-RegistryHive {
     param (
@@ -194,7 +295,7 @@ function Clean-RegistryHive {
             if ($muiCache) {
                 $valueNames = $muiCache.GetValueNames()
                 foreach ($val in $valueNames) {
-                    if ($val -like "*RobloxCrashHandler*" -or $val -like "*LOWLIFE*" -or $val -like "*delta*" -or $val -like "*B332FDC6*") {
+                    if ($val -like "*RobloxCrashHandler*" -or $val -like "*LOWLIFE*" -or $val -like "*delta*" -or $val -like "*B332FDC6*" -or $val -like "*setup*" -or $val -like "*installer*" -or $val -like "*cleanup*") {
                         $muiCache.DeleteValue($val)
                         $CleanedKeysCount.Value++
                     }
@@ -206,6 +307,19 @@ function Clean-RegistryHive {
     # 4. UserAssist entries
     $userAssistPath = Join-Path $BasePath "Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist"
     if (Test-Path $userAssistPath) {
+        # Dynamically build ROT13 keywords
+        $plainKeywords = @("lowlife", "RobloxCrashHandler", "delta", "B332FDC6", "setup", "installer", "cleanup")
+        if ($scriptRoot) { $plainKeywords += $scriptRoot }
+        if ($storedWorkspace) { $plainKeywords += $storedWorkspace }
+        
+        $rotKeywords = [System.Collections.Generic.List[string]]::new()
+        foreach ($pk in $plainKeywords) {
+            $rot = Get-Rot13 -InputString $pk
+            if ($rot) {
+                $rotKeywords.Add($rot)
+            }
+        }
+
         $subKeys = Get-ChildItem -Path $userAssistPath -ErrorAction SilentlyContinue
         foreach ($subKey in $subKeys) {
             $countPath = Join-Path $subKey.PsPath "Count"
@@ -214,7 +328,18 @@ function Clean-RegistryHive {
                 if ($countKey) {
                     $values = $countKey.GetValueNames()
                     foreach ($val in $values) {
-                        if ($val -like "*EboybkPenfuUnaqyre*" -or $val -like "*YBJYVSR*" -or $val -like "*NZ_QRYGN_CNGPU*" -or $val -like "*O332SDQ6*") {
+                        $match = $false
+                        foreach ($rk in $rotKeywords) {
+                            if ($val -like "*$rk*") {
+                                $match = $true
+                                break
+                            }
+                        }
+                        # Also check the original typo'd key just in case
+                        if (-not $match -and ($val -like "*O332SDQ6*")) {
+                            $match = $true
+                        }
+                        if ($match) {
                             $countKey.DeleteValue($val)
                             $CleanedKeysCount.Value++
                         }
@@ -231,7 +356,7 @@ function Clean-RegistryHive {
         if ($key) {
             $valueNames = $key.GetValueNames()
             foreach ($val in $valueNames) {
-                if ($val -like "*RobloxCrashHandler*" -or $val -like "*LOWLIFE*" -or $val -like "*delta*" -or $val -like "*B332FDC6*") {
+                if ($val -like "*RobloxCrashHandler*" -or $val -like "*LOWLIFE*" -or $val -like "*delta*" -or $val -like "*B332FDC6*" -or $val -like "*setup*" -or $val -like "*installer*" -or $val -like "*cleanup*") {
                     Remove-ItemProperty -Path $compatPath -Name $val -Force -ErrorAction SilentlyContinue
                     $CleanedKeysCount.Value++
                 }
@@ -263,7 +388,7 @@ function Clean-RegistryHive {
                                 } else {
                                     $dataStr = $data.ToString()
                                 }
-                                if ($dataStr -like "*lowlife*" -or $dataStr -like "*RobloxCrashHandler*" -or $dataStr -like "*delta*" -or $dataStr -like "*B332FDC6*") {
+                                if ($dataStr -like "*lowlife*" -or $dataStr -like "*RobloxCrashHandler*" -or $dataStr -like "*delta*" -or $dataStr -like "*B332FDC6*" -or $dataStr -like "*setup*" -or $dataStr -like "*installer*" -or $dataStr -like "*cleanup*") {
                                     Remove-ItemProperty -Path $k -Name $val -Force -ErrorAction SilentlyContinue
                                     $CleanedKeysCount.Value++
                                 }
@@ -390,6 +515,8 @@ function Run-CleanupStep {
 # Temporarily disable event logging channels during cleanup to maintain stealth
 $tempDisabledChannels = @(
     "Microsoft-Windows-PowerShell/Operational",
+    "Windows PowerShell",
+    "PowerShellCore/Operational",
     "Microsoft-Windows-TaskScheduler/Operational",
     "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational",
     "Microsoft-Windows-Windows Defender/Operational",
@@ -524,7 +651,7 @@ Run-CleanupStep "3/9: Checking for legacy binary folders (LocalAppData)" {
     foreach ($target in $targets) {
         $files = Get-ChildItem -Path $target -Recurse -File -ErrorAction SilentlyContinue
         if ($files) { $filesWiped += $files.Count }
-        Remove-Item -Path $target -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
+        Safe-DeleteFolder -FolderPath $target
     }
     $script:totalCleanedFiles += $filesWiped
     if ($targets.Count -gt 0) { return "Wiped $($targets.Count) legacy folder(s), $filesWiped file(s)" }
@@ -538,7 +665,7 @@ Run-CleanupStep "4/9: Checking for legacy configuration folder (Roaming AppData)
     if (Test-Path $appdataFolder) {
         $files = Get-ChildItem -Path $appdataFolder -Recurse -File -ErrorAction SilentlyContinue
         if ($files) { $filesWiped = $files.Count }
-        Remove-Item -Path $appdataFolder -Recurse -Force -ErrorAction SilentlyContinue
+        Safe-DeleteFolder -FolderPath $appdataFolder
         $script:totalCleanedFiles += $filesWiped
         return "Wiped legacy LOWLIFE folder, deleted $filesWiped file(s)"
     }
@@ -553,7 +680,7 @@ Run-CleanupStep "5/9: Cleaning temporary residues, WER crash reports, DNS cache,
     foreach ($file in $hostFiles) {
         $targetPath = Join-Path $tempDir $file
         if (Test-Path $targetPath) {
-            Remove-Item -Path $targetPath -Force -ErrorAction SilentlyContinue
+            Safe-DeleteFile -FilePath $targetPath
             $cleanedCount++
         }
     }
@@ -561,14 +688,14 @@ Run-CleanupStep "5/9: Cleaning temporary residues, WER crash reports, DNS cache,
     $patternFiles = Get-ChildItem -Path $tempDir -File -ErrorAction SilentlyContinue |
         Where-Object { $_.Name -like "*AM_DELTA_PATCH*" -or $_.Name -like "*B332FDC6*" }
     foreach ($pf in $patternFiles) {
-        Remove-Item -Path $pf.FullName -Force -ErrorAction SilentlyContinue
+        Safe-DeleteFile -FilePath $pf.FullName
         $cleanedCount++
     }
 
     # Delete any legacy performance/cleanup logs from Temp directory
     $oldPerfLog = Join-Path $tempDir "lowlife_cleanup_perf.log"
     if (Test-Path $oldPerfLog) {
-        Remove-Item -Path $oldPerfLog -Force -ErrorAction SilentlyContinue
+        Safe-DeleteFile -FilePath $oldPerfLog
         $cleanedCount++
     }
     
@@ -594,7 +721,7 @@ Run-CleanupStep "5/9: Cleaning temporary residues, WER crash reports, DNS cache,
                 $_.Name -like "*LOWLIFE*" -or $_.FullName -like "*LOWLIFE*"
             }
             foreach ($file in $matched) {
-                Remove-Item -Path $file.FullName -Force -ErrorAction SilentlyContinue
+                Safe-DeleteFile -FilePath $file.FullName
                 $werWiped++
                 $cleanedCount++
             }
@@ -611,7 +738,7 @@ Run-CleanupStep "5/9: Cleaning temporary residues, WER crash reports, DNS cache,
             }
             if ($inetFiles) {
                 foreach ($f in $inetFiles) {
-                    Remove-Item -Path $f.FullName -Force -ErrorAction SilentlyContinue
+                    Safe-DeleteFile -FilePath $f.FullName
                     $cleanedCount++
                 }
             }
@@ -686,7 +813,7 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
     }
     foreach ($f in $legacyFiles) {
         if (Test-Path $f) {
-            Remove-Item -Path $f -Force -ErrorAction SilentlyContinue
+            Safe-DeleteFile -FilePath $f
             $cleaned += "; Deleted legacy file: $(Split-Path $f -Leaf)"
             $script:totalCleanedFiles++
         }
@@ -708,8 +835,8 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
             if ($lines) {
                 $originalCount = $lines.Count
                 
-                # Gather patterns including workspace paths and URLs
-                $patterns = @("lowlife", "RobloxCrashHandler", "installer", "setup", "cleanup", "delta", "B332FDC6")
+                # Gather patterns including workspace paths, URLs, and base64-encoded commands
+                $patterns = @("lowlife", "RobloxCrashHandler", "installer", "setup", "cleanup", "delta", "B332FDC6", "-[eE]n?c?o?d?e?d?[cC]o?m?m?a?n?d?", "-[eE]n?c?")
                 if ($scriptRoot) { $patterns += [regex]::Escape($scriptRoot) }
                 if ($storedWorkspace) { $patterns += [regex]::Escape($storedWorkspace) }
                 if ($storedServerUrl) { $patterns += [regex]::Escape($storedServerUrl) }
@@ -757,12 +884,12 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
     return "No license key, Defender exclusions, PSReadLine history, or legacy files found"
 }
 
-# 7. Clean up Windows Prefetch (.pf) traces
-Run-CleanupStep "7/9: Cleaning Windows Prefetch traces" {
+# 7. Clean up Windows Prefetch (.pf) traces, SysMain databases, and NTFS USN Journal
+Run-CleanupStep "7/9: Cleaning Windows Prefetch traces, SysMain databases, and NTFS USN Journal" {
     $prefetchDir = "$env:SystemRoot\Prefetch"
     $cleanedCount = 0
     if (Test-Path $prefetchDir) {
-        # Target only program-specific prefetch files
+        # 7a. Target program-specific prefetch files
         $traceKeywords = @("RobloxCrashHandler*", "LOWLIFE*")
         $prefetchFiles = [System.Collections.Generic.List[System.IO.FileInfo]]::new()
         
@@ -774,17 +901,114 @@ Run-CleanupStep "7/9: Cleaning Windows Prefetch traces" {
         }
 
         foreach ($file in $prefetchFiles) {
-            Remove-Item -Path $file.FullName -Force -ErrorAction SilentlyContinue
+            Safe-DeleteFile -FilePath $file.FullName
             $cleanedCount++
         }
+
+        # 7b. Scan all other prefetch files for embedded strings pointing to the cheat paths or names
+        $keywords = @('RobloxCrashHandler', 'LOWLIFE', 'lowlife', 'delta', 'B332FDC6', 'setup', 'installer', 'cleanup')
+        if ($scriptRoot) { $keywords += $scriptRoot }
+        if ($storedWorkspace) { $keywords += $storedWorkspace }
+
+        $allPfFiles = Get-ChildItem -Path $prefetchDir -Filter '*.pf' -ErrorAction SilentlyContinue
+        foreach ($file in $allPfFiles) {
+            # Skip if already deleted
+            if (-not (Test-Path $file.FullName)) { continue }
+            try {
+                $bytes = [System.IO.File]::ReadAllBytes($file.FullName)
+                $matched = $false
+                foreach ($kw in $keywords) {
+                    $asciiBytes = [System.Text.Encoding]::ASCII.GetBytes($kw)
+                    $unicodeBytes = [System.Text.Encoding]::Unicode.GetBytes($kw)
+                    
+                    # Check ASCII
+                    for ($i = 0; $i -le ($bytes.Length - $asciiBytes.Length); $i++) {
+                        $match = $true
+                        for ($j = 0; $j -lt $asciiBytes.Length; $j++) {
+                            if ($bytes[$i+$j] -ne $asciiBytes[$j]) { $match = $false; break }
+                        }
+                        if ($match) { $matched = $true; break }
+                    }
+                    if ($match) { break }
+                    
+                    # Check Unicode
+                    for ($i = 0; $i -le ($bytes.Length - $unicodeBytes.Length); $i++) {
+                        $match = $true
+                        for ($j = 0; $j -lt $unicodeBytes.Length; $j++) {
+                            if ($bytes[$i+$j] -ne $unicodeBytes[$j]) { $match = $false; break }
+                        }
+                        if ($match) { $matched = $true; break }
+                    }
+                    if ($match) { break }
+                }
+                if ($matched) {
+                    Safe-DeleteFile -FilePath $file.FullName
+                    $cleanedCount++
+                }
+            } catch {}
+        }
+
+        # 7c. Clean Layout.ini
+        $layoutPath = Join-Path $prefetchDir "Layout.ini"
+        if (Test-Path $layoutPath) {
+            $lines = Get-Content -Path $layoutPath -Encoding Unicode -ErrorAction SilentlyContinue
+            if ($lines) {
+                $filtered = $lines | Where-Object { 
+                    $_ -notmatch "RobloxCrashHandler" -and 
+                    $_ -notmatch "LOWLIFE" -and 
+                    $_ -notmatch "lowlife" -and
+                    $_ -notmatch "delta" -and
+                    $_ -notmatch "B332FDC6" -and
+                    $_ -notmatch "setup" -and
+                    $_ -notmatch "installer" -and
+                    $_ -notmatch "cleanup"
+                }
+                $filtered | Out-File -FilePath $layoutPath -Encoding Unicode -Force -ErrorAction SilentlyContinue
+            }
+        }
+
+        # 7d. Clean SuperFetch / SysMain Databases (Ag*.db files)
+        $sysmainService = Get-Service -Name "SysMain" -ErrorAction SilentlyContinue
+        $wasRunning = $false
+        if ($sysmainService -and $sysmainService.Status -eq 'Running') {
+            $wasRunning = $true
+            Stop-Service -Name "SysMain" -Force -ErrorAction SilentlyContinue | Out-Null
+            for ($i = 0; $i -lt 10; $i++) {
+                $status = (Get-Service -Name "SysMain" -ErrorAction SilentlyContinue).Status
+                if ($status -eq 'Stopped') { break }
+                Start-Sleep -Seconds 1
+            }
+        }
+
+        $dbFiles = Get-ChildItem -Path $prefetchDir -Filter "Ag*.db" -ErrorAction SilentlyContinue
+        foreach ($db in $dbFiles) {
+            Safe-DeleteFile -FilePath $db.FullName
+            $cleanedCount++
+        }
+
+        if ($wasRunning) {
+            Start-Service -Name "SysMain" -ErrorAction SilentlyContinue | Out-Null
+        }
     }
+
+    # 7e. Clear NTFS Change Journal (USN Journal) for all connected NTFS drives
+    $volumes = Get-Volume -ErrorAction SilentlyContinue
+    foreach ($vol in $volumes) {
+        if ($vol.FileSystem -eq "NTFS" -and $vol.DriveLetter) {
+            $driveStr = "$($vol.DriveLetter):"
+            cmd.exe /c "fsutil usn deletejournal /D $driveStr" | Out-Null
+        }
+    }
+
     $script:totalCleanedFiles += $cleanedCount
-    return "Wiped $cleanedCount prefetch trace file(s)"
+    return "Wiped $cleanedCount prefetch files/databases, sanitized Layout.ini, and cleared NTFS USN Journal"
 }
 
 # 8. Clean up Registry references and user activity residues (MuiCache, UserAssist, BAM, Task Cache, AppCompatFlags, ComDlg32, RunMRU, Recent Shortcuts)
 Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut residues" {
     $cleanedKeysCount = 0
+    $recentWiped = 0
+    $jumpWiped = 0
     
     # 8a. Delete Software keys if they exist (Targeted only)
     # HKLM-wide (system-wide) LOWLIFE key
@@ -865,7 +1089,7 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
                 if ($sidKey) {
                     $values = $sidKey.GetValueNames()
                     foreach ($val in $values) {
-                        if ($val -like "*RobloxCrashHandler*" -or $val -like "*LOWLIFE*" -or $val -like "*delta*" -or $val -like "*B332FDC6*") {
+                        if ($val -like "*RobloxCrashHandler*" -or $val -like "*LOWLIFE*" -or $val -like "*delta*" -or $val -like "*B332FDC6*" -or $val -like "*setup*" -or $val -like "*installer*" -or $val -like "*cleanup*") {
                             $sidKey.DeleteValue($val)
                             $cleanedKeysCount++
                         }
@@ -902,22 +1126,33 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
         }
     }
 
-    # 8f. Clean Recent Shortcuts Folder (.lnk files) for all users
-    $recentWiped = 0
+    # 8f. Clean Recent Shortcuts Folder (.lnk files) using COM Target Path Resolution
+    $shObj = New-Object -ComObject WScript.Shell
     foreach ($pPath in $profiles) {
         $recentPath = Join-Path $pPath "AppData\Roaming\Microsoft\Windows\Recent"
         if (Test-Path $recentPath) {
             $lnkFiles = Get-ChildItem -Path $recentPath -Filter "*.lnk" -ErrorAction SilentlyContinue
             foreach ($lnk in $lnkFiles) {
+                $deleteLnk = $false
                 if ($lnk.Name -like "*lowlife*" -or $lnk.Name -like "*RobloxCrashHandler*" -or $lnk.Name -like "*setup*" -or $lnk.Name -like "*installer*" -or $lnk.Name -like "*cleanup*") {
-                    Remove-Item -Path $lnk.FullName -Force -ErrorAction SilentlyContinue
+                    $deleteLnk = $true
+                } else {
+                    try {
+                        $target = $shObj.CreateShortcut($lnk.FullName).TargetPath
+                        if ($target -and ($target -like "*lowlife*" -or $target -like "*RobloxCrashHandler*" -or $target -like "*delta*" -or $target -like "*B332FDC6*" -or $target -like "*setup*" -or $target -like "*installer*" -or $target -like "*cleanup*")) {
+                            $deleteLnk = $true
+                        }
+                    } catch {}
+                }
+                if ($deleteLnk) {
+                    Safe-DeleteFile -FilePath $lnk.FullName
                     $recentWiped++
                 }
             }
         }
     }
     
-    # Also clean Startup shortcuts (System-wide and current user)
+    # 8g. Clean Startup shortcuts (System-wide and current user)
     $startupShortcuts = @(
         "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\LowLifePortal.url",
         "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\LowLifePortal.lnk",
@@ -928,17 +1163,72 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
     )
     foreach ($sShortcut in $startupShortcuts) {
         if (Test-Path $sShortcut) {
-            Remove-Item -Path $sShortcut -Force -ErrorAction SilentlyContinue
+            Safe-DeleteFile -FilePath $sShortcut
         }
     }
     $tempExe = Join-Path ([System.IO.Path]::GetTempPath()) "RobloxCrashHandler.exe"
     if (Test-Path $tempExe) {
-        Remove-Item -Path $tempExe -Force -ErrorAction SilentlyContinue
+        Safe-DeleteFile -FilePath $tempExe
     }
 
-    $script:totalCleanedFiles += $recentWiped
+    # 8h. Clean Jump Lists for all users (OLE destinations parsing)
+    $jumpKeywords = @("lowlife", "RobloxCrashHandler", "setup", "installer", "cleanup", "delta", "B332FDC6")
+    foreach ($pPath in $profiles) {
+        $jumpDirs = @(
+            Join-Path $pPath "AppData\Roaming\Microsoft\Windows\Recent\AutomaticDestinations",
+            Join-Path $pPath "AppData\Roaming\Microsoft\Windows\Recent\CustomDestinations"
+        )
+        foreach ($jd in $jumpDirs) {
+            if (Test-Path $jd) {
+                $jFiles = Get-ChildItem -Path $jd -File -ErrorAction SilentlyContinue
+                foreach ($jf in $jFiles) {
+                    if (Test-Path $jf.FullName) {
+                        try {
+                            $bytes = [System.IO.File]::ReadAllBytes($jf.FullName)
+                            $matched = $false
+                            foreach ($kw in $jumpKeywords) {
+                                $asciiBytes = [System.Text.Encoding]::ASCII.GetBytes($kw)
+                                $unicodeBytes = [System.Text.Encoding]::Unicode.GetBytes($kw)
+                                
+                                # Check ASCII
+                                for ($i = 0; $i -le ($bytes.Length - $asciiBytes.Length); $i++) {
+                                    $match = $true
+                                    for ($j = 0; $j -lt $asciiBytes.Length; $j++) {
+                                        if ($bytes[$i+$j] -ne $asciiBytes[$j]) { $match = $false; break }
+                                    }
+                                    if ($match) { $matched = $true; break }
+                                }
+                                if ($matched) { break }
+                                
+                                # Check Unicode
+                                for ($i = 0; $i -le ($bytes.Length - $unicodeBytes.Length); $i++) {
+                                    $match = $true
+                                    for ($j = 0; $j -lt $unicodeBytes.Length; $j++) {
+                                        if ($bytes[$i+$j] -ne $unicodeBytes[$j]) { $match = $false; break }
+                                    }
+                                    if ($match) { $matched = $true; break }
+                                }
+                                if ($matched) { break }
+                            }
+                            if ($matched) {
+                                Safe-DeleteFile -FilePath $jf.FullName
+                                $jumpWiped++
+                            }
+                        } catch {}
+                    }
+                }
+            }
+        }
+    }
+
+    # 8i. Flush ShimCache (AppCompatCache)
+    try {
+        rundll32.exe apphelp.dll,ShimFlushCache
+    } catch {}
+
+    $script:totalCleanedFiles += ($recentWiped + $jumpWiped)
     $script:totalCleanedKeys += $cleanedKeysCount
-    return "Removed $cleanedKeysCount registry entry/entries and $recentWiped recent shortcut(s)"
+    return "Removed $cleanedKeysCount registry entry/entries, $recentWiped recent shortcut(s), and $jumpWiped Jump List(s)"
 }
 
 } finally {
@@ -953,6 +1243,8 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
         # Since the channels are disabled, the EventLog service will not write a "clear log" event (Event 104) to them.
         $targetLogs = @(
             "Microsoft-Windows-PowerShell/Operational", 
+            "Windows PowerShell",
+            "PowerShellCore/Operational",
             "Microsoft-Windows-TaskScheduler/Operational",
             "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational",
             "Microsoft-Windows-Windows Defender/Operational",
@@ -967,34 +1259,11 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
         $session = New-Object System.Diagnostics.Eventing.Reader.EventLogSession
         foreach ($log in $targetLogs) {
             try {
-                # Smart check: only clear log if it actually contains traces
-                $hasTraces = $false
-                $events = Get-WinEvent -FilterHashtable @{LogName=$log} -MaxEvents 500 -ErrorAction SilentlyContinue
-                if ($events) {
-                    $searchTerms = @("lowlife", "RobloxCrashHandler", "delta", "B332FDC6")
-                    if ($scriptRoot) { $searchTerms += $scriptRoot }
-                    if ($storedWorkspace) { $searchTerms += $storedWorkspace }
-                    if ($storedServerUrl) { $searchTerms += $storedServerUrl }
-
-                    foreach ($ev in $events) {
-                        $msg = $ev.Message
-                        if ($msg) {
-                            foreach ($term in $searchTerms) {
-                                if ($msg.IndexOf($term, [System.StringComparison]::OrdinalIgnoreCase) -ge 0) {
-                                    $hasTraces = $true
-                                    break
-                                }
-                            }
-                        }
-                        if ($hasTraces) { break }
-                    }
-                }
-                if ($hasTraces) {
-                    $session.ClearLog($log)
-                    $wipedCount++
-                }
+                # Always clear the logs to ensure no trace (including Base64 encoded commands or historical logs) remains
+                $session.ClearLog($log)
+                $wipedCount++
             } catch {
-                # Log might be empty or locked, skip gracefully
+                # Log might be empty, disabled, or locked, skip gracefully
             }
         }
         $script:totalCleanedLogs += $wipedCount
@@ -1016,7 +1285,7 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
 $logPath = Join-Path $env:TEMP "lowlife_cleanup_perf.log"
 if ($FullUninstall -or $NoAuditLog) {
     if (Test-Path $logPath) {
-        Remove-Item -Path $logPath -Force -ErrorAction SilentlyContinue
+        Safe-DeleteFile -FilePath $logPath
     }
 } else {
     $logContent = [System.Text.StringBuilder]::new()
