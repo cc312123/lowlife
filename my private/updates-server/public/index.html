@@ -153,7 +153,7 @@
                     version = data.latestVersion;
                     downloads = data.totalDownloads;
                     changelog = data.latestChangelog;
-                    const lastHistory = data.history && data.history.length > 0 ? data.history[data.history.length - 1] : null;
+                    const lastHistory = data.history && data.history.length > 0 ? (data.history.find(h => h.version === data.latestVersion) || data.history[data.history.length - 1]) : null;
                     date = lastHistory ? lastHistory.date : '-';
                 } else if (data.success) {
                     // Mapping for dynamic API structure

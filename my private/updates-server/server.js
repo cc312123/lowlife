@@ -96,13 +96,14 @@ function saveReleaseData(data) {
 app.get('/api/release/latest', (req, res) => {
     try {
         const data = getReleaseData();
+        const latestRelease = data.history && data.history.find(h => h.version === data.latestVersion) || data.history[data.history.length - 1];
         res.json({
             success: true,
             version: data.latestVersion,
             changelog: data.latestChangelog,
             totalDownloads: data.totalDownloads,
-            date: data.history[data.history.length - 1]?.date || '',
-            md5: data.latestHash || data.history[data.history.length - 1]?.md5 || ''
+            date: latestRelease?.date || '',
+            md5: data.latestHash || latestRelease?.md5 || ''
         });
     } catch (err) {
         res.status(500).json({ success: false, error: 'Failed to read release data.' });

@@ -67,7 +67,10 @@ if (Test-Path $ReleasesJsonPath) {
     
     # Update latest history entry hash if it exists
     if ($json.history -and $json.history.Count -gt 0) {
-        $lastHistory = $json.history[-1]
+        $lastHistory = $json.history | Where-Object { $_.version -eq $json.latestVersion }
+        if (-not $lastHistory) {
+            $lastHistory = $json.history[-1]
+        }
         if (-not (Get-Member -InputObject $lastHistory -Name "md5")) {
             $lastHistory | Add-Member -MemberType NoteProperty -Name "md5" -Value $Hash
         } else {
