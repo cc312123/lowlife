@@ -736,6 +736,7 @@ namespace rbx::aimbot {
                     if (settings::aimbot::knocked_check) {
                         if (is_knocked(locked_target)) {
                             relation_invalid = true;
+                            needs_key_release = true;
                         }
                     } else {
                         // If knock check is off, stay locked until they die (health <= 0)
@@ -744,6 +745,7 @@ namespace rbx::aimbot {
                                 float health = const_cast<cache::entity_t&>(locked_target).humanoid.get_health();
                                 if (health <= 0.0f || !std::isfinite(health)) {
                                     relation_invalid = true;
+                                    needs_key_release = true;
                                 }
                             } catch (...) {}
                         }
@@ -765,6 +767,17 @@ namespace rbx::aimbot {
                         target = locked_target;
                     }
                     else {
+                        if (settings::aimbot::knocked_check && is_knocked(locked_target)) {
+                            needs_key_release = true;
+                        } else if (locked_target.humanoid.address != 0) {
+                            try {
+                                float health = const_cast<cache::entity_t&>(locked_target).humanoid.get_health();
+                                if (health <= 0.0f || !std::isfinite(health)) {
+                                    needs_key_release = true;
+                                }
+                            } catch (...) {}
+                        }
+
                         locked_target = cache::entity_t{};
                         has_locked_target = false;
                         target_pos_initialized = false; 

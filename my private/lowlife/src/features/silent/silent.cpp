@@ -19,6 +19,7 @@
 #include "silent.h"
 
 std::uint64_t c_silent_helper::cached_input_object = 0;
+static bool g_silent_aim_needs_key_release = false;
 
 static math::vector2 world_to_screen(math::vector3 world, math::vector2 dimensions, math::matrix4 viewmatrix)
 {
@@ -428,6 +429,7 @@ static void update_silent_aim_key_state()
 			g_silent_found_target = false;
 			g_silent_data_ready = false;
 			g_silent_locked_part_name = "";
+			g_silent_aim_needs_key_release = false;
 		}
 	}
 	else
@@ -445,6 +447,7 @@ static void update_silent_aim_key_state()
 				g_silent_found_target = false;
 				g_silent_data_ready = false;
 				g_silent_locked_part_name = "";
+				g_silent_aim_needs_key_release = false;
 			}
 		}
 	}
@@ -476,6 +479,18 @@ void rbx::silent::silent_aim_1()
 		}
 
 		update_silent_aim_key_state();
+
+		if (g_silent_aim_needs_key_release)
+		{
+			g_silent_found_target = false;
+			if (!g_silent_aim_manual_locked)
+			{
+				g_silent_cached_target = {};
+				g_silent_locked_part_name = "";
+			}
+			g_silent_data_ready = false;
+			continue;
+		}
 
 		
 		if (g_silent_aim_instance.address && g_silent_has_original_sizes)
@@ -733,6 +748,7 @@ void rbx::silent::silent_aim_1()
 				if (is_player_knocked(g_silent_cached_target))
 				{
 					target_invalid = true;
+					g_silent_aim_needs_key_release = true;
 				}
 			}
 			else
@@ -745,6 +761,7 @@ void rbx::silent::silent_aim_1()
 						if (health <= 0.0f || !std::isfinite(health))
 						{
 							target_invalid = true;
+							g_silent_aim_needs_key_release = true;
 						}
 					}
 					catch (...) {}
