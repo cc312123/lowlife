@@ -712,9 +712,7 @@ namespace rbx::aimbot {
                     }
 
                     if (!relation_invalid) {
-                        if (settings::aimbot::sticky_aim) {
-                            target = g_aimbot_manual_target;
-                        } else if (is_target_valid(g_aimbot_manual_target, local_crew_id, cursor_pt, dims, view, true)) {
+                        if (is_target_valid(g_aimbot_manual_target, local_crew_id, cursor_pt, dims, view, true)) {
                             target = g_aimbot_manual_target;
                         }
                     }
@@ -723,52 +721,6 @@ namespace rbx::aimbot {
 
             if (target.instance.address == 0) {
                 if (settings::aimbot::sticky_aim && has_locked_target && locked_target.instance.address != 0) {
-                    // Sticky lock: check relations, team check, and knocked/death status. Keep target locked through walls and FOV.
-                    bool relation_invalid = false;
-                    auto rel_it = settings::player_relations::relations.find(locked_target.name);
-                    if (rel_it != settings::player_relations::relations.end() && rel_it->second == 1) {
-                        relation_invalid = true;
-                    }
-                    if (settings::aimbot::team_check && is_on_same_team(locked_target, local_crew_id)) {
-                        relation_invalid = true;
-                    }
-
-                    // Release target if they go behind a wall and wall check is enabled
-                    if (settings::aimbot::wall_check && !is_player_visible(locked_target)) {
-                        relation_invalid = true;
-                    }
-
-                    // Release target if they are knocked/dead
-                    if (settings::aimbot::knocked_check) {
-                        if (is_knocked(locked_target)) {
-                            relation_invalid = true;
-                            needs_key_release = true;
-                        }
-                    } else {
-                        // If knock check is off, stay locked until they die (health <= 0)
-                        if (locked_target.humanoid.address != 0) {
-                            try {
-                                float health = const_cast<cache::entity_t&>(locked_target).humanoid.get_health();
-                                if (health <= 0.0f || !std::isfinite(health)) {
-                                    relation_invalid = true;
-                                    needs_key_release = true;
-                                }
-                            } catch (...) {}
-                        }
-                    }
-
-                    if (!relation_invalid) {
-                        target = locked_target;
-                    } else {
-                        locked_target = cache::entity_t{};
-                        has_locked_target = false;
-                        target_pos_initialized = false;
-                        locked_part_name = "";
-                        accum_x = 0.0f;
-                        accum_y = 0.0f;
-                    }
-                }
-                else if (has_locked_target && locked_target.instance.address != 0) {
                     if (is_target_valid(locked_target, local_crew_id, cursor_pt, dims, view, false)) {
                         target = locked_target;
                     }
@@ -786,7 +738,7 @@ namespace rbx::aimbot {
 
                         locked_target = cache::entity_t{};
                         has_locked_target = false;
-                        target_pos_initialized = false; 
+                        target_pos_initialized = false;
                         locked_part_name = "";
                         accum_x = 0.0f;
                         accum_y = 0.0f;
@@ -795,7 +747,7 @@ namespace rbx::aimbot {
                 else {
                     locked_target = cache::entity_t{};
                     has_locked_target = false;
-                    target_pos_initialized = false; 
+                    target_pos_initialized = false;
                     locked_part_name = "";
                     accum_x = 0.0f;
                     accum_y = 0.0f;

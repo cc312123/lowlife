@@ -723,7 +723,7 @@ void rbx::silent::silent_aim_1()
 			{
 				target = g_silent_cached_target;
 				
-				if (!settings::silent::sticky_aim && settings::silent::fov_check && game::visengine.address)
+				if (settings::silent::fov_check && game::visengine.address)
 				{
 					if (!is_target_within_fov(g_silent_cached_target))
 					{
