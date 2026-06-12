@@ -220,10 +220,7 @@ namespace config
 		file << "    \"fov_changer_enabled\": " << (settings::expl::fov_changer_enabled ? "true" : "false") << ",\n";
 		file << "    \"fov_changer_value\": " << settings::expl::fov_changer_value << ",\n";
 		file << "    \"infinite_ammo\": " << (settings::expl::infinite_ammo ? "true" : "false") << ",\n";
-		file << "    \"mechanical_nospread\": " << (settings::expl::mechanical_nospread ? "true" : "false") << ",\n";
-		file << "    \"crouch_on_fire\": " << (settings::expl::crouch_on_fire ? "true" : "false") << ",\n";
-		file << "    \"stop_on_shot\": " << (settings::expl::stop_on_shot ? "true" : "false") << ",\n";
-		file << "    \"crouch_key\": " << settings::expl::crouch_key << "\n";
+		file << "    \"no_spread_recoil\": " << (settings::expl::no_spread_recoil ? "true" : "false") << "\n";
 		file << "  },\n";
 
 		
@@ -696,14 +693,8 @@ namespace config
 				settings::expl::fov_changer_value = std::stof(value);
 			if (parse_json_value(section, "infinite_ammo", value))
 				settings::expl::infinite_ammo = (value == "true");
-			if (parse_json_value(section, "mechanical_nospread", value))
-				settings::expl::mechanical_nospread = (value == "true");
-			if (parse_json_value(section, "crouch_on_fire", value))
-				settings::expl::crouch_on_fire = (value == "true");
-			if (parse_json_value(section, "stop_on_shot", value))
-				settings::expl::stop_on_shot = (value == "true");
-			if (parse_json_value(section, "crouch_key", value))
-				settings::expl::crouch_key = std::stoi(value);
+			if (parse_json_value(section, "no_spread_recoil", value))
+				settings::expl::no_spread_recoil = (value == "true");
 		}
 
 

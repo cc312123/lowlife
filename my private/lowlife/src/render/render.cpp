@@ -2312,12 +2312,8 @@ void render_t::render_menu()
         ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 5.f);
         ImGui::Separator();
         ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 5.f);
-        ImGui::Text("Mechanical Accuracy");
-        ImGui::Checkbox("Enable Accuracy Assist", &settings::expl::mechanical_nospread);
-        if (settings::expl::mechanical_nospread) {
-            ImGui::Checkbox("Crouch-on-Fire", &settings::expl::crouch_on_fire);
-            ImGui::Checkbox("Stop-on-Shot (Stop Movement)", &settings::expl::stop_on_shot);
-        }
+        ImGui::Checkbox("No Spread & Recoil", &settings::expl::no_spread_recoil);
+
 
         ImGui::EndChild();
         ImGui::PopStyleVar();

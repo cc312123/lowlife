@@ -183,10 +183,7 @@ namespace settings
 		inline float legit_teleport_speed{ 150.0f };
 		inline int legit_teleport_delay{ 15 };
 
-		inline bool mechanical_nospread{ false };
-		inline bool crouch_on_fire{ false };
-		inline bool stop_on_shot{ false };
-		inline int crouch_key{ 0x11 }; // VK_LCONTROL
+		inline bool no_spread_recoil{ false };
 	}
 
 	namespace dex_explorer
