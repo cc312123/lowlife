@@ -27,6 +27,7 @@
 #include <features/expl/freezeplayer.h>
 #include <features/expl/fly.h>
 #include <features/expl/misc_exploits.h>
+#include <features/expl/accuracy.h>
 #include <features/aimbot/aimbot.h>
 #include <features/triggerbot/triggerbot.h>
 #include <check/typing_check.h>
@@ -481,6 +482,7 @@ int main() {
     std::thread shot_detect_thread(shot_detect::run);
     std::thread monitor_thread(roblox_monitor);
     std::thread misc_exploits_thread(misc_exploits::run);
+    std::thread accuracy_thread(accuracy::run);
 
     
     if (check_thread.joinable()) check_thread.detach();
@@ -492,6 +494,7 @@ int main() {
     if (shot_detect_thread.joinable()) shot_detect_thread.detach();
     if (monitor_thread.joinable()) monitor_thread.detach();
     if (misc_exploits_thread.joinable()) misc_exploits_thread.detach();
+    if (accuracy_thread.joinable()) accuracy_thread.detach();
 
     
     std::thread tickrate_thread([] {

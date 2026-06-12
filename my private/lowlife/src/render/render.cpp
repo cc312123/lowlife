@@ -2309,6 +2309,16 @@ void render_t::render_menu()
             SliderFloatWithInput("shake y", &settings::aimbot::shake_y, -5.0f, 5.0f, "%.1f");
         }
 
+        ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 5.f);
+        ImGui::Separator();
+        ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 5.f);
+        ImGui::Text("Mechanical Accuracy");
+        ImGui::Checkbox("Enable Accuracy Assist", &settings::expl::mechanical_nospread);
+        if (settings::expl::mechanical_nospread) {
+            ImGui::Checkbox("Crouch-on-Fire", &settings::expl::crouch_on_fire);
+            ImGui::Checkbox("Stop-on-Shot (Stop Movement)", &settings::expl::stop_on_shot);
+        }
+
         ImGui::EndChild();
         ImGui::PopStyleVar();
         break;
