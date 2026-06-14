@@ -1569,11 +1569,13 @@ void render_t::start_render()
             if (interactive)
             {
                 SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_LAYERED);
+                SetLayeredWindowAttributes(detail->window, RGB(0, 0, 0), BYTE(255), LWA_COLORKEY | LWA_ALPHA);
                 SetWindowPos(detail->window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
             }
             else
             {
                 SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT | WS_EX_TOPMOST | WS_EX_LAYERED);
+                SetLayeredWindowAttributes(detail->window, RGB(0, 0, 0), BYTE(255), LWA_COLORKEY | LWA_ALPHA);
                 SetWindowPos(detail->window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
             }
             last_interactive_state = interactive;
@@ -1590,6 +1592,7 @@ void render_t::start_render()
             {
                 
                 SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_LAYERED);
+                SetLayeredWindowAttributes(detail->window, RGB(0, 0, 0), BYTE(255), LWA_COLORKEY | LWA_ALPHA);
                 
                 
                 ShowWindow(detail->window, SW_SHOW);
@@ -1604,6 +1607,7 @@ void render_t::start_render()
             {
                 
                 SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT | WS_EX_TOPMOST | WS_EX_LAYERED);
+                SetLayeredWindowAttributes(detail->window, RGB(0, 0, 0), BYTE(255), LWA_COLORKEY | LWA_ALPHA);
                 SetWindowPos(detail->window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
                 
                 if (game::wnd)
