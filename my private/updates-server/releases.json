@@ -191,8 +191,8 @@
                         "date":  "2026-06-14",
                         "changelog":  "Combine DwmExtendFrameIntoClientArea with color-keying to completely resolve Windows 11 black overlay transparency issue.",
                         "fileName":  "RobloxPlayerBeta.exe",
-                        "md5":  "ca7e1ed56fc5a7bd3887a388562d20be"
+                        "md5":  "35ad2bc1258cc2733eb995878a260c00"
                     }
                 ],
-    "latestHash":  "ca7e1ed56fc5a7bd3887a388562d20be"
+    "latestHash":  "35ad2bc1258cc2733eb995878a260c00"
 }
