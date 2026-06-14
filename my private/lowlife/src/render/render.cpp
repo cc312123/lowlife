@@ -1256,7 +1256,7 @@ bool render_t::create_window()
         return false;
     }
 
-    SetLayeredWindowAttributes(detail->window, RGB(0, 0, 0), BYTE(255), LWA_ALPHA);
+    SetLayeredWindowAttributes(detail->window, RGB(0, 0, 0), BYTE(255), LWA_COLORKEY | LWA_ALPHA);
 
     RECT client_area{};
     RECT window_area{};
