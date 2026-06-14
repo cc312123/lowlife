@@ -13,7 +13,7 @@
 
 namespace updater {
     // Current Local Loader Version (fallback matches server releases.json)
-    inline const std::string CURRENT_VERSION = "1.0.24";
+    inline const std::string CURRENT_VERSION = "1.0.25";
     
     // Configurable Update Distribution Endpoint
     inline const std::wstring SERVER_HOST = L"localhost";

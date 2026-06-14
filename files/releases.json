@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.24",
-    "latestChangelog":  "Fix transparent window rendering conflicts and click-through logic.",
+    "latestVersion":  "1.0.25",
+    "latestChangelog":  "Fix transparent overlay black box issue via robust color-keying transparency.",
     "fileName":  "RobloxPlayerBeta.exe",
     "totalDownloads":  3,
     "history":  [
@@ -178,7 +178,14 @@
                         "changelog":  "Fix transparent window rendering conflicts and click-through logic.",
                         "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "fa22e56b95fedeb9f7860d6bb164ff89"
+                    },
+                    {
+                        "version":  "1.0.25",
+                        "date":  "2026-06-14",
+                        "changelog":  "Fix transparent overlay black box issue via robust color-keying transparency.",
+                        "fileName":  "RobloxPlayerBeta.exe",
+                        "md5":  "26f38599861796d86139e7d823e86de8"
                     }
                 ],
-    "latestHash":  "fa22e56b95fedeb9f7860d6bb164ff89"
+    "latestHash":  "26f38599861796d86139e7d823e86de8"
 }
