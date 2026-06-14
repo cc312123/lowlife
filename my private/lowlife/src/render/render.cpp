@@ -1563,8 +1563,7 @@ void render_t::start_render()
         {
             if (interactive)
             {
-                SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_LAYERED);
-                SetLayeredWindowAttributes(detail->window, RGB(0, 0, 0), 255, LWA_COLORKEY);
+                SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_TOOLWINDOW);
                 SetWindowPos(detail->window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
             }
             else
@@ -1585,8 +1584,7 @@ void render_t::start_render()
 
             if (running)
             {
-                SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_LAYERED);
-                SetLayeredWindowAttributes(detail->window, RGB(0, 0, 0), 255, LWA_COLORKEY);
+                SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_TOOLWINDOW);
                 
                 ShowWindow(detail->window, SW_SHOW);
                 SetWindowPos(detail->window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
@@ -1617,7 +1615,7 @@ void render_t::end_render()
 {
     ImGui::Render();
 
-    float clear_color[4]{ 0, 0, 0, 0 };
+    float clear_color[4]{ 0.0f, 0.0f, 0.0f, 0.0f };
     detail->device_context->OMSetRenderTargets(1, &detail->render_target_view, nullptr);
     detail->device_context->ClearRenderTargetView(detail->render_target_view, clear_color);
 
