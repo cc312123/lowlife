@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.22",
-    "latestChangelog":  "Fix critical bug terminating RobloxPlayerBeta.exe instead of RobloxCrashHandler.exe.",
+    "latestVersion":  "1.0.23",
+    "latestChangelog":  "Fix solid black background overlay transparency issue when menu interactivity is toggled.",
     "fileName":  "RobloxPlayerBeta.exe",
     "totalDownloads":  3,
     "history":  [
@@ -164,7 +164,14 @@
                         "changelog":  "Fix critical bug terminating RobloxPlayerBeta.exe instead of RobloxCrashHandler.exe.",
                         "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "f1534ae17ecf4a050faa6d226907cb2e"
+                    },
+                    {
+                        "version":  "1.0.23",
+                        "date":  "2026-06-14",
+                        "changelog":  "Fix solid black background overlay transparency issue when menu interactivity is toggled.",
+                        "fileName":  "RobloxPlayerBeta.exe",
+                        "md5":  "7331971e4025c57d5c440240d3ac34c7"
                     }
                 ],
-    "latestHash":  "f1534ae17ecf4a050faa6d226907cb2e"
+    "latestHash":  "7331971e4025c57d5c440240d3ac34c7"
 }
