@@ -9,7 +9,11 @@ Write-Host "Preparing local release and encryption..." -ForegroundColor Cyan
 
 # Define roots
 $SourceDir = $PSScriptRoot
-$RepoRoot = Split-Path $SourceDir -Parent
+if (-not $SourceDir) { $SourceDir = $PWD.Path }
+$RepoRoot = $SourceDir
+if (-not (Test-Path (Join-Path $RepoRoot ".git"))) {
+    $RepoRoot = Split-Path $SourceDir -Parent
+}
 
 # 2. Copy updated files to static structure
 Write-Host "Copying files to static deployment directories..." -ForegroundColor Cyan
