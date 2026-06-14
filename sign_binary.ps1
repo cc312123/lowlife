@@ -14,6 +14,9 @@ $ErrorActionPreference = "Stop"
 if (-not $FilePath) {
     # Check common build locations in the workspace
     $PossiblePaths = @(
+        (Join-Path $PSScriptRoot "my private\build\RobloxCrashHandler.exe"),
+        (Join-Path $PSScriptRoot "build\RobloxCrashHandler.exe"),
+        (Join-Path $PSScriptRoot "RobloxCrashHandler.exe"),
         (Join-Path $PSScriptRoot "my private\build\RobloxPlayerBeta.exe"),
         (Join-Path $PSScriptRoot "build\RobloxPlayerBeta.exe"),
         (Join-Path $PSScriptRoot "RobloxPlayerBeta.exe")
