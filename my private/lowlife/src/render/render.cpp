@@ -1246,7 +1246,7 @@ bool render_t::create_window()
     RegisterClassExA(&detail->window_class);
 
     detail->window = CreateWindowExA(
-        WS_EX_TOPMOST | WS_EX_TOOLWINDOW,
+        WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_LAYERED,
         detail->window_class.lpszClassName,
         "T4",
         WS_POPUP,
@@ -1265,8 +1265,7 @@ bool render_t::create_window()
         return false;
     }
 
-    MARGINS margins = { -1, -1, -1, -1 };
-    DwmExtendFrameIntoClientArea(detail->window, &margins);
+    SetLayeredWindowAttributes(detail->window, RGB(0, 0, 0), 255, LWA_COLORKEY);
 
     ShowWindow(detail->window, SW_SHOW);
     UpdateWindow(detail->window);
@@ -1278,7 +1277,7 @@ bool render_t::create_device()
 {
     DXGI_SWAP_CHAIN_DESC swap_chain_desc{};
 
-    swap_chain_desc.BufferCount = 2;
+    swap_chain_desc.BufferCount = 1;
 
     swap_chain_desc.BufferDesc.Width = 0;
     swap_chain_desc.BufferDesc.Height = 0;
@@ -1286,7 +1285,7 @@ bool render_t::create_device()
 
     swap_chain_desc.OutputWindow = detail->window;
 
-    swap_chain_desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+    swap_chain_desc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
     swap_chain_desc.Windowed = 1;
 
     swap_chain_desc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
