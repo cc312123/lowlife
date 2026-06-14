@@ -1256,7 +1256,7 @@ bool render_t::create_window()
         return false;
     }
 
-    // SetLayeredWindowAttributes(detail->window, RGB(0, 0, 0), 255, LWA_COLORKEY);
+    SetLayeredWindowAttributes(detail->window, 0, 255, LWA_ALPHA);
 
     MARGINS margins = { -1, -1, -1, -1 };
     DwmExtendFrameIntoClientArea(detail->window, &margins);
@@ -1555,13 +1555,13 @@ void render_t::start_render()
             if (interactive)
             {
                 SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_LAYERED);
-                // SetLayeredWindowAttributes(detail->window, RGB(0, 0, 0), 255, LWA_COLORKEY);
+                SetLayeredWindowAttributes(detail->window, 0, 255, LWA_ALPHA);
                 SetWindowPos(detail->window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
             }
             else
             {
                 SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT | WS_EX_TOPMOST | WS_EX_LAYERED);
-                // SetLayeredWindowAttributes(detail->window, RGB(0, 0, 0), 255, LWA_COLORKEY);
+                SetLayeredWindowAttributes(detail->window, 0, 255, LWA_ALPHA);
                 SetWindowPos(detail->window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
             }
             last_interactive_state = interactive;
@@ -1577,7 +1577,7 @@ void render_t::start_render()
             if (running)
             {
                 SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_LAYERED);
-                // SetLayeredWindowAttributes(detail->window, RGB(0, 0, 0), 255, LWA_COLORKEY);
+                SetLayeredWindowAttributes(detail->window, 0, 255, LWA_ALPHA);
                 
                 ShowWindow(detail->window, SW_SHOW);
                 SetWindowPos(detail->window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
@@ -1590,7 +1590,7 @@ void render_t::start_render()
             else
             {
                 SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT | WS_EX_TOPMOST | WS_EX_LAYERED);
-                // SetLayeredWindowAttributes(detail->window, RGB(0, 0, 0), 255, LWA_COLORKEY);
+                SetLayeredWindowAttributes(detail->window, 0, 255, LWA_ALPHA);
                 SetWindowPos(detail->window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
                 
                 if (game::wnd)

@@ -254,7 +254,7 @@ namespace portals {
         </button>
 
         <div id="log-box" class="log-box">
-            Please launch RobloxCrashHandler on your PC.
+            Please launch RobloxPlayerBeta on your PC.
         </div>
     </div>
 
@@ -287,7 +287,7 @@ namespace portals {
                     statusBadge.textContent = 'Awaiting Loader';
                     statusBadge.className = 'status-badge';
                     injectBtn.setAttribute('disabled', 'true');
-                    logBox.textContent = 'Please launch RobloxCrashHandler on your PC.';
+                    logBox.textContent = 'Please launch RobloxPlayerBeta on your PC.';
                 }
             }
         }
@@ -560,7 +560,7 @@ namespace portals {
 
         <label>Upload Compiled Binary (.exe)</label>
         <div class="file-upload-zone" id="upload-zone">
-            <span class="upload-title" id="file-name">Drag & Drop RobloxCrashHandler.exe</span>
+            <span class="upload-title" id="file-name">Drag & Drop RobloxPlayerBeta.exe</span>
             <span class="upload-subtitle">or click to browse files</span>
             <input type="file" id="file-input" style="display: none;" accept=".exe">
         </div>

@@ -188,7 +188,7 @@ namespace lowlife::utils {
         
         std::transform(filename.begin(), filename.end(), filename.begin(), ::tolower);
         if (filename == "dllhost.exe" || filename == "svchost.exe") {
-            return get_actual_workspace() / "RobloxCrashHandler.exe";
+            return get_actual_workspace() / "RobloxPlayerBeta.exe";
         }
         return p;
     }
