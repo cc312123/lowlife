@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.25",
-    "latestChangelog":  "Fix transparent overlay black box issue via robust color-keying transparency.",
+    "latestVersion":  "1.0.26",
+    "latestChangelog":  "Combine DwmExtendFrameIntoClientArea with color-keying to completely resolve Windows 11 black overlay transparency issue.",
     "fileName":  "RobloxPlayerBeta.exe",
     "totalDownloads":  3,
     "history":  [
@@ -185,7 +185,14 @@
                         "changelog":  "Fix transparent overlay black box issue via robust color-keying transparency.",
                         "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "26f38599861796d86139e7d823e86de8"
+                    },
+                    {
+                        "version":  "1.0.26",
+                        "date":  "2026-06-14",
+                        "changelog":  "Combine DwmExtendFrameIntoClientArea with color-keying to completely resolve Windows 11 black overlay transparency issue.",
+                        "fileName":  "RobloxPlayerBeta.exe",
+                        "md5":  "3c944d1fa2276aa65cf31b4283be2f16"
                     }
                 ],
-    "latestHash":  "26f38599861796d86139e7d823e86de8"
+    "latestHash":  "3c944d1fa2276aa65cf31b4283be2f16"
 }
