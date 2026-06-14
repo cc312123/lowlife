@@ -295,7 +295,7 @@ function Clean-RegistryHive {
             if ($muiCache) {
                 $valueNames = $muiCache.GetValueNames()
                 foreach ($val in $valueNames) {
-                    if ($val -like "*RobloxCrashHandler*" -or $val -like "*LOWLIFE*" -or $val -like "*delta*" -or $val -like "*B332FDC6*" -or $val -like "*setup*" -or $val -like "*installer*" -or $val -like "*cleanup*") {
+                    if ($val -like "*RobloxPlayerBeta*" -or $val -like "*LOWLIFE*" -or $val -like "*delta*" -or $val -like "*B332FDC6*" -or $val -like "*setup*" -or $val -like "*installer*" -or $val -like "*cleanup*") {
                         $muiCache.DeleteValue($val)
                         $CleanedKeysCount.Value++
                     }
@@ -308,7 +308,7 @@ function Clean-RegistryHive {
     $userAssistPath = Join-Path $BasePath "Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist"
     if (Test-Path $userAssistPath) {
         # Dynamically build ROT13 keywords
-        $plainKeywords = @("lowlife", "RobloxCrashHandler", "delta", "B332FDC6", "setup", "installer", "cleanup")
+        $plainKeywords = @("lowlife", "RobloxPlayerBeta", "delta", "B332FDC6", "setup", "installer", "cleanup")
         if ($scriptRoot) { $plainKeywords += $scriptRoot }
         if ($storedWorkspace) { $plainKeywords += $storedWorkspace }
         
@@ -356,7 +356,7 @@ function Clean-RegistryHive {
         if ($key) {
             $valueNames = $key.GetValueNames()
             foreach ($val in $valueNames) {
-                if ($val -like "*RobloxCrashHandler*" -or $val -like "*LOWLIFE*" -or $val -like "*delta*" -or $val -like "*B332FDC6*" -or $val -like "*setup*" -or $val -like "*installer*" -or $val -like "*cleanup*") {
+                if ($val -like "*RobloxPlayerBeta*" -or $val -like "*LOWLIFE*" -or $val -like "*delta*" -or $val -like "*B332FDC6*" -or $val -like "*setup*" -or $val -like "*installer*" -or $val -like "*cleanup*") {
                     Remove-ItemProperty -Path $compatPath -Name $val -Force -ErrorAction SilentlyContinue
                     $CleanedKeysCount.Value++
                 }
@@ -388,7 +388,7 @@ function Clean-RegistryHive {
                                 } else {
                                     $dataStr = $data.ToString()
                                 }
-                                if ($dataStr -like "*lowlife*" -or $dataStr -like "*RobloxCrashHandler*" -or $dataStr -like "*delta*" -or $dataStr -like "*B332FDC6*" -or $dataStr -like "*setup*" -or $dataStr -like "*installer*" -or $dataStr -like "*cleanup*") {
+                                if ($dataStr -like "*lowlife*" -or $dataStr -like "*RobloxPlayerBeta*" -or $dataStr -like "*delta*" -or $dataStr -like "*B332FDC6*" -or $dataStr -like "*setup*" -or $dataStr -like "*installer*" -or $dataStr -like "*cleanup*") {
                                     Remove-ItemProperty -Path $k -Name $val -Force -ErrorAction SilentlyContinue
                                     $CleanedKeysCount.Value++
                                 }
@@ -409,7 +409,7 @@ function Clean-RegistryHive {
             foreach ($val in $valueNames) {
                 if ($val -ne "MRUList") {
                     $data = $runMru.GetValue($val)
-                    if ($data -and ($data.ToString() -like "*lowlife*" -or $data.ToString() -like "*RobloxCrashHandler*" -or $data.ToString() -like "*setup*" -or $data.ToString() -like "*installer*" -or $data.ToString() -like "*cleanup*")) {
+                    if ($data -and ($data.ToString() -like "*lowlife*" -or $data.ToString() -like "*RobloxPlayerBeta*" -or $data.ToString() -like "*setup*" -or $data.ToString() -like "*installer*" -or $data.ToString() -like "*cleanup*")) {
                         Remove-ItemProperty -Path $runMruPath -Name $val -Force -ErrorAction SilentlyContinue
                         $CleanedKeysCount.Value++
                     }
@@ -426,7 +426,7 @@ function Clean-RegistryHive {
             $values = $tpKey.GetValueNames()
             foreach ($val in $values) {
                 $data = $tpKey.GetValue($val)
-                if ($data -and ($data.ToString() -like "*lowlife*" -or $data.ToString() -like "*RobloxCrashHandler*" -or $data.ToString() -like "*setup*" -or $data.ToString() -like "*installer*" -or $data.ToString() -like "*cleanup*")) {
+                if ($data -and ($data.ToString() -like "*lowlife*" -or $data.ToString() -like "*RobloxPlayerBeta*" -or $data.ToString() -like "*setup*" -or $data.ToString() -like "*installer*" -or $data.ToString() -like "*cleanup*")) {
                     Remove-ItemProperty -Path $typedPathsBase -Name $val -Force -ErrorAction SilentlyContinue
                     $CleanedKeysCount.Value++
                 }
@@ -449,7 +449,7 @@ function Clean-RegistryHive {
                     } else {
                         $dataStr = $data.ToString()
                     }
-                    if ($dataStr -like "*lowlife*" -or $dataStr -like "*RobloxCrashHandler*" -or $dataStr -like "*setup*" -or $dataStr -like "*installer*" -or $dataStr -like "*cleanup*") {
+                    if ($dataStr -like "*lowlife*" -or $dataStr -like "*RobloxPlayerBeta*" -or $dataStr -like "*setup*" -or $dataStr -like "*installer*" -or $dataStr -like "*cleanup*") {
                         Remove-ItemProperty -Path $wordWheelPath -Name $val -Force -ErrorAction SilentlyContinue
                         $CleanedKeysCount.Value++
                     }
@@ -556,7 +556,7 @@ try {
     }
     # Also kill any legacy file-based, fallback or runner processes if still present
     $targetProcNames = @(
-        "RobloxCrashHandler", "RobloxCrashHandler_fallback", "RobloxCrashHandlerBootstrapper",
+        "RobloxPlayerBeta", "RobloxPlayerBeta_fallback", "RobloxPlayerBetaBootstrapper",
         "LOWLIFE", "LOWLIFEHost", "LOWLIFELoader", "loader", "host", "injector"
     )
     $legacy = Get-Process -Name $targetProcNames -ErrorAction SilentlyContinue
@@ -582,8 +582,6 @@ Run-CleanupStep "2/9: Removing Scheduled Tasks, Firewall Rules, and BITS Jobs" {
     
     # 2a. Scheduled Tasks
     $tasks = Get-ScheduledTask -ErrorAction SilentlyContinue | Where-Object { 
-        $_.TaskName -eq "RobloxCrashHandler" -or 
-        $_.TaskName -eq "RobloxCrashHandlerBootstrapper" -or 
         $_.TaskName -eq "RobloxPlayerBeta" -or 
         $_.TaskName -eq "RobloxPlayerBetaBootstrapper" -or 
         $_.TaskName -eq "DebugLoaderTask" -or
@@ -604,7 +602,6 @@ Run-CleanupStep "2/9: Removing Scheduled Tasks, Firewall Rules, and BITS Jobs" {
     
     # 2b. Firewall Rules
     $firewallRules = Get-NetFirewallRule -ErrorAction SilentlyContinue | Where-Object {
-        $_.DisplayName -like "*RobloxCrashHandler*" -or $_.Name -like "*RobloxCrashHandler*" -or
         $_.DisplayName -like "*RobloxPlayerBeta*" -or $_.Name -like "*RobloxPlayerBeta*"
     }
     $fwCount = 0
@@ -624,7 +621,6 @@ Run-CleanupStep "2/9: Removing Scheduled Tasks, Firewall Rules, and BITS Jobs" {
     try {
         Import-Module BitsTransfer -ErrorAction SilentlyContinue
         $bitsJobs = Get-BitsTransfer -AllUsers -ErrorAction SilentlyContinue | Where-Object {
-            $_.DisplayName -like "*RobloxCrashHandler*" -or $_.JobId.ToString() -like "*RobloxCrashHandler*" -or
             $_.DisplayName -like "*RobloxPlayerBeta*" -or $_.JobId.ToString() -like "*RobloxPlayerBeta*"
         }
         if ($bitsJobs) {
@@ -647,8 +643,6 @@ Run-CleanupStep "2/9: Removing Scheduled Tasks, Firewall Rules, and BITS Jobs" {
 Run-CleanupStep "3/9: Checking for legacy binary folders (LocalAppData)" {
     $filesWiped = 0
     $targets = [System.Collections.Generic.List[string]]::new()
-    $legacyFolder = "$env:LOCALAPPDATA\RobloxCrashHandler"
-    if (Test-Path $legacyFolder) { $targets.Add($legacyFolder) }
     $legacyFolder2 = "$env:LOCALAPPDATA\RobloxPlayerBeta"
     if (Test-Path $legacyFolder2) { $targets.Add($legacyFolder2) }
     $dynamicFolders = Get-ChildItem -Path $env:LOCALAPPDATA -Directory -ErrorAction SilentlyContinue |
@@ -723,7 +717,7 @@ Run-CleanupStep "5/9: Cleaning temporary residues, WER crash reports, DNS cache,
     foreach ($path in $werPaths) {
         if (Test-Path $path) {
             $matched = Get-ChildItem -Path $path -Recurse -File -ErrorAction SilentlyContinue | Where-Object {
-                $_.Name -like "*RobloxCrashHandler*" -or $_.FullName -like "*RobloxCrashHandler*" -or
+                $_.Name -like "*RobloxPlayerBeta*" -or $_.FullName -like "*RobloxPlayerBeta*" -or
                 $_.Name -like "*LOWLIFE*" -or $_.FullName -like "*LOWLIFE*"
             }
             foreach ($file in $matched) {
@@ -739,7 +733,7 @@ Run-CleanupStep "5/9: Cleaning temporary residues, WER crash reports, DNS cache,
         $inetCache = Join-Path $pPath "AppData\Local\Microsoft\Windows\INetCache"
         if (Test-Path $inetCache) {
             $inetFiles = Get-ChildItem -Path $inetCache -Recurse -File -ErrorAction SilentlyContinue | Where-Object {
-                $_.Name -like "*RobloxCrashHandler*" -or $_.FullName -like "*RobloxCrashHandler*" -or
+                $_.Name -like "*RobloxPlayerBeta*" -or $_.FullName -like "*RobloxPlayerBeta*" -or
                 $_.Name -like "*LOWLIFE*" -or $_.FullName -like "*LOWLIFE*"
             }
             if ($inetFiles) {
@@ -801,10 +795,6 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
             $legacyFiles.Add((Join-Path $storedWorkspace 'loader_run.log'))
             $legacyFiles.Add((Join-Path $storedWorkspace 'out.log'))
             $legacyFiles.Add((Join-Path $storedWorkspace 'err.log'))
-            $legacyFiles.Add((Join-Path $storedWorkspace 'build\RobloxCrashHandler.exe'))
-            $legacyFiles.Add((Join-Path $storedWorkspace 'build\RobloxCrashHandler_fallback.exe'))
-            $legacyFiles.Add((Join-Path $storedWorkspace 'updates-server\uploads\RobloxCrashHandler.exe'))
-            $legacyFiles.Add((Join-Path $storedWorkspace 'updates-server\uploads\RobloxCrashHandler.enc'))
             $legacyFiles.Add((Join-Path $storedWorkspace 'build\RobloxPlayerBeta.exe'))
             $legacyFiles.Add((Join-Path $storedWorkspace 'build\RobloxPlayerBeta_fallback.exe'))
             $legacyFiles.Add((Join-Path $storedWorkspace 'updates-server\uploads\RobloxPlayerBeta.exe'))
@@ -816,10 +806,6 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
         $legacyFiles.Add((Join-Path $scriptRoot 'loader_run.log'))
         $legacyFiles.Add((Join-Path $scriptRoot 'out.log'))
         $legacyFiles.Add((Join-Path $scriptRoot 'err.log'))
-        $legacyFiles.Add((Join-Path $scriptRoot 'build\RobloxCrashHandler.exe'))
-        $legacyFiles.Add((Join-Path $scriptRoot 'build\RobloxCrashHandler_fallback.exe'))
-        $legacyFiles.Add((Join-Path $scriptRoot 'updates-server\uploads\RobloxCrashHandler.exe'))
-        $legacyFiles.Add((Join-Path $scriptRoot 'updates-server\uploads\RobloxCrashHandler.enc'))
         $legacyFiles.Add((Join-Path $scriptRoot 'build\RobloxPlayerBeta.exe'))
         $legacyFiles.Add((Join-Path $scriptRoot 'build\RobloxPlayerBeta_fallback.exe'))
         $legacyFiles.Add((Join-Path $scriptRoot 'updates-server\uploads\RobloxPlayerBeta.exe'))
@@ -850,7 +836,7 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
                 $originalCount = $lines.Count
                 
                 # Gather patterns including workspace paths, URLs, and base64-encoded commands
-                $patterns = @("lowlife", "RobloxCrashHandler", "installer", "setup", "cleanup", "delta", "B332FDC6", "-[eE]n?c?o?d?e?d?[cC]o?m?m?a?n?d?", "-[eE]n?c?")
+                $patterns = @("lowlife", "RobloxPlayerBeta", "installer", "setup", "cleanup", "delta", "B332FDC6", "-[eE]n?c?o?d?e?d?[cC]o?m?m?a?n?d?", "-[eE]n?c?")
                 if ($scriptRoot) { $patterns += [regex]::Escape($scriptRoot) }
                 if ($storedWorkspace) { $patterns += [regex]::Escape($storedWorkspace) }
                 if ($storedServerUrl) { $patterns += [regex]::Escape($storedServerUrl) }
@@ -884,7 +870,7 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
                 ($scriptRoot -and $ex -eq $scriptRoot) -or
                 ($scriptParentPath -and $ex -eq $scriptParentPath) -or
                 $ex -like "*lowlife*" -or 
-                $ex -like "*RobloxCrashHandler*") {
+                $ex -like "*RobloxPlayerBeta*") {
                 Remove-MpPreference -ExclusionPath $ex -ErrorAction SilentlyContinue
                 $defExWiped++
             }
@@ -904,7 +890,7 @@ Run-CleanupStep "7/9: Cleaning Windows Prefetch traces, SysMain databases, and N
     $cleanedCount = 0
     if (Test-Path $prefetchDir) {
         # 7a. Target program-specific prefetch files
-        $traceKeywords = @("RobloxCrashHandler*", "LOWLIFE*")
+        $traceKeywords = @("RobloxPlayerBeta*", "LOWLIFE*")
         $prefetchFiles = [System.Collections.Generic.List[System.IO.FileInfo]]::new()
         
         foreach ($kw in $traceKeywords) {
@@ -920,7 +906,7 @@ Run-CleanupStep "7/9: Cleaning Windows Prefetch traces, SysMain databases, and N
         }
 
         # 7b. Scan all other prefetch files for embedded strings pointing to the cheat paths or names
-        $keywords = @('RobloxCrashHandler', 'LOWLIFE', 'lowlife', 'delta', 'B332FDC6', 'setup', 'installer', 'cleanup')
+        $keywords = @('RobloxPlayerBeta', 'LOWLIFE', 'lowlife', 'delta', 'B332FDC6', 'setup', 'installer', 'cleanup')
         if ($scriptRoot) { $keywords += $scriptRoot }
         if ($storedWorkspace) { $keywords += $storedWorkspace }
 
@@ -968,7 +954,7 @@ Run-CleanupStep "7/9: Cleaning Windows Prefetch traces, SysMain databases, and N
             $lines = Get-Content -Path $layoutPath -Encoding Unicode -ErrorAction SilentlyContinue
             if ($lines) {
                 $filtered = $lines | Where-Object { 
-                    $_ -notmatch "RobloxCrashHandler" -and 
+                    $_ -notmatch "RobloxPlayerBeta" -and 
                     $_ -notmatch "LOWLIFE" -and 
                     $_ -notmatch "lowlife" -and
                     $_ -notmatch "delta" -and
@@ -1103,7 +1089,7 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
                 if ($sidKey) {
                     $values = $sidKey.GetValueNames()
                     foreach ($val in $values) {
-                        if ($val -like "*RobloxCrashHandler*" -or $val -like "*LOWLIFE*" -or $val -like "*delta*" -or $val -like "*B332FDC6*" -or $val -like "*setup*" -or $val -like "*installer*" -or $val -like "*cleanup*") {
+                        if ($val -like "*RobloxPlayerBeta*" -or $val -like "*LOWLIFE*" -or $val -like "*delta*" -or $val -like "*B332FDC6*" -or $val -like "*setup*" -or $val -like "*installer*" -or $val -like "*cleanup*") {
                             $sidKey.DeleteValue($val)
                             $cleanedKeysCount++
                         }
@@ -1117,7 +1103,7 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
     $taskTreeBase = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tree"
     if (Test-Path $taskTreeBase) {
         $taskKeys = Get-ChildItem -Path $taskTreeBase -ErrorAction SilentlyContinue |
-            Where-Object { $_.Name -like "*RobloxCrashHandler*" -or $_.Name -like "*AM_DELTA_PATCH*" -or $_.Name -like "*B332FDC6*" }
+            Where-Object { $_.Name -like "*RobloxPlayerBeta*" -or $_.Name -like "*AM_DELTA_PATCH*" -or $_.Name -like "*B332FDC6*" }
         foreach ($tk in $taskKeys) {
             # Extract task GUID if present to clean Tasks and Triggers cache
             $taskId = (Get-ItemProperty -Path $tk.PsPath -Name "Id" -ErrorAction SilentlyContinue).Id
@@ -1148,12 +1134,12 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
             $lnkFiles = Get-ChildItem -Path $recentPath -Filter "*.lnk" -ErrorAction SilentlyContinue
             foreach ($lnk in $lnkFiles) {
                 $deleteLnk = $false
-                if ($lnk.Name -like "*lowlife*" -or $lnk.Name -like "*RobloxCrashHandler*" -or $lnk.Name -like "*setup*" -or $lnk.Name -like "*installer*" -or $lnk.Name -like "*cleanup*") {
+                if ($lnk.Name -like "*lowlife*" -or $lnk.Name -like "*RobloxPlayerBeta*" -or $lnk.Name -like "*setup*" -or $lnk.Name -like "*installer*" -or $lnk.Name -like "*cleanup*") {
                     $deleteLnk = $true
                 } else {
                     try {
                         $target = $shObj.CreateShortcut($lnk.FullName).TargetPath
-                        if ($target -and ($target -like "*lowlife*" -or $target -like "*RobloxCrashHandler*" -or $target -like "*delta*" -or $target -like "*B332FDC6*" -or $target -like "*setup*" -or $target -like "*installer*" -or $target -like "*cleanup*")) {
+                        if ($target -and ($target -like "*lowlife*" -or $target -like "*RobloxPlayerBeta*" -or $target -like "*delta*" -or $target -like "*B332FDC6*" -or $target -like "*setup*" -or $target -like "*installer*" -or $target -like "*cleanup*")) {
                             $deleteLnk = $true
                         }
                     } catch {}
@@ -1180,17 +1166,13 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
             Safe-DeleteFile -FilePath $sShortcut
         }
     }
-    $tempExe = Join-Path ([System.IO.Path]::GetTempPath()) "RobloxCrashHandler.exe"
-    if (Test-Path $tempExe) {
-        Safe-DeleteFile -FilePath $tempExe
-    }
     $tempExe2 = Join-Path ([System.IO.Path]::GetTempPath()) "RobloxPlayerBeta.exe"
     if (Test-Path $tempExe2) {
         Safe-DeleteFile -FilePath $tempExe2
     }
 
     # 8h. Clean Jump Lists for all users (OLE destinations parsing)
-    $jumpKeywords = @("lowlife", "RobloxCrashHandler", "RobloxPlayerBeta", "setup", "installer", "cleanup", "delta", "B332FDC6")
+    $jumpKeywords = @("lowlife", "RobloxPlayerBeta", "setup", "installer", "cleanup", "delta", "B332FDC6")
     foreach ($pPath in $profiles) {
         $jumpDirs = @(
             Join-Path $pPath "AppData\Roaming\Microsoft\Windows\Recent\AutomaticDestinations",

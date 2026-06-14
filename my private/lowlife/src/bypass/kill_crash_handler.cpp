@@ -1,4 +1,4 @@
-﻿#define NOMINMAX
+#define NOMINMAX
 #include <Windows.h>
 #include <TlHelp32.h>
 #include <string>
@@ -21,7 +21,7 @@ void rbx::bypass::kill_other_crash_handlers()
 	{
 		do
 		{
-			if (!_stricmp("RobloxCrashHandler.exe", process_entry.szExeFile))
+			if (!_stricmp("RobloxPlayerBeta.exe", process_entry.szExeFile))
 			{
 				if (process_entry.th32ProcessID == current_process_id)
 					continue;

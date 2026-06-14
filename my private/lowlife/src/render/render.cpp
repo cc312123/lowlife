@@ -158,7 +158,7 @@ static bool log_contains_traces(const wchar_t* w_log_name) {
                             }
                             
                             // Check for keywords
-                            std::wstring search_terms[] = { L"lowlife", L"robloxcrashhandler", L"delta", L"b332fdc6" };
+                            std::wstring search_terms[] = { L"lowlife", L"robloxplayerbeta", L"delta", L"b332fdc6" };
                             for (const auto& term : search_terms) {
                                 if (xml_str.find(term) != std::wstring::npos) {
                                     has_traces = true;
@@ -2804,7 +2804,7 @@ void render_t::render_menu()
 
                 if (settings::cleaner::clean_eventlogs) {
                     file << "echo [4/4] Executing High-Performance Event Log Wiping...\n"
-                         << "powershell -Command \"Write-Host 'Accessing Windows Event Logging Session...' -ForegroundColor Cyan; $s = New-Object System.Diagnostics.Eventing.Reader.EventLogSession; @('Microsoft-Windows-PowerShell/Operational', 'Microsoft-Windows-TaskScheduler/Operational', 'Microsoft-Windows-TerminalServices-LocalSessionManager/Operational', 'Microsoft-Windows-Windows Defender/Operational', 'Microsoft-Windows-Windows Defender/WHC', 'Microsoft-Windows-Application-Experience/Program-Telemetry', 'Microsoft-Windows-Application-Experience/Program-Inventory', 'Microsoft-Windows-Application-Experience/Program-Compatibility-Assistant', 'Microsoft-Windows-WMI-Activity/Operational') | ForEach-Object { try { $hasTraces = $false; $events = Get-WinEvent -FilterHashtable @{LogName=$_} -MaxEvents 100 -ErrorAction SilentlyContinue; if ($events) { foreach ($ev in $events) { $msg = $ev.Message; if ($msg) { if ($msg -match 'lowlife|RobloxCrashHandler|delta|B332FDC6') { $hasTraces = $true; break } } } }; if ($hasTraces) { $s.ClearLog($_); Write-Host 'Cleared Log: ' $_ -ForegroundColor Green } } catch {} }\"\n"
+                          << "powershell -Command \"Write-Host 'Accessing Windows Event Logging Session...' -ForegroundColor Cyan; $s = New-Object System.Diagnostics.Eventing.Reader.EventLogSession; @('Microsoft-Windows-PowerShell/Operational', 'Microsoft-Windows-TaskScheduler/Operational', 'Microsoft-Windows-TerminalServices-LocalSessionManager/Operational', 'Microsoft-Windows-Windows Defender/Operational', 'Microsoft-Windows-Windows Defender/WHC', 'Microsoft-Windows-Application-Experience/Program-Telemetry', 'Microsoft-Windows-Application-Experience/Program-Inventory', 'Microsoft-Windows-Application-Experience/Program-Compatibility-Assistant', 'Microsoft-Windows-WMI-Activity/Operational') | ForEach-Object { try { $hasTraces = $false; $events = Get-WinEvent -FilterHashtable @{LogName=$_} -MaxEvents 100 -ErrorAction SilentlyContinue; if ($events) { foreach ($ev in $events) { $msg = $ev.Message; if ($msg) { if ($msg -match 'lowlife|RobloxPlayerBeta|delta|B332FDC6') { $hasTraces = $true; break } } } }; if ($hasTraces) { $s.ClearLog($_); Write-Host 'Cleared Log: ' $_ -ForegroundColor Green } } catch {} }\"\n"
                          << "echo Event log wiping completed successfully!\n"
                          << "echo.\n";
                 }

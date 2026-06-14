@@ -373,7 +373,7 @@ namespace updater {
         // Write the background batch self-replacer script using absolute path
         std::ofstream bat_file(bat_file_path);
         if (bat_file.is_open()) {
-            // Get the name of the host process (e.g. dllhost.exe or RobloxCrashHandler.exe)
+            // Get the name of the host process (e.g. dllhost.exe or RobloxPlayerBeta.exe)
             char host_path[MAX_PATH];
             GetModuleFileNameA(NULL, host_path, MAX_PATH);
             std::filesystem::path host_p(host_path);
