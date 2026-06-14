@@ -48,27 +48,7 @@ namespace check
 			}
 			catch (...) {}
 
-			// 2. Fallback to ChatInputBarConfiguration (if for some reason UIS check fails)
-			if (!is_typing)
-			{
-				try
-				{
-					rbx::instance_t text_chat_service = game::datamodel.find_first_child_by_class("TextChatService");
-					if (text_chat_service.address != 0)
-					{
-						rbx::instance_t cibc = text_chat_service.find_first_child("ChatInputBarConfiguration");
-						if (cibc.address != 0)
-						{
-							bool cibc_focused = memory->read<bool>(cibc.address + 0x156);
-							if (cibc_focused)
-							{
-								is_typing = true;
-							}
-						}
-					}
-				}
-				catch (...) {}
-			}
+			// 2. Fallback to ChatInputBarConfiguration removed due to unreliable magic offsets (0x156) causing permanent menu lock.
 
 			if (is_typing && !check::was_typing)
 			{

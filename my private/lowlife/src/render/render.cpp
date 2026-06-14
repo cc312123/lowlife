@@ -1243,8 +1243,8 @@ bool render_t::create_window()
         WS_POPUP,
         0,
         0,
-        GetSystemMetrics(SM_CXSCREEN),
-        GetSystemMetrics(SM_CYSCREEN),
+        GetSystemMetrics(SM_CXSCREEN) - 1,
+        GetSystemMetrics(SM_CYSCREEN) - 1,
         0,
         0,
         detail->window_class.hInstance,
@@ -1258,23 +1258,7 @@ bool render_t::create_window()
 
     SetLayeredWindowAttributes(detail->window, RGB(0, 0, 0), BYTE(255), LWA_COLORKEY | LWA_ALPHA);
 
-    RECT client_area{};
-    RECT window_area{};
-
-    GetClientRect(detail->window, &client_area);
-    GetWindowRect(detail->window, &window_area);
-
-    POINT diff{};
-    ClientToScreen(detail->window, &diff);
-
-    MARGINS margins
-    {
-        window_area.left + (diff.x - window_area.left),
-        window_area.top + (diff.y - window_area.top),
-        window_area.right,
-        window_area.bottom,
-    };
-
+    MARGINS margins = { -1, -1, -1, -1 };
     DwmExtendFrameIntoClientArea(detail->window, &margins);
 
     ShowWindow(detail->window, SW_SHOW);
@@ -1300,7 +1284,7 @@ bool render_t::create_device()
 
     swap_chain_desc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
-    swap_chain_desc.SampleDesc.Count = 2;
+    swap_chain_desc.SampleDesc.Count = 1;
     swap_chain_desc.SampleDesc.Quality = 0;
 
     swap_chain_desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
@@ -1478,6 +1462,8 @@ void render_t::start_render()
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
+    ImGui::GetIO().MouseDrawCursor = running;
+
     static HMODULE user32 = GetModuleHandleA("user32.dll");
     static SetWindowDisplayAffinityProc SetWindowDisplayAffinity = nullptr;
     if (!SetWindowDisplayAffinity && user32)
@@ -1590,10 +1576,8 @@ void render_t::start_render()
 
             if (running)
             {
-                
                 SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_LAYERED);
                 SetLayeredWindowAttributes(detail->window, RGB(0, 0, 0), BYTE(255), LWA_COLORKEY | LWA_ALPHA);
-                
                 
                 ShowWindow(detail->window, SW_SHOW);
                 SetWindowPos(detail->window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
@@ -1605,7 +1589,6 @@ void render_t::start_render()
             }
             else
             {
-                
                 SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT | WS_EX_TOPMOST | WS_EX_LAYERED);
                 SetLayeredWindowAttributes(detail->window, RGB(0, 0, 0), BYTE(255), LWA_COLORKEY | LWA_ALPHA);
                 SetWindowPos(detail->window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
