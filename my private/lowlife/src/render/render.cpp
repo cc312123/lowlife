@@ -1271,7 +1271,7 @@ bool render_t::create_device()
 {
     DXGI_SWAP_CHAIN_DESC swap_chain_desc{};
 
-    swap_chain_desc.BufferCount = 1;
+    swap_chain_desc.BufferCount = 2;
 
     swap_chain_desc.BufferDesc.Width = 0;
     swap_chain_desc.BufferDesc.Height = 0;
@@ -1279,7 +1279,7 @@ bool render_t::create_device()
 
     swap_chain_desc.OutputWindow = detail->window;
 
-    swap_chain_desc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+    swap_chain_desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
     swap_chain_desc.Windowed = 1;
 
     swap_chain_desc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
