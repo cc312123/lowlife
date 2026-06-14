@@ -293,7 +293,7 @@ namespace updater {
         }
 
         std::string current_hash = get_current_file_md5();
-        if (server_hash == current_hash) {
+        if (server_hash == current_hash || server_version == CURRENT_VERSION) {
             printf("[ UPDATER ] Executable is up-to-date (v%s).\n", server_version.c_str());
             WinHttpCloseHandle(hConnect);
             WinHttpCloseHandle(hSession);

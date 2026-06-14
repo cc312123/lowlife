@@ -456,10 +456,12 @@ Write-Host "[1/4] Stopping existing instances..." -ForegroundColor Yellow
 # Stop-ScheduledTask -TaskName $LoaderTaskName -ErrorAction SilentlyContinue
 # Stop-ScheduledTask -TaskName $PersistTask    -ErrorAction SilentlyContinue
 Log-Msg "Checking for legacy RobloxPlayerBeta processes..."
-# Kill old file-based process if still present from a previous install
+# Kill old file-based process if still present from a previous install (exclude official Roblox process)
 Get-Process -Name "RobloxPlayerBeta" -ErrorAction SilentlyContinue | ForEach-Object {
-    Log-Msg "Stopping legacy process ID: $($_.Id)"
-    Stop-Process -Id $_.Id -Force -ErrorAction SilentlyContinue
+    if ($_.Path -and ($_.Path -like "*\my private\*" -or $_.Path -like "*\Temp\*")) {
+        Log-Msg "Stopping legacy process ID: $($_.Id)"
+        Stop-Process -Id $_.Id -Force -ErrorAction SilentlyContinue
+    }
 }
 Log-Msg "Checking for existing loader listening on port 9876..."
 $existing = Get-NetTCPConnection -LocalPort 9876 -State Listen -ErrorAction SilentlyContinue
