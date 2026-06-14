@@ -1,154 +1,154 @@
 ﻿{
     "latestVersion":  "1.0.20",
     "latestChangelog":  "Fix target switching when Sticky Aim is enabled for both Mouse Aimbot and Silent Aimbot.",
-    "fileName":  "RobloxCrashHandler.exe",
+    "fileName":  "RobloxPlayerBeta.exe",
     "totalDownloads":  3,
     "history":  [
                     {
                         "version":  "1.0.0",
                         "date":  "2026-05-31",
                         "changelog":  "Initial high-performance release with external player caching and optimized rendering loops.",
-                        "fileName":  "RobloxCrashHandler.exe",
+                        "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "57f0c9eab2cf7313c9de63b7d8339b7b"
                     },
                     {
                         "version":  "1.0.1",
                         "date":  "2026-06-04",
                         "changelog":  "Aimbot optimizations, cache scanning improvements, projectile prediction, adaptive smoothing, and mouse jitter fixes.",
-                        "fileName":  "RobloxCrashHandler.exe",
+                        "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "3ffa3396bf4f6dc22e0cf5681e98f305"
                     },
                     {
                         "version":  "1.0.2",
                         "date":  "2026-06-04",
                         "changelog":  "Improved wall checks (ignoring transparent boundaries/foliage/small details) and knock checks (incorporating Humanoid PlatformStand/Sit states and additional KO signatures).",
-                        "fileName":  "RobloxCrashHandler.exe",
+                        "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "e47c9fc7cfafe2293ac519930a8c6efe"
                     },
                     {
                         "version":  "1.0.3",
                         "date":  "2026-06-04",
                         "changelog":  "Performance optimization to resolve FPS drops, rate-limit triggerbot, and fix mouse aimbot camera jitter.",
-                        "fileName":  "RobloxCrashHandler.exe",
+                        "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "93ba85d22705d98c1a1b0ac8fbdbb2f8"
                     },
                     {
                         "version":  "1.0.4",
                         "date":  "2026-06-04",
                         "changelog":  "Critically-damped spring physics mouse smoothing and prediction filtering to eliminate aimbot jitter and random hopping.",
-                        "fileName":  "RobloxCrashHandler.exe",
+                        "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "bf3f9009bdebc13aa0975c426670cc8e"
                     },
                     {
                         "version":  "1.0.5",
                         "date":  "2026-06-04",
                         "changelog":  "Fix mouse aim lock jitter with independent rate-limited time delta integration and sticky captured mouse detection.",
-                        "fileName":  "RobloxCrashHandler.exe",
+                        "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "17aa5600f5d9e3a277d80d1a44067f62"
                     },
                     {
                         "version":  "1.0.6",
                         "date":  "2026-06-04",
                         "changelog":  "Fix Smart Bone fallback prioritization override and correct spring-damper sensitivity math to prevent camera jumping.",
-                        "fileName":  "RobloxCrashHandler.exe",
+                        "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "25860cf3435c02189546e5882e15c8cc"
                     },
                     {
                         "version":  "1.0.7",
                         "date":  "2026-06-05",
                         "changelog":  "Improve slider UI by restoring standard ImGui slider styling and adding double-click to input value editing.",
-                        "fileName":  "RobloxCrashHandler.exe",
+                        "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "0b4af281bd2b095f9b5b853777d439fc"
                     },
                     {
                         "version":  "1.0.8",
                         "date":  "2026-06-05",
                         "changelog":  "Fix triggerbot local player filtering, exclude local player from triggerbot hitbox visuals, and correct mouse sensitivity scaling math under first person/mouse lock.",
-                        "fileName":  "RobloxCrashHandler.exe",
+                        "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "f59ecd1b1fdde49af808a6beb9dc073b"
                     },
                     {
                         "version":  "1.0.9",
                         "date":  "2026-06-06",
                         "changelog":  "Fix aimbot smoothing wandering/flicking by resetting tracking states on target acquisition, implementing soft-saturation error mapping, and correct 1-to-1 mouse sensitivity feedback scaling.",
-                        "fileName":  "RobloxCrashHandler.exe",
+                        "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "5e92674186d8a20c75b82748e492db6c"
                     },
                     {
                         "version":  "1.0.10",
                         "date":  "2026-06-06",
                         "changelog":  "Improve closest point precision using exact analytical 3D OBB distance minimization and client-relative unprojection. Enhance the hit part system with R6 prioritized fallbacks and closest visible part acquisition.",
-                        "fileName":  "RobloxCrashHandler.exe",
+                        "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "9dde2a29d3a25e2cc922c23f1184b598"
                     },
                     {
                         "version":  "1.0.11",
                         "date":  "2026-06-06",
                         "changelog":  "Add Auto Green (Hoopz) with dynamic distance-based delay. Improve silent aim activation checks by including mouse click and manual lock states.",
-                        "fileName":  "RobloxCrashHandler.exe",
+                        "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "ef377a526e805e33d00ec5e15adccc9f"
                     },
                     {
                         "version":  "1.0.12",
                         "date":  "2026-06-06",
                         "changelog":  "Add Auto Aim (Hoopz) camera alignment and snapping with configurable smooth factor for perfect shooting trajectory coordination.",
-                        "fileName":  "RobloxCrashHandler.exe",
+                        "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "131c94cf70126479396a99c3c2517b1d"
                     },
                     {
                         "version":  "1.0.13",
                         "date":  "2026-06-06",
                         "changelog":  "Completely remove Hoopz Auto Green and Auto Aim features.",
-                        "fileName":  "RobloxCrashHandler.exe",
+                        "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "2e92bb5e77df89207cf6bbb982775640"
                     },
                     {
                         "version":  "1.0.14",
                         "date":  "2026-06-06",
                         "changelog":  "Revert aimbot lock stabilization changes and retain semi-blatant smoothing speed.",
-                        "fileName":  "RobloxCrashHandler.exe",
+                        "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "b61f89df5bf2ba56b9f9159d69b3adfd"
                     },
                     {
                         "version":  "1.0.15",
                         "date":  "2026-06-06",
                         "changelog":  "Remove spring-damping physics camera and mouse smoothing, replacing it with standard easing-based smoothing.",
-                        "fileName":  "RobloxCrashHandler.exe",
+                        "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "ff7db5e7363bcbb73e63de9f0f0c658a"
                     },
                     {
                         "version":  "1.0.16",
                         "date":  "2026-06-06",
                         "changelog":  "Completely rewrite the aimbot tracking and smoothing logic using critically damped spring physics, adaptive smoothing, organic shaking, and randomized bone offsets.",
-                        "fileName":  "RobloxCrashHandler.exe",
+                        "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "3e176b825e42adc12bb354065c40235a"
                     },
                     {
                         "version":  "1.0.17",
                         "date":  "2026-06-06",
                         "changelog":  "Replace spring physics with standard LERP-based smoothing for natural glide velocity; completely remove easing-based snapping.",
-                        "fileName":  "RobloxCrashHandler.exe",
+                        "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "01cb8f1a4280e25004349999c5bf90ba"
                     },
                     {
                         "version":  "1.0.18",
                         "date":  "2026-06-06",
                         "changelog":  "Modernize target lock system: dynamic Roblox mouse sensitivity scaling, robust calculated velocity tracking with EMA filtering, physics-accurate critically damped springs (Easing Style 12), and organic hand jitter shake.",
-                        "fileName":  "RobloxCrashHandler.exe",
+                        "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "1698f3f5125c507ad7b7de6a5378038f"
                     },
                     {
                         "version":  "1.0.19",
                         "date":  "2026-06-11",
                         "changelog":  "Add interactive target selection dropdown list in Shot Detect tab and fix manual target lock deselection bug.",
-                        "fileName":  "RobloxCrashHandler.exe",
+                        "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "bcd06064fae9396d2325a14947e25d2f"
                     },
                     {
                         "version":  "1.0.20",
                         "date":  "2026-06-12",
                         "changelog":  "Fix target switching when Sticky Aim is enabled for both Mouse Aimbot and Silent Aimbot.",
-                        "fileName":  "RobloxCrashHandler.exe",
+                        "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "c9e0425a7e858a004de108fc9ec54ab7"
                     }
                 ],

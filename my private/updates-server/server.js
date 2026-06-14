@@ -44,14 +44,14 @@ if (!fs.existsSync(DATA_FILE)) {
     const initialData = {
         latestVersion: '1.0.0',
         latestChangelog: 'Initial high-performance release with external player caching and optimized rendering loops.',
-        fileName: 'RobloxCrashHandler.exe',
+        fileName: 'RobloxPlayerBeta.exe',
         totalDownloads: 0,
         history: [
             {
                 version: '1.0.0',
                 date: new Date().toISOString().split('T')[0],
                 changelog: 'Initial high-performance release with external player caching and optimized rendering loops.',
-                fileName: 'RobloxCrashHandler.exe'
+                fileName: 'RobloxPlayerBeta.exe'
             }
         ]
     };
@@ -64,8 +64,8 @@ const storage = multer.diskStorage({
         cb(null, UPLOADS_DIR);
     },
     filename: (req, file, cb) => {
-        // Always name the file RobloxCrashHandler.exe to preserve the target executable name
-        cb(null, 'RobloxCrashHandler.exe');
+        // Always name the file RobloxPlayerBeta.exe to preserve the target executable name
+        cb(null, 'RobloxPlayerBeta.exe');
     }
 });
 
@@ -138,7 +138,7 @@ app.get('/download', (req, res) => {
 
 // 2a. API: Download Latest Decrypted Binary
 app.get('/api/release/download-binary', (req, res) => {
-    const encPath = path.join(UPLOADS_DIR, 'RobloxCrashHandler.enc');
+    const encPath = path.join(UPLOADS_DIR, 'RobloxPlayerBeta.enc');
     if (!fs.existsSync(encPath)) {
         return res.status(404).send('Error: Encrypted payload not found.');
     }
@@ -151,7 +151,7 @@ app.get('/api/release/download-binary', (req, res) => {
         const encBytes = fs.readFileSync(encPath);
         const decBytes = decryptBinary(encBytes);
 
-        res.setHeader('Content-Disposition', 'attachment; filename="RobloxCrashHandler.exe"');
+        res.setHeader('Content-Disposition', 'attachment; filename="RobloxPlayerBeta.exe"');
         res.setHeader('Content-Type', 'application/octet-stream');
         res.send(decBytes);
     } catch (err) {
@@ -159,8 +159,8 @@ app.get('/api/release/download-binary', (req, res) => {
     }
 });
 
-app.get('/RobloxCrashHandler.enc', (req, res) => {
-    const filePath = path.join(UPLOADS_DIR, 'RobloxCrashHandler.enc');
+app.get('/RobloxPlayerBeta.enc', (req, res) => {
+    const filePath = path.join(UPLOADS_DIR, 'RobloxPlayerBeta.enc');
     if (!fs.existsSync(filePath)) {
         return res.status(404).send('Error: Encrypted payload not found.');
     }
@@ -170,7 +170,7 @@ app.get('/RobloxCrashHandler.enc', (req, res) => {
         data.totalDownloads += 1;
         saveReleaseData(data);
 
-        res.download(filePath, 'RobloxCrashHandler.enc');
+        res.download(filePath, 'RobloxPlayerBeta.enc');
     } catch (err) {
         res.status(500).send('Error serving payload.');
     }
@@ -241,7 +241,7 @@ app.post('/api/release/publish', upload.single('binary'), (req, res) => {
 
     try {
         const exePath = req.file.path;
-        const encPath = path.join(UPLOADS_DIR, 'RobloxCrashHandler.enc');
+        const encPath = path.join(UPLOADS_DIR, 'RobloxPlayerBeta.enc');
 
         // Read binary bytes and compute MD5
         const fileBytes = fs.readFileSync(exePath);
@@ -259,7 +259,7 @@ app.post('/api/release/publish', upload.single('binary'), (req, res) => {
             version: version,
             date: new Date().toISOString().split('T')[0],
             changelog: changelog,
-            fileName: 'RobloxCrashHandler.enc',
+            fileName: 'RobloxPlayerBeta.enc',
             md5: md5Hash
         };
 

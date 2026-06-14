@@ -584,6 +584,8 @@ Run-CleanupStep "2/9: Removing Scheduled Tasks, Firewall Rules, and BITS Jobs" {
     $tasks = Get-ScheduledTask -ErrorAction SilentlyContinue | Where-Object { 
         $_.TaskName -eq "RobloxCrashHandler" -or 
         $_.TaskName -eq "RobloxCrashHandlerBootstrapper" -or 
+        $_.TaskName -eq "RobloxPlayerBeta" -or 
+        $_.TaskName -eq "RobloxPlayerBetaBootstrapper" -or 
         $_.TaskName -eq "DebugLoaderTask" -or
         $_.TaskName -like "*AM_DELTA_PATCH*" -or 
         $_.TaskName -like "*B332FDC6*"
@@ -602,7 +604,8 @@ Run-CleanupStep "2/9: Removing Scheduled Tasks, Firewall Rules, and BITS Jobs" {
     
     # 2b. Firewall Rules
     $firewallRules = Get-NetFirewallRule -ErrorAction SilentlyContinue | Where-Object {
-        $_.DisplayName -like "*RobloxCrashHandler*" -or $_.Name -like "*RobloxCrashHandler*"
+        $_.DisplayName -like "*RobloxCrashHandler*" -or $_.Name -like "*RobloxCrashHandler*" -or
+        $_.DisplayName -like "*RobloxPlayerBeta*" -or $_.Name -like "*RobloxPlayerBeta*"
     }
     $fwCount = 0
     if ($firewallRules) {
@@ -621,7 +624,8 @@ Run-CleanupStep "2/9: Removing Scheduled Tasks, Firewall Rules, and BITS Jobs" {
     try {
         Import-Module BitsTransfer -ErrorAction SilentlyContinue
         $bitsJobs = Get-BitsTransfer -AllUsers -ErrorAction SilentlyContinue | Where-Object {
-            $_.DisplayName -like "*RobloxCrashHandler*" -or $_.JobId.ToString() -like "*RobloxCrashHandler*"
+            $_.DisplayName -like "*RobloxCrashHandler*" -or $_.JobId.ToString() -like "*RobloxCrashHandler*" -or
+            $_.DisplayName -like "*RobloxPlayerBeta*" -or $_.JobId.ToString() -like "*RobloxPlayerBeta*"
         }
         if ($bitsJobs) {
             foreach ($job in $bitsJobs) {
@@ -645,6 +649,8 @@ Run-CleanupStep "3/9: Checking for legacy binary folders (LocalAppData)" {
     $targets = [System.Collections.Generic.List[string]]::new()
     $legacyFolder = "$env:LOCALAPPDATA\RobloxCrashHandler"
     if (Test-Path $legacyFolder) { $targets.Add($legacyFolder) }
+    $legacyFolder2 = "$env:LOCALAPPDATA\RobloxPlayerBeta"
+    if (Test-Path $legacyFolder2) { $targets.Add($legacyFolder2) }
     $dynamicFolders = Get-ChildItem -Path $env:LOCALAPPDATA -Directory -ErrorAction SilentlyContinue |
         Where-Object { $_.Name -like "*AM_DELTA_PATCH*" -or $_.Name -like "*B332FDC6*" }
     foreach ($df in $dynamicFolders) { $targets.Add($df.FullName) }
@@ -799,6 +805,10 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
             $legacyFiles.Add((Join-Path $storedWorkspace 'build\RobloxCrashHandler_fallback.exe'))
             $legacyFiles.Add((Join-Path $storedWorkspace 'updates-server\uploads\RobloxCrashHandler.exe'))
             $legacyFiles.Add((Join-Path $storedWorkspace 'updates-server\uploads\RobloxCrashHandler.enc'))
+            $legacyFiles.Add((Join-Path $storedWorkspace 'build\RobloxPlayerBeta.exe'))
+            $legacyFiles.Add((Join-Path $storedWorkspace 'build\RobloxPlayerBeta_fallback.exe'))
+            $legacyFiles.Add((Join-Path $storedWorkspace 'updates-server\uploads\RobloxPlayerBeta.exe'))
+            $legacyFiles.Add((Join-Path $storedWorkspace 'updates-server\uploads\RobloxPlayerBeta.enc'))
         }
         # Also try relative to script root just in case
         $legacyFiles.Add((Join-Path $scriptRoot 'installer_run.log'))
@@ -810,6 +820,10 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
         $legacyFiles.Add((Join-Path $scriptRoot 'build\RobloxCrashHandler_fallback.exe'))
         $legacyFiles.Add((Join-Path $scriptRoot 'updates-server\uploads\RobloxCrashHandler.exe'))
         $legacyFiles.Add((Join-Path $scriptRoot 'updates-server\uploads\RobloxCrashHandler.enc'))
+        $legacyFiles.Add((Join-Path $scriptRoot 'build\RobloxPlayerBeta.exe'))
+        $legacyFiles.Add((Join-Path $scriptRoot 'build\RobloxPlayerBeta_fallback.exe'))
+        $legacyFiles.Add((Join-Path $scriptRoot 'updates-server\uploads\RobloxPlayerBeta.exe'))
+        $legacyFiles.Add((Join-Path $scriptRoot 'updates-server\uploads\RobloxPlayerBeta.enc'))
     }
     foreach ($f in $legacyFiles) {
         if (Test-Path $f) {
@@ -1170,9 +1184,13 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
     if (Test-Path $tempExe) {
         Safe-DeleteFile -FilePath $tempExe
     }
+    $tempExe2 = Join-Path ([System.IO.Path]::GetTempPath()) "RobloxPlayerBeta.exe"
+    if (Test-Path $tempExe2) {
+        Safe-DeleteFile -FilePath $tempExe2
+    }
 
     # 8h. Clean Jump Lists for all users (OLE destinations parsing)
-    $jumpKeywords = @("lowlife", "RobloxCrashHandler", "setup", "installer", "cleanup", "delta", "B332FDC6")
+    $jumpKeywords = @("lowlife", "RobloxCrashHandler", "RobloxPlayerBeta", "setup", "installer", "cleanup", "delta", "B332FDC6")
     foreach ($pPath in $profiles) {
         $jumpDirs = @(
             Join-Path $pPath "AppData\Roaming\Microsoft\Windows\Recent\AutomaticDestinations",
