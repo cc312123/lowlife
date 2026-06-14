@@ -3,8 +3,8 @@
 
 $ErrorActionPreference = "Stop"
 
-$BuildExe1 = Join-Path $PSScriptRoot "lowlife\build\RobloxPlayerBeta_new.exe"
-$BuildExe2 = Join-Path $PSScriptRoot "lowlife\build\RobloxPlayerBeta.exe"
+$BuildExe1 = Join-Path $PSScriptRoot "build\RobloxPlayerBeta_new.exe"
+$BuildExe2 = Join-Path $PSScriptRoot "build\RobloxPlayerBeta.exe"
 $BuildExe = $null
 
 if (Test-Path $BuildExe1) {
