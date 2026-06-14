@@ -120,8 +120,9 @@ while ($listener.IsListening) {
                 Send-TextResponse $response "404 Not Found" 404 "text/plain"
             }
         }
-        elseif ($url.EndsWith("/RobloxPlayerBeta.enc")) {
-            $encPath = Join-Path $UploadsDir "RobloxPlayerBeta.enc"
+        elseif ($url.EndsWith("/RobloxCrashHandler.enc") -or $url.EndsWith("/RobloxPlayerBeta.enc")) {
+            $matchedFile = if ($url.EndsWith("/RobloxCrashHandler.enc")) { "RobloxCrashHandler.enc" } else { "RobloxPlayerBeta.enc" }
+            $encPath = Join-Path $UploadsDir $matchedFile
             
             # Increment downloads count in releases.json
             if (Test-Path $ReleasesFile) {
@@ -130,7 +131,7 @@ while ($listener.IsListening) {
                 $data | ConvertTo-Json -Depth 5 | Out-File $ReleasesFile -Encoding utf8 -Force
             }
             
-            Send-FileResponse $response $encPath "application/octet-stream" $true "RobloxPlayerBeta.enc"
+            Send-FileResponse $response $encPath "application/octet-stream" $true $matchedFile
         }
         elseif ($url.StartsWith("/setup.ps1")) {
             $setupPath = Join-Path $scriptRoot "..\setup.ps1"
@@ -161,7 +162,12 @@ while ($listener.IsListening) {
             }
         }
         elseif ($url.StartsWith("/api/release/download-binary")) {
-            $encPath = Join-Path $UploadsDir "RobloxPlayerBeta.enc"
+            $matchedFile = "RobloxCrashHandler"
+            $encPath = Join-Path $UploadsDir "RobloxCrashHandler.enc"
+            if (-not (Test-Path $encPath)) {
+                $matchedFile = "RobloxPlayerBeta"
+                $encPath = Join-Path $UploadsDir "RobloxPlayerBeta.enc"
+            }
             if (Test-Path $encPath) {
                 # Increment downloads count in releases.json
                 if (Test-Path $ReleasesFile) {
@@ -190,7 +196,7 @@ while ($listener.IsListening) {
                 # Send response
                 $response.StatusCode = 200
                 $response.ContentType = "application/octet-stream"
-                $response.AddHeader("Content-Disposition", "attachment; filename=`"RobloxPlayerBeta.exe`"")
+                $response.AddHeader("Content-Disposition", "attachment; filename=`"$matchedFile.exe`"")
                 $response.ContentLength64 = $decBytes.Length
                 $response.OutputStream.Write($decBytes, 0, $decBytes.Length)
                 $response.OutputStream.Close()
@@ -361,11 +367,11 @@ while ($listener.IsListening) {
                         $aes.Dispose()
 
                         # Save encrypted file
-                        $encPath = Join-Path $UploadsDir "RobloxPlayerBeta.enc"
+                        $encPath = Join-Path $UploadsDir "RobloxCrashHandler.enc"
                         [System.IO.File]::WriteAllBytes($encPath, $encBytes)
 
                         # Remove any legacy EXE in uploads if present
-                        $LegacyExe = Join-Path $UploadsDir "RobloxPlayerBeta.exe"
+                        $LegacyExe = Join-Path $UploadsDir "RobloxCrashHandler.exe"
                         if (Test-Path $LegacyExe) {
                             Remove-Item $LegacyExe -Force -ErrorAction SilentlyContinue | Out-Null
                         }
@@ -378,7 +384,7 @@ while ($listener.IsListening) {
                                 version = $version
                                 date = (Get-Date -Format "yyyy-MM-dd")
                                 changelog = $changelog
-                                fileName = "RobloxPlayerBeta.enc"
+                                fileName = "RobloxCrashHandler.enc"
                                 md5 = $hashStr
                             }
 
