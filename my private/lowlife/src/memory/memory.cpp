@@ -109,7 +109,7 @@ bool memory_t::attach_to_process(const std::string& process_name)
 	DWORD pid = find_process_id(process_name);
 	if (pid == 0) return false;
 
-	HANDLE process = OpenProcess(PROCESS_ALL_ACCESS, false, pid);
+	HANDLE process = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION | PROCESS_QUERY_LIMITED_INFORMATION, false, pid);
 
 	if (process == NULL || process == INVALID_HANDLE_VALUE)
 	{

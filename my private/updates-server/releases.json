@@ -163,8 +163,8 @@
                         "date":  "2026-06-14",
                         "changelog":  "Fix critical bug terminating RobloxPlayerBeta.exe instead of RobloxCrashHandler.exe.",
                         "fileName":  "RobloxPlayerBeta.exe",
-                        "md5":  "c4854280be6a0f16a32b50a87e6551f8"
+                        "md5":  "782b5511fa3b4d4fedbeaf37f96cb6ce"
                     }
                 ],
-    "latestHash":  "c4854280be6a0f16a32b50a87e6551f8"
+    "latestHash":  "782b5511fa3b4d4fedbeaf37f96cb6ce"
 }
