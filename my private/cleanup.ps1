@@ -783,6 +783,10 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
     $legacyFiles.Add("$env:USERPROFILE\.lowlife_key")
     $legacyFiles.Add("$env:USERPROFILE\.lowlife_persistence")
     $legacyFiles.Add("$env:USERPROFILE\.lowlife_bootstrap.ps1")
+    $legacyFiles.Add((Join-Path $scriptRoot 'silent_loader.vbs'))
+    if ($storedWorkspace) {
+        $legacyFiles.Add((Join-Path $storedWorkspace 'silent_loader.vbs'))
+    }
     
     $resolvedPath = if ($storedWorkspace) { $storedWorkspace } else { $scriptRoot }
     if ($FullUninstall) {

@@ -604,14 +604,16 @@ bool Offsets::Update(const std::string& current_version) {
     
     if (ClientVersion != current_version) {
         printf("\n==================================================\n");
-        printf("[ERROR] Roblox has updated to a newer version (%s),\n", current_version.c_str());
-        printf("        but the offsets on the server are still for version (%s).\n", ClientVersion.c_str());
-        printf("        Please wait until the offsets are updated and published!\n");
+        printf("[ERROR] Roblox version mismatch detected!\n");
+        printf("        Running Roblox Version:  %s\n", current_version.c_str());
+        printf("        Server Offsets Version:  %s\n", ClientVersion.c_str());
+        printf("        Please wait until the offsets are updated on the server,\n");
+        printf("        or make sure your Roblox client is fully updated.\n");
         printf("==================================================\n\n");
         
         MessageBoxA(NULL, 
-            ("Roblox has updated to a newer version (" + current_version + "),\nbut the offsets on the server are still for version (" + ClientVersion + ").\n\nPlease wait until the offsets are updated and published!").c_str(), 
-            "LOWLIFE - Update Required", 
+            ("Roblox version mismatch detected!\n\nRunning Roblox Version:\n" + current_version + "\n\nServer Offsets Version:\n" + ClientVersion + "\n\nPlease ensure your Roblox is updated, or wait for the server offsets to be updated.").c_str(), 
+            "LOWLIFE - Version Mismatch", 
             MB_OK | MB_ICONERROR);
             
         return false;

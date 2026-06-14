@@ -53,9 +53,12 @@ std::uint32_t memory_t::find_process_id(const std::string& process_name)
 		{
 			if (!_stricmp(process_name.c_str(), process_entry.szExeFile))
 			{
-				local_process_id = process_entry.th32ProcessID;
-				process_id = local_process_id;
-				break;
+				if (process_entry.th32ProcessID != GetCurrentProcessId())
+				{
+					local_process_id = process_entry.th32ProcessID;
+					process_id = local_process_id;
+					break;
+				}
 			}
 		} while (Process32Next(snapshot, &process_entry));
 	}

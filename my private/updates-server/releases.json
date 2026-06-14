@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.20",
-    "latestChangelog":  "Fix target switching when Sticky Aim is enabled for both Mouse Aimbot and Silent Aimbot.",
+    "latestVersion":  "1.0.21",
+    "latestChangelog":  "Update offsets for Roblox client version-76173e47a79145c7, fix process lookup loop bug, and clarify version mismatch warning dialog.",
     "fileName":  "RobloxPlayerBeta.exe",
     "totalDownloads":  3,
     "history":  [
@@ -148,6 +148,13 @@
                         "version":  "1.0.20",
                         "date":  "2026-06-12",
                         "changelog":  "Fix target switching when Sticky Aim is enabled for both Mouse Aimbot and Silent Aimbot.",
+                        "fileName":  "RobloxPlayerBeta.exe",
+                        "md5":  "cc2e04d27ee63b19d0618014dba166c5"
+                    },
+                    {
+                        "version":  "1.0.21",
+                        "date":  "2026-06-14",
+                        "changelog":  "Update offsets for Roblox client version-76173e47a79145c7, fix process lookup loop bug, and clarify version mismatch warning dialog.",
                         "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "cc2e04d27ee63b19d0618014dba166c5"
                     }
