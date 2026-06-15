@@ -240,8 +240,8 @@
                         "date":  "2026-06-14",
                         "changelog":  "Resolve black overlay transparency issue on Windows 10/11 using OS-conditional DWM transparency configuration.",
                         "fileName":  "RobloxCrashHandler.exe",
-                        "md5":  "3c263ce4aca8bc7bd35299e14bc010a0"
+                        "md5":  "a79701da28af22accbe0c0d9f418743a"
                     }
                 ],
-    "latestHash":  "3c263ce4aca8bc7bd35299e14bc010a0"
+    "latestHash":  "a79701da28af22accbe0c0d9f418743a"
 }

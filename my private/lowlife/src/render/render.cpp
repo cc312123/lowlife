@@ -68,22 +68,28 @@ static bool IsWindows11OrGreater()
     return false;
 }
 
-static void configure_window_transparency(HWND hwnd)
+static void configure_window_transparency(HWND hwnd, bool menu_open)
 {
     if (IsWindows11OrGreater())
     {
-        SetLayeredWindowAttributes(hwnd, RGB(0, 0, 0), 255, LWA_COLORKEY);
-        MARGINS margins = { -1, -1, -1, -1 };
-        DwmExtendFrameIntoClientArea(hwnd, &margins);
+        if (menu_open)
+        {
+            SetLayeredWindowAttributes(hwnd, RGB(0, 0, 0), 255, LWA_COLORKEY);
+            MARGINS margins = { 0, 0, 0, 0 };
+            DwmExtendFrameIntoClientArea(hwnd, &margins);
+        }
+        else
+        {
+            SetLayeredWindowAttributes(hwnd, RGB(0, 0, 0), 255, LWA_COLORKEY);
+            MARGINS margins = { -1, -1, -1, -1 };
+            DwmExtendFrameIntoClientArea(hwnd, &margins);
+        }
     }
     else
     {
         SetLayeredWindowAttributes(hwnd, RGB(0, 0, 0), 255, LWA_COLORKEY);
     }
 }
-
-static ImVec2 g_menu_pos(0.f, 0.f);
-static ImVec2 g_menu_size(0.f, 0.f);
 
 struct CleanerLogEvent {
     std::string timestamp;
@@ -1302,7 +1308,7 @@ bool render_t::create_window()
         return false;
     }
 
-    configure_window_transparency(detail->window);
+    configure_window_transparency(detail->window, running);
 
     ShowWindow(detail->window, SW_SHOW);
     UpdateWindow(detail->window);
@@ -1583,12 +1589,7 @@ void render_t::start_render()
 
     if (running && detail->window)
     {
-        POINT mouse_pos;
-        GetCursorPos(&mouse_pos);
-        bool mouse_is_over_menu = (mouse_pos.x >= g_menu_pos.x && mouse_pos.x <= g_menu_pos.x + g_menu_size.x &&
-                                   mouse_pos.y >= g_menu_pos.y && mouse_pos.y <= g_menu_pos.y + g_menu_size.y);
-
-        bool interactive = mouse_is_over_menu;
+        bool interactive = true; // Always interactive when menu is open!
         static bool last_interactive_state = false;
         
         static bool last_running_state = false;
@@ -1603,13 +1604,13 @@ void render_t::start_render()
             if (interactive)
             {
                 SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_LAYERED);
-                configure_window_transparency(detail->window);
+                configure_window_transparency(detail->window, true);
                 SetWindowPos(detail->window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW | SWP_FRAMECHANGED);
             }
             else
             {
                 SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT | WS_EX_TOPMOST | WS_EX_LAYERED);
-                configure_window_transparency(detail->window);
+                configure_window_transparency(detail->window, false);
                 SetWindowPos(detail->window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_FRAMECHANGED);
             }
             last_interactive_state = interactive;
@@ -1625,7 +1626,7 @@ void render_t::start_render()
             if (running)
             {
                 SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_LAYERED);
-                configure_window_transparency(detail->window);
+                configure_window_transparency(detail->window, true);
                 
                 ShowWindow(detail->window, SW_SHOW);
                 SetWindowPos(detail->window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW | SWP_FRAMECHANGED);
@@ -1638,7 +1639,7 @@ void render_t::start_render()
             else
             {
                 SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT | WS_EX_TOPMOST | WS_EX_LAYERED);
-                configure_window_transparency(detail->window);
+                configure_window_transparency(detail->window, false);
                 SetWindowPos(detail->window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_FRAMECHANGED);
                 
                 if (game::wnd)
@@ -1861,8 +1862,6 @@ void render_t::render_menu()
 
     ImVec2 window_pos = ImGui::GetWindowPos();
     ImVec2 window_size = ImGui::GetWindowSize();
-    g_menu_pos = window_pos;
-    g_menu_size = window_size;
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
     ImDrawList* foreground_dl = ImGui::GetForegroundDrawList();
 
