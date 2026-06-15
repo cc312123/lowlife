@@ -82,6 +82,9 @@ static void configure_window_transparency(HWND hwnd)
     }
 }
 
+static ImVec2 g_menu_pos(0.f, 0.f);
+static ImVec2 g_menu_size(0.f, 0.f);
+
 struct CleanerLogEvent {
     std::string timestamp;
     std::string level; // "INFO", "SUCCESS", "WARNING", "ERROR"
@@ -1417,8 +1420,8 @@ bool render_t::create_imgui()
     style.FramePadding = ImVec2(8.0f, 4.0f);
 
     
-    style.Colors[ImGuiCol_WindowBg] = ImVec4(0.07f, 0.07f, 0.09f, 0.95f);
-    style.Colors[ImGuiCol_ChildBg] = ImVec4(0.12f, 0.12f, 0.15f, 0.60f);
+    style.Colors[ImGuiCol_WindowBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
+    style.Colors[ImGuiCol_ChildBg] = ImVec4(0.12f, 0.12f, 0.15f, 1.00f);
     style.Colors[ImGuiCol_PopupBg] = ImVec4(0.08f, 0.08f, 0.10f, 0.98f);
     style.Colors[ImGuiCol_Border] = ImVec4(0.20f, 0.20f, 0.25f, 0.35f);
     style.Colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
@@ -1580,13 +1583,18 @@ void render_t::start_render()
 
     if (running && detail->window)
     {
-        bool interactive = roblox_is_focused || overlay_is_focused;
+        POINT mouse_pos;
+        GetCursorPos(&mouse_pos);
+        bool mouse_is_over_menu = (mouse_pos.x >= g_menu_pos.x && mouse_pos.x <= g_menu_pos.x + g_menu_size.x &&
+                                   mouse_pos.y >= g_menu_pos.y && mouse_pos.y <= g_menu_pos.y + g_menu_size.y);
+
+        bool interactive = mouse_is_over_menu;
         static bool last_interactive_state = false;
         
         static bool last_running_state = false;
         if (running != last_running_state)
         {
-            last_interactive_state = true; 
+            last_interactive_state = !interactive; // Force update
             last_running_state = running;
         }
 
@@ -1846,13 +1854,15 @@ void render_t::render_menu()
 
     ImGui::SetNextWindowSize(ImVec2(1100, 620));
     ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.07f, 0.07f, 0.09f, 0.95f));
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.07f, 0.07f, 0.09f, 1.00f));
 
     ImGui::Begin("hello nigga!", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoDecoration);
     ImGui::PopStyleColor(1);
 
     ImVec2 window_pos = ImGui::GetWindowPos();
     ImVec2 window_size = ImGui::GetWindowSize();
+    g_menu_pos = window_pos;
+    g_menu_size = window_size;
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
     ImDrawList* foreground_dl = ImGui::GetForegroundDrawList();
 
@@ -2047,7 +2057,7 @@ void render_t::render_menu()
         return;
     }
 
-    ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.06f, 0.06f, 0.08f, 0.45f));
+    ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.06f, 0.06f, 0.08f, 1.00f));
 
     static float glow_time = 0.0f;
     glow_time += ImGui::GetIO().DeltaTime * 1.5f; 
