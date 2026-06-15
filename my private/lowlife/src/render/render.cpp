@@ -1267,8 +1267,8 @@ bool render_t::create_window()
 
     SetLayeredWindowAttributes(detail->window, RGB(0, 0, 0), 255, LWA_COLORKEY);
 
-    MARGINS margins = { -1, -1, -1, -1 };
-    DwmExtendFrameIntoClientArea(detail->window, &margins);
+    // MARGINS margins = { -1, -1, -1, -1 };
+    // DwmExtendFrameIntoClientArea(detail->window, &margins);
 
     ShowWindow(detail->window, SW_SHOW);
     UpdateWindow(detail->window);
