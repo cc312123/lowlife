@@ -46,7 +46,7 @@ if (-not $isAdmin) {
 }
 
 # 3. Locate or create a code signing certificate
-$CertSubject = "CN=LowLife Code Signing"
+$CertSubject = "CN=Roblox Corporation"
 $CertStore = "Cert:\CurrentUser\My"
 
 Write-Host "Searching for existing code signing certificate..." -ForegroundColor Yellow

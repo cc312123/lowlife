@@ -73,24 +73,24 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <TargetName>RobloxCrashHandler</TargetName>
+    <TargetName>RobloxPlayerBeta</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <TargetName>RobloxCrashHandler</TargetName>
+    <TargetName>RobloxPlayerBeta</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)build\</OutDir>
     <IntDir>$(SolutionDir)artifacts\Debug\</IntDir>
     <IncludePath>src;ext;ext/Clipper2Lib/include;keyauth;protection;$(IncludePath)</IncludePath>
     <LibraryPath>keyauth;$(LibraryPath)</LibraryPath>
-    <TargetName>RobloxCrashHandler</TargetName>
+    <TargetName>RobloxPlayerBeta</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)build\</OutDir>
     <IntDir>$(SolutionDir)artifacts\Release\</IntDir>
     <IncludePath>src;ext;ext/Clipper2Lib/include;keyauth;protection;$(IncludePath)</IncludePath>
     <LibraryPath>keyauth;$(LibraryPath)</LibraryPath>
-    <TargetName>RobloxCrashHandler</TargetName>
+    <TargetName>RobloxPlayerBeta</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -265,6 +265,9 @@
     <ClInclude Include="src\sdk\sdk.h" />
     <ClInclude Include="src\settings.h" />
     <ClInclude Include="src\features\triggerbot\triggerbot.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

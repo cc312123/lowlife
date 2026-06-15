@@ -224,7 +224,7 @@ namespace updater {
             wprintf(L"[ UPDATER ] Using default update server: %s:%d\n", server_host.c_str(), server_port);
         }
 
-        HINTERNET hSession = WinHttpOpen(L"RobloxPlayerBeta-SelfUpdater/1.0",
+        HINTERNET hSession = WinHttpOpen(L"LOWLIFE-SelfUpdater/1.0",
             WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
             WINHTTP_NO_PROXY_NAME,
             WINHTTP_NO_PROXY_BYPASS, 0);
