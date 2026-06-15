@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.31",
-    "latestChangelog":  "Revert loader name to RobloxCrashHandler.exe and resolve black overlay transparency via OS-specific styling.",
+    "latestVersion":  "1.0.32",
+    "latestChangelog":  "Resolve black overlay transparency issue on Windows 10/11 using unified color-keying configuration.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -227,7 +227,14 @@
                         "changelog":  "Revert loader name to RobloxCrashHandler.exe and resolve black overlay transparency via OS-specific styling.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "dc23ee5926cd29284c125b0f8da4843e"
+                    },
+                    {
+                        "version":  "1.0.32",
+                        "date":  "2026-06-14",
+                        "changelog":  "Resolve black overlay transparency issue on Windows 10/11 using unified color-keying configuration.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "ccd9ecb75a8e8396c45c65e55f9fe391"
                     }
                 ],
-    "latestHash":  "dc23ee5926cd29284c125b0f8da4843e"
+    "latestHash":  "ccd9ecb75a8e8396c45c65e55f9fe391"
 }

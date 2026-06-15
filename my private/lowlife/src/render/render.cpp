@@ -70,14 +70,7 @@ static bool IsWindows11OrGreater()
 
 static void configure_window_transparency(HWND hwnd)
 {
-    if (IsWindows11OrGreater())
-    {
-        SetLayeredWindowAttributes(hwnd, RGB(0, 0, 0), 255, LWA_COLORKEY);
-    }
-    else
-    {
-        SetLayeredWindowAttributes(hwnd, 0, 255, LWA_ALPHA);
-    }
+    SetLayeredWindowAttributes(hwnd, RGB(0, 0, 0), 255, LWA_COLORKEY);
     MARGINS margins = { -1, -1, -1, -1 };
     DwmExtendFrameIntoClientArea(hwnd, &margins);
 }
