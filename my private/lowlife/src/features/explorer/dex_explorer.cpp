@@ -1,4 +1,4 @@
-﻿#include "dex_explorer.h"
+#include "dex_explorer.h"
 #include <render/render.h>
 #include <settings.h>
 #include "../resources/iconsdex.h"
@@ -545,7 +545,7 @@ namespace dex_explorer
 			float total_w = ImGui::GetContentRegionAvail().x;
 			float total_h = ImGui::GetContentRegionAvail().y;
 
-			ImGui::BeginChild("ExplorerTree", ImVec2(total_w, total_h), true, ImGuiWindowFlags_HorizontalScrollbar);
+			ImGui::BeginChild("##ExplorerTree", ImVec2(total_w, total_h), true, ImGuiWindowFlags_HorizontalScrollbar);
 			{
 
 				if (game::datamodel.address != 0)

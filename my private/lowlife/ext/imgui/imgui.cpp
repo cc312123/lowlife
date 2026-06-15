@@ -6350,13 +6350,15 @@ bool ImGui::BeginChildEx(const char* name, ImGuiID id, const ImVec2& size_arg, I
 
     float child_rounding = g.Style.ChildRounding;
 
-    ImVec2 header_min = ImVec2(child_pos.x + 1, child_pos.y + 1);
-    ImVec2 header_max = ImVec2(child_pos.x + child_size.x - 1, child_pos.y + 20);
-    draw_list->AddRectFilledMultiColor(header_min, header_max, IM_COL32(35, 35, 35, 255), IM_COL32(35, 35, 35, 255), IM_COL32(25, 25, 25, 255), IM_COL32(25, 25, 25, 255));
-    draw_list->AddLine(ImVec2(header_min.x, header_max.y), ImVec2(header_max.x, header_max.y), IM_COL32(60, 60, 60, 255), 1.0f);
+    bool show_header = (name != nullptr && name[0] != '\0' && !(name[0] == '#' && name[1] == '#'));
 
-    if (name)
+    if (show_header)
     {
+        ImVec2 header_min = ImVec2(child_pos.x + 1, child_pos.y + 1);
+        ImVec2 header_max = ImVec2(child_pos.x + child_size.x - 1, child_pos.y + 20);
+        draw_list->AddRectFilledMultiColor(header_min, header_max, IM_COL32(35, 35, 35, 255), IM_COL32(35, 35, 35, 255), IM_COL32(25, 25, 25, 255), IM_COL32(25, 25, 25, 255));
+        draw_list->AddLine(ImVec2(header_min.x, header_max.y), ImVec2(header_max.x, header_max.y), IM_COL32(60, 60, 60, 255), 1.0f);
+
         ImVec2 text_pos = ImVec2(child_pos.x + 4, child_pos.y + 3);
         for (int x = -1; x <= 1; x++)
         {
@@ -6369,13 +6371,24 @@ bool ImGui::BeginChildEx(const char* name, ImGuiID id, const ImVec2& size_arg, I
         draw_list->AddText(text_pos, IM_COL32(255, 255, 255, 255), name);
     }
 
-    draw_list->AddRect(child_pos, ImVec2(child_pos.x + child_size.x, child_pos.y + child_size.y), IM_COL32(60, 60, 60, 255), child_rounding, 0, 1.0f);
-    draw_list->AddRect(ImVec2(child_pos.x + 1, child_pos.y + 1), ImVec2(child_pos.x + child_size.x - 1, child_pos.y + child_size.y - 1), IM_COL32(0, 0, 0, 255), child_rounding, 0, 1.0f);
+    if (child_flags & ImGuiChildFlags_Borders)
+    {
+        draw_list->AddRect(child_pos, ImVec2(child_pos.x + child_size.x, child_pos.y + child_size.y), IM_COL32(60, 60, 60, 255), child_rounding, 0, 1.0f);
+        draw_list->AddRect(ImVec2(child_pos.x + 1, child_pos.y + 1), ImVec2(child_pos.x + child_size.x - 1, child_pos.y + child_size.y - 1), IM_COL32(0, 0, 0, 255), child_rounding, 0, 1.0f);
 
-    g.CurrentWindow->DC.CursorPos.y += 25.0f;
-    g.CurrentWindow->DC.Indent.x = 5.0f; // this is for the every other element except the first element, like what da fuk
-    g.CurrentWindow->WorkRect.Max.x -= 5.0f;
-    g.CurrentWindow->DC.CursorPos.x += 5.0f; // lowk gay, this is for the first element
+        g.CurrentWindow->DC.Indent.x = 5.0f; // this is for the every other element except the first element, like what da fuk
+        g.CurrentWindow->WorkRect.Max.x -= 5.0f;
+        g.CurrentWindow->DC.CursorPos.x += 5.0f; // lowk gay, this is for the first element
+    }
+
+    if (show_header)
+    {
+        g.CurrentWindow->DC.CursorPos.y += 25.0f;
+        g.CurrentWindow->ClipRect.Min.y += 21.0f;
+        g.CurrentWindow->InnerClipRect.Min.y += 21.0f;
+        PopClipRect();
+        PushClipRect(g.CurrentWindow->InnerClipRect.Min, g.CurrentWindow->InnerClipRect.Max, true);
+    }
 
     g.Style.ChildBorderSize = backup_border_size;
 

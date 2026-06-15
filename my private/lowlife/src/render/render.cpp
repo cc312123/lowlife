@@ -2380,7 +2380,7 @@ void render_t::render_menu()
 
         ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() * 0.5f + 8.f, 78.f));
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
-        ImGui::BeginChild("Redirection Settings", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f));
+        ImGui::BeginChild("Redirection Settings", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true);
 
         const char* aim_parts[] = { "Head", "Torso", "Closest to Mouse" };
         ImGui::Combo("Aim Part", &settings::silent::aim_part, aim_parts, IM_ARRAYSIZE(aim_parts));
@@ -2947,7 +2947,7 @@ void render_t::render_menu()
         ImGui::Separator();
         ImGui::Spacing();
 
-        ImGui::BeginChild("CleanerLogBox", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y - 10.0f), true);
+        ImGui::BeginChild("##CleanerLogBox", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y - 10.0f), true);
         
         {
             std::lock_guard<std::mutex> lock(cleaner_log_mtx);
@@ -3015,7 +3015,7 @@ void render_t::render_menu()
 
         ImGui::BeginChild("Configs List", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true);
 
-        ImGui::BeginChild("ConfigList", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y - 100), true);
+        ImGui::BeginChild("##ConfigList", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y - 100), true);
 
         for (size_t i = 0; i < config_list.size(); i++)
         {
@@ -3332,7 +3332,7 @@ void render_t::render_menu()
         ImGui::Separator();
         ImGui::Spacing();
 
-        ImGui::BeginChild("ScrollablePlayers", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y - 10.0f), false);
+        ImGui::BeginChild("##ScrollablePlayers", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y - 10.0f), false);
 
         std::shared_ptr<std::vector<cache::entity_t>> snapshot_ptr;
         {
