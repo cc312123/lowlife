@@ -58,8 +58,8 @@ Write-Host "Signing built binary..." -ForegroundColor Cyan
 
 # 5. Update releases.json version info before running copy_release
 $ReleasesJsonPath = Join-Path $PSScriptRoot "updates-server\releases.json"
-$newVersion = "1.0.31"
-$changelogText = "Revert loader name to RobloxCrashHandler.exe and resolve black overlay transparency via OS-specific styling."
+$newVersion = "1.0.33"
+$changelogText = "Resolve black overlay transparency issue on Windows 10/11 using OS-conditional DWM transparency configuration."
 
 if (Test-Path $ReleasesJsonPath) {
     $json = Get-Content $ReleasesJsonPath -Raw | ConvertFrom-Json
