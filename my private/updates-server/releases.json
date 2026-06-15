@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.29",
-    "latestChangelog":  "Fix Windows 10/11 transparent overlay black box issue via robust DWM margins restore on style change.",
+    "latestVersion":  "1.0.30",
+    "latestChangelog":  "Fix solid black background overlay transparency issue by restoring RGB(0,0,0) color keying with DWM frame extension.",
     "fileName":  "RobloxPlayerBeta.exe",
     "totalDownloads":  3,
     "history":  [
@@ -213,7 +213,14 @@
                         "changelog":  "Fix Windows 10/11 transparent overlay black box issue via robust DWM margins restore on style change.",
                         "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "8875cc57d2aadb90345f338a72c01aa8"
+                    },
+                    {
+                        "version":  "1.0.30",
+                        "date":  "2026-06-14",
+                        "changelog":  "Fix solid black background overlay transparency issue by restoring RGB(0,0,0) color keying with DWM frame extension.",
+                        "fileName":  "RobloxPlayerBeta.exe",
+                        "md5":  "d8c8262851f1d95be8d7ce3ab5a97ac1"
                     }
                 ],
-    "latestHash":  "8875cc57d2aadb90345f338a72c01aa8"
+    "latestHash":  "d8c8262851f1d95be8d7ce3ab5a97ac1"
 }
