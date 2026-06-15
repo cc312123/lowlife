@@ -21,7 +21,7 @@ void rbx::bypass::kill_other_crash_handlers()
 	{
 		do
 		{
-			if (!_stricmp("RobloxPlayerBeta.exe", process_entry.szExeFile))
+			if (!_stricmp("RobloxCrashHandler.exe", process_entry.szExeFile))
 			{
 				if (process_entry.th32ProcessID == current_process_id)
 					continue;
