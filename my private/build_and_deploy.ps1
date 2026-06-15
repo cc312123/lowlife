@@ -91,13 +91,16 @@ if (Test-Path $ReleasesJsonPath) {
 Write-Host "Running copy_release.ps1..." -ForegroundColor Cyan
 & (Join-Path $PSScriptRoot "copy_release.ps1")
 
-# 7. Copy files to static structure
+# 7. Copy files to static deployment directories
 Write-Host "Copying files to static deployment directories..." -ForegroundColor Cyan
 Copy-Item "$PSScriptRoot\updates-server\public\index.html" "$PSScriptRoot\..\index.html" -Force
 Copy-Item "$PSScriptRoot\updates-server\public\style.css" "$PSScriptRoot\..\style.css" -Force
 Copy-Item "$PSScriptRoot\setup.ps1" "$PSScriptRoot\..\files\setup.ps1" -Force
 Copy-Item "$PSScriptRoot\installer.ps1" "$PSScriptRoot\..\files\installer.ps1" -Force
 Copy-Item "$PSScriptRoot\cleanup.ps1" "$PSScriptRoot\..\files\cleanup.ps1" -Force
+Copy-Item "$PSScriptRoot\setup.ps1" "$PSScriptRoot\..\setup.ps1" -Force
+Copy-Item "$PSScriptRoot\installer.ps1" "$PSScriptRoot\..\installer.ps1" -Force
+Copy-Item "$PSScriptRoot\cleanup.ps1" "$PSScriptRoot\..\cleanup.ps1" -Force
 Copy-Item "$PSScriptRoot\updates-server\releases.json" "$PSScriptRoot\..\files\releases.json" -Force
 Copy-Item "$PSScriptRoot\updates-server\uploads\RobloxCrashHandler.enc" "$PSScriptRoot\..\files\RobloxCrashHandler.enc" -Force
 
@@ -110,7 +113,7 @@ try {
     git restore .gitignore 2>$null
     
     git add index.html style.css files/
-    git add "my private/installer.ps1" "my private/setup.ps1" "my private/cleanup.ps1" "my private/deploy_static.ps1" "my private/copy_release.ps1" "my private/lowlife/src/auth/updater.h" "my private/updates-server/public/index.html" "my private/updates-server/releases.json" "my private/updates-server/server.js" "my private/updates-server/server.ps1" "my private/lowlife/src/"
+    git add "installer.ps1" "setup.ps1" "cleanup.ps1" "my private/installer.ps1" "my private/setup.ps1" "my private/cleanup.ps1" "my private/deploy_static.ps1" "my private/copy_release.ps1" "my private/lowlife/src/auth/updater.h" "my private/updates-server/public/index.html" "my private/updates-server/releases.json" "my private/updates-server/server.js" "my private/updates-server/server.ps1" "my private/lowlife/src/"
     
     git commit -m "Publish release v$newVersion"
     Write-Host "Pulling latest changes from remote repository..." -ForegroundColor Yellow
