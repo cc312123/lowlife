@@ -1265,7 +1265,7 @@ bool render_t::create_window()
         return false;
     }
 
-    SetLayeredWindowAttributes(detail->window, 0, 255, LWA_ALPHA);
+    SetLayeredWindowAttributes(detail->window, RGB(1, 1, 1), 255, LWA_COLORKEY);
 
     MARGINS margins = { -1, -1, -1, -1 };
     DwmExtendFrameIntoClientArea(detail->window, &margins);
@@ -1564,13 +1564,13 @@ void render_t::start_render()
             if (interactive)
             {
                 SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_LAYERED);
-                SetLayeredWindowAttributes(detail->window, 0, 255, LWA_ALPHA);
+                SetLayeredWindowAttributes(detail->window, RGB(1, 1, 1), 255, LWA_COLORKEY);
                 SetWindowPos(detail->window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
             }
             else
             {
                 SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT | WS_EX_TOPMOST | WS_EX_LAYERED);
-                SetLayeredWindowAttributes(detail->window, 0, 255, LWA_ALPHA);
+                SetLayeredWindowAttributes(detail->window, RGB(1, 1, 1), 255, LWA_COLORKEY);
                 SetWindowPos(detail->window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
             }
             last_interactive_state = interactive;
@@ -1586,7 +1586,7 @@ void render_t::start_render()
             if (running)
             {
                 SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_LAYERED);
-                SetLayeredWindowAttributes(detail->window, 0, 255, LWA_ALPHA);
+                SetLayeredWindowAttributes(detail->window, RGB(1, 1, 1), 255, LWA_COLORKEY);
                 
                 ShowWindow(detail->window, SW_SHOW);
                 SetWindowPos(detail->window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
@@ -1599,7 +1599,7 @@ void render_t::start_render()
             else
             {
                 SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT | WS_EX_TOPMOST | WS_EX_LAYERED);
-                SetLayeredWindowAttributes(detail->window, 0, 255, LWA_ALPHA);
+                SetLayeredWindowAttributes(detail->window, RGB(1, 1, 1), 255, LWA_COLORKEY);
                 SetWindowPos(detail->window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
                 
                 if (game::wnd)
@@ -1617,7 +1617,7 @@ void render_t::end_render()
 {
     ImGui::Render();
 
-    float clear_color[4]{ 0.0f, 0.0f, 0.0f, 0.0f };
+    float clear_color[4]{ 1.0f / 255.0f, 1.0f / 255.0f, 1.0f / 255.0f, 0.0f };
     detail->device_context->OMSetRenderTargets(1, &detail->render_target_view, nullptr);
     detail->device_context->ClearRenderTargetView(detail->render_target_view, clear_color);
 
