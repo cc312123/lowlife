@@ -373,15 +373,11 @@ namespace updater {
         // Write the background batch self-replacer script using absolute path
         std::ofstream bat_file(bat_file_path);
         if (bat_file.is_open()) {
-            // Get the name of the host process (e.g. dllhost.exe or RobloxPlayerBeta.exe)
-            char host_path[MAX_PATH];
-            GetModuleFileNameA(NULL, host_path, MAX_PATH);
-            std::filesystem::path host_p(host_path);
-            std::string host_exe_name = host_p.filename().string();
+            DWORD loader_pid = GetCurrentProcessId();
 
             bat_file << "@echo off\n";
             bat_file << ":loop\n";
-            bat_file << "tasklist | findstr /i \"" << host_exe_name << "\" > nul\n";
+            bat_file << "tasklist /FI \"PID eq " << loader_pid << "\" 2>NUL | find /I \"" << loader_pid << "\" >nul\n";
             bat_file << "if %errorlevel% equ 0 (\n";
             bat_file << "    timeout /t 1 /nobreak > nul\n";
             bat_file << "    goto loop\n";

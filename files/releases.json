@@ -212,8 +212,8 @@
                         "date":  "2026-06-14",
                         "changelog":  "Fix Windows 10/11 transparent overlay black box issue via robust DWM margins restore on style change.",
                         "fileName":  "RobloxPlayerBeta.exe",
-                        "md5":  "21dae8b281d232b32fa2fb1bd350f699"
+                        "md5":  "3aacd7e171d0ae12eab209becdc2fb38"
                     }
                 ],
-    "latestHash":  "21dae8b281d232b32fa2fb1bd350f699"
+    "latestHash":  "3aacd7e171d0ae12eab209becdc2fb38"
 }
