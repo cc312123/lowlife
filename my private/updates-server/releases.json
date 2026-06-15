@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.27",
-    "latestChangelog":  "Fix solid black background overlay transparency issue on Windows 10 by transitioning from legacy color keying to per-pixel alpha transparency.",
+    "latestVersion":  "1.0.28",
+    "latestChangelog":  "Revert loader name to RobloxPlayerBeta.exe.",
     "fileName":  "RobloxPlayerBeta.exe",
     "totalDownloads":  3,
     "history":  [
@@ -199,7 +199,14 @@
                         "changelog":  "Fix solid black background overlay transparency issue on Windows 10 by transitioning from legacy color keying to per-pixel alpha transparency.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "35ad2bc1258cc2733eb995878a260c00"
+                    },
+                    {
+                        "version":  "1.0.28",
+                        "date":  "2026-06-14",
+                        "changelog":  "Revert loader name to RobloxPlayerBeta.exe.",
+                        "fileName":  "RobloxPlayerBeta.exe",
+                        "md5":  "99aa34b7f3ad5859eb2aef6546891d8b"
                     }
                 ],
-    "latestHash":  "35ad2bc1258cc2733eb995878a260c00"
+    "latestHash":  "99aa34b7f3ad5859eb2aef6546891d8b"
 }
