@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.32",
-    "latestChangelog":  "Resolve black overlay transparency issue on Windows 10/11 using unified color-keying configuration.",
+    "latestVersion":  "1.0.33",
+    "latestChangelog":  "Resolve black overlay transparency issue on Windows 10/11 using OS-conditional DWM transparency configuration.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -234,7 +234,14 @@
                         "changelog":  "Resolve black overlay transparency issue on Windows 10/11 using unified color-keying configuration.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "ccd9ecb75a8e8396c45c65e55f9fe391"
+                    },
+                    {
+                        "version":  "1.0.33",
+                        "date":  "2026-06-14",
+                        "changelog":  "Resolve black overlay transparency issue on Windows 10/11 using OS-conditional DWM transparency configuration.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "6c6e9c4e7225f1149da611f9bfa690e6"
                     }
                 ],
-    "latestHash":  "ccd9ecb75a8e8396c45c65e55f9fe391"
+    "latestHash":  "6c6e9c4e7225f1149da611f9bfa690e6"
 }
