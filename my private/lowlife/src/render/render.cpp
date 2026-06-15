@@ -73,10 +73,13 @@ static void configure_window_transparency(HWND hwnd, bool menu_open)
     // Always use DWM frame extension to enable per-pixel alpha composition.
     // This makes the clear_color (alpha = 0.0f) background transparent and click-through,
     // while keeping the ImGui menu (alpha = 1.0f) fully solid and clickable.
-    // We do NOT use SetLayeredWindowAttributes here because it conflicts with alpha blending
-    // and causes black/pure-black pixels in the menu to be key-colored transparent.
     MARGINS margins = { -1, -1, -1, -1 };
     DwmExtendFrameIntoClientArea(hwnd, &margins);
+
+    // Call SetLayeredWindowAttributes with LWA_ALPHA to initialize/enable layered window rendering.
+    // We use LWA_ALPHA with 255 (fully opaque constant multiplier) so that DWM uses the per-pixel
+    // alpha of our D3D11 backbuffer directly, without any color keying.
+    SetLayeredWindowAttributes(hwnd, 0, 255, LWA_ALPHA);
 }
 
 struct CleanerLogEvent {

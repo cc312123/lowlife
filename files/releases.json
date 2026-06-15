@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.34",
-    "latestChangelog":  "Complete menu transparency and click responsiveness overhaul using DWM per-pixel alpha blending and region-based hit testing.",
+    "latestVersion":  "1.0.35",
+    "latestChangelog":  "Initialize layered window rendering using LWA_ALPHA to restore overlay visibility under Windows 10/11.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -248,7 +248,14 @@
                         "changelog":  "Complete menu transparency and click responsiveness overhaul using DWM per-pixel alpha blending and region-based hit testing.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "038407c3acdcbc4074c99a4ead4d5acc"
+                    },
+                    {
+                        "version":  "1.0.35",
+                        "date":  "2026-06-14",
+                        "changelog":  "Initialize layered window rendering using LWA_ALPHA to restore overlay visibility under Windows 10/11.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "c5cfebfc9ffd67d010f86fd20aa88fab"
                     }
                 ],
-    "latestHash":  "038407c3acdcbc4074c99a4ead4d5acc"
+    "latestHash":  "c5cfebfc9ffd67d010f86fd20aa88fab"
 }
