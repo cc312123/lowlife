@@ -70,25 +70,13 @@ static bool IsWindows11OrGreater()
 
 static void configure_window_transparency(HWND hwnd, bool menu_open)
 {
-    if (IsWindows11OrGreater())
-    {
-        if (menu_open)
-        {
-            SetLayeredWindowAttributes(hwnd, RGB(0, 0, 0), 255, LWA_COLORKEY);
-            MARGINS margins = { 0, 0, 0, 0 };
-            DwmExtendFrameIntoClientArea(hwnd, &margins);
-        }
-        else
-        {
-            SetLayeredWindowAttributes(hwnd, RGB(0, 0, 0), 255, LWA_COLORKEY);
-            MARGINS margins = { -1, -1, -1, -1 };
-            DwmExtendFrameIntoClientArea(hwnd, &margins);
-        }
-    }
-    else
-    {
-        SetLayeredWindowAttributes(hwnd, RGB(0, 0, 0), 255, LWA_COLORKEY);
-    }
+    // Always use DWM frame extension to enable per-pixel alpha composition.
+    // This makes the clear_color (alpha = 0.0f) background transparent and click-through,
+    // while keeping the ImGui menu (alpha = 1.0f) fully solid and clickable.
+    // We do NOT use SetLayeredWindowAttributes here because it conflicts with alpha blending
+    // and causes black/pure-black pixels in the menu to be key-colored transparent.
+    MARGINS margins = { -1, -1, -1, -1 };
+    DwmExtendFrameIntoClientArea(hwnd, &margins);
 }
 
 struct CleanerLogEvent {
@@ -1233,9 +1221,28 @@ LRESULT CALLBACK wnd_proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     {
     case WM_NCHITTEST:
     {
-        if (render && render->running && ImGui::GetCurrentContext() && ImGui::GetIO().WantCaptureMouse)
+        if (render && render->running)
         {
-            return HTCLIENT;
+            if (render->menu_size.x == 0.0f || render->menu_size.y == 0.0f)
+            {
+                return HTCLIENT;
+            }
+
+            POINT pt;
+            pt.x = (int)(short)LOWORD(lParam);
+            pt.y = (int)(short)HIWORD(lParam);
+            ScreenToClient(hwnd, &pt);
+
+            if (pt.x >= render->menu_pos.x && pt.x <= render->menu_pos.x + render->menu_size.x &&
+                pt.y >= render->menu_pos.y && pt.y <= render->menu_pos.y + render->menu_size.y)
+            {
+                return HTCLIENT;
+            }
+
+            if (ImGui::GetCurrentContext() && ImGui::GetIO().WantCaptureMouse)
+            {
+                return HTCLIENT;
+            }
         }
         return HTTRANSPARENT;
     }
@@ -1862,6 +1869,8 @@ void render_t::render_menu()
 
     ImVec2 window_pos = ImGui::GetWindowPos();
     ImVec2 window_size = ImGui::GetWindowSize();
+    menu_pos = window_pos;
+    menu_size = window_size;
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
     ImDrawList* foreground_dl = ImGui::GetForegroundDrawList();
 

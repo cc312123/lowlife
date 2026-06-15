@@ -24,6 +24,8 @@ public:
 	~render_t();
 
 	bool running = true;
+	ImVec2 menu_pos = { 0.0f, 0.0f };
+	ImVec2 menu_size = { 0.0f, 0.0f };
 
 	void start_render();
 	void render_menu();

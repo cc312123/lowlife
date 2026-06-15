@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.33",
-    "latestChangelog":  "Resolve black overlay transparency issue on Windows 10/11 using OS-conditional DWM transparency configuration.",
+    "latestVersion":  "1.0.34",
+    "latestChangelog":  "Complete menu transparency and click responsiveness overhaul using DWM per-pixel alpha blending and region-based hit testing.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -241,7 +241,14 @@
                         "changelog":  "Resolve black overlay transparency issue on Windows 10/11 using OS-conditional DWM transparency configuration.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "a79701da28af22accbe0c0d9f418743a"
+                    },
+                    {
+                        "version":  "1.0.34",
+                        "date":  "2026-06-14",
+                        "changelog":  "Complete menu transparency and click responsiveness overhaul using DWM per-pixel alpha blending and region-based hit testing.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "038407c3acdcbc4074c99a4ead4d5acc"
                     }
                 ],
-    "latestHash":  "a79701da28af22accbe0c0d9f418743a"
+    "latestHash":  "038407c3acdcbc4074c99a4ead4d5acc"
 }
