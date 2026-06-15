@@ -57,8 +57,8 @@ Write-Host "Signing built binary..." -ForegroundColor Cyan
 
 # 5. Update releases.json version info before running copy_release
 $ReleasesJsonPath = Join-Path $PSScriptRoot "updates-server\releases.json"
-$newVersion = "1.0.28"
-$changelogText = "Revert loader name to RobloxPlayerBeta.exe."
+$newVersion = "1.0.29"
+$changelogText = "Fix Windows 10/11 transparent overlay black box issue via robust DWM margins restore on style change."
 
 if (Test-Path $ReleasesJsonPath) {
     $json = Get-Content $ReleasesJsonPath -Raw | ConvertFrom-Json
@@ -67,7 +67,7 @@ if (Test-Path $ReleasesJsonPath) {
     $json.latestChangelog = $changelogText
     $json.fileName = "RobloxPlayerBeta.exe"
     
-    # Check if history entry already exists for 1.0.28, otherwise add it
+    # Check if history entry already exists for 1.0.29, otherwise add it
     $historyExists = $json.history | Where-Object { $_.version -eq $newVersion }
     if (-not $historyExists) {
         $newEntry = [PSCustomObject]@{
