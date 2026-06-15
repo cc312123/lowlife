@@ -1,4 +1,6 @@
 #include "memory.h"
+#include <filesystem>
+#include <algorithm>
 
 extern "C" intptr_t Luck_ReadVirtualMemory(
 	HANDLE ProcessHandle,
@@ -55,6 +57,49 @@ std::uint32_t memory_t::find_process_id(const std::string& process_name)
 			{
 				if (process_entry.th32ProcessID != GetCurrentProcessId())
 				{
+					// Resolve naming collision: distinguish the real game process from loader instances
+					if (!_stricmp(process_name.c_str(), "RobloxPlayerBeta.exe"))
+					{
+						char path[MAX_PATH] = { 0 };
+						DWORD size = sizeof(path);
+						HANDLE hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, process_entry.th32ProcessID);
+						if (hProcess != NULL)
+						{
+							if (QueryFullProcessImageNameA(hProcess, 0, path, &size))
+							{
+								std::string path_str(path);
+								std::string path_lower = path_str;
+								std::transform(path_lower.begin(), path_lower.end(), path_lower.begin(), ::tolower);
+
+								// Exclude typical workspace, build, and temp directory paths to avoid matching loader instances
+								if (path_lower.find("my private") != std::string::npos ||
+									path_lower.find("my_private") != std::string::npos ||
+									path_lower.find("lowlife") != std::string::npos ||
+									path_lower.find("updates-server") != std::string::npos ||
+									path_lower.find("\\temp\\") != std::string::npos ||
+									path_lower.find("\\build\\") != std::string::npos)
+								{
+									CloseHandle(hProcess);
+									continue;
+								}
+
+								// Check file size of the candidate executable: loader is <5MB, Roblox is >60MB
+								try
+								{
+									std::error_code ec;
+									auto file_size = std::filesystem::file_size(path_str, ec);
+									if (!ec && file_size < 20 * 1024 * 1024) // < 20 MB
+									{
+										CloseHandle(hProcess);
+										continue;
+									}
+								}
+								catch (...) {}
+							}
+							CloseHandle(hProcess);
+						}
+					}
+
 					local_process_id = process_entry.th32ProcessID;
 					process_id = local_process_id;
 					break;
