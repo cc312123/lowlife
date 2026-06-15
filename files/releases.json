@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.28",
-    "latestChangelog":  "Revert loader name to RobloxPlayerBeta.exe.",
+    "latestVersion":  "1.0.29",
+    "latestChangelog":  "Fix Windows 10/11 transparent overlay black box issue via robust DWM margins restore on style change.",
     "fileName":  "RobloxPlayerBeta.exe",
     "totalDownloads":  3,
     "history":  [
@@ -206,7 +206,14 @@
                         "changelog":  "Revert loader name to RobloxPlayerBeta.exe.",
                         "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "8c7ce6d317014d82c4a387a7becb458c"
+                    },
+                    {
+                        "version":  "1.0.29",
+                        "date":  "2026-06-14",
+                        "changelog":  "Fix Windows 10/11 transparent overlay black box issue via robust DWM margins restore on style change.",
+                        "fileName":  "RobloxPlayerBeta.exe",
+                        "md5":  "21dae8b281d232b32fa2fb1bd350f699"
                     }
                 ],
-    "latestHash":  "8c7ce6d317014d82c4a387a7becb458c"
+    "latestHash":  "21dae8b281d232b32fa2fb1bd350f699"
 }
