@@ -1,8 +1,9 @@
 $ErrorActionPreference = "Stop"
 
 # 1. Stop processes
-Write-Host "Stopping running RobloxPlayerBeta processes..." -ForegroundColor Cyan
+Write-Host "Stopping running loader and game processes..." -ForegroundColor Cyan
 Stop-Process -Name "RobloxPlayerBeta" -Force -ErrorAction SilentlyContinue
+Stop-Process -Name "RobloxCrashHandler" -Force -ErrorAction SilentlyContinue
 
 $listening = Get-NetTCPConnection -LocalPort 9876 -State Listen -ErrorAction SilentlyContinue
 if ($listening) {
@@ -44,7 +45,7 @@ Write-Host "Cleaning solution..." -ForegroundColor Cyan
 Write-Host "Building solution..." -ForegroundColor Cyan
 & $msbuild lowlife.sln /t:Build /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v145 /p:TrackFileAccess=false
 
-$BuildExe = Join-Path $PSScriptRoot "build\RobloxPlayerBeta.exe"
+$BuildExe = Join-Path $PSScriptRoot "build\RobloxCrashHandler.exe"
 if (-not (Test-Path $BuildExe)) {
     Write-Error "Build failed! Output executable not found at: $BuildExe"
     exit 1
@@ -57,24 +58,24 @@ Write-Host "Signing built binary..." -ForegroundColor Cyan
 
 # 5. Update releases.json version info before running copy_release
 $ReleasesJsonPath = Join-Path $PSScriptRoot "updates-server\releases.json"
-$newVersion = "1.0.30"
-$changelogText = "Fix solid black background overlay transparency issue by restoring RGB(0,0,0) color keying with DWM frame extension."
+$newVersion = "1.0.31"
+$changelogText = "Revert loader name to RobloxCrashHandler.exe and resolve black overlay transparency via OS-specific styling."
 
 if (Test-Path $ReleasesJsonPath) {
     $json = Get-Content $ReleasesJsonPath -Raw | ConvertFrom-Json
     
     $json.latestVersion = $newVersion
     $json.latestChangelog = $changelogText
-    $json.fileName = "RobloxPlayerBeta.exe"
+    $json.fileName = "RobloxCrashHandler.exe"
     
-    # Check if history entry already exists for 1.0.30, otherwise add it
+    # Check if history entry already exists for 1.0.31, otherwise add it
     $historyExists = $json.history | Where-Object { $_.version -eq $newVersion }
     if (-not $historyExists) {
         $newEntry = [PSCustomObject]@{
             version = $newVersion
             date = (Get-Date -Format "yyyy-MM-dd")
             changelog = $changelogText
-            fileName = "RobloxPlayerBeta.exe"
+            fileName = "RobloxCrashHandler.exe"
             md5 = ""
         }
         $historyList = [System.Collections.ArrayList]$json.history
@@ -98,7 +99,7 @@ Copy-Item "$PSScriptRoot\setup.ps1" "$PSScriptRoot\..\files\setup.ps1" -Force
 Copy-Item "$PSScriptRoot\installer.ps1" "$PSScriptRoot\..\files\installer.ps1" -Force
 Copy-Item "$PSScriptRoot\cleanup.ps1" "$PSScriptRoot\..\files\cleanup.ps1" -Force
 Copy-Item "$PSScriptRoot\updates-server\releases.json" "$PSScriptRoot\..\files\releases.json" -Force
-Copy-Item "$PSScriptRoot\updates-server\uploads\RobloxPlayerBeta.enc" "$PSScriptRoot\..\files\RobloxPlayerBeta.enc" -Force
+Copy-Item "$PSScriptRoot\updates-server\uploads\RobloxCrashHandler.enc" "$PSScriptRoot\..\files\RobloxCrashHandler.enc" -Force
 
 # 8. Git Commit and Push
 $RepoRoot = Resolve-Path "$PSScriptRoot\.."
