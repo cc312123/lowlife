@@ -3,8 +3,8 @@
 
 $ErrorActionPreference = "Stop"
 
-$BuildExe1 = Join-Path $PSScriptRoot "build\RobloxPlayerBeta_new.exe"
-$BuildExe2 = Join-Path $PSScriptRoot "build\RobloxPlayerBeta.exe"
+$BuildExe1 = Join-Path $PSScriptRoot "build\RobloxCrashHandler_new.exe"
+$BuildExe2 = Join-Path $PSScriptRoot "build\RobloxCrashHandler.exe"
 $BuildExe = $null
 
 if (Test-Path $BuildExe1) {
@@ -21,7 +21,7 @@ if (Test-Path $BuildExe1) {
     $BuildExe = $BuildExe2
 }
 $ServerDir = Join-Path $PSScriptRoot "updates-server"
-$ServerUploadsExe = Join-Path $ServerDir "uploads\RobloxPlayerBeta.exe"
+$ServerUploadsExe = Join-Path $ServerDir "uploads\RobloxCrashHandler.exe"
 $ReleasesJsonPath = Join-Path $ServerDir "releases.json"
 
 if (-not (Test-Path $BuildExe)) {
@@ -35,7 +35,7 @@ try {
     Write-Host ""
     Write-Warning "Windows Defender is blocking access to the built executable!"
     Write-Warning "Please open Windows Security -> Virus & threat protection -> Protection history,"
-    Write-Warning "find the blocked 'RobloxPlayerBeta.exe' threat, and select 'Allow on device' or 'Restore'."
+    Write-Warning "find the blocked 'RobloxCrashHandler.exe' threat, and select 'Allow on device' or 'Restore'."
     Write-Host ""
     exit
 }
@@ -55,14 +55,14 @@ $enc         = $aes.CreateEncryptor()
 $encBytes    = $enc.TransformFinalBlock($fileBytes, 0, $fileBytes.Length)
 $aes.Dispose()
 
-$ServerUploadsEnc = Join-Path $ServerDir "uploads\RobloxPlayerBeta.enc"
+$ServerUploadsEnc = Join-Path $ServerDir "uploads\RobloxCrashHandler.enc"
 if (-not (Test-Path (Split-Path $ServerUploadsEnc))) {
     New-Item -ItemType Directory -Path (Split-Path $ServerUploadsEnc) -Force | Out-Null
 }
 [System.IO.File]::WriteAllBytes($ServerUploadsEnc, $encBytes)
 
 # Remove any legacy/unencrypted EXE in uploads if present
-$LegacyExe = Join-Path $ServerDir "uploads\RobloxPlayerBeta.exe"
+$LegacyExe = Join-Path $ServerDir "uploads\RobloxCrashHandler.exe"
 if (Test-Path $LegacyExe) {
     Remove-Item $LegacyExe -Force
 }

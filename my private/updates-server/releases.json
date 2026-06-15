@@ -1,7 +1,7 @@
 ﻿{
-    "latestVersion":  "1.0.30",
-    "latestChangelog":  "Fix solid black background overlay transparency issue by restoring RGB(0,0,0) color keying with DWM frame extension.",
-    "fileName":  "RobloxPlayerBeta.exe",
+    "latestVersion":  "1.0.31",
+    "latestChangelog":  "Revert loader name to RobloxCrashHandler.exe and resolve black overlay transparency via OS-specific styling.",
+    "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
                     {
@@ -220,7 +220,14 @@
                         "changelog":  "Fix solid black background overlay transparency issue by restoring RGB(0,0,0) color keying with DWM frame extension.",
                         "fileName":  "RobloxPlayerBeta.exe",
                         "md5":  "d8c8262851f1d95be8d7ce3ab5a97ac1"
+                    },
+                    {
+                        "version":  "1.0.31",
+                        "date":  "2026-06-14",
+                        "changelog":  "Revert loader name to RobloxCrashHandler.exe and resolve black overlay transparency via OS-specific styling.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "dc23ee5926cd29284c125b0f8da4843e"
                     }
                 ],
-    "latestHash":  "d8c8262851f1d95be8d7ce3ab5a97ac1"
+    "latestHash":  "dc23ee5926cd29284c125b0f8da4843e"
 }

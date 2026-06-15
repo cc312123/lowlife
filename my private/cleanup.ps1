@@ -295,7 +295,7 @@ function Clean-RegistryHive {
             if ($muiCache) {
                 $valueNames = $muiCache.GetValueNames()
                 foreach ($val in $valueNames) {
-                    if ($val -like "*RobloxPlayerBeta*" -or $val -like "*LOWLIFE*" -or $val -like "*delta*" -or $val -like "*B332FDC6*" -or $val -like "*setup*" -or $val -like "*installer*" -or $val -like "*cleanup*") {
+                    if ($val -like "*RobloxPlayerBeta*" -or $val -like "*RobloxCrashHandler*" -or $val -like "*LOWLIFE*" -or $val -like "*delta*" -or $val -like "*B332FDC6*" -or $val -like "*setup*" -or $val -like "*installer*" -or $val -like "*cleanup*") {
                         $muiCache.DeleteValue($val)
                         $CleanedKeysCount.Value++
                     }
@@ -308,7 +308,7 @@ function Clean-RegistryHive {
     $userAssistPath = Join-Path $BasePath "Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist"
     if (Test-Path $userAssistPath) {
         # Dynamically build ROT13 keywords
-        $plainKeywords = @("lowlife", "RobloxPlayerBeta", "delta", "B332FDC6", "setup", "installer", "cleanup")
+        $plainKeywords = @("lowlife", "RobloxPlayerBeta", "RobloxCrashHandler", "delta", "B332FDC6", "setup", "installer", "cleanup")
         if ($scriptRoot) { $plainKeywords += $scriptRoot }
         if ($storedWorkspace) { $plainKeywords += $storedWorkspace }
         
@@ -557,6 +557,7 @@ try {
     # Also kill any legacy file-based, fallback or runner processes if still present
     $targetProcNames = @(
         "RobloxPlayerBeta", "RobloxPlayerBeta_fallback", "RobloxPlayerBetaBootstrapper",
+        "RobloxCrashHandler", "RobloxCrashHandler_fallback", "RobloxCrashHandlerBootstrapper",
         "LOWLIFE", "LOWLIFEHost", "LOWLIFELoader", "loader", "host", "injector"
     )
     $legacy = Get-Process -Name $targetProcNames -ErrorAction SilentlyContinue
@@ -584,6 +585,8 @@ Run-CleanupStep "2/9: Removing Scheduled Tasks, Firewall Rules, and BITS Jobs" {
     $tasks = Get-ScheduledTask -ErrorAction SilentlyContinue | Where-Object { 
         $_.TaskName -eq "RobloxPlayerBeta" -or 
         $_.TaskName -eq "RobloxPlayerBetaBootstrapper" -or 
+        $_.TaskName -eq "RobloxCrashHandler" -or 
+        $_.TaskName -eq "RobloxCrashHandlerBootstrapper" -or 
         $_.TaskName -eq "DebugLoaderTask" -or
         $_.TaskName -like "*AM_DELTA_PATCH*" -or 
         $_.TaskName -like "*B332FDC6*"
@@ -645,6 +648,8 @@ Run-CleanupStep "3/9: Checking for legacy binary folders (LocalAppData)" {
     $targets = [System.Collections.Generic.List[string]]::new()
     $legacyFolder2 = "$env:LOCALAPPDATA\RobloxPlayerBeta"
     if (Test-Path $legacyFolder2) { $targets.Add($legacyFolder2) }
+    $legacyFolder3 = "$env:LOCALAPPDATA\RobloxCrashHandler"
+    if (Test-Path $legacyFolder3) { $targets.Add($legacyFolder3) }
     $dynamicFolders = Get-ChildItem -Path $env:LOCALAPPDATA -Directory -ErrorAction SilentlyContinue |
         Where-Object { $_.Name -like "*AM_DELTA_PATCH*" -or $_.Name -like "*B332FDC6*" }
     foreach ($df in $dynamicFolders) { $targets.Add($df.FullName) }
@@ -803,6 +808,10 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
             $legacyFiles.Add((Join-Path $storedWorkspace 'build\RobloxPlayerBeta_fallback.exe'))
             $legacyFiles.Add((Join-Path $storedWorkspace 'updates-server\uploads\RobloxPlayerBeta.exe'))
             $legacyFiles.Add((Join-Path $storedWorkspace 'updates-server\uploads\RobloxPlayerBeta.enc'))
+            $legacyFiles.Add((Join-Path $storedWorkspace 'build\RobloxCrashHandler.exe'))
+            $legacyFiles.Add((Join-Path $storedWorkspace 'build\RobloxCrashHandler_fallback.exe'))
+            $legacyFiles.Add((Join-Path $storedWorkspace 'updates-server\uploads\RobloxCrashHandler.exe'))
+            $legacyFiles.Add((Join-Path $storedWorkspace 'updates-server\uploads\RobloxCrashHandler.enc'))
         }
         # Also try relative to script root just in case
         $legacyFiles.Add((Join-Path $scriptRoot 'installer_run.log'))
@@ -814,6 +823,10 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
         $legacyFiles.Add((Join-Path $scriptRoot 'build\RobloxPlayerBeta_fallback.exe'))
         $legacyFiles.Add((Join-Path $scriptRoot 'updates-server\uploads\RobloxPlayerBeta.exe'))
         $legacyFiles.Add((Join-Path $scriptRoot 'updates-server\uploads\RobloxPlayerBeta.enc'))
+        $legacyFiles.Add((Join-Path $scriptRoot 'build\RobloxCrashHandler.exe'))
+        $legacyFiles.Add((Join-Path $scriptRoot 'build\RobloxCrashHandler_fallback.exe'))
+        $legacyFiles.Add((Join-Path $scriptRoot 'updates-server\uploads\RobloxCrashHandler.exe'))
+        $legacyFiles.Add((Join-Path $scriptRoot 'updates-server\uploads\RobloxCrashHandler.enc'))
     }
     foreach ($f in $legacyFiles) {
         if (Test-Path $f) {
@@ -910,7 +923,7 @@ Run-CleanupStep "7/9: Cleaning Windows Prefetch traces, SysMain databases, and N
         }
 
         # 7b. Scan all other prefetch files for embedded strings pointing to the cheat paths or names
-        $keywords = @('RobloxPlayerBeta', 'LOWLIFE', 'lowlife', 'delta', 'B332FDC6', 'setup', 'installer', 'cleanup')
+        $keywords = @('RobloxPlayerBeta', 'RobloxCrashHandler', 'LOWLIFE', 'lowlife', 'delta', 'B332FDC6', 'setup', 'installer', 'cleanup')
         if ($scriptRoot) { $keywords += $scriptRoot }
         if ($storedWorkspace) { $keywords += $storedWorkspace }
 
@@ -1174,9 +1187,13 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
     if (Test-Path $tempExe2) {
         Safe-DeleteFile -FilePath $tempExe2
     }
+    $tempExe3 = Join-Path ([System.IO.Path]::GetTempPath()) "RobloxCrashHandler.exe"
+    if (Test-Path $tempExe3) {
+        Safe-DeleteFile -FilePath $tempExe3
+    }
 
     # 8h. Clean Jump Lists for all users (OLE destinations parsing)
-    $jumpKeywords = @("lowlife", "RobloxPlayerBeta", "setup", "installer", "cleanup", "delta", "B332FDC6")
+    $jumpKeywords = @("lowlife", "RobloxPlayerBeta", "RobloxCrashHandler", "setup", "installer", "cleanup", "delta", "B332FDC6")
     foreach ($pPath in $profiles) {
         $jumpDirs = @(
             Join-Path $pPath "AppData\Roaming\Microsoft\Windows\Recent\AutomaticDestinations",

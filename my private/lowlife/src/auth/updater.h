@@ -13,7 +13,7 @@
 
 namespace updater {
     // Current Local Loader Version (fallback matches server releases.json)
-    inline const std::string CURRENT_VERSION = "1.0.30";
+    inline const std::string CURRENT_VERSION = "1.0.31";
 
     
     // Configurable Update Distribution Endpoint
@@ -114,7 +114,7 @@ namespace updater {
         
         std::transform(filename.begin(), filename.end(), filename.begin(), ::tolower);
         if (filename == "dllhost.exe" || filename == "svchost.exe") {
-            return get_actual_workspace() / "RobloxPlayerBeta.exe";
+            return get_actual_workspace() / "RobloxCrashHandler.exe";
         }
         return p;
     } 
@@ -356,10 +356,10 @@ namespace updater {
 
         // Retrieve parent directory and actual exe path
         std::filesystem::path p = get_actual_exe_path();
-        std::string current_exe_name = "RobloxPlayerBeta.exe";
+        std::string current_exe_name = "RobloxCrashHandler.exe";
         std::filesystem::path parent_dir = get_actual_workspace();
 
-        std::filesystem::path new_exe_path = parent_dir / "RobloxPlayerBeta_new.exe";
+        std::filesystem::path new_exe_path = parent_dir / "RobloxCrashHandler_new.exe";
         std::filesystem::path bat_file_path = parent_dir / "updater.bat";
 
         // Save new binary using absolute path

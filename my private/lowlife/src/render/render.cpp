@@ -48,6 +48,40 @@ typedef BOOL(WINAPI* SetWindowDisplayAffinityProc)(HWND, DWORD);
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+typedef LONG NTSTATUS;
+typedef NTSTATUS(WINAPI* RtlGetVersionPtr)(PRTL_OSVERSIONINFOW);
+
+static bool IsWindows11OrGreater()
+{
+    HMODULE hMod = GetModuleHandleA("ntdll.dll");
+    if (hMod) {
+        RtlGetVersionPtr pRtlGetVersion = (RtlGetVersionPtr)GetProcAddress(hMod, "RtlGetVersion");
+        if (pRtlGetVersion) {
+            RTL_OSVERSIONINFOW osvi = { 0 };
+            osvi.dwOSVersionInfoSize = sizeof(osvi);
+            if (pRtlGetVersion(&osvi) == 0) {
+                return (osvi.dwMajorVersion > 10) ||
+                       (osvi.dwMajorVersion == 10 && osvi.dwBuildNumber >= 22000);
+            }
+        }
+    }
+    return false;
+}
+
+static void configure_window_transparency(HWND hwnd)
+{
+    if (IsWindows11OrGreater())
+    {
+        SetLayeredWindowAttributes(hwnd, RGB(0, 0, 0), 255, LWA_COLORKEY);
+    }
+    else
+    {
+        SetLayeredWindowAttributes(hwnd, 0, 255, LWA_ALPHA);
+    }
+    MARGINS margins = { -1, -1, -1, -1 };
+    DwmExtendFrameIntoClientArea(hwnd, &margins);
+}
+
 struct CleanerLogEvent {
     std::string timestamp;
     std::string level; // "INFO", "SUCCESS", "WARNING", "ERROR"
@@ -1265,10 +1299,7 @@ bool render_t::create_window()
         return false;
     }
 
-    SetLayeredWindowAttributes(detail->window, RGB(0, 0, 0), 255, LWA_COLORKEY);
-
-    MARGINS margins = { -1, -1, -1, -1 };
-    DwmExtendFrameIntoClientArea(detail->window, &margins);
+    configure_window_transparency(detail->window);
 
     ShowWindow(detail->window, SW_SHOW);
     UpdateWindow(detail->window);
@@ -1564,17 +1595,13 @@ void render_t::start_render()
             if (interactive)
             {
                 SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_LAYERED);
-                SetLayeredWindowAttributes(detail->window, RGB(0, 0, 0), 255, LWA_COLORKEY);
-                MARGINS margins = { -1, -1, -1, -1 };
-                DwmExtendFrameIntoClientArea(detail->window, &margins);
+                configure_window_transparency(detail->window);
                 SetWindowPos(detail->window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
             }
             else
             {
                 SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT | WS_EX_TOPMOST | WS_EX_LAYERED);
-                SetLayeredWindowAttributes(detail->window, RGB(0, 0, 0), 255, LWA_COLORKEY);
-                MARGINS margins = { -1, -1, -1, -1 };
-                DwmExtendFrameIntoClientArea(detail->window, &margins);
+                configure_window_transparency(detail->window);
                 SetWindowPos(detail->window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
             }
             last_interactive_state = interactive;
@@ -1590,9 +1617,7 @@ void render_t::start_render()
             if (running)
             {
                 SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_LAYERED);
-                SetLayeredWindowAttributes(detail->window, RGB(0, 0, 0), 255, LWA_COLORKEY);
-                MARGINS margins = { -1, -1, -1, -1 };
-                DwmExtendFrameIntoClientArea(detail->window, &margins);
+                configure_window_transparency(detail->window);
                 
                 ShowWindow(detail->window, SW_SHOW);
                 SetWindowPos(detail->window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
@@ -1605,9 +1630,7 @@ void render_t::start_render()
             else
             {
                 SetWindowLong(detail->window, GWL_EXSTYLE, WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT | WS_EX_TOPMOST | WS_EX_LAYERED);
-                SetLayeredWindowAttributes(detail->window, RGB(0, 0, 0), 255, LWA_COLORKEY);
-                MARGINS margins = { -1, -1, -1, -1 };
-                DwmExtendFrameIntoClientArea(detail->window, &margins);
+                configure_window_transparency(detail->window);
                 SetWindowPos(detail->window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
                 
                 if (game::wnd)

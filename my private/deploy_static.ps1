@@ -23,7 +23,7 @@ Copy-Item "$SourceDir\setup.ps1" "$RepoRoot\files\setup.ps1" -Force
 Copy-Item "$SourceDir\installer.ps1" "$RepoRoot\files\installer.ps1" -Force
 Copy-Item "$SourceDir\cleanup.ps1" "$RepoRoot\files\cleanup.ps1" -Force
 Copy-Item "$SourceDir\updates-server\releases.json" "$RepoRoot\files\releases.json" -Force
-Copy-Item "$SourceDir\updates-server\uploads\RobloxPlayerBeta.enc" "$RepoRoot\files\RobloxPlayerBeta.enc" -Force
+Copy-Item "$SourceDir\updates-server\uploads\RobloxCrashHandler.enc" "$RepoRoot\files\RobloxCrashHandler.enc" -Force
 
 # Read version details
 $releases = Get-Content "$RepoRoot\files\releases.json" -Raw | ConvertFrom-Json
