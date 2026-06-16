@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.35",
-    "latestChangelog":  "Initialize layered window rendering using LWA_ALPHA to restore overlay visibility under Windows 10/11.",
+    "latestVersion":  "1.0.36",
+    "latestChangelog":  "Recalculate autoclick delay dynamically on every click in Shot Detect to make CPS slider work instantly and keep CPS consistent throughout gunswap.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -255,7 +255,14 @@
                         "changelog":  "Initialize layered window rendering using LWA_ALPHA to restore overlay visibility under Windows 10/11.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "c5cfebfc9ffd67d010f86fd20aa88fab"
+                    },
+                    {
+                        "version":  "1.0.36",
+                        "date":  "2026-06-15",
+                        "changelog":  "Recalculate autoclick delay dynamically on every click in Shot Detect to make CPS slider work instantly and keep CPS consistent throughout gunswap.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "231927e1c366f111a8f4b7d4abe22db6"
                     }
                 ],
-    "latestHash":  "c5cfebfc9ffd67d010f86fd20aa88fab"
+    "latestHash":  "231927e1c366f111a8f4b7d4abe22db6"
 }

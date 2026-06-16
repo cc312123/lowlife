@@ -1588,7 +1588,23 @@ namespace shot_detect
 					{
 						auto now = std::chrono::steady_clock::now();
 						auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_click_time).count();
-						if (duration >= current_delay)
+
+						int target_delay = current_delay;
+						if (!settings::shot_detect::randomize_delay)
+						{
+							if (is_first_click)
+							{
+								target_delay = settings::shot_detect::click_delay;
+							}
+							else
+							{
+								int cps = settings::shot_detect::cps;
+								if (cps < 1) cps = 1;
+								target_delay = 1000 / cps;
+							}
+						}
+
+						if (duration >= target_delay)
 						{
 							trigger_immediate_click();
 							last_click_time = now;
@@ -1596,41 +1612,26 @@ namespace shot_detect
 							if (is_first_click)
 							{
 								is_first_click = false;
-								if (settings::shot_detect::randomize_delay)
-								{
-									int min_val = settings::shot_detect::min_delay;
-									int max_val = settings::shot_detect::max_delay;
-									if (min_val > max_val) std::swap(min_val, max_val);
-									if (min_val < 1) min_val = 1;
-									if (max_val < 1) max_val = 1;
+							}
 
-									std::random_device rd;
-									std::mt19937 gen(rd());
-									std::uniform_int_distribution<> distrib(min_val, max_val);
-									current_delay = distrib(gen);
-								}
-								else
-								{
-									int cps = settings::shot_detect::cps;
-									if (cps < 1) cps = 1;
-									current_delay = 1000 / cps;
-								}
+							if (settings::shot_detect::randomize_delay)
+							{
+								int min_val = settings::shot_detect::min_delay;
+								int max_val = settings::shot_detect::max_delay;
+								if (min_val > max_val) std::swap(min_val, max_val);
+								if (min_val < 1) min_val = 1;
+								if (max_val < 1) max_val = 1;
+
+								std::random_device rd;
+								std::mt19937 gen(rd());
+								std::uniform_int_distribution<> distrib(min_val, max_val);
+								current_delay = distrib(gen);
 							}
 							else
 							{
-								if (settings::shot_detect::randomize_delay)
-								{
-									int min_val = settings::shot_detect::min_delay;
-									int max_val = settings::shot_detect::max_delay;
-									if (min_val > max_val) std::swap(min_val, max_val);
-									if (min_val < 1) min_val = 1;
-									if (max_val < 1) max_val = 1;
-
-									std::random_device rd;
-									std::mt19937 gen(rd());
-									std::uniform_int_distribution<> distrib(min_val, max_val);
-									current_delay = distrib(gen);
-								}
+								int cps = settings::shot_detect::cps;
+								if (cps < 1) cps = 1;
+								current_delay = 1000 / cps;
 							}
 						}
 					}
@@ -1638,7 +1639,14 @@ namespace shot_detect
 					{
 						auto now = std::chrono::steady_clock::now();
 						auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_click_time).count();
-						if (duration >= current_delay)
+
+						int target_delay = current_delay;
+						if (!settings::shot_detect::randomize_delay)
+						{
+							target_delay = settings::shot_detect::click_delay;
+						}
+
+						if (duration >= target_delay)
 						{
 							trigger_immediate_click();
 							is_clicking = false;
