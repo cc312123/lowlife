@@ -341,7 +341,7 @@ namespace rbx::aimbot {
 
             if (cache::cached_players) {
                 for (const auto& player : *cache::cached_players) {
-                    if (player.instance.address == 0 || player.instance.address == local_player_addr)
+                    if (cache::is_local_player(player))
                         continue;
 
                     if (!is_target_valid(player, local_crew_id, cursor_pt, dims, view)) continue;

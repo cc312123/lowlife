@@ -885,16 +885,7 @@ namespace botter
 
 			for (auto& player : *players_snapshot)
 			{
-				if (player.instance.address == 0 ||
-					player.instance.address == cache::cached_local_player.instance.address ||
-					player.instance.address == game::local_player.address ||
-					(player.name == cache::cached_local_player.name && !player.name.empty()))
-				{
-					continue;
-				}
-
-				if (game::local_character.address != 0 && player.model_address != 0 &&
-					player.model_address == game::local_character.address)
+				if (cache::is_local_player(player))
 				{
 					continue;
 				}
@@ -1301,8 +1292,7 @@ namespace shot_detect
 
 		for (const auto& player : *players_snapshot)
 		{
-			if (player.instance.address == 0 ||
-				player.instance.address == game::local_player.address)
+			if (cache::is_local_player(player))
 			{
 				continue;
 			}
@@ -1464,7 +1454,7 @@ namespace shot_detect
 
 								for (const auto& player : *players_snapshot)
 								{
-									if (player.instance.address == 0 || player.instance.address == game::local_player.address)
+									if (cache::is_local_player(player))
 										continue;
 
 									auto hrp_it = player.parts.find("HumanoidRootPart");

@@ -1,4 +1,4 @@
-﻿#include "freezeplayer.h"
+#include "freezeplayer.h"
 
 #include <memory/memory.h>
 #include <sdk/sdk.h>
@@ -113,7 +113,7 @@ namespace freezeplayer
 				{
 					for (auto& player : *players_snapshot)
 					{
-						if (player.instance.address == 0 || player.instance.address == game::local_player.address)
+						if (cache::is_local_player(player))
 							continue;
 
 						

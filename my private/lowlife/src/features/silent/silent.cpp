@@ -243,10 +243,7 @@ static cache::entity_t get_closest_player_from_cursor()
 
 	for (auto& player : *players_snapshot)
 	{
-		if (player.instance.address == 0)
-			continue;
-
-		if (player.instance.address == game::local_player.address)
+		if (cache::is_local_player(player))
 			continue;
 
 		

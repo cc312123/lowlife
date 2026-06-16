@@ -37,5 +37,11 @@ namespace cache
 	inline cache::entity_t cached_local_player;
 	inline std::shared_ptr<std::vector<cache::entity_t>> cached_players;
 
+	inline std::uint64_t local_player_address{ 0 };
+	inline std::int64_t local_player_user_id{ 0 };
+	inline std::string local_player_name{ "" };
+
+	bool is_local_player(const cache::entity_t& player);
+
 	void run();
 }

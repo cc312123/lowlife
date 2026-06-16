@@ -361,7 +361,7 @@ void esp::run()
 			continue;
 		}
 
-		if (!settings::visuals::localplayer && entity.instance.address == game::local_player.address)
+		if (!settings::visuals::localplayer && cache::is_local_player(entity))
 		{
 			continue;
 		}
@@ -512,14 +512,7 @@ void esp::run()
 		// 4. Triggerbot Hitbox Visualization
 		if (settings::botter::autoclicker_enabled && settings::botter::visualize_hitbox)
 		{
-			bool is_local = (entity.instance.address == game::local_player.address ||
-							 entity.instance.address == cache::cached_local_player.instance.address ||
-							 (entity.name == cache::cached_local_player.name && !entity.name.empty()));
-			if (game::local_character.address != 0 && entity.model_address != 0 &&
-				entity.model_address == game::local_character.address)
-			{
-				is_local = true;
-			}
+			bool is_local = cache::is_local_player(entity);
 
 			if (!is_local)
 			{

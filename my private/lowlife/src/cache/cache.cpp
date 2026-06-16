@@ -174,12 +174,25 @@ void cache::run()
 			persistent_cache.clear();
 			cached_model_addresses.clear();
 			cached_model_children_counts.clear();
+			local_player_address = 0;
+			local_player_user_id = 0;
+			local_player_name = "";
 			last_pid = current_pid;
 		}
 
 		rbx::player_t local_player_obj = { game::local_player.address };
 		if (local_player_obj.address != 0)
 		{
+			local_player_address = local_player_obj.address;
+			if (local_player_user_id == 0)
+			{
+				local_player_user_id = local_player_obj.get_user_id();
+			}
+			if (local_player_name.empty() || local_player_name == "unknown")
+			{
+				local_player_name = local_player_obj.get_name();
+			}
+
 			static std::uint64_t last_resolved_lp = 0;
 			static bool resolved = false;
 			if (local_player_obj.address != last_resolved_lp)
@@ -466,7 +479,10 @@ void cache::run()
 			
 			for (cache::entity_t& entity : *cached_players)
 			{
-				if (entity.instance.address == game::local_player.address)
+				if (entity.instance.address == game::local_player.address ||
+					(local_player_address != 0 && entity.instance.address == local_player_address) ||
+					(local_player_user_id != 0 && entity.user_id == local_player_user_id) ||
+					(!local_player_name.empty() && local_player_name != "unknown" && entity.name == local_player_name))
 				{
 					cached_local_player = entity;
 					break;
@@ -476,4 +492,22 @@ void cache::run()
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(30));
 	}
+}
+
+bool cache::is_local_player(const cache::entity_t& player)
+{
+	if (player.instance.address == 0) return false;
+	
+	if (player.instance.address == cached_local_player.instance.address) return true;
+	if (player.instance.address == game::local_player.address) return true;
+	if (local_player_address != 0 && player.instance.address == local_player_address) return true;
+	
+	if (local_player_user_id != 0 && player.user_id == local_player_user_id) return true;
+	
+	if (!local_player_name.empty() && local_player_name != "unknown" && player.name == local_player_name) return true;
+	if (!cached_local_player.name.empty() && cached_local_player.name != "unknown" && player.name == cached_local_player.name) return true;
+	
+	if (game::local_character.address != 0 && player.model_address != 0 && player.model_address == game::local_character.address) return true;
+	
+	return false;
 }
