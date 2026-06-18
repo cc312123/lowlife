@@ -536,8 +536,8 @@ namespace dex_explorer
 			ImVec2 window_size = ImGui::GetWindowSize();
 			ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
-			draw_list->AddRect(ImVec2(window_pos.x + 1, window_pos.y + 1), ImVec2(window_pos.x + window_size.x - 1, window_pos.y + window_size.y - 1), IM_COL32(60, 60, 60, 255), 0, 1.0f);
-			draw_list->AddRect(ImVec2(window_pos.x + 2, window_pos.y + 2), ImVec2(window_pos.x + window_size.x - 2, window_pos.y + window_size.y - 2), IM_COL32(0, 0, 0, 255), 0, 1.0f);
+			draw_list->AddRect(ImVec2(window_pos.x + 1, window_pos.y + 1), ImVec2(window_pos.x + window_size.x - 1, window_pos.y + window_size.y - 1), IM_COL32(60, 60, 60, 255), 0.0f, 0, 1.0f);
+			draw_list->AddRect(ImVec2(window_pos.x + 2, window_pos.y + 2), ImVec2(window_pos.x + window_size.x - 2, window_pos.y + window_size.y - 2), IM_COL32(0, 0, 0, 255), 0.0f, 0, 1.0f);
 			draw_list->AddRectFilled(ImVec2(window_pos.x + 5, window_pos.y + 5), ImVec2(window_pos.x + window_size.x - 5, window_pos.y + window_size.y - 5), IM_COL32(20, 20, 20, 255));
 			draw_list->AddRect(ImVec2(window_pos.x + 7, window_pos.y + 7), ImVec2(window_pos.x + window_size.x - 7, window_pos.y + window_size.y - 7), IM_COL32(0, 0, 0, 255));
 			draw_list->AddRect(ImVec2(window_pos.x + 6, window_pos.y + 6), ImVec2(window_pos.x + window_size.x - 6, window_pos.y + window_size.y - 6), IM_COL32(60, 60, 60, 255));

@@ -3696,7 +3696,6 @@ void render_t::render_menu()
 #undef SetCursorPos
 
     ImGui::End();
-    ImGui::PopStyleColor(1);
     ImGui::PopStyleVar();
 
     
