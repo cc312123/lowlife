@@ -29,3 +29,6 @@ uploads/
 
 # Sensitive credential / key files
 key.txt
+
+# Temp build files
+my private/temp/

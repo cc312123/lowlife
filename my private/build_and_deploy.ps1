@@ -1,9 +1,12 @@
 $ErrorActionPreference = "Stop"
+Set-Location $PSScriptRoot
 
 # 1. Stop processes
 Write-Host "Stopping running loader and game processes..." -ForegroundColor Cyan
 Stop-Process -Name "RobloxPlayerBeta" -Force -ErrorAction SilentlyContinue
 Stop-Process -Name "RobloxCrashHandler" -Force -ErrorAction SilentlyContinue
+Stop-Process -Name "mspdbsrv" -Force -ErrorAction SilentlyContinue
+Stop-Process -Name "vctip" -Force -ErrorAction SilentlyContinue
 
 $listening = Get-NetTCPConnection -LocalPort 9876 -State Listen -ErrorAction SilentlyContinue
 if ($listening) {
@@ -58,8 +61,8 @@ Write-Host "Signing built binary..." -ForegroundColor Cyan
 
 # 5. Update releases.json version info before running copy_release
 $ReleasesJsonPath = Join-Path $PSScriptRoot "updates-server\releases.json"
-$newVersion = "1.0.33"
-$changelogText = "Resolve black overlay transparency issue on Windows 10/11 using OS-conditional DWM transparency configuration."
+$newVersion = "1.0.38"
+$changelogText = "Update offsets for Roblox client version-8884371d30284041."
 
 if (Test-Path $ReleasesJsonPath) {
     $json = Get-Content $ReleasesJsonPath -Raw | ConvertFrom-Json
