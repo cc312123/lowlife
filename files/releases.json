@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.37",
-    "latestChangelog":  "Fix triggerbot local player filtering and shooting local player hitbox issues.",
+    "latestVersion":  "1.0.38",
+    "latestChangelog":  "Update offsets for Roblox client version-8884371d30284041.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -269,7 +269,14 @@
                         "changelog":  "Fix triggerbot local player filtering and shooting local player hitbox issues.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "04f1561796f77012a7761b2daae6c654"
+                    },
+                    {
+                        "version":  "1.0.38",
+                        "date":  "2026-06-18",
+                        "changelog":  "Update offsets for Roblox client version-8884371d30284041.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "f7a57ea11813f1f99071f88126515fca"
                     }
                 ],
-    "latestHash":  "04f1561796f77012a7761b2daae6c654"
+    "latestHash":  "f7a57ea11813f1f99071f88126515fca"
 }
