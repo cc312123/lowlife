@@ -1,4 +1,4 @@
-﻿
+
 #pragma once
 
 #include "../../ext/imgui/imgui_internal.h"
@@ -272,6 +272,80 @@ inline bool add_tab(const char* label, int idx, bool sel, int total_tabs)
     
     ImGui::PopStyleColor(4);
     return clicked;
+}
+
+inline bool add_sidebar_tab(const char* label, const char* icon, int idx, bool sel)
+{
+    ImGuiWindow* window = ImGui::GetCurrentWindow();
+    if (window->SkipItems)
+        return false;
+
+    ImGuiContext& g = *GImGui;
+    const ImGuiStyle& style = g.Style;
+    const ImGuiID id = window->GetID(label);
+
+    ImVec2 wpos = ImGui::GetWindowPos();
+    float sidebar_x = wpos.x + 14.f;
+    float tab_y = wpos.y + 90.f + (idx * 44.f);
+    ImVec2 tab_size = ImVec2(192.f, 36.f);
+
+    ImRect bb(ImVec2(sidebar_x, tab_y), ImVec2(sidebar_x + tab_size.x, tab_y + tab_size.y));
+    ImGui::ItemSize(bb);
+    if (!ImGui::ItemAdd(bb, id))
+        return false;
+
+    bool hovered, held;
+    bool pressed = ImGui::ButtonBehavior(bb, id, &hovered, &held);
+
+    static float tab_alphas[10] = { 0.0f };
+    static float hover_alphas[10] = { 0.0f };
+    static bool initialized = false;
+    if (!initialized) {
+        for (int i = 0; i < 10; i++) {
+            tab_alphas[i] = 0.0f;
+            hover_alphas[i] = 0.0f;
+        }
+        initialized = true;
+    }
+
+    float target_alpha = sel ? 1.0f : 0.0f;
+    float target_hover = (hovered && !sel) ? 1.0f : 0.0f;
+    float tween_speed = g.IO.DeltaTime * 10.0f;
+
+    tab_alphas[idx] += (target_alpha - tab_alphas[idx]) * tween_speed;
+    hover_alphas[idx] += (target_hover - hover_alphas[idx]) * tween_speed;
+
+    ImDrawList* dl = ImGui::GetWindowDrawList();
+
+    if (sel) {
+        ImU32 bg_col = IM_COL32(28, 28, 36, 255);
+        dl->AddRectFilled(bb.Min, bb.Max, bg_col, 6.f);
+        dl->AddRectFilled(ImVec2(bb.Min.x, bb.Min.y + 4.f), ImVec2(bb.Min.x + 3.f, bb.Max.y - 4.f), ImGui::ColorConvertFloat4ToU32(menu::accent_color), 2.f);
+        ImU32 glow_col = IM_COL32(menu::accent_color.x * 255, menu::accent_color.y * 255, menu::accent_color.z * 255, (int)(40 * tab_alphas[idx]));
+        dl->AddRect(bb.Min, bb.Max, glow_col, 6.f, 0, 1.0f);
+    } else if (hover_alphas[idx] > 0.01f) {
+        ImU32 hover_col = IM_COL32(35, 35, 45, (int)(120 * hover_alphas[idx]));
+        dl->AddRectFilled(bb.Min, bb.Max, hover_col, 6.f);
+    }
+
+    ImVec4 text_color = sel ? menu::accent_color : ImVec4(0.70f, 0.70f, 0.75f, 1.0f);
+    if (!sel && hovered) {
+        text_color = ImVec4(0.90f, 0.90f, 0.95f, 1.0f);
+    }
+
+    ImVec2 icon_sz = ImGui::CalcTextSize(icon);
+    ImVec2 text_sz = ImGui::CalcTextSize(label);
+
+    float text_offset_y = (tab_size.y - text_sz.y) * 0.5f;
+    float icon_offset_y = (tab_size.y - icon_sz.y) * 0.5f;
+
+    ImVec2 icon_pos = ImVec2(bb.Min.x + 14.f, bb.Min.y + icon_offset_y);
+    dl->AddText(icon_pos, ImGui::ColorConvertFloat4ToU32(text_color), icon);
+
+    ImVec2 label_pos = ImVec2(bb.Min.x + 36.f, bb.Min.y + text_offset_y);
+    dl->AddText(label_pos, ImGui::ColorConvertFloat4ToU32(text_color), label);
+
+    return pressed;
 }
 
 static std::vector<const char*> text_list =

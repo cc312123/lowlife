@@ -1858,6 +1858,17 @@ void render_t::render_menu()
         return changed;
     };
 
+    auto adjust_menu_pos = [](ImVec2 pos) -> ImVec2 {
+        float new_x = pos.x;
+        float new_y = pos.y + 12.f;
+        if (pos.x < 100.f) {
+            new_x = 240.f;
+        } else if (pos.x > 500.f) {
+            new_x = 679.f;
+        }
+        return ImVec2(new_x, new_y);
+    };
+
     if (!menu::authenticated && keyauth && keyauth->response.success)
     {
         menu::authenticated = true;
@@ -2070,6 +2081,7 @@ void render_t::render_menu()
 
     ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.06f, 0.06f, 0.08f, 1.00f));
 
+    // Outer glow pulse animation
     static float glow_time = 0.0f;
     glow_time += ImGui::GetIO().DeltaTime * 1.5f; 
     float pulse_factor = 0.7f + sinf(glow_time) * 0.3f; 
@@ -2081,14 +2093,12 @@ void render_t::render_menu()
         }
     }
     
-    
+    // Main window background
     draw_list->AddRect(window_pos, ImVec2(window_pos.x + window_size.x, window_pos.y + window_size.y), IM_COL32(40, 40, 48, 255), 10.0f, 0, 1.0f);
-
-    
     draw_list->AddRectFilled(ImVec2(window_pos.x + 4, window_pos.y + 4), ImVec2(window_pos.x + window_size.x - 4, window_pos.y + window_size.y - 4), IM_COL32(18, 18, 22, 255), 8.0f);
     draw_list->AddRect(ImVec2(window_pos.x + 4, window_pos.y + 4), ImVec2(window_pos.x + window_size.x - 4, window_pos.y + window_size.y - 4), IM_COL32(45, 45, 52, 255), 8.0f);
 
-    
+    // Jewel Particle Background (subtle)
     struct Jewel {
         ImVec2 pos;
         ImVec2 dir;
@@ -2107,10 +2117,10 @@ void render_t::render_menu()
             Jewel j;
             j.pos = ImVec2((float)(50 + (i * 57) % 1000), (float)(50 + (i * 33) % 520));
             j.dir = ImVec2(((i % 2 == 0) ? 1.0f : -1.0f) * 0.4f, ((i % 3 == 0) ? 1.0f : -1.0f) * 0.4f);
-            j.size = (float)(10 + (i * 9) % 16);
+            j.size = (float)(8 + (i * 9) % 12); 
             j.rot = (float)(i * 45);
-            j.rot_speed = (float)(0.15f + (i * 0.08f));
-            j.speed = (float)(8.0f + (i * 4) % 15);
+            j.rot_speed = (float)(0.1f + (i * 0.05f));
+            j.speed = (float)(6.0f + (i * 4) % 10);
             j.shape = (i % 3 == 0) ? 4 : ((i % 2 == 0) ? 6 : 8); 
             jewels.push_back(j);
         }
@@ -2118,17 +2128,15 @@ void render_t::render_menu()
     }
 
     float dt = ImGui::GetIO().DeltaTime;
-    ImU32 jewel_edge_color = IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 35); 
-    ImU32 jewel_fill_color = IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 12); 
-    ImU32 jewel_facet_color = IM_COL32(255, 255, 255, 18); 
+    ImU32 jewel_edge_color = IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 20); 
+    ImU32 jewel_fill_color = IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 6); 
+    ImU32 jewel_facet_color = IM_COL32(255, 255, 255, 10); 
 
     for (auto& j : jewels) {
-        
         j.pos.x += j.dir.x * j.speed * dt;
         j.pos.y += j.dir.y * j.speed * dt;
         j.rot += j.rot_speed * dt;
 
-        
         if (j.pos.x < 15) j.pos.x = window_size.x - 15;
         else if (j.pos.x > window_size.x - 15) j.pos.x = 15;
         if (j.pos.y < 15) j.pos.y = window_size.y - 15;
@@ -2136,7 +2144,6 @@ void render_t::render_menu()
 
         ImVec2 abs_center = ImVec2(window_pos.x + j.pos.x, window_pos.y + j.pos.y);
 
-        
         std::vector<ImVec2> vertices;
         for (int s = 0; s < j.shape; s++) {
             float angle = j.rot + (s * (6.283185f / j.shape));
@@ -2145,57 +2152,62 @@ void render_t::render_menu()
             vertices.push_back(ImVec2(abs_center.x + cosf(angle) * r_x, abs_center.y + sinf(angle) * r_y));
         }
 
-        
         draw_list->AddConvexPolyFilled(vertices.data(), (int)vertices.size(), jewel_fill_color);
 
-        
         for (size_t s = 0; s < vertices.size(); s++) {
             size_t next = (s + 1) % vertices.size();
             draw_list->AddLine(vertices[s], vertices[next], jewel_edge_color, 1.0f);
         }
 
-        
         for (size_t s = 0; s < vertices.size(); s++) {
-            draw_list->AddLine(abs_center, vertices[s], jewel_facet_color, 1.0f);
-            
-            size_t next = (s + 1) % vertices.size();
-            ImVec2 midpoint = ImVec2((vertices[s].x + vertices[next].x) * 0.5f, (vertices[s].y + vertices[next].y) * 0.5f);
-            ImVec2 inner_pt = ImVec2(abs_center.x + (midpoint.x - abs_center.x) * 0.45f, abs_center.y + (midpoint.y - abs_center.y) * 0.45f);
-            draw_list->AddLine(inner_pt, vertices[s], jewel_facet_color, 0.8f);
-            draw_list->AddLine(inner_pt, vertices[next], jewel_facet_color, 0.8f);
+            draw_list->AddLine(abs_center, vertices[s], jewel_facet_color, 0.8f);
         }
     }
 
-    
-    draw_list->AddRectFilled(ImVec2(window_pos.x + 14, window_pos.y + 71), ImVec2(window_pos.x + window_size.x - 14, window_pos.y + window_size.y - 14), IM_COL32(18, 18, 22, 130), 6.0f);
-    draw_list->AddRect(ImVec2(window_pos.x + 14, window_pos.y + 71), ImVec2(window_pos.x + window_size.x - 14, window_pos.y + window_size.y - 14), IM_COL32(35, 35, 42, 180), 6.0f);
+    // DRAW REDESIGNED SIDEBAR
+    // Background
+    draw_list->AddRectFilled(ImVec2(window_pos.x + 4.f, window_pos.y + 4.f), ImVec2(window_pos.x + 220.f, window_pos.y + window_size.y - 4.f), IM_COL32(11, 11, 15, 255), 8.0f, ImDrawFlags_RoundCornersLeft);
+    // Vertical separator
+    draw_list->AddLine(ImVec2(window_pos.x + 220.f, window_pos.y + 4.f), ImVec2(window_pos.x + 220.f, window_pos.y + window_size.y - 4.f), IM_COL32(40, 40, 48, 180), 1.0f);
 
-    
-    if (menu::authenticated && keyauth)
-    {
+    // Sidebar Header: brand logo
+    const char* logo_t1 = "low";
+    const char* logo_t2 = "life";
+    ImVec2 size1 = ImGui::CalcTextSize(logo_t1);
+    ImVec2 size2 = ImGui::CalcTextSize(logo_t2);
+    ImVec2 lpos = ImVec2(window_pos.x + 30.f, window_pos.y + 25.f);
+
+    // Outline / shadow for logo text
+    ImU32 shadow_col = IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 45);
+    for (int i = 1; i <= 3; i++) {
+        draw_list->AddText(ImVec2(lpos.x - i, lpos.y), shadow_col, logo_t1);
+        draw_list->AddText(ImVec2(lpos.x + size1.x - i, lpos.y), shadow_col, logo_t2);
+        draw_list->AddText(ImVec2(lpos.x + i, lpos.y), shadow_col, logo_t1);
+        draw_list->AddText(ImVec2(lpos.x + size1.x + i, lpos.y), shadow_col, logo_t2);
+    }
+    draw_list->AddText(lpos, IM_COL32(255, 255, 255, 255), logo_t1);
+    draw_list->AddText(ImVec2(lpos.x + size1.x, lpos.y), ImGui::ColorConvertFloat4ToU32(menu::accent_color), logo_t2);
+
+    // Subtitle / tag
+    const char* sub = "SECURED ENGINE";
+    draw_list->AddText(ImVec2(window_pos.x + 30.f, window_pos.y + 48.f), IM_COL32(110, 110, 125, 255), sub);
+
+    // Horizontal logo divider
+    draw_list->AddLine(ImVec2(window_pos.x + 15.f, window_pos.y + 70.f), ImVec2(window_pos.x + 205.f, window_pos.y + 70.f), IM_COL32(40, 40, 48, 120), 1.0f);
+
+    // Expiry Info card at the bottom of the sidebar
+    if (menu::authenticated && keyauth) {
         std::string dur_str = get_remaining_duration_string();
-        
-        char hud_buf[128];
-        sprintf_s(hud_buf, "Key: %s", dur_str.c_str());
-        
-        ImVec2 text_sz = ImGui::CalcTextSize(hud_buf);
-        
-        
-        ImVec2 hud_pos = ImVec2(window_pos.x + window_size.x - text_sz.x - 25.0f, window_pos.y + 16.0f);
-        
-        
-        ImVec2 bg_min = ImVec2(hud_pos.x - 8.0f, hud_pos.y - 4.0f);
-        ImVec2 bg_max = ImVec2(hud_pos.x + text_sz.x + 8.0f, hud_pos.y + text_sz.y + 4.0f);
-        draw_list->AddRectFilled(bg_min, bg_max, IM_COL32(20, 20, 25, 160), 4.0f);
-        draw_list->AddRect(bg_min, bg_max, IM_COL32(45, 45, 52, 120), 4.0f, 0, 1.0f);
-        
-        
-        std::string label = "Key: ";
-        ImVec2 label_sz = ImGui::CalcTextSize(label.c_str());
-        draw_list->AddText(hud_pos, IM_COL32(180, 180, 200, 255), label.c_str());
-        draw_list->AddText(ImVec2(hud_pos.x + label_sz.x, hud_pos.y), ImGui::ColorConvertFloat4ToU32(menu::accent_color), dur_str.c_str());
-        
-        
+        float card_y = window_pos.y + 540.f;
+        ImVec2 card_min = ImVec2(window_pos.x + 14.f, card_y);
+        ImVec2 card_max = ImVec2(window_pos.x + 206.f, card_y + 64.f);
+
+        draw_list->AddRectFilled(card_min, card_max, IM_COL32(16, 16, 22, 255), 6.f);
+        draw_list->AddRect(card_min, card_max, IM_COL32(40, 40, 48, 255), 6.f, 0, 1.0f);
+
+        draw_list->AddText(ImVec2(card_min.x + 12.f, card_min.y + 10.f), IM_COL32(140, 140, 150, 255), "License Key Status");
+        draw_list->AddText(ImVec2(card_min.x + 12.f, card_min.y + 28.f), ImGui::ColorConvertFloat4ToU32(menu::accent_color), dur_str.c_str());
+
         if (!keyauth->user_data.subscriptions.empty()) {
             try {
                 std::string expiry_str = keyauth->user_data.subscriptions[0].expiry;
@@ -2210,58 +2222,44 @@ void render_t::render_menu()
         }
     }
 
-    
+    // DRAW CONTENT PANE BACKGROUND ON THE RIGHT
+    draw_list->AddRectFilled(ImVec2(window_pos.x + 226.f, window_pos.y + 71.f), ImVec2(window_pos.x + window_size.x - 14.f, window_pos.y + window_size.y - 14.f), IM_COL32(18, 18, 22, 130), 6.0f);
+    draw_list->AddRect(ImVec2(window_pos.x + 226.f, window_pos.y + 71.f), ImVec2(window_pos.x + window_size.x - 14.f, window_pos.y + window_size.y - 14.f), IM_COL32(35, 35, 42, 180), 6.0f);
 
-    const char* charm_text = "low";
-    const char* wtfniggertext = "life";
-
-    ImVec2 charm_size = ImGui::CalcTextSize(charm_text);
-    ImVec2 wtf_size = ImGui::CalcTextSize(wtfniggertext);
-    float total_width = charm_size.x + wtf_size.x;
-
-    float window_width = ImGui::GetWindowWidth();
-    float window_x = ImGui::GetWindowPos().x;
-    float start_x = window_x + (window_width - total_width) * 0.5f;
-    float start_y = ImGui::GetCursorScreenPos().y + 4.0f;
-
-    for (int x = -1; x <= 1; x++) {
-        for (int y = -1; y <= 1; y++) {
-            if (x == 0 && y == 0) continue;
-            draw_list->AddText(ImVec2(start_x + x * 1.0f, start_y + y * 1.0f), IM_COL32(0, 0, 0, 255.0f), charm_text);
-            draw_list->AddText(ImVec2(start_x + charm_size.x + x * 1.0f, start_y + y * 1.0f), IM_COL32(0, 0, 0, 255.0f), wtfniggertext);
-        }
+    // DRAW TOP HEADER ON THE RIGHT
+    const char* active_tab_name = "AIMBOT";
+    switch (selected_tab_index) {
+        case 0: active_tab_name = "AIMBOT CONTROLS"; break;
+        case 1: active_tab_name = "SILENT REDIRECTION"; break;
+        case 2: active_tab_name = "VISUAL ENVIRONMENT"; break;
+        case 3: active_tab_name = "MISCELLANEOUS HACKS"; break;
+        case 4: active_tab_name = "SYSTEM CONFIGURATIONS"; break;
+        case 5: active_tab_name = "DATABASE PROFILES"; break;
+        case 6: active_tab_name = "SHOT DIAGNOSTICS"; break;
+        case 7: active_tab_name = "AUTOMATIC TRIGGERBOT"; break;
+        case 8: active_tab_name = "PLAYERS DATABASE"; break;
     }
-
     
-    const char* items[] = { "Option 1", "Option 2", "Option 3", "Option 4" };
-    static int current_item = 0;
-    
+    // Header Text
+    draw_list->AddText(ImVec2(window_pos.x + 240.f, window_pos.y + 24.f), IM_COL32(255, 255, 255, 255), active_tab_name);
+    // Sub-info
+    char diagnostics_buf[128];
+    sprintf_s(diagnostics_buf, "Engine status: OK | Latency: --ms | %.0f FPS", ImGui::GetIO().Framerate);
+    draw_list->AddText(ImVec2(window_pos.x + 240.f, window_pos.y + 44.f), IM_COL32(110, 110, 125, 255), diagnostics_buf);
 
-    draw_list->AddText(ImVec2(start_x, start_y), ImGui::ColorConvertFloat4ToU32(ImVec4(1.0f, 1.0f, 1.0f, 1.0f)), charm_text);
-    draw_list->AddText(ImVec2(start_x + charm_size.x, start_y), ImGui::ColorConvertFloat4ToU32(menu::accent_color), wtfniggertext);
+    // Draw vertical tab navigation in the sidebar
+    if (add_sidebar_tab("Aimbot", "⌖", 0, selected_tab_index == 0)) selected_tab_index = 0;
+    if (add_sidebar_tab("Silent", "👁", 1, selected_tab_index == 1)) selected_tab_index = 1;
+    if (add_sidebar_tab("Visuals", "☼", 2, selected_tab_index == 2)) selected_tab_index = 2;
+    if (add_sidebar_tab("Misc", "⚙", 3, selected_tab_index == 3)) selected_tab_index = 3;
+    if (add_sidebar_tab("Settings", "⛭", 4, selected_tab_index == 4)) selected_tab_index = 4;
+    if (add_sidebar_tab("Configs", "💾", 5, selected_tab_index == 5)) selected_tab_index = 5;
+    if (add_sidebar_tab("Shot Detect", "🎯", 6, selected_tab_index == 6)) selected_tab_index = 6;
+    if (add_sidebar_tab("Triggerbot", "⚡", 7, selected_tab_index == 7)) selected_tab_index = 7;
+    if (add_sidebar_tab("Players", "👥", 8, selected_tab_index == 8)) selected_tab_index = 8;
 
-    draw_list->AddRectFilledMultiColor(ImVec2(window_pos.x + 20, window_pos.y + 30), ImVec2(window_pos.x + window_size.x * 0.5f, window_pos.y + 31), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 0), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 255), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 255), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 0));
-    draw_list->AddRectFilledMultiColor(ImVec2(window_pos.x + window_size.x * 0.5f, window_pos.y + 30), ImVec2(window_pos.x + window_size.x - 20, window_pos.y + 31), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 255), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 0), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 0), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 255));
-
-    if (add_tab("Aimbot", 0, selected_tab_index == 0, 9))
-        selected_tab_index = 0;
-    if (add_tab("Silent", 1, selected_tab_index == 1, 9))
-        selected_tab_index = 1;
-    if (add_tab("Visuals", 2, selected_tab_index == 2, 9))
-        selected_tab_index = 2;
-    if (add_tab("Misc", 3, selected_tab_index == 3, 9))
-        selected_tab_index = 3;
-    if (add_tab("Triggerbot", 7, selected_tab_index == 7, 9))
-        selected_tab_index = 7;
-
-    if (add_tab("Players", 8, selected_tab_index == 8, 9))
-        selected_tab_index = 8;
-    if (add_tab("Shot Detect", 6, selected_tab_index == 6, 9))
-        selected_tab_index = 6;
-    if (add_tab("Settings", 4, selected_tab_index == 4, 9))
-        selected_tab_index = 4;
-    if (add_tab("Configs", 5, selected_tab_index == 5, 9))
-        selected_tab_index = 5;
+    // Shift coordinates dynamically for the switch case child rendering
+#define SetCursorPos(pos) SetCursorPos(adjust_menu_pos(pos))
 
     
     switch (selected_tab_index)
@@ -3665,6 +3663,8 @@ void render_t::render_menu()
         break;
     }
     }
+
+#undef SetCursorPos
 
     ImGui::End();
     ImGui::PopStyleColor(1);
