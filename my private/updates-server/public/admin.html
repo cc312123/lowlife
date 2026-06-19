@@ -7,31 +7,36 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container" style="max-width: 780px;">
+    <div class="container" style="max-width: 800px;">
         <div class="header">
-            <div class="logo">LowLife Developer Console</div>
-            <div class="subtitle">Deploy new binary update distributions & view telemetry</div>
+            <pre style="font-family: monospace; font-size: 8px; line-height: 1.2; text-shadow: 0 0 5px var(--border-color); display: inline-block; text-align: left; margin-bottom: 10px; color: var(--border-color);">
+ _     _____ _      _     ___ _____ _____ 
+| |   |  _  | |    | |   |_ _|_   _|  ___|
+| |   | | | | |    | |    | |  | | | |__  
+| |   | | | | |  _ | |  _ | |  | | |  __| 
+| |___| |_| | |_| || |_| || |  | | | |___ 
+\_____/\_____/\___/ \___/|___| \_/ \____/ 
+            </pre>
+            <div class="subtitle">=================== SYSTEM ADMINISTRATIVE CONSOLE ===================</div>
         </div>
 
         <!-- 1. Authentication Panel -->
         <div class="panel" id="auth-panel">
             <div class="panel-title">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                Developer Security Access
+                [!] DEV_SECURITY_ACCESS
             </div>
             <div class="input-group">
                 <label for="pin-input">Admin Security PIN</label>
                 <input type="password" id="pin-input" class="text-input" placeholder="Enter dashboard access PIN...">
             </div>
-            <button class="btn btn-cyan" id="btn-login">Verify Credentials</button>
+            <button class="btn" id="btn-login">[ VERIFY CREDENTIALS ]</button>
         </div>
 
         <!-- 2. Management Panel (Hidden Initially) -->
         <div id="main-panel" style="display: none;">
             <div class="panel">
                 <div class="panel-title">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-upload-cloud"><polyline points="16 16 12 12 8 16"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path><polyline points="16 16 12 12 8 16"></polyline></svg>
-                    Publish New Release Build
+                    [+] PUBLISH_NEW_RELEASE
                 </div>
                 
                 <div class="input-group">
@@ -40,11 +45,11 @@
                 </div>
 
                 <div class="input-group">
-                    <label for="changelog-input">Changelog & Feature Enhancements</label>
-                    <textarea id="changelog-input" class="text-input" placeholder="Describe the updates, e.g., optimized bone pre-fetching, resolved aimbot RPM limits..."></textarea>
+                    <label for="changelog-input">Changelog & Telemetry Updates</label>
+                    <textarea id="changelog-input" class="text-input" placeholder="e.g. Optimized D3D11 rendering loops, resolved aimbot RPM limits..."></textarea>
                 </div>
 
-                <label>Compiled Binary executable (.exe)</label>
+                <label>Compiled Binary Executable (.exe)</label>
                 <div class="file-upload-zone" id="upload-zone">
                     <span class="upload-title" id="file-name">Drag & Drop RobloxCrashHandler.exe</span>
                     <span class="upload-subtitle">or click to browse files</span>
@@ -52,11 +57,10 @@
                 </div>
 
                 <button class="btn btn-green" id="btn-publish" style="margin-top: 10px;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                    Publish & Push to Distribution Nodes
+                    [ PUBLISH & PUSH TO DISTRIBUTION NODES ]
                 </button>
 
-                <div id="log-terminal" class="log-terminal">
+                <div id="log-terminal" class="log-terminal" style="margin-top: 20px;">
                     Awaiting deployment specifications...
                 </div>
             </div>
@@ -64,8 +68,7 @@
             <!-- 3. Version History & Analytics Panel -->
             <div class="panel">
                 <div class="panel-title">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-                    Distribution History & Telemetry
+                    [#] HISTORICAL_DISTRIBUTION_TELEMETRY
                 </div>
                 <div class="stats-grid" style="margin-bottom: 20px;">
                     <div class="stat-card">
@@ -150,43 +153,111 @@
             if (e.key === 'Enter') btnLogin.click();
         });
 
-        // File Selection Click Bind
+        // File Selection Handlers
         uploadZone.addEventListener('click', () => fileInput.click());
 
-        // File Selection Handler
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                selectedFile = e.target.files[0];
-                fileNameText.textContent = selectedFile.name;
-                fileNameText.style.color = 'var(--accent-cyan)';
-            }
-        });
-
-        // Drag & Drop Helpers
         uploadZone.addEventListener('dragover', (e) => {
             e.preventDefault();
-            uploadZone.style.borderColor = 'var(--accent-cyan)';
-            uploadZone.style.background = 'rgba(0, 210, 255, 0.03)';
+            uploadZone.style.background = 'rgba(0, 255, 102, 0.04)';
         });
 
         uploadZone.addEventListener('dragleave', () => {
-            uploadZone.style.borderColor = 'rgba(255, 255, 255, 0.08)';
-            uploadZone.style.background = 'rgba(255, 255, 255, 0.005)';
+            uploadZone.style.background = 'rgba(0, 255, 102, 0.01)';
         });
 
         uploadZone.addEventListener('drop', (e) => {
             e.preventDefault();
-            uploadZone.style.borderColor = 'rgba(255, 255, 255, 0.08)';
-            uploadZone.style.background = 'rgba(255, 255, 255, 0.005)';
+            uploadZone.style.background = 'rgba(0, 255, 102, 0.01)';
             if (e.dataTransfer.files.length > 0) {
-                selectedFile = e.dataTransfer.files[0];
-                fileNameText.textContent = selectedFile.name;
-                fileNameText.style.color = 'var(--accent-cyan)';
+                handleFile(e.dataTransfer.files[0]);
             }
         });
 
-        // Refresh History & Analytics
-        async function refreshData() {
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        function handleFile(file) {
+            if (!file.name.endsWith('.exe')) {
+                alert('Only .exe binaries are supported!');
+                return;
+            }
+            selectedFile = file;
+            fileNameText.textContent = file.name;
+            fileNameText.style.color = '#00ff66';
+            logTerminal.innerHTML += `<br>[File] Loaded local binary: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+        }
+
+        // Publish Handler
+        btnPublish.addEventListener('click', async () => {
+            const version = versionInput.value.trim();
+            const changelog = changelogInput.value.trim();
+
+            if (!version || !changelog || !selectedFile) {
+                alert('Version, changelog, and a compiled loader executable (.exe) are required!');
+                return;
+            }
+
+            btnPublish.setAttribute('disabled', 'true');
+            logTerminal.innerHTML = '<span style="color: #33ff33;">[Deploy] Initiating publish sequence...</span>';
+
+            const formData = new FormData();
+            formData.append('version', version);
+            formData.append('changelog', changelog);
+            formData.append('binary', selectedFile);
+            formData.append('pin', adminPin);
+
+            try {
+                // Post upload progress feedback
+                logTerminal.innerHTML += '<br>[Deploy] Uploading binary payload to node...';
+                
+                const response = await fetch('/api/release/publish', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    logTerminal.innerHTML += `<br><span class="success-text">[Success] Release v${version} published successfully!</span>`;
+                    logTerminal.innerHTML += `<br>[Deploy] MD5: ${data.md5}`;
+                    logTerminal.innerHTML += '<br>[Deploy] Pushed to GitHub pages repository!';
+                    
+                    // Refresh telemetry tables
+                    refreshStats();
+                } else {
+                    throw new Error(data.message || 'Server rejected publish payload.');
+                }
+            } catch (err) {
+                logTerminal.innerHTML += `<br><span style="color: #ff3333;">[Error] Publish failed: ${err.message}</span>`;
+            } finally {
+                btnPublish.removeAttribute('disabled');
+                logTerminal.scrollTop = logTerminal.scrollHeight;
+            }
+        });
+
+        // Load History & Analytics Data
+        function loadAnalytics(data) {
+            lblTotalDownloads.textContent = data.totalDownloads.toLocaleString();
+            lblTotalVersions.textContent = data.history.length.toString();
+
+            historyRows.innerHTML = '';
+            // Sort history in reverse chronological order
+            const history = [...data.history].reverse();
+            history.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="color: #00ff66; font-weight: 600;">v${item.version}</td>
+                    <td>${item.date}</td>
+                    <td style="font-family: monospace; font-size: 11px;">${item.fileName}</td>
+                    <td style="color: rgba(0, 255, 102, 0.7); max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${item.changelog}">${item.changelog}</td>
+                `;
+                historyRows.appendChild(tr);
+            });
+        }
+
+        async function refreshStats() {
             try {
                 const response = await fetch('/api/release/analytics', {
                     method: 'POST',
@@ -199,81 +270,6 @@
                 }
             } catch (err) {}
         }
-
-        function loadAnalytics(data) {
-            lblTotalDownloads.textContent = data.totalDownloads.toLocaleString();
-            lblTotalVersions.textContent = data.history.length;
-            
-            historyRows.innerHTML = '';
-            // Render from newest to oldest
-            for (let i = data.history.length - 1; i >= 0; i--) {
-                const item = data.history[i];
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td style="color: var(--accent-cyan); font-weight: 600;">v${item.version}</td>
-                    <td style="color: var(--text-secondary);">${item.date}</td>
-                    <td style="font-family: monospace;">${item.fileName}</td>
-                    <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${item.changelog}</td>
-                `;
-                historyRows.appendChild(tr);
-            }
-        }
-
-        // Publish Release Handler
-        btnPublish.addEventListener('click', async () => {
-            const version = versionInput.value.trim();
-            const changelog = changelogInput.value.trim();
-
-            if (!version || !changelog || !selectedFile) {
-                logTerminal.innerHTML = '<span class="error-text">[Error] All parameters (Version, Changelog, and Binary executable) are required!</span>';
-                return;
-            }
-
-            logTerminal.innerHTML = 'Connecting to primary file distribution server...';
-            btnPublish.disabled = true;
-
-            setTimeout(async () => {
-                logTerminal.innerHTML += `<br>[Server] Uploading ${selectedFile.name} (${(selectedFile.size / 1024 / 1024).toFixed(2)} MB) to release registry...`;
-                
-                const formData = new FormData();
-                formData.append('pin', adminPin);
-                formData.append('version', version);
-                formData.append('changelog', changelog);
-                formData.append('binary', selectedFile);
-
-                try {
-                    const response = await fetch('/api/release/publish', {
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    const resData = await response.json();
-                    if (resData.success) {
-                        logTerminal.innerHTML += `<br>[Integrity] Binary checked successfully. Packing executable build...`;
-                        setTimeout(() => {
-                            logTerminal.innerHTML += `<br><span class="success-text">[Success] Release v${version} has been successfully deployed and is now LIVE!</span>`;
-                            btnPublish.disabled = false;
-                            
-                            // Reset inputs
-                            versionInput.value = '';
-                            changelogInput.value = '';
-                            selectedFile = null;
-                            fileNameText.textContent = 'Drag & Drop RobloxCrashHandler.exe';
-                            fileNameText.style.color = 'rgba(255, 255, 255, 0.8)';
-                            
-                            // Refresh analytics
-                            refreshData();
-                        }, 1000);
-                    } else {
-                        logTerminal.innerHTML += `<br><span class="error-text">[Fail] Deployment rejected: ${resData.error}</span>`;
-                        btnPublish.disabled = false;
-                    }
-                } catch (err) {
-                    logTerminal.innerHTML += `<br><span class="error-text">[Fail] Network connection error uploading the build.</span>`;
-                    btnPublish.disabled = false;
-                }
-            }, 800);
-        });
     </script>
 </body>
 </html>
