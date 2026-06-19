@@ -2872,10 +2872,7 @@ void render_t::render_menu()
 
         ImGui::Checkbox("Infinite Bullets", &settings::expl::infinite_ammo);
         ImGui::Checkbox("Shotgun Spread Control", &settings::expl::db_spread_enabled);
-        if (settings::expl::db_spread_enabled)
-        {
-            SliderFloatWithInput("Spread Value", &settings::expl::db_spread_value, 0.0f, 10.0f, "%.2f");
-        }
+        ImGui::Spacing();
 
         ImGui::Spacing();
 

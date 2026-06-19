@@ -179,7 +179,6 @@ namespace settings
 
 		inline bool infinite_ammo{ false };
 		inline bool db_spread_enabled{ false };
-		inline float db_spread_value{ 0.0f };
 
 		inline bool legit_teleport{ false };
 		inline float legit_teleport_speed{ 150.0f };
