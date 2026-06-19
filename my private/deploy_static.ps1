@@ -3,6 +3,12 @@
 
 $ErrorActionPreference = "Stop"
 
+# Add portable git to path if it exists
+$portableGitCmd = Join-Path $PSScriptRoot "temp\PortableGit\cmd"
+if (Test-Path $portableGitCmd) {
+    $env:PATH = "$portableGitCmd;$env:PATH"
+}
+
 # 1. Run local release compiler and encryptor
 Write-Host "Preparing local release and encryption..." -ForegroundColor Cyan
 & (Join-Path $PSScriptRoot "copy_release.ps1")

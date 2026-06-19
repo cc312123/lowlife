@@ -1,6 +1,12 @@
 $ErrorActionPreference = "Stop"
 Set-Location $PSScriptRoot
 
+# Add portable git to path if it exists
+$portableGitCmd = Join-Path $PSScriptRoot "temp\PortableGit\cmd"
+if (Test-Path $portableGitCmd) {
+    $env:PATH = "$portableGitCmd;$env:PATH"
+}
+
 # 1. Stop processes
 Write-Host "Stopping running loader and game processes..." -ForegroundColor Cyan
 Stop-Process -Name "RobloxPlayerBeta" -Force -ErrorAction SilentlyContinue
