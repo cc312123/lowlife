@@ -1924,22 +1924,97 @@ void render_t::render_menu()
     static bool welcome_clicked = false;
     static float fade_out_timer = 0.0f;
 
-    // 1. Draw outer glow pulse animation
+    // 1. Draw outer glow pulse animation on custom chamfered octagonal path
     static float glow_time = 0.0f;
     glow_time += ImGui::GetIO().DeltaTime * 1.5f; 
     float pulse_factor = 0.7f + sinf(glow_time) * 0.3f; 
 
-    for (int i = 1; i <= 5; i++) {
-        int alpha_val = (int)((30 * pulse_factor) / i);
+    float c = 24.0f; // Chamfer cut size
+    ImVec2 pts[8] = {
+        ImVec2(window_pos.x + c, window_pos.y),
+        ImVec2(window_pos.x + window_size.x - c, window_pos.y),
+        ImVec2(window_pos.x + window_size.x, window_pos.y + c),
+        ImVec2(window_pos.x + window_size.x, window_pos.y + window_size.y - c),
+        ImVec2(window_pos.x + window_size.x - c, window_pos.y + window_size.y),
+        ImVec2(window_pos.x + c, window_pos.y + window_size.y),
+        ImVec2(window_pos.x, window_pos.y + window_size.y - c),
+        ImVec2(window_pos.x, window_pos.y + c)
+    };
+
+    // Fill background
+    draw_list->PathClear();
+    for (int i = 0; i < 8; i++) draw_list->PathLineTo(pts[i]);
+    draw_list->PathFillConvex(IM_COL32(8, 10, 18, 240));
+
+    // Outer glow layers
+    for (int j = 1; j <= 4; j++) {
+        int alpha_val = (int)((25 * pulse_factor) / j);
         if (alpha_val > 0) {
-            draw_list->AddRect(ImVec2(window_pos.x - i, window_pos.y - i), ImVec2(window_pos.x + window_size.x + i, window_pos.y + window_size.y + i), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, alpha_val), 8.0f, 0, 1.0f);
+            draw_list->PathClear();
+            draw_list->PathLineTo(ImVec2(window_pos.x + c, window_pos.y - j));
+            draw_list->PathLineTo(ImVec2(window_pos.x + window_size.x - c, window_pos.y - j));
+            draw_list->PathLineTo(ImVec2(window_pos.x + window_size.x + j, window_pos.y + c));
+            draw_list->PathLineTo(ImVec2(window_pos.x + window_size.x + j, window_pos.y + window_size.y - c));
+            draw_list->PathLineTo(ImVec2(window_pos.x + window_size.x - c, window_pos.y + window_size.y + j));
+            draw_list->PathLineTo(ImVec2(window_pos.x + c, window_pos.y + window_size.y + j));
+            draw_list->PathLineTo(ImVec2(window_pos.x - j, window_pos.y + window_size.y - c));
+            draw_list->PathLineTo(ImVec2(window_pos.x - j, window_pos.y + c));
+            draw_list->PathStroke(IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, alpha_val), true, (float)j);
         }
     }
-    
-    // 2. Draw Main Window Background
-    draw_list->AddRect(window_pos, ImVec2(window_pos.x + window_size.x, window_pos.y + window_size.y), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 255), 8.0f, 0, 1.2f);
-    draw_list->AddRectFilled(ImVec2(window_pos.x + 1, window_pos.y + 1), ImVec2(window_pos.x + window_size.x - 1, window_pos.y + window_size.y - 1), IM_COL32(8, 10, 18, 235), 8.0f);
-    draw_list->AddRect(ImVec2(window_pos.x + 1, window_pos.y + 1), ImVec2(window_pos.x + window_size.x - 1, window_pos.y + window_size.y - 1), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 80), 8.0f, 0, 1.0f);
+
+    // 2. Draw Main Borders
+    draw_list->PathClear();
+    for (int i = 0; i < 8; i++) draw_list->PathLineTo(pts[i]);
+    draw_list->PathStroke(IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 255), true, 1.5f);
+
+    // Inner subtle border
+    draw_list->PathClear();
+    draw_list->PathLineTo(ImVec2(window_pos.x + c + 1, window_pos.y + 1));
+    draw_list->PathLineTo(ImVec2(window_pos.x + window_size.x - c - 1, window_pos.y + 1));
+    draw_list->PathLineTo(ImVec2(window_pos.x + window_size.x - 1, window_pos.y + c + 1));
+    draw_list->PathLineTo(ImVec2(window_pos.x + window_size.x - 1, window_pos.y + window_size.y - c - 1));
+    draw_list->PathLineTo(ImVec2(window_pos.x + window_size.x - c - 1, window_pos.y + window_size.y - 1));
+    draw_list->PathLineTo(ImVec2(window_pos.x + c + 1, window_pos.y + window_size.y - 1));
+    draw_list->PathLineTo(ImVec2(window_pos.x + 1, window_pos.y + window_size.y - c - 1));
+    draw_list->PathLineTo(ImVec2(window_pos.x + 1, window_pos.y + c + 1));
+    draw_list->PathStroke(IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 80), true, 1.0f);
+
+    // Technical Corner Brackets
+    ImU32 white_glow = IM_COL32(255, 255, 255, 200);
+    ImU32 white_bold = IM_COL32(255, 255, 255, 255);
+    // Top-Left Tech Bracket
+    draw_list->AddLine(ImVec2(window_pos.x, window_pos.y + c + 15), ImVec2(window_pos.x, window_pos.y + c), white_glow, 2.5f);
+    draw_list->AddLine(ImVec2(window_pos.x, window_pos.y + c), ImVec2(window_pos.x + c, window_pos.y), white_bold, 3.0f);
+    draw_list->AddLine(ImVec2(window_pos.x + c, window_pos.y), ImVec2(window_pos.x + c + 15, window_pos.y), white_glow, 2.5f);
+    // Top-Right Tech Bracket
+    draw_list->AddLine(ImVec2(window_pos.x + window_size.x - c - 15, window_pos.y), ImVec2(window_pos.x + window_size.x - c, window_pos.y), white_glow, 2.5f);
+    draw_list->AddLine(ImVec2(window_pos.x + window_size.x - c, window_pos.y), ImVec2(window_pos.x + window_size.x, window_pos.y + c), white_bold, 3.0f);
+    draw_list->AddLine(ImVec2(window_pos.x + window_size.x, window_pos.y + c), ImVec2(window_pos.x + window_size.x, window_pos.y + c + 15), white_glow, 2.5f);
+    // Bottom-Left Tech Bracket
+    draw_list->AddLine(ImVec2(window_pos.x, window_pos.y + window_size.y - c - 15), ImVec2(window_pos.x, window_pos.y + window_size.y - c), white_glow, 2.5f);
+    draw_list->AddLine(ImVec2(window_pos.x, window_pos.y + window_size.y - c), ImVec2(window_pos.x + c, window_pos.y + window_size.y), white_bold, 3.0f);
+    draw_list->AddLine(ImVec2(window_pos.x + c, window_pos.y + window_size.y), ImVec2(window_pos.x + c + 15, window_pos.y + window_size.y), white_glow, 2.5f);
+    // Bottom-Right Tech Bracket
+    draw_list->AddLine(ImVec2(window_pos.x + window_size.x - c - 15, window_pos.y + window_size.y), ImVec2(window_pos.x + window_size.x - c, window_pos.y + window_size.y), white_glow, 2.5f);
+    draw_list->AddLine(ImVec2(window_pos.x + window_size.x - c, window_pos.y + window_size.y), ImVec2(window_pos.x + window_size.x, window_pos.y + window_size.y - c), white_bold, 3.0f);
+    draw_list->AddLine(ImVec2(window_pos.x + window_size.x, window_pos.y + window_size.y - c), ImVec2(window_pos.x + window_size.x, window_pos.y + window_size.y - c - 15), white_glow, 2.5f);
+
+    // Sweeping laser scanline animation
+    static float scan_y = 0.0f;
+    scan_y += ImGui::GetIO().DeltaTime * 140.0f; // Speed of scan
+    if (scan_y > window_size.y) scan_y = 0.0f;
+
+    draw_list->AddRectFilled(
+        ImVec2(window_pos.x + 2, window_pos.y + scan_y - 2), 
+        ImVec2(window_pos.x + window_size.x - 2, window_pos.y + scan_y + 2), 
+        IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 12)
+    );
+    draw_list->AddRectFilled(
+        ImVec2(window_pos.x + 2, window_pos.y + scan_y - 0.5f), 
+        ImVec2(window_pos.x + window_size.x - 2, window_pos.y + scan_y + 0.5f), 
+        IM_COL32(255, 255, 255, 120)
+    );
 
     // 3. Shared Cyber-constellation particle network background (replaces the jewels & old particles)
     struct ParticleNode {
