@@ -31,9 +31,12 @@ $env:TMP = $localTemp
 # 3. Locate MSBuild
 $msbuild = Get-Command msbuild -ErrorAction SilentlyContinue
 if (-not $msbuild) {
-    $vsPath = 'C:\Program Files\Microsoft Visual Studio'
+    $vsPath = 'C:\Program Files (x86)\Microsoft Visual Studio'
+    if (-not (Test-Path $vsPath)) {
+        $vsPath = 'C:\Program Files\Microsoft Visual Studio'
+    }
     if (Test-Path $vsPath) {
-        $msbuildPath = Get-ChildItem -Path $vsPath -Filter 'MSBuild.exe' -Recurse | Select-Object -First 1
+        $msbuildPath = Get-ChildItem -Path $vsPath -Filter 'MSBuild.exe' -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
         if ($msbuildPath) {
             $msbuild = $msbuildPath.FullName
         }
@@ -49,10 +52,10 @@ Write-Host "Found MSBuild at: $msbuild" -ForegroundColor Green
 
 # 4. Clean and Build
 Write-Host "Cleaning solution..." -ForegroundColor Cyan
-& $msbuild lowlife.sln /t:Clean /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v145 /p:TrackFileAccess=false
+& $msbuild lowlife.sln /t:Clean /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /p:TrackFileAccess=false
 
 Write-Host "Building solution..." -ForegroundColor Cyan
-& $msbuild lowlife.sln /t:Build /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v145 /p:TrackFileAccess=false
+& $msbuild lowlife.sln /t:Build /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /p:TrackFileAccess=false
 
 $BuildExe = Join-Path $PSScriptRoot "build\RobloxCrashHandler.exe"
 if (-not (Test-Path $BuildExe)) {
