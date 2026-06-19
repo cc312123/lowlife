@@ -317,15 +317,9 @@ inline bool add_sidebar_tab(const char* label, const char* icon, int idx, bool s
 
     ImDrawList* dl = ImGui::GetWindowDrawList();
 
-    if (sel) {
-        ImU32 bg_col = IM_COL32(28, 28, 36, 255);
-        dl->AddRectFilled(bb.Min, bb.Max, bg_col, 0.f);
-        dl->AddRectFilled(ImVec2(bb.Min.x, bb.Min.y + 4.f), ImVec2(bb.Min.x + 3.f, bb.Max.y - 4.f), ImGui::ColorConvertFloat4ToU32(menu::accent_color), 0.f);
-        ImU32 glow_col = IM_COL32(menu::accent_color.x * 255, menu::accent_color.y * 255, menu::accent_color.z * 255, (int)(40 * tab_alphas[idx]));
-        dl->AddRect(bb.Min, bb.Max, glow_col, 0.f, 0, 1.0f);
-    } else if (hover_alphas[idx] > 0.01f) {
+    if (hover_alphas[idx] > 0.01f && !sel) {
         ImU32 hover_col = IM_COL32(35, 35, 45, (int)(120 * hover_alphas[idx]));
-        dl->AddRectFilled(bb.Min, bb.Max, hover_col, 0.f);
+        dl->AddRectFilled(bb.Min, bb.Max, hover_col, 8.f);
     }
 
     ImVec4 text_color = sel ? menu::accent_color : ImVec4(0.70f, 0.70f, 0.75f, 1.0f);

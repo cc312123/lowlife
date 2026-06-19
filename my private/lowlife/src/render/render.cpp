@@ -1909,14 +1909,14 @@ void render_t::render_menu()
     for (int i = 1; i <= 5; i++) {
         int alpha_val = (int)((30 * pulse_factor) / i);
         if (alpha_val > 0) {
-            draw_list->AddRect(ImVec2(window_pos.x - i, window_pos.y - i), ImVec2(window_pos.x + window_size.x + i, window_pos.y + window_size.y + i), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, alpha_val), 0.0f, 0, 1.0f);
+            draw_list->AddRect(ImVec2(window_pos.x - i, window_pos.y - i), ImVec2(window_pos.x + window_size.x + i, window_pos.y + window_size.y + i), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, alpha_val), 8.0f, 0, 1.0f);
         }
     }
     
     // 2. Draw Main Window Background
-    draw_list->AddRect(window_pos, ImVec2(window_pos.x + window_size.x, window_pos.y + window_size.y), IM_COL32(0, 255, 102, 255), 0.0f, 0, 1.0f);
-    draw_list->AddRectFilled(ImVec2(window_pos.x + 4, window_pos.y + 4), ImVec2(window_pos.x + window_size.x - 4, window_pos.y + window_size.y - 4), IM_COL32(4, 9, 5, 255), 0.0f);
-    draw_list->AddRect(ImVec2(window_pos.x + 4, window_pos.y + 4), ImVec2(window_pos.x + window_size.x - 4, window_pos.y + window_size.y - 4), IM_COL32(0, 255, 102, 100), 0.0f);
+    draw_list->AddRect(window_pos, ImVec2(window_pos.x + window_size.x, window_pos.y + window_size.y), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 255), 8.0f, 0, 1.2f);
+    draw_list->AddRectFilled(ImVec2(window_pos.x + 1, window_pos.y + 1), ImVec2(window_pos.x + window_size.x - 1, window_pos.y + window_size.y - 1), IM_COL32(8, 10, 18, 235), 8.0f);
+    draw_list->AddRect(ImVec2(window_pos.x + 1, window_pos.y + 1), ImVec2(window_pos.x + window_size.x - 1, window_pos.y + window_size.y - 1), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 80), 8.0f, 0, 1.0f);
 
     // 3. Shared Cyber-constellation particle network background (replaces the jewels & old particles)
     struct ParticleNode {
@@ -2198,6 +2198,21 @@ void render_t::render_menu()
     draw_list->AddRectFilled(ImVec2(window_pos.x + 4.f, window_pos.y + 4.f), ImVec2(window_pos.x + 220.f, window_pos.y + window_size.y - 4.f), IM_COL32(11, 11, 15, 255), 8.0f, ImDrawFlags_RoundCornersLeft);
     // Vertical separator
     draw_list->AddLine(ImVec2(window_pos.x + 220.f, window_pos.y + 4.f), ImVec2(window_pos.x + 220.f, window_pos.y + window_size.y - 4.f), IM_COL32(40, 40, 48, 180), 1.0f);
+
+    // Dynamic Sliding Tab Selector Pill
+    static float sliding_tab_y = 0.0f;
+    float target_tab_y = window_pos.y + 90.f + (selected_tab_index * 44.f);
+    if (sliding_tab_y == 0.0f) {
+        sliding_tab_y = target_tab_y;
+    } else {
+        sliding_tab_y += (target_tab_y - sliding_tab_y) * ImGui::GetIO().DeltaTime * 12.0f;
+    }
+    
+    ImVec2 pill_min = ImVec2(window_pos.x + 14.f, sliding_tab_y);
+    ImVec2 pill_max = ImVec2(window_pos.x + 206.f, sliding_tab_y + 36.f);
+    draw_list->AddRectFilled(pill_min, pill_max, IM_COL32(28, 28, 36, 255), 8.f);
+    draw_list->AddRectFilled(ImVec2(pill_min.x, pill_min.y + 4.f), ImVec2(pill_min.x + 3.f, pill_max.y - 4.f), ImGui::ColorConvertFloat4ToU32(menu::accent_color), 0.f);
+    draw_list->AddRect(pill_min, pill_max, IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 30), 8.f, 0, 1.0f);
 
     // Sidebar Header: brand logo
     const char* logo_t1 = "low";
@@ -2663,35 +2678,102 @@ void render_t::render_menu()
             preview_draw->AddText(ImVec2(char_center.x - t_size.x * 0.5f, max_pt.y + bottom_offset), tool_col, p_tool);
             bottom_offset += 10.0f;
         }
-
         
-        if (settings::visuals::healthbar) {
-            ImVec2 hb_pos = ImVec2(min_pt.x - 5.0f, min_pt.y);
-            preview_draw->AddRectFilled(ImVec2(hb_pos.x - 1, hb_pos.y - 1), ImVec2(hb_pos.x + 2, hb_pos.y + box_h + 1), black_out);
-            preview_draw->AddRectFilled(hb_pos, ImVec2(hb_pos.x + 1, hb_pos.y + box_h), IM_COL32(50, 50, 50, 255));
-            
-            float health_percentage = 0.75f; 
-            float h_h = box_h * health_percentage;
-            ImU32 hb_col = IM_COL32(
-                (int)(settings::visuals::healthbar_color[0] * 255),
-                (int)(settings::visuals::healthbar_color[1] * 255),
-                (int)(settings::visuals::healthbar_color[2] * 255),
-                255
-            );
-            preview_draw->AddRectFilled(ImVec2(hb_pos.x, hb_pos.y + box_h - h_h), ImVec2(hb_pos.x + 1, hb_pos.y + box_h), hb_col);
+        ImGui::Spacing();
+        ImGui::Separator();
+        ImGui::Spacing();
 
-            if (settings::visuals::health_text) {
-                ImU32 ht_col = IM_COL32(
-                    (int)(settings::visuals::health_text_color[0] * 255),
-                    (int)(settings::visuals::health_text_color[1] * 255),
-                    (int)(settings::visuals::health_text_color[2] * 255),
-                    255
-                );
-                preview_draw->AddText(ImVec2(hb_pos.x - 14.0f, hb_pos.y + box_h * 0.5f - 4.0f), ht_col, "75");
+        ImGui::TextColored(menu::accent_color, "2D TACTICAL RADAR");
+        
+        {
+            ImDrawList* radar_draw = ImGui::GetWindowDrawList();
+            ImVec2 radar_start = ImGui::GetCursorScreenPos();
+            radar_start.y += 5.0f;
+            ImVec2 radar_size = ImVec2(ImGui::GetContentRegionAvail().x - 10.0f, 150.0f);
+            
+            // Draw background grid
+            radar_draw->AddRectFilled(radar_start, ImVec2(radar_start.x + radar_size.x, radar_start.y + radar_size.y), IM_COL32(10, 10, 14, 255), 4.0f);
+            radar_draw->AddRect(radar_start, ImVec2(radar_start.x + radar_size.x, radar_start.y + radar_size.y), IM_COL32(40, 40, 48, 255), 4.0f);
+            
+            ImVec2 radar_center = ImVec2(radar_start.x + radar_size.x * 0.5f, radar_start.y + radar_size.y * 0.5f);
+            
+            // Crosshairs
+            radar_draw->AddLine(ImVec2(radar_start.x, radar_center.y), ImVec2(radar_start.x + radar_size.x, radar_center.y), IM_COL32(255, 255, 255, 20), 1.0f);
+            radar_draw->AddLine(ImVec2(radar_center.x, radar_start.y), ImVec2(radar_center.x, radar_start.y + radar_size.y), IM_COL32(255, 255, 255, 20), 1.0f);
+            
+            // Range rings
+            radar_draw->AddCircle(radar_center, 35.0f, IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 15), 32, 1.0f);
+            radar_draw->AddCircle(radar_center, 70.0f, IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 10), 32, 1.0f);
+            
+            // Plot local player dot
+            radar_draw->AddCircleFilled(radar_center, 3.5f, IM_COL32(255, 255, 255, 255));
+            radar_draw->AddCircle(radar_center, 3.5f, IM_COL32(0, 0, 0, 255), 12, 1.0f);
+            
+            // Fetch local position
+            math::vector3 local_pos = {0.f, 0.f, 0.f};
+            auto local_hrp_it = cache::cached_local_player.parts.find("HumanoidRootPart");
+            if (local_hrp_it != cache::cached_local_player.parts.end()) {
+                local_pos = local_hrp_it->second.get_primitive().get_position();
             }
+            
+            // Fetch local camera look direction for orientation alignment
+            float cam_yaw = 0.f; // fallback orient north
+            
+            std::shared_ptr<std::vector<cache::entity_t>> snapshot_ptr;
+            {
+                std::lock_guard<std::mutex> lock(cache::mtx);
+                snapshot_ptr = cache::cached_players;
+            }
+            
+            if (snapshot_ptr && local_hrp_it != cache::cached_local_player.parts.end()) {
+                for (const auto& player : *snapshot_ptr) {
+                    if (player.instance.address == 0 || player.instance.address == cache::cached_local_player.instance.address)
+                        continue;
+                    
+                    auto enemy_hrp_it = player.parts.find("HumanoidRootPart");
+                    if (enemy_hrp_it != player.parts.end()) {
+                        rbx::part_t enemy_part = enemy_hrp_it->second;
+                        math::vector3 ep = enemy_part.get_primitive().get_position();
+                        float dx = ep.x - local_pos.x;
+                        float dz = ep.z - local_pos.z;
+                        
+                        // Scale factors
+                        float radar_scale = 0.55f;
+                        float rx = dx * radar_scale;
+                        float ry = dz * radar_scale;
+                        
+                        // Clamp position to boundary
+                        float dist = std::sqrt(rx * rx + ry * ry);
+                        float max_r = 73.0f;
+                        if (dist > max_r) {
+                            rx = (rx / dist) * max_r;
+                            ry = (ry / dist) * max_r;
+                        }
+                        
+                        ImVec2 dot_pos = ImVec2(radar_center.x + rx, radar_center.y + ry);
+                        
+                        // Select color based on relation
+                        int rel = 0;
+                        auto rel_it = settings::player_relations::relations.find(player.name);
+                        if (rel_it != settings::player_relations::relations.end()) {
+                            rel = rel_it->second;
+                        }
+                        
+                        ImU32 dot_color = IM_COL32(230, 230, 230, 255);
+                        if (rel == 1) dot_color = IM_COL32(0, 255, 120, 255); // Teammate
+                        else if (rel == 2) dot_color = IM_COL32(255, 60, 60, 255); // Enemy
+                        else if (g_silent_aim_locked && g_silent_cached_target.instance.address == player.instance.address) {
+                            dot_color = IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 255);
+                        }
+                        
+                        radar_draw->AddCircleFilled(dot_pos, 3.0f, dot_color);
+                        radar_draw->AddCircle(dot_pos, 3.0f, IM_COL32(0, 0, 0, 255), 12, 1.0f);
+                    }
+                }
+            }
+            ImGui::Dummy(ImVec2(0.0f, 160.0f));
         }
 
-        ImGui::Dummy(ImVec2(0.0f, 160.0f));
         ImGui::Separator();
 
         {
@@ -3352,6 +3434,49 @@ void render_t::render_menu()
             } else {
                 ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "no tool held");
             }
+
+            // Real-time Distance Tracking & Rolling Graph
+            float dist = 0.0f;
+            auto local_hrp_it = cache::cached_local_player.parts.find("HumanoidRootPart");
+            auto enemy_hrp_it = shot_detect::target_player.parts.find("HumanoidRootPart");
+            if (local_hrp_it != cache::cached_local_player.parts.end() && enemy_hrp_it != shot_detect::target_player.parts.end()) {
+                math::vector3 lp = local_hrp_it->second.get_primitive().get_position();
+                math::vector3 ep = enemy_hrp_it->second.get_primitive().get_position();
+                float dx = ep.x - lp.x;
+                float dy = ep.y - lp.y;
+                float dz = ep.z - lp.z;
+                dist = std::sqrt(dx * dx + dy * dy + dz * dz);
+            }
+
+            ImGui::Spacing();
+            ImGui::Text("Target Distance:");
+            ImGui::SameLine();
+            ImGui::TextColored(menu::accent_color, "%.1f Studs", dist);
+
+            // Rolling history buffer
+            static float distance_history[50] = { 0.0f };
+            static int history_offset = 0;
+            static float update_timer = 0.0f;
+
+            update_timer += ImGui::GetIO().DeltaTime;
+            if (update_timer >= 0.05f) { // Update history at 20Hz
+                distance_history[history_offset] = dist;
+                history_offset = (history_offset + 1) % 50;
+                update_timer = 0.0f;
+            }
+
+            // Re-order data for plotting
+            float plot_data[50];
+            for (int i = 0; i < 50; i++) {
+                plot_data[i] = distance_history[(history_offset + i) % 50];
+            }
+
+            ImGui::Spacing();
+            ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(15, 15, 20, 255));
+            ImGui::PushStyleColor(ImGuiCol_PlotLines, ImGui::ColorConvertFloat4ToU32(menu::accent_color));
+            ImGui::PushStyleColor(ImGuiCol_PlotLinesHovered, IM_COL32(255, 255, 255, 255));
+            ImGui::PlotLines("##DistancePlot", plot_data, 50, 0, nullptr, 0.0f, 500.0f, ImVec2(ImGui::GetContentRegionAvail().x - 10.f, 80.0f));
+            ImGui::PopStyleColor(3);
         } else {
             ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "[None]");
         }
