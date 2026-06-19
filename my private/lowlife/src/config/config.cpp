@@ -219,7 +219,9 @@ namespace config
 		file << "    \"gravity_value\": " << settings::expl::gravity_value << ",\n";
 		file << "    \"fov_changer_enabled\": " << (settings::expl::fov_changer_enabled ? "true" : "false") << ",\n";
 		file << "    \"fov_changer_value\": " << settings::expl::fov_changer_value << ",\n";
-		file << "    \"infinite_ammo\": " << (settings::expl::infinite_ammo ? "true" : "false") << "\n";
+		file << "    \"infinite_ammo\": " << (settings::expl::infinite_ammo ? "true" : "false") << ",\n";
+		file << "    \"db_spread_enabled\": " << (settings::expl::db_spread_enabled ? "true" : "false") << ",\n";
+		file << "    \"db_spread_value\": " << settings::expl::db_spread_value << "\n";
 		file << "  },\n";
 
 		
@@ -693,6 +695,10 @@ namespace config
 				settings::expl::fov_changer_value = std::stof(value);
 			if (parse_json_value(section, "infinite_ammo", value))
 				settings::expl::infinite_ammo = (value == "true");
+			if (parse_json_value(section, "db_spread_enabled", value))
+				settings::expl::db_spread_enabled = (value == "true");
+			if (parse_json_value(section, "db_spread_value", value))
+				settings::expl::db_spread_value = std::stof(value);
 		}
 
 
