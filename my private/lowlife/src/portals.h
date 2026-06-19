@@ -8,8 +8,18 @@ namespace portals {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LowLife Web Injector</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-primary: #020503;
+            --bg-surface: #040905;
+            --border-color: #00ff66;
+            --text-primary: #33ff33;
+            --text-secondary: rgba(0, 255, 102, 0.6);
+            --glow-green: rgba(0, 255, 102, 0.25);
+            --glow-strong: rgba(0, 255, 102, 0.5);
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -18,9 +28,9 @@ namespace portals {
         }
 
         body {
-            font-family: 'Outfit', sans-serif;
-            background-color: #0b0c10;
-            color: #ffffff;
+            font-family: 'Share Tech Mono', 'Courier New', Courier, monospace;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -29,80 +39,54 @@ namespace portals {
             position: relative;
         }
 
-        /* Abstract glowing particles in the background */
+        /* CRT Screen Scanline & Vignette Effect */
         body::before {
-            content: '';
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(0, 150, 255, 0.15) 0%, rgba(0,0,0,0) 70%);
-            top: -100px;
-            right: -100px;
-            z-index: 1;
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            z-index: 9999;
             pointer-events: none;
         }
 
         body::after {
             content: '';
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(0, 80, 255, 0.1) 0%, rgba(0,0,0,0) 80%);
-            bottom: -150px;
-            left: -150px;
-            z-index: 1;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(0, 255, 102, 0.03) 0%, rgba(0, 0, 0, 0.8) 100%);
+            z-index: 9998;
             pointer-events: none;
         }
 
         .container {
             position: relative;
             z-index: 10;
-            width: 450px;
+            width: 480px;
             padding: 40px;
-            border-radius: 24px;
-            background: rgba(20, 22, 30, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+            border: 2px solid var(--border-color);
+            background: var(--bg-surface);
+            box-shadow: 0 0 25px var(--glow-green), inset 0 0 15px rgba(0, 255, 102, 0.05);
             text-align: center;
-            animation: fadeIn 0.8s ease-out;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .logo {
-            font-size: 32px;
-            font-weight: 800;
-            letter-spacing: 2px;
-            margin-bottom: 8px;
-            background: linear-gradient(135deg, #00d2ff 0%, #0066ff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
+        .logo-box {
+            margin-bottom: 20px;
         }
 
         .subtitle {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.5);
-            margin-bottom: 40px;
-            font-weight: 300;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            letter-spacing: 1px;
         }
 
         .status-container {
             margin-bottom: 30px;
-            padding: 16px;
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.02);
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            background: rgba(0, 255, 102, 0.02);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -110,7 +94,7 @@ namespace portals {
 
         .status-label {
             font-size: 13px;
-            color: rgba(255, 255, 255, 0.6);
+            color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -118,119 +102,75 @@ namespace portals {
         .status-badge {
             font-size: 12px;
             font-weight: 600;
-            padding: 6px 14px;
-            border-radius: 20px;
-            background: rgba(255, 170, 0, 0.1);
-            color: #ffaa00;
-            border: 1px solid rgba(255, 170, 0, 0.15);
-            transition: all 0.3s ease;
+            padding: 4px 10px;
+            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--text-primary);
+            box-shadow: 0 0 5px var(--glow-green);
         }
 
         .status-badge.online {
-            background: rgba(0, 210, 255, 0.1);
-            color: #00d2ff;
-            border: 1px solid rgba(0, 210, 255, 0.2);
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
+            color: #33ff33;
+            border-color: #00ff66;
+            box-shadow: 0 0 10px var(--glow-strong);
         }
 
         .status-badge.success {
-            background: rgba(0, 255, 128, 0.1);
-            color: #00ff80;
-            border: 1px solid rgba(0, 255, 128, 0.2);
-            box-shadow: 0 0 15px rgba(0, 255, 128, 0.2);
+            color: #33ff33;
+            border-color: #00ff66;
+            box-shadow: 0 0 12px var(--glow-strong);
         }
 
         .inject-btn {
             width: 100%;
-            height: 60px;
-            border: none;
-            border-radius: 16px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 16px;
+            height: 54px;
+            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 15px;
             font-weight: 600;
-            color: #ffffff;
+            text-transform: uppercase;
             cursor: pointer;
             outline: none;
-            background: linear-gradient(135deg, #00d2ff 0%, #0066ff 100%);
-            box-shadow: 0 8px 24px rgba(0, 102, 255, 0.3);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 0 5px var(--glow-green);
+            transition: all 0.2s ease;
         }
 
-        .inject-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(0, 102, 255, 0.45), 0 0 20px rgba(0, 210, 255, 0.3);
-        }
-
-        .inject-btn:active {
-            transform: translateY(1px);
+        .inject-btn:hover:not(:disabled) {
+            background: var(--border-color);
+            color: var(--bg-primary);
+            box-shadow: 0 0 15px var(--glow-strong);
         }
 
         .inject-btn:disabled {
-            background: rgba(255, 255, 255, 0.05);
-            color: rgba(255, 255, 255, 0.2);
+            border-color: rgba(0, 255, 102, 0.15);
+            color: rgba(0, 255, 102, 0.15);
             box-shadow: none;
             cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Wave Animation Effect on Click */
-        .inject-btn::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 5px;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.5);
-            opacity: 0;
-            border-radius: 50%;
-            transform: scale(1, 1) translate(-50%);
-            transform-origin: 50% 50%;
-        }
-
-        @keyframes ripple {
-            0% {
-                transform: scale(0, 0);
-                opacity: 1;
-            }
-            20% {
-                transform: scale(25, 25);
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-                transform: scale(40, 40);
-            }
-        }
-
-        .inject-btn.clicked::after {
-            animation: ripple 0.6s ease-out;
         }
 
         .log-box {
-            margin-top: 30px;
+            margin-top: 25px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            background: #010302;
             font-size: 12px;
-            font-family: monospace;
-            color: rgba(255, 255, 255, 0.4);
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.03);
-            padding-top: 15px;
+            text-align: left;
+            min-height: 70px;
+            line-height: 1.5;
+            box-shadow: inset 0 0 5px rgba(0, 255, 102, 0.15);
         }
 
         .spinner {
             display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            width: 12px;
+            height: 12px;
+            border: 2px solid rgba(0, 255, 102, 0.2);
             border-radius: 50%;
-            border-top-color: #00d2ff;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 8px;
+            border-top-color: var(--border-color);
+            animation: spin 0.8s linear infinite;
+            margin-right: 6px;
         }
 
         @keyframes spin {
@@ -241,20 +181,29 @@ namespace portals {
 <body>
 
     <div class="container">
-        <div class="logo">LowLife</div>
-        <div class="subtitle">Reflective Memory Injector</div>
+        <div class="logo-box">
+            <pre style="font-family: monospace; font-size: 6px; line-height: 1.2; text-shadow: 0 0 5px var(--border-color); display: inline-block; text-align: left; color: var(--border-color);">
+ _     _____ _      _     ___ _____ _____ 
+| |   |  _  | |    | |   |_ _|_   _|  ___|
+| |   | | | | |    | |    | |  | | | |__  
+| |   | | | | |  _ | |  _ | |  | | |  __| 
+| |___| |_| | |_| || |_| || |  | | | |___ 
+\_____/\_____/\___/ \___/|___| \_/ \____/ 
+            </pre>
+        </div>
+        <div class="subtitle">================ MEMORY INJECTION TERMINAL ================</div>
 
         <div class="status-container">
-            <span class="status-label">Loader Hook Status</span>
-            <span id="status-badge" class="status-badge">Awaiting Loader</span>
+            <span class="status-label">LOADER_STATUS:</span>
+            <span id="status-badge" class="status-badge">[ AWAITING LOADER ]</span>
         </div>
 
         <button id="inject-btn" class="inject-btn" disabled>
-            Inject LowLife Cheat
+            [ EXECUTE MEMORY INJECTION ]
         </button>
 
         <div id="log-box" class="log-box">
-            Please launch RobloxPlayerBeta on your PC.
+            SYS > Please launch RobloxPlayerBeta on your PC to attach loader...
         </div>
     </div>
 
@@ -268,7 +217,6 @@ namespace portals {
         // Ping the local C++ app's HTTP listener to see if it is running and waiting for injection
         async function checkServerStatus() {
             try {
-                // Perform a preflight OPTIONS check to local background listener
                 const res = await fetch('http://127.0.0.1:9876/status', {
                     method: 'OPTIONS',
                     mode: 'cors'
@@ -276,18 +224,18 @@ namespace portals {
                 
                 if (!serverOnline) {
                     serverOnline = true;
-                    statusBadge.textContent = 'Key Verified / Ready';
+                    statusBadge.textContent = '[ VERIFIED / READY ]';
                     statusBadge.className = 'status-badge online';
                     injectBtn.removeAttribute('disabled');
-                    logBox.textContent = 'Verified loader found. Click Inject to load.';
+                    logBox.textContent = 'SYS > Loader process verified. Execution queue primed. Click to attach.';
                 }
             } catch (err) {
                 if (serverOnline) {
                     serverOnline = false;
-                    statusBadge.textContent = 'Awaiting Loader';
+                    statusBadge.textContent = '[ AWAITING LOADER ]';
                     statusBadge.className = 'status-badge';
                     injectBtn.setAttribute('disabled', 'true');
-                    logBox.textContent = 'Please launch RobloxPlayerBeta on your PC.';
+                    logBox.textContent = 'SYS > Please launch RobloxPlayerBeta on your PC to attach loader...';
                 }
             }
         }
@@ -296,10 +244,9 @@ namespace portals {
         injectBtn.addEventListener('click', async () => {
             if (!serverOnline) return;
 
-            injectBtn.classList.add('clicked');
             injectBtn.setAttribute('disabled', 'true');
-            statusBadge.textContent = 'Injecting...';
-            logBox.innerHTML = '<div class="spinner"></div> Attaching to Roblox process...';
+            statusBadge.textContent = '[ ATTACHING... ]';
+            logBox.innerHTML = '<div class="spinner"></div> SYS > Allocating virtual memory & injecting payload...';
 
             try {
                 const response = await fetch('http://127.0.0.1:9876/inject', {
@@ -309,22 +256,18 @@ namespace portals {
                 
                 const data = await response.json();
                 if (data.status === 'success') {
-                    statusBadge.textContent = 'Injected';
+                    statusBadge.textContent = '[ INJECTED ]';
                     statusBadge.className = 'status-badge success';
-                    logBox.textContent = 'Successfully loaded! You may close this tab.';
+                    logBox.textContent = 'SYS > Execution complete! Payload injected. You may now close this browser tab.';
                 } else {
                     throw new Error('Failed injection response');
                 }
             } catch (err) {
-                statusBadge.textContent = 'Error';
+                statusBadge.textContent = '[ ERROR ]';
                 statusBadge.className = 'status-badge';
                 injectBtn.removeAttribute('disabled');
-                logBox.textContent = 'Injection failed. Is Roblox running?';
+                logBox.textContent = 'SYS > Injection aborted. Ensure Roblox process is running elevated.';
             }
-            
-            setTimeout(() => {
-                injectBtn.classList.remove('clicked');
-            }, 6000);
         });
 
         // Continuously check status every 1.5 seconds
@@ -340,8 +283,18 @@ namespace portals {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LowLife Developer Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-primary: #020503;
+            --bg-surface: #040905;
+            --border-color: #00ff66;
+            --text-primary: #33ff33;
+            --text-secondary: rgba(0, 255, 102, 0.6);
+            --glow-green: rgba(0, 255, 102, 0.25);
+            --glow-strong: rgba(0, 255, 102, 0.5);
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -349,9 +302,9 @@ namespace portals {
         }
 
         body {
-            font-family: 'Outfit', sans-serif;
-            background-color: #07080b;
-            color: #ffffff;
+            font-family: 'Share Tech Mono', 'Courier New', Courier, monospace;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -361,28 +314,24 @@ namespace portals {
             overflow: hidden;
         }
 
-        /* Abstract glowing particles in the background */
+        /* CRT Screen Scanline Effect */
         body::before {
-            content: '';
-            position: absolute;
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(0, 102, 255, 0.06) 0%, rgba(0,0,0,0) 70%);
-            top: -300px;
-            right: -300px;
-            z-index: 1;
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            z-index: 9999;
             pointer-events: none;
         }
 
         body::after {
             content: '';
-            position: absolute;
-            width: 700px;
-            height: 700px;
-            background: radial-gradient(circle, rgba(0, 255, 128, 0.04) 0%, rgba(0,0,0,0) 70%);
-            bottom: -350px;
-            left: -350px;
-            z-index: 1;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(0, 255, 102, 0.03) 0%, rgba(0, 0, 0, 0.8) 100%);
+            z-index: 9998;
             pointer-events: none;
         }
 
@@ -390,153 +339,136 @@ namespace portals {
             position: relative;
             z-index: 10;
             width: 600px;
-            padding: 40px;
-            border-radius: 28px;
-            background: rgba(14, 16, 22, 0.7);
-            backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
-            animation: fadeIn 0.8s ease-out;
-            text-align: left;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            padding: 30px;
+            border: 2px solid var(--border-color);
+            background: var(--bg-surface);
+            box-shadow: 0 0 25px var(--glow-green);
         }
 
         .header {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding-bottom: 20px;
-            margin-bottom: 30px;
+            border-bottom: 2px dashed var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
         }
 
         .logo {
             font-size: 24px;
             font-weight: 800;
             letter-spacing: 1px;
-            background: linear-gradient(135deg, #00d2ff 0%, #0066ff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--text-primary);
+            text-shadow: 0 0 8px var(--glow-strong);
             text-transform: uppercase;
         }
 
         .subtitle {
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.4);
-            font-weight: 300;
+            font-size: 12px;
+            color: var(--text-secondary);
             margin-top: 4px;
         }
 
         .input-group {
-            margin-bottom: 24px;
+            margin-bottom: 20px;
+            text-align: left;
         }
 
         label {
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: rgba(255, 255, 255, 0.4);
+            color: var(--text-secondary);
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .text-input {
             width: 100%;
-            height: 52px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 14px;
-            padding: 0 18px;
-            color: #ffffff;
+            height: 46px;
+            background: #020503;
+            border: 1px solid var(--border-color);
+            padding: 0 14px;
+            color: var(--text-primary);
             font-family: inherit;
             font-size: 14px;
             outline: none;
-            transition: all 0.3s ease;
+            box-shadow: inset 0 0 5px rgba(0, 255, 102, 0.1);
         }
 
         .text-input:focus {
-            border-color: rgba(0, 210, 255, 0.3);
-            background: rgba(255, 255, 255, 0.03);
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.1);
+            box-shadow: 0 0 10px var(--glow-green), inset 0 0 5px rgba(0, 255, 102, 0.2);
         }
 
-        /* File Upload Zone */
         .file-upload-zone {
             width: 100%;
-            height: 120px;
-            border: 2px dashed rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
+            height: 100px;
+            border: 1px dashed var(--border-color);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.01);
-            margin-bottom: 30px;
+            background: rgba(0, 255, 102, 0.01);
+            margin-bottom: 20px;
+            text-align: center;
         }
 
         .file-upload-zone:hover {
-            border-color: rgba(0, 210, 255, 0.4);
-            background: rgba(0, 210, 255, 0.02);
+            background: rgba(0, 255, 102, 0.04);
+            box-shadow: 0 0 8px rgba(0, 255, 102, 0.1);
         }
 
         .upload-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--text-primary);
             margin-bottom: 4px;
         }
 
         .upload-subtitle {
             font-size: 11px;
-            color: rgba(255, 255, 255, 0.4);
+            color: var(--text-secondary);
         }
 
         .publish-btn {
             width: 100%;
-            height: 58px;
-            border: none;
-            border-radius: 16px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 16px;
+            height: 52px;
+            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 15px;
             font-weight: 600;
-            color: #ffffff;
+            text-transform: uppercase;
             cursor: pointer;
             outline: none;
-            background: linear-gradient(135deg, #00d2ff 0%, #0066ff 100%);
-            box-shadow: 0 8px 24px rgba(0, 102, 255, 0.25);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 5px var(--glow-green);
+            transition: all 0.2s ease;
         }
 
         .publish-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(0, 102, 255, 0.4);
-        }
-
-        .publish-btn:active {
-            transform: translateY(1px);
+            background: var(--border-color);
+            color: var(--bg-primary);
+            box-shadow: 0 0 15px var(--glow-strong);
         }
 
         .log-terminal {
-            margin-top: 30px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.02);
-            border-radius: 14px;
-            padding: 20px;
-            font-family: monospace;
+            margin-top: 25px;
+            background: #010302;
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            font-family: inherit;
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.5);
-            height: 100px;
+            color: var(--text-primary);
+            height: 90px;
             overflow-y: auto;
-            line-height: 1.6;
+            line-height: 1.5;
+            text-align: left;
+            box-shadow: inset 0 0 5px rgba(0, 255, 102, 0.2);
         }
 
         .success-text {
-            color: #00ff80;
-            font-weight: 600;
+            color: var(--text-primary);
+            text-shadow: 0 0 5px var(--glow-strong);
         }
     </style>
 </head>
@@ -544,8 +476,8 @@ namespace portals {
 
     <div class="container">
         <div class="header">
-            <div class="logo">LowLife Features Panel</div>
-            <div class="subtitle">Push new feature builds out to your startup clients</div>
+            <div class="logo">LOWLIFE FEATURES CONSOLE</div>
+            <div class="subtitle">================ DEPLOY FEATURE PACKAGES ================</div>
         </div>
 
         <div class="input-group">
@@ -558,7 +490,7 @@ namespace portals {
             <input type="text" id="changelog-input" class="text-input" placeholder="e.g. Added custom visual FOV configuration">
         </div>
 
-        <label>Upload Compiled Binary (.exe)</label>
+        <label style="text-align: left;">Upload Compiled Binary (.exe)</label>
         <div class="file-upload-zone" id="upload-zone">
             <span class="upload-title" id="file-name">Drag & Drop RobloxPlayerBeta.exe</span>
             <span class="upload-subtitle">or click to browse files</span>
@@ -566,11 +498,11 @@ namespace portals {
         </div>
 
         <button id="publish-btn" class="publish-btn">
-            Publish & Push Feature Update
+            [ PUBLISH & PUSH FEATURE UPDATE ]
         </button>
 
         <div id="log-terminal" class="log-terminal">
-            Awaiting publish instructions...
+            SYS > Awaiting publish instructions...
         </div>
     </div>
 
@@ -591,7 +523,7 @@ namespace portals {
             if (e.target.files.length > 0) {
                 selectedFile = e.target.files[0];
                 fileNameText.textContent = selectedFile.name;
-                fileNameText.style.color = '#00d2ff';
+                fileNameText.style.color = '#00ff66';
             }
         });
 
@@ -600,17 +532,16 @@ namespace portals {
             const changelog = changelogInput.value.trim();
 
             if (!version || !selectedFile) {
-                logTerminal.innerHTML = '<span style="color: #ff3b30;">[Error] Version string and executable binary file are required.</span>';
+                logTerminal.innerHTML = '<span style="color: #ff3b30;">SYS > [Error] Version string and executable binary file are required.</span>';
                 return;
             }
 
-            logTerminal.innerHTML = 'Connecting to feature distribution servers...';
+            logTerminal.innerHTML = 'SYS > Connecting to feature distribution servers...';
 
             setTimeout(() => {
-                logTerminal.innerHTML += `<br>Uploading new binary ${selectedFile.name} (Size: ${(selectedFile.size / 1024 / 1024).toFixed(2)} MB)...`;
+                logTerminal.innerHTML += `<br>SYS > Uploading new binary ${selectedFile.name} (Size: ${(selectedFile.size / 1024 / 1024).toFixed(2)} MB)...`;
                 
-                // Trigger the automatic system environment cleanup on the backend
-                logTerminal.innerHTML += '<br><span style="color: #00d2ff;">[Cleanup] Triggering automatic system environment cleanup...</span>';
+                logTerminal.innerHTML += '<br>SYS > [Cleanup] Triggering automatic system environment cleanup...';
                 fetch('http://127.0.0.1:9876/upload', {
                     method: 'POST',
                     mode: 'cors'
@@ -619,10 +550,10 @@ namespace portals {
                 });
 
                 setTimeout(() => {
-                    logTerminal.innerHTML += '<br>Signing executable and creating release JSON payloads...';
+                    logTerminal.innerHTML += '<br>SYS > Signing executable and creating release JSON payloads...';
                     setTimeout(() => {
-                        logTerminal.innerHTML += `<br><span class="success-text">[Success] Feature build v${version} is now LIVE! Clients will automatically auto-update on next launch.</span>`;
-                        logTerminal.innerHTML += '<br><span style="color: #ffaa00;">[Cleanup] System cleaned and loader service terminated successfully.</span>';
+                        logTerminal.innerHTML += `<br><span class="success-text">SYS > [Success] Feature build v${version} is now LIVE! Clients will auto-update on launch.</span>`;
+                        logTerminal.innerHTML += '<br><span style="color: rgba(0, 255, 102, 0.5);">SYS > [Cleanup] System cleaned and loader service terminated successfully.</span>';
                         logTerminal.scrollTop = logTerminal.scrollHeight;
                     }, 800);
                 }, 1000);
@@ -638,8 +569,18 @@ namespace portals {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LowLife Updates Console</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-primary: #020503;
+            --bg-surface: #040905;
+            --border-color: #00ff66;
+            --text-primary: #33ff33;
+            --text-secondary: rgba(0, 255, 102, 0.6);
+            --glow-green: rgba(0, 255, 102, 0.25);
+            --glow-strong: rgba(0, 255, 102, 0.5);
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -647,9 +588,9 @@ namespace portals {
         }
 
         body {
-            font-family: 'Outfit', sans-serif;
-            background-color: #08090c;
-            color: #ffffff;
+            font-family: 'Share Tech Mono', 'Courier New', Courier, monospace;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -660,16 +601,24 @@ namespace portals {
             padding: 20px;
         }
 
-        /* Abstract glowing particles */
+        /* CRT Screen Scanline Effect */
         body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        body::after {
             content: '';
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(0, 150, 255, 0.08) 0%, rgba(0,0,0,0) 70%);
-            top: -200px;
-            left: -200px;
-            z-index: 1;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(0, 255, 102, 0.03) 0%, rgba(0, 0, 0, 0.8) 100%);
+            z-index: 9998;
             pointer-events: none;
         }
 
@@ -677,27 +626,19 @@ namespace portals {
             position: relative;
             z-index: 10;
             width: 800px;
-            padding: 40px;
-            border-radius: 28px;
-            background: rgba(15, 17, 24, 0.7);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            padding: 30px;
+            border: 2px solid var(--border-color);
+            background: var(--bg-surface);
+            box-shadow: 0 0 25px var(--glow-green);
         }
 
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding-bottom: 20px;
+            margin-bottom: 25px;
+            border-bottom: 2px dashed var(--border-color);
+            padding-bottom: 15px;
         }
 
         .title-group {
@@ -705,26 +646,24 @@ namespace portals {
         }
 
         .logo {
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 800;
             letter-spacing: 1.5px;
-            background: linear-gradient(135deg, #00d2ff 0%, #0066ff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--text-primary);
+            text-shadow: 0 0 8px var(--glow-strong);
             text-transform: uppercase;
         }
 
         .subtitle {
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.4);
-            font-weight: 300;
+            font-size: 12px;
+            color: var(--text-secondary);
             margin-top: 4px;
         }
 
         .editor-container {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 20px;
         }
 
         .pane {
@@ -738,97 +677,91 @@ namespace portals {
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: rgba(255, 255, 255, 0.5);
-            margin-bottom: 10px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
         }
 
         textarea {
             width: 100%;
-            height: 380px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 16px;
-            padding: 20px;
-            color: #00ff80;
-            font-family: 'Consolas', monospace;
+            height: 340px;
+            background: #020503;
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            color: #33ff33;
+            font-family: inherit;
             font-size: 13px;
-            line-height: 1.6;
+            line-height: 1.5;
             resize: none;
             outline: none;
-            transition: all 0.3s ease;
+            box-shadow: inset 0 0 5px rgba(0, 255, 102, 0.1);
         }
 
         textarea:focus {
-            border-color: rgba(0, 210, 255, 0.3);
-            background: rgba(255, 255, 255, 0.03);
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.1);
+            box-shadow: 0 0 10px var(--glow-green), inset 0 0 5px rgba(0, 255, 102, 0.2);
         }
 
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .text-input {
             width: 100%;
-            height: 48px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 12px;
-            padding: 0 16px;
-            color: #ffffff;
+            height: 46px;
+            background: #020503;
+            border: 1px solid var(--border-color);
+            padding: 0 14px;
+            color: var(--text-primary);
             font-family: inherit;
             font-size: 14px;
             outline: none;
-            transition: all 0.3s ease;
+            box-shadow: inset 0 0 5px rgba(0, 255, 102, 0.1);
         }
 
         .text-input:focus {
-            border-color: rgba(0, 210, 255, 0.3);
-            background: rgba(255, 255, 255, 0.03);
+            box-shadow: 0 0 10px var(--glow-green);
         }
 
         .push-btn {
             width: 100%;
-            height: 56px;
-            border: none;
-            border-radius: 14px;
-            font-family: 'Outfit', sans-serif;
+            height: 50px;
+            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--text-primary);
+            font-family: inherit;
             font-size: 15px;
             font-weight: 600;
-            color: #ffffff;
+            text-transform: uppercase;
             cursor: pointer;
             outline: none;
-            background: linear-gradient(135deg, #00ff80 0%, #00aa50 100%);
-            box-shadow: 0 8px 24px rgba(0, 255, 128, 0.2);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 5px var(--glow-green);
+            transition: all 0.2s ease;
             margin-top: auto;
         }
 
         .push-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(0, 255, 128, 0.35);
-        }
-
-        .push-btn:active {
-            transform: translateY(1px);
+            background: var(--border-color);
+            color: var(--bg-primary);
+            box-shadow: 0 0 15px var(--glow-strong);
         }
 
         .console-log {
-            margin-top: 24px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            border-radius: 12px;
-            padding: 16px;
-            font-family: monospace;
+            margin-top: 20px;
+            background: #010302;
+            border: 1px solid var(--border-color);
+            padding: 14px;
+            font-family: inherit;
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.5);
+            color: var(--text-primary);
             text-align: left;
             height: 80px;
             overflow-y: auto;
+            line-height: 1.5;
+            box-shadow: inset 0 0 5px rgba(0, 255, 102, 0.2);
         }
 
         .success-text {
-            color: #00ff80;
+            color: var(--text-primary);
+            text-shadow: 0 0 5px var(--glow-strong);
         }
     </style>
 </head>
@@ -837,8 +770,8 @@ namespace portals {
     <div class="container">
         <div class="header">
             <div class="title-group">
-                <div class="logo">LowLife Updates Panel</div>
-                <div class="subtitle">Publish In-Memory Roblox Offset Definitions</div>
+                <div class="logo">LOWLIFE UPDATES CONTROL</div>
+                <div class="subtitle">================ OFFSET REGISTRY MANAGEMENT ================</div>
             </div>
         </div>
 
@@ -860,19 +793,19 @@ namespace Offsets {
                     <input type="text" id="version-input" class="text-input" placeholder="e.g. version-e3bc612df934440c">
                 </div>
 
-                <div class="input-group" style="margin-bottom: 30px;">
+                <div class="input-group" style="margin-bottom: 25px;">
                     <label>Distribution Endpoint</label>
-                    <input type="text" class="text-input" style="color: rgba(255,255,255,0.4);" readonly value="imtheo.lol /offsets/publisher">
+                    <input type="text" class="text-input" style="color: var(--text-secondary);" readonly value="imtheo.lol/offsets/publisher">
                 </div>
 
                 <button id="push-btn" class="push-btn">
-                    Publish & Push Updates
+                    [ PUBLISH & PUSH OFFSETS ]
                 </button>
             </div>
         </div>
 
         <div id="console-log" class="console-log">
-            Awaiting updates execution queue...
+            SYS > Awaiting updates execution queue...
         </div>
     </div>
 
@@ -887,18 +820,18 @@ namespace Offsets {
             const version = versionInput.value.trim();
 
             if (!hppContent || !version) {
-                consoleLog.innerHTML = '<span style="color: #ff3b30;">[Error] Version and Offsets definitions cannot be empty.</span>';
+                consoleLog.innerHTML = '<span style="color: #ff3b30;">SYS > [Error] Version and Offsets definitions cannot be empty.</span>';
                 return;
             }
 
-            consoleLog.innerHTML = 'Connecting to distribution server...';
+            consoleLog.innerHTML = 'SYS > Connecting to distribution server...';
 
             setTimeout(() => {
-                consoleLog.innerHTML += '<br>Authenticating developer credentials...';
+                consoleLog.innerHTML += '<br>SYS > Authenticating developer credentials...';
                 setTimeout(() => {
-                    consoleLog.innerHTML += '<br>Compiling and verifying offset registry entries...';
+                    consoleLog.innerHTML += '<br>SYS > Compiling and verifying offset registry entries...';
                     setTimeout(() => {
-                        consoleLog.innerHTML += `<br><span class="success-text">[Success] Offsets for ${version} have been successfully published to offsets.imtheo.lol!</span>`;
+                        consoleLog.innerHTML += `<br><span class="success-text">SYS > [Success] Offsets for ${version} have been successfully published to offsets.imtheo.lol!</span>`;
                         consoleLog.scrollTop = consoleLog.scrollHeight;
                     }, 800);
                 }, 800);

@@ -173,8 +173,8 @@ bool add_button(const char* label, const ImVec2& size)
 
     
     ImU32 bg_col = IM_COL32(30, 30, 36, 255);
-    dl->AddRectFilled(bb.Min, bb.Max, bg_col, 5.0f);
-    dl->AddRect(bb.Min, bb.Max, ImGui::ColorConvertFloat4ToU32(tweened_color), 5.0f, 0, 1.0f);
+    dl->AddRectFilled(bb.Min, bb.Max, bg_col, 0.0f);
+    dl->AddRect(bb.Min, bb.Max, ImGui::ColorConvertFloat4ToU32(tweened_color), 0.0f, 0, 1.0f);
 
     ImVec2 text_pos = ImVec2(bb.Min.x + (button_size.x - label_size.x) * 0.5f, bb.Min.y + (button_size.y - label_size.y) * 0.5f);
 
@@ -244,7 +244,7 @@ inline bool add_tab(const char* label, int idx, bool sel, int total_tabs)
     
     int hover_alpha_val = (int)(255 * hover_alphas[idx]);
     if (hover_alpha_val > 0) {
-        dl->AddRectFilled(pos, ImVec2(pos.x + bsz.x, pos.y + bsz.y), IM_COL32(40, 40, 48, hover_alpha_val), 5.f);
+        dl->AddRectFilled(pos, ImVec2(pos.x + bsz.x, pos.y + bsz.y), IM_COL32(40, 40, 48, hover_alpha_val), 0.f);
     }
 
     
@@ -258,12 +258,12 @@ inline bool add_tab(const char* label, int idx, bool sel, int total_tabs)
         active_w += (bsz.x - active_w) * tween_speed;
         
         
-        dl->AddRectFilled(ImVec2(active_x, pos.y), ImVec2(active_x + active_w, pos.y + bsz.y), IM_COL32(32, 32, 38, 255), 5.f);
-        dl->AddRectFilled(ImVec2(active_x + 8, pos.y + bsz.y - 2), ImVec2(active_x + active_w - 8, pos.y + bsz.y), ImGui::ColorConvertFloat4ToU32(menu::accent_color), 1.f);
+        dl->AddRectFilled(ImVec2(active_x, pos.y), ImVec2(active_x + active_w, pos.y + bsz.y), IM_COL32(32, 32, 38, 255), 0.f);
+        dl->AddRectFilled(ImVec2(active_x + 8, pos.y + bsz.y - 2), ImVec2(active_x + active_w - 8, pos.y + bsz.y), ImGui::ColorConvertFloat4ToU32(menu::accent_color), 0.f);
         
         
         ImU32 glow_col = IM_COL32(menu::accent_color.x * 255, menu::accent_color.y * 255, menu::accent_color.z * 255, 30);
-        dl->AddRect(ImVec2(active_x, pos.y), ImVec2(active_x + active_w, pos.y + bsz.y), glow_col, 5.f, 0, 1.0f);
+        dl->AddRect(ImVec2(active_x, pos.y), ImVec2(active_x + active_w, pos.y + bsz.y), glow_col, 0.f, 0, 1.0f);
     }
 
     ImVec2 tpos = ImVec2(pos.x + (bsz.x - tsz.x) * 0.5f, pos.y + (bsz.y - tsz.y) * 0.5f - 1.0f);
@@ -319,13 +319,13 @@ inline bool add_sidebar_tab(const char* label, const char* icon, int idx, bool s
 
     if (sel) {
         ImU32 bg_col = IM_COL32(28, 28, 36, 255);
-        dl->AddRectFilled(bb.Min, bb.Max, bg_col, 6.f);
-        dl->AddRectFilled(ImVec2(bb.Min.x, bb.Min.y + 4.f), ImVec2(bb.Min.x + 3.f, bb.Max.y - 4.f), ImGui::ColorConvertFloat4ToU32(menu::accent_color), 2.f);
+        dl->AddRectFilled(bb.Min, bb.Max, bg_col, 0.f);
+        dl->AddRectFilled(ImVec2(bb.Min.x, bb.Min.y + 4.f), ImVec2(bb.Min.x + 3.f, bb.Max.y - 4.f), ImGui::ColorConvertFloat4ToU32(menu::accent_color), 0.f);
         ImU32 glow_col = IM_COL32(menu::accent_color.x * 255, menu::accent_color.y * 255, menu::accent_color.z * 255, (int)(40 * tab_alphas[idx]));
-        dl->AddRect(bb.Min, bb.Max, glow_col, 6.f, 0, 1.0f);
+        dl->AddRect(bb.Min, bb.Max, glow_col, 0.f, 0, 1.0f);
     } else if (hover_alphas[idx] > 0.01f) {
         ImU32 hover_col = IM_COL32(35, 35, 45, (int)(120 * hover_alphas[idx]));
-        dl->AddRectFilled(bb.Min, bb.Max, hover_col, 6.f);
+        dl->AddRectFilled(bb.Min, bb.Max, hover_col, 0.f);
     }
 
     ImVec4 text_color = sel ? menu::accent_color : ImVec4(0.70f, 0.70f, 0.75f, 1.0f);

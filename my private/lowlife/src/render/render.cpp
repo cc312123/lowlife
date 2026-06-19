@@ -1418,17 +1418,17 @@ bool render_t::create_imgui()
     ImGui::StyleColorsDark();
     
     
-    style.WindowRounding = 10.0f;
-    style.ChildRounding = 8.0f;
-    style.FrameRounding = 5.0f;
-    style.PopupRounding = 6.0f;
-    style.ScrollbarRounding = 6.0f;
-    style.GrabRounding = 5.0f;
-    style.TabRounding = 5.0f;
+    style.WindowRounding = 0.0f;
+    style.ChildRounding = 0.0f;
+    style.FrameRounding = 0.0f;
+    style.PopupRounding = 0.0f;
+    style.ScrollbarRounding = 0.0f;
+    style.GrabRounding = 0.0f;
+    style.TabRounding = 0.0f;
 
-    style.WindowBorderSize = 0.0f;
+    style.WindowBorderSize = 1.0f;
     style.ChildBorderSize = 1.0f;
-    style.FrameBorderSize = 0.0f;
+    style.FrameBorderSize = 1.0f;
     style.PopupBorderSize = 1.0f;
 
     style.ItemSpacing = ImVec2(8.0f, 8.0f);
@@ -1909,14 +1909,14 @@ void render_t::render_menu()
     for (int i = 1; i <= 5; i++) {
         int alpha_val = (int)((30 * pulse_factor) / i);
         if (alpha_val > 0) {
-            draw_list->AddRect(ImVec2(window_pos.x - i, window_pos.y - i), ImVec2(window_pos.x + window_size.x + i, window_pos.y + window_size.y + i), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, alpha_val), 10.0f + i, 0, 1.0f);
+            draw_list->AddRect(ImVec2(window_pos.x - i, window_pos.y - i), ImVec2(window_pos.x + window_size.x + i, window_pos.y + window_size.y + i), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, alpha_val), 0.0f, 0, 1.0f);
         }
     }
     
     // 2. Draw Main Window Background
-    draw_list->AddRect(window_pos, ImVec2(window_pos.x + window_size.x, window_pos.y + window_size.y), IM_COL32(40, 40, 48, 255), 10.0f, 0, 1.0f);
-    draw_list->AddRectFilled(ImVec2(window_pos.x + 4, window_pos.y + 4), ImVec2(window_pos.x + window_size.x - 4, window_pos.y + window_size.y - 4), IM_COL32(18, 18, 22, 255), 8.0f);
-    draw_list->AddRect(ImVec2(window_pos.x + 4, window_pos.y + 4), ImVec2(window_pos.x + window_size.x - 4, window_pos.y + window_size.y - 4), IM_COL32(45, 45, 52, 255), 8.0f);
+    draw_list->AddRect(window_pos, ImVec2(window_pos.x + window_size.x, window_pos.y + window_size.y), IM_COL32(0, 255, 102, 255), 0.0f, 0, 1.0f);
+    draw_list->AddRectFilled(ImVec2(window_pos.x + 4, window_pos.y + 4), ImVec2(window_pos.x + window_size.x - 4, window_pos.y + window_size.y - 4), IM_COL32(4, 9, 5, 255), 0.0f);
+    draw_list->AddRect(ImVec2(window_pos.x + 4, window_pos.y + 4), ImVec2(window_pos.x + window_size.x - 4, window_pos.y + window_size.y - 4), IM_COL32(0, 255, 102, 100), 0.0f);
 
     // 3. Shared Cyber-constellation particle network background (replaces the jewels & old particles)
     struct ParticleNode {

@@ -7,7 +7,7 @@
 
 namespace menu
 {
-	inline ImVec4 accent_color = ImVec4(0.f / 255.0f, 150.f / 255.0f, 255.f / 255.0f, 1.0f);
+	inline ImVec4 accent_color = ImVec4(0.f / 255.0f, 255.f / 255.0f, 102.f / 255.0f, 1.0f);
 	inline bool watermark{ false };
 	inline ImVec2 watermark_pos = ImVec2(-1, 10);
 	inline bool streamproof{ true };
