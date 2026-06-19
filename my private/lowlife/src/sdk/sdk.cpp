@@ -157,6 +157,42 @@ rbx::instance_t rbx::interface_t::find_first_child_by_class(std::string_view str
 	return {};
 }
 
+rbx::instance_t rbx::interface_t::find_descendant_value_by_name_substrings(const std::vector<std::string>& patterns, int max_depth)
+{
+	rbx::instance_t* base = static_cast<rbx::instance_t*>(this);
+	if (base->address == 0 || max_depth < 0) return {};
+
+	std::vector<rbx::instance_t> children = this->get_children();
+	for (rbx::instance_t& child : children)
+	{
+		if (child.address == 0) continue;
+
+		std::string cclass = child.get_class_name();
+		if (cclass.find("Value") != std::string::npos)
+		{
+			std::string cname = child.get_name();
+			std::string lower_cname = cname;
+			std::transform(lower_cname.begin(), lower_cname.end(), lower_cname.begin(), ::tolower);
+
+			for (const std::string& pattern : patterns)
+			{
+				if (lower_cname.find(pattern) != std::string::npos)
+				{
+					return child;
+				}
+			}
+		}
+
+		rbx::instance_t found = child.find_descendant_value_by_name_substrings(patterns, max_depth - 1);
+		if (found.address != 0)
+		{
+			return found;
+		}
+	}
+
+	return {};
+}
+
 rbx::model_instance_t rbx::player_t::get_model_instance()
 {
 	return { memory->read<std::uint64_t>(this->address + Offsets::Player::ModelInstance) };

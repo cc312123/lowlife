@@ -37,6 +37,7 @@ namespace rbx
 		size_t get_children_count();
 		rbx::instance_t find_first_child(std::string_view str);
 		rbx::instance_t find_first_child_by_class(std::string_view str);
+		rbx::instance_t find_descendant_value_by_name_substrings(const std::vector<std::string>& patterns, int max_depth = 5);
 	};
 
 	struct instance_t : public nameable_t, public interface_t

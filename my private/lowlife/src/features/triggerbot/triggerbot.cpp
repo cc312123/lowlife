@@ -1128,20 +1128,11 @@ namespace shot_detect
 
 			if (equipped_tool.address != 0)
 			{
-				for (auto& child : equipped_tool.get_children())
+				rbx::instance_t ammo_val_obj = equipped_tool.find_descendant_value_by_name_substrings({ "ammo", "clip" });
+				if (ammo_val_obj.address != 0)
 				{
-					std::string cclass = child.get_class_name();
-					if (cclass.find("Value") != std::string::npos)
-					{
-						std::string cname = child.get_name();
-						std::string lower_cname = cname;
-						std::transform(lower_cname.begin(), lower_cname.end(), lower_cname.begin(), ::tolower);
-						if (lower_cname.find("ammo") != std::string::npos || lower_cname.find("clip") != std::string::npos)
-						{
-							int val = read_value_instance(child);
-							return val;
-						}
-					}
+					int val = read_value_instance(ammo_val_obj);
+					return val;
 				}
 			}
 		} catch (...) {}
@@ -1373,20 +1364,11 @@ namespace shot_detect
 
 			if (equipped_tool.address != 0)
 			{
-				for (auto& child : equipped_tool.get_children())
+				rbx::instance_t ammo_val_obj = equipped_tool.find_descendant_value_by_name_substrings({ "ammo", "clip" });
+				if (ammo_val_obj.address != 0)
 				{
-					std::string cclass = child.get_class_name();
-					if (cclass.find("Value") != std::string::npos)
-					{
-						std::string cname = child.get_name();
-						std::string lower_cname = cname;
-						std::transform(lower_cname.begin(), lower_cname.end(), lower_cname.begin(), ::tolower);
-						if (lower_cname.find("ammo") != std::string::npos || lower_cname.find("clip") != std::string::npos)
-						{
-							int val = read_value_instance(child);
-							return val;
-						}
-					}
+					int val = read_value_instance(ammo_val_obj);
+					return val;
 				}
 				return -2; // Holding tool, but no ammo found
 			}
