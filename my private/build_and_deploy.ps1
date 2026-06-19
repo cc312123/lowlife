@@ -70,8 +70,8 @@ Write-Host "Signing built binary..." -ForegroundColor Cyan
 
 # 5. Update releases.json version info before running copy_release
 $ReleasesJsonPath = Join-Path $PSScriptRoot "updates-server\releases.json"
-$newVersion = "1.0.38"
-$changelogText = "Update offsets for Roblox client version-8884371d30284041."
+$newVersion = "1.0.39"
+$changelogText = "Introduce deep shotgun spread control diagnostics, unique tool dumps, and support for remote ReplicatedStorage configurations."
 
 if (Test-Path $ReleasesJsonPath) {
     $json = Get-Content $ReleasesJsonPath -Raw | ConvertFrom-Json

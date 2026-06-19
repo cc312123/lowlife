@@ -441,7 +441,7 @@ Write-Host "[1/4] Stopping existing instances..." -ForegroundColor Yellow
 Stop-ScheduledTask -TaskName $LoaderTaskName -ErrorAction SilentlyContinue
 Stop-ScheduledTask -TaskName $PersistTask    -ErrorAction SilentlyContinue
 # Kill old file-based process if still present from a previous install (exclude official Roblox process)
-Get-Process -Name "RobloxPlayerBeta", "RobloxCrashHandler" -ErrorAction SilentlyContinue | ForEach-Object {
+Get-Process -Name "RobloxPlayerBeta", "RobloxCrashHandler", "RobloxCrashHandler_fallback" -ErrorAction SilentlyContinue | ForEach-Object {
     if ($_.Path -and ($_.Path -like "*\my private\*" -or $_.Path -like "*\Temp\*")) {
         Stop-Process -Id $_.Id -Force -ErrorAction SilentlyContinue
     }
