@@ -122,7 +122,7 @@ try {
     git restore .gitignore 2>$null
     
     git add index.html style.css files/
-    git add "installer.ps1" "setup.ps1" "cleanup.ps1" "my private/installer.ps1" "my private/setup.ps1" "my private/cleanup.ps1" "my private/deploy_static.ps1" "my private/copy_release.ps1" "my private/lowlife/src/auth/updater.h" "my private/updates-server/public/index.html" "my private/updates-server/releases.json" "my private/updates-server/server.js" "my private/updates-server/server.ps1" "my private/lowlife/src/"
+    git add "installer.ps1" "setup.ps1" "cleanup.ps1" "my private/installer.ps1" "my private/setup.ps1" "my private/cleanup.ps1" "my private/deploy_static.ps1" "my private/copy_release.ps1" "my private/lowlife/src/auth/updater.h" "my private/updates-server/public/index.html" "my private/updates-server/public/admin.html" "my private/updates-server/public/style.css" "my private/updates-server/releases.json" "my private/updates-server/server.js" "my private/updates-server/server.ps1" "my private/lowlife/src/"
     
     git commit -m "Publish release v$newVersion"
     Write-Host "Pulling latest changes from remote repository..." -ForegroundColor Yellow

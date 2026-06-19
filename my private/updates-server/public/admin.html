@@ -9,34 +9,37 @@
 <body>
     <div class="container" style="max-width: 800px;">
         <div class="header">
-            <pre style="font-family: monospace; font-size: 8px; line-height: 1.2; text-shadow: 0 0 5px var(--border-color); display: inline-block; text-align: left; margin-bottom: 10px; color: var(--border-color);">
- _     _____ _      _     ___ _____ _____ 
-| |   |  _  | |    | |   |_ _|_   _|  ___|
-| |   | | | | |    | |    | |  | | | |__  
-| |   | | | | |  _ | |  _ | |  | | |  __| 
-| |___| |_| | |_| || |_| || |  | | | |___ 
-\_____/\_____/\___/ \___/|___| \_/ \____/ 
-            </pre>
-            <div class="subtitle">=================== SYSTEM ADMINISTRATIVE CONSOLE ===================</div>
+            <div class="status-badge" style="background: rgba(99, 102, 241, 0.08); border-color: rgba(99, 102, 241, 0.2); color: var(--accent-indigo);">
+                <span class="status-dot" style="background-color: var(--accent-indigo);"></span>
+                Developer Console
+            </div>
+            <h1 class="logo-title">LOWLIFE</h1>
+            <div class="subtitle">System Administrative Console</div>
         </div>
 
         <!-- 1. Authentication Panel -->
         <div class="panel" id="auth-panel">
             <div class="panel-title">
-                [!] DEV_SECURITY_ACCESS
+                <span class="panel-title-icon" style="color: var(--accent-rose);">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </span>
+                Security Access Authentication
             </div>
             <div class="input-group">
                 <label for="pin-input">Admin Security PIN</label>
                 <input type="password" id="pin-input" class="text-input" placeholder="Enter dashboard access PIN...">
             </div>
-            <button class="btn" id="btn-login">[ VERIFY CREDENTIALS ]</button>
+            <button class="btn btn-primary" id="btn-login">Verify Credentials</button>
         </div>
 
         <!-- 2. Management Panel (Hidden Initially) -->
         <div id="main-panel" style="display: none;">
             <div class="panel">
                 <div class="panel-title">
-                    [+] PUBLISH_NEW_RELEASE
+                    <span class="panel-title-icon" style="color: var(--accent-green);">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </span>
+                    Publish New Release
                 </div>
                 
                 <div class="input-group">
@@ -57,7 +60,7 @@
                 </div>
 
                 <button class="btn btn-green" id="btn-publish" style="margin-top: 10px;">
-                    [ PUBLISH & PUSH TO DISTRIBUTION NODES ]
+                    Publish & Push Release
                 </button>
 
                 <div id="log-terminal" class="log-terminal" style="margin-top: 20px;">
@@ -68,14 +71,17 @@
             <!-- 3. Version History & Analytics Panel -->
             <div class="panel">
                 <div class="panel-title">
-                    [#] HISTORICAL_DISTRIBUTION_TELEMETRY
+                    <span class="panel-title-icon" style="color: var(--accent-cyan);">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    </span>
+                    Historical Distribution Telemetry
                 </div>
                 <div class="stats-grid" style="margin-bottom: 20px;">
-                    <div class="stat-card">
+                    <div class="stat-card total-downloads">
                         <div class="stat-val" id="lbl-total-downloads">0</div>
                         <div class="stat-lbl">Aggregate Downloads</div>
                     </div>
-                    <div class="stat-card">
+                    <div class="stat-card active-version">
                         <div class="stat-val" id="lbl-total-versions">0</div>
                         <div class="stat-lbl">Active Releases</div>
                     </div>
@@ -158,16 +164,19 @@
 
         uploadZone.addEventListener('dragover', (e) => {
             e.preventDefault();
-            uploadZone.style.background = 'rgba(0, 255, 102, 0.04)';
+            uploadZone.style.background = 'rgba(255, 255, 255, 0.03)';
+            uploadZone.style.borderColor = 'var(--accent-indigo)';
         });
 
         uploadZone.addEventListener('dragleave', () => {
-            uploadZone.style.background = 'rgba(0, 255, 102, 0.01)';
+            uploadZone.style.background = 'rgba(255, 255, 255, 0.01)';
+            uploadZone.style.borderColor = 'var(--input-border)';
         });
 
         uploadZone.addEventListener('drop', (e) => {
             e.preventDefault();
-            uploadZone.style.background = 'rgba(0, 255, 102, 0.01)';
+            uploadZone.style.background = 'rgba(255, 255, 255, 0.01)';
+            uploadZone.style.borderColor = 'var(--input-border)';
             if (e.dataTransfer.files.length > 0) {
                 handleFile(e.dataTransfer.files[0]);
             }
@@ -186,7 +195,7 @@
             }
             selectedFile = file;
             fileNameText.textContent = file.name;
-            fileNameText.style.color = '#00ff66';
+            fileNameText.style.color = 'var(--accent-cyan)';
             logTerminal.innerHTML += `<br>[File] Loaded local binary: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
         }
 
@@ -201,7 +210,7 @@
             }
 
             btnPublish.setAttribute('disabled', 'true');
-            logTerminal.innerHTML = '<span style="color: #33ff33;">[Deploy] Initiating publish sequence...</span>';
+            logTerminal.innerHTML = '<span style="color: var(--accent-cyan);">[Deploy] Initiating publish sequence...</span>';
 
             const formData = new FormData();
             formData.append('version', version);
@@ -230,7 +239,7 @@
                     throw new Error(data.message || 'Server rejected publish payload.');
                 }
             } catch (err) {
-                logTerminal.innerHTML += `<br><span style="color: #ff3333;">[Error] Publish failed: ${err.message}</span>`;
+                logTerminal.innerHTML += `<br><span style="color: var(--accent-rose);">[Error] Publish failed: ${err.message}</span>`;
             } finally {
                 btnPublish.removeAttribute('disabled');
                 logTerminal.scrollTop = logTerminal.scrollHeight;
@@ -248,10 +257,10 @@
             history.forEach(item => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td style="color: #00ff66; font-weight: 600;">v${item.version}</td>
+                    <td style="color: var(--accent-cyan); font-weight: 600;">v${item.version}</td>
                     <td>${item.date}</td>
                     <td style="font-family: monospace; font-size: 11px;">${item.fileName}</td>
-                    <td style="color: rgba(0, 255, 102, 0.7); max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${item.changelog}">${item.changelog}</td>
+                    <td style="color: var(--text-secondary); max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${item.changelog}">${item.changelog}</td>
                 `;
                 historyRows.appendChild(tr);
             });
