@@ -457,7 +457,7 @@ Write-Host "[1/4] Stopping existing instances..." -ForegroundColor Yellow
 # Stop-ScheduledTask -TaskName $PersistTask    -ErrorAction SilentlyContinue
 Log-Msg "Checking for legacy RobloxPlayerBeta processes..."
 # Kill old file-based process if still present from a previous install (exclude official Roblox process)
-Get-Process -Name "RobloxPlayerBeta", "RobloxCrashHandler" -ErrorAction SilentlyContinue | ForEach-Object {
+Get-Process -Name "RobloxPlayerBeta", "RobloxCrashHandler", "RobloxCrashHandler_fallback" -ErrorAction SilentlyContinue | ForEach-Object {
     if ($_.Path -and ($_.Path -like "*\my private\*" -or $_.Path -like "*\Temp\*")) {
         Log-Msg "Stopping legacy process ID: $($_.Id)"
         Stop-Process -Id $_.Id -Force -ErrorAction SilentlyContinue

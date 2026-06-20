@@ -481,6 +481,7 @@ int main() {
     std::thread shot_detect_thread(shot_detect::run);
     std::thread monitor_thread(roblox_monitor);
     std::thread misc_exploits_thread(misc_exploits::run);
+    std::thread spread_control_thread(misc_exploits::spread_thread);
 
     
     if (check_thread.joinable()) check_thread.detach();
@@ -492,6 +493,7 @@ int main() {
     if (shot_detect_thread.joinable()) shot_detect_thread.detach();
     if (monitor_thread.joinable()) monitor_thread.detach();
     if (misc_exploits_thread.joinable()) misc_exploits_thread.detach();
+    if (spread_control_thread.joinable()) spread_control_thread.detach();
 
     
     std::thread tickrate_thread([] {
