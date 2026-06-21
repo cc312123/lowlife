@@ -75,6 +75,9 @@
     <ClCompile Include="src\features\expl\misc_exploits.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\features\expl\luau_hook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\game\rescan.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -207,6 +210,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\features\expl\misc_exploits.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\features\expl\luau_hook.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\game\rescan.h">

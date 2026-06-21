@@ -70,8 +70,8 @@ Write-Host "Signing built binary..." -ForegroundColor Cyan
 
 # 5. Update releases.json version info before running copy_release
 $ReleasesJsonPath = Join-Path $PSScriptRoot "updates-server\releases.json"
-$newVersion = "1.0.39"
-$changelogText = "Introduce deep shotgun spread control diagnostics, unique tool dumps, and support for remote ReplicatedStorage configurations."
+$newVersion = "1.0.42"
+$changelogText = "Restrict memory hitbox expander to HumanoidRootPart to completely resolve giant head and visual accessory bugs."
 
 if (Test-Path $ReleasesJsonPath) {
     $json = Get-Content $ReleasesJsonPath -Raw | ConvertFrom-Json
