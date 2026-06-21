@@ -2971,9 +2971,13 @@ void render_t::render_menu()
         ImGui::Checkbox("Infinite Bullets", &settings::expl::infinite_ammo);
         ImGui::Spacing();
 
+        ImGui::Checkbox("Raycast Hitbox Expander", &settings::botter::raycast_hitbox);
         ImGui::Spacing();
 
+        SliderFloatWithInput("Hitbox Size", &settings::botter::hitbox_size, 10.f, 500.f, "%.0f");
+        ImGui::Spacing();
 
+        ImGui::Checkbox("Visualize Hitbox", &settings::botter::visualize_hitbox);
         ImGui::Spacing();
         ImGui::Separator();
         ImGui::Spacing();
@@ -3354,15 +3358,6 @@ void render_t::render_menu()
             ImGui::SameLine();
             inline_keybind_button("botter_keybind", &settings::botter::trigger_keybind, &settings::botter::trigger_keybind_mode);
         }
-
-        ImGui::Spacing();
-        SliderFloatWithInput("Hitbox Size", &settings::botter::hitbox_size, 10.f, 500.f, "%.0f");
-
-        ImGui::Spacing();
-        ImGui::Checkbox("Visualize Hitbox", &settings::botter::visualize_hitbox);
-
-        ImGui::Spacing();
-        ImGui::Checkbox("Raycast Hitbox Expander", &settings::botter::raycast_hitbox);
 
         ImGui::Spacing();
         SliderIntWithInput("Triggerbot CPS", &settings::botter::cps, 1, 100);
