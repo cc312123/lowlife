@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.39",
-    "latestChangelog":  "Introduce deep shotgun spread control diagnostics, unique tool dumps, and support for remote ReplicatedStorage configurations.",
+    "latestVersion":  "1.0.40",
+    "latestChangelog":  "Fix memory-based and raycast-based hitbox expander scaling and replication alignment.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -283,7 +283,14 @@
                         "changelog":  "Introduce deep shotgun spread control diagnostics, unique tool dumps, and support for remote ReplicatedStorage configurations.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "e7a10a2d83f0bf197cbd9c7583071cfa"
+                    },
+                    {
+                        "version":  "1.0.40",
+                        "date":  "2026-06-21",
+                        "changelog":  "Fix memory-based and raycast-based hitbox expander scaling and replication alignment.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "52dcdf7405f6e2648f9807903b41cfdb"
                     }
                 ],
-    "latestHash":  "e7a10a2d83f0bf197cbd9c7583071cfa"
+    "latestHash":  "52dcdf7405f6e2648f9807903b41cfdb"
 }

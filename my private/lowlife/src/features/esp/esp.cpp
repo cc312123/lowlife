@@ -556,6 +556,13 @@ void esp::run()
 								{
 									size = { 4.0f, 6.0f, 2.0f };
 								}
+								else if (part_name == "Head" && settings::botter::raycast_hitbox)
+								{
+									float scale = settings::botter::hitbox_size / 100.0f;
+									if (scale < 0.1f) scale = 0.1f;
+									if (scale > 50.0f) scale = 50.0f;
+									size = size * (1.0f / scale);
+								}
 								size = size * visual_scale;
 								math::matrix3 rot = p_prim.get_rotation();
 

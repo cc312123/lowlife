@@ -1128,6 +1128,12 @@ namespace botter
 													{
 														size = { 4.0f, 6.0f, 2.0f };
 													}
+													else if (part_name == "Head")
+													{
+														float current_scale = scale;
+														if (current_scale < 0.1f) current_scale = 0.1f;
+														size = size * (1.0f / current_scale);
+													}
 													math::matrix3 rot = p_prim.get_rotation();
 
 													cached_part_t box;
