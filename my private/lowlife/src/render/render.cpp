@@ -1,4 +1,4 @@
-#define IMGUI_DEFINE_MATH_OPERATORS
+﻿#define IMGUI_DEFINE_MATH_OPERATORS
 #define NOMINMAX
 #include <render/render.h>
 #include <mutex>
@@ -2398,15 +2398,15 @@ void render_t::render_menu()
     draw_list->AddText(ImVec2(window_pos.x + 240.f, window_pos.y + 44.f), IM_COL32(110, 110, 125, 255), diagnostics_buf);
 
     // Draw vertical tab navigation in the sidebar
-    if (add_sidebar_tab("Aimbot", "⌖", 0, selected_tab_index == 0)) selected_tab_index = 0;
-    if (add_sidebar_tab("Silent", "👁", 1, selected_tab_index == 1)) selected_tab_index = 1;
-    if (add_sidebar_tab("Visuals", "☼", 2, selected_tab_index == 2)) selected_tab_index = 2;
-    if (add_sidebar_tab("Misc", "⚙", 3, selected_tab_index == 3)) selected_tab_index = 3;
-    if (add_sidebar_tab("Settings", "⛭", 4, selected_tab_index == 4)) selected_tab_index = 4;
-    if (add_sidebar_tab("Configs", "💾", 5, selected_tab_index == 5)) selected_tab_index = 5;
-    if (add_sidebar_tab("Shot Detect", "🎯", 6, selected_tab_index == 6)) selected_tab_index = 6;
-    if (add_sidebar_tab("Triggerbot", "⚡", 7, selected_tab_index == 7)) selected_tab_index = 7;
-    if (add_sidebar_tab("Players", "👥", 8, selected_tab_index == 8)) selected_tab_index = 8;
+    if (add_sidebar_tab("Aimbot", "âŒ–", 0, selected_tab_index == 0)) selected_tab_index = 0;
+    if (add_sidebar_tab("Silent", "ðŸ‘", 1, selected_tab_index == 1)) selected_tab_index = 1;
+    if (add_sidebar_tab("Visuals", "â˜¼", 2, selected_tab_index == 2)) selected_tab_index = 2;
+    if (add_sidebar_tab("Misc", "âš™", 3, selected_tab_index == 3)) selected_tab_index = 3;
+    if (add_sidebar_tab("Settings", "â›­", 4, selected_tab_index == 4)) selected_tab_index = 4;
+    if (add_sidebar_tab("Configs", "ðŸ’¾", 5, selected_tab_index == 5)) selected_tab_index = 5;
+    if (add_sidebar_tab("Shot Detect", "ðŸŽ¯", 6, selected_tab_index == 6)) selected_tab_index = 6;
+    if (add_sidebar_tab("Triggerbot", "âš¡", 7, selected_tab_index == 7)) selected_tab_index = 7;
+    if (add_sidebar_tab("Players", "ðŸ‘¥", 8, selected_tab_index == 8)) selected_tab_index = 8;
 
     // Shift coordinates dynamically for the switch case child rendering
 #define SetCursorPos(pos) SetCursorPos(adjust_menu_pos(pos))
@@ -2418,7 +2418,7 @@ void render_t::render_menu()
     {
         ImGui::SetCursorPos(ImVec2(22.f, 78.f));
 
-        ImGui::BeginChild("Aimbot", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true);
+        ImGui::BeginChild("Aimbot", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
         ImGui::Checkbox("Enable", &settings::aimbot::enabled);
         if (settings::aimbot::enabled)
@@ -2432,7 +2432,7 @@ void render_t::render_menu()
         ImGui::SameLine();
         if (add_tooltip_trigger("aimbot_fov_tooltip")) {
             if (begin_tooltip_popup("aimbot_fov_tooltip", ImVec2(290, 180))) {
-                ImGui::BeginChild("Aimbot FOV Settings", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), true);
+                ImGui::BeginChild("Aimbot FOV Settings", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), true, ImGuiWindowFlags_NoBackground);
 
                 ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.f);
                 SliderFloatWithInput("size", &settings::aimbot::fov, 1.0f, 1000.0f, "%.1f");
@@ -2453,7 +2453,7 @@ void render_t::render_menu()
 
         ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() * 0.5f + 8.f, 78.f));
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
-        ImGui::BeginChild("Aimbot Settings", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true);
+        ImGui::BeginChild("Aimbot Settings", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
         const char* aimbot_types[] = { "Camera Lock", "Mouse Lock" };
         ImGui::Combo("Aimbot Type", &settings::aimbot::aimbot_type, aimbot_types, IM_ARRAYSIZE(aimbot_types));
@@ -2513,7 +2513,7 @@ void render_t::render_menu()
     {
         ImGui::SetCursorPos(ImVec2(22.f, 78.f));
 
-        ImGui::BeginChild("Redirection", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true);
+        ImGui::BeginChild("Redirection", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
         ImGui::Checkbox("Enable", &settings::silent::enabled);
         if (settings::silent::enabled)
@@ -2527,7 +2527,7 @@ void render_t::render_menu()
         ImGui::SameLine();
         if (add_tooltip_trigger("fov_tooltip")) {
             if (begin_tooltip_popup("fov_tooltip", ImVec2(290, 180))) {
-                ImGui::BeginChild("Field Of View Settings", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), true);
+                ImGui::BeginChild("Field Of View Settings", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), true, ImGuiWindowFlags_NoBackground);
 
                 ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.f);
                 SliderFloatWithInput("size", &settings::silent::fov, 10.f, 500.f, "%.1f");
@@ -2549,7 +2549,7 @@ void render_t::render_menu()
 
         ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() * 0.5f + 8.f, 78.f));
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
-        ImGui::BeginChild("Redirection Settings", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true);
+        ImGui::BeginChild("Redirection Settings", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
         const char* aim_parts[] = { "Head", "Torso", "Closest to Mouse" };
         ImGui::Combo("Aim Part", &settings::silent::aim_part, aim_parts, IM_ARRAYSIZE(aim_parts));
@@ -2575,7 +2575,7 @@ void render_t::render_menu()
     case 2:
         ImGui::SetCursorPos(ImVec2(22.f, 78.f));
 
-        ImGui::BeginChild("WallHack", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true);
+        ImGui::BeginChild("WallHack", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
         ImGui::Checkbox("Boxes", &settings::visuals::box);
         ImGui::SameLine();
@@ -2620,7 +2620,7 @@ void render_t::render_menu()
         ImGui::SameLine();
         if (add_tooltip_trigger("healthbar_tooltip")) {
             if (begin_tooltip_popup("healthbar_tooltip", ImVec2(250, 150))) {
-                ImGui::BeginChild("Health Bar Settings", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), true);
+                ImGui::BeginChild("Health Bar Settings", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), true, ImGuiWindowFlags_NoBackground);
 
                 ImGui::Checkbox("Health Text", &settings::visuals::health_text);
 
@@ -2641,7 +2641,7 @@ void render_t::render_menu()
 
         ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() * 0.5f + 8.f, 78.f));
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
-        ImGui::BeginChild("WallHack Misc", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true);
+        ImGui::BeginChild("WallHack Misc", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
         {
 
         
@@ -2904,7 +2904,7 @@ void render_t::render_menu()
     case 3:
         ImGui::SetCursorPos(ImVec2(22.f, 78.f));
 
-        ImGui::BeginChild("Movement", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true);
+        ImGui::BeginChild("Movement", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
         ImGui::Checkbox("Walkspeed", &settings::expl::walkspeed);
 
@@ -2972,7 +2972,7 @@ void render_t::render_menu()
 
         ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() * 0.5f + 8.f, 78.f));
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
-        ImGui::BeginChild("Blatant & World", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true);
+        ImGui::BeginChild("Blatant & World", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
         ImGui::TextColored(menu::accent_color, "BLATANT");
 
@@ -3093,7 +3093,7 @@ void render_t::render_menu()
 
         ImGui::SetCursorPos(ImVec2(22.f, 78.f));
 
-        ImGui::BeginChild("User Interface", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true);
+        ImGui::BeginChild("User Interface", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
         ImGui::TextColored(menu::accent_color, "INTERFACE OPTIONS");
         ImGui::Separator();
@@ -3158,7 +3158,7 @@ void render_t::render_menu()
 
         ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() * 0.5f + 8.f, 78.f));
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
-        ImGui::BeginChild("User Interface Settings", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true);
+        ImGui::BeginChild("User Interface Settings", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
         ImGui::TextColored(menu::accent_color, "LOADER CONTROL");
         ImGui::Separator();
@@ -3191,7 +3191,7 @@ void render_t::render_menu()
         ImGui::Separator();
         ImGui::Spacing();
 
-        ImGui::BeginChild("##CleanerLogBox", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y - 10.0f), true);
+        ImGui::BeginChild("##CleanerLogBox", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y - 10.0f), true, ImGuiWindowFlags_NoBackground);
         
         {
             std::lock_guard<std::mutex> lock(cleaner_log_mtx);
@@ -3257,9 +3257,9 @@ void render_t::render_menu()
 
         ImGui::SetCursorPos(ImVec2(22.f, 78.f));
 
-        ImGui::BeginChild("Configs List", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true);
+        ImGui::BeginChild("Configs List", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
-        ImGui::BeginChild("##ConfigList", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y - 100), true);
+        ImGui::BeginChild("##ConfigList", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y - 100), true, ImGuiWindowFlags_NoBackground);
 
         for (size_t i = 0; i < config_list.size(); i++)
         {
@@ -3313,7 +3313,7 @@ void render_t::render_menu()
 
         ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() * 0.5f + 8.f, 78.f));
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
-        ImGui::BeginChild("Config Actions", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true);
+        ImGui::BeginChild("Config Actions", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
         if (selected_config_index >= 0 && selected_config_index < static_cast<int>(config_list.size()))
         {
@@ -3361,7 +3361,7 @@ void render_t::render_menu()
     {
         ImGui::SetCursorPos(ImVec2(22.f, 78.f));
 
-        ImGui::BeginChild("Triggerbot", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true);
+        ImGui::BeginChild("Triggerbot", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
         ImGui::Checkbox("Enable Triggerbot", &settings::botter::autoclicker_enabled);
         if (settings::botter::autoclicker_enabled)
@@ -3386,7 +3386,7 @@ void render_t::render_menu()
 
         ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() * 0.5f + 8.f, 78.f));
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
-        ImGui::BeginChild("Triggerbot Status", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true);
+        ImGui::BeginChild("Triggerbot Status", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
         ImGui::Text("Triggerbot Status:");
         ImGui::SameLine();
@@ -3404,7 +3404,7 @@ void render_t::render_menu()
     {
         ImGui::SetCursorPos(ImVec2(22.f, 78.f));
 
-        ImGui::BeginChild("Shot Detect", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true);
+        ImGui::BeginChild("Shot Detect", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
         ImGui::Checkbox("Enable Shot Detect", &settings::shot_detect::enabled);
         if (settings::shot_detect::enabled)
@@ -3458,7 +3458,7 @@ void render_t::render_menu()
 
         ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() * 0.5f + 8.f, 78.f));
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
-        ImGui::BeginChild("Shot Detect Status & Target", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true);
+        ImGui::BeginChild("Shot Detect Status & Target", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
         ImGui::Text("Shot Detect Status:");
         ImGui::SameLine();
@@ -3599,7 +3599,7 @@ void render_t::render_menu()
         static cache::entity_t selected_player = {};
         
         ImGui::SetCursorPos(ImVec2(22.f, 78.f));
-        ImGui::BeginChild("Players List Window", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true);
+        ImGui::BeginChild("Players List Window", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
         
         ImGui::TextColored(menu::accent_color, "Player Directory");
         ImGui::Separator();
@@ -3694,7 +3694,7 @@ void render_t::render_menu()
         
         ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() * 0.5f + 8.f, 78.f));
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
-        ImGui::BeginChild("Player Controls Window", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true);
+        ImGui::BeginChild("Player Controls Window", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
         if (selected_player.instance.address != 0)
         {
