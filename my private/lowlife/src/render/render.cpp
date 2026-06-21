@@ -2969,7 +2969,6 @@ void render_t::render_menu()
         ImGui::TextColored(menu::accent_color, "BLATANT");
 
         ImGui::Checkbox("Infinite Bullets", &settings::expl::infinite_ammo);
-        ImGui::Checkbox("Shotgun Spread Control", &settings::expl::db_spread_enabled);
         ImGui::Spacing();
 
         ImGui::Spacing();
