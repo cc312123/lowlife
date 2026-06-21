@@ -37,6 +37,7 @@ public:
 	bool attach_to_process(const std::string& process_name);
 
 	std::string read_string(std::uint64_t address);
+	std::uint64_t scan_signature(const std::string& section_name, const std::string& signature);
 
 	template <typename T>
 	T read(std::uint64_t address);

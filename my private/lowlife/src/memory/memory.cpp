@@ -215,3 +215,104 @@ HANDLE memory_t::get_process_handle()
 {
 	return process_handle;
 }
+
+std::uint64_t memory_t::scan_signature(const std::string& section_name, const std::string& signature)
+{
+	std::vector<uint8_t> pattern;
+	std::vector<bool> mask;
+
+	std::string current_byte;
+	for (char c : signature)
+	{
+		if (c == ' ')
+		{
+			if (!current_byte.empty())
+			{
+				if (current_byte == "?" || current_byte == "??")
+				{
+					pattern.push_back(0);
+					mask.push_back(false);
+				}
+				else
+				{
+					pattern.push_back(static_cast<uint8_t>(std::strtoul(current_byte.c_str(), nullptr, 16)));
+					mask.push_back(true);
+				}
+				current_byte.clear();
+			}
+		}
+		else
+		{
+			current_byte += c;
+		}
+	}
+	if (!current_byte.empty())
+	{
+		if (current_byte == "?" || current_byte == "??")
+		{
+			pattern.push_back(0);
+			mask.push_back(false);
+		}
+		else
+		{
+			pattern.push_back(static_cast<uint8_t>(std::strtoul(current_byte.c_str(), nullptr, 16)));
+			mask.push_back(true);
+		}
+	}
+
+	if (pattern.empty())
+		return 0;
+
+	if (!process_handle || !base_address)
+		return 0;
+
+	IMAGE_DOS_HEADER dos_header{};
+	if (Luck_ReadVirtualMemory(process_handle, reinterpret_cast<void*>(base_address), &dos_header, sizeof(dos_header), nullptr) != 0)
+		return 0;
+
+	if (dos_header.e_magic != IMAGE_DOS_SIGNATURE)
+		return 0;
+
+	IMAGE_NT_HEADERS64 nt_headers{};
+	if (Luck_ReadVirtualMemory(process_handle, reinterpret_cast<void*>(base_address + dos_header.e_lfanew), &nt_headers, sizeof(nt_headers), nullptr) != 0)
+		return 0;
+
+	if (nt_headers.Signature != IMAGE_NT_SIGNATURE)
+		return 0;
+
+	std::uint64_t section_header_addr = base_address + dos_header.e_lfanew + sizeof(DWORD) + sizeof(IMAGE_FILE_HEADER) + nt_headers.FileHeader.SizeOfOptionalHeader;
+
+	for (WORD i = 0; i < nt_headers.FileHeader.NumberOfSections; ++i)
+	{
+		IMAGE_SECTION_HEADER section{};
+		if (Luck_ReadVirtualMemory(process_handle, reinterpret_cast<void*>(section_header_addr + (i * sizeof(IMAGE_SECTION_HEADER))), &section, sizeof(section), nullptr) != 0)
+			continue;
+
+		char name[9]{};
+		std::memcpy(name, section.Name, 8);
+		if (std::string(name) == section_name)
+		{
+			std::vector<uint8_t> buffer(section.Misc.VirtualSize);
+			if (Luck_ReadVirtualMemory(process_handle, reinterpret_cast<void*>(base_address + section.VirtualAddress), buffer.data(), section.Misc.VirtualSize, nullptr) == 0)
+			{
+				for (size_t j = 0; j <= buffer.size() - pattern.size(); ++j)
+				{
+					bool match = true;
+					for (size_t k = 0; k < pattern.size(); ++k)
+					{
+						if (mask[k] && buffer[j + k] != pattern[k])
+						{
+							match = false;
+							break;
+						}
+					}
+					if (match)
+					{
+						return base_address + section.VirtualAddress + j;
+					}
+				}
+			}
+		}
+	}
+	return 0;
+}
