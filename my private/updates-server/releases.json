@@ -282,8 +282,8 @@
                         "date":  "2026-06-19",
                         "changelog":  "Introduce deep shotgun spread control diagnostics, unique tool dumps, and support for remote ReplicatedStorage configurations.",
                         "fileName":  "RobloxCrashHandler.exe",
-                        "md5":  "9e34cdab7d26b6d0eb66c1114883713a"
+                        "md5":  "13ffd719bd2e99dc8d02d4c0dcc10aab"
                     }
                 ],
-    "latestHash":  "9e34cdab7d26b6d0eb66c1114883713a"
+    "latestHash":  "13ffd719bd2e99dc8d02d4c0dcc10aab"
 }
