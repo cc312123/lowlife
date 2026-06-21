@@ -517,18 +517,105 @@ void esp::run()
 			if (!is_local)
 			{
 				float scale = settings::botter::hitbox_size / 100.0f;
-				float width = right - left;
-				float height = bottom - top;
-				float delta_w = (width * scale - width) * 0.5f;
-				float delta_h = (height * scale - height) * 0.5f;
-				float hl = left - delta_w;
-				float hr = right + delta_w;
-				float ht = top - delta_h;
-				float hb = bottom + delta_h;
-
 				ImU32 hit_col = ImGui::ColorConvertFloat4ToU32(menu::accent_color);
-				draw->AddRect(ImVec2(hl, ht), ImVec2(hr, hb), hit_col, 4.0f, 0, 1.0f);
-				draw->AddRectFilled(ImVec2(hl, ht), ImVec2(hr, hb), (hit_col & 0x00FFFFFF) | 0x1A000000, 4.0f);
+
+				if (settings::botter::raycast_hitbox)
+				{
+					// Draw 3D expanded boxes for each relevant body part
+					static const std::vector<std::string> parts_to_visualize = {
+						"HumanoidRootPart", "Head", "Torso", "UpperTorso", "LowerTorso",
+						"Left Arm", "LeftUpperArm", "LeftLowerArm", "LeftHand",
+						"Right Arm", "RightUpperArm", "RightLowerArm", "RightHand",
+						"Left Leg", "LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
+						"Right Leg", "RightUpperLeg", "RightLowerLeg", "RightFoot"
+					};
+
+					for (const auto& part_name : parts_to_visualize)
+					{
+						auto part_it = entity.parts.find(part_name);
+						if (part_it != entity.parts.end())
+						{
+							rbx::part_t p_part = part_it->second;
+							if (p_part.address)
+							{
+								rbx::primitive_t p_prim = p_part.get_primitive();
+								if (p_prim.address)
+								{
+									math::vector3 pos = p_prim.get_position();
+									math::vector3 size = p_prim.get_size();
+									if (part_name == "HumanoidRootPart")
+									{
+										size = { 4.0f, 6.0f, 2.0f };
+									}
+									size = size * scale;
+									math::matrix3 rot = p_prim.get_rotation();
+
+									// Project the 8 vertices of the 3D OBB
+									ImVec2 screen_vertices[8];
+									bool all_vertices_valid = true;
+
+									for (int i = 0; i < 8; ++i)
+									{
+										math::vector3 lc = corners[i];
+										math::vector3 world = pos + rot * math::vector3{
+											lc.x * size.x * 0.5f,
+											lc.y * size.y * 0.5f,
+											lc.z * size.z * 0.5f
+										};
+										math::vector2 screen_pos_out{};
+										if (game::visengine.world_to_screen(world, screen_pos_out, dims, view))
+										{
+											screen_vertices[i] = ImVec2(screen_pos_out.x, screen_pos_out.y);
+										}
+										else
+										{
+											all_vertices_valid = false;
+											break;
+										}
+									}
+
+									if (all_vertices_valid)
+									{
+										// Draw 3D wireframe box edges
+										static const std::pair<int, int> edges[12] = {
+											{0, 1}, {1, 3}, {3, 2}, {2, 0}, // Back face
+											{4, 5}, {5, 7}, {7, 6}, {6, 4}, // Front face
+											{0, 4}, {1, 5}, {2, 6}, {3, 7}  // Intersecting edges
+										};
+
+										for (const auto& edge : edges)
+										{
+											draw->AddLine(screen_vertices[edge.first], screen_vertices[edge.second], hit_col, 1.2f);
+										}
+
+										// Draw translucent filled face segments to highlight the volume
+										ImU32 fill_col = (hit_col & 0x00FFFFFF) | 0x0C000000;
+										draw->AddQuadFilled(screen_vertices[0], screen_vertices[1], screen_vertices[3], screen_vertices[2], fill_col); // Back
+										draw->AddQuadFilled(screen_vertices[4], screen_vertices[5], screen_vertices[7], screen_vertices[6], fill_col); // Front
+										draw->AddQuadFilled(screen_vertices[0], screen_vertices[1], screen_vertices[5], screen_vertices[4], fill_col); // Bottom
+										draw->AddQuadFilled(screen_vertices[2], screen_vertices[3], screen_vertices[7], screen_vertices[6], fill_col); // Top
+										draw->AddQuadFilled(screen_vertices[0], screen_vertices[2], screen_vertices[6], screen_vertices[4], fill_col); // Left
+										draw->AddQuadFilled(screen_vertices[1], screen_vertices[3], screen_vertices[7], screen_vertices[5], fill_col); // Right
+									}
+								}
+							}
+						}
+					}
+				}
+				else
+				{
+					float width = right - left;
+					float height = bottom - top;
+					float delta_w = (width * scale - width) * 0.5f;
+					float delta_h = (height * scale - height) * 0.5f;
+					float hl = left - delta_w;
+					float hr = right + delta_w;
+					float ht = top - delta_h;
+					float hb = bottom + delta_h;
+
+					draw->AddRect(ImVec2(hl, ht), ImVec2(hr, hb), hit_col, 4.0f, 0, 1.0f);
+					draw->AddRectFilled(ImVec2(hl, ht), ImVec2(hr, hb), (hit_col & 0x00FFFFFF) | 0x1A000000, 4.0f);
+				}
 			}
 		}
 
