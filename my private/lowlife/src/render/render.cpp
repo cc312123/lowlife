@@ -1437,7 +1437,7 @@ bool render_t::create_imgui()
 
     
     style.Colors[ImGuiCol_WindowBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
-    style.Colors[ImGuiCol_ChildBg] = ImVec4(0.12f, 0.12f, 0.15f, 1.00f);
+    style.Colors[ImGuiCol_ChildBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
     style.Colors[ImGuiCol_PopupBg] = ImVec4(0.08f, 0.08f, 0.10f, 0.98f);
     style.Colors[ImGuiCol_Border] = ImVec4(0.20f, 0.20f, 0.25f, 0.35f);
     style.Colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
@@ -2297,7 +2297,7 @@ void render_t::render_menu()
     // Background
     draw_list->AddRectFilled(ImVec2(window_pos.x + 4.f, window_pos.y + 4.f), ImVec2(window_pos.x + 220.f, window_pos.y + window_size.y - 4.f), IM_COL32(11, 11, 15, 255), 8.0f, ImDrawFlags_RoundCornersLeft);
     // Vertical separator
-    draw_list->AddLine(ImVec2(window_pos.x + 220.f, window_pos.y + 4.f), ImVec2(window_pos.x + 220.f, window_pos.y + window_size.y - 4.f), IM_COL32(40, 40, 48, 180), 1.0f);
+    draw_list->AddLine(ImVec2(window_pos.x + 220.f, window_pos.y + 4.f), ImVec2(window_pos.x + 220.f, window_pos.y + window_size.y - 4.f), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 90), 1.0f);
 
     // Dynamic Sliding Tab Selector Pill
     static float sliding_tab_y = 0.0f;
@@ -2337,7 +2337,7 @@ void render_t::render_menu()
     draw_list->AddText(ImVec2(window_pos.x + 30.f, window_pos.y + 48.f), IM_COL32(110, 110, 125, 255), sub);
 
     // Horizontal logo divider
-    draw_list->AddLine(ImVec2(window_pos.x + 15.f, window_pos.y + 70.f), ImVec2(window_pos.x + 205.f, window_pos.y + 70.f), IM_COL32(40, 40, 48, 120), 1.0f);
+    draw_list->AddLine(ImVec2(window_pos.x + 15.f, window_pos.y + 70.f), ImVec2(window_pos.x + 205.f, window_pos.y + 70.f), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 60), 1.0f);
 
     // Expiry Info card at the bottom of the sidebar
     if (menu::authenticated && keyauth) {
@@ -2347,7 +2347,7 @@ void render_t::render_menu()
         ImVec2 card_max = ImVec2(window_pos.x + 206.f, card_y + 64.f);
 
         draw_list->AddRectFilled(card_min, card_max, IM_COL32(16, 16, 22, 255), 6.f);
-        draw_list->AddRect(card_min, card_max, IM_COL32(40, 40, 48, 255), 6.f, 0, 1.0f);
+        draw_list->AddRect(card_min, card_max, IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 120), 6.f, 0, 1.0f);
 
         draw_list->AddText(ImVec2(card_min.x + 12.f, card_min.y + 10.f), IM_COL32(140, 140, 150, 255), "License Key Status");
         draw_list->AddText(ImVec2(card_min.x + 12.f, card_min.y + 28.f), ImGui::ColorConvertFloat4ToU32(menu::accent_color), dur_str.c_str());
@@ -2368,7 +2368,7 @@ void render_t::render_menu()
 
     // DRAW CONTENT PANE BACKGROUND ON THE RIGHT
     draw_list->AddRectFilled(ImVec2(window_pos.x + 226.f, window_pos.y + 71.f), ImVec2(window_pos.x + window_size.x - 14.f, window_pos.y + window_size.y - 14.f), IM_COL32(18, 18, 22, 130), 6.0f);
-    draw_list->AddRect(ImVec2(window_pos.x + 226.f, window_pos.y + 71.f), ImVec2(window_pos.x + window_size.x - 14.f, window_pos.y + window_size.y - 14.f), IM_COL32(35, 35, 42, 180), 6.0f);
+    draw_list->AddRect(ImVec2(window_pos.x + 226.f, window_pos.y + 71.f), ImVec2(window_pos.x + window_size.x - 14.f, window_pos.y + window_size.y - 14.f), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 115), 6.0f);
 
     // DRAW TOP HEADER ON THE RIGHT
     const char* active_tab_name = "AIMBOT";
@@ -2650,7 +2650,7 @@ void render_t::render_menu()
         
         
         preview_draw->AddRectFilled(preview_start, ImVec2(preview_start.x + preview_size.x, preview_start.y + preview_size.y), IM_COL32(14, 14, 18, 255), 4.0f);
-        preview_draw->AddRect(preview_start, ImVec2(preview_start.x + preview_size.x, preview_start.y + preview_size.y), IM_COL32(40, 40, 48, 255), 4.0f);
+        preview_draw->AddRect(preview_start, ImVec2(preview_start.x + preview_size.x, preview_start.y + preview_size.y), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 115), 4.0f);
 
         
         ImVec2 char_center = ImVec2(preview_start.x + preview_size.x * 0.5f, preview_start.y + preview_size.y * 0.5f + 10.0f);
@@ -2793,7 +2793,7 @@ void render_t::render_menu()
             
             // Draw background grid
             radar_draw->AddRectFilled(radar_start, ImVec2(radar_start.x + radar_size.x, radar_start.y + radar_size.y), IM_COL32(10, 10, 14, 255), 4.0f);
-            radar_draw->AddRect(radar_start, ImVec2(radar_start.x + radar_size.x, radar_start.y + radar_size.y), IM_COL32(40, 40, 48, 255), 4.0f);
+            radar_draw->AddRect(radar_start, ImVec2(radar_start.x + radar_size.x, radar_start.y + radar_size.y), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 115), 4.0f);
             
             ImVec2 radar_center = ImVec2(radar_start.x + radar_size.x * 0.5f, radar_start.y + radar_size.y * 0.5f);
             
