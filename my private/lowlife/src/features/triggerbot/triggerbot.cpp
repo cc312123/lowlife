@@ -23,6 +23,12 @@
 #include "triggerbot.h"
 
 namespace {
+	std::uint64_t cached_lua_state = 0;
+	std::uint64_t cached_global_state = 0;
+	std::uint64_t cached_rngstate_offset = 0;
+	std::uint64_t last_dm_address = 0;
+	bool is_resolving = false;
+
 	bool is_player_knocked(const cache::entity_t& player) {
 		if (player.is_knocked) return true;
 		
@@ -1011,17 +1017,45 @@ namespace botter
 		POINT cursor_pt = {};
 		static std::chrono::steady_clock::time_point last_bot_click = std::chrono::steady_clock::now();
 
-		static std::uint64_t cached_lua_state = 0;
-		static std::uint64_t cached_global_state = 0;
-		static std::uint64_t cached_rngstate_offset = 0;
-		static std::uint64_t last_dm_address = 0;
-
 		while (true)
 		{
 			Sleep(2); 
 
 			bool autoclicker_active = settings::botter::autoclicker_enabled;
 			bool no_spread_active = settings::botter::db_spread_raycast;
+
+			// Resolve DataModel transitions
+			if (game::datamodel.address != last_dm_address)
+			{
+				cached_lua_state = 0;
+				cached_global_state = 0;
+				cached_rngstate_offset = 0;
+				is_resolving = false;
+				last_dm_address = game::datamodel.address;
+			}
+
+			// Asynchronously resolve Luau RNG offset if not cached
+			if (no_spread_active && cached_rngstate_offset == 0 && game::datamodel.address != 0 && !is_resolving)
+			{
+				is_resolving = true;
+				std::thread([]() {
+					std::uint64_t L = luau::find_lua_state();
+					if (L != 0)
+					{
+						std::uint64_t g = 0;
+						std::uint64_t offset = luau::find_rngstate_offset(L, g);
+						if (offset != 0)
+						{
+							cached_lua_state = L;
+							cached_global_state = g;
+							cached_rngstate_offset = offset;
+							printf("[ LOWLIFE ]: Asynchronously resolved global_State to 0x%llx, rngstate offset to 0x%llx\n", g, offset);
+						}
+					}
+					is_resolving = false;
+				}).detach();
+			}
+
 
 			if ((!autoclicker_active && !no_spread_active) || check::textchatopen || !game::workspace.address)
 			{
@@ -1330,23 +1364,6 @@ namespace botter
 			// Apply No Spread if we are holding a tool and actively aiming at any target player's hitbox
 			if (no_spread_active && holding_tool && any_player_intersected)
 			{
-				if (game::datamodel.address != last_dm_address)
-				{
-					cached_lua_state = 0;
-					cached_global_state = 0;
-					cached_rngstate_offset = 0;
-					last_dm_address = game::datamodel.address;
-				}
-
-				if (cached_rngstate_offset == 0 && game::datamodel.address != 0)
-				{
-					cached_lua_state = luau::find_lua_state();
-					if (cached_lua_state != 0)
-					{
-						cached_rngstate_offset = luau::find_rngstate_offset(cached_lua_state, cached_global_state);
-					}
-				}
-
 				if (cached_global_state != 0 && cached_rngstate_offset != 0)
 				{
 					memory->write<std::uint64_t>(cached_global_state + cached_rngstate_offset, 0);
