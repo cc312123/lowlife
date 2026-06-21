@@ -1418,13 +1418,13 @@ bool render_t::create_imgui()
     ImGui::StyleColorsDark();
     
     
-    style.WindowRounding = 8.0f;
-    style.ChildRounding = 6.0f;
-    style.FrameRounding = 4.0f;
-    style.PopupRounding = 6.0f;
+    style.WindowRounding = 12.0f;
+    style.ChildRounding = 8.0f;
+    style.FrameRounding = 6.0f;
+    style.PopupRounding = 8.0f;
     style.ScrollbarRounding = 4.0f;
     style.GrabRounding = 4.0f;
-    style.TabRounding = 4.0f;
+    style.TabRounding = 6.0f;
 
     style.WindowBorderSize = 1.0f;
     style.ChildBorderSize = 1.0f;
@@ -1915,6 +1915,8 @@ void render_t::render_menu()
     style.Colors[ImGuiCol_ButtonHovered] = ImVec4(accent.x * 0.5f, accent.y * 0.5f, accent.z * 0.5f, 0.600f);
     style.Colors[ImGuiCol_Header] = ImVec4(accent.x * 0.3f, accent.y * 0.3f, accent.z * 0.3f, 0.40f);
     style.Colors[ImGuiCol_HeaderHovered] = ImVec4(accent.x * 0.4f, accent.y * 0.4f, accent.z * 0.4f, 0.60f);
+    style.Colors[ImGuiCol_Border] = ImVec4(accent.x * 0.75f, accent.y * 0.75f, accent.z * 0.75f, 0.45f);
+    style.Colors[ImGuiCol_Separator] = ImVec4(accent.x * 0.60f, accent.y * 0.60f, accent.z * 0.60f, 0.35f);
 
     
     static float intro_time = 0.0f;
