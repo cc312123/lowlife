@@ -2974,6 +2974,20 @@ void render_t::render_menu()
         ImGui::Checkbox("Raycast Hitbox Expander", &settings::botter::raycast_hitbox);
         ImGui::Spacing();
 
+        if (settings::botter::raycast_hitbox)
+        {
+            ImGui::Checkbox("DB Spread Raycast", &settings::botter::db_spread_raycast);
+            ImGui::Spacing();
+            
+            if (settings::botter::db_spread_raycast)
+            {
+                SliderFloatWithInput("DB Spread Angle", &settings::botter::db_spread_angle, 0.01f, 0.50f, "%.3f");
+                ImGui::Spacing();
+                SliderIntWithInput("Min Pellets to Trigger", &settings::botter::db_min_pellets, 1, 5);
+                ImGui::Spacing();
+            }
+        }
+
         SliderFloatWithInput("Hitbox Size", &settings::botter::hitbox_size, 10.f, 3000.f, "%.0f");
         ImGui::Spacing();
 

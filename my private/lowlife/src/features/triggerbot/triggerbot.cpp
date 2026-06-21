@@ -1109,43 +1109,119 @@ namespace botter
 										"Left Leg", "LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
 										"Right Leg", "RightUpperLeg", "RightLowerLeg", "RightFoot"
 									};
+									
+									std::vector<math::vector3> test_rays;
+									if (settings::botter::db_spread_raycast)
+									{
+										math::vector3 right = {};
+										if (std::abs(cursor_ray_dir.x) > 0.9f)
+											right = { 0.0f, 1.0f, 0.0f };
+										else
+											right = { 1.0f, 0.0f, 0.0f };
+
+										math::vector3 temp_right = {
+											cursor_ray_dir.y * right.z - cursor_ray_dir.z * right.y,
+											cursor_ray_dir.z * right.x - cursor_ray_dir.x * right.z,
+											cursor_ray_dir.x * right.y - cursor_ray_dir.y * right.x
+										};
+
+										float len_r = std::sqrt(temp_right.x * temp_right.x + temp_right.y * temp_right.y + temp_right.z * temp_right.z);
+										if (len_r > 0.001f) {
+											temp_right = { temp_right.x / len_r, temp_right.y / len_r, temp_right.z / len_r };
+										}
+
+										math::vector3 temp_up = {
+											cursor_ray_dir.y * temp_right.z - cursor_ray_dir.z * temp_right.y,
+											cursor_ray_dir.z * temp_right.x - cursor_ray_dir.x * temp_right.z,
+											cursor_ray_dir.x * temp_right.y - cursor_ray_dir.y * temp_right.x
+										};
+
+										float spread_angle = settings::botter::db_spread_angle;
+
+										test_rays.push_back(cursor_ray_dir);
+
+										math::vector3 r1 = cursor_ray_dir + temp_right * spread_angle;
+										math::vector3 r2 = cursor_ray_dir - temp_right * spread_angle;
+										math::vector3 r3 = cursor_ray_dir + temp_up * spread_angle;
+										math::vector3 r4 = cursor_ray_dir - temp_up * spread_angle;
+
+										auto normalize_ray = [](math::vector3& r) {
+											float len = std::sqrt(r.x * r.x + r.y * r.y + r.z * r.z);
+											if (len > 0.001f) {
+												r = { r.x / len, r.y / len, r.z / len };
+											}
+										};
+										normalize_ray(r1);
+										normalize_ray(r2);
+										normalize_ray(r3);
+										normalize_ray(r4);
+
+										test_rays.push_back(r1);
+										test_rays.push_back(r2);
+										test_rays.push_back(r3);
+										test_rays.push_back(r4);
+									}
+									else
+									{
+										test_rays.push_back(cursor_ray_dir);
+									}
+
+									int hit_rays_count = 0;
 									float scale = settings::botter::hitbox_size / 100.0f;
 
-									for (const auto& part_name : parts_to_check)
+									for (const auto& ray_dir : test_rays)
 									{
-										auto part_it = player.parts.find(part_name);
-										if (part_it != player.parts.end())
+										bool ray_hit = false;
+										for (const auto& part_name : parts_to_check)
 										{
-											rbx::part_t p_part = part_it->second;
-											if (p_part.address)
+											auto part_it = player.parts.find(part_name);
+											if (part_it != player.parts.end())
 											{
-												rbx::primitive_t p_prim = p_part.get_primitive();
-												if (p_prim.address)
+												rbx::part_t p_part = part_it->second;
+												if (p_part.address)
 												{
-													math::vector3 pos = p_prim.get_position();
-													math::vector3 size = p_prim.get_size();
-													if (part_name == "HumanoidRootPart")
+													rbx::primitive_t p_prim = p_part.get_primitive();
+													if (p_prim.address)
 													{
-														size = { 4.0f, 6.0f, 2.0f };
-													}
-													math::matrix3 rot = p_prim.get_rotation();
+														math::vector3 pos = p_prim.get_position();
+														math::vector3 size = p_prim.get_size();
+														if (part_name == "HumanoidRootPart")
+														{
+															size = { 4.0f, 6.0f, 2.0f };
+														}
+														math::matrix3 rot = p_prim.get_rotation();
 
-													cached_part_t box;
-													box.position = pos;
-													box.rotation = rot;
-													box.size = size * scale;
-													box.type = 0;
+														cached_part_t box;
+														box.position = pos;
+														box.rotation = rot;
+														box.size = size * scale;
+														box.type = 0;
 
-													float dist = 0.0f;
-													if (ray_intersects_obb(camera_pos, cursor_ray_dir, 2000.0f, box, dist))
-													{
-														intersected = true;
-														break;
+														float dist = 0.0f;
+														if (ray_intersects_obb(camera_pos, ray_dir, 2000.0f, box, dist))
+														{
+															ray_hit = true;
+															break;
+														}
 													}
 												}
 											}
 										}
+										if (ray_hit)
+										{
+											hit_rays_count++;
+										}
 									}
+
+									if (settings::botter::db_spread_raycast)
+									{
+										intersected = (hit_rays_count >= settings::botter::db_min_pellets);
+									}
+									else
+									{
+										intersected = (hit_rays_count > 0);
+									}
+
 									hit = intersected;
 								}
 							}

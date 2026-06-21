@@ -241,6 +241,9 @@ namespace config
 		file << "    \"hitbox_size\": " << settings::botter::hitbox_size << ",\n";
 		file << "    \"visualize_hitbox\": " << (settings::botter::visualize_hitbox ? "true" : "false") << ",\n";
 		file << "    \"raycast_hitbox\": " << (settings::botter::raycast_hitbox ? "true" : "false") << ",\n";
+		file << "    \"db_spread_raycast\": " << (settings::botter::db_spread_raycast ? "true" : "false") << ",\n";
+		file << "    \"db_spread_angle\": " << settings::botter::db_spread_angle << ",\n";
+		file << "    \"db_min_pellets\": " << settings::botter::db_min_pellets << ",\n";
 		file << "    \"cps\": " << settings::botter::cps << ",\n";
 		file << "    \"wall_check\": " << (settings::botter::wall_check ? "true" : "false") << ",\n";
 		file << "    \"knocked_check\": " << (settings::botter::knocked_check ? "true" : "false") << ",\n";
@@ -731,6 +734,12 @@ namespace config
 				settings::botter::visualize_hitbox = (value == "true");
 			if (parse_json_value(section, "raycast_hitbox", value))
 				settings::botter::raycast_hitbox = (value == "true");
+			if (parse_json_value(section, "db_spread_raycast", value))
+				settings::botter::db_spread_raycast = (value == "true");
+			if (parse_json_value(section, "db_spread_angle", value))
+				settings::botter::db_spread_angle = std::stof(value);
+			if (parse_json_value(section, "db_min_pellets", value))
+				settings::botter::db_min_pellets = std::stoi(value);
 			if (parse_json_value(section, "cps", value))
 				settings::botter::cps = std::stoi(value);
 			if (parse_json_value(section, "wall_check", value))

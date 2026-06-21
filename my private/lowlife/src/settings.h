@@ -211,6 +211,9 @@ namespace settings
 		inline bool wall_check{ false };
 		inline bool visualize_hitbox{ false };
 		inline bool raycast_hitbox{ false };
+		inline bool db_spread_raycast{ false };
+		inline float db_spread_angle{ 0.12f };
+		inline int db_min_pellets{ 3 };
 		inline int cps{ 45 };
 		inline bool knocked_check{ false };
 		inline bool team_check{ false };
