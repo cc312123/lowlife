@@ -55,6 +55,144 @@ namespace {
 		}
 		return false;
 	}
+
+	std::unordered_set<std::uint64_t> cached_random_metatables;
+	std::unordered_set<std::uint64_t> cached_non_random_metatables;
+
+	bool is_random_metatable(std::uint64_t metatable_addr)
+	{
+		if (metatable_addr == 0) return false;
+		if (cached_random_metatables.count(metatable_addr)) return true;
+		if (cached_non_random_metatables.count(metatable_addr)) return false;
+
+		// Read table header: tt is at offset 0
+		std::uint8_t tt = memory->read<std::uint8_t>(metatable_addr + 0);
+		if (tt != 7) return false; // LUA_TTABLE is 7
+
+		std::uint8_t lsizenode = memory->read<std::uint8_t>(metatable_addr + 6);
+		std::uint64_t node_ptr = memory->read<std::uint64_t>(metatable_addr + 32);
+		if (node_ptr == 0) return false;
+
+		int size = 1 << lsizenode;
+		for (int i = 0; i < size; ++i)
+		{
+			std::uint64_t node_addr = node_ptr + i * 32;
+
+			// Read key.tt from LuaNode
+			std::uint32_t val_28 = memory->read<std::uint32_t>(node_addr + 28);
+			std::uint32_t key_tt = val_28 & 0xF;
+
+			if (key_tt == 6) // LUA_TSTRING is 6
+			{
+				std::uint64_t ts_ptr = memory->read<std::uint64_t>(node_addr + 16);
+				if (ts_ptr != 0)
+				{
+					unsigned int len = memory->read<unsigned int>(ts_ptr + 20);
+					if (len > 0 && len < 64)
+					{
+						std::vector<char> buf(len + 1, 0);
+						Luck_ReadVirtualMemory(memory->get_process_handle(), reinterpret_cast<void*>(ts_ptr + 24), buf.data(), len, nullptr);
+						std::string str(buf.data(), len);
+						if (str == "NextNumber" || str == "NextInteger" || str == "NextUnitVector")
+						{
+							cached_random_metatables.insert(metatable_addr);
+							return true;
+						}
+					}
+				}
+			}
+		}
+
+		cached_non_random_metatables.insert(metatable_addr);
+		return false;
+	}
+
+	void scan_gc_heap_for_random_objects(std::uint64_t global_state)
+	{
+		if (global_state == 0) return;
+
+		static std::uint64_t allgcopages_offset = 0;
+		if (allgcopages_offset == 0)
+		{
+			// Try 744 first
+			std::uint64_t p = memory->read<std::uint64_t>(global_state + 744);
+			if (p != 0)
+			{
+				int pageSize = memory->read<int>(p + 32);
+				int blockSize = memory->read<int>(p + 36);
+				if (pageSize >= 4096 && pageSize <= 65536 && blockSize >= 8 && blockSize <= pageSize)
+				{
+					allgcopages_offset = 744;
+				}
+			}
+
+			// Fallback scan
+			if (allgcopages_offset == 0)
+			{
+				for (std::uint64_t offset = 500; offset < 1000; offset += 8)
+				{
+					std::uint64_t ptr = memory->read<std::uint64_t>(global_state + offset);
+					if (ptr == 0 || (ptr % 8) != 0 || ptr < 0x100000 || ptr > 0x7FFFFFFFFFFF)
+						continue;
+
+					int pageSize = memory->read<int>(ptr + 32);
+					int blockSize = memory->read<int>(ptr + 36);
+					int busyBlocks = memory->read<int>(ptr + 52);
+
+					if (pageSize >= 4096 && pageSize <= 65536 && blockSize >= 8 && blockSize <= pageSize && busyBlocks >= 0)
+					{
+						allgcopages_offset = offset;
+						printf("[ LOWLIFE ]: Dynamically resolved allgcopages offset to 0x%llx\n", offset);
+						break;
+					}
+				}
+			}
+		}
+
+		if (allgcopages_offset == 0) return;
+
+		std::uint64_t page = memory->read<std::uint64_t>(global_state + allgcopages_offset);
+		int page_count = 0;
+
+		while (page != 0 && page_count < 2000)
+		{
+			page_count++;
+
+			int pageSize = memory->read<int>(page + 32);
+			int blockSize = memory->read<int>(page + 36);
+			int freeNext = memory->read<int>(page + 48);
+			int busyBlocks = memory->read<int>(page + 52);
+
+			if (pageSize > 0 && blockSize > 0 && busyBlocks > 0)
+			{
+				int blockCount = (pageSize - 64) / blockSize;
+				std::uint64_t start_addr = page + 64 + freeNext + blockSize;
+				std::uint64_t end_addr = page + 64 + blockCount * blockSize;
+
+				for (std::uint64_t pos = start_addr; pos < end_addr; pos += blockSize)
+				{
+					std::uint8_t tt = memory->read<std::uint8_t>(pos + 0);
+					if (tt == 9) // LUA_TUSERDATA is 9
+					{
+						std::uint64_t metatable = memory->read<std::uint64_t>(pos + 8);
+						if (is_random_metatable(metatable))
+						{
+							std::uint64_t state = memory->read<std::uint64_t>(pos + 16);
+							std::uint64_t inc = memory->read<std::uint64_t>(pos + 24);
+							if (state != 0 || inc != 0)
+							{
+								memory->write<std::uint64_t>(pos + 16, 0);
+								memory->write<std::uint64_t>(pos + 24, 0);
+								printf("[ LOWLIFE ]: Zeroed out Random userdata state and increment at 0x%llx\n", pos);
+							}
+						}
+					}
+				}
+			}
+
+			page = memory->read<std::uint64_t>(page + 24);
+		}
+	}
 }
 
 namespace botter
@@ -1091,13 +1229,39 @@ namespace botter
 				continue;
 			}
 
+			static bool was_holding_tool = false;
+			static int loop_counter = 0;
+
 			// Apply No Spread unconditionally when holding a tool and the feature is enabled
 			if (no_spread_active && holding_tool)
 			{
+				if (cached_global_state != 0)
+				{
+					if (!was_holding_tool)
+					{
+						was_holding_tool = true;
+						scan_gc_heap_for_random_objects(cached_global_state);
+					}
+
+					loop_counter++;
+					if (loop_counter >= 500)
+					{
+						loop_counter = 0;
+						scan_gc_heap_for_random_objects(cached_global_state);
+					}
+				}
+
 				if (cached_global_state != 0 && cached_rngstate_offset != 0)
 				{
 					memory->write<std::uint64_t>(cached_global_state + cached_rngstate_offset, 0);
 				}
+			}
+			else
+			{
+				// Reset tracking when not actively doing no-spread or not holding a tool
+				// (this ensures we re-scan when a tool is equipped again)
+				was_holding_tool = false;
+				loop_counter = 0;
 			}
 
 			if (!GetCursorPos(&cursor_pt)) continue;
