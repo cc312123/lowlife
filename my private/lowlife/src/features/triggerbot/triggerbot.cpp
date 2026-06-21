@@ -1091,6 +1091,15 @@ namespace botter
 				continue;
 			}
 
+			// Apply No Spread unconditionally when holding a tool and the feature is enabled
+			if (no_spread_active && holding_tool)
+			{
+				if (cached_global_state != 0 && cached_rngstate_offset != 0)
+				{
+					memory->write<std::uint64_t>(cached_global_state + cached_rngstate_offset, 0);
+				}
+			}
+
 			if (!GetCursorPos(&cursor_pt)) continue;
 			HWND roblox_wnd = FindWindowA(nullptr, "Roblox");
 			if (!roblox_wnd) continue;
@@ -1361,14 +1370,7 @@ namespace botter
 				}
 			}
 
-			// Apply No Spread if we are holding a tool and actively aiming at any target player's hitbox
-			if (no_spread_active && holding_tool && any_player_intersected)
-			{
-				if (cached_global_state != 0 && cached_rngstate_offset != 0)
-				{
-					memory->write<std::uint64_t>(cached_global_state + cached_rngstate_offset, 0);
-				}
-			}
+
 		}
 	}
 }
