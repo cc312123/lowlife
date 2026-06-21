@@ -1027,6 +1027,7 @@ namespace botter
 			if (!GetCursorPos(&cursor_pt)) continue;
 			HWND roblox_wnd = FindWindowA(nullptr, "Roblox");
 			if (!roblox_wnd) continue;
+			ScreenToClient(roblox_wnd, &cursor_pt);
 
 			math::vector3 camera_pos = {};
 			rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
@@ -1050,9 +1051,7 @@ namespace botter
 			bool ray_valid = false;
 			if (settings::botter::raycast_hitbox)
 			{
-				POINT client_cursor = cursor_pt;
-				ScreenToClient(roblox_wnd, &client_cursor);
-				cursor_ray_dir = get_ray_direction({ (float)client_cursor.x, (float)client_cursor.y }, dims, view);
+				cursor_ray_dir = get_ray_direction({ (float)cursor_pt.x, (float)cursor_pt.y }, dims, view);
 				float ray_len_sq = cursor_ray_dir.x * cursor_ray_dir.x + cursor_ray_dir.y * cursor_ray_dir.y + cursor_ray_dir.z * cursor_ray_dir.z;
 				if (ray_len_sq > 0.1f)
 				{
@@ -1188,6 +1187,26 @@ namespace botter
 
 								if (valid && left < right && top < bottom)
 								{
+									// Standardized client-rect bounding offset check
+									HWND roblox_window = game::wnd;
+									if (!roblox_window) roblox_window = FindWindowA(nullptr, "Roblox");
+									RECT client_rect{};
+									POINT client_pos{};
+									float offset_x = 0.f;
+									float offset_y = 0.f;
+									if (roblox_window && GetClientRect(roblox_window, &client_rect))
+									{
+										client_pos.x = client_rect.left;
+										client_pos.y = client_rect.top;
+										ClientToScreen(roblox_window, &client_pos);
+										offset_x = (float)client_pos.x;
+										offset_y = (float)client_pos.y;
+									}
+
+									// adjust for roblox screen bounds matching the projection translation
+									float client_cursor_x = (float)cursor_pt.x + offset_x;
+									float client_cursor_y = (float)cursor_pt.y + offset_y;
+
 									float scale = settings::botter::hitbox_size / 100.0f;
 									float width = right - left;
 									float height = bottom - top;
@@ -1198,8 +1217,8 @@ namespace botter
 									float target_top = top - delta_h;
 									float target_bottom = bottom + delta_h;
 
-									if (cursor_pt.x >= target_left && cursor_pt.x <= target_right &&
-										cursor_pt.y >= target_top && cursor_pt.y <= target_bottom)
+									if (client_cursor_x >= target_left && client_cursor_x <= target_right &&
+										client_cursor_y >= target_top && client_cursor_y <= target_bottom)
 									{
 										hit = true;
 									}
