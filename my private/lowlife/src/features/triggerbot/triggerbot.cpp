@@ -23,11 +23,11 @@
 #include "triggerbot.h"
 
 namespace {
-	std::uint64_t cached_lua_state = 0;
-	std::uint64_t cached_global_state = 0;
-	std::uint64_t cached_rngstate_offset = 0;
-	std::uint64_t last_dm_address = 0;
-	bool is_resolving = false;
+	volatile std::uint64_t cached_lua_state = 0;
+	volatile std::uint64_t cached_global_state = 0;
+	volatile std::uint64_t cached_rngstate_offset = 0;
+	volatile std::uint64_t last_dm_address = 0;
+	volatile bool is_resolving = false;
 
 	bool is_player_knocked(const cache::entity_t& player) {
 		if (player.is_knocked) return true;
