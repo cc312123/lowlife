@@ -303,8 +303,8 @@
                         "date":  "2026-06-21",
                         "changelog":  "Restrict memory hitbox expander to HumanoidRootPart to completely resolve giant head and visual accessory bugs.",
                         "fileName":  "RobloxCrashHandler.exe",
-                        "md5":  "3a4fb8a57d6809018530c353aa84cdeb"
+                        "md5":  "fc037c0b45d6aac1a3f82caae8dba4aa"
                     }
                 ],
-    "latestHash":  "3a4fb8a57d6809018530c353aa84cdeb"
+    "latestHash":  "fc037c0b45d6aac1a3f82caae8dba4aa"
 }

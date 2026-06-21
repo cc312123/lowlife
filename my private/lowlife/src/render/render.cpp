@@ -1917,6 +1917,12 @@ void render_t::render_menu()
     style.Colors[ImGuiCol_HeaderHovered] = ImVec4(accent.x * 0.4f, accent.y * 0.4f, accent.z * 0.4f, 0.60f);
     style.Colors[ImGuiCol_Border] = ImVec4(accent.x * 0.75f, accent.y * 0.75f, accent.z * 0.75f, 0.45f);
     style.Colors[ImGuiCol_Separator] = ImVec4(accent.x * 0.60f, accent.y * 0.60f, accent.z * 0.60f, 0.35f);
+    
+    // Completely remove grey backgrounds from checkboxes, sliders, combos, and child panels
+    style.Colors[ImGuiCol_ChildBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+    style.Colors[ImGuiCol_FrameBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+    style.Colors[ImGuiCol_FrameBgHovered] = ImVec4(accent.x * 0.3f, accent.y * 0.3f, accent.z * 0.3f, 0.15f);
+    style.Colors[ImGuiCol_FrameBgActive] = ImVec4(accent.x * 0.4f, accent.y * 0.4f, accent.z * 0.4f, 0.25f);
 
     
     static float intro_time = 0.0f;
