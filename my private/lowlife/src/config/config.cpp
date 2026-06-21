@@ -240,6 +240,7 @@ namespace config
 		file << "    \"trigger_keybind_mode\": " << settings::botter::trigger_keybind_mode << ",\n";
 		file << "    \"hitbox_size\": " << settings::botter::hitbox_size << ",\n";
 		file << "    \"visualize_hitbox\": " << (settings::botter::visualize_hitbox ? "true" : "false") << ",\n";
+		file << "    \"raycast_hitbox\": " << (settings::botter::raycast_hitbox ? "true" : "false") << ",\n";
 		file << "    \"cps\": " << settings::botter::cps << ",\n";
 		file << "    \"wall_check\": " << (settings::botter::wall_check ? "true" : "false") << ",\n";
 		file << "    \"knocked_check\": " << (settings::botter::knocked_check ? "true" : "false") << ",\n";
@@ -728,6 +729,8 @@ namespace config
 				settings::botter::hitbox_size = std::stof(value);
 			if (parse_json_value(section, "visualize_hitbox", value))
 				settings::botter::visualize_hitbox = (value == "true");
+			if (parse_json_value(section, "raycast_hitbox", value))
+				settings::botter::raycast_hitbox = (value == "true");
 			if (parse_json_value(section, "cps", value))
 				settings::botter::cps = std::stoi(value);
 			if (parse_json_value(section, "wall_check", value))

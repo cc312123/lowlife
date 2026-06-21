@@ -766,6 +766,172 @@ namespace botter
 			input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
 			SendInput(1, &input, sizeof(INPUT));
 		}
+
+		bool invert_matrix4(const math::matrix4& m, math::matrix4& invOut)
+		{
+			float inv[16], det;
+			int i;
+
+			inv[0] = m.m[1][1]  * m.m[2][2] * m.m[3][3] - 
+					 m.m[1][1]  * m.m[2][3] * m.m[3][2] - 
+					 m.m[2][1]  * m.m[1][2] * m.m[3][3] + 
+					 m.m[2][1]  * m.m[1][3] * m.m[3][2] +
+					 m.m[3][1] * m.m[1][2] * m.m[2][3] - 
+					 m.m[3][1] * m.m[1][3] * m.m[2][2];
+
+			inv[4] = -m.m[1][0]  * m.m[2][2] * m.m[3][3] + 
+					  m.m[1][0]  * m.m[2][3] * m.m[3][2] + 
+					  m.m[2][0]  * m.m[1][2] * m.m[3][3] - 
+					  m.m[2][0]  * m.m[1][3] * m.m[3][2] - 
+					  m.m[3][0] * m.m[1][2] * m.m[2][3] + 
+					  m.m[3][0] * m.m[1][3] * m.m[2][2];
+
+			inv[8] = m.m[1][0]  * m.m[2][1] * m.m[3][3] - 
+					 m.m[1][0]  * m.m[2][3] * m.m[3][1] - 
+					 m.m[2][0]  * m.m[1][1] * m.m[3][3] + 
+					 m.m[2][0]  * m.m[1][3] * m.m[3][1] + 
+					 m.m[3][0] * m.m[1][1] * m.m[2][3] - 
+					 m.m[3][0] * m.m[1][3] * m.m[2][1];
+
+			inv[12] = -m.m[1][0]  * m.m[2][1] * m.m[3][2] + 
+					   m.m[1][0]  * m.m[2][2] * m.m[3][1] + 
+					   m.m[2][0]  * m.m[1][1] * m.m[3][2] - 
+					   m.m[2][0]  * m.m[1][2] * m.m[3][1] - 
+					   m.m[3][0] * m.m[1][1] * m.m[2][2] + 
+					   m.m[3][0] * m.m[1][2] * m.m[2][1];
+
+			inv[1] = -m.m[0][1]  * m.m[2][2] * m.m[3][3] + 
+					  m.m[0][1]  * m.m[2][3] * m.m[3][2] + 
+					  m.m[2][1]  * m.m[0][2] * m.m[3][3] - 
+					  m.m[2][1]  * m.m[0][3] * m.m[3][2] - 
+					  m.m[3][1] * m.m[0][2] * m.m[2][3] + 
+					  m.m[3][1] * m.m[0][3] * m.m[2][2];
+
+			inv[5] = m.m[0][0]  * m.m[2][2] * m.m[3][3] - 
+					 m.m[0][0]  * m.m[2][3] * m.m[3][2] - 
+					 m.m[2][0]  * m.m[0][2] * m.m[3][3] + 
+					 m.m[2][0]  * m.m[0][3] * m.m[3][2] + 
+					 m.m[3][0] * m.m[0][2] * m.m[2][3] - 
+					 m.m[3][0] * m.m[0][3] * m.m[2][2];
+
+			inv[9] = -m.m[0][0]  * m.m[2][1] * m.m[3][3] + 
+					  m.m[0][0]  * m.m[2][3] * m.m[3][1] + 
+					  m.m[2][0]  * m.m[0][1] * m.m[3][3] - 
+					  m.m[2][0]  * m.m[0][3] * m.m[3][1] - 
+					  m.m[3][0] * m.m[0][1] * m.m[2][3] + 
+					  m.m[3][0] * m.m[0][3] * m.m[2][1];
+
+			inv[13] = m.m[0][0]  * m.m[2][1] * m.m[3][2] - 
+					  m.m[0][0]  * m.m[2][2] * m.m[3][1] - 
+					  m.m[2][0]  * m.m[0][1] * m.m[3][2] + 
+					  m.m[2][0]  * m.m[0][2] * m.m[3][1] + 
+					  m.m[3][0] * m.m[0][1] * m.m[2][2] - 
+					  m.m[3][0] * m.m[0][2] * m.m[2][1];
+
+			inv[2] = m.m[0][1]  * m.m[1][2] * m.m[3][3] - 
+					 m.m[0][1]  * m.m[1][3] * m.m[3][2] - 
+					 m.m[1][1]  * m.m[0][2] * m.m[3][3] + 
+					 m.m[1][1]  * m.m[0][3] * m.m[3][2] + 
+					 m.m[3][1] * m.m[0][2] * m.m[1][3] - 
+					 m.m[3][1] * m.m[0][3] * m.m[1][2];
+
+			inv[6] = -m.m[0][0]  * m.m[1][2] * m.m[3][3] + 
+					  m.m[0][0]  * m.m[1][3] * m.m[3][2] + 
+					  m.m[1][0]  * m.m[0][2] * m.m[3][3] - 
+					  m.m[1][0]  * m.m[0][3] * m.m[3][2] - 
+					  m.m[3][0] * m.m[0][2] * m.m[1][3] + 
+					  m.m[3][0] * m.m[0][3] * m.m[1][2];
+
+			inv[10] = m.m[0][0]  * m.m[1][1] * m.m[3][3] - 
+					  m.m[0][0]  * m.m[1][3] * m.m[3][1] - 
+					  m.m[1][0]  * m.m[0][1] * m.m[3][3] + 
+					  m.m[1][0]  * m.m[0][3] * m.m[3][1] + 
+					  m.m[3][0] * m.m[0][1] * m.m[1][3] - 
+					  m.m[3][0] * m.m[0][3] * m.m[1][1];
+
+			inv[14] = -m.m[0][0]  * m.m[1][1] * m.m[3][2] + 
+					   m.m[0][0]  * m.m[1][2] * m.m[3][1] + 
+					   m.m[1][0]  * m.m[0][1] * m.m[3][2] - 
+					   m.m[1][0]  * m.m[0][2] * m.m[3][1] - 
+					   m.m[3][0] * m.m[0][1] * m.m[1][2] + 
+					   m.m[3][0] * m.m[0][2] * m.m[1][1];
+
+			inv[3] = -m.m[0][1] * m.m[1][2] * m.m[2][3] + 
+					  m.m[0][1] * m.m[1][3] * m.m[2][2] + 
+					  m.m[1][1] * m.m[0][2] * m.m[2][3] - 
+					  m.m[1][1] * m.m[0][3] * m.m[2][2] - 
+					  m.m[2][1] * m.m[0][2] * m.m[1][3] + 
+					  m.m[2][1] * m.m[0][3] * m.m[1][2];
+
+			inv[7] = m.m[0][0] * m.m[1][2] * m.m[2][3] - 
+					 m.m[0][0] * m.m[1][3] * m.m[2][2] - 
+					 m.m[1][0] * m.m[0][2] * m.m[2][3] + 
+					 m.m[1][0] * m.m[0][3] * m.m[2][2] + 
+					 m.m[2][0] * m.m[0][2] * m.m[1][3] - 
+					 m.m[2][0] * m.m[0][3] * m.m[1][2];
+
+			inv[11] = -m.m[0][0] * m.m[1][1] * m.m[2][3] + 
+					   m.m[0][0] * m.m[1][3] * m.m[2][1] + 
+					   m.m[1][0] * m.m[0][1] * m.m[2][3] - 
+					   m.m[1][0] * m.m[0][3] * m.m[2][1] - 
+					   m.m[2][0] * m.m[0][1] * m.m[1][3] + 
+					   m.m[2][0] * m.m[0][3] * m.m[1][1];
+
+			inv[15] = m.m[0][0] * m.m[1][1] * m.m[2][2] - 
+					  m.m[0][0] * m.m[1][2] * m.m[2][1] - 
+					  m.m[1][0] * m.m[0][1] * m.m[2][2] + 
+					  m.m[1][0] * m.m[0][2] * m.m[2][1] + 
+					  m.m[2][0] * m.m[0][1] * m.m[1][2] - 
+					  m.m[2][0] * m.m[0][2] * m.m[1][1];
+
+			det = m.m[0][0] * inv[0] + m.m[0][1] * inv[4] + m.m[0][2] * inv[8] + m.m[0][3] * inv[12];
+
+			if (std::abs(det) < 1e-6f)
+				return false;
+
+			det = 1.0f / det;
+
+			for (i = 0; i < 4; i++) {
+				invOut.m[i][0] = inv[i*4 + 0] * det;
+				invOut.m[i][1] = inv[i*4 + 1] * det;
+				invOut.m[i][2] = inv[i*4 + 2] * det;
+				invOut.m[i][3] = inv[i*4 + 3] * det;
+			}
+
+			return true;
+		}
+
+		math::vector3 get_ray_direction(math::vector2 screen_pos, math::vector2 dimensions, const math::matrix4& viewmatrix)
+		{
+			math::matrix4 inv_view;
+			if (!invert_matrix4(viewmatrix, inv_view))
+				return { 0.f, 0.f, 0.f };
+
+			float ndcX = (2.0f * screen_pos.x / dimensions.x) - 1.0f;
+			float ndcY = 1.0f - (2.0f * screen_pos.y / dimensions.y);
+
+			math::vector4 p1_clip = { ndcX, ndcY, 0.0f, 1.0f };
+			math::vector4 p2_clip = { ndcX, ndcY, 1.0f, 1.0f };
+
+			math::vector4 p1_world = inv_view.multiply(p1_clip);
+			math::vector4 p2_world = inv_view.multiply(p2_clip);
+
+			if (std::abs(p1_world.w) < 1e-6f || std::abs(p2_world.w) < 1e-6f)
+				return { 0.f, 0.f, 0.f };
+
+			math::vector3 w1 = { p1_world.x / p1_world.w, p1_world.y / p1_world.w, p1_world.z / p1_world.w };
+			math::vector3 w2 = { p2_world.x / p2_world.w, p2_world.y / p2_world.w, p2_world.z / p2_world.w };
+
+			math::vector3 dir = w2 - w1;
+			float len = std::sqrt(dir.x * dir.x + dir.y * dir.y + dir.z * dir.z);
+			if (len > 1e-5f)
+			{
+				dir.x /= len;
+				dir.y /= len;
+				dir.z /= len;
+			}
+			return dir;
+		}
 	}
 
 	bool is_occluded(const math::vector3& start, const math::vector3& end)
@@ -879,6 +1045,21 @@ namespace botter
 			math::vector2 dims = game::visengine.get_dimensions();
 			math::matrix4 view = game::visengine.get_viewmatrix();
 
+			// Precalculate ray direction if raycast hitbox check is enabled
+			math::vector3 cursor_ray_dir = {};
+			bool ray_valid = false;
+			if (settings::botter::raycast_hitbox)
+			{
+				POINT client_cursor = cursor_pt;
+				ScreenToClient(roblox_wnd, &client_cursor);
+				cursor_ray_dir = get_ray_direction({ (float)client_cursor.x, (float)client_cursor.y }, dims, view);
+				float ray_len_sq = cursor_ray_dir.x * cursor_ray_dir.x + cursor_ray_dir.y * cursor_ray_dir.y + cursor_ray_dir.z * cursor_ray_dir.z;
+				if (ray_len_sq > 0.1f)
+				{
+					ray_valid = true;
+				}
+			}
+
 			bool clicked_this_tick = false;
 
 			if (!players_snapshot) continue;
@@ -905,7 +1086,7 @@ namespace botter
 					continue;
 				}
 
-				// -- TARGET HRP PROJECTION BOX CHECK --
+				// -- TARGET HITBOX CHECK --
 				clicked_this_tick = false;
 				auto hrp_it = player.parts.find("HumanoidRootPart");
 				if (hrp_it != player.parts.end())
@@ -916,98 +1097,159 @@ namespace botter
 						rbx::primitive_t prim = part.get_primitive();
 						if (prim.address)
 						{
-							math::vector3 pos = prim.get_position();
-							math::vector3 size = { 4.0f, 6.0f, 2.0f };
-							math::matrix3 rot = prim.get_rotation();
-
-							bool valid = false;
-							float left = FLT_MAX, top = FLT_MAX;
-							float right = -FLT_MAX, bottom = -FLT_MAX;
-
-							static math::vector3 local_corners[8] =
+							bool hit = false;
+							if (settings::botter::raycast_hitbox)
 							{
-								{-1, -1, -1}, {1, -1, -1}, {-1, 1, -1}, {1, 1, -1},
-								{-1, -1, 1}, {1, -1, 1}, {-1, 1, 1}, {1, 1, 1}
-							};
-
-							for (auto& corner : local_corners)
-							{
-								math::vector3 world = pos + rot * math::vector3
+								if (ray_valid)
 								{
-									corner.x * size.x * 0.5f,
-									corner.y * size.y * 0.5f,
-									corner.z * size.z * 0.5f
+									bool intersected = false;
+									static const std::vector<std::string> parts_to_check = {
+										"HumanoidRootPart", "Head", "Torso", "UpperTorso", "LowerTorso",
+										"Left Arm", "LeftUpperArm", "LeftLowerArm", "LeftHand",
+										"Right Arm", "RightUpperArm", "RightLowerArm", "RightHand",
+										"Left Leg", "LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
+										"Right Leg", "RightUpperLeg", "RightLowerLeg", "RightFoot"
+									};
+									float scale = settings::botter::hitbox_size / 100.0f;
+
+									for (const auto& part_name : parts_to_check)
+									{
+										auto part_it = player.parts.find(part_name);
+										if (part_it != player.parts.end())
+										{
+											rbx::part_t p_part = part_it->second;
+											if (p_part.address)
+											{
+												rbx::primitive_t p_prim = p_part.get_primitive();
+												if (p_prim.address)
+												{
+													math::vector3 pos = p_prim.get_position();
+													math::vector3 size = p_prim.get_size();
+													if (part_name == "HumanoidRootPart")
+													{
+														size = { 4.0f, 6.0f, 2.0f };
+													}
+													math::matrix3 rot = p_prim.get_rotation();
+
+													cached_part_t box;
+													box.position = pos;
+													box.rotation = rot;
+													box.size = size * scale;
+													box.type = 0;
+
+													float dist = 0.0f;
+													if (ray_intersects_obb(camera_pos, cursor_ray_dir, 2000.0f, box, dist))
+													{
+														intersected = true;
+														break;
+													}
+												}
+											}
+										}
+									}
+									hit = intersected;
+								}
+							}
+							else
+							{
+								math::vector3 pos = prim.get_position();
+								math::vector3 size = { 4.0f, 6.0f, 2.0f };
+								math::matrix3 rot = prim.get_rotation();
+
+								bool valid = false;
+								float left = FLT_MAX, top = FLT_MAX;
+								float right = -FLT_MAX, bottom = -FLT_MAX;
+
+								static math::vector3 local_corners[8] =
+								{
+									{-1, -1, -1}, {1, -1, -1}, {-1, 1, -1}, {1, 1, -1},
+									{-1, -1, 1}, {1, -1, 1}, {-1, 1, 1}, {1, 1, 1}
 								};
 
-								math::vector2 out{};
-								if (game::visengine.world_to_screen(world, out, dims, view))
+								for (auto& corner : local_corners)
 								{
-									valid = true;
-									left = std::min(left, out.x);
-									top = std::min(top, out.y);
-									right = std::max(right, out.x);
-									bottom = std::max(bottom, out.y);
+									math::vector3 world = pos + rot * math::vector3
+									{
+										corner.x * size.x * 0.5f,
+										corner.y * size.y * 0.5f,
+										corner.z * size.z * 0.5f
+									};
+
+									math::vector2 out{};
+									if (game::visengine.world_to_screen(world, out, dims, view))
+									{
+										valid = true;
+										left = std::min(left, out.x);
+										top = std::min(top, out.y);
+										right = std::max(right, out.x);
+										bottom = std::max(bottom, out.y);
+									}
+								}
+
+								if (valid && left < right && top < bottom)
+								{
+									float scale = settings::botter::hitbox_size / 100.0f;
+									float width = right - left;
+									float height = bottom - top;
+									float delta_w = (width * scale - width) * 0.5f;
+									float delta_h = (height * scale - height) * 0.5f;
+									float target_left = left - delta_w;
+									float target_right = right + delta_w;
+									float target_top = top - delta_h;
+									float target_bottom = bottom + delta_h;
+
+									if (cursor_pt.x >= target_left && cursor_pt.x <= target_right &&
+										cursor_pt.y >= target_top && cursor_pt.y <= target_bottom)
+									{
+										hit = true;
+									}
 								}
 							}
 
-							if (valid && left < right && top < bottom)
+							if (hit)
 							{
-								float scale = settings::botter::hitbox_size / 100.0f;
-								float width = right - left;
-								float height = bottom - top;
-								float delta_w = (width * scale - width) * 0.5f;
-								float delta_h = (height * scale - height) * 0.5f;
-								float target_left = left - delta_w;
-								float target_right = right + delta_w;
-								float target_top = top - delta_h;
-								float target_bottom = bottom + delta_h;
-
-								if (cursor_pt.x >= target_left && cursor_pt.x <= target_right &&
-									cursor_pt.y >= target_top && cursor_pt.y <= target_bottom)
+								if (settings::botter::wall_check && camera_inst.address != 0)
 								{
-									if (settings::botter::wall_check && camera_inst.address != 0)
+									bool any_part_visible = false;
+									const std::unordered_set<std::string> target_parts_to_check = {
+										"Head", "Torso", "UpperTorso", "LowerTorso",
+										"Left Arm", "LeftUpperArm", "LeftLowerArm", "LeftHand",
+										"Right Arm", "RightUpperArm", "RightLowerArm", "RightHand",
+										"Left Leg", "LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
+										"Right Leg", "RightUpperLeg", "RightLowerLeg", "RightFoot",
+										"HumanoidRootPart"
+									};
+
+									for (const auto& pair : player.parts)
 									{
-										bool any_part_visible = false;
-										const std::unordered_set<std::string> target_parts_to_check = {
-											"Head", "Torso", "UpperTorso", "LowerTorso",
-											"Left Arm", "LeftUpperArm", "LeftLowerArm", "LeftHand",
-											"Right Arm", "RightUpperArm", "RightLowerArm", "RightHand",
-											"Left Leg", "LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
-											"Right Leg", "RightUpperLeg", "RightLowerLeg", "RightFoot",
-											"HumanoidRootPart"
-										};
-										
-										for (const auto& pair : player.parts)
+										if (target_parts_to_check.find(pair.first) == target_parts_to_check.end()) continue;
+										rbx::part_t part = pair.second;
+										if (!part.address) continue;
+										rbx::primitive_t primitive = part.get_primitive();
+										if (!primitive.address) continue;
+										math::vector3 world_pos = primitive.get_position();
+										if (!is_occluded(camera_pos, world_pos))
 										{
-											if (target_parts_to_check.find(pair.first) == target_parts_to_check.end()) continue;
-											rbx::part_t part = pair.second;
-											if (!part.address) continue;
-											rbx::primitive_t primitive = part.get_primitive();
-											if (!primitive.address) continue;
-											math::vector3 world_pos = primitive.get_position();
-											if (!is_occluded(camera_pos, world_pos))
-											{
-												any_part_visible = true;
-												break;
-											}
-										}
-										
-										if (!any_part_visible)
-										{
-											continue;
+											any_part_visible = true;
+											break;
 										}
 									}
 
-									auto now = std::chrono::steady_clock::now();
-									auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_bot_click).count();
-									int cps = settings::botter::cps;
-									if (cps < 1) cps = 1;
-									if (duration >= (1000 / cps))
+									if (!any_part_visible)
 									{
-										trigger_immediate_click();
-										last_bot_click = now;
-										clicked_this_tick = true;
+										continue;
 									}
+								}
+
+								auto now = std::chrono::steady_clock::now();
+								auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_bot_click).count();
+								int cps = settings::botter::cps;
+								if (cps < 1) cps = 1;
+								if (duration >= (1000 / cps))
+								{
+									trigger_immediate_click();
+									last_bot_click = now;
+									clicked_this_tick = true;
 								}
 							}
 						}

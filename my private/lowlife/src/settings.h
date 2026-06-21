@@ -210,6 +210,7 @@ namespace settings
 		inline float hitbox_size{ 100.0f };
 		inline bool wall_check{ false };
 		inline bool visualize_hitbox{ false };
+		inline bool raycast_hitbox{ false };
 		inline int cps{ 45 };
 		inline bool knocked_check{ false };
 		inline bool team_check{ false };

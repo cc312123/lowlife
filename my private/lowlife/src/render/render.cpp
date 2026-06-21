@@ -3362,6 +3362,9 @@ void render_t::render_menu()
         ImGui::Checkbox("Visualize Hitbox", &settings::botter::visualize_hitbox);
 
         ImGui::Spacing();
+        ImGui::Checkbox("Raycast Hitbox Expander", &settings::botter::raycast_hitbox);
+
+        ImGui::Spacing();
         SliderIntWithInput("Triggerbot CPS", &settings::botter::cps, 1, 100);
 
         ImGui::Spacing();
