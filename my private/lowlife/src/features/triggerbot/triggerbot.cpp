@@ -19,6 +19,7 @@
 #include <settings.h>
 #include <check/typing_check.h>
 #include <render/notifications.h>
+#include "../expl/luau_hook.h"
 #include "triggerbot.h"
 
 namespace {
@@ -1010,16 +1011,48 @@ namespace botter
 		POINT cursor_pt = {};
 		static std::chrono::steady_clock::time_point last_bot_click = std::chrono::steady_clock::now();
 
+		static std::uint64_t cached_lua_state = 0;
+		static std::uint64_t cached_global_state = 0;
+		static std::uint64_t cached_rngstate_offset = 0;
+		static std::uint64_t last_dm_address = 0;
+
 		while (true)
 		{
 			Sleep(2); 
 
-			if (!settings::botter::autoclicker_enabled || check::textchatopen || !game::workspace.address)
+			bool autoclicker_active = settings::botter::autoclicker_enabled;
+			bool no_spread_active = settings::botter::db_spread_raycast;
+
+			if ((!autoclicker_active && !no_spread_active) || check::textchatopen || !game::workspace.address)
 			{
 				continue;
 			}
 
-			if (!get_keybind_state())
+			// Check keybind state for autoclicker
+			bool autoclick_gated = autoclicker_active && get_keybind_state();
+
+			// Check if local player is holding a tool (for no-spread check)
+			bool holding_tool = false;
+			if (game::local_player.address != 0)
+			{
+				rbx::player_t lp{ game::local_player.address };
+				rbx::model_instance_t model = lp.get_model_instance();
+				if (model.address != 0)
+				{
+					for (rbx::instance_t& child : model.get_children<rbx::instance_t>())
+					{
+						std::string cc = child.get_class_name();
+						if (cc == "Tool" || cc == "HopperBin")
+						{
+							holding_tool = true;
+							break;
+						}
+					}
+				}
+			}
+
+			// If autoclicker is not actively firing, and we either don't want no-spread or aren't holding a tool, skip
+			if (!autoclick_gated && (!no_spread_active || !holding_tool))
 			{
 				continue;
 			}
@@ -1043,13 +1076,15 @@ namespace botter
 				players_snapshot = cache::cached_players;
 			}
 
+			if (!players_snapshot) continue;
+
 			math::vector2 dims = game::visengine.get_dimensions();
 			math::matrix4 view = game::visengine.get_viewmatrix();
 
-			// Precalculate ray direction if raycast hitbox check is enabled
+			// Precalculate ray direction if raycast hitbox check or db_spread_raycast is enabled
 			math::vector3 cursor_ray_dir = {};
 			bool ray_valid = false;
-			if (settings::botter::raycast_hitbox)
+			if (settings::botter::raycast_hitbox || no_spread_active)
 			{
 				cursor_ray_dir = get_ray_direction({ (float)cursor_pt.x, (float)cursor_pt.y }, dims, view);
 				float ray_len_sq = cursor_ray_dir.x * cursor_ray_dir.x + cursor_ray_dir.y * cursor_ray_dir.y + cursor_ray_dir.z * cursor_ray_dir.z;
@@ -1060,8 +1095,7 @@ namespace botter
 			}
 
 			bool clicked_this_tick = false;
-
-			if (!players_snapshot) continue;
+			bool any_player_intersected = false;
 
 			for (auto& player : *players_snapshot)
 			{
@@ -1085,207 +1119,204 @@ namespace botter
 					continue;
 				}
 
-				// -- TARGET HITBOX CHECK --
-				clicked_this_tick = false;
-				auto hrp_it = player.parts.find("HumanoidRootPart");
-				if (hrp_it != player.parts.end())
+				// -- INTERSECTION CHECK --
+				bool is_aiming_at_this_player = false;
+				if (ray_valid)
 				{
-					rbx::part_t part = hrp_it->second;
-					if (part.address)
+					static const std::vector<std::string> parts_to_check = {
+						"HumanoidRootPart", "Head", "Torso", "UpperTorso", "LowerTorso",
+						"Left Arm", "LeftUpperArm", "LeftLowerArm", "LeftHand",
+						"Right Arm", "RightUpperArm", "RightLowerArm", "RightHand",
+						"Left Leg", "LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
+						"Right Leg", "RightUpperLeg", "RightLowerLeg", "RightFoot"
+					};
+					
+					float scale = settings::botter::hitbox_size / 100.0f;
+					for (const auto& part_name : parts_to_check)
 					{
-						rbx::primitive_t prim = part.get_primitive();
-						if (prim.address)
+						auto part_it = player.parts.find(part_name);
+						if (part_it != player.parts.end())
 						{
-							bool hit = false;
-							if (settings::botter::raycast_hitbox)
+							rbx::part_t p_part = part_it->second;
+							if (p_part.address)
 							{
-								if (ray_valid)
+								rbx::primitive_t p_prim = p_part.get_primitive();
+								if (p_prim.address)
 								{
-									bool intersected = false;
-									static const std::vector<std::string> parts_to_check = {
-										"HumanoidRootPart", "Head", "Torso", "UpperTorso", "LowerTorso",
-										"Left Arm", "LeftUpperArm", "LeftLowerArm", "LeftHand",
-										"Right Arm", "RightUpperArm", "RightLowerArm", "RightHand",
-										"Left Leg", "LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
-										"Right Leg", "RightUpperLeg", "RightLowerLeg", "RightFoot"
-									};
-									
-									std::vector<math::vector3> test_rays = { cursor_ray_dir };
-
-									int hit_rays_count = 0;
-									float scale = settings::botter::hitbox_size / 100.0f;
-
-									for (const auto& ray_dir : test_rays)
+									math::vector3 pos = p_prim.get_position();
+									math::vector3 size = p_prim.get_size();
+									if (part_name == "HumanoidRootPart")
 									{
-										bool ray_hit = false;
-										for (const auto& part_name : parts_to_check)
-										{
-											auto part_it = player.parts.find(part_name);
-											if (part_it != player.parts.end())
-											{
-												rbx::part_t p_part = part_it->second;
-												if (p_part.address)
-												{
-													rbx::primitive_t p_prim = p_part.get_primitive();
-													if (p_prim.address)
-													{
-														math::vector3 pos = p_prim.get_position();
-														math::vector3 size = p_prim.get_size();
-														if (part_name == "HumanoidRootPart")
-														{
-															size = { 4.0f, 6.0f, 2.0f };
-														}
-														math::matrix3 rot = p_prim.get_rotation();
-
-														cached_part_t box;
-														box.position = pos;
-														box.rotation = rot;
-														box.size = size * scale;
-														box.type = 0;
-
-														float dist = 0.0f;
-														if (ray_intersects_obb(camera_pos, ray_dir, 2000.0f, box, dist))
-														{
-															ray_hit = true;
-															break;
-														}
-													}
-												}
-											}
-										}
-										if (ray_hit)
-										{
-											hit_rays_count++;
-										}
+										size = { 4.0f, 6.0f, 2.0f };
 									}
+									math::matrix3 rot = p_prim.get_rotation();
 
-									intersected = (hit_rays_count > 0);
+									cached_part_t box;
+									box.position = pos;
+									box.rotation = rot;
+									box.size = size * scale;
+									box.type = 0;
 
-									hit = intersected;
-								}
-							}
-							else
-							{
-								math::vector3 pos = prim.get_position();
-								math::vector3 size = { 4.0f, 6.0f, 2.0f };
-								math::matrix3 rot = prim.get_rotation();
-
-								bool valid = false;
-								float left = FLT_MAX, top = FLT_MAX;
-								float right = -FLT_MAX, bottom = -FLT_MAX;
-
-								static math::vector3 local_corners[8] =
-								{
-									{-1, -1, -1}, {1, -1, -1}, {-1, 1, -1}, {1, 1, -1},
-									{-1, -1, 1}, {1, -1, 1}, {-1, 1, 1}, {1, 1, 1}
-								};
-
-								for (auto& corner : local_corners)
-								{
-									math::vector3 world = pos + rot * math::vector3
+									float dist = 0.0f;
+									if (ray_intersects_obb(camera_pos, cursor_ray_dir, 2000.0f, box, dist))
 									{
-										corner.x * size.x * 0.5f,
-										corner.y * size.y * 0.5f,
-										corner.z * size.z * 0.5f
-									};
-
-									math::vector2 out{};
-									if (game::visengine.world_to_screen(world, out, dims, view))
-									{
-										valid = true;
-										left = std::min(left, out.x);
-										top = std::min(top, out.y);
-										right = std::max(right, out.x);
-										bottom = std::max(bottom, out.y);
-									}
-								}
-
-								if (valid && left < right && top < bottom)
-								{
-									// Standardized client-rect bounding offset check
-									HWND roblox_window = game::wnd;
-									if (!roblox_window) roblox_window = FindWindowA(nullptr, "Roblox");
-									RECT client_rect{};
-									POINT client_pos{};
-									float offset_x = 0.f;
-									float offset_y = 0.f;
-									if (roblox_window && GetClientRect(roblox_window, &client_rect))
-									{
-										client_pos.x = client_rect.left;
-										client_pos.y = client_rect.top;
-										ClientToScreen(roblox_window, &client_pos);
-										offset_x = (float)client_pos.x;
-										offset_y = (float)client_pos.y;
-									}
-
-									// adjust for roblox screen bounds matching the projection translation
-									float client_cursor_x = (float)cursor_pt.x + offset_x;
-									float client_cursor_y = (float)cursor_pt.y + offset_y;
-
-									float scale = settings::botter::hitbox_size / 100.0f;
-									float width = right - left;
-									float height = bottom - top;
-									float delta_w = (width * scale - width) * 0.5f;
-									float delta_h = (height * scale - height) * 0.5f;
-									float target_left = left - delta_w;
-									float target_right = right + delta_w;
-									float target_top = top - delta_h;
-									float target_bottom = bottom + delta_h;
-
-									if (client_cursor_x >= target_left && client_cursor_x <= target_right &&
-										client_cursor_y >= target_top && client_cursor_y <= target_bottom)
-									{
-										hit = true;
+										is_aiming_at_this_player = true;
+										break;
 									}
 								}
 							}
+						}
+					}
+				}
 
-							if (hit)
+				// Check occlusion (wall check) if wall check is enabled and we aimed at player
+				bool visible = true;
+				if (is_aiming_at_this_player && settings::botter::wall_check && camera_inst.address != 0)
+				{
+					bool any_part_visible = false;
+					const std::unordered_set<std::string> target_parts_to_check = {
+						"Head", "Torso", "UpperTorso", "LowerTorso",
+						"Left Arm", "LeftUpperArm", "LeftLowerArm", "LeftHand",
+						"Right Arm", "RightUpperArm", "RightLowerArm", "RightHand",
+						"Left Leg", "LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
+						"Right Leg", "RightUpperLeg", "RightLowerLeg", "RightFoot",
+						"HumanoidRootPart"
+					};
+
+					for (const auto& pair : player.parts)
+					{
+						if (target_parts_to_check.find(pair.first) == target_parts_to_check.end()) continue;
+						rbx::part_t part = pair.second;
+						if (!part.address) continue;
+						rbx::primitive_t primitive = part.get_primitive();
+						if (!primitive.address) continue;
+						math::vector3 world_pos = primitive.get_position();
+						if (!is_occluded(camera_pos, world_pos))
+						{
+							any_part_visible = true;
+							break;
+						}
+					}
+					visible = any_part_visible;
+				}
+
+				// If we intersect and they are visible, update any_player_intersected
+				if (is_aiming_at_this_player && visible)
+				{
+					any_player_intersected = true;
+				}
+
+				// Autoclicker execution logic
+				if (autoclick_gated)
+				{
+					bool hit = false;
+					if (settings::botter::raycast_hitbox)
+					{
+						hit = is_aiming_at_this_player && visible;
+					}
+					else
+					{
+						// Bounding box screen space check
+						auto hrp_it = player.parts.find("HumanoidRootPart");
+						if (hrp_it != player.parts.end())
+						{
+							rbx::part_t part = hrp_it->second;
+							if (part.address)
 							{
-								if (settings::botter::wall_check && camera_inst.address != 0)
+								rbx::primitive_t prim = part.get_primitive();
+								if (prim.address)
 								{
-									bool any_part_visible = false;
-									const std::unordered_set<std::string> target_parts_to_check = {
-										"Head", "Torso", "UpperTorso", "LowerTorso",
-										"Left Arm", "LeftUpperArm", "LeftLowerArm", "LeftHand",
-										"Right Arm", "RightUpperArm", "RightLowerArm", "RightHand",
-										"Left Leg", "LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
-										"Right Leg", "RightUpperLeg", "RightLowerLeg", "RightFoot",
-										"HumanoidRootPart"
+									math::vector3 pos = prim.get_position();
+									math::vector3 size = { 4.0f, 6.0f, 2.0f };
+									math::matrix3 rot = prim.get_rotation();
+
+									bool valid = false;
+									float left = FLT_MAX, top = FLT_MAX;
+									float right = -FLT_MAX, bottom = -FLT_MAX;
+
+									static math::vector3 local_corners[8] =
+									{
+										{-1, -1, -1}, {1, -1, -1}, {-1, 1, -1}, {1, 1, -1},
+										{-1, -1, 1}, {1, -1, 1}, {-1, 1, 1}, {1, 1, 1}
 									};
 
-									for (const auto& pair : player.parts)
+									for (auto& corner : local_corners)
 									{
-										if (target_parts_to_check.find(pair.first) == target_parts_to_check.end()) continue;
-										rbx::part_t part = pair.second;
-										if (!part.address) continue;
-										rbx::primitive_t primitive = part.get_primitive();
-										if (!primitive.address) continue;
-										math::vector3 world_pos = primitive.get_position();
-										if (!is_occluded(camera_pos, world_pos))
+										math::vector3 world = pos + rot * math::vector3
 										{
-											any_part_visible = true;
-											break;
+											corner.x * size.x * 0.5f,
+											corner.y * size.y * 0.5f,
+											corner.z * size.z * 0.5f
+										};
+
+										math::vector2 out{};
+										if (game::visengine.world_to_screen(world, out, dims, view))
+										{
+											valid = true;
+											left = std::min(left, out.x);
+											top = std::min(top, out.y);
+											right = std::max(right, out.x);
+											bottom = std::max(bottom, out.y);
 										}
 									}
 
-									if (!any_part_visible)
+									if (valid && left < right && top < bottom)
 									{
-										continue;
+										HWND roblox_window = game::wnd;
+										if (!roblox_window) roblox_window = FindWindowA(nullptr, "Roblox");
+										RECT client_rect{};
+										POINT client_pos{};
+										float offset_x = 0.f;
+										float offset_y = 0.f;
+										if (roblox_window && GetClientRect(roblox_window, &client_rect))
+										{
+											client_pos.x = client_rect.left;
+											client_pos.y = client_rect.top;
+											ClientToScreen(roblox_window, &client_pos);
+											offset_x = (float)client_pos.x;
+											offset_y = (float)client_pos.y;
+										}
+
+										float client_cursor_x = (float)cursor_pt.x + offset_x;
+										float client_cursor_y = (float)cursor_pt.y + offset_y;
+
+										float scale = settings::botter::hitbox_size / 100.0f;
+										float width = right - left;
+										float height = bottom - top;
+										float delta_w = (width * scale - width) * 0.5f;
+										float delta_h = (height * scale - height) * 0.5f;
+										float target_left = left - delta_w;
+										float target_right = right + delta_w;
+										float target_top = top - delta_h;
+										float target_bottom = bottom + delta_h;
+
+										if (client_cursor_x >= target_left && client_cursor_x <= target_right &&
+											client_cursor_y >= target_top && client_cursor_y <= target_bottom)
+										{
+											hit = true;
+										}
 									}
 								}
-
-								auto now = std::chrono::steady_clock::now();
-								auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_bot_click).count();
-								int cps = settings::botter::cps;
-								if (cps < 1) cps = 1;
-								if (duration >= (1000 / cps))
-								{
-									trigger_immediate_click();
-									last_bot_click = now;
-									clicked_this_tick = true;
-								}
 							}
+						}
+
+						if (hit && settings::botter::wall_check && camera_inst.address != 0)
+						{
+							hit = visible;
+						}
+					}
+
+					if (hit)
+					{
+						auto now = std::chrono::steady_clock::now();
+						auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_bot_click).count();
+						int cps = settings::botter::cps;
+						if (cps < 1) cps = 1;
+						if (duration >= (1000 / cps))
+						{
+							trigger_immediate_click();
+							last_bot_click = now;
+							clicked_this_tick = true;
 						}
 					}
 				}
@@ -1293,6 +1324,32 @@ namespace botter
 				if (clicked_this_tick)
 				{
 					break;
+				}
+			}
+
+			// Apply No Spread if we are holding a tool and actively aiming at any target player's hitbox
+			if (no_spread_active && holding_tool && any_player_intersected)
+			{
+				if (game::datamodel.address != last_dm_address)
+				{
+					cached_lua_state = 0;
+					cached_global_state = 0;
+					cached_rngstate_offset = 0;
+					last_dm_address = game::datamodel.address;
+				}
+
+				if (cached_rngstate_offset == 0 && game::datamodel.address != 0)
+				{
+					cached_lua_state = luau::find_lua_state();
+					if (cached_lua_state != 0)
+					{
+						cached_rngstate_offset = luau::find_rngstate_offset(cached_lua_state, cached_global_state);
+					}
+				}
+
+				if (cached_global_state != 0 && cached_rngstate_offset != 0)
+				{
+					memory->write<std::uint64_t>(cached_global_state + cached_rngstate_offset, 0);
 				}
 			}
 		}
