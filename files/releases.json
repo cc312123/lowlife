@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.40",
-    "latestChangelog":  "Fix memory-based and raycast-based hitbox expander scaling and replication alignment.",
+    "latestVersion":  "1.0.41",
+    "latestChangelog":  "Fix visual Head mesh scaling for memory expander and increase hitbox size limit to 3000%.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -290,7 +290,14 @@
                         "changelog":  "Fix memory-based and raycast-based hitbox expander scaling and replication alignment.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "52dcdf7405f6e2648f9807903b41cfdb"
+                    },
+                    {
+                        "version":  "1.0.41",
+                        "date":  "2026-06-21",
+                        "changelog":  "Fix visual Head mesh scaling for memory expander and increase hitbox size limit to 3000%.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "55d072b3d9fd40c4e35847b1defb98df"
                     }
                 ],
-    "latestHash":  "52dcdf7405f6e2648f9807903b41cfdb"
+    "latestHash":  "55d072b3d9fd40c4e35847b1defb98df"
 }

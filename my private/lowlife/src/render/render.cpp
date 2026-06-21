@@ -2974,7 +2974,7 @@ void render_t::render_menu()
         ImGui::Checkbox("Raycast Hitbox Expander", &settings::botter::raycast_hitbox);
         ImGui::Spacing();
 
-        SliderFloatWithInput("Hitbox Size", &settings::botter::hitbox_size, 10.f, 500.f, "%.0f");
+        SliderFloatWithInput("Hitbox Size", &settings::botter::hitbox_size, 10.f, 3000.f, "%.0f");
         ImGui::Spacing();
 
         ImGui::Checkbox("Visualize Hitbox", &settings::botter::visualize_hitbox);
