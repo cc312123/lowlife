@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.41",
-    "latestChangelog":  "Fix visual Head mesh scaling for memory expander and increase hitbox size limit to 3000%.",
+    "latestVersion":  "1.0.42",
+    "latestChangelog":  "Restrict memory hitbox expander to HumanoidRootPart to completely resolve giant head and visual accessory bugs.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -297,7 +297,14 @@
                         "changelog":  "Fix visual Head mesh scaling for memory expander and increase hitbox size limit to 3000%.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "55d072b3d9fd40c4e35847b1defb98df"
+                    },
+                    {
+                        "version":  "1.0.42",
+                        "date":  "2026-06-21",
+                        "changelog":  "Restrict memory hitbox expander to HumanoidRootPart to completely resolve giant head and visual accessory bugs.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "012b9ef31c30acc7185b1b8e28cf4355"
                     }
                 ],
-    "latestHash":  "55d072b3d9fd40c4e35847b1defb98df"
+    "latestHash":  "012b9ef31c30acc7185b1b8e28cf4355"
 }
