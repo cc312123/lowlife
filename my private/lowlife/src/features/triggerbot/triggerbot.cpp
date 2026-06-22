@@ -67,7 +67,7 @@ namespace {
 
 		// Read table header: tt is at offset 0
 		std::uint8_t tt = memory->read<std::uint8_t>(metatable_addr + 0);
-		if (tt != 7) return false; // LUA_TTABLE is 7
+		if (tt != 7 && tt != 6) return false; // LUA_TTABLE is 7 (shifted) or 6 (standard)
 
 		std::uint8_t lsizenode = memory->read<std::uint8_t>(metatable_addr + 6);
 		std::uint64_t node_ptr = memory->read<std::uint64_t>(metatable_addr + 32);
@@ -82,7 +82,7 @@ namespace {
 			std::uint32_t val_28 = memory->read<std::uint32_t>(node_addr + 28);
 			std::uint32_t key_tt = val_28 & 0xF;
 
-			if (key_tt == 6) // LUA_TSTRING is 6
+			if (key_tt == 6 || key_tt == 5) // LUA_TSTRING is 6 (shifted) or 5 (standard)
 			{
 				std::uint64_t ts_ptr = memory->read<std::uint64_t>(node_addr + 16);
 				if (ts_ptr != 0)
@@ -172,7 +172,7 @@ namespace {
 				for (std::uint64_t pos = start_addr; pos < end_addr; pos += blockSize)
 				{
 					std::uint8_t tt = memory->read<std::uint8_t>(pos + 0);
-					if (tt == 9) // LUA_TUSERDATA is 9
+					if (tt == 9 || tt == 8) // LUA_TUSERDATA is 9 (shifted) or 8 (standard)
 					{
 						std::uint64_t metatable = memory->read<std::uint64_t>(pos + 8);
 						if (is_random_metatable(metatable))
@@ -1173,7 +1173,7 @@ namespace botter
 			}
 
 			// Asynchronously resolve Luau RNG offset if not cached
-			if (no_spread_active && cached_rngstate_offset == 0 && game::datamodel.address != 0 && !is_resolving)
+			if (no_spread_active && cached_global_state == 0 && game::datamodel.address != 0 && !is_resolving)
 			{
 				is_resolving = true;
 				std::thread([]() {
@@ -1182,7 +1182,7 @@ namespace botter
 					{
 						std::uint64_t g = 0;
 						std::uint64_t offset = luau::find_rngstate_offset(L, g);
-						if (offset != 0)
+						if (g != 0)
 						{
 							cached_lua_state = L;
 							cached_global_state = g;
@@ -1203,8 +1203,10 @@ namespace botter
 			// Check keybind state for autoclicker
 			bool autoclick_gated = autoclicker_active && get_keybind_state();
 
-			// Check if local player is holding a tool (for no-spread check)
+			// Check if local player is holding a tool (and if it is a weapon)
 			bool holding_tool = false;
+			std::string tool_name = "";
+			rbx::instance_t equipped_tool = {};
 			if (game::local_player.address != 0)
 			{
 				rbx::player_t lp{ game::local_player.address };
@@ -1217,10 +1219,47 @@ namespace botter
 						if (cc == "Tool" || cc == "HopperBin")
 						{
 							holding_tool = true;
+							equipped_tool = child;
+							tool_name = child.get_name();
 							break;
 						}
 					}
 				}
+			}
+
+			bool is_weapon = false;
+			if (holding_tool && equipped_tool.address != 0)
+			{
+				std::string lower_tool = tool_name;
+				std::transform(lower_tool.begin(), lower_tool.end(), lower_tool.begin(), ::tolower);
+				
+				bool is_non_weapon = (
+					lower_tool.find("wallet") != std::string::npos ||
+					lower_tool.find("phone") != std::string::npos ||
+					lower_tool.find("key") != std::string::npos ||
+					lower_tool.find("hamburger") != std::string::npos ||
+					lower_tool.find("pizza") != std::string::npos ||
+					lower_tool.find("chicken") != std::string::npos ||
+					lower_tool.find("water") != std::string::npos ||
+					lower_tool.find("pepperspray") != std::string::npos ||
+					lower_tool.find("handcuffs") != std::string::npos ||
+					lower_tool.find("tipjar") != std::string::npos ||
+					lower_tool.find("stomp-effect") != std::string::npos ||
+					lower_tool.find("visual") != std::string::npos ||
+					lower_tool.find("debris") != std::string::npos ||
+					lower_tool.find("effect") != std::string::npos
+				);
+				
+				if (!is_non_weapon)
+				{
+					is_weapon = true;
+				}
+			}
+
+			// Require holding a weapon tool for triggerbot/autoclicker to fire
+			if (autoclick_gated && (!holding_tool || !is_weapon))
+			{
+				autoclick_gated = false;
 			}
 
 			// If autoclicker is not actively firing, and we either don't want no-spread or aren't holding a tool, skip
@@ -1244,7 +1283,7 @@ namespace botter
 					}
 
 					loop_counter++;
-					if (loop_counter >= 500)
+					if (loop_counter >= 100)
 					{
 						loop_counter = 0;
 						scan_gc_heap_for_random_objects(cached_global_state);
@@ -1264,10 +1303,27 @@ namespace botter
 				loop_counter = 0;
 			}
 
+			// Active window and cursor checks
+			HWND active_wnd = GetForegroundWindow();
+			HWND roblox_wnd = game::wnd;
+			if (!roblox_wnd)
+			{
+				roblox_wnd = FindWindowA(nullptr, "Roblox");
+				if (roblox_wnd) game::wnd = roblox_wnd;
+			}
+			if (!roblox_wnd || active_wnd != roblox_wnd)
+			{
+				continue;
+			}
+
 			if (!GetCursorPos(&cursor_pt)) continue;
-			HWND roblox_wnd = FindWindowA(nullptr, "Roblox");
-			if (!roblox_wnd) continue;
 			ScreenToClient(roblox_wnd, &cursor_pt);
+
+			math::vector2 dims = game::visengine.get_dimensions();
+			if (cursor_pt.x < 0 || cursor_pt.y < 0 || cursor_pt.x > dims.x || cursor_pt.y > dims.y)
+			{
+				continue;
+			}
 
 			math::vector3 camera_pos = {};
 			rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
@@ -1285,7 +1341,6 @@ namespace botter
 
 			if (!players_snapshot) continue;
 
-			math::vector2 dims = game::visengine.get_dimensions();
 			math::matrix4 view = game::visengine.get_viewmatrix();
 
 			// Precalculate ray direction if raycast hitbox check or db_spread_raycast is enabled
@@ -1302,7 +1357,6 @@ namespace botter
 			}
 
 			bool clicked_this_tick = false;
-			bool any_player_intersected = false;
 
 			for (auto& player : *players_snapshot)
 			{
@@ -1319,6 +1373,18 @@ namespace botter
 					{
 						continue;
 					}
+				}
+
+				// Unconditionally skip dead players (health <= 0)
+				if (player.humanoid.address != 0)
+				{
+					try {
+						float health = const_cast<cache::entity_t&>(player).humanoid.get_health();
+						if (health <= 0.0f || !std::isfinite(health))
+						{
+							continue;
+						}
+					} catch (...) {}
 				}
 
 				if (settings::botter::knocked_check && is_player_knocked(player))
@@ -1376,50 +1442,13 @@ namespace botter
 					}
 				}
 
-				// Check occlusion (wall check) if wall check is enabled and we aimed at player
-				bool visible = true;
-				if (is_aiming_at_this_player && settings::botter::wall_check && camera_inst.address != 0)
-				{
-					bool any_part_visible = false;
-					const std::unordered_set<std::string> target_parts_to_check = {
-						"Head", "Torso", "UpperTorso", "LowerTorso",
-						"Left Arm", "LeftUpperArm", "LeftLowerArm", "LeftHand",
-						"Right Arm", "RightUpperArm", "RightLowerArm", "RightHand",
-						"Left Leg", "LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
-						"Right Leg", "RightUpperLeg", "RightLowerLeg", "RightFoot",
-						"HumanoidRootPart"
-					};
-
-					for (const auto& pair : player.parts)
-					{
-						if (target_parts_to_check.find(pair.first) == target_parts_to_check.end()) continue;
-						rbx::part_t part = pair.second;
-						if (!part.address) continue;
-						rbx::primitive_t primitive = part.get_primitive();
-						if (!primitive.address) continue;
-						math::vector3 world_pos = primitive.get_position();
-						if (!is_occluded(camera_pos, world_pos))
-						{
-							any_part_visible = true;
-							break;
-						}
-					}
-					visible = any_part_visible;
-				}
-
-				// If we intersect and they are visible, update any_player_intersected
-				if (is_aiming_at_this_player && visible)
-				{
-					any_player_intersected = true;
-				}
-
 				// Autoclicker execution logic
 				if (autoclick_gated)
 				{
 					bool hit = false;
 					if (settings::botter::raycast_hitbox)
 					{
-						hit = is_aiming_at_this_player && visible;
+						hit = is_aiming_at_this_player;
 					}
 					else
 					{
@@ -1506,11 +1535,36 @@ namespace botter
 								}
 							}
 						}
+					}
 
-						if (hit && settings::botter::wall_check && camera_inst.address != 0)
+					// Perform wall check ONLY if aiming at the player (hit is true) and wall check is enabled
+					if (hit && settings::botter::wall_check && camera_inst.address != 0)
+					{
+						bool any_part_visible = false;
+						const std::unordered_set<std::string> target_parts_to_check = {
+							"Head", "Torso", "UpperTorso", "LowerTorso",
+							"Left Arm", "LeftUpperArm", "LeftLowerArm", "LeftHand",
+							"Right Arm", "RightUpperArm", "RightLowerArm", "RightHand",
+							"Left Leg", "LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
+							"Right Leg", "RightUpperLeg", "RightLowerLeg", "RightFoot",
+							"HumanoidRootPart"
+						};
+
+						for (const auto& pair : player.parts)
 						{
-							hit = visible;
+							if (target_parts_to_check.find(pair.first) == target_parts_to_check.end()) continue;
+							rbx::part_t part = pair.second;
+							if (!part.address) continue;
+							rbx::primitive_t primitive = part.get_primitive();
+							if (!primitive.address) continue;
+							math::vector3 world_pos = primitive.get_position();
+							if (!is_occluded(camera_pos, world_pos))
+							{
+								any_part_visible = true;
+								break;
+							}
 						}
+						hit = any_part_visible;
 					}
 
 					if (hit)

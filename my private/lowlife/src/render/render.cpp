@@ -1,4 +1,4 @@
-﻿#define IMGUI_DEFINE_MATH_OPERATORS
+#define IMGUI_DEFINE_MATH_OPERATORS
 #define NOMINMAX
 #include <render/render.h>
 #include <mutex>
@@ -2411,606 +2411,670 @@ void render_t::render_menu()
     // Shift coordinates dynamically for the switch case child rendering
 #define SetCursorPos(pos) SetCursorPos(adjust_menu_pos(pos))
 
+    static int tab_subpages[9] = { 0 };
+    int& current_page = tab_subpages[selected_tab_index];
+
+    const char* page1_names[] = { 
+        "Aimbot Controls", 
+        "Silent Controls", 
+        "ESP Visuals", 
+        "Misc Movement", 
+        "User Interface", 
+        "Configurations", 
+        "Shot Detection", 
+        "Triggerbot Controls", 
+        "Players List" 
+    };
+    const char* page2_names[] = { 
+        "Aimbot Settings", 
+        "Redirection Settings", 
+        "ESP Radar & Preview", 
+        "Blatant & World Settings", 
+        "System Cleaner & Loader", 
+        "Config Actions", 
+        "Status & Target Tracking", 
+        "Triggerbot Settings & Status", 
+        "Player Details & Actions" 
+    };
+
+    ImGui::SetCursorPos(ImVec2(22.f, 78.f));
+    
+    float avail_width = ImGui::GetContentRegionAvail().x - 13.f;
+    float btn_width = (avail_width - 8.f) / 2.f;
+
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4.f);
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(12.f, 6.f));
+
+    // Page 1
+    bool page1_selected = (current_page == 0);
+    if (page1_selected) {
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 0.25f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 0.35f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 0.45f));
+        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+    } else {
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(24.f/255.f, 24.f/255.f, 30.f/255.f, 0.6f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(35.f/255.f, 35.f/255.f, 45.f/255.f, 0.8f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(45.f/255.f, 45.f/255.f, 55.f/255.f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.6f, 0.6f, 0.65f, 1.0f));
+    }
+    
+    if (ImGui::Button(page1_names[selected_tab_index], ImVec2(btn_width, 28.f))) {
+        current_page = 0;
+    }
+    ImGui::PopStyleColor(4);
+
+    ImGui::SameLine(0, 8.f);
+
+    // Page 2
+    bool page2_selected = (current_page == 1);
+    if (page2_selected) {
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 0.25f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 0.35f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 0.45f));
+        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+    } else {
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(24.f/255.f, 24.f/255.f, 30.f/255.f, 0.6f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(35.f/255.f, 35.f/255.f, 45.f/255.f, 0.8f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(45.f/255.f, 45.f/255.f, 55.f/255.f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.6f, 0.6f, 0.65f, 1.0f));
+    }
+
+    if (ImGui::Button(page2_names[selected_tab_index], ImVec2(btn_width, 28.f))) {
+        current_page = 1;
+    }
+    ImGui::PopStyleColor(4);
+    
+    ImGui::PopStyleVar(2);
     
     switch (selected_tab_index)
     {
     case 0:
     {
-        ImGui::SetCursorPos(ImVec2(22.f, 78.f));
-
-        ImGui::BeginChild("Aimbot", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
-
-        ImGui::Checkbox("Enable", &settings::aimbot::enabled);
-        if (settings::aimbot::enabled)
+        if (current_page == 0)
         {
-            ImGui::SameLine();
-            inline_keybind_button("aimbot_keybind", &settings::aimbot::keybind, &settings::aimbot::keybind_mode);
-        }
+            ImGui::SetCursorPos(ImVec2(22.f, 114.f));
+            ImGui::BeginChild("Aimbot", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
-        ImGui::Checkbox("Sticky Aim", &settings::aimbot::sticky_aim);
-        ImGui::Checkbox("Draw FOV", &settings::aimbot::draw_fov);
-        ImGui::SameLine();
-        if (add_tooltip_trigger("aimbot_fov_tooltip")) {
-            if (begin_tooltip_popup("aimbot_fov_tooltip", ImVec2(290, 180))) {
-                ImGui::BeginChild("Aimbot FOV Settings", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), true, ImGuiWindowFlags_NoBackground);
-
-                ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.f);
-                SliderFloatWithInput("size", &settings::aimbot::fov, 1.0f, 1000.0f, "%.1f");
-
-                ImGui::Checkbox("Fill", &settings::aimbot::filled_fov);
+            ImGui::Checkbox("Enable", &settings::aimbot::enabled);
+            if (settings::aimbot::enabled)
+            {
                 ImGui::SameLine();
-                ImGui::ColorEdit4("FOV Color", settings::aimbot::fov_color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_AlphaBar);
-
-                ImGui::Checkbox("Rotate", &settings::aimbot::rotate_fov);
-                ImGui::Checkbox("Rainbow", &settings::aimbot::rainbow_fov);
-
-                ImGui::EndChild();
-                end_tooltip_popup("aimbot_fov_tooltip", ImVec2(290, 180));
+                inline_keybind_button("aimbot_keybind", &settings::aimbot::keybind, &settings::aimbot::keybind_mode);
             }
+
+            ImGui::Checkbox("Sticky Aim", &settings::aimbot::sticky_aim);
+            ImGui::Checkbox("Draw FOV", &settings::aimbot::draw_fov);
+            ImGui::SameLine();
+            if (add_tooltip_trigger("aimbot_fov_tooltip")) {
+                if (begin_tooltip_popup("aimbot_fov_tooltip", ImVec2(290, 180))) {
+                    ImGui::BeginChild("Aimbot FOV Settings", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), true, ImGuiWindowFlags_NoBackground);
+
+                    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.f);
+                    SliderFloatWithInput("size", &settings::aimbot::fov, 1.0f, 1000.0f, "%.1f");
+
+                    ImGui::Checkbox("Fill", &settings::aimbot::filled_fov);
+                    ImGui::SameLine();
+                    ImGui::ColorEdit4("FOV Color", settings::aimbot::fov_color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_AlphaBar);
+
+                    ImGui::Checkbox("Rotate", &settings::aimbot::rotate_fov);
+                    ImGui::Checkbox("Rainbow", &settings::aimbot::rainbow_fov);
+
+                    ImGui::EndChild();
+                    end_tooltip_popup("aimbot_fov_tooltip", ImVec2(290, 180));
+                }
+            }
+
+            ImGui::EndChild();
         }
+        else
+        {
+            ImGui::SetCursorPos(ImVec2(22.f, 114.f));
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
+            ImGui::BeginChild("Aimbot Settings", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
-        ImGui::EndChild();
+            const char* aimbot_types[] = { "Camera Lock", "Mouse Lock" };
+            ImGui::Combo("Aimbot Type", &settings::aimbot::aimbot_type, aimbot_types, IM_ARRAYSIZE(aimbot_types));
 
-        ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() * 0.5f + 8.f, 78.f));
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
-        ImGui::BeginChild("Aimbot Settings", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
+            const char* aimparts[] = {
+                "Head", "Upper Torso", "Torso", "Lower Torso", "HumanoidRootPart", "Left Arm", "Right Arm", "Left Leg", "Right Leg", "Closest Point"
+            };
+            ImGui::Combo("aimpart", &settings::aimbot::aimpart, aimparts, IM_ARRAYSIZE(aimparts));
+            ImGui::Checkbox("FOV Check", &settings::aimbot::fov_check);
+            ImGui::Checkbox("Knocked Check", &settings::aimbot::knocked_check);
+            ImGui::Checkbox("Wall Check", &settings::aimbot::wall_check);
+            ImGui::Checkbox("Team Check", &settings::aimbot::team_check);
 
-        const char* aimbot_types[] = { "Camera Lock", "Mouse Lock" };
-        ImGui::Combo("Aimbot Type", &settings::aimbot::aimbot_type, aimbot_types, IM_ARRAYSIZE(aimbot_types));
+            const char* easing_styles[] = {
+                "None", "Linear", "Sine (In)", "Sine (Out)", "Sine (InOut)", "Quad (In)", "Quad (Out)", "Quad (InOut)", "Cubic (In)", "Cubic (Out)", "Cubic (InOut)", "Elastic (Out)", "Bounce (Out)"
+            };
+            ImGui::Combo("Smoothing Easing", &settings::aimbot::easing_style, easing_styles, IM_ARRAYSIZE(easing_styles));
 
-        const char* aimparts[] = {
-            "Head", "Upper Torso", "Torso", "Lower Torso", "HumanoidRootPart", "Left Arm", "Right Arm", "Left Leg", "Right Leg", "Closest Point"
-        };
-        ImGui::Combo("aimpart", &settings::aimbot::aimpart, aimparts, IM_ARRAYSIZE(aimparts));
-        ImGui::Checkbox("FOV Check", &settings::aimbot::fov_check);
-        ImGui::Checkbox("Knocked Check", &settings::aimbot::knocked_check);
-        ImGui::Checkbox("Wall Check", &settings::aimbot::wall_check);
-        ImGui::Checkbox("Team Check", &settings::aimbot::team_check);
-
-        const char* easing_styles[] = {
-            "None", "Linear", "Sine (In)", "Sine (Out)", "Sine (InOut)", "Quad (In)", "Quad (Out)", "Quad (InOut)", "Cubic (In)", "Cubic (Out)", "Cubic (InOut)", "Elastic (Out)", "Bounce (Out)"
-        };
-        ImGui::Combo("Smoothing Easing", &settings::aimbot::easing_style, easing_styles, IM_ARRAYSIZE(easing_styles));
-
-        if (settings::aimbot::aimbot_type == 0) {
-            ImGui::Checkbox("Camera Smooth", &settings::aimbot::camera_smooth);
-            if (settings::aimbot::camera_smooth) {
-                SliderFloatWithInput("camera smooth x", &settings::aimbot::camera_smooth_x, 0.0f, 200.0f, "%.1f");
-                SliderFloatWithInput("camera smooth y", &settings::aimbot::camera_smooth_y, 0.0f, 200.0f, "%.1f");
+            if (settings::aimbot::aimbot_type == 0) {
+                ImGui::Checkbox("Camera Smooth", &settings::aimbot::camera_smooth);
+                if (settings::aimbot::camera_smooth) {
+                    SliderFloatWithInput("camera smooth x", &settings::aimbot::camera_smooth_x, 0.0f, 200.0f, "%.1f");
+                    SliderFloatWithInput("camera smooth y", &settings::aimbot::camera_smooth_y, 0.0f, 200.0f, "%.1f");
+                }
+                ImGui::Checkbox("Camera Prediction", &settings::aimbot::camera_prediction);
+                if (settings::aimbot::camera_prediction) {
+                    SliderFloatWithInput("camera prediction x", &settings::aimbot::camera_prediction_x, 1.0f, 20.0f, "%.1f");
+                    SliderFloatWithInput("camera prediction y", &settings::aimbot::camera_prediction_y, 1.0f, 20.0f, "%.1f");
+                }
             }
-            ImGui::Checkbox("Camera Prediction", &settings::aimbot::camera_prediction);
-            if (settings::aimbot::camera_prediction) {
-                SliderFloatWithInput("camera prediction x", &settings::aimbot::camera_prediction_x, 1.0f, 20.0f, "%.1f");
-                SliderFloatWithInput("camera prediction y", &settings::aimbot::camera_prediction_y, 1.0f, 20.0f, "%.1f");
+
+            if (settings::aimbot::aimbot_type == 1) {
+                ImGui::Checkbox("Mouse Smooth", &settings::aimbot::mouse_smooth);
+                if (settings::aimbot::mouse_smooth) {
+                    SliderFloatWithInput("mouse smooth x", &settings::aimbot::mouse_smooth_x, 0.0f, 200.0f, "%.1f");
+                    SliderFloatWithInput("mouse smooth y", &settings::aimbot::mouse_smooth_y, 0.0f, 200.0f, "%.1f");
+                    SliderFloatWithInput("mouse sensitivity", &settings::aimbot::mouse_sensitivity, 0.1f, 10.0f, "%.1f");
+                }
+                ImGui::Checkbox("Mouse Prediction", &settings::aimbot::mouse_prediction);
+                if (settings::aimbot::mouse_prediction) {
+                    SliderFloatWithInput("mouse prediction x", &settings::aimbot::mouse_prediction_x, 1.0f, 20.0f, "%.1f");
+                    SliderFloatWithInput("mouse prediction y", &settings::aimbot::mouse_prediction_y, 1.0f, 20.0f, "%.1f");
+                }
             }
+
+            ImGui::Checkbox("Enable Shake", &settings::aimbot::shake);
+            if (settings::aimbot::shake) {
+                SliderFloatWithInput("shake x", &settings::aimbot::shake_x, -5.0f, 5.0f, "%.1f");
+                SliderFloatWithInput("shake y", &settings::aimbot::shake_y, -5.0f, 5.0f, "%.1f");
+            }
+
+            ImGui::EndChild();
+            ImGui::PopStyleVar();
         }
-
-        if (settings::aimbot::aimbot_type == 1) {
-            ImGui::Checkbox("Mouse Smooth", &settings::aimbot::mouse_smooth);
-            if (settings::aimbot::mouse_smooth) {
-                SliderFloatWithInput("mouse smooth x", &settings::aimbot::mouse_smooth_x, 0.0f, 200.0f, "%.1f");
-                SliderFloatWithInput("mouse smooth y", &settings::aimbot::mouse_smooth_y, 0.0f, 200.0f, "%.1f");
-                SliderFloatWithInput("mouse sensitivity", &settings::aimbot::mouse_sensitivity, 0.1f, 10.0f, "%.1f");
-            }
-            ImGui::Checkbox("Mouse Prediction", &settings::aimbot::mouse_prediction);
-            if (settings::aimbot::mouse_prediction) {
-                SliderFloatWithInput("mouse prediction x", &settings::aimbot::mouse_prediction_x, 1.0f, 20.0f, "%.1f");
-                SliderFloatWithInput("mouse prediction y", &settings::aimbot::mouse_prediction_y, 1.0f, 20.0f, "%.1f");
-            }
-        }
-
-        ImGui::Checkbox("Enable Shake", &settings::aimbot::shake);
-        if (settings::aimbot::shake) {
-            SliderFloatWithInput("shake x", &settings::aimbot::shake_x, -5.0f, 5.0f, "%.1f");
-            SliderFloatWithInput("shake y", &settings::aimbot::shake_y, -5.0f, 5.0f, "%.1f");
-        }
-
-        ImGui::EndChild();
-        ImGui::PopStyleVar();
         break;
     }
     case 1:
     {
-        ImGui::SetCursorPos(ImVec2(22.f, 78.f));
-
-        ImGui::BeginChild("Redirection", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
-
-        ImGui::Checkbox("Enable", &settings::silent::enabled);
-        if (settings::silent::enabled)
+        if (current_page == 0)
         {
-            ImGui::SameLine();
-            inline_keybind_button("silent_keybind", &settings::silent::keybind, &settings::silent::keybind_mode);
-        }
-        ImGui::Checkbox("Sticky Aim", &settings::silent::sticky_aim);
-        ImGui::Checkbox("Spoof Mouse", &settings::silent::spoof_mouse);
-        ImGui::Checkbox("Draw FOV", &settings::silent::draw_fov);
-        ImGui::SameLine();
-        if (add_tooltip_trigger("fov_tooltip")) {
-            if (begin_tooltip_popup("fov_tooltip", ImVec2(290, 180))) {
-                ImGui::BeginChild("Field Of View Settings", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), true, ImGuiWindowFlags_NoBackground);
+            ImGui::SetCursorPos(ImVec2(22.f, 114.f));
+            ImGui::BeginChild("Redirection", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
-                ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.f);
-                SliderFloatWithInput("size", &settings::silent::fov, 10.f, 500.f, "%.1f");
-
-                ImGui::Checkbox("Fill", &settings::silent::filled_fov);
+            ImGui::Checkbox("Enable", &settings::silent::enabled);
+            if (settings::silent::enabled)
+            {
                 ImGui::SameLine();
-                ImGui::ColorEdit4("Fov Color", settings::silent::fov_color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_AlphaBar);
-
-                ImGui::Checkbox("Rotate", &settings::silent::rotate_fov);
-                ImGui::Checkbox("Rainbow", &settings::silent::rainbow_fov);
-
-                ImGui::EndChild();
-                end_tooltip_popup("fov_tooltip", ImVec2(290, 180));
-
+                inline_keybind_button("silent_keybind", &settings::silent::keybind, &settings::silent::keybind_mode);
             }
+            ImGui::Checkbox("Sticky Aim", &settings::silent::sticky_aim);
+            ImGui::Checkbox("Spoof Mouse", &settings::silent::spoof_mouse);
+            ImGui::Checkbox("Draw FOV", &settings::silent::draw_fov);
+            ImGui::SameLine();
+            if (add_tooltip_trigger("fov_tooltip")) {
+                if (begin_tooltip_popup("fov_tooltip", ImVec2(290, 180))) {
+                    ImGui::BeginChild("Field Of View Settings", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), true, ImGuiWindowFlags_NoBackground);
+
+                    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.f);
+                    SliderFloatWithInput("size", &settings::silent::fov, 10.f, 500.f, "%.1f");
+
+                    ImGui::Checkbox("Fill", &settings::silent::filled_fov);
+                    ImGui::SameLine();
+                    ImGui::ColorEdit4("Fov Color", settings::silent::fov_color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_AlphaBar);
+
+                    ImGui::Checkbox("Rotate", &settings::silent::rotate_fov);
+                    ImGui::Checkbox("Rainbow", &settings::silent::rainbow_fov);
+
+                    ImGui::EndChild();
+                    end_tooltip_popup("fov_tooltip", ImVec2(290, 180));
+                }
+            }
+
+            ImGui::EndChild();
         }
-
-        ImGui::EndChild();
-
-        ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() * 0.5f + 8.f, 78.f));
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
-        ImGui::BeginChild("Redirection Settings", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
-
-        const char* aim_parts[] = { "Head", "Torso", "Closest to Mouse" };
-        ImGui::Combo("Aim Part", &settings::silent::aim_part, aim_parts, IM_ARRAYSIZE(aim_parts));
-
-        ImGui::Checkbox("Gun Based FOV", &settings::silent::gun_based_fov);
-
-        if (settings::silent::gun_based_fov)
+        else
         {
-            SliderFloatWithInput("Double Barrel", &settings::silent::fov_double_barrel, 10.f, 500.f, "%.1f");
-            SliderFloatWithInput("Tactical Shotgun", &settings::silent::fov_tactical_shotgun, 10.f, 500.f, "%.1f");
-            SliderFloatWithInput("Revolver", &settings::silent::fov_revolver, 10.f, 500.f, "%.1f");
-        }
+            ImGui::SetCursorPos(ImVec2(22.f, 114.f));
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
+            ImGui::BeginChild("Redirection Settings", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
-        ImGui::Checkbox("Fov Check", &settings::silent::fov_check);
+            const char* aim_parts[] = { "Head", "Torso", "Closest to Mouse" };
+            ImGui::Combo("Aim Part", &settings::silent::aim_part, aim_parts, IM_ARRAYSIZE(aim_parts));
+
+            ImGui::Checkbox("Gun Based FOV", &settings::silent::gun_based_fov);
+
+            if (settings::silent::gun_based_fov)
+            {
+                SliderFloatWithInput("Double Barrel", &settings::silent::fov_double_barrel, 10.f, 500.f, "%.1f");
+                SliderFloatWithInput("Tactical Shotgun", &settings::silent::fov_tactical_shotgun, 10.f, 500.f, "%.1f");
+                SliderFloatWithInput("Revolver", &settings::silent::fov_revolver, 10.f, 500.f, "%.1f");
+            }
+
+            ImGui::Checkbox("Fov Check", &settings::silent::fov_check);
         ImGui::Checkbox("Knocked Check", &settings::silent::knocked_check);
-        ImGui::Checkbox("Wall Check", &settings::silent::wall_check);
-        ImGui::Checkbox("Magic Bullet", &settings::silent::magic_bullet);
+            ImGui::Checkbox("Wall Check", &settings::silent::wall_check);
+            ImGui::Checkbox("Magic Bullet", &settings::silent::magic_bullet);
 
-        ImGui::EndChild();
-        ImGui::PopStyleVar();
+            ImGui::EndChild();
+            ImGui::PopStyleVar();
+        }
         break;
     }
     case 2:
-        ImGui::SetCursorPos(ImVec2(22.f, 78.f));
-
-        ImGui::BeginChild("WallHack", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
-
-        ImGui::Checkbox("Boxes", &settings::visuals::box);
-        ImGui::SameLine();
-        ImGui::ColorEdit4("box col", settings::visuals::box_color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
-        ImGui::Checkbox("Name", &settings::visuals::name);
-        ImGui::SameLine();
-        ImGui::ColorEdit4("name col", settings::visuals::name_color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
-        ImGui::Checkbox("Distance", &settings::visuals::distance);
-        ImGui::SameLine();
-        ImGui::ColorEdit4("distance col", settings::visuals::distance_color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
-        ImGui::Checkbox("Tool", &settings::visuals::tool);
-        ImGui::SameLine();
-        ImGui::ColorEdit4("tool col", settings::visuals::tool_color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
-        ImGui::Checkbox("Weapon Icon", &settings::visuals::weapon_icon);
-        ImGui::SameLine();
-        ImGui::ColorEdit4("weapon icon col", settings::visuals::weapon_icon_color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
-        ImGui::Checkbox("Highlight", &settings::visuals::highlights);
-        ImGui::SameLine();
-        ImGui::ColorEdit4("highlights col", settings::visuals::highlights_color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
-
-        ImGui::Checkbox("Snaplines (Tracers)", &settings::visuals::tracers);
-        ImGui::SameLine();
-        ImGui::ColorEdit4("tracers col", settings::visuals::tracers_color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
-        if (settings::visuals::tracers) {
-            const char* origins[] = { "Screen Bottom", "Screen Center" };
-            ImGui::Combo("Tracer Origin", &settings::visuals::tracers_origin, origins, IM_ARRAYSIZE(origins));
-        }
-
-        ImGui::Checkbox("Skeleton ESP", &settings::visuals::skeleton);
-        ImGui::SameLine();
-        ImGui::ColorEdit4("skeleton col", settings::visuals::skeleton_color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
-
-        ImGui::Checkbox("Head Dot", &settings::visuals::head_dot);
-        ImGui::SameLine();
-        ImGui::ColorEdit4("headdot col", settings::visuals::head_dot_color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
-
-        ImGui::Checkbox("Look Vector (Eye)", &settings::visuals::look_vector);
-        ImGui::SameLine();
-        ImGui::ColorEdit4("lookvector col", settings::visuals::look_vector_color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
-
-        ImGui::Checkbox("Healthbar", &settings::visuals::healthbar);
-        ImGui::SameLine();
-        if (add_tooltip_trigger("healthbar_tooltip")) {
-            if (begin_tooltip_popup("healthbar_tooltip", ImVec2(250, 150))) {
-                ImGui::BeginChild("Health Bar Settings", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), true, ImGuiWindowFlags_NoBackground);
-
-                ImGui::Checkbox("Health Text", &settings::visuals::health_text);
-
-                ImGui::Text("Health Bar Color");
-                ImGui::SameLine();
-                ImGui::ColorEdit3("healthbar color", settings::visuals::healthbar_color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
-
-                ImGui::Text("Health Text Color");
-                ImGui::SameLine();
-                ImGui::ColorEdit3("healthtext color", settings::visuals::health_text_color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
-
-                ImGui::EndChild();
-                end_tooltip_popup("healthbar_tooltip", ImVec2(250, 150));
-            }
-        }
-
-        ImGui::EndChild();
-
-        ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() * 0.5f + 8.f, 78.f));
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
-        ImGui::BeginChild("WallHack Misc", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
+    {
+        if (current_page == 0)
         {
+            ImGui::SetCursorPos(ImVec2(22.f, 114.f));
+            ImGui::BeginChild("WallHack", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
-        
-        ImGui::TextColored(menu::accent_color, "ESP LIVE PREVIEW");
-        ImGui::Separator();
-        
-        
-        ImDrawList* preview_draw = ImGui::GetWindowDrawList();
-        ImVec2 preview_start = ImGui::GetCursorScreenPos();
-        preview_start.y += 5.0f;
-        ImVec2 preview_size = ImVec2(ImGui::GetContentRegionAvail().x - 10.0f, 150.0f);
-        
-        
-        preview_draw->AddRectFilled(preview_start, ImVec2(preview_start.x + preview_size.x, preview_start.y + preview_size.y), IM_COL32(14, 14, 18, 255), 4.0f);
-        preview_draw->AddRect(preview_start, ImVec2(preview_start.x + preview_size.x, preview_start.y + preview_size.y), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 115), 4.0f);
+            ImGui::Checkbox("Boxes", &settings::visuals::box);
+            ImGui::SameLine();
+            ImGui::ColorEdit4("box col", settings::visuals::box_color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+            ImGui::Checkbox("Name", &settings::visuals::name);
+            ImGui::SameLine();
+            ImGui::ColorEdit4("name col", settings::visuals::name_color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+            ImGui::Checkbox("Distance", &settings::visuals::distance);
+            ImGui::SameLine();
+            ImGui::ColorEdit4("distance col", settings::visuals::distance_color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+            ImGui::Checkbox("Tool", &settings::visuals::tool);
+            ImGui::SameLine();
+            ImGui::ColorEdit4("tool col", settings::visuals::tool_color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+            ImGui::Checkbox("Weapon Icon", &settings::visuals::weapon_icon);
+            ImGui::SameLine();
+            ImGui::ColorEdit4("weapon icon col", settings::visuals::weapon_icon_color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+            ImGui::Checkbox("Highlight", &settings::visuals::highlights);
+            ImGui::SameLine();
+            ImGui::ColorEdit4("highlights col", settings::visuals::highlights_color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
 
-        
-        ImVec2 char_center = ImVec2(preview_start.x + preview_size.x * 0.5f, preview_start.y + preview_size.y * 0.5f + 10.0f);
-        float box_w = 40.0f;
-        float box_h = 80.0f;
-        ImVec2 min_pt = ImVec2(char_center.x - box_w * 0.5f, char_center.y - box_h * 0.5f);
-        ImVec2 max_pt = ImVec2(char_center.x + box_w * 0.5f, char_center.y + box_h * 0.5f);
-
-        ImU32 white_out = IM_COL32(255, 255, 255, 255);
-        ImU32 black_out = IM_COL32(0, 0, 0, 255);
-
-        
-        if (settings::visuals::tracers) {
-            ImU32 tracer_col = ImGui::ColorConvertFloat4ToU32({
-                settings::visuals::tracers_color[0], settings::visuals::tracers_color[1],
-                settings::visuals::tracers_color[2], settings::visuals::tracers_color[3]
-            });
-            ImVec2 origin = (settings::visuals::tracers_origin == 0) ? ImVec2(char_center.x, preview_start.y + preview_size.y) : ImVec2(char_center.x, preview_start.y + preview_size.y * 0.5f);
-            preview_draw->AddLine(origin, ImVec2(char_center.x, max_pt.y), tracer_col, 1.0f);
-        }
-
-        
-        if (settings::visuals::highlights) {
-            ImU32 highlight_col = ImGui::ColorConvertFloat4ToU32({
-                settings::visuals::highlights_color[0], settings::visuals::highlights_color[1],
-                settings::visuals::highlights_color[2], settings::visuals::highlights_color[3] * 0.4f
-            });
-            preview_draw->AddRectFilled(min_pt, max_pt, highlight_col, 2.0f);
-        }
-
-        
-        if (settings::visuals::skeleton) {
-            ImU32 skel_col = ImGui::ColorConvertFloat4ToU32({
-                settings::visuals::skeleton_color[0], settings::visuals::skeleton_color[1],
-                settings::visuals::skeleton_color[2], settings::visuals::skeleton_color[3]
-            });
-            
-            preview_draw->AddLine(ImVec2(char_center.x, min_pt.y + 10.f), ImVec2(char_center.x, min_pt.y + 20.f), skel_col, 1.5f);
-            
-            preview_draw->AddLine(ImVec2(char_center.x, min_pt.y + 20.f), ImVec2(char_center.x, min_pt.y + 50.f), skel_col, 1.5f);
-            
-            preview_draw->AddLine(ImVec2(char_center.x, min_pt.y + 25.f), ImVec2(min_pt.x + 5.f, min_pt.y + 40.f), skel_col, 1.5f);
-            
-            preview_draw->AddLine(ImVec2(char_center.x, min_pt.y + 25.f), ImVec2(max_pt.x - 5.f, min_pt.y + 40.f), skel_col, 1.5f);
-            
-            preview_draw->AddLine(ImVec2(char_center.x, min_pt.y + 50.f), ImVec2(min_pt.x + 10.f, max_pt.y - 5.f), skel_col, 1.5f);
-            
-            preview_draw->AddLine(ImVec2(char_center.x, min_pt.y + 50.f), ImVec2(max_pt.x - 10.f, max_pt.y - 5.f), skel_col, 1.5f);
-        }
-
-        
-        ImVec2 head_preview_pt = ImVec2(char_center.x, min_pt.y + 10.0f);
-        if (settings::visuals::head_dot) {
-            ImU32 dot_col = ImGui::ColorConvertFloat4ToU32({
-                settings::visuals::head_dot_color[0], settings::visuals::head_dot_color[1],
-                settings::visuals::head_dot_color[2], settings::visuals::head_dot_color[3]
-            });
-            preview_draw->AddCircleFilled(head_preview_pt, 2.5f, dot_col);
-            preview_draw->AddCircle(head_preview_pt, 2.5f, black_out);
-        }
-        if (settings::visuals::look_vector) {
-            ImU32 gaze_col = ImGui::ColorConvertFloat4ToU32({
-                settings::visuals::look_vector_color[0], settings::visuals::look_vector_color[1],
-                settings::visuals::look_vector_color[2], settings::visuals::look_vector_color[3]
-            });
-            preview_draw->AddLine(head_preview_pt, ImVec2(head_preview_pt.x + 15.0f, head_preview_pt.y - 12.0f), gaze_col, 1.5f);
-            preview_draw->AddCircleFilled(ImVec2(head_preview_pt.x + 15.0f, head_preview_pt.y - 12.0f), 1.5f, gaze_col);
-        }
-
-        
-        if (settings::visuals::box) {
-            ImU32 box_col = ImGui::ColorConvertFloat4ToU32({
-                settings::visuals::box_color[0], settings::visuals::box_color[1],
-                settings::visuals::box_color[2], settings::visuals::box_color[3]
-            });
-            if (settings::visuals::box_type == 1) { 
-                float corner_len = 8.0f;
-                
-                preview_draw->AddLine(min_pt, ImVec2(min_pt.x + corner_len, min_pt.y), box_col);
-                preview_draw->AddLine(min_pt, ImVec2(min_pt.x, min_pt.y + corner_len), box_col);
-                
-                preview_draw->AddLine(ImVec2(max_pt.x, min_pt.y), ImVec2(max_pt.x - corner_len, min_pt.y), box_col);
-                preview_draw->AddLine(ImVec2(max_pt.x, min_pt.y), ImVec2(max_pt.x, min_pt.y + corner_len), box_col);
-                
-                preview_draw->AddLine(ImVec2(min_pt.x, max_pt.y), ImVec2(min_pt.x + corner_len, max_pt.y), box_col);
-                preview_draw->AddLine(ImVec2(min_pt.x, max_pt.y), ImVec2(min_pt.x, max_pt.y - corner_len), box_col);
-                
-                preview_draw->AddLine(max_pt, ImVec2(max_pt.x - corner_len, max_pt.y), box_col);
-                preview_draw->AddLine(max_pt, ImVec2(max_pt.x, max_pt.y - corner_len), box_col);
-            } else { 
-                preview_draw->AddRect(min_pt, max_pt, box_col, 0.0f, 0, 1.0f);
+            ImGui::Checkbox("Snaplines (Tracers)", &settings::visuals::tracers);
+            ImGui::SameLine();
+            ImGui::ColorEdit4("tracers col", settings::visuals::tracers_color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+            if (settings::visuals::tracers) {
+                const char* origins[] = { "Screen Bottom", "Screen Center" };
+                ImGui::Combo("Tracer Origin", &settings::visuals::tracers_origin, origins, IM_ARRAYSIZE(origins));
             }
-        }
 
-        
-        if (settings::visuals::name) {
-            ImU32 name_col = ImGui::ColorConvertFloat4ToU32({
-                settings::visuals::name_color[0], settings::visuals::name_color[1],
-                settings::visuals::name_color[2], settings::visuals::name_color[3]
-            });
-            const char* p_name = "Player_01";
-            ImVec2 n_size = ImGui::CalcTextSize(p_name);
-            preview_draw->AddText(ImVec2(char_center.x - n_size.x * 0.5f, min_pt.y - 12.0f), name_col, p_name);
-        }
+            ImGui::Checkbox("Skeleton ESP", &settings::visuals::skeleton);
+            ImGui::SameLine();
+            ImGui::ColorEdit4("skeleton col", settings::visuals::skeleton_color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
 
-        
-        float bottom_offset = 2.0f;
-        if (settings::visuals::distance) {
-            ImU32 dist_col = ImGui::ColorConvertFloat4ToU32({
-                settings::visuals::distance_color[0], settings::visuals::distance_color[1],
-                settings::visuals::distance_color[2], settings::visuals::distance_color[3]
-            });
-            const char* p_dist = "[45.2M]";
-            ImVec2 d_size = ImGui::CalcTextSize(p_dist);
-            preview_draw->AddText(ImVec2(char_center.x - d_size.x * 0.5f, max_pt.y + bottom_offset), dist_col, p_dist);
-            bottom_offset += 10.0f;
-        }
-        if (settings::visuals::tool) {
-            ImU32 tool_col = ImGui::ColorConvertFloat4ToU32({
-                settings::visuals::tool_color[0], settings::visuals::tool_color[1],
-                settings::visuals::tool_color[2], settings::visuals::tool_color[3]
-            });
-            const char* p_tool = "Double-Barrel";
-            ImVec2 t_size = ImGui::CalcTextSize(p_tool);
-            preview_draw->AddText(ImVec2(char_center.x - t_size.x * 0.5f, max_pt.y + bottom_offset), tool_col, p_tool);
-            bottom_offset += 10.0f;
-        }
-        
-        ImGui::Spacing();
-        ImGui::Separator();
-        ImGui::Spacing();
+            ImGui::Checkbox("Head Dot", &settings::visuals::head_dot);
+            ImGui::SameLine();
+            ImGui::ColorEdit4("headdot col", settings::visuals::head_dot_color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
 
-        ImGui::TextColored(menu::accent_color, "2D TACTICAL RADAR");
-        
-        {
-            ImDrawList* radar_draw = ImGui::GetWindowDrawList();
-            ImVec2 radar_start = ImGui::GetCursorScreenPos();
-            radar_start.y += 5.0f;
-            ImVec2 radar_size = ImVec2(ImGui::GetContentRegionAvail().x - 10.0f, 150.0f);
-            
-            // Draw background grid
-            radar_draw->AddRectFilled(radar_start, ImVec2(radar_start.x + radar_size.x, radar_start.y + radar_size.y), IM_COL32(10, 10, 14, 255), 4.0f);
-            radar_draw->AddRect(radar_start, ImVec2(radar_start.x + radar_size.x, radar_start.y + radar_size.y), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 115), 4.0f);
-            
-            ImVec2 radar_center = ImVec2(radar_start.x + radar_size.x * 0.5f, radar_start.y + radar_size.y * 0.5f);
-            
-            // Crosshairs
-            radar_draw->AddLine(ImVec2(radar_start.x, radar_center.y), ImVec2(radar_start.x + radar_size.x, radar_center.y), IM_COL32(255, 255, 255, 20), 1.0f);
-            radar_draw->AddLine(ImVec2(radar_center.x, radar_start.y), ImVec2(radar_center.x, radar_start.y + radar_size.y), IM_COL32(255, 255, 255, 20), 1.0f);
-            
-            // Range rings
-            radar_draw->AddCircle(radar_center, 35.0f, IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 15), 32, 1.0f);
-            radar_draw->AddCircle(radar_center, 70.0f, IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 10), 32, 1.0f);
-            
-            // Plot local player dot
-            radar_draw->AddCircleFilled(radar_center, 3.5f, IM_COL32(255, 255, 255, 255));
-            radar_draw->AddCircle(radar_center, 3.5f, IM_COL32(0, 0, 0, 255), 12, 1.0f);
-            
-            // Fetch local position
-            math::vector3 local_pos = {0.f, 0.f, 0.f};
-            auto local_hrp_it = cache::cached_local_player.parts.find("HumanoidRootPart");
-            if (local_hrp_it != cache::cached_local_player.parts.end()) {
-                local_pos = local_hrp_it->second.get_primitive().get_position();
-            }
-            
-            // Fetch local camera look direction for orientation alignment
-            float cam_yaw = 0.f; // fallback orient north
-            
-            std::shared_ptr<std::vector<cache::entity_t>> snapshot_ptr;
-            {
-                std::lock_guard<std::mutex> lock(cache::mtx);
-                snapshot_ptr = cache::cached_players;
-            }
-            
-            if (snapshot_ptr && local_hrp_it != cache::cached_local_player.parts.end()) {
-                for (const auto& player : *snapshot_ptr) {
-                    if (player.instance.address == 0 || player.instance.address == cache::cached_local_player.instance.address)
-                        continue;
-                    
-                    auto enemy_hrp_it = player.parts.find("HumanoidRootPart");
-                    if (enemy_hrp_it != player.parts.end()) {
-                        rbx::part_t enemy_part = enemy_hrp_it->second;
-                        math::vector3 ep = enemy_part.get_primitive().get_position();
-                        float dx = ep.x - local_pos.x;
-                        float dz = ep.z - local_pos.z;
-                        
-                        // Scale factors
-                        float radar_scale = 0.55f;
-                        float rx = dx * radar_scale;
-                        float ry = dz * radar_scale;
-                        
-                        // Clamp position to boundary
-                        float dist = std::sqrt(rx * rx + ry * ry);
-                        float max_r = 73.0f;
-                        if (dist > max_r) {
-                            rx = (rx / dist) * max_r;
-                            ry = (ry / dist) * max_r;
-                        }
-                        
-                        ImVec2 dot_pos = ImVec2(radar_center.x + rx, radar_center.y + ry);
-                        
-                        // Select color based on relation
-                        int rel = 0;
-                        auto rel_it = settings::player_relations::relations.find(player.name);
-                        if (rel_it != settings::player_relations::relations.end()) {
-                            rel = rel_it->second;
-                        }
-                        
-                        ImU32 dot_color = IM_COL32(230, 230, 230, 255);
-                        if (rel == 1) dot_color = IM_COL32(0, 255, 120, 255); // Teammate
-                        else if (rel == 2) dot_color = IM_COL32(255, 60, 60, 255); // Enemy
-                        else if (g_silent_aim_locked && g_silent_cached_target.instance.address == player.instance.address) {
-                            dot_color = IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 255);
-                        }
-                        
-                        radar_draw->AddCircleFilled(dot_pos, 3.0f, dot_color);
-                        radar_draw->AddCircle(dot_pos, 3.0f, IM_COL32(0, 0, 0, 255), 12, 1.0f);
-                    }
+            ImGui::Checkbox("Look Vector (Eye)", &settings::visuals::look_vector);
+            ImGui::SameLine();
+            ImGui::ColorEdit4("lookvector col", settings::visuals::look_vector_color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+
+            ImGui::Checkbox("Healthbar", &settings::visuals::healthbar);
+            ImGui::SameLine();
+            if (add_tooltip_trigger("healthbar_tooltip")) {
+                if (begin_tooltip_popup("healthbar_tooltip", ImVec2(250, 150))) {
+                    ImGui::BeginChild("Health Bar Settings", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), true, ImGuiWindowFlags_NoBackground);
+
+                    ImGui::Checkbox("Health Text", &settings::visuals::health_text);
+
+                    ImGui::Text("Health Bar Color");
+                    ImGui::SameLine();
+                    ImGui::ColorEdit3("healthbar color", settings::visuals::healthbar_color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+
+                    ImGui::Text("Health Text Color");
+                    ImGui::SameLine();
+                    ImGui::ColorEdit3("healthtext color", settings::visuals::health_text_color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+
+                    ImGui::EndChild();
+                    end_tooltip_popup("healthbar_tooltip", ImVec2(250, 150));
                 }
             }
-            ImGui::Dummy(ImVec2(0.0f, 160.0f));
+
+            ImGui::EndChild();
         }
-
-        ImGui::Separator();
-
+        else
         {
-            const char* box_types[] = { "Normal", "Corner" };
-            ImGui::Combo("Box Type", &settings::visuals::box_type, box_types, IM_ARRAYSIZE(box_types));
-        }
-
-        ImGui::Checkbox("Localplayer", &settings::visuals::localplayer);
-        ImGui::Checkbox("Target Only", &settings::visuals::target);
-        ImGui::Checkbox("Feature Indicator", &settings::visuals::feature_indicator);
-
-        if (settings::visuals::feature_indicator)
-        {
-            SliderFloatWithInput("indicator x", &settings::visuals::feature_indicator_x, 0.0f, 1920.0f, "%.0f");
-            SliderFloatWithInput("indicator y", &settings::visuals::feature_indicator_y, 0.0f, 1080.0f, "%.0f");
-        }
-
-        }
-        ImGui::EndChild();
-        ImGui::PopStyleVar();
-        break;
-    case 3:
-        ImGui::SetCursorPos(ImVec2(22.f, 78.f));
-
-        ImGui::BeginChild("Movement", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
-
-        ImGui::Checkbox("Walkspeed", &settings::expl::walkspeed);
-
-        if (settings::expl::walkspeed)
-        {
-            SliderFloatWithInput("Speed", &settings::expl::walkspeed_speed, 1.0f, 1000.0f, "%.1f");
-
-            const char* walkspeed_modes[] = { "Normal", "Reloading", "Low Health" };
-            ImGui::Combo("Conditions", &settings::expl::walkspeed_mode, walkspeed_modes, IM_ARRAYSIZE(walkspeed_modes));
-
-            if (settings::expl::walkspeed_mode == 2)
+            ImGui::SetCursorPos(ImVec2(22.f, 114.f));
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
+            ImGui::BeginChild("WallHack Misc", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
             {
-                SliderFloatWithInput("", &settings::expl::walkspeed_health_threshold, 1.0f, 100.0f, "%.1f");
+                ImGui::TextColored(menu::accent_color, "ESP LIVE PREVIEW");
+                ImGui::Separator();
+                ImGui::Spacing();
+                
+                ImDrawList* preview_draw = ImGui::GetWindowDrawList();
+                ImVec2 preview_start = ImGui::GetCursorScreenPos();
+                preview_start.y += 5.0f;
+                ImVec2 preview_size = ImVec2(ImGui::GetContentRegionAvail().x - 10.0f, 150.0f);
+                
+                preview_draw->AddRectFilled(preview_start, ImVec2(preview_start.x + preview_size.x, preview_start.y + preview_size.y), IM_COL32(14, 14, 18, 255), 4.0f);
+                preview_draw->AddRect(preview_start, ImVec2(preview_start.x + preview_size.x, preview_start.y + preview_size.y), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 115), 4.0f);
+
+                ImVec2 char_center = ImVec2(preview_start.x + preview_size.x * 0.5f, preview_start.y + preview_size.y * 0.5f + 10.0f);
+                float box_w = 40.0f;
+                float box_h = 80.0f;
+                ImVec2 min_pt = ImVec2(char_center.x - box_w * 0.5f, char_center.y - box_h * 0.5f);
+                ImVec2 max_pt = ImVec2(char_center.x + box_w * 0.5f, char_center.y + box_h * 0.5f);
+
+                ImU32 white_out = IM_COL32(255, 255, 255, 255);
+                ImU32 black_out = IM_COL32(0, 0, 0, 255);
+
+                if (settings::visuals::tracers) {
+                    ImU32 tracer_col = ImGui::ColorConvertFloat4ToU32({
+                        settings::visuals::tracers_color[0], settings::visuals::tracers_color[1],
+                        settings::visuals::tracers_color[2], settings::visuals::tracers_color[3]
+                    });
+                    ImVec2 origin = (settings::visuals::tracers_origin == 0) ? ImVec2(char_center.x, preview_start.y + preview_size.y) : ImVec2(char_center.x, preview_start.y + preview_size.y * 0.5f);
+                    preview_draw->AddLine(origin, ImVec2(char_center.x, max_pt.y), tracer_col, 1.0f);
+                }
+
+                if (settings::visuals::highlights) {
+                    ImU32 highlight_col = ImGui::ColorConvertFloat4ToU32({
+                        settings::visuals::highlights_color[0], settings::visuals::highlights_color[1],
+                        settings::visuals::highlights_color[2], settings::visuals::highlights_color[3] * 0.4f
+                    });
+                    preview_draw->AddRectFilled(min_pt, max_pt, highlight_col, 2.0f);
+                }
+
+                if (settings::visuals::skeleton) {
+                    ImU32 skel_col = ImGui::ColorConvertFloat4ToU32({
+                        settings::visuals::skeleton_color[0], settings::visuals::skeleton_color[1],
+                        settings::visuals::skeleton_color[2], settings::visuals::skeleton_color[3]
+                    });
+                    
+                    preview_draw->AddLine(ImVec2(char_center.x, min_pt.y + 10.f), ImVec2(char_center.x, min_pt.y + 20.f), skel_col, 1.5f);
+                    preview_draw->AddLine(ImVec2(char_center.x, min_pt.y + 20.f), ImVec2(char_center.x, min_pt.y + 50.f), skel_col, 1.5f);
+                    preview_draw->AddLine(ImVec2(char_center.x, min_pt.y + 25.f), ImVec2(min_pt.x + 5.f, min_pt.y + 40.f), skel_col, 1.5f);
+                    preview_draw->AddLine(ImVec2(char_center.x, min_pt.y + 25.f), ImVec2(max_pt.x - 5.f, min_pt.y + 40.f), skel_col, 1.5f);
+                    preview_draw->AddLine(ImVec2(char_center.x, min_pt.y + 50.f), ImVec2(min_pt.x + 10.f, max_pt.y - 5.f), skel_col, 1.5f);
+                    preview_draw->AddLine(ImVec2(char_center.x, min_pt.y + 50.f), ImVec2(max_pt.x - 10.f, max_pt.y - 5.f), skel_col, 1.5f);
+                }
+
+                ImVec2 head_preview_pt = ImVec2(char_center.x, min_pt.y + 10.0f);
+                if (settings::visuals::head_dot) {
+                    ImU32 dot_col = ImGui::ColorConvertFloat4ToU32({
+                        settings::visuals::head_dot_color[0], settings::visuals::head_dot_color[1],
+                        settings::visuals::head_dot_color[2], settings::visuals::head_dot_color[3]
+                    });
+                    preview_draw->AddCircleFilled(head_preview_pt, 2.5f, dot_col);
+                    preview_draw->AddCircle(head_preview_pt, 2.5f, black_out);
+                }
+                if (settings::visuals::look_vector) {
+                    ImU32 gaze_col = ImGui::ColorConvertFloat4ToU32({
+                        settings::visuals::look_vector_color[0], settings::visuals::look_vector_color[1],
+                        settings::visuals::look_vector_color[2], settings::visuals::look_vector_color[3]
+                    });
+                    preview_draw->AddLine(head_preview_pt, ImVec2(head_preview_pt.x + 15.0f, head_preview_pt.y - 12.0f), gaze_col, 1.5f);
+                    preview_draw->AddCircleFilled(ImVec2(head_preview_pt.x + 15.0f, head_preview_pt.y - 12.0f), 1.5f, gaze_col);
+                }
+
+                if (settings::visuals::box) {
+                    ImU32 box_col = ImGui::ColorConvertFloat4ToU32({
+                        settings::visuals::box_color[0], settings::visuals::box_color[1],
+                        settings::visuals::box_color[2], settings::visuals::box_color[3]
+                    });
+                    if (settings::visuals::box_type == 1) { 
+                        float corner_len = 8.0f;
+                        preview_draw->AddLine(min_pt, ImVec2(min_pt.x + corner_len, min_pt.y), box_col);
+                        preview_draw->AddLine(min_pt, ImVec2(min_pt.x, min_pt.y + corner_len), box_col);
+                        preview_draw->AddLine(ImVec2(max_pt.x, min_pt.y), ImVec2(max_pt.x - corner_len, min_pt.y), box_col);
+                        preview_draw->AddLine(ImVec2(max_pt.x, min_pt.y), ImVec2(max_pt.x, min_pt.y + corner_len), box_col);
+                        preview_draw->AddLine(ImVec2(min_pt.x, max_pt.y), ImVec2(min_pt.x + corner_len, max_pt.y), box_col);
+                        preview_draw->AddLine(ImVec2(min_pt.x, max_pt.y), ImVec2(min_pt.x, max_pt.y - corner_len), box_col);
+                        preview_draw->AddLine(max_pt, ImVec2(max_pt.x - corner_len, max_pt.y), box_col);
+                        preview_draw->AddLine(max_pt, ImVec2(max_pt.x, max_pt.y - corner_len), box_col);
+                    } else { 
+                        preview_draw->AddRect(min_pt, max_pt, box_col, 0.0f, 0, 1.0f);
+                    }
+                }
+
+                if (settings::visuals::name) {
+                    ImU32 name_col = ImGui::ColorConvertFloat4ToU32({
+                        settings::visuals::name_color[0], settings::visuals::name_color[1],
+                        settings::visuals::name_color[2], settings::visuals::name_color[3]
+                    });
+                    const char* p_name = "Player_01";
+                    ImVec2 n_size = ImGui::CalcTextSize(p_name);
+                    preview_draw->AddText(ImVec2(char_center.x - n_size.x * 0.5f, min_pt.y - 12.0f), name_col, p_name);
+                }
+
+                float bottom_offset = 2.0f;
+                if (settings::visuals::distance) {
+                    ImU32 dist_col = ImGui::ColorConvertFloat4ToU32({
+                        settings::visuals::distance_color[0], settings::visuals::distance_color[1],
+                        settings::visuals::distance_color[2], settings::visuals::distance_color[3]
+                    });
+                    const char* p_dist = "[45.2M]";
+                    ImVec2 d_size = ImGui::CalcTextSize(p_dist);
+                    preview_draw->AddText(ImVec2(char_center.x - d_size.x * 0.5f, max_pt.y + bottom_offset), dist_col, p_dist);
+                    bottom_offset += 10.0f;
+                }
+                if (settings::visuals::tool) {
+                    ImU32 tool_col = ImGui::ColorConvertFloat4ToU32({
+                        settings::visuals::tool_color[0], settings::visuals::tool_color[1],
+                        settings::visuals::tool_color[2], settings::visuals::tool_color[3]
+                    });
+                    const char* p_tool = "Double-Barrel";
+                    ImVec2 t_size = ImGui::CalcTextSize(p_tool);
+                    preview_draw->AddText(ImVec2(char_center.x - t_size.x * 0.5f, max_pt.y + bottom_offset), tool_col, p_tool);
+                    bottom_offset += 10.0f;
+                }
+                
+                ImGui::Spacing();
+                ImGui::Separator();
+                ImGui::Spacing();
+
+                ImGui::TextColored(menu::accent_color, "2D TACTICAL RADAR");
+                
+                {
+                    ImDrawList* radar_draw = ImGui::GetWindowDrawList();
+                    ImVec2 radar_start = ImGui::GetCursorScreenPos();
+                    radar_start.y += 5.0f;
+                    ImVec2 radar_size = ImVec2(ImGui::GetContentRegionAvail().x - 10.0f, 150.0f);
+                    
+                    radar_draw->AddRectFilled(radar_start, ImVec2(radar_start.x + radar_size.x, radar_start.y + radar_size.y), IM_COL32(10, 10, 14, 255), 4.0f);
+                    radar_draw->AddRect(radar_start, ImVec2(radar_start.x + radar_size.x, radar_start.y + radar_size.y), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 115), 4.0f);
+                    
+                    ImVec2 radar_center = ImVec2(radar_start.x + radar_size.x * 0.5f, radar_start.y + radar_size.y * 0.5f);
+                    
+                    radar_draw->AddLine(ImVec2(radar_start.x, radar_center.y), ImVec2(radar_start.x + radar_size.x, radar_center.y), IM_COL32(255, 255, 255, 20), 1.0f);
+                    radar_draw->AddLine(ImVec2(radar_center.x, radar_start.y), ImVec2(radar_center.x, radar_start.y + radar_size.y), IM_COL32(255, 255, 255, 20), 1.0f);
+                    
+                    radar_draw->AddCircle(radar_center, 35.0f, IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 15), 32, 1.0f);
+                    radar_draw->AddCircle(radar_center, 70.0f, IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 10), 32, 1.0f);
+                    
+                    radar_draw->AddCircleFilled(radar_center, 3.5f, IM_COL32(255, 255, 255, 255));
+                    radar_draw->AddCircle(radar_center, 3.5f, IM_COL32(0, 0, 0, 255), 12, 1.0f);
+                    
+                    math::vector3 local_pos = {0.f, 0.f, 0.f};
+                    auto local_hrp_it = cache::cached_local_player.parts.find("HumanoidRootPart");
+                    if (local_hrp_it != cache::cached_local_player.parts.end()) {
+                        local_pos = local_hrp_it->second.get_primitive().get_position();
+                    }
+                    
+                    float cam_yaw = 0.f;
+                    
+                    std::shared_ptr<std::vector<cache::entity_t>> snapshot_ptr;
+                    {
+                        std::lock_guard<std::mutex> lock(cache::mtx);
+                        snapshot_ptr = cache::cached_players;
+                    }
+                    
+                    if (snapshot_ptr && local_hrp_it != cache::cached_local_player.parts.end()) {
+                        for (const auto& player : *snapshot_ptr) {
+                            if (player.instance.address == 0 || player.instance.address == cache::cached_local_player.instance.address)
+                                continue;
+                            
+                            auto enemy_hrp_it = player.parts.find("HumanoidRootPart");
+                            if (enemy_hrp_it != player.parts.end()) {
+                                rbx::part_t enemy_part = enemy_hrp_it->second;
+                                math::vector3 ep = enemy_part.get_primitive().get_position();
+                                float dx = ep.x - local_pos.x;
+                                float dz = ep.z - local_pos.z;
+                                
+                                float radar_scale = 0.55f;
+                                float rx = dx * radar_scale;
+                                float ry = dz * radar_scale;
+                                
+                                float dist = std::sqrt(rx * rx + ry * ry);
+                                float max_r = 73.0f;
+                                if (dist > max_r) {
+                                    rx = (rx / dist) * max_r;
+                                    ry = (ry / dist) * max_r;
+                                }
+                                
+                                ImVec2 dot_pos = ImVec2(radar_center.x + rx, radar_center.y + ry);
+                                
+                                int rel = 0;
+                                auto rel_it = settings::player_relations::relations.find(player.name);
+                                if (rel_it != settings::player_relations::relations.end()) {
+                                    rel = rel_it->second;
+                                }
+                                
+                                ImU32 dot_color = IM_COL32(230, 230, 230, 255);
+                                if (rel == 1) dot_color = IM_COL32(0, 255, 120, 255);
+                                else if (rel == 2) dot_color = IM_COL32(255, 60, 60, 255);
+                                else if (g_silent_aim_locked && g_silent_cached_target.instance.address == player.instance.address) {
+                                    dot_color = IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 255);
+                                }
+                                
+                                radar_draw->AddCircleFilled(dot_pos, 3.0f, dot_color);
+                                radar_draw->AddCircle(dot_pos, 3.0f, IM_COL32(0, 0, 0, 255), 12, 1.0f);
+                            }
+                        }
+                    }
+                    ImGui::Dummy(ImVec2(0.0f, 160.0f));
+                }
+
+                ImGui::Separator();
+
+                {
+                    const char* box_types[] = { "Normal", "Corner" };
+                    ImGui::Combo("Box Type", &settings::visuals::box_type, box_types, IM_ARRAYSIZE(box_types));
+                }
+
+                ImGui::Checkbox("Localplayer", &settings::visuals::localplayer);
+                ImGui::Checkbox("Target Only", &settings::visuals::target);
+                ImGui::Checkbox("Feature Indicator", &settings::visuals::feature_indicator);
+
+                if (settings::visuals::feature_indicator)
+                {
+                    SliderFloatWithInput("indicator x", &settings::visuals::feature_indicator_x, 0.0f, 1920.0f, "%.0f");
+                    SliderFloatWithInput("indicator y", &settings::visuals::feature_indicator_y, 0.0f, 1080.0f, "%.0f");
+                }
             }
+            ImGui::EndChild();
+            ImGui::PopStyleVar();
         }
-
-        ImGui::Spacing();
-        ImGui::Checkbox("JumpPower Modifier", &settings::expl::jumppower_enabled);
-        if (settings::expl::jumppower_enabled)
-        {
-            SliderFloatWithInput("Power", &settings::expl::jumppower_power, 0.0f, 500.0f, "%.1f");
-        }
-
-        ImGui::Spacing();
-        ImGui::Checkbox("Infinite Jump", &settings::expl::infinite_jump);
-
-        ImGui::Spacing();
-        ImGui::Checkbox("NoClip", &settings::expl::noclip_enabled);
-
-        ImGui::Spacing();
-        ImGui::Checkbox("Freeze Players", &settings::expl::freeze_players);
-        if (settings::expl::freeze_players)
-        {
-            ImGui::SameLine();
-            inline_keybind_button("freeze_players_keybind", &settings::expl::freeze_players_keybind, &settings::expl::freeze_players_keybind_mode);
-        }
-
-        ImGui::Spacing();
-        ImGui::Checkbox("Tickrate", &settings::expl::tickrate);
-        if (settings::expl::tickrate)
-        {
-            SliderFloatWithInput(" ", &settings::expl::tickrate_amount, 30.0f, 1000.0f, "%.1f");
-        }
-
-        ImGui::Spacing();
-        ImGui::Checkbox("Fly", &settings::expl::fly_enabled);
-        if (settings::expl::fly_enabled)
-        {
-            ImGui::SameLine();
-            inline_keybind_button("fly_keybind", &settings::expl::fly_keybind, &settings::expl::fly_keybind_mode);
-            SliderFloatWithInput("Speed", &settings::expl::fly_speed, 1.0f, 1000.0f, "%.1f");
-            const char* fly_modes[] = { "Velocity", "CFrame" };
-            ImGui::Combo("Fly Mode", &settings::expl::fly_mode, fly_modes, IM_ARRAYSIZE(fly_modes));
-        }
-
-        ImGui::Spacing();
-        ImGui::Checkbox("Legit Teleport", &settings::expl::legit_teleport);
-        if (settings::expl::legit_teleport)
-        {
-            SliderFloatWithInput("Glide Speed", &settings::expl::legit_teleport_speed, 10.0f, 1000.0f, "%.0f");
-            SliderIntWithInput("Step Delay (ms)", &settings::expl::legit_teleport_delay, 5, 100);
-        }
-
-        ImGui::EndChild();
-
-        ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() * 0.5f + 8.f, 78.f));
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
-        ImGui::BeginChild("Blatant & World", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
-
-        ImGui::TextColored(menu::accent_color, "BLATANT");
-
-        ImGui::Checkbox("Infinite Bullets", &settings::expl::infinite_ammo);
-        ImGui::Spacing();
-
-        ImGui::Checkbox("Raycast Hitbox Expander", &settings::botter::raycast_hitbox);
-        ImGui::Spacing();
-
-        ImGui::Checkbox("DB No Spread", &settings::botter::db_spread_raycast);
-        ImGui::Spacing();
-
-        SliderFloatWithInput("Hitbox Size", &settings::botter::hitbox_size, 10.f, 3000.f, "%.0f");
-        ImGui::Spacing();
-
-        ImGui::Checkbox("Visualize Hitbox", &settings::botter::visualize_hitbox);
-        ImGui::Spacing();
-        ImGui::Separator();
-        ImGui::Spacing();
-
-        ImGui::TextColored(menu::accent_color, "WORLD & CLIENT");
-
-        ImGui::Checkbox("Gravity Modifier", &settings::expl::gravity_enabled);
-        if (settings::expl::gravity_enabled)
-        {
-            SliderFloatWithInput("Gravity Value", &settings::expl::gravity_value, 0.0f, 1000.0f, "%.1f");
-        }
-
-        ImGui::Spacing();
-        ImGui::Checkbox("FOV Changer", &settings::expl::fov_changer_enabled);
-        if (settings::expl::fov_changer_enabled)
-        {
-            SliderFloatWithInput("Camera FOV", &settings::expl::fov_changer_value, 30.0f, 150.0f, "%.0f");
-        }
-
-        ImGui::EndChild();
-        ImGui::PopStyleVar();
         break;
+    }
+    case 3:
+    {
+        if (current_page == 0)
+        {
+            ImGui::SetCursorPos(ImVec2(22.f, 114.f));
+            ImGui::BeginChild("Movement", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
+
+            ImGui::Checkbox("Walkspeed", &settings::expl::walkspeed);
+
+            if (settings::expl::walkspeed)
+            {
+                SliderFloatWithInput("Speed", &settings::expl::walkspeed_speed, 1.0f, 1000.0f, "%.1f");
+
+                const char* walkspeed_modes[] = { "Normal", "Reloading", "Low Health" };
+                ImGui::Combo("Conditions", &settings::expl::walkspeed_mode, walkspeed_modes, IM_ARRAYSIZE(walkspeed_modes));
+
+                if (settings::expl::walkspeed_mode == 2)
+                {
+                    SliderFloatWithInput("", &settings::expl::walkspeed_health_threshold, 1.0f, 100.0f, "%.1f");
+                }
+            }
+
+            ImGui::Spacing();
+            ImGui::Checkbox("JumpPower Modifier", &settings::expl::jumppower_enabled);
+            if (settings::expl::jumppower_enabled)
+            {
+                SliderFloatWithInput("Power", &settings::expl::jumppower_power, 0.0f, 500.0f, "%.1f");
+            }
+
+            ImGui::Spacing();
+            ImGui::Checkbox("Infinite Jump", &settings::expl::infinite_jump);
+
+            ImGui::Spacing();
+            ImGui::Checkbox("NoClip", &settings::expl::noclip_enabled);
+
+            ImGui::Spacing();
+            ImGui::Checkbox("Freeze Players", &settings::expl::freeze_players);
+            if (settings::expl::freeze_players)
+            {
+                ImGui::SameLine();
+                inline_keybind_button("freeze_players_keybind", &settings::expl::freeze_players_keybind, &settings::expl::freeze_players_keybind_mode);
+            }
+
+            ImGui::Spacing();
+            ImGui::Checkbox("Tickrate", &settings::expl::tickrate);
+            if (settings::expl::tickrate)
+            {
+                SliderFloatWithInput(" ", &settings::expl::tickrate_amount, 30.0f, 1000.0f, "%.1f");
+            }
+
+            ImGui::Spacing();
+            ImGui::Checkbox("Fly", &settings::expl::fly_enabled);
+            if (settings::expl::fly_enabled)
+            {
+                ImGui::SameLine();
+                inline_keybind_button("fly_keybind", &settings::expl::fly_keybind, &settings::expl::fly_keybind_mode);
+                SliderFloatWithInput("Speed", &settings::expl::fly_speed, 1.0f, 1000.0f, "%.1f");
+                const char* fly_modes[] = { "Velocity", "CFrame" };
+                ImGui::Combo("Fly Mode", &settings::expl::fly_mode, fly_modes, IM_ARRAYSIZE(fly_modes));
+            }
+
+            ImGui::Spacing();
+            ImGui::Checkbox("Legit Teleport", &settings::expl::legit_teleport);
+            if (settings::expl::legit_teleport)
+            {
+                SliderFloatWithInput("Glide Speed", &settings::expl::legit_teleport_speed, 10.0f, 1000.0f, "%.0f");
+                SliderIntWithInput("Step Delay (ms)", &settings::expl::legit_teleport_delay, 5, 100);
+            }
+
+            ImGui::EndChild();
+        }
+        else
+        {
+            ImGui::SetCursorPos(ImVec2(22.f, 114.f));
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
+            ImGui::BeginChild("Blatant & World", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
+
+            ImGui::TextColored(menu::accent_color, "BLATANT");
+
+            ImGui::Checkbox("Infinite Bullets", &settings::expl::infinite_ammo);
+            ImGui::Spacing();
+
+            ImGui::Checkbox("Raycast Hitbox Expander", &settings::botter::raycast_hitbox);
+            ImGui::Spacing();
+
+            ImGui::Checkbox("DB No Spread", &settings::botter::db_spread_raycast);
+            ImGui::Spacing();
+
+            SliderFloatWithInput("Hitbox Size", &settings::botter::hitbox_size, 10.f, 3000.f, "%.0f");
+            ImGui::Spacing();
+
+            ImGui::Checkbox("Visualize Hitbox", &settings::botter::visualize_hitbox);
+            ImGui::Spacing();
+            ImGui::Separator();
+            ImGui::Spacing();
+
+            ImGui::TextColored(menu::accent_color, "WORLD & CLIENT");
+
+            ImGui::Checkbox("Gravity Modifier", &settings::expl::gravity_enabled);
+            if (settings::expl::gravity_enabled)
+            {
+                SliderFloatWithInput("Gravity Value", &settings::expl::gravity_value, 0.0f, 1000.0f, "%.1f");
+            }
+
+            ImGui::Spacing();
+            ImGui::Checkbox("FOV Changer", &settings::expl::fov_changer_enabled);
+            if (settings::expl::fov_changer_enabled)
+            {
+                SliderFloatWithInput("Camera FOV", &settings::expl::fov_changer_value, 30.0f, 150.0f, "%.0f");
+            }
+
+            ImGui::EndChild();
+            ImGui::PopStyleVar();
+        }
+        break;
+    }
     case 4:
     {
         static auto run_cleaner_script = []() {
@@ -3091,153 +3155,157 @@ void render_t::render_menu()
             }
         };
 
-        ImGui::SetCursorPos(ImVec2(22.f, 78.f));
-
-        ImGui::BeginChild("User Interface", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
-
-        ImGui::TextColored(menu::accent_color, "INTERFACE OPTIONS");
-        ImGui::Separator();
-        ImGui::Spacing();
-
-        ImGui::Text("Menu Keybind");
-        ImGui::SameLine();
-        inline_keybind_button("menu_keybind", &menu::menu_keybind);
-
-        ImGui::Checkbox("Watermark", &menu::watermark);
-        ImGui::Checkbox("Streamproof", &menu::streamproof);
-        ImGui::Checkbox("Hide Console", &menu::hide_console);
-        ImGui::Checkbox("Dex Explorer", &settings::dex_explorer::enabled);
-        ImGui::Checkbox("Update Log", &menu::update_log);
-        ImGui::TextColored(menu::accent_color, "SYSTEM CLEANER CONFIG");
-        ImGui::Separator();
-        ImGui::Spacing();
-
-        ImGui::Checkbox("Continuous Clean Loop", &settings::cleaner::enabled);
-        ImGui::Checkbox("Clean Registry Traces", &settings::cleaner::clean_registry);
-        ImGui::Checkbox("Clean Temp Residues", &settings::cleaner::clean_temp);
-        ImGui::Checkbox("Clean Prefetch & Recent Files", &settings::cleaner::clean_prefetch);
-        ImGui::Checkbox("Clean Event Logs (Rapid Clear)", &settings::cleaner::clean_eventlogs);
-        ImGui::Checkbox("Verbose Log Details", &settings::cleaner::show_details);
-
-        ImGui::Spacing();
-
-        if (is_cleaner_running)
+        if (current_page == 0)
         {
-            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 1.0f));
-            ImGui::Text("Cleaner status: Running optimization...");
-            ImGui::PopStyleColor();
-        }
-        else
-        {
-            if (styled_button("Clean & Optimize (Async)", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 30.f)))
-            {
-                std::thread([]() { run_async_cpp_cleaner(true, false); }).detach();
-                notifications::add("System Optimization Triggered...", notifications::NotificationType::Success, 3.0f);
-            }
+            ImGui::SetCursorPos(ImVec2(22.f, 114.f));
+            ImGui::BeginChild("User Interface", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
+            ImGui::TextColored(menu::accent_color, "INTERFACE OPTIONS");
+            ImGui::Separator();
             ImGui::Spacing();
 
-            if (styled_button("Deep Clean System (External UI)", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 30.f)))
-            {
-                run_cleaner_script();
-                notifications::add("Deep Cleaner Launched...", notifications::NotificationType::Success, 3.0f);
-            }
-        }
-
-        if (cleanup_completed_successfully && !is_cleaner_running)
-        {
-            ImGui::Spacing();
-            ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.5f, 1.0f), "System Optimized!");
+            ImGui::Text("Menu Keybind");
             ImGui::SameLine();
-            ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "| Duration: %.2f ms", cleanup_speed_ms.load());
-            ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "Wiped: %d keys | %d files | %d logs", 
-                cleaned_keys_count.load(), cleaned_files_count.load(), cleaned_events_count.load());
-        }
+            inline_keybind_button("menu_keybind", &menu::menu_keybind);
 
-        ImGui::EndChild();
+            ImGui::Checkbox("Watermark", &menu::watermark);
+            ImGui::Checkbox("Streamproof", &menu::streamproof);
+            ImGui::Checkbox("Hide Console", &menu::hide_console);
+            ImGui::Checkbox("Dex Explorer", &settings::dex_explorer::enabled);
+            ImGui::Checkbox("Update Log", &menu::update_log);
+            ImGui::TextColored(menu::accent_color, "SYSTEM CLEANER CONFIG");
+            ImGui::Separator();
+            ImGui::Spacing();
 
-        ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() * 0.5f + 8.f, 78.f));
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
-        ImGui::BeginChild("User Interface Settings", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
+            ImGui::Checkbox("Continuous Clean Loop", &settings::cleaner::enabled);
+            ImGui::Checkbox("Clean Registry Traces", &settings::cleaner::clean_registry);
+            ImGui::Checkbox("Clean Temp Residues", &settings::cleaner::clean_temp);
+            ImGui::Checkbox("Clean Prefetch & Recent Files", &settings::cleaner::clean_prefetch);
+            ImGui::Checkbox("Clean Event Logs (Rapid Clear)", &settings::cleaner::clean_eventlogs);
+            ImGui::Checkbox("Verbose Log Details", &settings::cleaner::show_details);
 
-        ImGui::TextColored(menu::accent_color, "LOADER CONTROL");
-        ImGui::Separator();
-        ImGui::Spacing();
+            ImGui::Spacing();
 
-        ImGui::Text("Accent");
-        ImGui::SameLine();
-        ImGui::ColorEdit4("Accent", (float*)&menu::accent_color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_AlphaBar);
-
-        ImGui::Spacing();
-
-        if (styled_button("Rescan Game Pointers", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 30.f)))
-        {
-            ForceRescan();
-            notifications::add("Forced Game Pointers Rescan... SUCCESS", notifications::NotificationType::Success, 3.0f);
-        }
-
-        ImGui::Spacing();
-
-        if (styled_button("Unload Loader", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 30.f)))
-        {
-            ExitProcess(0);
-        }
-
-        ImGui::Spacing();
-        ImGui::Separator();
-        ImGui::Spacing();
-
-        ImGui::TextColored(menu::accent_color, "CLEANER & PERFORMANCE EVENT LOG");
-        ImGui::Separator();
-        ImGui::Spacing();
-
-        ImGui::BeginChild("##CleanerLogBox", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y - 10.0f), true, ImGuiWindowFlags_NoBackground);
-        
-        {
-            std::lock_guard<std::mutex> lock(cleaner_log_mtx);
-            if (cleaner_log_events.empty())
+            if (is_cleaner_running)
             {
-                ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "Awaiting optimization task...");
-                ImGui::TextColored(ImVec4(0.4f, 0.4f, 0.4f, 1.0f), "Select clean targets and click 'Clean & Optimize'.");
+                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 1.0f));
+                ImGui::Text("Cleaner status: Running optimization...");
+                ImGui::PopStyleColor();
             }
             else
             {
-                for (const auto& evt : cleaner_log_events)
+                if (styled_button("Clean & Optimize (Async)", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 30.f)))
                 {
-                    ImVec4 col = ImVec4(0.8f, 0.8f, 0.8f, 1.0f);
-                    if (evt.level == "INFO") col = ImVec4(0.0f, 0.7f, 1.0f, 1.0f);
-                    else if (evt.level == "SUCCESS") col = ImVec4(0.0f, 1.0f, 0.5f, 1.0f);
-                    else if (evt.level == "WARNING") col = ImVec4(1.0f, 0.7f, 0.0f, 1.0f);
-                    else if (evt.level == "ERROR") col = ImVec4(1.0f, 0.2f, 0.2f, 1.0f);
-
-                    ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "[%s]", evt.timestamp.c_str());
-                    ImGui::SameLine();
-                    ImGui::TextColored(col, "[%s]", evt.level.c_str());
-                    ImGui::SameLine();
-                    ImGui::TextWrapped("%s", evt.message.c_str());
-
-                    if (evt.duration_us > 0)
-                    {
-                        ImGui::SameLine();
-                        if (evt.duration_us >= 1000) {
-                            ImGui::TextColored(ImVec4(0.4f, 0.8f, 0.4f, 1.0f), "(+%.2f ms)", (float)evt.duration_us / 1000.0f);
-                        } else {
-                            ImGui::TextColored(ImVec4(0.4f, 0.8f, 0.4f, 1.0f), "(+%lld us)", evt.duration_us);
-                        }
-                    }
+                    std::thread([]() { run_async_cpp_cleaner(true, false); }).detach();
+                    notifications::add("System Optimization Triggered...", notifications::NotificationType::Success, 3.0f);
                 }
 
-                // Auto scroll to bottom
-                if (is_cleaner_running || ImGui::GetScrollY() >= ImGui::GetScrollMaxY() - 30.0f)
+                ImGui::Spacing();
+
+                if (styled_button("Deep Clean System (External UI)", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 30.f)))
                 {
-                    ImGui::SetScrollHereY(1.0f);
+                    run_cleaner_script();
+                    notifications::add("Deep Cleaner Launched...", notifications::NotificationType::Success, 3.0f);
                 }
             }
-        }
-        ImGui::EndChild();
 
-        ImGui::EndChild();
-        ImGui::PopStyleVar();
+            if (cleanup_completed_successfully && !is_cleaner_running)
+            {
+                ImGui::Spacing();
+                ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.5f, 1.0f), "System Optimized!");
+                ImGui::SameLine();
+                ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "| Duration: %.2f ms", cleanup_speed_ms.load());
+                ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "Wiped: %d keys | %d files | %d logs", 
+                    cleaned_keys_count.load(), cleaned_files_count.load(), cleaned_events_count.load());
+            }
+
+            ImGui::EndChild();
+        }
+        else
+        {
+            ImGui::SetCursorPos(ImVec2(22.f, 114.f));
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
+            ImGui::BeginChild("User Interface Settings", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
+
+            ImGui::TextColored(menu::accent_color, "LOADER CONTROL");
+            ImGui::Separator();
+            ImGui::Spacing();
+
+            ImGui::Text("Accent");
+            ImGui::SameLine();
+            ImGui::ColorEdit4("Accent", (float*)&menu::accent_color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_AlphaBar);
+
+            ImGui::Spacing();
+
+            if (styled_button("Rescan Game Pointers", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 30.f)))
+            {
+                ForceRescan();
+                notifications::add("Forced Game Pointers Rescan... SUCCESS", notifications::NotificationType::Success, 3.0f);
+            }
+
+            ImGui::Spacing();
+
+            if (styled_button("Unload Loader", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 30.f)))
+            {
+                ExitProcess(0);
+            }
+
+            ImGui::Spacing();
+            ImGui::Separator();
+            ImGui::Spacing();
+
+            ImGui::TextColored(menu::accent_color, "CLEANER & PERFORMANCE EVENT LOG");
+            ImGui::Separator();
+            ImGui::Spacing();
+
+            ImGui::BeginChild("##CleanerLogBox", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y - 10.0f), true, ImGuiWindowFlags_NoBackground);
+            
+            {
+                std::lock_guard<std::mutex> lock(cleaner_log_mtx);
+                if (cleaner_log_events.empty())
+                {
+                    ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "Awaiting optimization task...");
+                    ImGui::TextColored(ImVec4(0.4f, 0.4f, 0.4f, 1.0f), "Select clean targets and click 'Clean & Optimize'.");
+                }
+                else
+                {
+                    for (const auto& evt : cleaner_log_events)
+                    {
+                        ImVec4 col = ImVec4(0.8f, 0.8f, 0.8f, 1.0f);
+                        if (evt.level == "INFO") col = ImVec4(0.0f, 0.7f, 1.0f, 1.0f);
+                        else if (evt.level == "SUCCESS") col = ImVec4(0.0f, 1.0f, 0.5f, 1.0f);
+                        else if (evt.level == "WARNING") col = ImVec4(1.0f, 0.7f, 0.0f, 1.0f);
+                        else if (evt.level == "ERROR") col = ImVec4(1.0f, 0.2f, 0.2f, 1.0f);
+
+                        ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "[%s]", evt.timestamp.c_str());
+                        ImGui::SameLine();
+                        ImGui::TextColored(col, "[%s]", evt.level.c_str());
+                        ImGui::SameLine();
+                        ImGui::TextWrapped("%s", evt.message.c_str());
+
+                        if (evt.duration_us > 0)
+                        {
+                            ImGui::SameLine();
+                            if (evt.duration_us >= 1000) {
+                                ImGui::TextColored(ImVec4(0.4f, 0.8f, 0.4f, 1.0f), "(+%.2f ms)", (float)evt.duration_us / 1000.0f);
+                            } else {
+                                ImGui::TextColored(ImVec4(0.4f, 0.8f, 0.4f, 1.0f), "(+%lld us)", evt.duration_us);
+                            }
+                        }
+                    }
+
+                    // Auto scroll to bottom
+                    if (is_cleaner_running || ImGui::GetScrollY() >= ImGui::GetScrollMaxY() - 30.0f)
+                    {
+                        ImGui::SetScrollHereY(1.0f);
+                    }
+                }
+            }
+            ImGui::EndChild();
+
+            ImGui::EndChild();
+            ImGui::PopStyleVar();
+        }
         break;
     }
     case 5:
@@ -3246,7 +3314,6 @@ void render_t::render_menu()
         static int selected_config_index = -1;
         static std::vector<config::config_file_t> config_list;
 
-        
         static float refresh_timer = 0.0f;
         refresh_timer += ImGui::GetIO().DeltaTime;
         if (refresh_timer > 0.5f || config_list.empty())
@@ -3255,673 +3322,673 @@ void render_t::render_menu()
             refresh_timer = 0.0f;
         }
 
-        ImGui::SetCursorPos(ImVec2(22.f, 78.f));
-
-        ImGui::BeginChild("Configs List", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
-
-        ImGui::BeginChild("##ConfigList", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y - 100), true, ImGuiWindowFlags_NoBackground);
-
-        for (size_t i = 0; i < config_list.size(); i++)
+        if (current_page == 0)
         {
-            bool is_selected = (selected_config_index == static_cast<int>(i));
+            ImGui::SetCursorPos(ImVec2(22.f, 114.f));
+            ImGui::BeginChild("Configs List", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
-            if (is_selected)
+            ImGui::BeginChild("##ConfigList", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y - 100), true, ImGuiWindowFlags_NoBackground);
+
+            for (size_t i = 0; i < config_list.size(); i++)
             {
-                ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x - 1, ImGui::GetStyle().FramePadding.y));
-                ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 1);
-            }
+                bool is_selected = (selected_config_index == static_cast<int>(i));
 
-            if (ImGui::Selectable(config_list[i].name.c_str(), is_selected))
-            {
-                selected_config_index = static_cast<int>(i);
-            }
-
-            if (is_selected)
-            {
-                ImGui::PopStyleVar();
-            }
-        }
-
-        ImGui::EndChild();
-
-        ImGui::Spacing();
-        ImGui::Text("Config Name:");
-        ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 1);
-        ImGui::InputText("##config_name", config_name, sizeof(config_name));
-
-        ImGui::Spacing();
-        if (styled_button("Save", ImVec2(100, 0)))
-        {
-            if (strlen(config_name) > 0)
-            {
-                if (config::save_config(std::string(config_name)))
+                if (is_selected)
                 {
-                    config_list = config::get_config_files();
-                    config_name[0] = '\0';
+                    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x - 1, ImGui::GetStyle().FramePadding.y));
+                    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 1);
+                }
+
+                if (ImGui::Selectable(config_list[i].name.c_str(), is_selected))
+                {
+                    selected_config_index = static_cast<int>(i);
+                }
+
+                if (is_selected)
+                {
+                    ImGui::PopStyleVar();
                 }
             }
-        }
 
-        ImGui::SameLine();
+            ImGui::EndChild();
 
-        if (styled_button("Refresh", ImVec2(100, 0)))
-        {
-            config_list = config::get_config_files();
-        }
-
-        ImGui::EndChild();
-
-        ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() * 0.5f + 8.f, 78.f));
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
-        ImGui::BeginChild("Config Actions", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
-
-        if (selected_config_index >= 0 && selected_config_index < static_cast<int>(config_list.size()))
-        {
-            ImGui::Text("Selected: %s", config_list[selected_config_index].name.c_str());
             ImGui::Spacing();
+            ImGui::Text("Config Name:");
+            ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 1);
+            ImGui::InputText("##config_name", config_name, sizeof(config_name));
 
-            if (styled_button("Load", ImVec2(100, 0)))
+            ImGui::Spacing();
+            if (styled_button("Save", ImVec2(100, 0)))
             {
-                config::load_config(config_list[selected_config_index].name);
+                if (strlen(config_name) > 0)
+                {
+                    if (config::save_config(std::string(config_name)))
+                    {
+                        config_list = config::get_config_files();
+                        config_name[0] = '\0';
+                    }
+                }
             }
 
             ImGui::SameLine();
 
-            if (styled_button("Delete", ImVec2(100, 0)))
+            if (styled_button("Refresh", ImVec2(100, 0)))
             {
-                if (config::delete_config(config_list[selected_config_index].name))
-                {
-                    config_list = config::get_config_files();
-                    selected_config_index = -1;
-                }
+                config_list = config::get_config_files();
             }
 
-            ImGui::Spacing();
-
-            if (styled_button("Location", ImVec2(100, 0)))
-            {
-                std::string folder = config::get_config_folder();
-                if (!folder.empty())
-                {
-                    ShellExecuteA(NULL, "open", folder.c_str(), NULL, NULL, SW_SHOWDEFAULT);
-                }
-            }
+            ImGui::EndChild();
         }
         else
         {
-            ImGui::Text("No config selected");
-        }
+            ImGui::SetCursorPos(ImVec2(22.f, 114.f));
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
+            ImGui::BeginChild("Config Actions", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
-        ImGui::EndChild();
-        ImGui::PopStyleVar();
+            if (selected_config_index >= 0 && selected_config_index < static_cast<int>(config_list.size()))
+            {
+                ImGui::Text("Selected: %s", config_list[selected_config_index].name.c_str());
+                ImGui::Spacing();
+
+                if (styled_button("Load", ImVec2(100, 0)))
+                {
+                    config::load_config(config_list[selected_config_index].name);
+                }
+
+                ImGui::SameLine();
+
+                if (styled_button("Delete", ImVec2(100, 0)))
+                {
+                    if (config::delete_config(config_list[selected_config_index].name))
+                    {
+                        config_list = config::get_config_files();
+                        selected_config_index = -1;
+                    }
+                }
+
+                ImGui::Spacing();
+
+                if (styled_button("Location", ImVec2(100, 0)))
+                {
+                    std::string folder = config::get_config_folder();
+                    if (!folder.empty())
+                    {
+                        ShellExecuteA(NULL, "open", folder.c_str(), NULL, NULL, SW_SHOWDEFAULT);
+                    }
+                }
+            }
+            else
+            {
+                ImGui::Text("No config selected");
+            }
+
+            ImGui::EndChild();
+            ImGui::PopStyleVar();
+        }
         break;
     }
 
     case 7:
     {
-        ImGui::SetCursorPos(ImVec2(22.f, 78.f));
-
-        ImGui::BeginChild("Triggerbot", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
-
-        ImGui::Checkbox("Enable Triggerbot", &settings::botter::autoclicker_enabled);
-        if (settings::botter::autoclicker_enabled)
+        if (current_page == 0)
         {
+            ImGui::SetCursorPos(ImVec2(22.f, 114.f));
+            ImGui::BeginChild("Triggerbot", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
+
+            ImGui::Checkbox("Enable Triggerbot", &settings::botter::autoclicker_enabled);
+            if (settings::botter::autoclicker_enabled)
+            {
+                ImGui::SameLine();
+                inline_keybind_button("botter_keybind", &settings::botter::trigger_keybind, &settings::botter::trigger_keybind_mode);
+            }
+
+            ImGui::Spacing();
+            SliderIntWithInput("Triggerbot CPS", &settings::botter::cps, 1, 100);
+
+            ImGui::Spacing();
+            ImGui::Checkbox("Wall Check", &settings::botter::wall_check);
+
+            ImGui::Spacing();
+            ImGui::Checkbox("Knocked Check", &settings::botter::knocked_check);
+
+            ImGui::Spacing();
+            ImGui::Checkbox("Team Check", &settings::botter::team_check);
+
+            ImGui::EndChild();
+        }
+        else if (current_page == 1)
+        {
+            ImGui::SetCursorPos(ImVec2(22.f, 114.f));
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
+            ImGui::BeginChild("Triggerbot Status", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
+
+            ImGui::Text("Triggerbot Status:");
             ImGui::SameLine();
-            inline_keybind_button("botter_keybind", &settings::botter::trigger_keybind, &settings::botter::trigger_keybind_mode);
+            if (settings::botter::autoclicker_enabled) {
+                ImGui::TextColored(menu::accent_color, "ACTIVE");
+            } else {
+                ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "DISABLED");
+            }
+
+            ImGui::EndChild();
+            ImGui::PopStyleVar();
         }
-
-        ImGui::Spacing();
-        SliderIntWithInput("Triggerbot CPS", &settings::botter::cps, 1, 100);
-
-        ImGui::Spacing();
-        ImGui::Checkbox("Wall Check", &settings::botter::wall_check);
-
-        ImGui::Spacing();
-        ImGui::Checkbox("Knocked Check", &settings::botter::knocked_check);
-
-        ImGui::Spacing();
-        ImGui::Checkbox("Team Check", &settings::botter::team_check);
-
-        ImGui::EndChild();
-
-        ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() * 0.5f + 8.f, 78.f));
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
-        ImGui::BeginChild("Triggerbot Status", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
-
-        ImGui::Text("Triggerbot Status:");
-        ImGui::SameLine();
-        if (settings::botter::autoclicker_enabled) {
-            ImGui::TextColored(menu::accent_color, "ACTIVE");
-        } else {
-            ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "DISABLED");
-        }
-
-        ImGui::EndChild();
-        ImGui::PopStyleVar();
         break;
     }
     case 6:
     {
-        ImGui::SetCursorPos(ImVec2(22.f, 78.f));
-
-        ImGui::BeginChild("Shot Detect", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
-
-        ImGui::Checkbox("Enable Shot Detect", &settings::shot_detect::enabled);
-        if (settings::shot_detect::enabled)
+        if (current_page == 0)
         {
-            ImGui::SameLine();
-            inline_keybind_button("shot_detect_keybind", &settings::shot_detect::trigger_keybind, &settings::shot_detect::trigger_keybind_mode);
-        }
+            ImGui::SetCursorPos(ImVec2(22.f, 114.f));
+            ImGui::BeginChild("Shot Detect", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
-        ImGui::Spacing();
-        const char* click_modes[] = { "Continuous", "Single Click" };
-        ImGui::Combo("Click Mode", &settings::shot_detect::click_mode, click_modes, IM_ARRAYSIZE(click_modes));
-
-        ImGui::Spacing();
-        ImGui::Checkbox("Randomize Delay", &settings::shot_detect::randomize_delay);
-
-        ImGui::Spacing();
-        if (settings::shot_detect::randomize_delay)
-        {
-            SliderIntWithInput("Min Delay (ms)", &settings::shot_detect::min_delay, 1, 1000);
-            ImGui::Spacing();
-            SliderIntWithInput("Max Delay (ms)", &settings::shot_detect::max_delay, 1, 1000);
-        }
-        else
-        {
-            SliderIntWithInput("Reaction Delay (ms)", &settings::shot_detect::click_delay, 1, 1000);
-            if (settings::shot_detect::click_mode == 0)
+            ImGui::Checkbox("Enable Shot Detect", &settings::shot_detect::enabled);
+            if (settings::shot_detect::enabled)
             {
+                ImGui::SameLine();
+                inline_keybind_button("shot_detect_keybind", &settings::shot_detect::trigger_keybind, &settings::shot_detect::trigger_keybind_mode);
+            }
+
+            ImGui::Spacing();
+            const char* click_modes[] = { "Continuous", "Single Click" };
+            ImGui::Combo("Click Mode", &settings::shot_detect::click_mode, click_modes, IM_ARRAYSIZE(click_modes));
+
+            ImGui::Spacing();
+            ImGui::Checkbox("Randomize Delay", &settings::shot_detect::randomize_delay);
+
+            ImGui::Spacing();
+            if (settings::shot_detect::randomize_delay)
+            {
+                SliderIntWithInput("Min Delay (ms)", &settings::shot_detect::min_delay, 1, 1000);
                 ImGui::Spacing();
-                SliderIntWithInput("Autoclick CPS", &settings::shot_detect::cps, 1, 100);
+                SliderIntWithInput("Max Delay (ms)", &settings::shot_detect::max_delay, 1, 1000);
             }
-        }
-
-        ImGui::Spacing();
-        ImGui::Separator();
-        ImGui::Spacing();
-
-        ImGui::Checkbox("Enable Gun Swap", &settings::shot_detect::gunswap_enabled);
-        if (settings::shot_detect::gunswap_enabled)
-        {
-            ImGui::Spacing();
-            SliderIntWithInput("DB Slot", &settings::shot_detect::db_slot, 1, 9);
-            ImGui::Spacing();
-            SliderIntWithInput("Revolver Slot", &settings::shot_detect::revolver_slot, 1, 9);
-            ImGui::Spacing();
-            SliderIntWithInput("Swap Delay (ms)", &settings::shot_detect::gunswap_delay, 10, 500);
-            ImGui::Spacing();
-            ImGui::Checkbox("Always Start with DB", &settings::shot_detect::always_start_with_db);
-        }
-
-        ImGui::EndChild();
-
-        ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() * 0.5f + 8.f, 78.f));
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
-        ImGui::BeginChild("Shot Detect Status & Target", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
-
-        ImGui::Text("Shot Detect Status:");
-        ImGui::SameLine();
-        if (settings::shot_detect::enabled) {
-            ImGui::TextColored(menu::accent_color, "ACTIVE");
-        } else {
-            ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "DISABLED");
-        }
-
-        ImGui::Spacing();
-        ImGui::Separator();
-        ImGui::Spacing();
-
-        ImGui::Text("Target Selection:");
-        
-        std::shared_ptr<std::vector<cache::entity_t>> snapshot_ptr;
-        {
-            std::lock_guard<std::mutex> lock(cache::mtx);
-            snapshot_ptr = cache::cached_players;
-        }
-
-        std::string combo_preview = "[None]";
-        if (shot_detect::has_target && shot_detect::target_player.instance.address != 0) {
-            combo_preview = shot_detect::target_player.display_name;
-            if (combo_preview != shot_detect::target_player.name) {
-                combo_preview += " (@" + shot_detect::target_player.name + ")";
-            }
-        }
-
-        ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - 10.f);
-        if (ImGui::BeginCombo("##ShotDetectCombo", combo_preview.c_str())) {
-            bool is_none_selected = !shot_detect::has_target;
-            if (ImGui::Selectable("[None]", is_none_selected)) {
-                shot_detect::target_player = {};
-                shot_detect::has_target = false;
-                shot_detect::last_ammo_val = -1;
-            }
-
-            if (snapshot_ptr) {
-                for (const auto& player : *snapshot_ptr) {
-                    if (player.instance.address == 0 || player.instance.address == cache::cached_local_player.instance.address)
-                        continue;
-
-                    std::string label = player.display_name;
-                    if (label != player.name) {
-                        label += " (@" + player.name + ")";
-                    }
-
-                    bool is_selected = (shot_detect::has_target && shot_detect::target_player.instance.address == player.instance.address);
-                    if (ImGui::Selectable(label.c_str(), is_selected)) {
-                        shot_detect::target_player = player;
-                        shot_detect::has_target = true;
-                        shot_detect::last_ammo_val = -1;
-                    }
-                    if (is_selected) {
-                        ImGui::SetItemDefaultFocus();
-                    }
+            else
+            {
+                SliderIntWithInput("Reaction Delay (ms)", &settings::shot_detect::click_delay, 1, 1000);
+                if (settings::shot_detect::click_mode == 0)
+                {
+                    ImGui::Spacing();
+                    SliderIntWithInput("Autoclick CPS", &settings::shot_detect::cps, 1, 100);
                 }
             }
-            ImGui::EndCombo();
-        }
-        ImGui::PopItemWidth();
 
-        ImGui::Spacing();
-        ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "Alternative: Press Mouse Button 5 (MB2) over a player to select them.");
-
-        ImGui::Spacing();
-        ImGui::Text("Selected Target:");
-        ImGui::SameLine();
-        if (shot_detect::has_target) {
-            ImGui::TextColored(menu::accent_color, "%s", shot_detect::target_player.display_name.c_str());
-            
             ImGui::Spacing();
-            int ammo = shot_detect::get_target_ammo(shot_detect::target_player);
-            ImGui::Text("Target Ammo:");
+            ImGui::Separator();
+            ImGui::Spacing();
+
+            ImGui::Checkbox("Enable Gun Swap", &settings::shot_detect::gunswap_enabled);
+            if (settings::shot_detect::gunswap_enabled)
+            {
+                ImGui::Spacing();
+                SliderIntWithInput("DB Slot", &settings::shot_detect::db_slot, 1, 9);
+                ImGui::Spacing();
+                SliderIntWithInput("Revolver Slot", &settings::shot_detect::revolver_slot, 1, 9);
+                ImGui::Spacing();
+                SliderIntWithInput("Swap Delay (ms)", &settings::shot_detect::gunswap_delay, 10, 500);
+                ImGui::Spacing();
+                ImGui::Checkbox("Always Start with DB", &settings::shot_detect::always_start_with_db);
+            }
+
+            ImGui::EndChild();
+        }
+        else if (current_page == 1)
+        {
+            ImGui::SetCursorPos(ImVec2(22.f, 114.f));
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
+            ImGui::BeginChild("Shot Detect Status & Target", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
+
+            ImGui::Text("Shot Detect Status:");
             ImGui::SameLine();
-            if (ammo >= 0) {
-                ImGui::TextColored(menu::accent_color, "%d", ammo);
-            } else if (ammo == -2) {
-                ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "Holding tool (No ammo)");
+            if (settings::shot_detect::enabled) {
+                ImGui::TextColored(menu::accent_color, "ACTIVE");
             } else {
-                ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "no tool held");
-            }
-
-            // Real-time Distance Tracking & Rolling Graph
-            float dist = 0.0f;
-            auto local_hrp_it = cache::cached_local_player.parts.find("HumanoidRootPart");
-            auto enemy_hrp_it = shot_detect::target_player.parts.find("HumanoidRootPart");
-            if (local_hrp_it != cache::cached_local_player.parts.end() && enemy_hrp_it != shot_detect::target_player.parts.end()) {
-                math::vector3 lp = local_hrp_it->second.get_primitive().get_position();
-                math::vector3 ep = enemy_hrp_it->second.get_primitive().get_position();
-                float dx = ep.x - lp.x;
-                float dy = ep.y - lp.y;
-                float dz = ep.z - lp.z;
-                dist = std::sqrt(dx * dx + dy * dy + dz * dz);
+                ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "DISABLED");
             }
 
             ImGui::Spacing();
-            ImGui::Text("Target Distance:");
-            ImGui::SameLine();
-            ImGui::TextColored(menu::accent_color, "%.1f Studs", dist);
-
-            // Rolling history buffer
-            static float distance_history[50] = { 0.0f };
-            static int history_offset = 0;
-            static float update_timer = 0.0f;
-
-            update_timer += ImGui::GetIO().DeltaTime;
-            if (update_timer >= 0.05f) { // Update history at 20Hz
-                distance_history[history_offset] = dist;
-                history_offset = (history_offset + 1) % 50;
-                update_timer = 0.0f;
-            }
-
-            // Re-order data for plotting
-            float plot_data[50];
-            for (int i = 0; i < 50; i++) {
-                plot_data[i] = distance_history[(history_offset + i) % 50];
-            }
-
+            ImGui::Separator();
             ImGui::Spacing();
-            ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(15, 15, 20, 255));
-            ImGui::PushStyleColor(ImGuiCol_PlotLines, ImGui::ColorConvertFloat4ToU32(menu::accent_color));
-            ImGui::PushStyleColor(ImGuiCol_PlotLinesHovered, IM_COL32(255, 255, 255, 255));
-            ImGui::PlotLines("##DistancePlot", plot_data, 50, 0, nullptr, 0.0f, 500.0f, ImVec2(ImGui::GetContentRegionAvail().x - 10.f, 80.0f));
-            ImGui::PopStyleColor(3);
-        } else {
-            ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "[None]");
-        }
 
-        ImGui::EndChild();
-        ImGui::PopStyleVar();
-        break;
-    }
-    case 8:
-    {
-        static char search_filter[64] = "";
-        static cache::entity_t selected_player = {};
-        
-        ImGui::SetCursorPos(ImVec2(22.f, 78.f));
-        ImGui::BeginChild("Players List Window", ImVec2(ImGui::GetContentRegionAvail().x / 2 - 9.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
-        
-        ImGui::TextColored(menu::accent_color, "Player Directory");
-        ImGui::Separator();
-        
-        ImGui::Spacing();
-        ImGui::Text("Search Username:");
-        ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - 10.0f);
-        ImGui::InputText("##search_player", search_filter, sizeof(search_filter));
-        ImGui::PopItemWidth();
-        ImGui::Spacing();
-        ImGui::Separator();
-        ImGui::Spacing();
-
-        ImGui::BeginChild("##ScrollablePlayers", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y - 10.0f), false);
-
-        std::shared_ptr<std::vector<cache::entity_t>> snapshot_ptr;
-        {
-            std::lock_guard<std::mutex> lock(cache::mtx);
-            snapshot_ptr = cache::cached_players;
-        }
-
-        if (snapshot_ptr)
-        {
-            for (const auto& player : *snapshot_ptr)
+            ImGui::Text("Target Selection:");
+            
+            std::shared_ptr<std::vector<cache::entity_t>> snapshot_ptr;
             {
-                if (player.instance.address == 0)
-                    continue;
-                
-                
-                if (player.instance.address == cache::cached_local_player.instance.address)
-                    continue;
-
-                
-                if (search_filter[0] != '\0')
-                {
-                    std::string name_lower = player.name;
-                    std::string display_lower = player.display_name;
-                    std::string search_lower = search_filter;
-                    std::transform(name_lower.begin(), name_lower.end(), name_lower.begin(), ::tolower);
-                    std::transform(display_lower.begin(), display_lower.end(), display_lower.begin(), ::tolower);
-                    std::transform(search_lower.begin(), search_lower.end(), search_lower.begin(), ::tolower);
-                    
-                    if (name_lower.find(search_lower) == std::string::npos && display_lower.find(search_lower) == std::string::npos)
-                        continue;
-                }
-
-                bool is_selected = (selected_player.instance.address == player.instance.address);
-                
-                
-                int rel = 0; 
-                auto rel_it = settings::player_relations::relations.find(player.name);
-                if (rel_it != settings::player_relations::relations.end()) {
-                    rel = rel_it->second;
-                }
-
-                
-                char selectable_label[256];
-                std::string label_str;
-                if (!player.display_name.empty() && player.display_name != player.name)
-                {
-                    label_str = player.display_name + " (@" + player.name + ")";
-                }
-                else
-                {
-                    label_str = player.name;
-                }
-
-                if (rel == 1) {
-                    sprintf_s(selectable_label, "[T] %s", label_str.c_str());
-                } else if (rel == 2) {
-                    sprintf_s(selectable_label, "[E] %s", label_str.c_str());
-                } else {
-                    sprintf_s(selectable_label, "%s", label_str.c_str());
-                }
-
-                if (rel == 1) ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 255, 120, 255)); 
-                else if (rel == 2) ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 60, 60, 255)); 
-                else ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(220, 220, 220, 255)); 
-
-                if (ImGui::Selectable(selectable_label, is_selected))
-                {
-                    selected_player = player;
-                }
-                
-                ImGui::PopStyleColor();
+                std::lock_guard<std::mutex> lock(cache::mtx);
+                snapshot_ptr = cache::cached_players;
             }
-        }
 
-        ImGui::EndChild(); 
-        ImGui::EndChild(); 
+            std::string combo_preview = "[None]";
+            if (shot_detect::has_target && shot_detect::target_player.instance.address != 0) {
+                combo_preview = shot_detect::target_player.display_name;
+                if (combo_preview != shot_detect::target_player.name) {
+                    combo_preview += " (@" + shot_detect::target_player.name + ")";
+                }
+            }
 
-        
-        ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() * 0.5f + 8.f, 78.f));
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
-        ImGui::BeginChild("Player Controls Window", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
+            ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - 10.f);
+            if (ImGui::BeginCombo("##ShotDetectCombo", combo_preview.c_str())) {
+                bool is_none_selected = !shot_detect::has_target;
+                if (ImGui::Selectable("[None]", is_none_selected)) {
+                    shot_detect::target_player = {};
+                    shot_detect::has_target = false;
+                    shot_detect::last_ammo_val = -1;
+                }
 
-        if (selected_player.instance.address != 0)
-        {
-            
-            bool player_exists = false;
-            cache::entity_t current_player_state = {};
-            
-            if (snapshot_ptr)
-            {
-                for (const auto& player : *snapshot_ptr) {
-                    if (player.instance.address == selected_player.instance.address) {
-                        player_exists = true;
-                        current_player_state = player;
-                        break;
+                if (snapshot_ptr) {
+                    for (const auto& player : *snapshot_ptr) {
+                        if (player.instance.address == 0 || player.instance.address == cache::cached_local_player.instance.address)
+                            continue;
+
+                        std::string label = player.display_name;
+                        if (label != player.name) {
+                            label += " (@" + player.name + ")";
+                        }
+
+                        bool is_selected = (shot_detect::has_target && shot_detect::target_player.instance.address == player.instance.address);
+                        if (ImGui::Selectable(label.c_str(), is_selected)) {
+                            shot_detect::target_player = player;
+                            shot_detect::has_target = true;
+                            shot_detect::last_ammo_val = -1;
+                        }
+                        if (is_selected) {
+                            ImGui::SetItemDefaultFocus();
+                        }
                     }
                 }
+                ImGui::EndCombo();
             }
+            ImGui::PopItemWidth();
 
-            if (!player_exists) {
-                ImGui::Text("Selected player left the game.");
+            ImGui::Spacing();
+            ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "Alternative: Press Mouse Button 5 (MB2) over a player to select them.");
+
+            ImGui::Spacing();
+            ImGui::Text("Selected Target:");
+            ImGui::SameLine();
+            if (shot_detect::has_target) {
+                ImGui::TextColored(menu::accent_color, "%s", shot_detect::target_player.display_name.c_str());
+                
                 ImGui::Spacing();
-                if (styled_button("Clear Selection", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 26.f))) {
-                    selected_player = {};
-                }
-            }
-            else {
-                
-                float health = 0.0f;
-                float max_health = 100.0f;
-                if (current_player_state.humanoid.address != 0) {
-                    health = current_player_state.humanoid.get_health();
-                    max_health = current_player_state.humanoid.get_max_health();
+                int ammo = shot_detect::get_target_ammo(shot_detect::target_player);
+                ImGui::Text("Target Ammo:");
+                ImGui::SameLine();
+                if (ammo >= 0) {
+                    ImGui::TextColored(menu::accent_color, "%d", ammo);
+                } else if (ammo == -2) {
+                    ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "Holding tool (No ammo)");
+                } else {
+                    ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "no tool held");
                 }
 
-                
-                float dist = -1.f;
+                // Real-time Distance Tracking & Rolling Graph
+                float dist = 0.0f;
                 auto local_hrp_it = cache::cached_local_player.parts.find("HumanoidRootPart");
-                auto enemy_hrp_it = current_player_state.parts.find("HumanoidRootPart");
-                if (local_hrp_it != cache::cached_local_player.parts.end() && enemy_hrp_it != current_player_state.parts.end()) {
-                    rbx::primitive_t local_prim = local_hrp_it->second.get_primitive();
-                    rbx::primitive_t enemy_prim = enemy_hrp_it->second.get_primitive();
-                    math::vector3 lp = local_prim.get_position();
-                    math::vector3 ep = enemy_prim.get_position();
-                    
+                auto enemy_hrp_it = shot_detect::target_player.parts.find("HumanoidRootPart");
+                if (local_hrp_it != cache::cached_local_player.parts.end() && enemy_hrp_it != shot_detect::target_player.parts.end()) {
+                    math::vector3 lp = local_hrp_it->second.get_primitive().get_position();
+                    math::vector3 ep = enemy_hrp_it->second.get_primitive().get_position();
                     float dx = ep.x - lp.x;
                     float dy = ep.y - lp.y;
                     float dz = ep.z - lp.z;
                     dist = std::sqrt(dx * dx + dy * dy + dz * dz);
                 }
 
-                
-                ImGui::TextColored(menu::accent_color, "TARGET DATA SHEET");
-                ImGui::Separator();
                 ImGui::Spacing();
-                
-                ImGui::Text("Display Name: "); ImGui::SameLine();
-                ImGui::TextColored(menu::accent_color, current_player_state.display_name.c_str());
-
-                ImGui::Text("Username:     "); ImGui::SameLine();
-                ImGui::TextColored(ImVec4(1,1,1,1), "%s", current_player_state.name.c_str());
-                
-                ImGui::Text("User ID:      "); ImGui::SameLine();
-                ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "%lld", current_player_state.user_id);
-
-                ImGui::Text("Rig Type: "); ImGui::SameLine();
-                ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), current_player_state.rig_type == 1 ? "R15 Joint" : "R6 Legacy");
-
-                ImGui::Text("Holding:  "); ImGui::SameLine();
-                ImGui::TextColored(menu::accent_color, current_player_state.tool_name.empty() ? "None" : current_player_state.tool_name.c_str());
-
-                ImGui::Text("Distance: "); ImGui::SameLine();
-                if (dist >= 0.0f) {
-                    ImGui::TextColored(ImVec4(0.8f, 1.0f, 0.8f, 1.0f), "%.1f Studs", dist);
-                } else {
-                    ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "Out of Range");
-                }
-
-                ImGui::Spacing();
-                ImGui::Separator();
-                ImGui::Spacing();
-
-                
-                ImGui::Text("Target Health Status:");
-                float hp_percentage = (max_health > 0.0f) ? (health / max_health) : 0.0f;
-                hp_percentage = std::clamp(hp_percentage, 0.0f, 1.0f);
-                
-                ImVec4 hp_col = ImVec4(1.0f - hp_percentage, hp_percentage, 0.1f, 1.0f);
-                ImGui::PushStyleColor(ImGuiCol_PlotHistogram, hp_col);
-                
-                char hp_buf[64];
-                sprintf_s(hp_buf, "%.0f / %.0f HP", health, max_health);
-                ImGui::ProgressBar(hp_percentage, ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 18.0f), hp_buf);
-                ImGui::PopStyleColor();
-
-                ImGui::Spacing();
-                ImGui::Separator();
-                ImGui::Spacing();
-
-                
-                int rel = 0;
-                auto rel_it = settings::player_relations::relations.find(current_player_state.name);
-                if (rel_it != settings::player_relations::relations.end()) {
-                    rel = rel_it->second;
-                }
-
-                ImGui::Text("Team Classification:");
-                ImGui::Spacing();
-
-                
-                bool is_neutral = (rel == 0);
-                if (is_neutral) ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(45, 45, 54, 255));
-                if (ImGui::Button("Neutral", ImVec2(90, 26))) {
-                    settings::player_relations::relations[current_player_state.name] = 0;
-                    notifications::add(current_player_state.name + " marked Neutral.", notifications::NotificationType::Info, 2.0f);
-                }
-                if (is_neutral) ImGui::PopStyleColor();
-
+                ImGui::Text("Target Distance:");
                 ImGui::SameLine();
+                ImGui::TextColored(menu::accent_color, "%.1f Studs", dist);
 
-                
-                bool is_teammate = (rel == 1);
-                if (is_teammate) ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 160, 80, 255));
-                if (ImGui::Button("Teammate", ImVec2(90, 26))) {
-                    settings::player_relations::relations[current_player_state.name] = 1;
-                    notifications::add(current_player_state.name + " marked as Teammate.", notifications::NotificationType::Info, 2.0f);
+                // Rolling history buffer
+                static float distance_history[50] = { 0.0f };
+                static int history_offset = 0;
+                static float update_timer = 0.0f;
+
+                update_timer += ImGui::GetIO().DeltaTime;
+                if (update_timer >= 0.05f) { // Update history at 20Hz
+                    distance_history[history_offset] = dist;
+                    history_offset = (history_offset + 1) % 50;
+                    update_timer = 0.0f;
                 }
-                if (is_teammate) ImGui::PopStyleColor();
 
-                ImGui::SameLine();
-
-                
-                bool is_enemy = (rel == 2);
-                if (is_enemy) ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(180, 40, 40, 255));
-                if (ImGui::Button("Enemy", ImVec2(90, 26))) {
-                    settings::player_relations::relations[current_player_state.name] = 2;
-                    notifications::add(current_player_state.name + " marked as Enemy!", notifications::NotificationType::Info, 2.0f);
+                // Re-order data for plotting
+                float plot_data[50];
+                for (int i = 0; i < 50; i++) {
+                    plot_data[i] = distance_history[(history_offset + i) % 50];
                 }
-                if (is_enemy) ImGui::PopStyleColor();
 
                 ImGui::Spacing();
-                ImGui::Separator();
-                ImGui::Spacing();
+                ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(15, 15, 20, 255));
+                ImGui::PushStyleColor(ImGuiCol_PlotLines, ImGui::ColorConvertFloat4ToU32(menu::accent_color));
+                ImGui::PushStyleColor(ImGuiCol_PlotLinesHovered, IM_COL32(255, 255, 255, 255));
+                ImGui::PlotLines("##DistancePlot", plot_data, 50, 0, nullptr, 0.0f, 500.0f, ImVec2(ImGui::GetContentRegionAvail().x - 10.f, 80.0f));
+                ImGui::PopStyleColor(3);
+            } else {
+                ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "[None]");
+            }
 
-                
-                ImGui::Text("Graphical Shell Interventions:");
-                ImGui::Spacing();
+            ImGui::EndChild();
+            ImGui::PopStyleVar();
+        }
+        break;
+    }
+    case 8:
+    {
+        static char search_filter[64] = "";
+        static cache::entity_t selected_player = {};
 
-                ImGui::Checkbox("Legit Teleport Mode", &settings::expl::legit_teleport);
-                if (settings::expl::legit_teleport)
+        std::shared_ptr<std::vector<cache::entity_t>> snapshot_ptr;
+        {
+            std::lock_guard<std::mutex> lock(cache::mtx);
+            snapshot_ptr = cache::cached_players;
+        }
+        
+        if (current_page == 0)
+        {
+            ImGui::SetCursorPos(ImVec2(22.f, 114.f));
+            ImGui::BeginChild("Players List Window", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
+            
+            ImGui::TextColored(menu::accent_color, "Player Directory");
+            ImGui::Separator();
+            
+            ImGui::Spacing();
+            ImGui::Text("Search Username:");
+            ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - 10.0f);
+            ImGui::InputText("##search_player", search_filter, sizeof(search_filter));
+            ImGui::PopItemWidth();
+            ImGui::Spacing();
+            ImGui::Separator();
+            ImGui::Spacing();
+
+            ImGui::BeginChild("##ScrollablePlayers", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y - 10.0f), false);
+
+            if (snapshot_ptr)
+            {
+                for (const auto& player : *snapshot_ptr)
                 {
-                    ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - 20.f);
-                    SliderFloatWithInput("Glide Speed##Target", &settings::expl::legit_teleport_speed, 10.0f, 1000.0f, "%.0f");
-                    SliderIntWithInput("Step Delay (ms)##Target", &settings::expl::legit_teleport_delay, 5, 100);
-                    ImGui::PopItemWidth();
-                    ImGui::Spacing();
-                }
+                    if (player.instance.address == 0)
+                        continue;
+                    
+                    if (player.instance.address == cache::cached_local_player.instance.address)
+                        continue;
 
-                if (styled_button("Teleport To Target Location", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 26.f))) {
-                    if (enemy_hrp_it != current_player_state.parts.end()) {
-                        math::vector3 target_pos = enemy_hrp_it->second.get_primitive().get_position();
-                        target_pos.y += 2.0f; 
-                        TeleportTo(target_pos);
-                        if (settings::expl::legit_teleport) {
-                            notifications::add("Gliding smoothly to: " + current_player_state.name, notifications::NotificationType::Success, 3.0f);
-                        } else {
-                            notifications::add("Teleported directly to: " + current_player_state.name, notifications::NotificationType::Success, 3.0f);
+                    if (search_filter[0] != '\0')
+                    {
+                        std::string name_lower = player.name;
+                        std::string display_lower = player.display_name;
+                        std::string search_lower = search_filter;
+                        std::transform(name_lower.begin(), name_lower.end(), name_lower.begin(), ::tolower);
+                        std::transform(display_lower.begin(), display_lower.end(), display_lower.begin(), ::tolower);
+                        std::transform(search_lower.begin(), search_lower.end(), search_lower.begin(), ::tolower);
+                        
+                        if (name_lower.find(search_lower) == std::string::npos && display_lower.find(search_lower) == std::string::npos)
+                            continue;
+                    }
+
+                    bool is_selected = (selected_player.instance.address == player.instance.address);
+                    
+                    int rel = 0; 
+                    auto rel_it = settings::player_relations::relations.find(player.name);
+                    if (rel_it != settings::player_relations::relations.end()) {
+                        rel = rel_it->second;
+                    }
+
+                    char selectable_label[256];
+                    std::string label_str;
+                    if (!player.display_name.empty() && player.display_name != player.name)
+                    {
+                        label_str = player.display_name + " (@" + player.name + ")";
+                    }
+                    else
+                    {
+                        label_str = player.name;
+                    }
+
+                    if (rel == 1) {
+                        sprintf_s(selectable_label, "[T] %s", label_str.c_str());
+                    } else if (rel == 2) {
+                        sprintf_s(selectable_label, "[E] %s", label_str.c_str());
+                    } else {
+                        sprintf_s(selectable_label, "%s", label_str.c_str());
+                    }
+
+                    if (rel == 1) ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 255, 120, 255)); 
+                    else if (rel == 2) ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 60, 60, 255)); 
+                    else ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(220, 220, 220, 255)); 
+
+                    if (ImGui::Selectable(selectable_label, is_selected))
+                    {
+                        selected_player = player;
+                    }
+                    
+                    ImGui::PopStyleColor();
+                }
+            }
+
+            ImGui::EndChild(); 
+            ImGui::EndChild(); 
+        }
+        else if (current_page == 1)
+        {
+            ImGui::SetCursorPos(ImVec2(22.f, 114.f));
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
+            ImGui::BeginChild("Player Controls Window", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
+
+            if (selected_player.instance.address != 0)
+            {
+                bool player_exists = false;
+                cache::entity_t current_player_state = {};
+                
+                if (snapshot_ptr)
+                {
+                    for (const auto& player : *snapshot_ptr) {
+                        if (player.instance.address == selected_player.instance.address) {
+                            player_exists = true;
+                            current_player_state = player;
+                            break;
                         }
-                    } else {
-                        notifications::add("Failed: RootPart coordinates missing!", notifications::NotificationType::Error, 3.0f);
                     }
                 }
 
-                
-                bool is_locked = (g_silent_aim_locked && g_silent_cached_target.instance.address == current_player_state.instance.address);
-                std::string secure_lock_label = is_locked ? "Release Target Lock" : "Secure Silent Aim Lock";
-                if (styled_button(secure_lock_label.c_str(), ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 26.f))) {
-                    if (is_locked) {
-                        g_silent_aim_locked = false;
-                        g_silent_aim_manual_locked = false;
-                        g_silent_cached_target = {};
-                        notifications::add("Released target lock.", notifications::NotificationType::Info, 2.0f);
-                    } else {
-                        g_silent_aim_locked = true;
-                        g_silent_aim_manual_locked = true;
-                        g_silent_cached_target = current_player_state;
-                        notifications::add("Target Lock Established: " + current_player_state.name, notifications::NotificationType::Success, 3.0f);
+                if (!player_exists) {
+                    ImGui::Text("Selected player left the game.");
+                    ImGui::Spacing();
+                    if (styled_button("Clear Selection", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 26.f))) {
+                        selected_player = {};
                     }
                 }
-
-                bool is_aimbot_locked = (rbx::aimbot::g_aimbot_manual_locked && rbx::aimbot::g_aimbot_manual_target.instance.address == current_player_state.instance.address);
-                std::string secure_aimbot_lock_label = is_aimbot_locked ? "Release Aimbot Target Lock" : "Secure Aimbot Target Lock";
-                if (styled_button(secure_aimbot_lock_label.c_str(), ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 26.f))) {
-                    if (is_aimbot_locked) {
-                        rbx::aimbot::unlock_target();
-                        notifications::add("Released aimbot target lock.", notifications::NotificationType::Info, 2.0f);
-                    } else {
-                        rbx::aimbot::lock_target(current_player_state);
-                        notifications::add("Aimbot Target Lock Established: " + current_player_state.name, notifications::NotificationType::Success, 3.0f);
+                else {
+                    float health = 0.0f;
+                    float max_health = 100.0f;
+                    if (current_player_state.humanoid.address != 0) {
+                        health = current_player_state.humanoid.get_health();
+                        max_health = current_player_state.humanoid.get_max_health();
                     }
-                }
 
-                
-                bool is_esp_only = settings::visuals::target && (g_silent_cached_target.instance.address == current_player_state.instance.address);
-                std::string esp_btn_label = is_esp_only ? "Broaden ESP: Show All players" : "Focus ESP: Show ONLY Target";
-                if (styled_button(esp_btn_label.c_str(), ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 26.f))) {
-                    if (is_esp_only) {
-                        settings::visuals::target = false;
-                        notifications::add("Broadened ESP back to standard.", notifications::NotificationType::Info, 2.0f);
+                    float dist = -1.f;
+                    auto local_hrp_it = cache::cached_local_player.parts.find("HumanoidRootPart");
+                    auto enemy_hrp_it = current_player_state.parts.find("HumanoidRootPart");
+                    if (local_hrp_it != cache::cached_local_player.parts.end() && enemy_hrp_it != current_player_state.parts.end()) {
+                        rbx::primitive_t local_prim = local_hrp_it->second.get_primitive();
+                        rbx::primitive_t enemy_prim = enemy_hrp_it->second.get_primitive();
+                        math::vector3 lp = local_prim.get_position();
+                        math::vector3 ep = enemy_prim.get_position();
+                        
+                        float dx = ep.x - lp.x;
+                        float dy = ep.y - lp.y;
+                        float dz = ep.z - lp.z;
+                        dist = std::sqrt(dx * dx + dy * dy + dz * dz);
+                    }
+
+                    ImGui::TextColored(menu::accent_color, "TARGET DATA SHEET");
+                    ImGui::Separator();
+                    ImGui::Spacing();
+                    
+                    ImGui::Text("Display Name: "); ImGui::SameLine();
+                    ImGui::TextColored(menu::accent_color, current_player_state.display_name.c_str());
+
+                    ImGui::Text("Username:     "); ImGui::SameLine();
+                    ImGui::TextColored(ImVec4(1,1,1,1), "%s", current_player_state.name.c_str());
+                    
+                    ImGui::Text("User ID:      "); ImGui::SameLine();
+                    ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "%lld", current_player_state.user_id);
+
+                    ImGui::Text("Rig Type: "); ImGui::SameLine();
+                    ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), current_player_state.rig_type == 1 ? "R15 Joint" : "R6 Legacy");
+
+                    ImGui::Text("Holding:  "); ImGui::SameLine();
+                    ImGui::TextColored(menu::accent_color, current_player_state.tool_name.empty() ? "None" : current_player_state.tool_name.c_str());
+
+                    ImGui::Text("Distance: "); ImGui::SameLine();
+                    if (dist >= 0.0f) {
+                        ImGui::TextColored(ImVec4(0.8f, 1.0f, 0.8f, 1.0f), "%.1f Studs", dist);
                     } else {
-                        settings::visuals::target = true;
-                        g_silent_aim_locked = true;
-                        g_silent_aim_manual_locked = true;
-                        g_silent_cached_target = current_player_state;
-                        notifications::add("ESP Shell focused on: " + current_player_state.name, notifications::NotificationType::Success, 3.0f);
+                        ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "Out of Range");
+                    }
+
+                    ImGui::Spacing();
+                    ImGui::Separator();
+                    ImGui::Spacing();
+
+                    ImGui::Text("Target Health Status:");
+                    float hp_percentage = (max_health > 0.0f) ? (health / max_health) : 0.0f;
+                    hp_percentage = std::clamp(hp_percentage, 0.0f, 1.0f);
+                    
+                    ImVec4 hp_col = ImVec4(1.0f - hp_percentage, hp_percentage, 0.1f, 1.0f);
+                    ImGui::PushStyleColor(ImGuiCol_PlotHistogram, hp_col);
+                    
+                    char hp_buf[64];
+                    sprintf_s(hp_buf, "%.0f / %.0f HP", health, max_health);
+                    ImGui::ProgressBar(hp_percentage, ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 18.0f), hp_buf);
+                    ImGui::PopStyleColor();
+
+                    ImGui::Spacing();
+                    ImGui::Separator();
+                    ImGui::Spacing();
+
+                    int rel = 0;
+                    auto rel_it = settings::player_relations::relations.find(current_player_state.name);
+                    if (rel_it != settings::player_relations::relations.end()) {
+                        rel = rel_it->second;
+                    }
+
+                    ImGui::Text("Team Classification:");
+                    ImGui::Spacing();
+
+                    bool is_neutral = (rel == 0);
+                    if (is_neutral) ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(45, 45, 54, 255));
+                    if (ImGui::Button("Neutral", ImVec2(90, 26))) {
+                        settings::player_relations::relations[current_player_state.name] = 0;
+                        notifications::add(current_player_state.name + " marked Neutral.", notifications::NotificationType::Info, 2.0f);
+                    }
+                    if (is_neutral) ImGui::PopStyleColor();
+
+                    ImGui::SameLine();
+
+                    bool is_teammate = (rel == 1);
+                    if (is_teammate) ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 160, 80, 255));
+                    if (ImGui::Button("Teammate", ImVec2(90, 26))) {
+                        settings::player_relations::relations[current_player_state.name] = 1;
+                        notifications::add(current_player_state.name + " marked as Teammate.", notifications::NotificationType::Info, 2.0f);
+                    }
+                    if (is_teammate) ImGui::PopStyleColor();
+
+                    ImGui::SameLine();
+
+                    bool is_enemy = (rel == 2);
+                    if (is_enemy) ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(180, 40, 40, 255));
+                    if (ImGui::Button("Enemy", ImVec2(90, 26))) {
+                        settings::player_relations::relations[current_player_state.name] = 2;
+                        notifications::add(current_player_state.name + " marked as Enemy!", notifications::NotificationType::Info, 2.0f);
+                    }
+                    if (is_enemy) ImGui::PopStyleColor();
+
+                    ImGui::Spacing();
+                    ImGui::Separator();
+                    ImGui::Spacing();
+
+                    ImGui::Text("Graphical Shell Interventions:");
+                    ImGui::Spacing();
+
+                    ImGui::Checkbox("Legit Teleport Mode", &settings::expl::legit_teleport);
+                    if (settings::expl::legit_teleport)
+                    {
+                        ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - 20.f);
+                        SliderFloatWithInput("Glide Speed##Target", &settings::expl::legit_teleport_speed, 10.0f, 1000.0f, "%.0f");
+                        SliderIntWithInput("Step Delay (ms)##Target", &settings::expl::legit_teleport_delay, 5, 100);
+                        ImGui::PopItemWidth();
+                        ImGui::Spacing();
+                    }
+
+                    if (styled_button("Teleport To Target Location", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 26.f))) {
+                        if (enemy_hrp_it != current_player_state.parts.end()) {
+                            math::vector3 target_pos = enemy_hrp_it->second.get_primitive().get_position();
+                            target_pos.y += 2.0f; 
+                            TeleportTo(target_pos);
+                            if (settings::expl::legit_teleport) {
+                                notifications::add("Gliding smoothly to: " + current_player_state.name, notifications::NotificationType::Success, 3.0f);
+                            } else {
+                                notifications::add("Teleported directly to: " + current_player_state.name, notifications::NotificationType::Success, 3.0f);
+                            }
+                        } else {
+                            notifications::add("Failed: RootPart coordinates missing!", notifications::NotificationType::Error, 3.0f);
+                        }
+                    }
+
+                    bool is_locked = (g_silent_aim_locked && g_silent_cached_target.instance.address == current_player_state.instance.address);
+                    std::string secure_lock_label = is_locked ? "Release Target Lock" : "Secure Silent Aim Lock";
+                    if (styled_button(secure_lock_label.c_str(), ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 26.f))) {
+                        if (is_locked) {
+                            g_silent_aim_locked = false;
+                            g_silent_aim_manual_locked = false;
+                            g_silent_cached_target = {};
+                            notifications::add("Released target lock.", notifications::NotificationType::Info, 2.0f);
+                        } else {
+                            g_silent_aim_locked = true;
+                            g_silent_aim_manual_locked = true;
+                            g_silent_cached_target = current_player_state;
+                            notifications::add("Target Lock Established: " + current_player_state.name, notifications::NotificationType::Success, 3.0f);
+                        }
+                    }
+
+                    bool is_aimbot_locked = (rbx::aimbot::g_aimbot_manual_locked && rbx::aimbot::g_aimbot_manual_target.instance.address == current_player_state.instance.address);
+                    std::string secure_aimbot_lock_label = is_aimbot_locked ? "Release Aimbot Target Lock" : "Secure Aimbot Target Lock";
+                    if (styled_button(secure_aimbot_lock_label.c_str(), ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 26.f))) {
+                        if (is_aimbot_locked) {
+                            rbx::aimbot::unlock_target();
+                            notifications::add("Released aimbot target lock.", notifications::NotificationType::Info, 2.0f);
+                        } else {
+                            rbx::aimbot::lock_target(current_player_state);
+                            notifications::add("Aimbot Target Lock Established: " + current_player_state.name, notifications::NotificationType::Success, 3.0f);
+                        }
+                    }
+
+                    bool is_esp_only = settings::visuals::target && (g_silent_cached_target.instance.address == current_player_state.instance.address);
+                    std::string esp_btn_label = is_esp_only ? "Broaden ESP: Show All players" : "Focus ESP: Show ONLY Target";
+                    if (styled_button(esp_btn_label.c_str(), ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 26.f))) {
+                        if (is_esp_only) {
+                            settings::visuals::target = false;
+                            notifications::add("Broadened ESP back to standard.", notifications::NotificationType::Info, 2.0f);
+                        } else {
+                            settings::visuals::target = true;
+                            g_silent_aim_locked = true;
+                            g_silent_aim_manual_locked = true;
+                            g_silent_cached_target = current_player_state;
+                            notifications::add("ESP Shell focused on: " + current_player_state.name, notifications::NotificationType::Success, 3.0f);
+                        }
                     }
                 }
             }
-        }
-        else
-        {
-            ImGui::Text("Select a player from the directory");
-            ImGui::TextDisabled("to initiate real-time diagnostics");
-            ImGui::TextDisabled("and custom tactical options.");
-        }
+            else
+            {
+                ImGui::Text("Select a player from the directory");
+                ImGui::TextDisabled("to initiate real-time diagnostics");
+                ImGui::TextDisabled("and custom tactical options.");
+            }
 
-        ImGui::EndChild(); 
-        ImGui::PopStyleVar();
+            ImGui::EndChild(); 
+            ImGui::PopStyleVar();
+        }
         break;
     }
     }

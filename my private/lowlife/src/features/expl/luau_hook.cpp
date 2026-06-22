@@ -11,7 +11,11 @@ std::uint64_t luau::find_lua_state()
 {
 	if (game::datamodel.address == 0) return 0;
 
-	std::uint64_t script_context = memory->read<std::uint64_t>(game::datamodel.address + Offsets::DataModel::ScriptContext);
+	std::uint64_t script_context = game::datamodel.find_first_child_by_class("ScriptContext").address;
+	if (script_context == 0)
+	{
+		script_context = memory->read<std::uint64_t>(game::datamodel.address + Offsets::DataModel::ScriptContext);
+	}
 	if (script_context == 0) return 0;
 
 	// Scan ScriptContext memory from offset 0x8 to 0x400 for candidate lua_State pointers
