@@ -1,8 +1,9 @@
-﻿#pragma once
+#pragma once
 #include <memory>
 #include <cstdint>
 #include <vector>
 #include <string>
+#include <mutex>
 #include <sdk/sdk.h>
 #include <sdk/math/math.h>
 #include <cache/cache.h>
@@ -11,8 +12,7 @@ namespace rbx
 {
 	namespace silent
 	{
-		void silent_aim_1();
-		void silent_aim_2();
+		void run();
 		void initialize();
 	}
 }
@@ -37,20 +37,4 @@ inline bool g_silent_aim_locked{ false };
 inline bool g_silent_aim_manual_locked{ false };
 inline bool g_silent_aim_key_was_pressed{ false };
 
-inline bool g_silent_has_original_sizes{ false };
-inline math::vector2 g_silent_original_size{};
-inline std::vector<std::pair<std::uint64_t, math::vector2>> g_silent_original_children_sizes{};
-
-struct c_silent_helper final 
-{
-	std::uint64_t address = 0;
-	static std::uint64_t cached_input_object;
-
-	c_silent_helper() = default;
-	c_silent_helper(std::uint64_t addr) : address(addr) {}
-
-	void set_frame_pos_x(std::uint64_t position);
-	void set_frame_pos_y(std::uint64_t position);
-	void initialize_mouse_service(std::uint64_t address);
-	void write_mouse_position(std::uint64_t address, float x, float y);
-};
+inline std::mutex g_silent_aim_mutex{};

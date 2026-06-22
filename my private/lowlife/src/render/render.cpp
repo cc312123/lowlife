@@ -2927,8 +2927,15 @@ void render_t::render_menu()
                                 ImU32 dot_color = IM_COL32(230, 230, 230, 255);
                                 if (rel == 1) dot_color = IM_COL32(0, 255, 120, 255);
                                 else if (rel == 2) dot_color = IM_COL32(255, 60, 60, 255);
-                                else if (g_silent_aim_locked && g_silent_cached_target.instance.address == player.instance.address) {
-                                    dot_color = IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 255);
+                                else {
+                                    bool is_target = false;
+                                    {
+                                        std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
+                                        is_target = g_silent_aim_locked && g_silent_cached_target.instance.address == player.instance.address;
+                                    }
+                                    if (is_target) {
+                                        dot_color = IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 255);
+                                    }
                                 }
                                 
                                 radar_draw->AddCircleFilled(dot_pos, 3.0f, dot_color);
@@ -3947,15 +3954,21 @@ void render_t::render_menu()
                         }
                     }
 
-                    bool is_locked = (g_silent_aim_locked && g_silent_cached_target.instance.address == current_player_state.instance.address);
+                    bool is_locked = false;
+                    {
+                        std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
+                        is_locked = (g_silent_aim_locked && g_silent_cached_target.instance.address == current_player_state.instance.address);
+                    }
                     std::string secure_lock_label = is_locked ? "Release Target Lock" : "Secure Silent Aim Lock";
                     if (styled_button(secure_lock_label.c_str(), ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 26.f))) {
                         if (is_locked) {
+                            std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
                             g_silent_aim_locked = false;
                             g_silent_aim_manual_locked = false;
                             g_silent_cached_target = {};
                             notifications::add("Released target lock.", notifications::NotificationType::Info, 2.0f);
                         } else {
+                            std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
                             g_silent_aim_locked = true;
                             g_silent_aim_manual_locked = true;
                             g_silent_cached_target = current_player_state;
@@ -3975,13 +3988,18 @@ void render_t::render_menu()
                         }
                     }
 
-                    bool is_esp_only = settings::visuals::target && (g_silent_cached_target.instance.address == current_player_state.instance.address);
+                    bool is_esp_only = false;
+                    {
+                        std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
+                        is_esp_only = settings::visuals::target && (g_silent_cached_target.instance.address == current_player_state.instance.address);
+                    }
                     std::string esp_btn_label = is_esp_only ? "Broaden ESP: Show All players" : "Focus ESP: Show ONLY Target";
                     if (styled_button(esp_btn_label.c_str(), ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 26.f))) {
                         if (is_esp_only) {
                             settings::visuals::target = false;
                             notifications::add("Broadened ESP back to standard.", notifications::NotificationType::Info, 2.0f);
                         } else {
+                            std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
                             settings::visuals::target = true;
                             g_silent_aim_locked = true;
                             g_silent_aim_manual_locked = true;
@@ -4132,8 +4150,11 @@ void render_t::render_feature_indicator()
     lines.push_back("SILENT AIM: " + std::string(silent_active ? "ON" : "OFF"));
 
     std::string target_name = "NONE";
-    if (silent_active && g_silent_cached_target.instance.address != 0 && !g_silent_cached_target.name.empty()) {
-        target_name = g_silent_cached_target.name;
+    {
+        std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
+        if (silent_active && g_silent_cached_target.instance.address != 0 && !g_silent_cached_target.name.empty()) {
+            target_name = g_silent_cached_target.name;
+        }
     }
     lines.push_back("SILENT AIM TARGET: " + target_name);
 
