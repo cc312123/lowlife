@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.42",
-    "latestChangelog":  "Restrict memory hitbox expander to HumanoidRootPart to completely resolve giant head and visual accessory bugs.",
+    "latestVersion":  "1.0.43",
+    "latestChangelog":  "Improve UI aesthetics with dynamic dark gradients, styled separators, active borders, and outline shadows.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -304,7 +304,14 @@
                         "changelog":  "Restrict memory hitbox expander to HumanoidRootPart to completely resolve giant head and visual accessory bugs.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "17b0f7dfc0768d80bc19e2dcf2b8339e"
+                    },
+                    {
+                        "version":  "1.0.43",
+                        "date":  "2026-06-21",
+                        "changelog":  "Improve UI aesthetics with dynamic dark gradients, styled separators, active borders, and outline shadows.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "239f1d901068d28d549b2b70f0e1244a"
                     }
                 ],
-    "latestHash":  "17b0f7dfc0768d80bc19e2dcf2b8339e"
+    "latestHash":  "239f1d901068d28d549b2b70f0e1244a"
 }
