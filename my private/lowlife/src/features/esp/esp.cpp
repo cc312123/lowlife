@@ -17,8 +17,8 @@
 #include <settings.h>
 #include <game/game.h>
 #include <cache/cache.h>
-#include <features/silent/silent.h>
 #include <features/aimbot/aimbot.h>
+#include <features/silent/silent.h>
 
 enum BoneIdx {
 	IDX_HEAD = 0, IDX_TORSO, IDX_UPPER_TORSO, IDX_LOWER_TORSO,
@@ -38,41 +38,6 @@ static const char* bone_names[] = {
 	"HumanoidRootPart"
 };
 constexpr int num_bones = sizeof(bone_names) / sizeof(bone_names[0]);
-
-static float get_effective_fov()
-{
-	if (!settings::silent::gun_based_fov)
-		return settings::silent::fov;
-
-	static std::string last_tool = "";
-	static float cached_fov = settings::silent::fov;
-
-	std::string tool_name;
-	{
-		std::lock_guard<std::mutex> lock(cache::mtx);
-		tool_name = cache::cached_local_player.tool_name;
-	}
-
-	if (tool_name != last_tool) {
-		last_tool = tool_name;
-		std::string tool_name_lower = tool_name;
-		std::transform(tool_name_lower.begin(), tool_name_lower.end(), tool_name_lower.begin(), ::tolower);
-
-		if (tool_name_lower.find("double-barrel") != std::string::npos || 
-			tool_name_lower.find("double barrel") != std::string::npos ||
-			tool_name_lower.find("doublebarrel") != std::string::npos)
-			cached_fov = settings::silent::fov_double_barrel;
-		else if (tool_name_lower.find("tacticalshotgun") != std::string::npos ||
-			tool_name_lower.find("tactical shotgun") != std::string::npos)
-			cached_fov = settings::silent::fov_tactical_shotgun;
-		else if (tool_name_lower.find("revolver") != std::string::npos)
-			cached_fov = settings::silent::fov_revolver;
-		else
-			cached_fov = settings::silent::fov;
-	}
-
-	return cached_fov;
-}
 
 #include <clipper2/clipper.h>
 
@@ -238,64 +203,6 @@ void esp::run()
 			has_local_hrp = true;
 		}
 	}
-
-	if (settings::silent::draw_fov)
-	{
-		ImVec2 center(cursor_pos.x, cursor_pos.y);
-		
-		float rotation = 0.0f;
-		if (settings::silent::rotate_fov)
-		{
-			static float rotation_time = 0.0f;
-			rotation_time += ImGui::GetIO().DeltaTime * 2.0f;
-			if (rotation_time > 2.0f * M_PI)
-				rotation_time -= 2.0f * M_PI;
-			rotation = rotation_time;
-		}
-		
-		ImVec4 color_vec;
-		if (settings::silent::rainbow_fov)
-		{
-			static float rainbow_time = 0.0f;
-			rainbow_time += ImGui::GetIO().DeltaTime * 2.0f;
-			if (rainbow_time > 2.0f * M_PI)
-				rainbow_time -= 2.0f * M_PI;
-			
-			float h = rainbow_time / (2.0f * M_PI);
-			float s = 1.0f;
-			float v = 1.0f;
-			
-			int i = (int)(h * 6.0f);
-			float f = (h * 6.0f) - i;
-			float p = v * (1.0f - s);
-			float q = v * (1.0f - s * f);
-			float t = v * (1.0f - s * (1.0f - f));
-			
-			i %= 6;
-			switch (i)
-			{
-			case 0: color_vec = ImVec4(v, t, p, settings::silent::fov_color[3]); break;
-			case 1: color_vec = ImVec4(q, v, p, settings::silent::fov_color[3]); break;
-			case 2: color_vec = ImVec4(p, v, t, settings::silent::fov_color[3]); break;
-			case 3: color_vec = ImVec4(p, q, v, settings::silent::fov_color[3]); break;
-			case 4: color_vec = ImVec4(t, p, v, settings::silent::fov_color[3]); break;
-			case 5: color_vec = ImVec4(v, p, q, settings::silent::fov_color[3]); break;
-			}
-		}
-		else
-		{
-			color_vec = ImVec4(
-				settings::silent::fov_color[0],
-				settings::silent::fov_color[1],
-				settings::silent::fov_color[2],
-				settings::silent::fov_color[3]
-			);
-		}
-		
-		ImU32 fov_color = ImGui::ColorConvertFloat4ToU32(color_vec);
-		DrawPolygonalFOV(draw, center, get_effective_fov() - 1.0f, fov_color, settings::silent::filled_fov, rotation);
-	}
-
 	if (settings::aimbot::draw_fov)
 	{
 		ImVec2 center(cursor_pos.x, cursor_pos.y);
@@ -353,6 +260,63 @@ void esp::run()
 		DrawPolygonalFOV(draw, center, settings::aimbot::fov - 1.0f, fov_color, settings::aimbot::filled_fov, rotation);
 	}
 
+	if (settings::new_silent::draw_fov)
+	{
+		ImVec2 center(cursor_pos.x, cursor_pos.y);
+		
+		float rotation = 0.0f;
+		if (settings::new_silent::rotate_fov)
+		{
+			static float rotation_time = 0.0f;
+			rotation_time += ImGui::GetIO().DeltaTime * 2.0f;
+			if (rotation_time > 2.0f * M_PI)
+				rotation_time -= 2.0f * M_PI;
+			rotation = rotation_time;
+		}
+		
+		ImVec4 color_vec;
+		if (settings::new_silent::rainbow_fov)
+		{
+			static float rainbow_time = 0.0f;
+			rainbow_time += ImGui::GetIO().DeltaTime * 2.0f;
+			if (rainbow_time > 2.0f * M_PI)
+				rainbow_time -= 2.0f * M_PI;
+			
+			float h = rainbow_time / (2.0f * M_PI);
+			float s = 1.0f;
+			float v = 1.0f;
+			
+			int i = (int)(h * 6.0f);
+			float f = (h * 6.0f) - i;
+			float p = v * (1.0f - s);
+			float q = v * (1.0f - s * f);
+			float t = v * (1.0f - s * (1.0f - f));
+			
+			i %= 6;
+			switch (i)
+			{
+			case 0: color_vec = ImVec4(v, t, p, settings::new_silent::fov_color[3]); break;
+			case 1: color_vec = ImVec4(q, v, p, settings::new_silent::fov_color[3]); break;
+			case 2: color_vec = ImVec4(p, v, t, settings::new_silent::fov_color[3]); break;
+			case 3: color_vec = ImVec4(p, q, v, settings::new_silent::fov_color[3]); break;
+			case 4: color_vec = ImVec4(t, p, v, settings::new_silent::fov_color[3]); break;
+			case 5: color_vec = ImVec4(v, p, q, settings::new_silent::fov_color[3]); break;
+			}
+		}
+		else
+		{
+			color_vec = ImVec4(
+				settings::new_silent::fov_color[0],
+				settings::new_silent::fov_color[1],
+				settings::new_silent::fov_color[2],
+				settings::new_silent::fov_color[3]
+			);
+		}
+		
+		ImU32 fov_color = ImGui::ColorConvertFloat4ToU32(color_vec);
+		DrawPolygonalFOV(draw, center, settings::new_silent::fov - 1.0f, fov_color, settings::new_silent::filled_fov, rotation);
+	}
+
 	std::shared_ptr<std::vector<cache::entity_t>> snapshot_ptr;
 	{
 		std::lock_guard<std::mutex> lock(cache::mtx);
@@ -375,18 +339,6 @@ void esp::run()
 		{
 			continue;
 		}
-
-		bool is_silent_target = false;
-		if (settings::visuals::target && g_silent_aim_locked)
-		{
-			std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
-			is_silent_target = (entity.instance.address == g_silent_cached_target.instance.address);
-		}
-		if (settings::visuals::target && g_silent_aim_locked && !is_silent_target)
-		{
-			continue;
-		}
-
 		// Use a local stack-based lazy evaluation cache instead of heavy dynamic maps
 		ImVec2 bone_screens[num_bones];
 		bool bone_has_screen[num_bones] = { false };

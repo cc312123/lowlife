@@ -6,7 +6,6 @@
 #include <ctime>
 #include "render_helpers.h"
 #include "notifications.h"
-#include <features/silent/silent.h>
 #include <dwmapi.h>
 #include <cstdio>
 #include <chrono>
@@ -31,13 +30,13 @@ typedef BOOL(WINAPI* SetWindowDisplayAffinityProc)(HWND, DWORD);
 #include <settings.h>
 #include <check/typing_check.h>
 #include <features/esp/esp.h>
-#include <features/silent/silent.h>
 #include <features/aimbot/aimbot.h>
 #include <features/explorer/dex_explorer.h>
 #include "visitor.h"
 #include "../resources/WeaponIcon.hpp"
 #include "../config/config.h"
 #include <features/triggerbot/triggerbot.h>
+#include <features/silent/silent.h>
 #include <memory/memory.h>
 #include <sdk/offsets.h>
 #include <game/rescan.h>
@@ -683,9 +682,8 @@ static bool inline_keybind_button(const char* label, int* key, int* mode = nullp
         ImGui::SetNextWindowPos(keybind_popup_pos[key_id], ImGuiCond_Always);
 
         bool is_walkspeed = (strcmp(label, "walkspeed_keybind") == 0);
-        bool is_silent = (strcmp(label, "silent_keybind") == 0);
         bool is_jumppower = (strcmp(label, "jumppower_keybind") == 0);
-        int mode_count = (is_walkspeed || is_silent || is_jumppower) ? 3 : 2;
+        int mode_count = (is_walkspeed || is_jumppower) ? 3 : 2;
         ImVec2 popup_size = ImVec2(80.0f, mode_count == 3 ? 100.0f : 80.0f);
         ImGui::SetNextWindowSize(popup_size);
 
@@ -710,7 +708,7 @@ static bool inline_keybind_button(const char* label, int* key, int* mode = nullp
         ImDrawList* popup_dl = ImGui::GetWindowDrawList();
 
         const char* modes[3];
-        if (is_walkspeed || is_silent || is_jumppower)
+        if (is_walkspeed || is_jumppower)
         {
             modes[0] = "Hold";
             modes[1] = "Toggle";
@@ -920,9 +918,8 @@ static bool keybind_button(const char* label, int* key, int* mode = nullptr)
         ImGui::SetNextWindowPos(keybind_popup_pos[key_id], ImGuiCond_Always);
 
         bool is_walkspeed = (strcmp(label, "walkspeed_keybind") == 0);
-        bool is_silent = (strcmp(label, "silent_keybind") == 0);
         bool is_jumppower = (strcmp(label, "jumppower_keybind") == 0);
-        int mode_count = (is_walkspeed || is_silent || is_jumppower) ? 3 : 2;
+        int mode_count = (is_walkspeed || is_jumppower) ? 3 : 2;
         ImVec2 popup_size = ImVec2(80.0f, mode_count == 3 ? 100.0f : 80.0f);
         ImGui::SetNextWindowSize(popup_size);
 
@@ -947,7 +944,7 @@ static bool keybind_button(const char* label, int* key, int* mode = nullptr)
         ImDrawList* popup_dl = ImGui::GetWindowDrawList();
 
         const char* modes[3];
-        if (is_walkspeed || is_silent || is_jumppower)
+        if (is_walkspeed || is_jumppower)
         {
             modes[0] = "Hold";
             modes[1] = "Toggle";
@@ -1678,51 +1675,6 @@ void render_t::end_render()
     detail->swap_chain->Present(0, 0);
 }
 
-static void draw_custom_cursor()
-{
-    if (!g_silent_aim_instance.address)
-    {
-        return;
-    }
-
-    bool is_visible = false;
-    is_visible = memory->read<bool>(g_silent_aim_instance.address + Offsets::GuiObject::Visible);
-
-    if (!is_visible)
-    {
-        return;
-    }
-
-    POINT pt;
-    if (!GetCursorPos(&pt))
-    {
-        return;
-    }
-
-    bool right_click_held = GetAsyncKeyState(VK_RBUTTON) & 0x8000;
-    float gap = right_click_held ? 4.0f : 10.0f;
-    ImDrawList* draw = ImGui::GetBackgroundDrawList();
-    ImU32 col = IM_COL32(255, 255, 255, 255);
-    float dot_size = 4.0f;
-    float line_width = 2.0f;
-    float line_length = 10.0f;
-    ImVec2 center = { (float)pt.x, (float)pt.y };
-    ImVec2 dot_min(center.x - dot_size * 0.5f, center.y - dot_size * 0.5f);
-    ImVec2 dot_max(center.x + dot_size * 0.5f, center.y + dot_size * 0.5f);
-    draw->AddRectFilled(dot_min, dot_max, col, 0.0f);
-    ImVec2 top_min(center.x - line_width * 0.5f, center.y - gap - line_length);
-    ImVec2 top_max(center.x + line_width * 0.5f, center.y - gap);
-    draw->AddRectFilled(top_min, top_max, col, 0.0f);
-    ImVec2 bottom_min(center.x - line_width * 0.5f, center.y + gap);
-    ImVec2 bottom_max(center.x + line_width * 0.5f, center.y + gap + line_length);
-    draw->AddRectFilled(bottom_min, bottom_max, col, 0.0f);
-    ImVec2 left_min(center.x - gap - line_length, center.y - line_width * 0.5f);
-    ImVec2 left_max(center.x - gap, center.y + line_width * 0.5f);
-    draw->AddRectFilled(left_min, left_max, col, 0.0f);
-    ImVec2 right_min(center.x + gap, center.y - line_width * 0.5f);
-    ImVec2 right_max(center.x + gap + line_length, center.y + line_width * 0.5f);
-    draw->AddRectFilled(right_min, right_max, col, 0.0f);
-}
 
 static std::string get_remaining_duration_string() {
     if (!keyauth || keyauth->user_data.subscriptions.empty()) {
@@ -2382,14 +2334,14 @@ void render_t::render_menu()
     const char* active_tab_name = "AIMBOT";
     switch (selected_tab_index) {
         case 0: active_tab_name = "AIMBOT CONTROLS"; break;
-        case 1: active_tab_name = "SILENT REDIRECTION"; break;
-        case 2: active_tab_name = "VISUAL ENVIRONMENT"; break;
-        case 3: active_tab_name = "MISCELLANEOUS HACKS"; break;
-        case 4: active_tab_name = "SYSTEM CONFIGURATIONS"; break;
-        case 5: active_tab_name = "DATABASE PROFILES"; break;
-        case 6: active_tab_name = "SHOT DIAGNOSTICS"; break;
-        case 7: active_tab_name = "AUTOMATIC TRIGGERBOT"; break;
-        case 8: active_tab_name = "PLAYERS DATABASE"; break;
+        case 1: active_tab_name = "VISUAL ENVIRONMENT"; break;
+        case 2: active_tab_name = "MISCELLANEOUS HACKS"; break;
+        case 3: active_tab_name = "SYSTEM CONFIGURATIONS"; break;
+        case 4: active_tab_name = "DATABASE PROFILES"; break;
+        case 5: active_tab_name = "SHOT DIAGNOSTICS"; break;
+        case 6: active_tab_name = "AUTOMATIC TRIGGERBOT"; break;
+        case 7: active_tab_name = "PLAYERS DATABASE"; break;
+        case 8: active_tab_name = "SILENT AIM TARGETING"; break;
     }
     
     // Header Text
@@ -2401,14 +2353,14 @@ void render_t::render_menu()
 
     // Draw vertical tab navigation in the sidebar
     if (add_sidebar_tab("Aimbot", "âŒ–", 0, selected_tab_index == 0)) selected_tab_index = 0;
-    if (add_sidebar_tab("Silent", "ðŸ‘", 1, selected_tab_index == 1)) selected_tab_index = 1;
-    if (add_sidebar_tab("Visuals", "â˜¼", 2, selected_tab_index == 2)) selected_tab_index = 2;
-    if (add_sidebar_tab("Misc", "âš™", 3, selected_tab_index == 3)) selected_tab_index = 3;
-    if (add_sidebar_tab("Settings", "â›­", 4, selected_tab_index == 4)) selected_tab_index = 4;
-    if (add_sidebar_tab("Configs", "ðŸ’¾", 5, selected_tab_index == 5)) selected_tab_index = 5;
-    if (add_sidebar_tab("Shot Detect", "ðŸŽ¯", 6, selected_tab_index == 6)) selected_tab_index = 6;
-    if (add_sidebar_tab("Triggerbot", "âš¡", 7, selected_tab_index == 7)) selected_tab_index = 7;
-    if (add_sidebar_tab("Players", "ðŸ‘¥", 8, selected_tab_index == 8)) selected_tab_index = 8;
+    if (add_sidebar_tab("Visuals", "â˜¼", 1, selected_tab_index == 1)) selected_tab_index = 1;
+    if (add_sidebar_tab("Misc", "âš™", 2, selected_tab_index == 2)) selected_tab_index = 2;
+    if (add_sidebar_tab("Settings", "â›­", 3, selected_tab_index == 3)) selected_tab_index = 3;
+    if (add_sidebar_tab("Configs", "ðŸ’¾", 4, selected_tab_index == 4)) selected_tab_index = 4;
+    if (add_sidebar_tab("Shot Detect", "ðŸŽ¯", 5, selected_tab_index == 5)) selected_tab_index = 5;
+    if (add_sidebar_tab("Triggerbot", "âš¡", 6, selected_tab_index == 6)) selected_tab_index = 6;
+    if (add_sidebar_tab("Players", "ðŸ‘¥", 7, selected_tab_index == 7)) selected_tab_index = 7;
+    if (add_sidebar_tab("Silent Aim", "🎯", 8, selected_tab_index == 8)) selected_tab_index = 8;
 
     // Shift coordinates dynamically for the switch case child rendering
 #define SetCursorPos(pos) SetCursorPos(adjust_menu_pos(pos))
@@ -2418,25 +2370,25 @@ void render_t::render_menu()
 
     const char* page1_names[] = { 
         "Aimbot Controls", 
-        "Silent Controls", 
         "ESP Visuals", 
         "Misc Movement", 
         "User Interface", 
         "Configurations", 
         "Shot Detection", 
         "Triggerbot Controls", 
-        "Players List" 
+        "Players List",
+        "Silent Aim Controls"
     };
     const char* page2_names[] = { 
         "Aimbot Settings", 
-        "Redirection Settings", 
         "ESP Radar & Preview", 
         "Blatant & World Settings", 
         "System Cleaner & Loader", 
         "Config Actions", 
         "Status & Target Tracking", 
         "Triggerbot Settings & Status", 
-        "Player Details & Actions" 
+        "Player Details & Actions",
+        "Silent Aim Settings"
     };
 
     ImGui::SetCursorPos(ImVec2(22.f, 78.f));
@@ -2591,72 +2543,6 @@ void render_t::render_menu()
         break;
     }
     case 1:
-    {
-        if (current_page == 0)
-        {
-            ImGui::SetCursorPos(ImVec2(22.f, 114.f));
-            ImGui::BeginChild("Redirection", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
-
-            ImGui::Checkbox("Enable", &settings::silent::enabled);
-            if (settings::silent::enabled)
-            {
-                ImGui::SameLine();
-                inline_keybind_button("silent_keybind", &settings::silent::keybind, &settings::silent::keybind_mode);
-            }
-            ImGui::Checkbox("Sticky Aim", &settings::silent::sticky_aim);
-            ImGui::Checkbox("Spoof Mouse", &settings::silent::spoof_mouse);
-            ImGui::Checkbox("Draw FOV", &settings::silent::draw_fov);
-            ImGui::SameLine();
-            if (add_tooltip_trigger("fov_tooltip")) {
-                if (begin_tooltip_popup("fov_tooltip", ImVec2(290, 180))) {
-                    ImGui::BeginChild("Field Of View Settings", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), true, ImGuiWindowFlags_NoBackground);
-
-                    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.f);
-                    SliderFloatWithInput("size", &settings::silent::fov, 10.f, 500.f, "%.1f");
-
-                    ImGui::Checkbox("Fill", &settings::silent::filled_fov);
-                    ImGui::SameLine();
-                    ImGui::ColorEdit4("Fov Color", settings::silent::fov_color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_AlphaBar);
-
-                    ImGui::Checkbox("Rotate", &settings::silent::rotate_fov);
-                    ImGui::Checkbox("Rainbow", &settings::silent::rainbow_fov);
-
-                    ImGui::EndChild();
-                    end_tooltip_popup("fov_tooltip", ImVec2(290, 180));
-                }
-            }
-
-            ImGui::EndChild();
-        }
-        else
-        {
-            ImGui::SetCursorPos(ImVec2(22.f, 114.f));
-            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
-            ImGui::BeginChild("Redirection Settings", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
-
-            const char* aim_parts[] = { "Head", "Torso", "Closest to Mouse" };
-            ImGui::Combo("Aim Part", &settings::silent::aim_part, aim_parts, IM_ARRAYSIZE(aim_parts));
-
-            ImGui::Checkbox("Gun Based FOV", &settings::silent::gun_based_fov);
-
-            if (settings::silent::gun_based_fov)
-            {
-                SliderFloatWithInput("Double Barrel", &settings::silent::fov_double_barrel, 10.f, 500.f, "%.1f");
-                SliderFloatWithInput("Tactical Shotgun", &settings::silent::fov_tactical_shotgun, 10.f, 500.f, "%.1f");
-                SliderFloatWithInput("Revolver", &settings::silent::fov_revolver, 10.f, 500.f, "%.1f");
-            }
-
-            ImGui::Checkbox("Fov Check", &settings::silent::fov_check);
-        ImGui::Checkbox("Knocked Check", &settings::silent::knocked_check);
-            ImGui::Checkbox("Wall Check", &settings::silent::wall_check);
-            ImGui::Checkbox("Magic Bullet", &settings::silent::magic_bullet);
-
-            ImGui::EndChild();
-            ImGui::PopStyleVar();
-        }
-        break;
-    }
-    case 2:
     {
         if (current_page == 0)
         {
@@ -2932,16 +2818,6 @@ void render_t::render_menu()
                                 ImU32 dot_color = IM_COL32(230, 230, 230, 255);
                                 if (rel == 1) dot_color = IM_COL32(0, 255, 120, 255);
                                 else if (rel == 2) dot_color = IM_COL32(255, 60, 60, 255);
-                                else {
-                                    bool is_target = false;
-                                    {
-                                        std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
-                                        is_target = g_silent_aim_locked && g_silent_cached_target.instance.address == player.instance.address;
-                                    }
-                                    if (is_target) {
-                                        dot_color = IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 255);
-                                    }
-                                }
                                 
                                 radar_draw->AddCircleFilled(dot_pos, 3.0f, dot_color);
                                 radar_draw->AddCircle(dot_pos, 3.0f, IM_COL32(0, 0, 0, 255), 12, 1.0f);
@@ -2959,7 +2835,6 @@ void render_t::render_menu()
                 }
 
                 ImGui::Checkbox("Localplayer", &settings::visuals::localplayer);
-                ImGui::Checkbox("Target Only", &settings::visuals::target);
                 ImGui::Checkbox("Feature Indicator", &settings::visuals::feature_indicator);
 
                 if (settings::visuals::feature_indicator)
@@ -2973,7 +2848,7 @@ void render_t::render_menu()
         }
         break;
     }
-    case 3:
+    case 2:
     {
         if (current_page == 0)
         {
@@ -3099,7 +2974,7 @@ void render_t::render_menu()
         }
         break;
     }
-    case 4:
+    case 3:
     {
         static auto run_cleaner_script = []() {
             char temp_path[MAX_PATH];
@@ -3332,7 +3207,7 @@ void render_t::render_menu()
         }
         break;
     }
-    case 5:
+    case 4:
     {
         static char config_name[64] = "";
         static int selected_config_index = -1;
@@ -3446,13 +3321,12 @@ void render_t::render_menu()
                 ImGui::Text("No config selected");
             }
 
-            ImGui::EndChild();
             ImGui::PopStyleVar();
         }
         break;
     }
 
-    case 7:
+    case 6:
     {
         if (current_page == 0)
         {
@@ -3499,7 +3373,7 @@ void render_t::render_menu()
         }
         break;
     }
-    case 6:
+    case 5:
     {
         if (current_page == 0)
         {
@@ -3710,7 +3584,7 @@ void render_t::render_menu()
         }
         break;
     }
-    case 8:
+    case 7:
     {
         static char search_filter[64] = "";
         static cache::entity_t selected_player = {};
@@ -3986,28 +3860,6 @@ void render_t::render_menu()
                         }
                     }
 
-                    bool is_locked = false;
-                    {
-                        std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
-                        is_locked = (g_silent_aim_locked && g_silent_cached_target.instance.address == current_player_state.instance.address);
-                    }
-                    std::string secure_lock_label = is_locked ? "Release Target Lock" : "Secure Silent Aim Lock";
-                    if (styled_button(secure_lock_label.c_str(), ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 26.f))) {
-                        if (is_locked) {
-                            std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
-                            g_silent_aim_locked = false;
-                            g_silent_aim_manual_locked = false;
-                            g_silent_cached_target = {};
-                            notifications::add("Released target lock.", notifications::NotificationType::Info, 2.0f);
-                        } else {
-                            std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
-                            g_silent_aim_locked = true;
-                            g_silent_aim_manual_locked = true;
-                            g_silent_cached_target = current_player_state;
-                            notifications::add("Target Lock Established: " + current_player_state.name, notifications::NotificationType::Success, 3.0f);
-                        }
-                    }
-
                     bool is_aimbot_locked = false;
                     {
                         std::lock_guard<std::mutex> lock(rbx::aimbot::g_aimbot_mutex);
@@ -4023,26 +3875,6 @@ void render_t::render_menu()
                             notifications::add("Aimbot Target Lock Established: " + current_player_state.name, notifications::NotificationType::Success, 3.0f);
                         }
                     }
-
-                    bool is_esp_only = false;
-                    {
-                        std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
-                        is_esp_only = settings::visuals::target && (g_silent_cached_target.instance.address == current_player_state.instance.address);
-                    }
-                    std::string esp_btn_label = is_esp_only ? "Broaden ESP: Show All players" : "Focus ESP: Show ONLY Target";
-                    if (styled_button(esp_btn_label.c_str(), ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 26.f))) {
-                        if (is_esp_only) {
-                            settings::visuals::target = false;
-                            notifications::add("Broadened ESP back to standard.", notifications::NotificationType::Info, 2.0f);
-                        } else {
-                            std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
-                            settings::visuals::target = true;
-                            g_silent_aim_locked = true;
-                            g_silent_aim_manual_locked = true;
-                            g_silent_cached_target = current_player_state;
-                            notifications::add("ESP Shell focused on: " + current_player_state.name, notifications::NotificationType::Success, 3.0f);
-                        }
-                    }
                 }
             }
             else
@@ -4054,6 +3886,78 @@ void render_t::render_menu()
 
             ImGui::EndChild(); 
             ImGui::PopStyleVar();
+        }
+        break;
+    }
+    case 8:
+    {
+        if (current_page == 0)
+        {
+            ImGui::SetCursorPos(ImVec2(22.f, 114.f));
+            ImGui::BeginChild("Silent Aim Controls", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
+
+            ImGui::Checkbox("Enable Silent Aim", &settings::new_silent::enabled);
+            if (settings::new_silent::enabled)
+            {
+                ImGui::SameLine();
+                inline_keybind_button("silent_keybind", &settings::new_silent::keybind, &settings::new_silent::keybind_mode);
+            }
+
+            ImGui::Checkbox("Sticky Aim", &settings::new_silent::sticky_aim);
+            ImGui::Checkbox("Draw FOV", &settings::new_silent::draw_fov);
+            ImGui::SameLine();
+            if (add_tooltip_trigger("silent_fov_tooltip")) {
+                if (begin_tooltip_popup("silent_fov_tooltip", ImVec2(290, 180))) {
+                    ImGui::BeginChild("Silent FOV Settings", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), true, ImGuiWindowFlags_NoBackground);
+
+                    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10.f);
+                    SliderFloatWithInput("size", &settings::new_silent::fov, 1.0f, 1000.0f, "%.1f");
+
+                    ImGui::Checkbox("Fill", &settings::new_silent::filled_fov);
+                    ImGui::SameLine();
+                    ImGui::ColorEdit4("FOV Color", settings::new_silent::fov_color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_AlphaBar);
+
+                    ImGui::Checkbox("Rotate", &settings::new_silent::rotate_fov);
+                    ImGui::Checkbox("Rainbow", &settings::new_silent::rainbow_fov);
+
+                    ImGui::EndChild();
+                    end_tooltip_popup("silent_fov_tooltip", ImVec2(290, 180));
+                }
+            }
+
+            ImGui::EndChild();
+        }
+        else
+        {
+            ImGui::SetCursorPos(ImVec2(22.f, 114.f));
+            ImGui::BeginChild("Silent Aim Settings", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
+
+            const char* targeting_modes[] = { "Closest to Crosshair", "Closest Distance", "Lowest Health" };
+            ImGui::Combo("Target Mode", &settings::new_silent::target_mode, targeting_modes, IM_ARRAYSIZE(targeting_modes));
+
+            const char* silent_parts[] = {
+                "Head", "Upper Torso", "Lower Torso", "HumanoidRootPart", "Smart (Head/Torso)", "Random"
+            };
+            ImGui::Combo("Target Part", &settings::new_silent::aim_part, silent_parts, IM_ARRAYSIZE(silent_parts));
+
+            ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - 20.f);
+            ImGui::SliderInt("Hit Chance", &settings::new_silent::hit_chance, 0, 100, "%d%%");
+
+            ImGui::Checkbox("FOV Check", &settings::new_silent::fov_check);
+            ImGui::Checkbox("Knocked Check", &settings::new_silent::knocked_check);
+            ImGui::Checkbox("Wall Check", &settings::new_silent::wall_check);
+            ImGui::Checkbox("Team Check", &settings::new_silent::team_check);
+
+            ImGui::Checkbox("Enable Prediction", &settings::new_silent::prediction_enabled);
+            if (settings::new_silent::prediction_enabled) {
+                ImGui::Checkbox("Auto-Prediction", &settings::new_silent::auto_prediction);
+                if (!settings::new_silent::auto_prediction) {
+                    SliderFloatWithInput("predict scale x", &settings::new_silent::prediction_scale_x, 0.0f, 10.0f, "%.2f");
+                    SliderFloatWithInput("predict scale y", &settings::new_silent::prediction_scale_y, 0.0f, 10.0f, "%.2f");
+                }
+            }
+
+            ImGui::EndChild();
         }
         break;
     }
@@ -4152,59 +4056,10 @@ void render_t::render_visuals()
     esp::run();
 
     render_feature_indicator();
-
-    draw_custom_cursor();
 }
 
 void render_t::render_feature_indicator()
 {
-    if (!settings::visuals::feature_indicator) {
-        return;
-    }
-
-    if (!Visualize.visitor) {
-        return;
-    }
-
-    ImDrawList* draw = ImGui::GetForegroundDrawList();
-    ImVec2 display_size = ImGui::GetIO().DisplaySize;
-
-    float start_x = settings::visuals::feature_indicator_x;
-    float start_y = settings::visuals::feature_indicator_y;
-
-    if (start_y == 0.0f) {
-        start_y = display_size.y * 0.5f;
-    }
-
-    float font_size = 9.0f;
-
-    std::vector<std::string> lines;
-
-    bool silent_enabled = settings::silent::enabled;
-    bool silent_active = silent_enabled && g_silent_aim_locked;
-
-    lines.push_back("SILENT AIM: " + std::string(silent_active ? "ON" : "OFF"));
-
-    std::string target_name = "NONE";
-    {
-        std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
-        if (silent_active && g_silent_cached_target.instance.address != 0 && !g_silent_cached_target.name.empty()) {
-            target_name = g_silent_cached_target.name;
-        }
-    }
-    lines.push_back("SILENT AIM TARGET: " + target_name);
-
-    float text_y = start_y;
-    ImU32 text_color = IM_COL32(255, 255, 255, 255);
-
-    for (const auto& line : lines) {
-        ImVec2 text_size = Visualize.visitor->CalcTextSizeA(font_size, FLT_MAX, 0.0f, line.c_str());
-        float text_x = start_x;
-
-        Visualize.DrawTextWithSpacingAndOutline(draw, Visualize.visitor, font_size, ImVec2(text_x, text_y), text_color, IM_COL32(0, 0, 0, 255), line);
-
-        text_y += text_size.y + 2.0f;
-    }
 }
 
 void render_t::render_notifications()

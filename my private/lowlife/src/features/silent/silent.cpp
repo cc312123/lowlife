@@ -8,6 +8,7 @@
 #include <unordered_set>
 #include <mutex>
 #include <chrono>
+#include <random>
 
 #include <memory/memory.h>
 #include <sdk/sdk.h>
@@ -21,32 +22,13 @@
 
 namespace
 {
+	std::unique_ptr<rbx::instance_t> g_mouseservice{};
+
 	float get_magnitude(const math::vector2& a, const math::vector2& b)
 	{
 		float dx = a.x - b.x;
 		float dy = a.y - b.y;
 		return std::sqrt(dx * dx + dy * dy);
-	}
-
-	float get_effective_fov(const std::string& tool_name)
-	{
-		if (!settings::silent::gun_based_fov)
-			return settings::silent::fov;
-
-		std::string tool_name_lower = tool_name;
-		std::transform(tool_name_lower.begin(), tool_name_lower.end(), tool_name_lower.begin(), ::tolower);
-
-		if (tool_name_lower.find("double-barrel") != std::string::npos || 
-			tool_name_lower.find("double barrel") != std::string::npos ||
-			tool_name_lower.find("doublebarrel") != std::string::npos)
-			return settings::silent::fov_double_barrel;
-		else if (tool_name_lower.find("tacticalshotgun") != std::string::npos ||
-			tool_name_lower.find("tactical shotgun") != std::string::npos)
-			return settings::silent::fov_tactical_shotgun;
-		else if (tool_name_lower.find("revolver") != std::string::npos)
-			return settings::silent::fov_revolver;
-
-		return settings::silent::fov;
 	}
 
 	bool is_player_knocked(const cache::entity_t& player)
@@ -76,66 +58,131 @@ namespace
 		return false;
 	}
 
+	bool is_player_visible(const cache::entity_t& player)
+	{
+		if (game::workspace.address == 0) return true;
+		rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
+		if (camera_inst.address != 0) {
+			rbx::camera_t camera{ camera_inst.address };
+			math::vector3 camera_pos = camera.get_position();
+			
+			const std::unordered_set<std::string> target_parts = {
+				"Head", "UpperTorso", "LowerTorso", "HumanoidRootPart"
+			};
+
+			for (const auto& pair : player.parts) {
+				if (target_parts.find(pair.first) == target_parts.end()) continue;
+				rbx::part_t part = pair.second;
+				if (!part.address) continue;
+				rbx::primitive_t primitive = part.get_primitive();
+				if (!primitive.address) continue;
+				math::vector3 world_pos = primitive.get_position();
+				if (!botter::is_occluded(camera_pos, world_pos)) {
+					return true;
+				}
+			}
+			return false;
+		}
+		return true;
+	}
+
+	bool is_on_same_team(const cache::entity_t& player, const std::string& local_crew_id)
+	{
+		if (local_crew_id.empty() || player.crew_id.empty()) return false;
+		if (local_crew_id == "0" || player.crew_id == "0") return false;
+		return local_crew_id == player.crew_id;
+	}
+
 	rbx::part_t get_target_part(const cache::entity_t& player, int aim_part, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view)
 	{
 		if (player.parts.empty()) return rbx::part_t{};
 
-		if (aim_part == 0)
+		// Smart mode: check if head is visible. If not visible but torso is, use torso. Otherwise default to Head.
+		if (aim_part == 4) // Smart
+		{
+			if (game::workspace.address != 0)
+			{
+				rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
+				if (camera_inst.address != 0)
+				{
+					rbx::camera_t camera{ camera_inst.address };
+					math::vector3 camera_pos = camera.get_position();
+					
+					auto head_it = player.parts.find("Head");
+					if (head_it != player.parts.end() && head_it->second.address != 0)
+					{
+						rbx::part_t head_part = head_it->second;
+						rbx::primitive_t head_prim = head_part.get_primitive();
+						if (head_prim.address != 0 && !botter::is_occluded(camera_pos, head_prim.get_position()))
+						{
+							return head_it->second;
+						}
+					}
+					
+					auto torso_it = player.parts.find("UpperTorso");
+					if (torso_it != player.parts.end()) return torso_it->second;
+					torso_it = player.parts.find("Torso");
+					if (torso_it != player.parts.end()) return torso_it->second;
+				}
+			}
+			
+			auto head_it = player.parts.find("Head");
+			if (head_it != player.parts.end()) return head_it->second;
+		}
+		// Random mode: choose a random valid part
+		else if (aim_part == 5) // Random
+		{
+			std::vector<std::string> parts_list = { "Head", "UpperTorso", "LowerTorso", "HumanoidRootPart" };
+			std::random_device rd;
+			std::mt19937 g(rd());
+			std::shuffle(parts_list.begin(), parts_list.end(), g);
+			
+			for (const auto& name : parts_list)
+			{
+				auto it = player.parts.find(name);
+				if (it != player.parts.end() && it->second.address != 0)
+				{
+					return it->second;
+				}
+			}
+		}
+		else if (aim_part == 0) // Head
 		{
 			auto it = player.parts.find("Head");
 			if (it != player.parts.end()) return it->second;
 		}
-		else if (aim_part == 1)
+		else if (aim_part == 1) // UpperTorso
 		{
 			auto it = player.parts.find("UpperTorso");
 			if (it != player.parts.end()) return it->second;
 			it = player.parts.find("Torso");
 			if (it != player.parts.end()) return it->second;
 		}
-		else if (aim_part == 2)
+		else if (aim_part == 2) // LowerTorso
 		{
-			rbx::part_t closest = {};
-			float min_dist = std::numeric_limits<float>::max();
-			float cursor_x = static_cast<float>(cursor_pt.x);
-			float cursor_y = static_cast<float>(cursor_pt.y);
-
-			const std::unordered_set<std::string> valid_hitparts = {
-				"Head",
-				"Torso", "UpperTorso", "LowerTorso",
-				"Left Arm", "LeftUpperArm", "LeftLowerArm", "LeftHand",
-				"Right Arm", "RightUpperArm", "RightLowerArm", "RightHand",
-				"Left Leg", "LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
-				"Right Leg", "RightUpperLeg", "RightLowerLeg", "RightFoot",
-				"HumanoidRootPart"
-			};
-
-			for (const auto& pair : player.parts) {
-				if (valid_hitparts.find(pair.first) == valid_hitparts.end()) continue;
-				rbx::part_t part = pair.second;
-				if (!part.address) continue;
-				rbx::primitive_t primitive = part.get_primitive();
-				if (!primitive.address) continue;
-				math::vector3 world_pos = primitive.get_position();
-				math::vector2 screen_pos = {};
-				if (!game::visengine.world_to_screen(world_pos, screen_pos, dims, view)) continue;
-				float dist = get_magnitude(screen_pos, { cursor_x, cursor_y });
-				if (dist < min_dist) {
-					min_dist = dist;
-					closest = part;
-				}
-			}
-			if (closest.address != 0) return closest;
+			auto it = player.parts.find("LowerTorso");
+			if (it != player.parts.end()) return it->second;
+			it = player.parts.find("Torso");
+			if (it != player.parts.end()) return it->second;
+		}
+		else if (aim_part == 3) // HumanoidRootPart
+		{
+			auto it = player.parts.find("HumanoidRootPart");
+			if (it != player.parts.end()) return it->second;
 		}
 
-		if (auto it = player.parts.find("HumanoidRootPart"); it != player.parts.end()) return it->second;
-		if (auto it = player.parts.find("Head"); it != player.parts.end()) return it->second;
+		// Fallback to Head
+		auto it = player.parts.find("Head");
+		if (it != player.parts.end()) return it->second;
+		
 		return rbx::part_t{};
 	}
 
-	bool is_target_valid(const cache::entity_t& player, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, const std::string& tool_name, bool skip_fov_check = false)
+	bool is_target_valid(const cache::entity_t& player, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, bool skip_fov_check)
 	{
 		if (player.instance.address == 0) return false;
 
+		// Relation check (skip friends/whitelist if relation says so)
 		bool relation_invalid = false;
 		{
 			std::lock_guard<std::mutex> lock(settings::player_relations::relations_mutex);
@@ -144,56 +191,86 @@ namespace
 				relation_invalid = true;
 			}
 		}
-		if (relation_invalid) {
+		if (relation_invalid) return false;
+
+		// Team check
+		if (settings::new_silent::team_check)
+		{
+			std::string local_crew_id;
+			{
+				std::lock_guard<std::mutex> lock(cache::mtx);
+				local_crew_id = cache::cached_local_player.crew_id;
+			}
+			if (is_on_same_team(player, local_crew_id)) return false;
+		}
+
+		// Knocked check
+		if (settings::new_silent::knocked_check && is_player_knocked(player))
+		{
 			return false;
 		}
 
-		if (settings::silent::knocked_check && is_player_knocked(player)) {
+		// Wall check
+		if (settings::new_silent::wall_check && !is_player_visible(player))
+		{
 			return false;
 		}
 
-		if (settings::silent::fov_check && !skip_fov_check) {
-			rbx::part_t target_part = get_target_part(player, settings::silent::aim_part, cursor_pt, dims, view);
-			if (!target_part.address) return false;
+		// FOV check
+		if (settings::new_silent::fov_check && !skip_fov_check)
+		{
+			rbx::part_t target_part = get_target_part(player, settings::new_silent::aim_part, cursor_pt, dims, view);
+			if (target_part.address == 0) return false;
 
 			rbx::primitive_t primitive = target_part.get_primitive();
-			if (!primitive.address) return false;
+			if (primitive.address == 0) return false;
+
 			math::vector3 world_pos = primitive.get_position();
 			math::vector2 screen_pos = {};
 
 			if (!game::visengine.world_to_screen(world_pos, screen_pos, dims, view)) return false;
 
-			float dist = get_magnitude(screen_pos, { static_cast<float>(cursor_pt.x), static_cast<float>(cursor_pt.y) });
-			if (dist > get_effective_fov(tool_name)) return false;
-		}
-
-		if (settings::silent::wall_check && !settings::silent::magic_bullet) {
-			rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
-			if (camera_inst.address != 0) {
-				rbx::camera_t camera{ camera_inst.address };
-				math::vector3 camera_pos = camera.get_position();
-				
-				bool any_part_visible = false;
-				const std::vector<std::string> parts_to_check = { "Head", "UpperTorso", "HumanoidRootPart" };
-				for (const auto& part_name : parts_to_check) {
-					auto it = player.parts.find(part_name);
-					if (it != player.parts.end() && it->second.address != 0) {
-						rbx::part_t part = it->second;
-						rbx::primitive_t primitive = part.get_primitive();
-						if (primitive.address != 0) {
-							math::vector3 world_pos = primitive.get_position();
-							if (!botter::is_occluded(camera_pos, world_pos)) {
-								any_part_visible = true;
-								break;
-							}
-						}
-					}
-				}
-				if (!any_part_visible) return false;
-			}
+			float cursor_x = static_cast<float>(cursor_pt.x);
+			float cursor_y = static_cast<float>(cursor_pt.y);
+			float dist = get_magnitude(screen_pos, { cursor_x, cursor_y });
+			if (dist > settings::new_silent::fov) return false;
 		}
 
 		return true;
+	}
+
+	math::vector3 apply_prediction(rbx::primitive_t primitive)
+	{
+		math::vector3 pos = primitive.get_position();
+		math::vector3 vel = primitive.get_velocity();
+
+		constexpr float PREDICTION_SCALE = 0.016f;
+		constexpr float MAX_VELOCITY = 1000.0f;
+
+		if (!std::isfinite(vel.x) || !std::isfinite(vel.y) || !std::isfinite(vel.z) ||
+			std::abs(vel.x) > MAX_VELOCITY || std::abs(vel.y) > MAX_VELOCITY || std::abs(vel.z) > MAX_VELOCITY)
+			return pos;
+
+		float px = settings::new_silent::prediction_scale_x;
+		float py = settings::new_silent::prediction_scale_y;
+
+		if (settings::new_silent::auto_prediction)
+		{
+			// Auto-prediction dynamic scale based on estimation:
+			// A higher scale for higher ping. Let's read settings::aimbot::latency_ms or fallback to 50ms.
+			float ping = settings::aimbot::latency_ms;
+			if (ping <= 0.0f) ping = 50.0f;
+			
+			// Simple formula: scale is proportional to ping
+			float auto_scale = ping * 0.02f; // e.g. 50ms * 0.02 = 1.0f prediction scale
+			px = auto_scale;
+			py = auto_scale;
+		}
+
+		pos.x += vel.x * PREDICTION_SCALE * px;
+		pos.y += vel.y * PREDICTION_SCALE * py;
+		pos.z += vel.z * PREDICTION_SCALE * px;
+		return pos;
 	}
 
 	void write_mouse_position(std::uint64_t address, float x, float y)
@@ -220,26 +297,25 @@ namespace
 	}
 }
 
-void rbx::silent::run()
+void rbx::new_silent::run()
 {
 	SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
 
 	std::uint64_t last_locked_address = 0;
-	int aim_frame_check_counter = 0;
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> dis(1, 100);
 
 	for (;;)
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(8));
 
-		if (!settings::silent::enabled || !game::datamodel.address || !game::visengine.address)
+		if (!settings::new_silent::enabled || !game::datamodel.address || !game::visengine.address || !game::workspace.address)
 		{
 			{
 				std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
-				if (!g_silent_aim_manual_locked) {
-					g_silent_aim_locked = false;
-					g_silent_cached_target = {};
-				}
-				g_silent_data_ready = false;
+				g_silent_aim_locked = false;
+				g_silent_cached_target = {};
 			}
 			last_locked_address = 0;
 			continue;
@@ -249,7 +325,6 @@ void rbx::silent::run()
 		if (game::datamodel.address != last_datamodel_address)
 		{
 			g_mouseservice.reset();
-			g_silent_aim_instance = {};
 			last_datamodel_address = game::datamodel.address;
 		}
 
@@ -267,34 +342,6 @@ void rbx::silent::run()
 			continue;
 		}
 
-		if (aim_frame_check_counter++ % 250 == 0)
-		{
-			if (game::local_player.address != 0)
-			{
-				rbx::instance_t player_gui = game::local_player.find_first_child("PlayerGui");
-				if (player_gui.address != 0)
-				{
-					rbx::instance_t aim_frame = player_gui.find_first_child("Aim");
-					if (aim_frame.address != 0)
-					{
-						g_silent_aim_instance = aim_frame;
-					}
-					else
-					{
-						rbx::instance_t main_gui = player_gui.find_first_child("Main");
-						if (main_gui.address != 0)
-						{
-							rbx::instance_t main_aim = main_gui.find_first_child("Aim");
-							if (main_aim.address != 0)
-							{
-								g_silent_aim_instance = main_aim;
-							}
-						}
-					}
-				}
-			}
-		}
-
 		POINT cursor_point;
 		HWND roblox_window = FindWindowA(nullptr, "Roblox");
 		if (!roblox_window || !GetCursorPos(&cursor_point) || !ScreenToClient(roblox_window, &cursor_point))
@@ -305,21 +352,22 @@ void rbx::silent::run()
 		math::vector2 dims = game::visengine.get_dimensions();
 		math::matrix4 view = game::visengine.get_viewmatrix();
 
+		// Keybind check
 		bool should_active = false;
 		if (!check::textchatopen)
 		{
-			if (settings::silent::keybind == 0)
+			if (settings::new_silent::keybind == 0)
 			{
 				should_active = (GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0;
 			}
 			else
 			{
-				bool key_down = (GetAsyncKeyState(settings::silent::keybind) & 0x8000) != 0;
-				if (settings::silent::keybind_mode == 0)
+				bool key_down = (GetAsyncKeyState(settings::new_silent::keybind) & 0x8000) != 0;
+				if (settings::new_silent::keybind_mode == 0) // Hold
 				{
 					should_active = key_down;
 				}
-				else if (settings::silent::keybind_mode == 1)
+				else if (settings::new_silent::keybind_mode == 1) // Toggle
 				{
 					static bool was_pressed = false;
 					static bool toggle_active = false;
@@ -330,7 +378,7 @@ void rbx::silent::run()
 					was_pressed = key_down;
 					should_active = toggle_active;
 				}
-				else if (settings::silent::keybind_mode == 2)
+				else if (settings::new_silent::keybind_mode == 2) // Always Active
 				{
 					should_active = true;
 				}
@@ -340,61 +388,17 @@ void rbx::silent::run()
 		cache::entity_t current_target = {};
 		bool target_acquired = false;
 
-		bool manual_lock_active = false;
-		{
-			std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
-			if (g_silent_aim_manual_locked && g_silent_cached_target.instance.address != 0)
-			{
-				manual_lock_active = true;
-			}
-		}
-
-		if (manual_lock_active)
-		{
-			cache::entity_t manual_target = {};
-			bool found_manual = false;
-			{
-				std::lock_guard<std::mutex> cache_lock(cache::mtx);
-				if (cache::cached_players)
-				{
-					for (const auto& player : *cache::cached_players)
-					{
-						std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
-						if (player.instance.address == g_silent_cached_target.instance.address)
-						{
-							manual_target = player;
-							found_manual = true;
-							break;
-						}
-					}
-				}
-			}
-
-			if (found_manual && is_target_valid(manual_target, cursor_point, dims, view, "", true))
-			{
-				current_target = manual_target;
-				target_acquired = true;
-			}
-			else
-			{
-				std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
-				g_silent_aim_locked = false;
-				g_silent_aim_manual_locked = false;
-				g_silent_cached_target = {};
-			}
-		}
-
-		if (!target_acquired && settings::silent::sticky_aim && last_locked_address != 0)
+		// 1. Sticky Aim Check
+		if (settings::new_silent::sticky_aim && last_locked_address != 0)
 		{
 			std::lock_guard<std::mutex> cache_lock(cache::mtx);
-			std::string local_tool = cache::cached_local_player.tool_name;
 			if (cache::cached_players)
 			{
 				for (const auto& player : *cache::cached_players)
 				{
 					if (player.instance.address == last_locked_address)
 					{
-						if (is_target_valid(player, cursor_point, dims, view, local_tool, false))
+						if (is_target_valid(player, cursor_point, dims, view, false))
 						{
 							current_target = player;
 							target_acquired = true;
@@ -405,20 +409,23 @@ void rbx::silent::run()
 			}
 		}
 
+		// 2. Normal Target Scanning
 		if (!target_acquired)
 		{
-			float closest_dist = std::numeric_limits<float>::max();
+			float closest_crosshair_dist = std::numeric_limits<float>::max();
+			float closest_world_dist = std::numeric_limits<float>::max();
+			float lowest_health_val = std::numeric_limits<float>::max();
+
 			std::lock_guard<std::mutex> cache_lock(cache::mtx);
-			std::string local_tool = cache::cached_local_player.tool_name;
 			if (cache::cached_players)
 			{
 				for (const auto& player : *cache::cached_players)
 				{
 					if (cache::is_local_player(player)) continue;
 
-					if (is_target_valid(player, cursor_point, dims, view, local_tool, false))
+					if (is_target_valid(player, cursor_point, dims, view, false))
 					{
-						rbx::part_t target_part = get_target_part(player, settings::silent::aim_part, cursor_point, dims, view);
+						rbx::part_t target_part = get_target_part(player, settings::new_silent::aim_part, cursor_point, dims, view);
 						if (target_part.address != 0)
 						{
 							rbx::primitive_t primitive = target_part.get_primitive();
@@ -428,12 +435,55 @@ void rbx::silent::run()
 								math::vector2 screen_pos = {};
 								if (game::visengine.world_to_screen(world_pos, screen_pos, dims, view))
 								{
-									float dist = get_magnitude(screen_pos, { static_cast<float>(cursor_point.x), static_cast<float>(cursor_point.y) });
-									if (dist < closest_dist)
+									// Mode 0: Closest to Crosshair
+									if (settings::new_silent::target_mode == 0)
 									{
-										closest_dist = dist;
-										current_target = player;
-										target_acquired = true;
+										float dist = get_magnitude(screen_pos, { static_cast<float>(cursor_point.x), static_cast<float>(cursor_point.y) });
+										if (dist < closest_crosshair_dist)
+										{
+											closest_crosshair_dist = dist;
+											current_target = player;
+											target_acquired = true;
+										}
+									}
+									// Mode 1: Closest Distance (3D World Space Distance)
+									else if (settings::new_silent::target_mode == 1)
+									{
+										if (game::workspace.address != 0)
+										{
+											rbx::instance_t local_camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
+											if (local_camera_inst.address != 0)
+											{
+												rbx::camera_t local_camera{ local_camera_inst.address };
+												math::vector3 cam_pos = local_camera.get_position();
+												float dx = world_pos.x - cam_pos.x;
+												float dy = world_pos.y - cam_pos.y;
+												float dz = world_pos.z - cam_pos.z;
+												float dist_3d = std::sqrt(dx * dx + dy * dy + dz * dz);
+												if (dist_3d < closest_world_dist)
+												{
+													closest_world_dist = dist_3d;
+													current_target = player;
+													target_acquired = true;
+												}
+											}
+										}
+									}
+									// Mode 2: Lowest Health
+									else if (settings::new_silent::target_mode == 2)
+									{
+										if (player.humanoid.address != 0)
+										{
+											try {
+												float health = const_cast<cache::entity_t&>(player).humanoid.get_health();
+												if (health < lowest_health_val)
+												{
+													lowest_health_val = health;
+													current_target = player;
+													target_acquired = true;
+												}
+											} catch (...) {}
+										}
 									}
 								}
 							}
@@ -443,29 +493,44 @@ void rbx::silent::run()
 			}
 		}
 
+		// 3. Apply Silent Aim and Mouse Spoofing
 		if (target_acquired && should_active)
 		{
-			rbx::part_t target_part = get_target_part(current_target, settings::silent::aim_part, cursor_point, dims, view);
-			if (target_part.address != 0)
+			// Check Hit Chance
+			bool hit_roll_success = true;
+			if (settings::new_silent::hit_chance < 100)
 			{
-				rbx::primitive_t prim = target_part.get_primitive();
-				if (prim.address != 0)
+				int roll = dis(gen);
+				if (roll > settings::new_silent::hit_chance)
 				{
-					math::vector3 part_3d = prim.get_position();
-					math::vector2 screen_pos = {};
-					if (game::visengine.world_to_screen(part_3d, screen_pos, dims, view))
-					{
-						write_mouse_position(g_mouseservice->address, screen_pos.x, screen_pos.y);
+					hit_roll_success = false;
+				}
+			}
 
+			if (hit_roll_success)
+			{
+				rbx::part_t target_part = get_target_part(current_target, settings::new_silent::aim_part, cursor_point, dims, view);
+				if (target_part.address != 0)
+				{
+					rbx::primitive_t prim = target_part.get_primitive();
+					if (prim.address != 0)
+					{
+						// Apply Prediction if enabled
+						math::vector3 target_pos_3d = settings::new_silent::prediction_enabled ? apply_prediction(prim) : prim.get_position();
+						math::vector2 screen_pos = {};
+						if (game::visengine.world_to_screen(target_pos_3d, screen_pos, dims, view))
 						{
-							std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
-							g_silent_cached_target = current_target;
-							g_silent_aim_locked = true;
-							g_silent_partpos = screen_pos;
-							g_silent_data_ready = true;
+							write_mouse_position(g_mouseservice->address, screen_pos.x, screen_pos.y);
+
+							{
+								std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
+								g_silent_cached_target = current_target;
+								g_silent_aim_locked = true;
+								g_silent_partpos = screen_pos;
+							}
+							last_locked_address = current_target.instance.address;
+							continue;
 						}
-						last_locked_address = current_target.instance.address;
-						continue;
 					}
 				}
 			}
@@ -473,18 +538,14 @@ void rbx::silent::run()
 
 		{
 			std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
-			if (!g_silent_aim_manual_locked)
-			{
-				g_silent_aim_locked = false;
-				g_silent_cached_target = {};
-			}
-			g_silent_data_ready = false;
+			g_silent_aim_locked = false;
+			g_silent_cached_target = {};
 		}
 		last_locked_address = 0;
 	}
 }
 
-void rbx::silent::initialize()
+void rbx::new_silent::initialize()
 {
 	std::thread(run).detach();
 }

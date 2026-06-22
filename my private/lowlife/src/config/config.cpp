@@ -135,31 +135,30 @@ namespace config
 		file << "    \"adaptive_smooth_max\": " << settings::aimbot::adaptive_smooth_max << "\n";
 		file << "  },\n";
 
-		
-		file << "  \"silent\": {\n";
-		file << "    \"enabled\": " << (settings::silent::enabled ? "true" : "false") << ",\n";
-		file << "    \"sticky_aim\": " << (settings::silent::sticky_aim ? "true" : "false") << ",\n";
-		file << "    \"spoof_mouse\": " << (settings::silent::spoof_mouse ? "true" : "false") << ",\n";
-		file << "    \"draw_fov\": " << (settings::silent::draw_fov ? "true" : "false") << ",\n";
-		file << "    \"filled_fov\": " << (settings::silent::filled_fov ? "true" : "false") << ",\n";
-		file << "    \"rotate_fov\": " << (settings::silent::rotate_fov ? "true" : "false") << ",\n";
-		file << "    \"rainbow_fov\": " << (settings::silent::rainbow_fov ? "true" : "false") << ",\n";
-		file << "    \"fov\": " << settings::silent::fov << ",\n";
-		file << "    \"keybind\": " << settings::silent::keybind << ",\n";
-		file << "    \"keybind_mode\": " << settings::silent::keybind_mode << ",\n";
-		file << "    \"aim_part\": " << settings::silent::aim_part << ",\n";
-		file << "    \"fov_check\": " << (settings::silent::fov_check ? "true" : "false") << ",\n";
-		file << "    \"knocked_check\": " << (settings::silent::knocked_check ? "true" : "false") << ",\n";
-		file << "    \"wall_check\": " << (settings::silent::wall_check ? "true" : "false") << ",\n";
-		file << "    \"magic_bullet\": " << (settings::silent::magic_bullet ? "true" : "false") << ",\n";
-		file << "    \"gun_based_fov\": " << (settings::silent::gun_based_fov ? "true" : "false") << ",\n";
-		file << "    \"fov_double_barrel\": " << settings::silent::fov_double_barrel << ",\n";
-		file << "    \"fov_tactical_shotgun\": " << settings::silent::fov_tactical_shotgun << ",\n";
-		file << "    \"fov_revolver\": " << settings::silent::fov_revolver << ",\n";
-		file << "    \"fov_color\": [" << settings::silent::fov_color[0] << "," << settings::silent::fov_color[1] << "," << settings::silent::fov_color[2] << "," << settings::silent::fov_color[3] << "]\n";
+		file << "  \"new_silent\": {\n";
+		file << "    \"enabled\": " << (settings::new_silent::enabled ? "true" : "false") << ",\n";
+		file << "    \"target_mode\": " << settings::new_silent::target_mode << ",\n";
+		file << "    \"hit_chance\": " << settings::new_silent::hit_chance << ",\n";
+		file << "    \"sticky_aim\": " << (settings::new_silent::sticky_aim ? "true" : "false") << ",\n";
+		file << "    \"prediction_enabled\": " << (settings::new_silent::prediction_enabled ? "true" : "false") << ",\n";
+		file << "    \"prediction_scale_x\": " << settings::new_silent::prediction_scale_x << ",\n";
+		file << "    \"prediction_scale_y\": " << settings::new_silent::prediction_scale_y << ",\n";
+		file << "    \"auto_prediction\": " << (settings::new_silent::auto_prediction ? "true" : "false") << ",\n";
+		file << "    \"keybind\": " << settings::new_silent::keybind << ",\n";
+		file << "    \"keybind_mode\": " << settings::new_silent::keybind_mode << ",\n";
+		file << "    \"aim_part\": " << settings::new_silent::aim_part << ",\n";
+		file << "    \"fov_check\": " << (settings::new_silent::fov_check ? "true" : "false") << ",\n";
+		file << "    \"knocked_check\": " << (settings::new_silent::knocked_check ? "true" : "false") << ",\n";
+		file << "    \"team_check\": " << (settings::new_silent::team_check ? "true" : "false") << ",\n";
+		file << "    \"wall_check\": " << (settings::new_silent::wall_check ? "true" : "false") << ",\n";
+		file << "    \"draw_fov\": " << (settings::new_silent::draw_fov ? "true" : "false") << ",\n";
+		file << "    \"filled_fov\": " << (settings::new_silent::filled_fov ? "true" : "false") << ",\n";
+		file << "    \"rotate_fov\": " << (settings::new_silent::rotate_fov ? "true" : "false") << ",\n";
+		file << "    \"rainbow_fov\": " << (settings::new_silent::rainbow_fov ? "true" : "false") << ",\n";
+		file << "    \"fov\": " << settings::new_silent::fov << ",\n";
+		file << "    \"fov_color\": [" << settings::new_silent::fov_color[0] << "," << settings::new_silent::fov_color[1] << "," << settings::new_silent::fov_color[2] << "," << settings::new_silent::fov_color[3] << "]\n";
 		file << "  },\n";
 
-		
 		file << "  \"visuals\": {\n";
 		file << "    \"box\": " << (settings::visuals::box ? "true" : "false") << ",\n";
 		file << "    \"box_type\": " << settings::visuals::box_type << ",\n";
@@ -190,8 +189,7 @@ namespace config
 		file << "    \"health_text_color\": [" << settings::visuals::health_text_color[0] << "," << settings::visuals::health_text_color[1] << "," << settings::visuals::health_text_color[2] << "],\n";
 		file << "    \"feature_indicator\": " << (settings::visuals::feature_indicator ? "true" : "false") << ",\n";
 		file << "    \"feature_indicator_x\": " << settings::visuals::feature_indicator_x << ",\n";
-		file << "    \"feature_indicator_y\": " << settings::visuals::feature_indicator_y << ",\n";
-		file << "    \"target\": " << (settings::visuals::target ? "true" : "false") << "\n";
+		file << "    \"feature_indicator_y\": " << settings::visuals::feature_indicator_y << "\n";
 		file << "  },\n";
 
 		
@@ -536,53 +534,53 @@ namespace config
 				settings::aimbot::adaptive_smooth_max = std::stof(value);
 		}
 
-		
-		section = extract_json_section(json_content, "silent");
+		section = extract_json_section(json_content, "new_silent");
 		if (!section.empty())
 		{
 			if (parse_json_value(section, "enabled", value))
-				settings::silent::enabled = (value == "true");
+				settings::new_silent::enabled = (value == "true");
+			if (parse_json_value(section, "target_mode", value))
+				settings::new_silent::target_mode = std::stoi(value);
+			if (parse_json_value(section, "hit_chance", value))
+				settings::new_silent::hit_chance = std::stoi(value);
 			if (parse_json_value(section, "sticky_aim", value))
-				settings::silent::sticky_aim = (value == "true");
-			if (parse_json_value(section, "spoof_mouse", value))
-				settings::silent::spoof_mouse = (value == "true");
-			if (parse_json_value(section, "draw_fov", value))
-				settings::silent::draw_fov = (value == "true");
-			if (parse_json_value(section, "filled_fov", value))
-				settings::silent::filled_fov = (value == "true");
-			if (parse_json_value(section, "rotate_fov", value))
-				settings::silent::rotate_fov = (value == "true");
-			if (parse_json_value(section, "rainbow_fov", value))
-				settings::silent::rainbow_fov = (value == "true");
-			if (parse_json_value(section, "fov", value))
-				settings::silent::fov = std::stof(value);
+				settings::new_silent::sticky_aim = (value == "true");
+			if (parse_json_value(section, "prediction_enabled", value))
+				settings::new_silent::prediction_enabled = (value == "true");
+			if (parse_json_value(section, "prediction_scale_x", value))
+				settings::new_silent::prediction_scale_x = std::stof(value);
+			if (parse_json_value(section, "prediction_scale_y", value))
+				settings::new_silent::prediction_scale_y = std::stof(value);
+			if (parse_json_value(section, "auto_prediction", value))
+				settings::new_silent::auto_prediction = (value == "true");
 			if (parse_json_value(section, "keybind", value))
-				settings::silent::keybind = std::stoi(value);
+				settings::new_silent::keybind = std::stoi(value);
 			if (parse_json_value(section, "keybind_mode", value))
-				settings::silent::keybind_mode = std::stoi(value);
+				settings::new_silent::keybind_mode = std::stoi(value);
 			if (parse_json_value(section, "aim_part", value))
-				settings::silent::aim_part = std::stoi(value);
+				settings::new_silent::aim_part = std::stoi(value);
 			if (parse_json_value(section, "fov_check", value))
-				settings::silent::fov_check = (value == "true");
+				settings::new_silent::fov_check = (value == "true");
 			if (parse_json_value(section, "knocked_check", value))
-				settings::silent::knocked_check = (value == "true");
+				settings::new_silent::knocked_check = (value == "true");
+			if (parse_json_value(section, "team_check", value))
+				settings::new_silent::team_check = (value == "true");
 			if (parse_json_value(section, "wall_check", value))
-				settings::silent::wall_check = (value == "true");
-			if (parse_json_value(section, "magic_bullet", value))
-				settings::silent::magic_bullet = (value == "true");
-			if (parse_json_value(section, "gun_based_fov", value))
-				settings::silent::gun_based_fov = (value == "true");
-			if (parse_json_value(section, "fov_double_barrel", value))
-				settings::silent::fov_double_barrel = std::stof(value);
-			if (parse_json_value(section, "fov_tactical_shotgun", value))
-				settings::silent::fov_tactical_shotgun = std::stof(value);
-			if (parse_json_value(section, "fov_revolver", value))
-				settings::silent::fov_revolver = std::stof(value);
+				settings::new_silent::wall_check = (value == "true");
+			if (parse_json_value(section, "draw_fov", value))
+				settings::new_silent::draw_fov = (value == "true");
+			if (parse_json_value(section, "filled_fov", value))
+				settings::new_silent::filled_fov = (value == "true");
+			if (parse_json_value(section, "rotate_fov", value))
+				settings::new_silent::rotate_fov = (value == "true");
+			if (parse_json_value(section, "rainbow_fov", value))
+				settings::new_silent::rainbow_fov = (value == "true");
+			if (parse_json_value(section, "fov", value))
+				settings::new_silent::fov = std::stof(value);
 			if (parse_json_value(section, "fov_color", value))
-				parse_json_array(value, settings::silent::fov_color, 4);
+				parse_json_array(value, settings::new_silent::fov_color, 4);
 		}
 
-		
 		section = extract_json_section(json_content, "visuals");
 		if (!section.empty())
 		{
@@ -646,8 +644,6 @@ namespace config
 				settings::visuals::feature_indicator_x = std::stof(value);
 			if (parse_json_value(section, "feature_indicator_y", value))
 				settings::visuals::feature_indicator_y = std::stof(value);
-			if (parse_json_value(section, "target", value))
-				settings::visuals::target = (value == "true");
 		}
 
 		

@@ -75,28 +75,29 @@ namespace settings
 		inline float adaptive_smooth_min{ 2.0f };
 		inline float adaptive_smooth_max{ 10.0f };
 	}
-	namespace silent
+	namespace new_silent
 	{
 		inline bool enabled{ false };
+		inline int target_mode{ 0 }; // 0: Closest to Cursor, 1: Closest Distance, 2: Lowest Health
+		inline int hit_chance{ 100 }; // 0 to 100%
 		inline bool sticky_aim{ false };
-		inline bool spoof_mouse{ true };
+		inline bool prediction_enabled{ true };
+		inline float prediction_scale_x{ 1.0f };
+		inline float prediction_scale_y{ 1.0f };
+		inline bool auto_prediction{ true };
+		inline int keybind{ 0 };
+		inline int keybind_mode{ 0 }; // 0: Hold, 1: Toggle, 2: Always Active
+		inline int aim_part{ 0 }; // 0: Head, 1: UpperTorso, 2: LowerTorso, 3: HumanoidRootPart, 4: Smart, 5: Random
+		inline bool fov_check{ true };
+		inline bool knocked_check{ true };
+		inline bool team_check{ false };
+		inline bool wall_check{ false };
 		inline bool draw_fov{ false };
 		inline bool filled_fov{ false };
 		inline bool rotate_fov{ false };
 		inline bool rainbow_fov{ false };
 		inline float fov{ 200.0f };
-		inline int keybind{ 0 };
-		inline int keybind_mode{ 0 }; 
-		inline int aim_part{ 0 };
-		inline bool fov_check{ true };
-		inline bool knocked_check{ false };
-		inline bool wall_check{ false };
-		inline bool magic_bullet{ false };
-		inline bool gun_based_fov{ false };
-		inline float fov_double_barrel{ 200.0f };
-		inline float fov_tactical_shotgun{ 200.0f };
-		inline float fov_revolver{ 200.0f };
-		inline float fov_color[4]{ 1.f, 1.f, 1.f, 0.5f };
+		inline float fov_color[4]{ 1.f, 0.2f, 0.2f, 0.4f };
 	}
 	namespace visuals
 	{
@@ -141,7 +142,6 @@ namespace settings
 		inline bool feature_indicator{ false };
 		inline float feature_indicator_x{ 50.0f };
 		inline float feature_indicator_y{ 0.0f };
-		inline bool target{ false };
 	}
 
 	namespace expl

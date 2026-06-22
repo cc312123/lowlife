@@ -22,13 +22,13 @@
 #include <cache/cache.h>
 #include <render/render.h>
 #include <render/notifications.h>
-#include <features/silent/silent.h>
 #include <features/expl/walkspeed.h>
 #include <features/expl/freezeplayer.h>
 #include <features/expl/fly.h>
 #include <features/expl/misc_exploits.h>
 #include <features/aimbot/aimbot.h>
 #include <features/triggerbot/triggerbot.h>
+#include <features/silent/silent.h>
 #include <check/typing_check.h>
 #include <game/rescan.h>
 #include <auth/keyauth_init.h>
@@ -460,7 +460,7 @@ int main() {
     }
 
     std::thread(AutoRescanHandler).detach();
-    rbx::silent::initialize();
+    rbx::new_silent::initialize();
 
     
     if (!render->create_window() || !render->create_device() || !render->create_imgui()) {

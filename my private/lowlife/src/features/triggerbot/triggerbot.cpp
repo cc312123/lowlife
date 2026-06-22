@@ -685,8 +685,7 @@ namespace botter
 				Sleep(1000);
 
 				bool any_wall_check = (settings::botter::autoclicker_enabled && settings::botter::wall_check) || 
-				                      (settings::aimbot::enabled && settings::aimbot::wall_check) ||
-				                      (settings::silent::enabled && settings::silent::wall_check);
+				                      (settings::aimbot::enabled && settings::aimbot::wall_check);
 
 				if (!any_wall_check)
 				{
