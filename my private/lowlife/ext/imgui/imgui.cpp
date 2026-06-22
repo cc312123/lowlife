@@ -6338,7 +6338,7 @@ bool ImGui::BeginChildEx(const char* name, ImGuiID id, const ImVec2& size_arg, I
     if ((child_flags & ImGuiChildFlags_Borders) == 0)
         g.Style.ChildBorderSize = 0.0f;
 
-    PushStyleColor(ImGuiCol_ChildBg, IM_COL32(25, 25, 25, 255));
+    PushStyleColor(ImGuiCol_ChildBg, g.Style.Colors[ImGuiCol_ChildBg]);
     PushStyleVar(ImGuiStyleVar_ChildBorderSize, 0.f);
 
     const bool ret = Begin(temp_window_name, NULL, window_flags);
@@ -6356,8 +6356,14 @@ bool ImGui::BeginChildEx(const char* name, ImGuiID id, const ImVec2& size_arg, I
     {
         ImVec2 header_min = ImVec2(child_pos.x + 1, child_pos.y + 1);
         ImVec2 header_max = ImVec2(child_pos.x + child_size.x - 1, child_pos.y + 20);
-        draw_list->AddRectFilledMultiColor(header_min, header_max, IM_COL32(35, 35, 35, 255), IM_COL32(35, 35, 35, 255), IM_COL32(25, 25, 25, 255), IM_COL32(25, 25, 25, 255));
-        draw_list->AddLine(ImVec2(header_min.x, header_max.y), ImVec2(header_max.x, header_max.y), IM_COL32(60, 60, 60, 255), 1.0f);
+        
+        // Dynamic dark gradient with subtle accent tint at header edges
+        ImU32 head_col_1 = IM_COL32(g.Style.Colors[ImGuiCol_WindowBg].x * 255, g.Style.Colors[ImGuiCol_WindowBg].y * 255, g.Style.Colors[ImGuiCol_WindowBg].z * 255, 255);
+        ImU32 head_col_2 = IM_COL32(g.Style.Colors[ImGuiCol_Border].x * 255, g.Style.Colors[ImGuiCol_Border].y * 255, g.Style.Colors[ImGuiCol_Border].z * 255, 40);
+        draw_list->AddRectFilledMultiColor(header_min, header_max, head_col_1, head_col_1, head_col_2, head_col_2);
+        
+        // Use styled separator color instead of hardcoded dark line
+        draw_list->AddLine(ImVec2(header_min.x, header_max.y), ImVec2(header_max.x, header_max.y), ImGui::ColorConvertFloat4ToU32(g.Style.Colors[ImGuiCol_Separator]), 1.0f);
 
         ImVec2 text_pos = ImVec2(child_pos.x + 4, child_pos.y + 3);
         for (int x = -1; x <= 1; x++)
@@ -6373,8 +6379,9 @@ bool ImGui::BeginChildEx(const char* name, ImGuiID id, const ImVec2& size_arg, I
 
     if (child_flags & ImGuiChildFlags_Borders)
     {
-        draw_list->AddRect(child_pos, ImVec2(child_pos.x + child_size.x, child_pos.y + child_size.y), IM_COL32(60, 60, 60, 255), child_rounding, 0, 1.0f);
-        draw_list->AddRect(ImVec2(child_pos.x + 1, child_pos.y + 1), ImVec2(child_pos.x + child_size.x - 1, child_pos.y + child_size.y - 1), IM_COL32(0, 0, 0, 255), child_rounding, 0, 1.0f);
+        // Use the dynamic active border color and a thin black drop shadow outline
+        draw_list->AddRect(child_pos, ImVec2(child_pos.x + child_size.x, child_pos.y + child_size.y), ImGui::ColorConvertFloat4ToU32(g.Style.Colors[ImGuiCol_Border]), child_rounding, 0, 1.0f);
+        draw_list->AddRect(ImVec2(child_pos.x + 1, child_pos.y + 1), ImVec2(child_pos.x + child_size.x - 1, child_pos.y + child_size.y - 1), IM_COL32(0, 0, 0, 150), child_rounding, 0, 1.0f);
 
         g.CurrentWindow->DC.Indent.x = 5.0f; // this is for the every other element except the first element, like what da fuk
         g.CurrentWindow->WorkRect.Max.x -= 5.0f;

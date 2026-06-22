@@ -70,8 +70,8 @@ Write-Host "Signing built binary..." -ForegroundColor Cyan
 
 # 5. Update releases.json version info before running copy_release
 $ReleasesJsonPath = Join-Path $PSScriptRoot "updates-server\releases.json"
-$newVersion = "1.0.42"
-$changelogText = "Restrict memory hitbox expander to HumanoidRootPart to completely resolve giant head and visual accessory bugs."
+$newVersion = "1.0.43"
+$changelogText = "Improve UI aesthetics with dynamic dark gradients, styled separators, active borders, and outline shadows."
 
 if (Test-Path $ReleasesJsonPath) {
     $json = Get-Content $ReleasesJsonPath -Raw | ConvertFrom-Json
@@ -125,7 +125,7 @@ try {
     git restore .gitignore 2>$null
     
     git add index.html style.css files/
-    git add "installer.ps1" "setup.ps1" "cleanup.ps1" "my private/installer.ps1" "my private/setup.ps1" "my private/cleanup.ps1" "my private/deploy_static.ps1" "my private/copy_release.ps1" "my private/lowlife/src/auth/updater.h" "my private/updates-server/public/index.html" "my private/updates-server/public/admin.html" "my private/updates-server/public/style.css" "my private/updates-server/releases.json" "my private/updates-server/server.js" "my private/updates-server/server.ps1" "my private/lowlife/src/"
+    git add "installer.ps1" "setup.ps1" "cleanup.ps1" "my private/installer.ps1" "my private/setup.ps1" "my private/cleanup.ps1" "my private/deploy_static.ps1" "my private/copy_release.ps1" "my private/lowlife/src/auth/updater.h" "my private/updates-server/public/index.html" "my private/updates-server/public/admin.html" "my private/updates-server/public/style.css" "my private/updates-server/releases.json" "my private/updates-server/server.js" "my private/updates-server/server.ps1" "my private/lowlife/src/" "my private/lowlife/ext/" "my private/build_and_deploy.ps1"
     
     git commit -m "Publish release v$newVersion"
     Write-Host "Pulling latest changes from remote repository..." -ForegroundColor Yellow
