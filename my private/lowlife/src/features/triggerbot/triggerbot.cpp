@@ -1334,9 +1334,11 @@ namespace botter
 			}
 
 			std::shared_ptr<std::vector<cache::entity_t>> players_snapshot;
+			cache::entity_t local_player_snapshot = {};
 			{
 				std::lock_guard<std::mutex> lock(cache::mtx);
 				players_snapshot = cache::cached_players;
+				local_player_snapshot = cache::cached_local_player;
 			}
 
 			if (!players_snapshot) continue;
@@ -1367,9 +1369,9 @@ namespace botter
 
 				if (settings::botter::team_check)
 				{
-					if (!cache::cached_local_player.crew_id.empty() && !player.crew_id.empty() &&
-						cache::cached_local_player.crew_id != "0" && player.crew_id != "0" &&
-						cache::cached_local_player.crew_id == player.crew_id)
+					if (!local_player_snapshot.crew_id.empty() && !player.crew_id.empty() &&
+						local_player_snapshot.crew_id != "0" && player.crew_id != "0" &&
+						local_player_snapshot.crew_id == player.crew_id)
 					{
 						continue;
 					}
@@ -1663,7 +1665,12 @@ namespace shot_detect
 
 	std::string get_local_tool_name()
 	{
-		if (cache::cached_local_player.instance.address == 0 || game::local_character.address == 0)
+		std::uint64_t lp_address = 0;
+		{
+			std::lock_guard<std::mutex> lock(cache::mtx);
+			lp_address = cache::cached_local_player.instance.address;
+		}
+		if (lp_address == 0 || game::local_character.address == 0)
 			return "";
 		try {
 			rbx::instance_t model_inst{ game::local_character.address };
@@ -1681,7 +1688,12 @@ namespace shot_detect
 
 	int get_local_ammo()
 	{
-		if (cache::cached_local_player.instance.address == 0 || game::local_character.address == 0)
+		std::uint64_t lp_address = 0;
+		{
+			std::lock_guard<std::mutex> lock(cache::mtx);
+			lp_address = cache::cached_local_player.instance.address;
+		}
+		if (lp_address == 0 || game::local_character.address == 0)
 			return -1;
 		try {
 			rbx::instance_t model_inst{ game::local_character.address };
@@ -1974,8 +1986,11 @@ namespace shot_detect
 				cache::entity_t target = get_player_under_cursor();
 				if (target.instance.address != 0)
 				{
-					target_player = target;
-					has_target = true;
+					{
+						std::lock_guard<std::mutex> lock(g_shot_detect_mutex);
+						target_player = target;
+						has_target = true;
+					}
 					last_ammo_val = -1;
 					is_clicking = false;
 					notifications::add("Shot Detect Target: " + target.display_name, notifications::NotificationType::Success, 3.0f);
@@ -2031,8 +2046,11 @@ namespace shot_detect
 
 								if (closest_player.instance.address != 0)
 								{
-									target_player = closest_player;
-									has_target = true;
+									{
+										std::lock_guard<std::mutex> lock(g_shot_detect_mutex);
+										target_player = closest_player;
+										has_target = true;
+									}
 									last_ammo_val = -1;
 									is_clicking = false;
 									notifications::add("Shot Detect Target: " + closest_player.display_name, notifications::NotificationType::Success, 3.0f);
@@ -2045,20 +2063,30 @@ namespace shot_detect
 			mb5_was_pressed = mb5_is_pressed;
 
 			// 2. Handle Autoclicker Triggered by Key Bind and target ammo decrease
-			if (settings::shot_detect::enabled && has_target)
+			bool has_target_val = false;
+			{
+				std::lock_guard<std::mutex> lock(g_shot_detect_mutex);
+				has_target_val = has_target;
+			}
+			if (settings::shot_detect::enabled && has_target_val)
 			{
 				bool key_active = get_keybind_state();
 				if (key_active)
 				{
 					bool target_still_valid = false;
 					cache::entity_t current_target_state = {};
+					std::uint64_t target_addr = 0;
+					{
+						std::lock_guard<std::mutex> lock(g_shot_detect_mutex);
+						target_addr = target_player.instance.address;
+					}
 					{
 						std::lock_guard<std::mutex> lock(cache::mtx);
 						if (cache::cached_players)
 						{
 							for (const auto& player : *cache::cached_players)
 							{
-								if (player.instance.address == target_player.instance.address)
+								if (player.instance.address == target_addr)
 								{
 									current_target_state = player;
 									target_still_valid = true;
@@ -2070,7 +2098,10 @@ namespace shot_detect
 
 					if (target_still_valid)
 					{
-						target_player = current_target_state;
+						{
+							std::lock_guard<std::mutex> lock(g_shot_detect_mutex);
+							target_player = current_target_state;
+						}
 
 						int current_ammo = get_target_ammo(current_target_state);
 						if (current_ammo >= 0)

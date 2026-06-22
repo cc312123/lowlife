@@ -184,14 +184,24 @@ void DrawPolygonalFOV(ImDrawList* draw, ImVec2 center, float radius, ImU32 color
 
 static ImU32 get_relation_color(const std::string& name, float default_color[4])
 {
-	auto rel_it = settings::player_relations::relations.find(name);
-	if (rel_it != settings::player_relations::relations.end())
+	int rel_type = 0;
+	bool found = false;
 	{
-		if (rel_it->second == 1) 
+		std::lock_guard<std::mutex> lock(settings::player_relations::relations_mutex);
+		auto rel_it = settings::player_relations::relations.find(name);
+		if (rel_it != settings::player_relations::relations.end())
+		{
+			rel_type = rel_it->second;
+			found = true;
+		}
+	}
+	if (found)
+	{
+		if (rel_type == 1) 
 		{
 			return IM_COL32(0, 255, 120, (int)(default_color[3] * 255));
 		}
-		else if (rel_it->second == 2) 
+		else if (rel_type == 2) 
 		{
 			return IM_COL32(255, 60, 60, (int)(default_color[3] * 255));
 		}
@@ -366,12 +376,15 @@ void esp::run()
 			continue;
 		}
 
+		bool is_silent_target = false;
 		if (settings::visuals::target && g_silent_aim_locked)
 		{
-			if (entity.instance.address != g_silent_cached_target.instance.address)
-			{
-				continue;
-			}
+			std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
+			is_silent_target = (entity.instance.address == g_silent_cached_target.instance.address);
+		}
+		if (settings::visuals::target && g_silent_aim_locked && !is_silent_target)
+		{
+			continue;
 		}
 
 		// Use a local stack-based lazy evaluation cache instead of heavy dynamic maps

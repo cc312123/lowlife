@@ -2,6 +2,7 @@
 #include <string>
 #include <cstdint>
 #include <unordered_map>
+#include <mutex>
 #include "../ext/imgui/imgui.h"
 #include <Windows.h>
 
@@ -244,7 +245,7 @@ namespace settings
 
 	namespace player_relations
 	{
-		
+		inline std::mutex relations_mutex;
 		inline std::unordered_map<std::string, int> relations;
 	}
 }

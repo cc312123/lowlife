@@ -2880,22 +2880,24 @@ void render_t::render_menu()
                     radar_draw->AddCircle(radar_center, 3.5f, IM_COL32(0, 0, 0, 255), 12, 1.0f);
                     
                     math::vector3 local_pos = {0.f, 0.f, 0.f};
-                    auto local_hrp_it = cache::cached_local_player.parts.find("HumanoidRootPart");
-                    if (local_hrp_it != cache::cached_local_player.parts.end()) {
+                    cache::entity_t local_player_snapshot = {};
+                    std::shared_ptr<std::vector<cache::entity_t>> snapshot_ptr;
+                    {
+                        std::lock_guard<std::mutex> lock(cache::mtx);
+                        local_player_snapshot = cache::cached_local_player;
+                        snapshot_ptr = cache::cached_players;
+                    }
+                    
+                    auto local_hrp_it = local_player_snapshot.parts.find("HumanoidRootPart");
+                    if (local_hrp_it != local_player_snapshot.parts.end()) {
                         local_pos = local_hrp_it->second.get_primitive().get_position();
                     }
                     
                     float cam_yaw = 0.f;
                     
-                    std::shared_ptr<std::vector<cache::entity_t>> snapshot_ptr;
-                    {
-                        std::lock_guard<std::mutex> lock(cache::mtx);
-                        snapshot_ptr = cache::cached_players;
-                    }
-                    
-                    if (snapshot_ptr && local_hrp_it != cache::cached_local_player.parts.end()) {
+                    if (snapshot_ptr && local_hrp_it != local_player_snapshot.parts.end()) {
                         for (const auto& player : *snapshot_ptr) {
-                            if (player.instance.address == 0 || player.instance.address == cache::cached_local_player.instance.address)
+                            if (player.instance.address == 0 || player.instance.address == local_player_snapshot.instance.address)
                                 continue;
                             
                             auto enemy_hrp_it = player.parts.find("HumanoidRootPart");
@@ -2919,9 +2921,12 @@ void render_t::render_menu()
                                 ImVec2 dot_pos = ImVec2(radar_center.x + rx, radar_center.y + ry);
                                 
                                 int rel = 0;
-                                auto rel_it = settings::player_relations::relations.find(player.name);
-                                if (rel_it != settings::player_relations::relations.end()) {
-                                    rel = rel_it->second;
+                                {
+                                    std::lock_guard<std::mutex> lock(settings::player_relations::relations_mutex);
+                                    auto rel_it = settings::player_relations::relations.find(player.name);
+                                    if (rel_it != settings::player_relations::relations.end()) {
+                                        rel = rel_it->second;
+                                    }
                                 }
                                 
                                 ImU32 dot_color = IM_COL32(230, 230, 230, 255);
@@ -3572,23 +3577,36 @@ void render_t::render_menu()
             ImGui::Text("Target Selection:");
             
             std::shared_ptr<std::vector<cache::entity_t>> snapshot_ptr;
+            std::uint64_t local_player_addr = 0;
+            cache::entity_t local_player_snapshot = {};
             {
                 std::lock_guard<std::mutex> lock(cache::mtx);
                 snapshot_ptr = cache::cached_players;
+                local_player_addr = cache::cached_local_player.instance.address;
+                local_player_snapshot = cache::cached_local_player;
+            }
+
+            bool sd_has_target = false;
+            cache::entity_t sd_target_player = {};
+            {
+                std::lock_guard<std::mutex> lock(shot_detect::g_shot_detect_mutex);
+                sd_has_target = shot_detect::has_target;
+                sd_target_player = shot_detect::target_player;
             }
 
             std::string combo_preview = "[None]";
-            if (shot_detect::has_target && shot_detect::target_player.instance.address != 0) {
-                combo_preview = shot_detect::target_player.display_name;
-                if (combo_preview != shot_detect::target_player.name) {
-                    combo_preview += " (@" + shot_detect::target_player.name + ")";
+            if (sd_has_target && sd_target_player.instance.address != 0) {
+                combo_preview = sd_target_player.display_name;
+                if (combo_preview != sd_target_player.name) {
+                    combo_preview += " (@" + sd_target_player.name + ")";
                 }
             }
 
             ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - 10.f);
             if (ImGui::BeginCombo("##ShotDetectCombo", combo_preview.c_str())) {
-                bool is_none_selected = !shot_detect::has_target;
+                bool is_none_selected = !sd_has_target;
                 if (ImGui::Selectable("[None]", is_none_selected)) {
+                    std::lock_guard<std::mutex> lock(shot_detect::g_shot_detect_mutex);
                     shot_detect::target_player = {};
                     shot_detect::has_target = false;
                     shot_detect::last_ammo_val = -1;
@@ -3596,7 +3614,7 @@ void render_t::render_menu()
 
                 if (snapshot_ptr) {
                     for (const auto& player : *snapshot_ptr) {
-                        if (player.instance.address == 0 || player.instance.address == cache::cached_local_player.instance.address)
+                        if (player.instance.address == 0 || player.instance.address == local_player_addr)
                             continue;
 
                         std::string label = player.display_name;
@@ -3604,8 +3622,9 @@ void render_t::render_menu()
                             label += " (@" + player.name + ")";
                         }
 
-                        bool is_selected = (shot_detect::has_target && shot_detect::target_player.instance.address == player.instance.address);
+                        bool is_selected = (sd_has_target && sd_target_player.instance.address == player.instance.address);
                         if (ImGui::Selectable(label.c_str(), is_selected)) {
+                            std::lock_guard<std::mutex> lock(shot_detect::g_shot_detect_mutex);
                             shot_detect::target_player = player;
                             shot_detect::has_target = true;
                             shot_detect::last_ammo_val = -1;
@@ -3625,11 +3644,11 @@ void render_t::render_menu()
             ImGui::Spacing();
             ImGui::Text("Selected Target:");
             ImGui::SameLine();
-            if (shot_detect::has_target) {
-                ImGui::TextColored(menu::accent_color, "%s", shot_detect::target_player.display_name.c_str());
+            if (sd_has_target) {
+                ImGui::TextColored(menu::accent_color, "%s", sd_target_player.display_name.c_str());
                 
                 ImGui::Spacing();
-                int ammo = shot_detect::get_target_ammo(shot_detect::target_player);
+                int ammo = shot_detect::get_target_ammo(sd_target_player);
                 ImGui::Text("Target Ammo:");
                 ImGui::SameLine();
                 if (ammo >= 0) {
@@ -3642,9 +3661,9 @@ void render_t::render_menu()
 
                 // Real-time Distance Tracking & Rolling Graph
                 float dist = 0.0f;
-                auto local_hrp_it = cache::cached_local_player.parts.find("HumanoidRootPart");
-                auto enemy_hrp_it = shot_detect::target_player.parts.find("HumanoidRootPart");
-                if (local_hrp_it != cache::cached_local_player.parts.end() && enemy_hrp_it != shot_detect::target_player.parts.end()) {
+                auto local_hrp_it = local_player_snapshot.parts.find("HumanoidRootPart");
+                auto enemy_hrp_it = sd_target_player.parts.find("HumanoidRootPart");
+                if (local_hrp_it != local_player_snapshot.parts.end() && enemy_hrp_it != sd_target_player.parts.end()) {
                     math::vector3 lp = local_hrp_it->second.get_primitive().get_position();
                     math::vector3 ep = enemy_hrp_it->second.get_primitive().get_position();
                     float dx = ep.x - lp.x;
@@ -3697,9 +3716,13 @@ void render_t::render_menu()
         static cache::entity_t selected_player = {};
 
         std::shared_ptr<std::vector<cache::entity_t>> snapshot_ptr;
+        std::uint64_t local_player_addr = 0;
+        cache::entity_t local_player_snapshot = {};
         {
             std::lock_guard<std::mutex> lock(cache::mtx);
             snapshot_ptr = cache::cached_players;
+            local_player_addr = cache::cached_local_player.instance.address;
+            local_player_snapshot = cache::cached_local_player;
         }
         
         if (current_page == 0)
@@ -3728,7 +3751,7 @@ void render_t::render_menu()
                     if (player.instance.address == 0)
                         continue;
                     
-                    if (player.instance.address == cache::cached_local_player.instance.address)
+                    if (player.instance.address == local_player_addr)
                         continue;
 
                     if (search_filter[0] != '\0')
@@ -3747,9 +3770,12 @@ void render_t::render_menu()
                     bool is_selected = (selected_player.instance.address == player.instance.address);
                     
                     int rel = 0; 
-                    auto rel_it = settings::player_relations::relations.find(player.name);
-                    if (rel_it != settings::player_relations::relations.end()) {
-                        rel = rel_it->second;
+                    {
+                        std::lock_guard<std::mutex> lock(settings::player_relations::relations_mutex);
+                        auto rel_it = settings::player_relations::relations.find(player.name);
+                        if (rel_it != settings::player_relations::relations.end()) {
+                            rel = rel_it->second;
+                        }
                     }
 
                     char selectable_label[256];
@@ -3825,9 +3851,9 @@ void render_t::render_menu()
                     }
 
                     float dist = -1.f;
-                    auto local_hrp_it = cache::cached_local_player.parts.find("HumanoidRootPart");
+                    auto local_hrp_it = local_player_snapshot.parts.find("HumanoidRootPart");
                     auto enemy_hrp_it = current_player_state.parts.find("HumanoidRootPart");
-                    if (local_hrp_it != cache::cached_local_player.parts.end() && enemy_hrp_it != current_player_state.parts.end()) {
+                    if (local_hrp_it != local_player_snapshot.parts.end() && enemy_hrp_it != current_player_state.parts.end()) {
                         rbx::primitive_t local_prim = local_hrp_it->second.get_primitive();
                         rbx::primitive_t enemy_prim = enemy_hrp_it->second.get_primitive();
                         math::vector3 lp = local_prim.get_position();
@@ -3886,9 +3912,12 @@ void render_t::render_menu()
                     ImGui::Spacing();
 
                     int rel = 0;
-                    auto rel_it = settings::player_relations::relations.find(current_player_state.name);
-                    if (rel_it != settings::player_relations::relations.end()) {
-                        rel = rel_it->second;
+                    {
+                        std::lock_guard<std::mutex> lock(settings::player_relations::relations_mutex);
+                        auto rel_it = settings::player_relations::relations.find(current_player_state.name);
+                        if (rel_it != settings::player_relations::relations.end()) {
+                            rel = rel_it->second;
+                        }
                     }
 
                     ImGui::Text("Team Classification:");
@@ -3897,6 +3926,7 @@ void render_t::render_menu()
                     bool is_neutral = (rel == 0);
                     if (is_neutral) ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(45, 45, 54, 255));
                     if (ImGui::Button("Neutral", ImVec2(90, 26))) {
+                        std::lock_guard<std::mutex> lock(settings::player_relations::relations_mutex);
                         settings::player_relations::relations[current_player_state.name] = 0;
                         notifications::add(current_player_state.name + " marked Neutral.", notifications::NotificationType::Info, 2.0f);
                     }
@@ -3907,6 +3937,7 @@ void render_t::render_menu()
                     bool is_teammate = (rel == 1);
                     if (is_teammate) ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 160, 80, 255));
                     if (ImGui::Button("Teammate", ImVec2(90, 26))) {
+                        std::lock_guard<std::mutex> lock(settings::player_relations::relations_mutex);
                         settings::player_relations::relations[current_player_state.name] = 1;
                         notifications::add(current_player_state.name + " marked as Teammate.", notifications::NotificationType::Info, 2.0f);
                     }
@@ -3917,6 +3948,7 @@ void render_t::render_menu()
                     bool is_enemy = (rel == 2);
                     if (is_enemy) ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(180, 40, 40, 255));
                     if (ImGui::Button("Enemy", ImVec2(90, 26))) {
+                        std::lock_guard<std::mutex> lock(settings::player_relations::relations_mutex);
                         settings::player_relations::relations[current_player_state.name] = 2;
                         notifications::add(current_player_state.name + " marked as Enemy!", notifications::NotificationType::Info, 2.0f);
                     }
@@ -3976,7 +4008,11 @@ void render_t::render_menu()
                         }
                     }
 
-                    bool is_aimbot_locked = (rbx::aimbot::g_aimbot_manual_locked && rbx::aimbot::g_aimbot_manual_target.instance.address == current_player_state.instance.address);
+                    bool is_aimbot_locked = false;
+                    {
+                        std::lock_guard<std::mutex> lock(rbx::aimbot::g_aimbot_mutex);
+                        is_aimbot_locked = (rbx::aimbot::g_aimbot_manual_locked && rbx::aimbot::g_aimbot_manual_target.instance.address == current_player_state.instance.address);
+                    }
                     std::string secure_aimbot_lock_label = is_aimbot_locked ? "Release Aimbot Target Lock" : "Secure Aimbot Target Lock";
                     if (styled_button(secure_aimbot_lock_label.c_str(), ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 26.f))) {
                         if (is_aimbot_locked) {

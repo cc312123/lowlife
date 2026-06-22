@@ -498,14 +498,12 @@ bool cache::is_local_player(const cache::entity_t& player)
 {
 	if (player.instance.address == 0) return false;
 	
-	if (player.instance.address == cached_local_player.instance.address) return true;
 	if (player.instance.address == game::local_player.address) return true;
 	if (local_player_address != 0 && player.instance.address == local_player_address) return true;
 	
 	if (local_player_user_id != 0 && player.user_id == local_player_user_id) return true;
 	
 	if (!local_player_name.empty() && local_player_name != "unknown" && player.name == local_player_name) return true;
-	if (!cached_local_player.name.empty() && cached_local_player.name != "unknown" && player.name == cached_local_player.name) return true;
 	
 	if (game::local_character.address != 0 && player.model_address != 0 && player.model_address == game::local_character.address) return true;
 	

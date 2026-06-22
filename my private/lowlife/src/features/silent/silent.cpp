@@ -136,8 +136,15 @@ namespace
 	{
 		if (player.instance.address == 0) return false;
 
-		auto rel_it = settings::player_relations::relations.find(player.name);
-		if (rel_it != settings::player_relations::relations.end() && rel_it->second == 1) {
+		bool relation_invalid = false;
+		{
+			std::lock_guard<std::mutex> lock(settings::player_relations::relations_mutex);
+			auto rel_it = settings::player_relations::relations.find(player.name);
+			if (rel_it != settings::player_relations::relations.end() && rel_it->second == 1) {
+				relation_invalid = true;
+			}
+		}
+		if (relation_invalid) {
 			return false;
 		}
 

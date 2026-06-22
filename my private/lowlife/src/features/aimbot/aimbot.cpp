@@ -297,8 +297,15 @@ namespace rbx::aimbot {
         bool is_target_valid(const cache::entity_t& player, const std::string& local_crew_id, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, bool skip_fov_check = false) {
             if (player.instance.address == 0) return false;
 
-            auto rel_it = settings::player_relations::relations.find(player.name);
-            if (rel_it != settings::player_relations::relations.end() && rel_it->second == 1) {
+            bool relation_invalid = false;
+            {
+                std::lock_guard<std::mutex> lock(settings::player_relations::relations_mutex);
+                auto rel_it = settings::player_relations::relations.find(player.name);
+                if (rel_it != settings::player_relations::relations.end() && rel_it->second == 1) {
+                    relation_invalid = true;
+                }
+            }
+            if (relation_invalid) {
                 return false;
             }
 
@@ -692,28 +699,43 @@ namespace rbx::aimbot {
             cache::entity_t target = {};
 
             // Manual lock has priority
-            if (g_aimbot_manual_locked && g_aimbot_manual_target.instance.address != 0) {
+            bool is_manual_locked = false;
+            cache::entity_t manual_target_snap = {};
+            {
+                std::lock_guard<std::mutex> lock(g_aimbot_mutex);
+                is_manual_locked = g_aimbot_manual_locked;
+                manual_target_snap = g_aimbot_manual_target;
+            }
+
+            if (is_manual_locked && manual_target_snap.instance.address != 0) {
                 bool found = false;
                 for (const auto& player : players_snapshot) {
-                    if (player.instance.address == g_aimbot_manual_target.instance.address) {
-                        g_aimbot_manual_target = player;
+                    if (player.instance.address == manual_target_snap.instance.address) {
+                        manual_target_snap = player;
                         found = true;
                         break;
                     }
                 }
                 if (found) {
                     bool relation_invalid = false;
-                    auto rel_it = settings::player_relations::relations.find(g_aimbot_manual_target.name);
-                    if (rel_it != settings::player_relations::relations.end() && rel_it->second == 1) {
-                        relation_invalid = true;
+                    {
+                        std::lock_guard<std::mutex> lock(settings::player_relations::relations_mutex);
+                        auto rel_it = settings::player_relations::relations.find(manual_target_snap.name);
+                        if (rel_it != settings::player_relations::relations.end() && rel_it->second == 1) {
+                            relation_invalid = true;
+                        }
                     }
-                    if (settings::aimbot::team_check && is_on_same_team(g_aimbot_manual_target, local_crew_id)) {
+                    if (settings::aimbot::team_check && is_on_same_team(manual_target_snap, local_crew_id)) {
                         relation_invalid = true;
                     }
 
                     if (!relation_invalid) {
-                        if (is_target_valid(g_aimbot_manual_target, local_crew_id, cursor_pt, dims, view, true)) {
-                            target = g_aimbot_manual_target;
+                        if (is_target_valid(manual_target_snap, local_crew_id, cursor_pt, dims, view, true)) {
+                            target = manual_target_snap;
+                            {
+                                std::lock_guard<std::mutex> lock(g_aimbot_mutex);
+                                g_aimbot_manual_target = manual_target_snap;
+                            }
                         }
                     }
                 }
@@ -801,6 +823,7 @@ namespace rbx::aimbot {
 
     void initialize() {
         std::lock_guard<std::mutex> lock(mtx);
+        std::lock_guard<std::mutex> lock_g(g_aimbot_mutex);
         locked_target = cache::entity_t{};
         has_locked_target = false;
         key_was_pressed = false;
@@ -817,6 +840,7 @@ namespace rbx::aimbot {
 
     void lock_target(const cache::entity_t& target) {
         std::lock_guard<std::mutex> lock(mtx);
+        std::lock_guard<std::mutex> lock_g(g_aimbot_mutex);
         locked_target = target;
         has_locked_target = true;
         g_aimbot_manual_locked = true;
@@ -829,6 +853,7 @@ namespace rbx::aimbot {
 
     void unlock_target() {
         std::lock_guard<std::mutex> lock(mtx);
+        std::lock_guard<std::mutex> lock_g(g_aimbot_mutex);
         locked_target = cache::entity_t{};
         has_locked_target = false;
         g_aimbot_manual_locked = false;
