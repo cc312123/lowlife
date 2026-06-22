@@ -22,8 +22,6 @@
 
 namespace
 {
-	std::unique_ptr<rbx::instance_t> g_mouseservice{};
-
 	float get_magnitude(const math::vector2& a, const math::vector2& b)
 	{
 		float dx = a.x - b.x;
@@ -196,12 +194,7 @@ namespace
 		// Team check
 		if (settings::new_silent::team_check)
 		{
-			std::string local_crew_id;
-			{
-				std::lock_guard<std::mutex> lock(cache::mtx);
-				local_crew_id = cache::cached_local_player.crew_id;
-			}
-			if (is_on_same_team(player, local_crew_id)) return false;
+			if (is_on_same_team(player, cache::cached_local_player.crew_id)) return false;
 		}
 
 		// Knocked check
@@ -281,19 +274,6 @@ namespace
 		math::vector2 new_position = { x, y };
 
 		memory->write<math::vector2>(address + Offsets::MouseService::MousePosition, new_position);
-
-		std::uint64_t input_obj_1 = memory->read<std::uint64_t>(address + Offsets::MouseService::InputObject);
-		std::uint64_t input_obj_2 = memory->read<std::uint64_t>(address + Offsets::MouseService::InputObject2);
-
-		if (input_obj_1 != 0 && input_obj_1 != 0xFFFFFFFFFFFFFFFF)
-		{
-			memory->write<math::vector2>(input_obj_1 + Offsets::MouseService::MousePosition, new_position);
-		}
-
-		if (input_obj_2 != 0 && input_obj_2 != 0xFFFFFFFFFFFFFFFF)
-		{
-			memory->write<math::vector2>(input_obj_2 + Offsets::MouseService::MousePosition, new_position);
-		}
 	}
 }
 
@@ -321,23 +301,8 @@ void rbx::new_silent::run()
 			continue;
 		}
 
-		static std::uint64_t last_datamodel_address = 0;
-		if (game::datamodel.address != last_datamodel_address)
-		{
-			g_mouseservice.reset();
-			last_datamodel_address = game::datamodel.address;
-		}
-
-		if (!g_mouseservice || g_mouseservice->address == 0)
-		{
-			std::uint64_t mouse_svc_addr = game::datamodel.find_first_child_by_class("MouseService").address;
-			if (mouse_svc_addr != 0)
-			{
-				g_mouseservice = std::make_unique<rbx::instance_t>(mouse_svc_addr);
-			}
-		}
-
-		if (!g_mouseservice || g_mouseservice->address == 0)
+		std::uint64_t mouse_svc_addr = game::datamodel.find_first_child_by_class("MouseService").address;
+		if (mouse_svc_addr == 0)
 		{
 			continue;
 		}
@@ -520,7 +485,7 @@ void rbx::new_silent::run()
 						math::vector2 screen_pos = {};
 						if (game::visengine.world_to_screen(target_pos_3d, screen_pos, dims, view))
 						{
-							write_mouse_position(g_mouseservice->address, screen_pos.x, screen_pos.y);
+							write_mouse_position(mouse_svc_addr, screen_pos.x, screen_pos.y);
 
 							{
 								std::lock_guard<std::mutex> lock(g_silent_aim_mutex);

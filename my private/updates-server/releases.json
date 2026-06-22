@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.44",
-    "latestChangelog":  "Fix No Spread feature by widening type checks and adding a throttled retrying resolver.",
+    "latestVersion":  "1.0.45",
+    "latestChangelog":  "Fix Roblox crash occurring when using Silent Aim by resolving mutex deadlocks, stale cached pointers, and unsafe InputObject writes.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -318,7 +318,14 @@
                         "changelog":  "Fix No Spread feature by widening type checks and adding a throttled retrying resolver.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "5c7d210ed954662f1bf1483fdfbbf8cc"
+                    },
+                    {
+                        "version":  "1.0.45",
+                        "date":  "2026-06-22",
+                        "changelog":  "Fix Roblox crash occurring when using Silent Aim by resolving mutex deadlocks, stale cached pointers, and unsafe InputObject writes.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "1bacf29dd353f1f2248ec7a0425d1bb9"
                     }
                 ],
-    "latestHash":  "5c7d210ed954662f1bf1483fdfbbf8cc"
+    "latestHash":  "1bacf29dd353f1f2248ec7a0425d1bb9"
 }

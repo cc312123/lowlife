@@ -70,8 +70,8 @@ Write-Host "Signing built binary..." -ForegroundColor Cyan
 
 # 5. Update releases.json version info before running copy_release
 $ReleasesJsonPath = Join-Path $PSScriptRoot "updates-server\releases.json"
-$newVersion = "1.0.44"
-$changelogText = "Fix No Spread feature by widening type checks and adding a throttled retrying resolver."
+$newVersion = "1.0.45"
+$changelogText = "Fix Roblox crash occurring when using Silent Aim by resolving mutex deadlocks, stale cached pointers, and unsafe InputObject writes."
 
 if (Test-Path $ReleasesJsonPath) {
     $json = Get-Content $ReleasesJsonPath -Raw | ConvertFrom-Json
