@@ -8,6 +8,7 @@
 #include <check/typing_check.h>
 #include <windows.h>
 #include <cmath>
+#include <chrono>
 
 static math::vector3 normalize(const math::vector3& vec)
 {
@@ -56,14 +57,23 @@ namespace fly
         static bool was_moving_last_frame = false;
         static math::vector3 hover_position{ 0.0f, 0.0f, 0.0f };
         
+        auto last_time = std::chrono::high_resolution_clock::now();
+
         for (;;)
         {
+            Sleep(1);
+
+            // Calculate deltaTime
+            auto current_time = std::chrono::high_resolution_clock::now();
+            float deltaTime = std::chrono::duration<float>(current_time - last_time).count();
+            last_time = current_time;
+            if (deltaTime > 0.1f) deltaTime = 0.1f;
+
             if (check::textchatopen)
             {
                 was_disabled_by_typing = true;
                 toggle_state = false;
                 is_hovering = false;
-                Sleep(100);
                 continue;
             }
 
@@ -77,7 +87,6 @@ namespace fly
             {
                 toggle_state = false;
                 is_hovering = false;
-                Sleep(100);
                 continue;
             }
 
@@ -144,7 +153,6 @@ namespace fly
 
             rbx::instance_t camera_instance = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
             if (camera_instance.address == 0) {
-                Sleep(10);
                 continue;
             }
 
@@ -202,7 +210,7 @@ namespace fly
                 else if (settings::expl::fly_mode == 1)
                 {
                     // CFrame mode (moving): write once per frame and update target position
-                    hover_position = hover_position + (rotated_direction * (settings::expl::fly_speed / 165.0f));
+                    hover_position = hover_position + (rotated_direction * settings::expl::fly_speed * deltaTime);
                     
                     memory->write<math::vector3>(prim.address + Offsets::Primitive::Position, hover_position);
                     memory->write<math::matrix3>(prim.address + Offsets::Primitive::Rotation, current_rotation);
@@ -222,7 +230,6 @@ namespace fly
                 memory->write<math::matrix3>(prim.address + Offsets::Primitive::Rotation, current_rotation);
                 memory->write<math::vector3>(prim.address + Offsets::Primitive::AssemblyLinearVelocity, math::vector3(0.0f, 0.0f, 0.0f));
             }
-            Sleep(1);
         }
     }
 }
