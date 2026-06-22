@@ -238,6 +238,14 @@ void rbx::silent::run()
 			continue;
 		}
 
+		static std::uint64_t last_datamodel_address = 0;
+		if (game::datamodel.address != last_datamodel_address)
+		{
+			g_mouseservice.reset();
+			g_silent_aim_instance = {};
+			last_datamodel_address = game::datamodel.address;
+		}
+
 		if (!g_mouseservice || g_mouseservice->address == 0)
 		{
 			std::uint64_t mouse_svc_addr = game::datamodel.find_first_child_by_class("MouseService").address;
