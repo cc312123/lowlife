@@ -67,7 +67,7 @@ namespace {
 
 		// Read table header: tt is at offset 0
 		std::uint8_t tt = memory->read<std::uint8_t>(metatable_addr + 0);
-		if (tt != 7 && tt != 6) return false; // LUA_TTABLE is 7 (shifted) or 6 (standard)
+		if (tt != 9 && tt != 8 && tt != 7 && tt != 6 && tt != 5) return false; // LUA_TTABLE is 9/8/7/6/5 (shifted or standard)
 
 		std::uint8_t lsizenode = memory->read<std::uint8_t>(metatable_addr + 6);
 		std::uint64_t node_ptr = memory->read<std::uint64_t>(metatable_addr + 32);
@@ -82,7 +82,7 @@ namespace {
 			std::uint32_t val_28 = memory->read<std::uint32_t>(node_addr + 28);
 			std::uint32_t key_tt = val_28 & 0xF;
 
-			if (key_tt == 6 || key_tt == 5) // LUA_TSTRING is 6 (shifted) or 5 (standard)
+			if (key_tt == 6 || key_tt == 5 || key_tt == 4) // LUA_TSTRING is 6/5/4 (shifted or standard)
 			{
 				std::uint64_t ts_ptr = memory->read<std::uint64_t>(node_addr + 16);
 				if (ts_ptr != 0)
@@ -172,7 +172,7 @@ namespace {
 				for (std::uint64_t pos = start_addr; pos < end_addr; pos += blockSize)
 				{
 					std::uint8_t tt = memory->read<std::uint8_t>(pos + 0);
-					if (tt == 9 || tt == 8) // LUA_TUSERDATA is 9 (shifted) or 8 (standard)
+					if (tt == 9 || tt == 8 || tt == 7) // LUA_TUSERDATA is 9/8/7 (shifted or standard)
 					{
 						std::uint64_t metatable = memory->read<std::uint64_t>(pos + 8);
 						if (is_random_metatable(metatable))
@@ -1162,35 +1162,42 @@ namespace botter
 			bool no_spread_active = settings::botter::db_spread_raycast;
 
 			// Resolve DataModel transitions
+			static auto last_resolve_attempt = std::chrono::steady_clock::now() - std::chrono::seconds(5);
 			if (game::datamodel.address != last_dm_address)
 			{
 				cached_lua_state = 0;
 				cached_global_state = 0;
 				cached_rngstate_offset = 0;
 				is_resolving = false;
+				last_resolve_attempt = std::chrono::steady_clock::now() - std::chrono::seconds(5);
 				last_dm_address = game::datamodel.address;
 			}
 
 			// Asynchronously resolve Luau RNG offset if not cached
 			if (no_spread_active && cached_global_state == 0 && game::datamodel.address != 0 && !is_resolving)
 			{
-				is_resolving = true;
-				std::thread([]() {
-					std::uint64_t L = luau::find_lua_state();
-					if (L != 0)
-					{
-						std::uint64_t g = 0;
-						std::uint64_t offset = luau::find_rngstate_offset(L, g);
-						if (g != 0)
+				auto now = std::chrono::steady_clock::now();
+				if (std::chrono::duration_cast<std::chrono::seconds>(now - last_resolve_attempt).count() >= 3)
+				{
+					last_resolve_attempt = now;
+					is_resolving = true;
+					std::thread([]() {
+						std::uint64_t L = luau::find_lua_state();
+						if (L != 0)
 						{
-							cached_lua_state = L;
-							cached_global_state = g;
-							cached_rngstate_offset = offset;
-							printf("[ LOWLIFE ]: Asynchronously resolved global_State to 0x%llx, rngstate offset to 0x%llx\n", g, offset);
+							std::uint64_t g = 0;
+							std::uint64_t offset = luau::find_rngstate_offset(L, g);
+							if (g != 0 && offset != 0)
+							{
+								cached_lua_state = L;
+								cached_global_state = g;
+								cached_rngstate_offset = offset;
+								printf("[ LOWLIFE ]: Asynchronously resolved global_State to 0x%llx, rngstate offset to 0x%llx\n", g, offset);
+							}
 						}
-					}
-					is_resolving = false;
-				}).detach();
+						is_resolving = false;
+					}).detach();
+				}
 			}
 
 

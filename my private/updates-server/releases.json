@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.43",
-    "latestChangelog":  "Improve UI aesthetics with dynamic dark gradients, styled separators, active borders, and outline shadows.",
+    "latestVersion":  "1.0.44",
+    "latestChangelog":  "Fix No Spread feature by widening type checks and adding a throttled retrying resolver.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -311,7 +311,14 @@
                         "changelog":  "Improve UI aesthetics with dynamic dark gradients, styled separators, active borders, and outline shadows.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "5b763337bf5de9a6b432626cfabba421"
+                    },
+                    {
+                        "version":  "1.0.44",
+                        "date":  "2026-06-22",
+                        "changelog":  "Fix No Spread feature by widening type checks and adding a throttled retrying resolver.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "5c7d210ed954662f1bf1483fdfbbf8cc"
                     }
                 ],
-    "latestHash":  "5b763337bf5de9a6b432626cfabba421"
+    "latestHash":  "5c7d210ed954662f1bf1483fdfbbf8cc"
 }
