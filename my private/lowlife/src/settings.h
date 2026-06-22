@@ -150,6 +150,8 @@ namespace settings
 		inline int walkspeed_mode{ 0 };
 		inline float walkspeed_health_threshold{ 50.0f };
 		inline int walkspeed_keybind{ 0 };
+		inline int walkspeed_keybind_mode{ 0 };
+		inline int walkspeed_method{ 0 };
 		
 		inline bool freeze_players{ false };
 		inline int freeze_players_keybind{ 0 };
@@ -166,6 +168,9 @@ namespace settings
 
 		inline bool jumppower_enabled{ false };
 		inline float jumppower_power{ 50.0f };
+		inline int jumppower_keybind{ 0 };
+		inline int jumppower_keybind_mode{ 0 };
+		inline int jumppower_method{ 0 };
 
 		inline bool infinite_jump{ false };
 

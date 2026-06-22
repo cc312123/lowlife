@@ -684,7 +684,8 @@ static bool inline_keybind_button(const char* label, int* key, int* mode = nullp
 
         bool is_walkspeed = (strcmp(label, "walkspeed_keybind") == 0);
         bool is_silent = (strcmp(label, "silent_keybind") == 0);
-        int mode_count = (is_walkspeed || is_silent) ? 3 : 2;
+        bool is_jumppower = (strcmp(label, "jumppower_keybind") == 0);
+        int mode_count = (is_walkspeed || is_silent || is_jumppower) ? 3 : 2;
         ImVec2 popup_size = ImVec2(80.0f, mode_count == 3 ? 100.0f : 80.0f);
         ImGui::SetNextWindowSize(popup_size);
 
@@ -709,7 +710,7 @@ static bool inline_keybind_button(const char* label, int* key, int* mode = nullp
         ImDrawList* popup_dl = ImGui::GetWindowDrawList();
 
         const char* modes[3];
-        if (is_walkspeed || is_silent)
+        if (is_walkspeed || is_silent || is_jumppower)
         {
             modes[0] = "Hold";
             modes[1] = "Toggle";
@@ -920,7 +921,8 @@ static bool keybind_button(const char* label, int* key, int* mode = nullptr)
 
         bool is_walkspeed = (strcmp(label, "walkspeed_keybind") == 0);
         bool is_silent = (strcmp(label, "silent_keybind") == 0);
-        int mode_count = (is_walkspeed || is_silent) ? 3 : 2;
+        bool is_jumppower = (strcmp(label, "jumppower_keybind") == 0);
+        int mode_count = (is_walkspeed || is_silent || is_jumppower) ? 3 : 2;
         ImVec2 popup_size = ImVec2(80.0f, mode_count == 3 ? 100.0f : 80.0f);
         ImGui::SetNextWindowSize(popup_size);
 
@@ -945,7 +947,7 @@ static bool keybind_button(const char* label, int* key, int* mode = nullptr)
         ImDrawList* popup_dl = ImGui::GetWindowDrawList();
 
         const char* modes[3];
-        if (is_walkspeed || is_silent)
+        if (is_walkspeed || is_silent || is_jumppower)
         {
             modes[0] = "Hold";
             modes[1] = "Toggle";
@@ -2967,10 +2969,15 @@ void render_t::render_menu()
             ImGui::BeginChild("Movement", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
 
             ImGui::Checkbox("Walkspeed", &settings::expl::walkspeed);
+            ImGui::SameLine();
+            inline_keybind_button("walkspeed_keybind", &settings::expl::walkspeed_keybind, &settings::expl::walkspeed_keybind_mode);
 
             if (settings::expl::walkspeed)
             {
                 SliderFloatWithInput("Speed", &settings::expl::walkspeed_speed, 1.0f, 1000.0f, "%.1f");
+
+                const char* walkspeed_methods[] = { "Property", "CFrame Bypass", "Velocity Bypass" };
+                ImGui::Combo("Speed Method", &settings::expl::walkspeed_method, walkspeed_methods, IM_ARRAYSIZE(walkspeed_methods));
 
                 const char* walkspeed_modes[] = { "Normal", "Reloading", "Low Health" };
                 ImGui::Combo("Conditions", &settings::expl::walkspeed_mode, walkspeed_modes, IM_ARRAYSIZE(walkspeed_modes));
@@ -2983,9 +2990,14 @@ void render_t::render_menu()
 
             ImGui::Spacing();
             ImGui::Checkbox("JumpPower Modifier", &settings::expl::jumppower_enabled);
+            ImGui::SameLine();
+            inline_keybind_button("jumppower_keybind", &settings::expl::jumppower_keybind, &settings::expl::jumppower_keybind_mode);
             if (settings::expl::jumppower_enabled)
             {
                 SliderFloatWithInput("Power", &settings::expl::jumppower_power, 0.0f, 500.0f, "%.1f");
+
+                const char* jumppower_methods[] = { "Property", "Velocity Bypass" };
+                ImGui::Combo("Jump Method", &settings::expl::jumppower_method, jumppower_methods, IM_ARRAYSIZE(jumppower_methods));
             }
 
             ImGui::Spacing();

@@ -35,7 +35,7 @@ std::uint64_t luau::find_lua_state()
 			for (std::uint64_t offset_mainthread = 0x10; offset_mainthread <= 0xE0; offset_mainthread += 8)
 			{
 				std::uint64_t main = memory->read<std::uint64_t>(global_state + offset_mainthread);
-				if (main == L)
+				if (main == L || (main != 0 && (main % 8) == 0 && main >= 0x100000 && main <= 0x7FFFFFFFFFFF && memory->read<std::uint64_t>(main + offset_global) == global_state))
 				{
 					return L;
 				}
@@ -62,7 +62,7 @@ std::uint64_t luau::find_rngstate_offset(std::uint64_t lua_state, std::uint64_t&
 		for (std::uint64_t offset_mainthread = 0x10; offset_mainthread <= 0xE0; offset_mainthread += 8)
 		{
 			std::uint64_t main = memory->read<std::uint64_t>(g + offset_mainthread);
-			if (main == lua_state)
+			if (main == lua_state || (main != 0 && (main % 8) == 0 && main >= 0x100000 && main <= 0x7FFFFFFFFFFF && memory->read<std::uint64_t>(main + offset_global) == g))
 			{
 				global_state = g;
 				break;

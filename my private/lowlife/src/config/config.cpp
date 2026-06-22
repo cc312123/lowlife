@@ -201,6 +201,8 @@ namespace config
 		file << "    \"walkspeed_mode\": " << settings::expl::walkspeed_mode << ",\n";
 		file << "    \"walkspeed_health_threshold\": " << settings::expl::walkspeed_health_threshold << ",\n";
 		file << "    \"walkspeed_keybind\": " << settings::expl::walkspeed_keybind << ",\n";
+		file << "    \"walkspeed_keybind_mode\": " << settings::expl::walkspeed_keybind_mode << ",\n";
+		file << "    \"walkspeed_method\": " << settings::expl::walkspeed_method << ",\n";
 		file << "    \"freeze_players\": " << (settings::expl::freeze_players ? "true" : "false") << ",\n";
 		file << "    \"freeze_players_keybind\": " << settings::expl::freeze_players_keybind << ",\n";
 		file << "    \"freeze_players_keybind_mode\": " << settings::expl::freeze_players_keybind_mode << ",\n";
@@ -213,6 +215,9 @@ namespace config
 		file << "    \"fly_keybind_mode\": " << settings::expl::fly_keybind_mode << ",\n";
 		file << "    \"jumppower_enabled\": " << (settings::expl::jumppower_enabled ? "true" : "false") << ",\n";
 		file << "    \"jumppower_power\": " << settings::expl::jumppower_power << ",\n";
+		file << "    \"jumppower_keybind\": " << settings::expl::jumppower_keybind << ",\n";
+		file << "    \"jumppower_keybind_mode\": " << settings::expl::jumppower_keybind_mode << ",\n";
+		file << "    \"jumppower_method\": " << settings::expl::jumppower_method << ",\n";
 		file << "    \"infinite_jump\": " << (settings::expl::infinite_jump ? "true" : "false") << ",\n";
 		file << "    \"noclip_enabled\": " << (settings::expl::noclip_enabled ? "true" : "false") << ",\n";
 		file << "    \"gravity_enabled\": " << (settings::expl::gravity_enabled ? "true" : "false") << ",\n";
@@ -659,6 +664,10 @@ namespace config
 				settings::expl::walkspeed_health_threshold = std::stof(value);
 			if (parse_json_value(section, "walkspeed_keybind", value))
 				settings::expl::walkspeed_keybind = std::stoi(value);
+			if (parse_json_value(section, "walkspeed_keybind_mode", value))
+				settings::expl::walkspeed_keybind_mode = std::stoi(value);
+			if (parse_json_value(section, "walkspeed_method", value))
+				settings::expl::walkspeed_method = std::stoi(value);
 			if (parse_json_value(section, "freeze_players", value))
 				settings::expl::freeze_players = (value == "true");
 			if (parse_json_value(section, "freeze_players_keybind", value))
@@ -683,6 +692,12 @@ namespace config
 				settings::expl::jumppower_enabled = (value == "true");
 			if (parse_json_value(section, "jumppower_power", value))
 				settings::expl::jumppower_power = std::stof(value);
+			if (parse_json_value(section, "jumppower_keybind", value))
+				settings::expl::jumppower_keybind = std::stoi(value);
+			if (parse_json_value(section, "jumppower_keybind_mode", value))
+				settings::expl::jumppower_keybind_mode = std::stoi(value);
+			if (parse_json_value(section, "jumppower_method", value))
+				settings::expl::jumppower_method = std::stoi(value);
 			if (parse_json_value(section, "infinite_jump", value))
 				settings::expl::infinite_jump = (value == "true");
 			if (parse_json_value(section, "noclip_enabled", value))
