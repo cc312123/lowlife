@@ -88,27 +88,48 @@ std::uint64_t luau::find_rngstate_offset(std::uint64_t lua_state, std::uint64_t&
 		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 		Luck_ReadVirtualMemory(memory->get_process_handle(), reinterpret_cast<void*>(global_state), snapshot2.data(), 2048, nullptr);
 
-		for (size_t i = 0; i < 256; ++i)
+		for (size_t i = 0; i < 255; ++i)
 		{
 			std::uint64_t val1 = snapshot1[i];
 			std::uint64_t val2 = snapshot2[i];
 
 			if (val1 == val2 || val1 == 0 || val2 == 0) continue;
 
-			// Check 1 transition
+			// PCG32 uses dynamic increment (stored at next offset, must be odd)
+			std::uint64_t dynamic_inc = snapshot1[i + 1];
+			if ((dynamic_inc & 1) != 0 && dynamic_inc != 0)
+			{
+				// Check 1 transition
+				if (val2 == (val1 * multiplier + dynamic_inc))
+				{
+					return i * 8;
+				}
+
+				// Check 2 transitions
+				std::uint64_t t1 = val1 * multiplier + dynamic_inc;
+				if (val2 == (t1 * multiplier + dynamic_inc))
+				{
+					return i * 8;
+				}
+
+				// Check 3 transitions
+				std::uint64_t t2 = t1 * multiplier + dynamic_inc;
+				if (val2 == (t2 * multiplier + dynamic_inc))
+				{
+					return i * 8;
+				}
+			}
+
+			// Fallback check using the standard Knuth LCG constant
 			if (val2 == (val1 * multiplier + increment))
 			{
 				return i * 8;
 			}
-
-			// Check 2 transitions
 			std::uint64_t t1 = val1 * multiplier + increment;
 			if (val2 == (t1 * multiplier + increment))
 			{
 				return i * 8;
 			}
-
-			// Check 3 transitions
 			std::uint64_t t2 = t1 * multiplier + increment;
 			if (val2 == (t2 * multiplier + increment))
 			{

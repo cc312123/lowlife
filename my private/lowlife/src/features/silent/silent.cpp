@@ -28,16 +28,10 @@ namespace
 		return std::sqrt(dx * dx + dy * dy);
 	}
 
-	float get_effective_fov()
+	float get_effective_fov(const std::string& tool_name)
 	{
 		if (!settings::silent::gun_based_fov)
 			return settings::silent::fov;
-
-		std::string tool_name;
-		{
-			std::lock_guard<std::mutex> lock(cache::mtx);
-			tool_name = cache::cached_local_player.tool_name;
-		}
 
 		std::string tool_name_lower = tool_name;
 		std::transform(tool_name_lower.begin(), tool_name_lower.end(), tool_name_lower.begin(), ::tolower);
@@ -138,7 +132,7 @@ namespace
 		return rbx::part_t{};
 	}
 
-	bool is_target_valid(const cache::entity_t& player, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, bool skip_fov_check = false)
+	bool is_target_valid(const cache::entity_t& player, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, const std::string& tool_name, bool skip_fov_check = false)
 	{
 		if (player.instance.address == 0) return false;
 
@@ -163,7 +157,7 @@ namespace
 			if (!game::visengine.world_to_screen(world_pos, screen_pos, dims, view)) return false;
 
 			float dist = get_magnitude(screen_pos, { static_cast<float>(cursor_pt.x), static_cast<float>(cursor_pt.y) });
-			if (dist > get_effective_fov()) return false;
+			if (dist > get_effective_fov(tool_name)) return false;
 		}
 
 		if (settings::silent::wall_check && !settings::silent::magic_bullet) {
@@ -361,7 +355,7 @@ void rbx::silent::run()
 				}
 			}
 
-			if (found_manual && is_target_valid(manual_target, cursor_point, dims, view, true))
+			if (found_manual && is_target_valid(manual_target, cursor_point, dims, view, "", true))
 			{
 				current_target = manual_target;
 				target_acquired = true;
@@ -378,13 +372,14 @@ void rbx::silent::run()
 		if (!target_acquired && settings::silent::sticky_aim && last_locked_address != 0)
 		{
 			std::lock_guard<std::mutex> cache_lock(cache::mtx);
+			std::string local_tool = cache::cached_local_player.tool_name;
 			if (cache::cached_players)
 			{
 				for (const auto& player : *cache::cached_players)
 				{
 					if (player.instance.address == last_locked_address)
 					{
-						if (is_target_valid(player, cursor_point, dims, view, false))
+						if (is_target_valid(player, cursor_point, dims, view, local_tool, false))
 						{
 							current_target = player;
 							target_acquired = true;
@@ -399,13 +394,14 @@ void rbx::silent::run()
 		{
 			float closest_dist = std::numeric_limits<float>::max();
 			std::lock_guard<std::mutex> cache_lock(cache::mtx);
+			std::string local_tool = cache::cached_local_player.tool_name;
 			if (cache::cached_players)
 			{
 				for (const auto& player : *cache::cached_players)
 				{
 					if (cache::is_local_player(player)) continue;
 
-					if (is_target_valid(player, cursor_point, dims, view, false))
+					if (is_target_valid(player, cursor_point, dims, view, local_tool, false))
 					{
 						rbx::part_t target_part = get_target_part(player, settings::silent::aim_part, cursor_point, dims, view);
 						if (target_part.address != 0)
