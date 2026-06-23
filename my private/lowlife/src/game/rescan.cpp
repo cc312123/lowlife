@@ -566,6 +566,7 @@ float GetCacheEfficiency() {
     return g_smartCache.getCacheHitRate();
 }
 void AutoRescanHandler() {
+    AutoRescan::active = true;
     GameState initialState = CaptureCurrentState();
     AutoRescan::lastGameId = initialState.gameId;
     AutoRescan::lastPlaceId = initialState.placeId;
