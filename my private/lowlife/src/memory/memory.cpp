@@ -171,6 +171,18 @@ bool memory_t::attach_to_process(const std::string& process_name)
 	return true;
 }
 
+void memory_t::detach_from_process()
+{
+	if (process_handle && process_handle != INVALID_HANDLE_VALUE)
+	{
+		CloseHandle(process_handle);
+		process_handle = nullptr;
+	}
+	process_id = 0;
+	base_address = 0;
+}
+
+
 std::string memory_t::read_string(std::uint64_t address)
 {
 	struct msvc_string_layout {

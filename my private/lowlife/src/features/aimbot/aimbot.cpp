@@ -233,7 +233,7 @@ namespace rbx::aimbot {
                 rbx::primitive_t primitive = part.get_primitive();
                 math::vector3 world_pos = primitive.get_position();
                 math::vector2 screen_pos = {};
-                if (!game::visengine.world_to_screen(world_pos, screen_pos, dims, view)) continue;
+                if (!game::visengine.world_to_client(world_pos, screen_pos, dims, view)) continue;
                 float dist = vector2_distance(screen_pos.x, screen_pos.y, cursor_x, cursor_y);
                 if (dist < min_dist) {
                     min_dist = dist;
@@ -323,7 +323,7 @@ namespace rbx::aimbot {
                 math::vector3 world_pos = primitive.get_position();
                 math::vector2 screen_pos = {};
 
-                if (!game::visengine.world_to_screen(world_pos, screen_pos, dims, view)) return false;
+                if (!game::visengine.world_to_client(world_pos, screen_pos, dims, view)) return false;
 
                 float cursor_x = static_cast<float>(cursor_pt.x);
                 float cursor_y = static_cast<float>(cursor_pt.y);
@@ -360,7 +360,7 @@ namespace rbx::aimbot {
                     math::vector3 world_pos = primitive.get_position();
                     math::vector2 screen_pos = {};
 
-                    if (!game::visengine.world_to_screen(world_pos, screen_pos, dims, view)) continue;
+                    if (!game::visengine.world_to_client(world_pos, screen_pos, dims, view)) continue;
 
                     float dist = vector2_distance(screen_pos.x, screen_pos.y, cursor_x, cursor_y);
                     if (dist < best_dist) {
@@ -497,7 +497,7 @@ namespace rbx::aimbot {
 
         void execute_mouse_aim(const math::vector3& target_pos, const POINT& cursor_pt, float dt, const math::vector2& dims, const math::matrix4& view) {
             math::vector2 screen_pos = {};
-            if (!game::visengine.world_to_screen(target_pos, screen_pos, dims, view)) return;
+            if (!game::visengine.world_to_client(target_pos, screen_pos, dims, view)) return;
 
             float center_x = dims.x / 2.0f;
             float center_y = dims.y / 2.0f;

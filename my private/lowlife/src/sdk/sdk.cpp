@@ -429,6 +429,24 @@ bool rbx::visualengine_t::world_to_screen(const math::vector3& world, math::vect
 	return true;
 }
 
+bool rbx::visualengine_t::world_to_client(const math::vector3& world, math::vector2& out, const math::vector2& dims, const math::matrix4& view)
+{
+	math::vector4 clip = view.multiply({ world.x, world.y, world.z, 1.0f });
+
+	if (clip.w < 0.1f)
+	{
+		return false;
+	}
+
+	clip.x /= clip.w;
+	clip.y /= clip.w;
+
+	out.x = (dims.x * 0.5f * clip.x) + (dims.x * 0.5f);
+	out.y = -(dims.y * 0.5f * clip.y) + (dims.y * 0.5f);
+
+	return true;
+}
+
 math::vector3 rbx::camera_t::get_position()
 {
 	return memory->read<math::vector3>(this->address + Offsets::Camera::Position);

@@ -94,6 +94,7 @@ namespace rbx
 		math::vector2 get_dimensions();
 		math::matrix4 get_viewmatrix();
 		bool world_to_screen(const math::vector3& world, math::vector2& out, const math::vector2& dims, const math::matrix4& view);
+		bool world_to_client(const math::vector3& world, math::vector2& out, const math::vector2& dims, const math::matrix4& view);
 	};
 
 	struct camera_t final : public instance_t

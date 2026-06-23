@@ -345,17 +345,6 @@ static bool initialize_roblox_objects() noexcept {
     return real_dm != 0 && workspace != 0 && players != 0 && local_player != 0 && game::local_character.address != 0;
 }
 
-static void roblox_monitor() noexcept {
-    const int POLL_INTERVAL = 1000; 
-    while (!globals::cleanup_requested) {
-        if (!memory->find_process_id(globals::ROBLOX_PROCESS)) {
-            globals::roblox_valid = false;
-            globals::cleanup_requested = true;
-            break;
-        }
-        Sleep(POLL_INTERVAL);
-    }
-}
 
 static std::string get_roblox_version(HANDLE process_handle) noexcept {
     char path[MAX_PATH] = { 0 };
@@ -412,66 +401,14 @@ int main() {
     std::thread(lowlife::detection::debugger_detection_thread).detach();
     std::thread(rbx::bypass::run).detach();
 
-    
-    lowlife::bypass::pc_check::run_pc_bypass();
-    lowlife::bypass::process::hide_from_roblox();
-    lowlife::bypass::process::spoof_process_info();
-
-    
-    const char* roblox_proc = globals::ROBLOX_PROCESS;
-    if (!memory->find_process_id(roblox_proc) ||
-        !memory->attach_to_process(roblox_proc)) {
-        lowlife::utils::print_colored_message("Failed to attach to Roblox process", false);
-        Sleep(3000);
-        lowlife::utils::self_destruct();
-    }
-
-    std::string running_version = get_roblox_version(memory->get_process_handle());
-    if (!Offsets::Update(running_version)) {
-        lowlife::utils::print_colored_message("Warning: Offsets update from server failed.", false);
-        lowlife::utils::print_colored_message("Attempting to use compile-time offsets...", true);
-    }
-
-    bool init_success = false;
-    for (int attempts = 0; attempts < 600; ++attempts) {
-        if (memory->find_module_address(roblox_proc) && initialize_roblox_objects()) {
-            init_success = true;
-            break;
-        }
-        lowlife::utils::print_colored_message("Awaiting game loading / player spawn (retrying in 1s)...", true);
-        Sleep(1000);
-    }
-
-    if (!init_success) {
-        lowlife::utils::print_colored_message("Failed to initialize Roblox connection modules after 10 minutes.", false);
-        Sleep(3000);
-        lowlife::utils::self_destruct();
-    }
-
-    globals::roblox_valid = true;
-
-    
-    std::thread(cache::run).detach();
-
-    if (!InitializeStorage()) {
-        lowlife::utils::print_colored_message("Storage initialization failed", false);
-        Sleep(5000);
-        lowlife::utils::self_destruct();
-    }
-
-    std::thread(AutoRescanHandler).detach();
-    rbx::new_silent::initialize();
-
-    
+    // Create the overlay window, DX11 device and ImGui context once.
     if (!render->create_window() || !render->create_device() || !render->create_imgui()) {
         lowlife::utils::print_colored_message("Render initialization failed", false);
         Sleep(5000);
         lowlife::utils::self_destruct();
     }
 
-    notifications::add("LowLife Loaded Successfully!", notifications::NotificationType::Success, 5.0f);
-
-    
+    // Keep feature threads spawned continuously; they will check game state pointers dynamically.
     std::thread check_thread(check::run);
     std::thread walkspeed_thread(walkspeed::run);
     std::thread freeze_thread(freezeplayer::run);
@@ -479,10 +416,8 @@ int main() {
     std::thread aimbot_thread(rbx::aimbot::run);
     std::thread botter_thread(botter::run);
     std::thread shot_detect_thread(shot_detect::run);
-    std::thread monitor_thread(roblox_monitor);
     std::thread misc_exploits_thread(misc_exploits::run);
 
-    
     if (check_thread.joinable()) check_thread.detach();
     if (walkspeed_thread.joinable()) walkspeed_thread.detach();
     if (freeze_thread.joinable()) freeze_thread.detach();
@@ -490,49 +425,150 @@ int main() {
     if (aimbot_thread.joinable()) aimbot_thread.detach();
     if (botter_thread.joinable()) botter_thread.detach();
     if (shot_detect_thread.joinable()) shot_detect_thread.detach();
-    if (monitor_thread.joinable()) monitor_thread.detach();
     if (misc_exploits_thread.joinable()) misc_exploits_thread.detach();
 
-    
+    // Start a thread for tickrate adjustments that dynamically pauses when roblox is invalid.
     std::thread tickrate_thread([] {
         const int TICK_INTERVAL = 200;
-        while (!globals::cleanup_requested && globals::roblox_valid) {
-            if (!settings::expl::tickrate || !game::workspace.address) {
-                Sleep(TICK_INTERVAL);
-                continue;
-            }
-
-            uintptr_t world = memory->read<uintptr_t>(game::workspace.address + Offsets::Workspace::World);
-            if (world) {
-                memory->write<float>(world + Offsets::World::worldStepsPerSec, settings::expl::tickrate_amount);
+        while (true) {
+            if (globals::roblox_valid && !globals::cleanup_requested) {
+                if (settings::expl::tickrate && game::workspace.address) {
+                    uintptr_t world = memory->read<uintptr_t>(game::workspace.address + Offsets::Workspace::World);
+                    if (world) {
+                        memory->write<float>(world + Offsets::World::worldStepsPerSec, settings::expl::tickrate_amount);
+                    }
+                }
             }
             Sleep(TICK_INTERVAL);
         }
-        });
+    });
     if (tickrate_thread.joinable()) tickrate_thread.detach();
 
-    game::wnd = FindWindowA(nullptr, "Roblox");
+    const char* roblox_proc = globals::ROBLOX_PROCESS;
 
-    
-    while (globals::roblox_valid && !globals::cleanup_requested) {
-        render->start_render();
-        render->render_visuals();
+    while (true) {
+        lowlife::utils::print_colored_message("Waiting for RobloxPlayerBeta.exe to start...", true);
 
-        if (render->running) {
-            render->render_menu();
+        // Hide overlay while waiting for Roblox
+        if (render->detail->window) {
+            ShowWindow(render->detail->window, SW_HIDE);
         }
 
-        render->render_notifications();
-        render->end_render();
+        // Wait for Roblox process to be running
+        while (!memory->find_process_id(roblox_proc)) {
+            Sleep(500);
+        }
 
-        
-        Sleep(render->running ? 1 : 16);
+        lowlife::utils::print_colored_message("Roblox detected! Attaching...", true);
+
+        globals::cleanup_requested = false;
+        globals::roblox_valid = false;
+
+        // Perform PC check and bypasses
+        lowlife::bypass::pc_check::run_pc_bypass();
+        lowlife::bypass::process::hide_from_roblox();
+        lowlife::bypass::process::spoof_process_info();
+
+        if (!memory->attach_to_process(roblox_proc)) {
+            lowlife::utils::print_colored_message("Failed to attach to Roblox process. Retrying...", false);
+            Sleep(2000);
+            continue;
+        }
+
+        std::string running_version = get_roblox_version(memory->get_process_handle());
+        if (!Offsets::Update(running_version)) {
+            lowlife::utils::print_colored_message("Warning: Offsets update from server failed.", false);
+            lowlife::utils::print_colored_message("Attempting to use compile-time offsets...", true);
+        }
+
+        bool init_success = false;
+        // Limit attempts to 30 (~30 seconds) to avoid hanging forever if the user closes Roblox during loading
+        for (int attempts = 0; attempts < 30; ++attempts) {
+            if (!memory->find_process_id(roblox_proc)) {
+                break;
+            }
+            if (memory->find_module_address(roblox_proc) && initialize_roblox_objects()) {
+                init_success = true;
+                break;
+            }
+            lowlife::utils::print_colored_message("Awaiting game loading / player spawn (retrying in 1s)...", true);
+            Sleep(1000);
+        }
+
+        if (!init_success) {
+            lowlife::utils::print_colored_message("Initialization failed or Roblox closed. Resetting connection...", false);
+            memory->detach_from_process();
+            Sleep(2000);
+            continue;
+        }
+
+        globals::roblox_valid = true;
+
+        // Start cache thread dynamically
+        std::thread cache_thread(cache::run);
+        cache_thread.detach();
+
+        if (!InitializeStorage()) {
+            lowlife::utils::print_colored_message("Storage initialization failed. Resetting...", false);
+            globals::roblox_valid = false;
+            memory->detach_from_process();
+            Sleep(2000);
+            continue;
+        }
+
+        std::thread rescan_thread(AutoRescanHandler);
+        rescan_thread.detach();
+        rbx::new_silent::initialize();
+
+        notifications::add("LowLife Loaded Successfully!", notifications::NotificationType::Success, 5.0f);
+
+        game::wnd = FindWindowA(nullptr, "Roblox");
+
+        // Show overlay now that injection is complete
+        if (render->detail->window) {
+            ShowWindow(render->detail->window, SW_SHOW);
+        }
+
+        // Run the rendering loop while Roblox is running
+        while (globals::roblox_valid && !globals::cleanup_requested) {
+            if (!memory->find_process_id(roblox_proc)) {
+                globals::roblox_valid = false;
+                break;
+            }
+
+            render->start_render();
+            render->render_visuals();
+
+            if (render->running) {
+                render->render_menu();
+            }
+
+            render->render_notifications();
+            render->end_render();
+
+            Sleep(render->running ? 1 : 16);
+        }
+
+        // Clean up the current session
+        lowlife::utils::print_colored_message("Roblox process ended. Resetting session parameters...", false);
+
+        // Stop auto-rescanners
+        StopAutoRescan();
+
+        // Nullify Roblox object references to ensure features do not run on dead memory addresses
+        game::datamodel = { 0 };
+        game::visengine = { 0 };
+        game::workspace = { 0 };
+        game::players = { 0 };
+        game::local_player = { 0 };
+        game::local_character = { 0 };
+        game::wnd = nullptr;
+
+        memory->detach_from_process();
+
+        Sleep(1000);
     }
 
-    
     cleanup_keyauth();
-    Sleep(2000); 
-
-    lowlife::utils::self_destruct();
     return 0;
-}
+}

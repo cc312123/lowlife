@@ -327,16 +327,19 @@ inline bool add_sidebar_tab(const char* label, const char* icon, int idx, bool s
         text_color = ImVec4(0.90f, 0.90f, 0.95f, 1.0f);
     }
 
-    ImVec2 icon_sz = ImGui::CalcTextSize(icon);
     ImVec2 text_sz = ImGui::CalcTextSize(label);
-
     float text_offset_y = (tab_size.y - text_sz.y) * 0.5f;
-    float icon_offset_y = (tab_size.y - icon_sz.y) * 0.5f;
 
-    ImVec2 icon_pos = ImVec2(bb.Min.x + 14.f, bb.Min.y + icon_offset_y);
-    dl->AddText(icon_pos, ImGui::ColorConvertFloat4ToU32(text_color), icon);
+    float label_start_x = 20.f;
+    if (icon && icon[0] != '\0') {
+        ImVec2 icon_sz = ImGui::CalcTextSize(icon);
+        float icon_offset_y = (tab_size.y - icon_sz.y) * 0.5f;
+        ImVec2 icon_pos = ImVec2(bb.Min.x + 14.f, bb.Min.y + icon_offset_y);
+        dl->AddText(icon_pos, ImGui::ColorConvertFloat4ToU32(text_color), icon);
+        label_start_x = 36.f;
+    }
 
-    ImVec2 label_pos = ImVec2(bb.Min.x + 36.f, bb.Min.y + text_offset_y);
+    ImVec2 label_pos = ImVec2(bb.Min.x + label_start_x, bb.Min.y + text_offset_y);
     dl->AddText(label_pos, ImGui::ColorConvertFloat4ToU32(text_color), label);
 
     return pressed;

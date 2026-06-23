@@ -221,7 +221,7 @@ namespace
 			math::vector3 world_pos = primitive.get_position();
 			math::vector2 screen_pos = {};
 
-			if (!game::visengine.world_to_screen(world_pos, screen_pos, dims, view)) return false;
+			if (!game::visengine.world_to_client(world_pos, screen_pos, dims, view)) return false;
 
 			float cursor_x = static_cast<float>(cursor_pt.x);
 			float cursor_y = static_cast<float>(cursor_pt.y);
@@ -398,7 +398,7 @@ void rbx::new_silent::run()
 							{
 								math::vector3 world_pos = primitive.get_position();
 								math::vector2 screen_pos = {};
-								if (game::visengine.world_to_screen(world_pos, screen_pos, dims, view))
+								if (game::visengine.world_to_client(world_pos, screen_pos, dims, view))
 								{
 									// Mode 0: Closest to Crosshair
 									if (settings::new_silent::target_mode == 0)
@@ -483,7 +483,7 @@ void rbx::new_silent::run()
 						// Apply Prediction if enabled
 						math::vector3 target_pos_3d = settings::new_silent::prediction_enabled ? apply_prediction(prim) : prim.get_position();
 						math::vector2 screen_pos = {};
-						if (game::visengine.world_to_screen(target_pos_3d, screen_pos, dims, view))
+						if (game::visengine.world_to_client(target_pos_3d, screen_pos, dims, view))
 						{
 							write_mouse_position(mouse_svc_addr, screen_pos.x, screen_pos.y);
 

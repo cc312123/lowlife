@@ -1494,7 +1494,7 @@ namespace botter
 										};
 
 										math::vector2 out{};
-										if (game::visengine.world_to_screen(world, out, dims, view))
+										if (game::visengine.world_to_client(world, out, dims, view))
 										{
 											valid = true;
 											left = std::min(left, out.x);
@@ -1506,23 +1506,8 @@ namespace botter
 
 									if (valid && left < right && top < bottom)
 									{
-										HWND roblox_window = game::wnd;
-										if (!roblox_window) roblox_window = FindWindowA(nullptr, "Roblox");
-										RECT client_rect{};
-										POINT client_pos{};
-										float offset_x = 0.f;
-										float offset_y = 0.f;
-										if (roblox_window && GetClientRect(roblox_window, &client_rect))
-										{
-											client_pos.x = client_rect.left;
-											client_pos.y = client_rect.top;
-											ClientToScreen(roblox_window, &client_pos);
-											offset_x = (float)client_pos.x;
-											offset_y = (float)client_pos.y;
-										}
-
-										float client_cursor_x = (float)cursor_pt.x + offset_x;
-										float client_cursor_y = (float)cursor_pt.y + offset_y;
+										float client_cursor_x = (float)cursor_pt.x;
+										float client_cursor_y = (float)cursor_pt.y;
 
 										float scale = settings::botter::hitbox_size / 100.0f;
 										float width = right - left;
@@ -1900,7 +1885,7 @@ namespace shot_detect
 				};
 
 				math::vector2 out{};
-				if (game::visengine.world_to_screen(world, out, dims, view))
+				if (game::visengine.world_to_client(world, out, dims, view))
 				{
 					valid = true;
 					left = std::min(left, out.x);
@@ -2037,7 +2022,7 @@ namespace shot_detect
 									rbx::part_t hrp_part = hrp_it->second;
 									math::vector3 world_pos = hrp_part.get_primitive().get_position();
 									math::vector2 screen_pos = {};
-									if (game::visengine.world_to_screen(world_pos, screen_pos, dims, view))
+									if (game::visengine.world_to_client(world_pos, screen_pos, dims, view))
 									{
 										float dx = (float)cursor_pt.x - screen_pos.x;
 										float dy = (float)cursor_pt.y - screen_pos.y;

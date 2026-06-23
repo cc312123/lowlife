@@ -35,6 +35,7 @@ public:
 	std::uint64_t find_module_address(const std::string& module_name);
 
 	bool attach_to_process(const std::string& process_name);
+	void detach_from_process();
 
 	std::string read_string(std::uint64_t address);
 	std::uint64_t scan_signature(const std::string& section_name, const std::string& signature);

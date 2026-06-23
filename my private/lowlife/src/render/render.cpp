@@ -553,7 +553,7 @@ static const char* get_key_name(int vk_code)
     default:
         if (vk_code >= 'A' && vk_code <= 'Z') { static char buf[2]; buf[0] = (char)vk_code; buf[1] = 0; return buf; }
         if (vk_code >= '0' && vk_code <= '9') { static char buf[2]; buf[0] = (char)vk_code; buf[1] = 0; return buf; }
-        return "???";
+        return "None";
     }
 }
 
@@ -2030,222 +2030,116 @@ void render_t::render_menu()
     // 4. Intro sequence & welcome launcher screen
     if (!intro_done) {
         intro_time += ImGui::GetIO().DeltaTime;
-        float duration = 4.8f; 
+        const float duration = 8.242532590325792873582356238756823509823750239750237350723058f;
 
         if (intro_time >= duration) {
-            welcome_active = true;
-            intro_time = duration; 
+            intro_done = true;
         }
 
-        if (welcome_active) {
-            welcome_alpha += ImGui::GetIO().DeltaTime * 3.0f;
-            if (welcome_alpha > 1.0f) welcome_alpha = 1.0f;
-
-            if (welcome_clicked) {
-                fade_out_timer += ImGui::GetIO().DeltaTime * 3.0f;
-                welcome_alpha = 1.0f - fade_out_timer;
-                if (fade_out_timer >= 1.0f) {
-                    intro_done = true;
-                }
-            }
+        // Draw solid dark background overlay
+        float bg_alpha = 255.0f;
+        if (intro_time > (duration - 0.5f)) {
+            float t = (intro_time - (duration - 0.5f)) / 0.5f;
+            if (t > 1.0f) t = 1.0f;
+            bg_alpha = 255.0f * (1.0f - t);
         }
+        draw_list->AddRectFilled(window_pos, ImVec2(window_pos.x + window_size.x, window_pos.y + window_size.y), IM_COL32(0, 0, 0, (int)bg_alpha), 8.0f);
 
-        // Grid lines (fade out when welcome clicked)
-        float grid_spacing = 20.0f;
-        float grid_alpha = 4.0f * (1.0f - fade_out_timer);
-        for (float x = 10.0f; x < window_size.x - 10.0f; x += grid_spacing) {
-            draw_list->AddLine(ImVec2(window_pos.x + x, window_pos.y + 10.0f), ImVec2(window_pos.x + x, window_pos.y + window_size.y - 10.0f), IM_COL32(255, 255, 255, (int)grid_alpha));
-        }
-        for (float y = 10.0f; y < window_size.y - 10.0f; y += grid_spacing) {
-            draw_list->AddLine(ImVec2(window_pos.x + 10.0f, window_pos.y + y), ImVec2(window_pos.x + window_size.x - 10.0f, window_pos.y + y), IM_COL32(255, 255, 255, (int)grid_alpha));
-        }
+        // Calculate animation parameters
+        float logo_alpha = 1.0f;
+        float scale = 1.0f;
+        float angle = 0.0f;
+        ImVec2 offset = ImVec2(0.0f, 0.0f);
 
-        // Fast cyber particle streams
-        struct CyberParticle {
-            ImVec2 pos;
-            ImVec2 vel;
-            float size;
-            float life;
-        };
-        static std::vector<CyberParticle> particles;
-        static bool particles_init = false;
-        if (!particles_init) {
-            for (int i = 0; i < 35; ++i) {
-                CyberParticle p;
-                p.pos = ImVec2((float)(30 + (i * 47) % 1040), (float)(30 + (i * 29) % 560));
-                p.vel = ImVec2(((i % 2 == 0) ? 1.0f : -1.0f) * 12.0f, -((i % 3 == 0) ? 0.7f : 1.5f) * 15.0f);
-                p.size = (float)(1 + (i * 7) % 3);
-                p.life = (float)(0.2f + (i % 10) * 0.08f);
-                particles.push_back(p);
-            }
-            particles_init = true;
-        }
-
-        float p_dt = ImGui::GetIO().DeltaTime;
-        float particle_fade_factor = welcome_active ? (1.0f - fade_out_timer) : 1.0f;
-        for (auto& p : particles) {
-            p.pos.x += p.vel.x * p_dt;
-            p.pos.y += p.vel.y * p_dt;
-            if (p.pos.y < 15.0f) {
-                p.pos.y = window_size.y - 15.0f;
-                p.pos.x = (float)(30 + rand() % 1040);
-            }
-            if (p.pos.x < 15.0f || p.pos.x > window_size.x - 15.0f) {
-                p.vel.x = -p.vel.x;
-            }
-            draw_list->AddCircleFilled(ImVec2(window_pos.x + p.pos.x, window_pos.y + p.pos.y), p.size, IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, (int)(30 * particle_fade_factor)));
-        }
-
-        if (!welcome_active) {
-            // Loading screen sequence
-            float logo_alpha = (intro_time / 1.0f < 1.0f) ? (intro_time / 1.0f) : 1.0f;
-            if (intro_time > 4.2f) {
-                float fade_out = 1.0f - (intro_time - 4.2f) / 0.6f;
-                logo_alpha = (fade_out > 0.0f) ? fade_out : 0.0f;
-            }
-
-            const char* logo_t1 = "low";
-            const char* logo_t2 = "life";
-            ImVec2 size1 = ImGui::CalcTextSize(logo_t1);
-            ImVec2 size2 = ImGui::CalcTextSize(logo_t2);
-            float tw = size1.x + size2.x;
-            ImVec2 lpos = ImVec2(window_pos.x + (window_size.x - tw) * 0.5f, window_pos.y + 90.f);
-
-            ImU32 shadow_col = IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, (int)(55 * logo_alpha));
-            for (int i = 1; i <= 6; i++) {
-                draw_list->AddText(ImVec2(lpos.x - i, lpos.y), shadow_col, logo_t1);
-                draw_list->AddText(ImVec2(lpos.x + size1.x - i, lpos.y), shadow_col, logo_t2);
-                draw_list->AddText(ImVec2(lpos.x + i, lpos.y), shadow_col, logo_t1);
-                draw_list->AddText(ImVec2(lpos.x + size1.x + i, lpos.y), shadow_col, logo_t2);
-            }
-
-            draw_list->AddText(lpos, IM_COL32(255, 255, 255, (int)(255 * logo_alpha)), logo_t1);
-            draw_list->AddText(ImVec2(lpos.x + size1.x, lpos.y), ImGui::ColorConvertFloat4ToU32(ImVec4(accent.x, accent.y, accent.z, logo_alpha)), logo_t2);
-
-            const char* sub = "SECURED CYBERNETIC INTEGRATION ENGINE";
-            ImVec2 sub_size = ImGui::CalcTextSize(sub);
-            draw_list->AddText(ImVec2(window_pos.x + (window_size.x - sub_size.x) * 0.5f, lpos.y + 35.0f), IM_COL32(150, 150, 170, (int)(170 * logo_alpha)), sub);
-
-            float y_laser = window_pos.y + 40.0f + (sinf(intro_time * 2.0f) * 0.5f + 0.5f) * (window_size.y - 80.0f);
-            draw_list->AddRectFilled(ImVec2(window_pos.x + 10.0f, y_laser - 1.0f), ImVec2(window_pos.x + window_size.x - 10.0f, y_laser + 1.0f), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, (int)(150 * logo_alpha)));
-            draw_list->AddRectFilled(ImVec2(window_pos.x + 10.0f, y_laser - 3.0f), ImVec2(window_pos.x + window_size.x - 10.0f, y_laser + 3.0f), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, (int)(30 * logo_alpha)));
-
-            struct ConsoleLog {
-                const char* tag;
-                const char* message;
-                float time;
-                ImVec4 tag_col;
-            };
-            ConsoleLog logs[] = {
-                { " CONNECT ", "Linking core encryption gateways...", 0.6f, ImVec4(0.3f, 0.7f, 1.0f, 1.0f) },
-                { " SECURITY", "Injecting graphical renderer hooks... OK", 1.4f, ImVec4(0.2f, 0.8f, 0.4f, 1.0f) },
-                { " BYPASS  ", "Spoofing module hardware signatures... OK", 2.2f, ImVec4(0.9f, 0.7f, 0.2f, 1.0f) },
-                { " RUNTIME ", "Initializing internal feature threads... COMPLETED", 3.0f, ImVec4(0.8f, 0.2f, 0.9f, 1.0f) }
-            };
-
-            float log_start_y = lpos.y + 70.0f;
-            for (int i = 0; i < 4; i++) {
-                if (intro_time >= logs[i].time) {
-                    float current_log_alpha = ((intro_time - logs[i].time) / 0.4f < 1.0f) ? ((intro_time - logs[i].time) / 0.4f) : 1.0f;
-                    if (intro_time > 4.2f) {
-                        float fade_out = 1.0f - (intro_time - 4.2f) / 0.6f;
-                        current_log_alpha = (fade_out > 0.0f) ? (current_log_alpha * fade_out) : 0.0f;
-                    }
-                    
-                    ImVec2 t_pos = ImVec2(window_pos.x + 60.f, log_start_y + (i * 22.f));
-                    
-                    draw_list->AddRectFilled(t_pos, ImVec2(t_pos.x + 75.0f, t_pos.y + 16.0f), IM_COL32(logs[i].tag_col.x * 255, logs[i].tag_col.y * 255, logs[i].tag_col.z * 255, 30 * current_log_alpha), 3.0f);
-                    draw_list->AddRect(t_pos, ImVec2(t_pos.x + 75.0f, t_pos.y + 16.0f), IM_COL32(logs[i].tag_col.x * 255, logs[i].tag_col.y * 255, logs[i].tag_col.z * 255, 120 * current_log_alpha), 3.0f, 0, 1.0f);
-                    
-                    ImVec2 text_sz = ImGui::CalcTextSize(logs[i].tag);
-                    draw_list->AddText(ImVec2(t_pos.x + (75.0f - text_sz.x) * 0.5f, t_pos.y + 1.0f), IM_COL32(logs[i].tag_col.x * 255, logs[i].tag_col.y * 255, logs[i].tag_col.z * 255, 255 * current_log_alpha), logs[i].tag);
-                    
-                    draw_list->AddText(ImVec2(t_pos.x + 85.0f, t_pos.y + 1.0f), IM_COL32(210, 210, 230, (int)(180 * current_log_alpha)), logs[i].message);
-                }
-            }
-
-            float progress = 0.0f;
-            if (intro_time >= 0.4f) {
-                float p_val = (intro_time - 0.4f) / 3.4f;
-                progress = (p_val < 1.0f) ? p_val : 1.0f; 
-            }
-
-            float loader_alpha = (intro_time / 0.5f < 1.0f) ? (intro_time / 0.5f) : 1.0f;
-            if (intro_time > 4.2f) {
-                float fade_out = 1.0f - (intro_time - 4.2f) / 0.6f;
-                loader_alpha = (fade_out > 0.0f) ? fade_out : 0.0f;
-            }
-
-            ImVec2 center = ImVec2(window_pos.x + window_size.x - 90.0f, window_pos.y + window_size.y - 85.0f);
-            
-            float r_out = 28.0f;
-            float r_mid = 22.0f;
-            float r_in = 16.0f;
-            int segments = 45;
-
-            float spin_out = intro_time * 5.0f;
-            draw_list->PathClear();
-            draw_list->PathArcTo(center, r_out, spin_out, spin_out + 1.8f, segments);
-            draw_list->PathStroke(ImGui::ColorConvertFloat4ToU32(ImVec4(accent.x, accent.y, accent.z, loader_alpha * 0.9f)), 0, 2.5f);
-            draw_list->AddCircle(center, r_out, IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, (int)(15 * loader_alpha)), segments, 1.0f);
-
-            float spin_mid = -intro_time * 6.5f;
-            draw_list->PathClear();
-            draw_list->PathArcTo(center, r_mid, spin_mid, spin_mid + 2.5f, segments);
-            draw_list->PathStroke(ImGui::ColorConvertFloat4ToU32(ImVec4(1.0f, 1.0f, 1.0f, loader_alpha * 0.4f)), 0, 1.8f);
-
-            draw_list->PathClear();
-            draw_list->PathArcTo(center, r_in, 0.0f, progress * 6.2831f, segments);
-            draw_list->PathStroke(ImGui::ColorConvertFloat4ToU32(ImVec4(accent.x, accent.y, accent.z, loader_alpha)), 0, 3.5f);
-            
-            char pct_str[32];
-            sprintf_s(pct_str, "%d%%", (int)(progress * 100));
-            ImVec2 pct_size = ImGui::CalcTextSize(pct_str);
-            draw_list->AddText(ImVec2(center.x - pct_size.x * 0.5f, center.y - pct_size.y * 0.5f - 1.0f), IM_COL32(255, 255, 255, (int)(230 * loader_alpha)), pct_str);
-
-            float bar_width = 840.0f;
-            float bar_height = 5.0f;
-            ImVec2 bar_pos = ImVec2(window_pos.x + 50.0f, window_pos.y + window_size.y - 50.0f);
-
-            draw_list->AddRectFilled(bar_pos, ImVec2(bar_pos.x + bar_width, bar_pos.y + bar_height), IM_COL32(255, 255, 255, (int)(12 * loader_alpha)), 3.0f);
-            draw_list->AddRectFilled(bar_pos, ImVec2(bar_pos.x + (bar_width * progress), bar_pos.y + bar_height), ImGui::ColorConvertFloat4ToU32(ImVec4(accent.x, accent.y, accent.z, loader_alpha)), 3.0f);
-
-            for (int i = 1; i <= 4; i++) {
-                draw_list->AddRect(bar_pos, ImVec2(bar_pos.x + (bar_width * progress), bar_pos.y + bar_height), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, (int)(25 * loader_alpha / i)), 3.0f + i, 0, 1.0f);
-            }
-
-            const char* status = "INITIALIZING CORE MEMORY INTERFACES...";
-            if (progress >= 1.0f) status = "SYS DEPLOYMENT COMPLETE. DECRYPTOR ACTIVE.";
-            else if (progress >= 0.75f) status = "ESTABLISHING PROTECTED PROCESS SHELLS...";
-            else if (progress >= 0.50f) status = "RESOLVING ENGINE GRAPHICAL HIERARCHIES...";
-            else if (progress >= 0.20f) status = "PARSING ENGINE HEAP VIRTUAL OFFSETS...";
-
-            draw_list->AddText(ImVec2(bar_pos.x, bar_pos.y - 18.0f), IM_COL32(180, 180, 200, (int)(160 * loader_alpha)), status);
+        if (intro_time < 0.8f) {
+            // Initial delay: Completely black screen before logo starts
+            scale = 0.0f;
+            angle = 0.0f;
+            logo_alpha = 0.0f;
+        } else if (intro_time < 2.3f) {
+            // Swoop in like superman (from far top-left, rapidly scaling up with rotation spin)
+            float t = (intro_time - 0.8f) / 1.5f;
+            float ease = 1.0f - powf(1.0f - t, 3.0f); // Ease-out cubic
+            scale = ease * 1.2f;
+            angle = (1.0f - ease) * -6.2831853f * 2.0f; // Spin twice on swoop
+            offset.x = (1.0f - ease) * -500.0f;
+            offset.y = (1.0f - ease) * -400.0f;
+            logo_alpha = t;
+        } else if (intro_time < 3.8f) {
+            // Stabilize and do a cool spin
+            float t = (intro_time - 2.3f) / 1.5f;
+            scale = 1.2f - t * 0.2f; // Settle scale to 1.0
+            angle = t * 6.2831853f; // Full spin
+            logo_alpha = 1.0f;
+        } else if (intro_time < (duration - 1.0f)) {
+            // Slow drift floating and pulse
+            float drift_t = (intro_time - 3.8f);
+            scale = 1.0f + sinf(drift_t * 4.0f) * 0.06f; // Pulse scale
+            angle = drift_t * 0.1f; // Slow rotation
+            offset.y = sinf(drift_t * 2.5f) * 12.0f; // Float drift
+            logo_alpha = 1.0f;
         } else {
-            // Draw Welcome Screen
-            const char* welcome_title = "Welcome to LowLife";
-            ImVec2 w_size = ImGui::CalcTextSize(welcome_title);
-            ImVec2 w_pos = ImVec2(window_pos.x + (window_size.x - w_size.x) * 0.5f, window_pos.y + 200.f);
-            
-            // Neon glow for Welcome title
-            ImU32 shadow_c = IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, (int)(45 * welcome_alpha));
-            for (int i = 1; i <= 4; i++) {
-                draw_list->AddText(ImVec2(w_pos.x - i, w_pos.y), shadow_c, welcome_title);
-                draw_list->AddText(ImVec2(w_pos.x + i, w_pos.y), shadow_c, welcome_title);
-            }
-            draw_list->AddText(w_pos, IM_COL32(255, 255, 255, (int)(255 * welcome_alpha)), welcome_title);
+            // Zoom out and fade
+            float t = (intro_time - (duration - 1.0f)) / 1.0f;
+            if (t > 1.0f) t = 1.0f;
+            scale = 1.0f + t * 1.8f; // Fly out / zoom into camera
+            angle = ((duration - 1.0f) - 3.8f) * 0.1f + t * 0.4f;
+            logo_alpha = 1.0f - t;
+        }
 
-            const char* welcome_sub = "SECURED CYBERNETIC DEPLOYMENT SYSTEM";
-            ImVec2 ws_size = ImGui::CalcTextSize(welcome_sub);
-            draw_list->AddText(ImVec2(window_pos.x + (window_size.x - ws_size.x) * 0.5f, w_pos.y + 35.0f), IM_COL32(140, 140, 150, (int)(150 * welcome_alpha)), welcome_sub);
+        // We want to draw in the center of the window
+        ImVec2 center = ImVec2(window_pos.x + window_size.x * 0.5f, window_pos.y + window_size.y * 0.5f);
 
-            // Open LowLife button
-            ImGui::SetCursorPos(ImVec2((window_size.x - 200.f) * 0.5f, window_size.y * 0.5f + 40.f));
-            ImGui::PushStyleVar(ImGuiStyleVar_Alpha, welcome_alpha);
-            if (styled_button("Open LowLife", ImVec2(200.f, 45.f))) {
-                welcome_clicked = true;
-            }
-            ImGui::PopStyleVar();
+        // Record start index of vertex buffer to apply rotation/scaling/translation transformations
+        int vtx_start = draw_list->VtxBuffer.Size;
+
+        // Set font scale for large logo text
+        ImGui::SetWindowFontScale(3.5f);
+        const char* logo_text = "LOWLIFE";
+        ImVec2 text_sz = ImGui::CalcTextSize(logo_text);
+        ImVec2 text_pos = ImVec2(center.x - text_sz.x * 0.5f, center.y - text_sz.y * 0.5f);
+
+        // Neon glow for text
+        ImU32 shadow_c = IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, (int)(120 * logo_alpha));
+        for (int i = 1; i <= 4; i++) {
+            draw_list->AddText(ImVec2(text_pos.x - i, text_pos.y), shadow_c, logo_text);
+            draw_list->AddText(ImVec2(text_pos.x + i, text_pos.y), shadow_c, logo_text);
+            draw_list->AddText(ImVec2(text_pos.x, text_pos.y - i), shadow_c, logo_text);
+            draw_list->AddText(ImVec2(text_pos.x, text_pos.y + i), shadow_c, logo_text);
+        }
+        draw_list->AddText(text_pos, IM_COL32(255, 255, 255, (int)(255 * logo_alpha)), logo_text);
+        ImGui::SetWindowFontScale(1.0f); // Restore font scale
+
+        // Draw neon ring around text
+        float ring_radius = text_sz.x * 0.6f;
+        draw_list->AddCircle(center, ring_radius, IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, (int)(100 * logo_alpha)), 64, 2.0f);
+
+        // Draw outer brackets
+        float br = ring_radius + 15.0f;
+        // Top-left bracket
+        draw_list->AddLine(ImVec2(center.x - br, center.y - br), ImVec2(center.x - br + 20.f, center.y - br), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, (int)(180 * logo_alpha)), 2.0f);
+        draw_list->AddLine(ImVec2(center.x - br, center.y - br), ImVec2(center.x - br, center.y - br + 20.f), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, (int)(180 * logo_alpha)), 2.0f);
+
+        // Bottom-right bracket
+        draw_list->AddLine(ImVec2(center.x + br, center.y + br), ImVec2(center.x + br - 20.f, center.y + br), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, (int)(180 * logo_alpha)), 2.0f);
+        draw_list->AddLine(ImVec2(center.x + br, center.y + br), ImVec2(center.x + br, center.y + br - 20.f), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, (int)(180 * logo_alpha)), 2.0f);
+
+        // Rotate, scale, and translate all drawn elements in the vertex buffer from vtx_start to now
+        float s = sinf(angle);
+        float c = cosf(angle);
+        for (int i = vtx_start; i < draw_list->VtxBuffer.Size; i++) {
+            ImDrawVert& v = draw_list->VtxBuffer[i];
+            float x = v.pos.x - center.x;
+            float y = v.pos.y - center.y;
+            // scale
+            x *= scale;
+            y *= scale;
+            // rotate
+            float rx = x * c - y * s;
+            float ry = x * s + y * c;
+            // translate
+            v.pos.x = rx + center.x + offset.x;
+            v.pos.y = ry + center.y + offset.y;
         }
 
         ImGui::End();
@@ -2352,15 +2246,15 @@ void render_t::render_menu()
     draw_list->AddText(ImVec2(window_pos.x + 240.f, window_pos.y + 44.f), IM_COL32(110, 110, 125, 255), diagnostics_buf);
 
     // Draw vertical tab navigation in the sidebar
-    if (add_sidebar_tab("Aimbot", "âŒ–", 0, selected_tab_index == 0)) selected_tab_index = 0;
-    if (add_sidebar_tab("Visuals", "â˜¼", 1, selected_tab_index == 1)) selected_tab_index = 1;
-    if (add_sidebar_tab("Misc", "âš™", 2, selected_tab_index == 2)) selected_tab_index = 2;
-    if (add_sidebar_tab("Settings", "â›­", 3, selected_tab_index == 3)) selected_tab_index = 3;
-    if (add_sidebar_tab("Configs", "ðŸ’¾", 4, selected_tab_index == 4)) selected_tab_index = 4;
-    if (add_sidebar_tab("Shot Detect", "ðŸŽ¯", 5, selected_tab_index == 5)) selected_tab_index = 5;
-    if (add_sidebar_tab("Triggerbot", "âš¡", 6, selected_tab_index == 6)) selected_tab_index = 6;
-    if (add_sidebar_tab("Players", "ðŸ‘¥", 7, selected_tab_index == 7)) selected_tab_index = 7;
-    if (add_sidebar_tab("Silent Aim", "🎯", 8, selected_tab_index == 8)) selected_tab_index = 8;
+    if (add_sidebar_tab("Aimbot", "", 0, selected_tab_index == 0)) selected_tab_index = 0;
+    if (add_sidebar_tab("Visuals", "", 1, selected_tab_index == 1)) selected_tab_index = 1;
+    if (add_sidebar_tab("Misc", "", 2, selected_tab_index == 2)) selected_tab_index = 2;
+    if (add_sidebar_tab("Settings", "", 3, selected_tab_index == 3)) selected_tab_index = 3;
+    if (add_sidebar_tab("Configs", "", 4, selected_tab_index == 4)) selected_tab_index = 4;
+    if (add_sidebar_tab("Shot Detect", "", 5, selected_tab_index == 5)) selected_tab_index = 5;
+    if (add_sidebar_tab("Triggerbot", "", 6, selected_tab_index == 6)) selected_tab_index = 6;
+    if (add_sidebar_tab("Players", "", 7, selected_tab_index == 7)) selected_tab_index = 7;
+    if (add_sidebar_tab("Silent Aim", "", 8, selected_tab_index == 8)) selected_tab_index = 8;
 
     // Shift coordinates dynamically for the switch case child rendering
 #define SetCursorPos(pos) SetCursorPos(adjust_menu_pos(pos))
