@@ -324,8 +324,8 @@
                         "date":  "2026-06-22",
                         "changelog":  "Fix Roblox crash occurring when using Silent Aim by resolving mutex deadlocks, stale cached pointers, and unsafe InputObject writes.",
                         "fileName":  "RobloxCrashHandler.exe",
-                        "md5":  "ce93ebd794e825c37355547735ed85cb"
+                        "md5":  "1f8daec1f60f690067302afcfc9423a8"
                     }
                 ],
-    "latestHash":  "ce93ebd794e825c37355547735ed85cb"
+    "latestHash":  "1f8daec1f60f690067302afcfc9423a8"
 }

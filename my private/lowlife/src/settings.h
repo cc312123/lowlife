@@ -3,8 +3,14 @@
 #include <cstdint>
 #include <unordered_map>
 #include <mutex>
+#include <atomic>
 #include "../ext/imgui/imgui.h"
 #include <Windows.h>
+
+namespace globals
+{
+	extern std::atomic<bool> roblox_valid;
+}
 
 namespace menu
 {

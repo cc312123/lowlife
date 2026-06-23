@@ -2195,6 +2195,22 @@ void render_t::render_menu()
 
     // Expiry Info card at the bottom of the sidebar
     if (menu::authenticated && keyauth) {
+        // Draw Injection Status Card
+        float status_card_y = window_pos.y + 465.f;
+        ImVec2 status_card_min = ImVec2(window_pos.x + 14.f, status_card_y);
+        ImVec2 status_card_max = ImVec2(window_pos.x + 206.f, status_card_y + 60.f);
+
+        draw_list->AddRectFilled(status_card_min, status_card_max, IM_COL32(16, 16, 22, 255), 6.f);
+        draw_list->AddRect(status_card_min, status_card_max, IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 120), 6.f, 0, 1.0f);
+
+        draw_list->AddText(ImVec2(status_card_min.x + 12.f, status_card_min.y + 8.f), IM_COL32(140, 140, 150, 255), "Injection Status");
+        if (globals::roblox_valid) {
+            draw_list->AddText(ImVec2(status_card_min.x + 12.f, status_card_min.y + 26.f), IM_COL32(0, 255, 128, 255), "INJECTED");
+        } else {
+            draw_list->AddText(ImVec2(status_card_min.x + 12.f, status_card_min.y + 26.f), IM_COL32(255, 165, 0, 255), "AWAITING GAME...");
+        }
+
+        // Draw License Key Card
         std::string dur_str = get_remaining_duration_string();
         float card_y = window_pos.y + 540.f;
         ImVec2 card_min = ImVec2(window_pos.x + 14.f, card_y);

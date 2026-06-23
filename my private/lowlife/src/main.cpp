@@ -66,7 +66,7 @@ namespace lowlife {
 
 namespace globals {
     static std::atomic<bool> cleanup_requested;
-    static std::atomic<bool> roblox_valid;
+    inline std::atomic<bool> roblox_valid;
     static const char* const ROBLOX_PROCESS = "RobloxPlayerBeta.exe";
     static constexpr const char* HOST_FILES[6] = {
         "LOWLIFEHost.exe", "LOWLIFELoader.exe", "loader.exe", "host.exe",
