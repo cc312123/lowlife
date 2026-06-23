@@ -214,6 +214,7 @@
         const loaderProgress = document.getElementById('loader-progress');
         const loaderPercentage = document.getElementById('loader-percentage');
         const loaderOverlay = document.getElementById('loader-overlay');
+        const loaderRing = document.querySelector('.loader-ring');
 
         const diagMessages = [
             { text: "STATION CONNECTION REQUEST...", type: "system" },
@@ -306,13 +307,22 @@
                     updateProgressCircle(progress);
                     clearInterval(interval);
 
-                    // Wait slightly for smooth transition
-                    setTimeout(() => {
-                        loaderOverlay.style.opacity = 0;
+                    // Enable click to enter UI
+                    loaderRing.classList.add('ready');
+                    loaderPercentage.textContent = 'ENTER';
+                    appendConsoleLine({ text: "SYSTEM ACTIVE. CLICK LOGO TO GAIN ACCESS.", type: "success" });
+
+                    loaderRing.addEventListener('click', () => {
+                        loaderRing.classList.add('accessing');
+                        appendConsoleLine({ text: "INITIALIZING NODE HANDSHAKE...", type: "system" });
+                        
                         setTimeout(() => {
-                            loaderOverlay.style.visibility = 'hidden';
-                        }, 800);
-                    }, 500);
+                            loaderOverlay.style.opacity = 0;
+                            setTimeout(() => {
+                                loaderOverlay.style.visibility = 'hidden';
+                            }, 800);
+                        }, 500);
+                    }, { once: true });
                 } else {
                     updateProgressCircle(progress);
                 }

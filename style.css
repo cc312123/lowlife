@@ -182,6 +182,48 @@ body::before {
     transform: rotate(-90deg);
     width: 120px;
     height: 120px;
+    transform-origin: center;
+    animation: spinLogo 3s linear infinite;
+}
+
+.loader-ring.ready {
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.loader-ring.ready:hover {
+    transform: scale(1.08);
+}
+
+.loader-ring.ready:active {
+    transform: scale(0.95);
+}
+
+.loader-ring.ready .loader-ring-svg {
+    animation: ringPulse 2s infinite ease-in-out;
+}
+
+.loader-ring.accessing {
+    pointer-events: none;
+    transform: scale(0.9);
+    filter: brightness(1.5);
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+@keyframes spinLogo {
+    0% { transform: rotate(-90deg); }
+    100% { transform: rotate(270deg); }
+}
+
+@keyframes ringPulse {
+    0%, 100% { 
+        filter: drop-shadow(0 0 5px rgba(0, 242, 254, 0.3)) drop-shadow(0 0 10px rgba(99, 102, 241, 0.2));
+        transform: rotate(-90deg) scale(1);
+    }
+    50% { 
+        filter: drop-shadow(0 0 20px rgba(0, 242, 254, 0.7)) drop-shadow(0 0 30px rgba(99, 102, 241, 0.5));
+        transform: rotate(-90deg) scale(1.02);
+    }
 }
 
 .loader-ring-bg {
