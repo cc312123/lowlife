@@ -316,6 +316,9 @@
                         loaderRing.classList.add('accessing');
                         appendConsoleLine({ text: "INITIALIZING NODE HANDSHAKE...", type: "system" });
                         
+                        // Trigger dashboard reveal animation
+                        document.querySelector('.container').classList.add('revealed');
+                        
                         setTimeout(() => {
                             loaderOverlay.style.opacity = 0;
                             setTimeout(() => {
