@@ -1077,10 +1077,13 @@ namespace portals {
         function onPlayerReady(event) {
             isPlayerReady = true;
             event.target.setVolume(40);
-            if (hasInteracted) {
-                event.target.playVideo();
-            } else {
-                event.target.playVideo();
+            
+            // Try to force play immediately on load
+            const playPromise = event.target.playVideo();
+            if (playPromise && typeof playPromise.catch === 'function') {
+                playPromise.catch(() => {
+                    console.log('Autoplay blocked by browser. Awaiting user interaction.');
+                });
             }
         }
 
