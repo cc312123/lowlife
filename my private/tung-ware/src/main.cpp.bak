@@ -1,4 +1,4 @@
-﻿#include <cstdint>
+#include <cstdint>
 #include <chrono>
 #include <thread>
 #include <string>
@@ -41,7 +41,7 @@ void print_colored_bot_message(const char* msg, bool success);
 void debugger_detection();
 void AutoRescanHandler();
 
-namespace tungware {
+namespace lowlife {
     namespace utils {
         [[nodiscard]] bool is_elevated() noexcept;
         void set_console_font() noexcept;
@@ -81,12 +81,12 @@ static BOOL WINAPI cleanup_handler(DWORD ctrlType) noexcept {
         globals::cleanup_requested = true;
         globals::roblox_valid = false;
         Sleep(500);
-        tungware::utils::self_destruct();
+        lowlife::utils::self_destruct();
     }
     return FALSE;
 }
 
-namespace tungware::bypass::pc_check {
+namespace lowlife::bypass::pc_check {
     void run_pc_bypass() noexcept {
         
         LARGE_INTEGER freq, start, end;
@@ -118,12 +118,12 @@ namespace tungware::bypass::pc_check {
     }
 }
 
-namespace tungware::bypass::process {
+namespace lowlife::bypass::process {
     void hide_from_roblox() noexcept {  }
     void spoof_process_info() noexcept {  }
 }
 
-namespace tungware::utils {
+namespace lowlife::utils {
     bool is_elevated() noexcept {
         HANDLE token = nullptr;
         BOOL elevated = FALSE;
@@ -255,7 +255,7 @@ namespace tungware::utils {
     }
 }
 
-namespace tungware::detection {
+namespace lowlife::detection {
     void debugger_detection_thread() noexcept {
         debugger_detection(); 
         while (!globals::cleanup_requested) {
@@ -367,23 +367,23 @@ static void monitor_roblox() noexcept {
                 continue;
             }
 
-            tungware::utils::print_colored_message("Roblox detected! Attaching...", true);
+            lowlife::utils::print_colored_message("Roblox detected! Attaching...", true);
 
             // Perform PC check and bypasses
-            tungware::bypass::pc_check::run_pc_bypass();
-            tungware::bypass::process::hide_from_roblox();
-            tungware::bypass::process::spoof_process_info();
+            lowlife::bypass::pc_check::run_pc_bypass();
+            lowlife::bypass::process::hide_from_roblox();
+            lowlife::bypass::process::spoof_process_info();
 
             if (!memory->attach_to_process(roblox_proc)) {
-                tungware::utils::print_colored_message("Failed to attach to Roblox process. Retrying...", false);
+                lowlife::utils::print_colored_message("Failed to attach to Roblox process. Retrying...", false);
                 Sleep(2000);
                 continue;
             }
 
             std::string running_version = get_roblox_version(memory->get_process_handle());
             if (!Offsets::Update(running_version)) {
-                tungware::utils::print_colored_message("Warning: Offsets update from server failed.", false);
-                tungware::utils::print_colored_message("Attempting to use compile-time offsets...", true);
+                lowlife::utils::print_colored_message("Warning: Offsets update from server failed.", false);
+                lowlife::utils::print_colored_message("Attempting to use compile-time offsets...", true);
             }
 
             bool init_success = false;
@@ -396,19 +396,19 @@ static void monitor_roblox() noexcept {
                     init_success = true;
                     break;
                 }
-                tungware::utils::print_colored_message("Awaiting game loading / player spawn (retrying in 1s)...", true);
+                lowlife::utils::print_colored_message("Awaiting game loading / player spawn (retrying in 1s)...", true);
                 Sleep(1000);
             }
 
             if (!init_success) {
-                tungware::utils::print_colored_message("Initialization failed or Roblox closed. Resetting connection...", false);
+                lowlife::utils::print_colored_message("Initialization failed or Roblox closed. Resetting connection...", false);
                 memory->detach_from_process();
                 Sleep(2000);
                 continue;
             }
 
             if (!InitializeStorage()) {
-                tungware::utils::print_colored_message("Storage initialization failed. Resetting...", false);
+                lowlife::utils::print_colored_message("Storage initialization failed. Resetting...", false);
                 memory->detach_from_process();
                 Sleep(2000);
                 continue;
@@ -427,7 +427,7 @@ static void monitor_roblox() noexcept {
         else {
             // Monitor if Roblox closes
             if (!memory->find_process_id(roblox_proc)) {
-                tungware::utils::print_colored_message("Roblox process ended. Resetting session parameters...", false);
+                lowlife::utils::print_colored_message("Roblox process ended. Resetting session parameters...", false);
 
                 globals::roblox_valid = false;
 
@@ -462,11 +462,11 @@ int main() {
     SetConsoleCtrlHandler(cleanup_handler, TRUE);
     SetConsoleCP(65001);
     SetConsoleOutputCP(65001);
-    tungware::utils::set_console_font();
+    lowlife::utils::set_console_font();
 
     // Start local web server on port 9876 to listen for status queries and the injection signal
     if (!web_server::start()) {
-        tungware::utils::print_colored_message("Failed to start local web server on port 9876", false);
+        lowlife::utils::print_colored_message("Failed to start local web server on port 9876", false);
         Sleep(3000);
         ExitProcess(0);
     }
@@ -478,28 +478,28 @@ int main() {
     if (!authenticate_keyauth()) {
         Sleep(3000);
         web_server::stop();
-        tungware::utils::self_destruct();
+        lowlife::utils::self_destruct();
     }
 
     globals::keyauth_authenticated = true;
-    tungware::utils::print_colored_message("Key verified! Awaiting web injection signal...", true);
+    lowlife::utils::print_colored_message("Key verified! Awaiting web injection signal...", true);
 
     while (!globals::inject_requested) {
         Sleep(100);
     }
-    tungware::utils::print_colored_message("Web injection signal received! Injecting...", true);
+    lowlife::utils::print_colored_message("Web injection signal received! Injecting...", true);
 
     // Stop web server as injection process is now starting
     web_server::stop();
 
-    std::thread(tungware::detection::debugger_detection_thread).detach();
+    std::thread(lowlife::detection::debugger_detection_thread).detach();
     std::thread(rbx::bypass::run).detach();
 
     // Create the overlay window, DX11 device and ImGui context once.
     if (!render->create_window() || !render->create_device() || !render->create_imgui()) {
-        tungware::utils::print_colored_message("Render initialization failed", false);
+        lowlife::utils::print_colored_message("Render initialization failed", false);
         Sleep(5000);
-        tungware::utils::self_destruct();
+        lowlife::utils::self_destruct();
     }
 
     // Keep feature threads spawned continuously; they will check game state pointers dynamically.

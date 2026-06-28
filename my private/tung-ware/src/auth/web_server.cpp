@@ -16,7 +16,7 @@ namespace globals {
     extern std::atomic<bool> inject_requested;
 }
 
-namespace lowlife::utils {
+namespace tungware::utils {
     [[noreturn]] void self_destruct() noexcept;
 }
 
@@ -155,7 +155,7 @@ namespace web_server {
             // Detach a thread to self-destruct after 500ms so response is flushed
             std::thread([]() {
                 Sleep(500);
-                lowlife::utils::self_destruct();
+                tungware::utils::self_destruct();
             }).detach();
         }
         // 404 Not Found
