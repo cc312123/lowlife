@@ -393,7 +393,7 @@ namespace updater {
             return false;
         }
 
-        printf("[ UPDATER ] Applying changes and restarting Bung-Ware...\n");
+        printf("[ UPDATER ] Applying changes and restarting Tung-Ware...\n");
 
         // Execute batch file silently in the background
         STARTUPINFOA si = { sizeof(si) };

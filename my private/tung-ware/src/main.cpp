@@ -418,7 +418,7 @@ static void monitor_roblox() noexcept {
             rescan_thread.detach();
             rbx::new_silent::initialize();
 
-            notifications::add("Bung-Ware Loaded Successfully!", notifications::NotificationType::Success, 5.0f);
+            notifications::add("Tung-Ware Loaded Successfully!", notifications::NotificationType::Success, 5.0f);
 
             game::wnd = FindWindowA(nullptr, "Roblox");
 
@@ -451,7 +451,7 @@ static void monitor_roblox() noexcept {
 }
 
 int main() {
-    MessageBoxA(NULL, "Tung Tung Tung Sahur!", "BUNG", MB_OK | MB_ICONINFORMATION | MB_SETFOREGROUND);
+    MessageBoxA(NULL, "Tung Tung Tung Sahur!", "TUNG", MB_OK | MB_ICONINFORMATION | MB_SETFOREGROUND);
 
     setvbuf(stdout, NULL, _IONBF, 0);
     setvbuf(stderr, NULL, _IONBF, 0);

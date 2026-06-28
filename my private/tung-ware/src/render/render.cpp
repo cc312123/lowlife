@@ -1717,6 +1717,60 @@ static std::string get_remaining_duration_string() {
     }
 }
 
+static void draw_mascot(ImDrawList* draw_list, ImVec2 pos, float size, bool active)
+{
+    ImVec2 center = ImVec2(pos.x + size * 0.5f, pos.y + size * 0.45f);
+    
+    // Scale factor relative to a base size of 60.0f
+    float scale = size / 60.0f;
+    
+    // Theme colors for body:
+    ImU32 body_color = active ? IM_COL32(234, 88, 12, 255) : IM_COL32(180, 83, 9, 255); // Orange/Amber
+    ImU32 stroke_color = IM_COL32(69, 26, 3, 255); // Dark brown outline
+    ImU32 limb_color = IM_COL32(120, 53, 15, 255);
+    ImU32 bat_color = active ? IM_COL32(251, 146, 60, 255) : IM_COL32(245, 158, 11, 255); // Gold / Glowing peach
+    
+    // Draw legs
+    // Left leg
+    draw_list->AddLine(ImVec2(center.x - 6 * scale, center.y + 15 * scale), ImVec2(center.x - 10 * scale, center.y + 25 * scale), limb_color, 2.5f * scale);
+    draw_list->AddLine(ImVec2(center.x - 10 * scale, center.y + 25 * scale), ImVec2(center.x - 14 * scale, center.y + 25 * scale), limb_color, 2.5f * scale);
+    // Right leg
+    draw_list->AddLine(ImVec2(center.x + 6 * scale, center.y + 15 * scale), ImVec2(center.x + 10 * scale, center.y + 25 * scale), limb_color, 2.5f * scale);
+    draw_list->AddLine(ImVec2(center.x + 10 * scale, center.y + 25 * scale), ImVec2(center.x + 14 * scale, center.y + 25 * scale), limb_color, 2.5f * scale);
+    
+    // Draw arms
+    // Left arm holding stick
+    draw_list->AddLine(ImVec2(center.x - 10 * scale, center.y), ImVec2(center.x - 18 * scale, center.y + 5 * scale), limb_color, 2.5f * scale);
+    // Right arm
+    draw_list->AddLine(ImVec2(center.x + 10 * scale, center.y), ImVec2(center.x + 18 * scale, center.y + 5 * scale), limb_color, 2.5f * scale);
+    
+    // Draw stick (bat) in left hand
+    ImVec2 bat_start = ImVec2(center.x - 18 * scale, center.y + 5 * scale);
+    ImVec2 bat_end = ImVec2(center.x - 22 * scale, center.y - 8 * scale);
+    draw_list->AddLine(bat_start, bat_end, bat_color, 3.5f * scale);
+    
+    // Draw capsule body
+    ImVec2 body_min = ImVec2(center.x - 9 * scale, center.y - 18 * scale);
+    ImVec2 body_max = ImVec2(center.x + 9 * scale, center.y + 16 * scale);
+    draw_list->AddRectFilled(body_min, body_max, body_color, 9.0f * scale);
+    draw_list->AddRect(body_min, body_max, stroke_color, 9.0f * scale, 0, 1.5f * scale);
+    
+    // Draw eyes
+    ImVec2 left_eye = ImVec2(center.x - 4 * scale, center.y - 8 * scale);
+    ImVec2 right_eye = ImVec2(center.x + 4 * scale, center.y - 8 * scale);
+    draw_list->AddCircleFilled(left_eye, 2.5f * scale, IM_COL32_WHITE);
+    draw_list->AddCircle(left_eye, 2.5f * scale, stroke_color, 0, 0.8f * scale);
+    draw_list->AddCircleFilled(left_eye, 1.0f * scale, IM_COL32_BLACK); // Pupil
+    
+    draw_list->AddCircleFilled(right_eye, 2.5f * scale, IM_COL32_WHITE);
+    draw_list->AddCircle(right_eye, 2.5f * scale, stroke_color, 0, 0.8f * scale);
+    draw_list->AddCircleFilled(right_eye, 1.0f * scale, IM_COL32_BLACK); // Pupil
+    
+    // Draw smile
+    draw_list->AddLine(ImVec2(center.x - 3 * scale, center.y + 2 * scale), ImVec2(center.x, center.y + 4 * scale), stroke_color, 1.2f * scale);
+    draw_list->AddLine(ImVec2(center.x, center.y + 4 * scale), ImVec2(center.x + 3 * scale, center.y + 2 * scale), stroke_color, 1.2f * scale);
+}
+
 void render_t::render_menu()
 {
     // Helper functions for sliders with typing input
@@ -1845,38 +1899,67 @@ void render_t::render_menu()
     foreground_dl->Flags &= ImDrawListFlags_AntiAliasedLines;
     draw_list->Flags &= ImDrawListFlags_AntiAliasedLines;
 
-    // Dynamically animate accent color shifting between cyan and indigo to match the web portal
-    static float color_time = 0.0f;
-    color_time += ImGui::GetIO().DeltaTime * 0.4f; // Smooth color shift speed
-    float blend = 0.5f + 0.5f * sinf(color_time * 3.14159f * 2.0f);
-    
-    // Cyberpunk Cyan (0, 242, 254) to Cyberpunk Indigo (99, 102, 241)
-    ImVec4 accent = ImVec4(
-        (0.0f * (1.0f - blend) + 99.0f * blend) / 255.0f,
-        (242.0f * (1.0f - blend) + 102.0f * blend) / 255.0f,
-        (254.0f * (1.0f - blend) + 241.0f * blend) / 255.0f,
-        1.0f
-    );
+    // Mocha Theme & Sahur Theme configuration
+    ImVec4 accent;
+    ImU32 window_bg_col;
+    ImU32 sidebar_bg_col;
+    ImU32 pill_bg_col;
+    ImU32 card_bg_col;
+    ImU32 border_col;
+
+    if (!menu::sahur_theme_active) {
+        // Mocha Theme
+        accent = ImVec4(250.f / 255.f, 179.f / 255.f, 135.f / 255.f, 1.0f); // Catppuccin Peach (#fab387)
+        window_bg_col = IM_COL32(30, 30, 46, 245); // Base (#1e1e2e)
+        sidebar_bg_col = IM_COL32(24, 24, 37, 255); // Mantle (#181825)
+        pill_bg_col = IM_COL32(49, 50, 68, 255); // Surface0 (#313244)
+        card_bg_col = IM_COL32(17, 17, 27, 255); // Crust (#11111b)
+        border_col = IM_COL32(49, 50, 68, 180);
+    } else {
+        // Sahur Night Theme
+        accent = ImVec4(234.f / 255.f, 88.f / 255.f, 12.f / 255.f, 1.0f); // Glowing Amber Orange (#ea580c)
+        window_bg_col = IM_COL32(21, 13, 10, 245); // Deep Espresso
+        sidebar_bg_col = IM_COL32(36, 23, 18, 255); // Night Surface
+        pill_bg_col = IM_COL32(64, 36, 22, 255); // Roasted coffee
+        card_bg_col = IM_COL32(27, 17, 11, 255); // Deep Charcoal Coffee
+        border_col = IM_COL32(234, 88, 12, 160);
+    }
     menu::accent_color = accent;
 
     // Dynamically update active colors in ImGui style
     ImGuiStyle& style = ImGui::GetStyle();
+    
+    // Set Mocha/Sahur Text and general colors
+    style.Colors[ImGuiCol_Text] = ImVec4(205.f/255.f, 214.f/255.f, 244.f/255.f, 1.0f); // Text (#cdd6f4)
+    style.Colors[ImGuiCol_TextDisabled] = ImVec4(108.f/255.f, 112.f/255.f, 134.f/255.f, 1.0f); // Overlay0 (#6c7086)
+    style.Colors[ImGuiCol_WindowBg] = ImGui::ColorConvertU32ToFloat4(window_bg_col);
+    style.Colors[ImGuiCol_ChildBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+    style.Colors[ImGuiCol_PopupBg] = ImVec4(24.f/255.f, 24.f/255.f, 37.f/255.f, 0.95f); // Mantle (#181825)
+    style.Colors[ImGuiCol_Border] = ImGui::ColorConvertU32ToFloat4(border_col);
+    style.Colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+    
+    style.Colors[ImGuiCol_FrameBg] = ImVec4(17.f/255.f, 17.f/255.f, 27.f/255.f, 0.5f); // Crust (#11111b)
+    style.Colors[ImGuiCol_FrameBgHovered] = ImVec4(49.f/255.f, 50.f/255.f, 68.f/255.f, 0.5f); // Surface0 (#313244)
+    style.Colors[ImGuiCol_FrameBgActive] = ImVec4(69.f/255.f, 71.f/255.f, 90.f/255.f, 0.5f); // Surface1 (#45475a)
+    
+    style.Colors[ImGuiCol_TitleBg] = ImVec4(24.f/255.f, 24.f/255.f, 37.f/255.f, 1.0f);
+    style.Colors[ImGuiCol_TitleBgActive] = ImVec4(24.f/255.f, 24.f/255.f, 37.f/255.f, 1.0f);
+    
     style.Colors[ImGuiCol_CheckMark] = accent;
     style.Colors[ImGuiCol_SliderGrab] = accent;
     style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(accent.x * 1.1f, accent.y * 1.1f, accent.z * 1.1f, 1.0f);
-    style.Colors[ImGuiCol_ButtonActive] = accent;
-    style.Colors[ImGuiCol_HeaderActive] = accent;
-    style.Colors[ImGuiCol_ButtonHovered] = ImVec4(accent.x * 0.5f, accent.y * 0.5f, accent.z * 0.5f, 0.600f);
-    style.Colors[ImGuiCol_Header] = ImVec4(accent.x * 0.3f, accent.y * 0.3f, accent.z * 0.3f, 0.40f);
-    style.Colors[ImGuiCol_HeaderHovered] = ImVec4(accent.x * 0.4f, accent.y * 0.4f, accent.z * 0.4f, 0.60f);
-    style.Colors[ImGuiCol_Border] = ImVec4(accent.x * 0.75f, accent.y * 0.75f, accent.z * 0.75f, 0.45f);
-    style.Colors[ImGuiCol_Separator] = ImVec4(accent.x * 0.60f, accent.y * 0.60f, accent.z * 0.60f, 0.35f);
     
-    // Completely remove grey backgrounds from checkboxes, sliders, combos, and child panels
-    style.Colors[ImGuiCol_ChildBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-    style.Colors[ImGuiCol_FrameBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-    style.Colors[ImGuiCol_FrameBgHovered] = ImVec4(accent.x * 0.3f, accent.y * 0.3f, accent.z * 0.3f, 0.15f);
-    style.Colors[ImGuiCol_FrameBgActive] = ImVec4(accent.x * 0.4f, accent.y * 0.4f, accent.z * 0.4f, 0.25f);
+    style.Colors[ImGuiCol_Button] = ImVec4(49.f/255.f, 50.f/255.f, 68.f/255.f, 0.8f); // Surface0 (#313244)
+    style.Colors[ImGuiCol_ButtonHovered] = ImVec4(accent.x, accent.y, accent.z, 0.35f);
+    style.Colors[ImGuiCol_ButtonActive] = accent;
+    
+    style.Colors[ImGuiCol_Header] = ImVec4(49.f/255.f, 50.f/255.f, 68.f/255.f, 0.4f);
+    style.Colors[ImGuiCol_HeaderHovered] = ImVec4(accent.x, accent.y, accent.z, 0.3f);
+    style.Colors[ImGuiCol_HeaderActive] = accent;
+    
+    style.Colors[ImGuiCol_Separator] = ImVec4(49.f/255.f, 50.f/255.f, 68.f/255.f, 0.8f);
+    style.Colors[ImGuiCol_SeparatorHovered] = accent;
+    style.Colors[ImGuiCol_SeparatorActive] = accent;
 
     
     static float intro_time = 0.0f;
@@ -1906,7 +1989,7 @@ void render_t::render_menu()
     // Fill background
     draw_list->PathClear();
     for (int i = 0; i < 8; i++) draw_list->PathLineTo(pts[i]);
-    draw_list->PathFillConvex(IM_COL32(8, 10, 18, 240));
+    draw_list->PathFillConvex(window_bg_col);
 
     // Outer glow layers
     for (int j = 1; j <= 4; j++) {
@@ -2132,15 +2215,19 @@ void render_t::render_menu()
         // Record start index of vertex buffer to apply rotation/scaling/translation transformations
         int vtx_start = draw_list->VtxBuffer.Size;
 
-        // Set font scale for large logo text
-        ImGui::SetWindowFontScale(3.5f);
-        const char* logo_text = "TUNG-WARE";
+        // Draw mascot inside ring
+        ImVec2 mascot_center_pos = ImVec2(center.x - 70.0f, center.y - 95.0f);
+        draw_mascot(draw_list, mascot_center_pos, 140.0f, menu::sahur_theme_active);
+
+        // Draw text "TUNG SAHUR" below mascot
+        ImGui::SetWindowFontScale(2.8f);
+        const char* logo_text = "TUNG SAHUR";
         ImVec2 text_sz = ImGui::CalcTextSize(logo_text);
-        ImVec2 text_pos = ImVec2(center.x - text_sz.x * 0.5f, center.y - text_sz.y * 0.5f);
+        ImVec2 text_pos = ImVec2(center.x - text_sz.x * 0.5f, center.y + 45.0f);
 
         // Neon glow for text
         ImU32 shadow_c = IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, (int)(120 * logo_alpha));
-        for (int i = 1; i <= 4; i++) {
+        for (int i = 1; i <= 3; i++) {
             draw_list->AddText(ImVec2(text_pos.x - i, text_pos.y), shadow_c, logo_text);
             draw_list->AddText(ImVec2(text_pos.x + i, text_pos.y), shadow_c, logo_text);
             draw_list->AddText(ImVec2(text_pos.x, text_pos.y - i), shadow_c, logo_text);
@@ -2188,9 +2275,9 @@ void render_t::render_menu()
 
     // DRAW REDESIGNED SIDEBAR
     // Background
-    draw_list->AddRectFilled(ImVec2(window_pos.x + 4.f, window_pos.y + 4.f), ImVec2(window_pos.x + 220.f, window_pos.y + window_size.y - 4.f), IM_COL32(11, 11, 15, 255), 8.0f, ImDrawFlags_RoundCornersLeft);
+    draw_list->AddRectFilled(ImVec2(window_pos.x + 4.f, window_pos.y + 4.f), ImVec2(window_pos.x + 220.f, window_pos.y + window_size.y - 4.f), sidebar_bg_col, 8.0f, ImDrawFlags_RoundCornersLeft);
     // Vertical separator
-    draw_list->AddLine(ImVec2(window_pos.x + 220.f, window_pos.y + 4.f), ImVec2(window_pos.x + 220.f, window_pos.y + window_size.y - 4.f), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 90), 1.0f);
+    draw_list->AddLine(ImVec2(window_pos.x + 220.f, window_pos.y + 4.f), ImVec2(window_pos.x + 220.f, window_pos.y + window_size.y - 4.f), border_col, 1.0f);
 
     // Dynamic Sliding Tab Selector Pill
     static float sliding_tab_y = 0.0f;
@@ -2203,34 +2290,51 @@ void render_t::render_menu()
     
     ImVec2 pill_min = ImVec2(window_pos.x + 14.f, sliding_tab_y);
     ImVec2 pill_max = ImVec2(window_pos.x + 206.f, sliding_tab_y + 36.f);
-    draw_list->AddRectFilled(pill_min, pill_max, IM_COL32(28, 28, 36, 255), 8.f);
+    draw_list->AddRectFilled(pill_min, pill_max, pill_bg_col, 8.f);
     draw_list->AddRectFilled(ImVec2(pill_min.x, pill_min.y + 4.f), ImVec2(pill_min.x + 3.f, pill_max.y - 4.f), ImGui::ColorConvertFloat4ToU32(menu::accent_color), 0.f);
-    draw_list->AddRect(pill_min, pill_max, IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 30), 8.f, 0, 1.0f);
+    draw_list->AddRect(pill_min, pill_max, border_col, 8.f, 0, 1.0f);
 
-    // Sidebar Header: brand logo
-    const char* logo_t1 = "tung";
-    const char* logo_t2 = "ware";
-    ImVec2 size1 = ImGui::CalcTextSize(logo_t1);
-    ImVec2 size2 = ImGui::CalcTextSize(logo_t2);
-    ImVec2 lpos = ImVec2(window_pos.x + 30.f, window_pos.y + 25.f);
-
-    // Outline / shadow for logo text
-    ImU32 shadow_col = IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 45);
-    for (int i = 1; i <= 3; i++) {
-        draw_list->AddText(ImVec2(lpos.x - i, lpos.y), shadow_col, logo_t1);
-        draw_list->AddText(ImVec2(lpos.x + size1.x - i, lpos.y), shadow_col, logo_t2);
-        draw_list->AddText(ImVec2(lpos.x + i, lpos.y), shadow_col, logo_t1);
-        draw_list->AddText(ImVec2(lpos.x + size1.x + i, lpos.y), shadow_col, logo_t2);
+    // Sidebar Header: brand mascot & title
+    ImVec2 mascot_pos = ImVec2(window_pos.x + 20.f, window_pos.y + 15.f);
+    float mascot_size = 44.f;
+    
+    // Draw mascot
+    draw_mascot(draw_list, mascot_pos, mascot_size, menu::sahur_theme_active);
+    
+    // Mouse hover and click detection on mascot to toggle theme
+    ImVec2 mouse_pos = ImGui::GetIO().MousePos;
+    bool mascot_hovered = (mouse_pos.x >= mascot_pos.x && mouse_pos.x <= mascot_pos.x + mascot_size &&
+                           mouse_pos.y >= mascot_pos.y && mouse_pos.y <= mascot_pos.y + mascot_size);
+    if (mascot_hovered && ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows)) {
+        ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+        if (ImGui::IsMouseClicked(0)) {
+            menu::sahur_theme_active = !menu::sahur_theme_active;
+            notifications::add(menu::sahur_theme_active ? "Sahur Mode Activated! Sahur Sahur!" : "Mocha Theme Activated!", notifications::NotificationType::Success, 3.0f);
+        }
     }
-    draw_list->AddText(lpos, IM_COL32(255, 255, 255, 255), logo_t1);
-    draw_list->AddText(ImVec2(lpos.x + size1.x, lpos.y), ImGui::ColorConvertFloat4ToU32(menu::accent_color), logo_t2);
+    
+    // Brand title text next to mascot
+    const char* logo_text1 = "tung";
+    const char* logo_text2 = " sahur";
+    ImVec2 lpos = ImVec2(window_pos.x + 72.f, window_pos.y + 22.f);
+    
+    ImVec2 size1 = ImGui::CalcTextSize(logo_text1);
+    ImU32 shadow_col = IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 45);
+    for (int i = 1; i <= 2; i++) {
+        draw_list->AddText(ImVec2(lpos.x - i, lpos.y), shadow_col, logo_text1);
+        draw_list->AddText(ImVec2(lpos.x + size1.x - i, lpos.y), shadow_col, logo_text2);
+        draw_list->AddText(ImVec2(lpos.x + i, lpos.y), shadow_col, logo_text1);
+        draw_list->AddText(ImVec2(lpos.x + size1.x + i, lpos.y), shadow_col, logo_text2);
+    }
+    draw_list->AddText(lpos, IM_COL32(255, 255, 255, 255), logo_text1);
+    draw_list->AddText(ImVec2(lpos.x + size1.x, lpos.y), ImGui::ColorConvertFloat4ToU32(menu::accent_color), logo_text2);
 
-    // Subtitle / tag
+    // Subtitle / tag next to mascot
     const char* sub = "SECURED ENGINE";
-    draw_list->AddText(ImVec2(window_pos.x + 30.f, window_pos.y + 48.f), IM_COL32(110, 110, 125, 255), sub);
+    draw_list->AddText(ImVec2(window_pos.x + 72.f, window_pos.y + 42.f), IM_COL32(140, 140, 150, 255), sub);
 
     // Horizontal logo divider
-    draw_list->AddLine(ImVec2(window_pos.x + 15.f, window_pos.y + 70.f), ImVec2(window_pos.x + 205.f, window_pos.y + 70.f), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 60), 1.0f);
+    draw_list->AddLine(ImVec2(window_pos.x + 15.f, window_pos.y + 70.f), ImVec2(window_pos.x + 205.f, window_pos.y + 70.f), border_col, 1.0f);
 
     // Expiry Info card at the bottom of the sidebar
     if (menu::authenticated && keyauth) {
@@ -2239,8 +2343,8 @@ void render_t::render_menu()
         ImVec2 status_card_min = ImVec2(window_pos.x + 14.f, status_card_y);
         ImVec2 status_card_max = ImVec2(window_pos.x + 206.f, status_card_y + 60.f);
 
-        draw_list->AddRectFilled(status_card_min, status_card_max, IM_COL32(16, 16, 22, 255), 6.f);
-        draw_list->AddRect(status_card_min, status_card_max, IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 120), 6.f, 0, 1.0f);
+        draw_list->AddRectFilled(status_card_min, status_card_max, card_bg_col, 6.f);
+        draw_list->AddRect(status_card_min, status_card_max, border_col, 6.f, 0, 1.0f);
 
         draw_list->AddText(ImVec2(status_card_min.x + 12.f, status_card_min.y + 8.f), IM_COL32(140, 140, 150, 255), "Injection Status");
         if (globals::roblox_valid) {
@@ -2255,8 +2359,8 @@ void render_t::render_menu()
         ImVec2 card_min = ImVec2(window_pos.x + 14.f, card_y);
         ImVec2 card_max = ImVec2(window_pos.x + 206.f, card_y + 64.f);
 
-        draw_list->AddRectFilled(card_min, card_max, IM_COL32(16, 16, 22, 255), 6.f);
-        draw_list->AddRect(card_min, card_max, IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 120), 6.f, 0, 1.0f);
+        draw_list->AddRectFilled(card_min, card_max, card_bg_col, 6.f);
+        draw_list->AddRect(card_min, card_max, border_col, 6.f, 0, 1.0f);
 
         draw_list->AddText(ImVec2(card_min.x + 12.f, card_min.y + 10.f), IM_COL32(140, 140, 150, 255), "License Key Status");
         draw_list->AddText(ImVec2(card_min.x + 12.f, card_min.y + 28.f), ImGui::ColorConvertFloat4ToU32(menu::accent_color), dur_str.c_str());
@@ -2276,8 +2380,8 @@ void render_t::render_menu()
     }
 
     // DRAW CONTENT PANE BACKGROUND ON THE RIGHT
-    draw_list->AddRectFilled(ImVec2(window_pos.x + 226.f, window_pos.y + 71.f), ImVec2(window_pos.x + window_size.x - 14.f, window_pos.y + window_size.y - 14.f), IM_COL32(18, 18, 22, 130), 6.0f);
-    draw_list->AddRect(ImVec2(window_pos.x + 226.f, window_pos.y + 71.f), ImVec2(window_pos.x + window_size.x - 14.f, window_pos.y + window_size.y - 14.f), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 115), 6.0f);
+    draw_list->AddRectFilled(ImVec2(window_pos.x + 226.f, window_pos.y + 71.f), ImVec2(window_pos.x + window_size.x - 14.f, window_pos.y + window_size.y - 14.f), card_bg_col, 6.0f);
+    draw_list->AddRect(ImVec2(window_pos.x + 226.f, window_pos.y + 71.f), ImVec2(window_pos.x + window_size.x - 14.f, window_pos.y + window_size.y - 14.f), border_col, 6.0f);
 
     // DRAW TOP HEADER ON THE RIGHT
     const char* active_tab_name = "AIMBOT";
@@ -3078,12 +3182,6 @@ void render_t::render_menu()
 
             ImGui::TextColored(menu::accent_color, "LOADER CONTROL");
             ImGui::Separator();
-            ImGui::Spacing();
-
-            ImGui::Text("Accent");
-            ImGui::SameLine();
-            ImGui::ColorEdit4("Accent", (float*)&menu::accent_color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_AlphaBar);
-
             ImGui::Spacing();
 
             if (styled_button("Rescan Game Pointers", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, 30.f)))

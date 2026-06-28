@@ -8,7 +8,7 @@ namespace portals {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bung-Ware Web Injector - Sahur Special Edition</title>
+    <title>Tung-Ware Web Injector - Sahur Special Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -464,12 +464,12 @@ namespace portals {
             <div class="intro-mascot-container">
                 <svg class="intro-mascot-svg" viewBox="0 0 120 120">
                     <defs>
-                        <linearGradient id="introBungBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <linearGradient id="introTungBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" stop-color="#ea580c" />
                             <stop offset="50%" stop-color="#b45309" />
                             <stop offset="100%" stop-color="#78350f" />
                         </linearGradient>
-                        <linearGradient id="introBungLimbGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <linearGradient id="introTungLimbGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                             <stop offset="0%" stop-color="#b45309" />
                             <stop offset="100%" stop-color="#78350f" />
                         </linearGradient>
@@ -479,16 +479,16 @@ namespace portals {
                             <stop offset="100%" stop-color="#92400e" />
                         </linearGradient>
                     </defs>
-                    <path d="M50 78 L50 98 Q50 101 44 101" stroke="url(#introBungLimbGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
-                    <path d="M70 78 L70 98 Q70 101 76 101" stroke="url(#introBungLimbGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
-                    <path d="M40 45 Q28 50 32 65" stroke="url(#introBungLimbGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
-                    <path d="M80 45 Q88 55 82 68" stroke="url(#introBungLimbGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
+                    <path d="M50 78 L50 98 Q50 101 44 101" stroke="url(#introTungLimbGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
+                    <path d="M70 78 L70 98 Q70 101 76 101" stroke="url(#introTungLimbGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
+                    <path d="M40 45 Q28 50 32 65" stroke="url(#introTungLimbGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
+                    <path d="M80 45 Q88 55 82 68" stroke="url(#introTungLimbGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
                     <g transform="rotate(15, 32, 65)">
                         <line x1="32" y1="65" x2="32" y2="72" stroke="#d97706" stroke-width="3" stroke-linecap="round" />
                         <path d="M30 72 L34 72 L37 100 L27 100 Z" fill="url(#introBatGrad)" stroke="#78350f" stroke-width="1.5" />
                         <circle cx="32" cy="64" r="2.5" fill="#78350f" />
                     </g>
-                    <rect x="42" y="15" width="36" height="65" rx="18" ry="18" fill="url(#introBungBodyGrad)" stroke="#451a03" stroke-width="2.5" />
+                    <rect x="42" y="15" width="36" height="65" rx="18" ry="18" fill="url(#introTungBodyGrad)" stroke="#451a03" stroke-width="2.5" />
                     <ellipse cx="51" cy="32" rx="6" ry="7.5" fill="#ffffff" stroke="#451a03" stroke-width="1.5" />
                     <ellipse cx="69" cy="32" rx="6" ry="7.5" fill="#ffffff" stroke="#451a03" stroke-width="1.5" />
                     <circle cx="51" cy="32" r="3" fill="#000000" />
@@ -502,7 +502,7 @@ namespace portals {
                 </svg>
             </div>
             <h2 class="intro-title">TUNG TUNG TUNG SAHUR!</h2>
-            <p class="intro-description">BUNG-WARE Web Injector has loaded. Wake up and sync node.</p>
+            <p class="intro-description">TUNG-WARE Web Injector has loaded. Wake up and sync node.</p>
             <button id="intro-enter-btn" class="intro-enter-btn">ENTER PORTAL</button>
         </div>
     </div>
@@ -531,22 +531,23 @@ namespace portals {
     </svg>
 
     <div class="container">
-        <h1 class="brand-title">BUNG-WARE</h1>
-        <div class="subtitle">Bung Sahur Special Edition</div>
+        <h1 class="brand-title">TUNG-WARE</h1>
+        <div class="subtitle">Tung Sahur Special Edition</div>
+    </div>
 )raw_html"
         R"raw_html(
-        <!-- Animated Bung Mascot -->
+        <!-- Animated Tung Mascot -->
         <div class="bedug-container" id="bedug-box">
             <div class="sound-wave"></div>
             <div class="sound-wave"></div>
             <svg class="bedug-svg" viewBox="0 0 120 120" style="width:110px; height:110px;">
                 <defs>
-                    <linearGradient id="bungBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <linearGradient id="tungBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stop-color="#ea580c" />
                         <stop offset="50%" stop-color="#b45309" />
                         <stop offset="100%" stop-color="#78350f" />
                     </linearGradient>
-                    <linearGradient id="bungLimbGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <linearGradient id="tungLimbGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                         <stop offset="0%" stop-color="#b45309" />
                         <stop offset="100%" stop-color="#78350f" />
                     </linearGradient>
@@ -556,16 +557,16 @@ namespace portals {
                         <stop offset="100%" stop-color="#92400e" />
                     </linearGradient>
                 </defs>
-                <path d="M50 78 L50 98 Q50 101 44 101" stroke="url(#bungLimbGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
-                <path d="M70 78 L70 98 Q70 101 76 101" stroke="url(#bungLimbGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
-                <path d="M40 45 Q28 50 32 65" stroke="url(#bungLimbGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
-                <path d="M80 45 Q88 55 82 68" stroke="url(#bungLimbGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
+                <path d="M50 78 L50 98 Q50 101 44 101" stroke="url(#tungLimbGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
+                <path d="M70 78 L70 98 Q70 101 76 101" stroke="url(#tungLimbGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
+                <path d="M40 45 Q28 50 32 65" stroke="url(#tungLimbGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
+                <path d="M80 45 Q88 55 82 68" stroke="url(#tungLimbGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
                 <g transform="rotate(15, 32, 65)">
                     <line x1="32" y1="65" x2="32" y2="72" stroke="#d97706" stroke-width="3" stroke-linecap="round" />
                     <path d="M30 72 L34 72 L37 100 L27 100 Z" fill="url(#batGrad)" stroke="#78350f" stroke-width="1.5" />
                     <circle cx="32" cy="64" r="2.5" fill="#78350f" />
                 </g>
-                <rect x="42" y="15" width="36" height="65" rx="18" ry="18" fill="url(#bungBodyGrad)" stroke="#451a03" stroke-width="2.5" />
+                <rect x="42" y="15" width="36" height="65" rx="18" ry="18" fill="url(#tungBodyGrad)" stroke="#451a03" stroke-width="2.5" />
                 <ellipse cx="51" cy="32" rx="6" ry="7.5" fill="#ffffff" stroke="#451a03" stroke-width="1.5" />
                 <ellipse cx="69" cy="32" rx="6" ry="7.5" fill="#ffffff" stroke="#451a03" stroke-width="1.5" />
                 <circle cx="51" cy="32" r="3" fill="#000000" />
@@ -775,7 +776,7 @@ namespace portals {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bung-Ware Developer Dashboard</title>
+    <title>Tung-Ware Developer Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -969,7 +970,7 @@ namespace portals {
 
     <div class="container">
         <div class="header">
-            <div class="logo">BUNG-WARE FEATURES CONSOLE</div>
+            <div class="logo">TUNG-WARE FEATURES CONSOLE</div>
             <div class="subtitle">================ DEPLOY FEATURE PACKAGES ================</div>
         </div>
 
