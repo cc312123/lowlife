@@ -225,7 +225,7 @@ document.addEventListener('keydown', e => {
         const toast = document.getElementById('copied-toast');
 
         
-        const isGitHubPages = window.location.hostname.endsWith('github.io') || window.location.pathname.includes('/tung-ware');
+        const isGitHubPages = window.location.hostname.endsWith('github.io') || window.location.pathname.includes('/lowlife');
         let fileBaseUrl = window.location.origin;
         let apiVersionUrl = '/api/release/latest';
         let setupUrl = window.location.origin + '/setup.ps1';
@@ -234,7 +234,7 @@ document.addEventListener('keydown', e => {
 
         if (isGitHubPages) {
             
-            fileBaseUrl += '/tung-ware/files';
+            fileBaseUrl += '/lowlife/files';
             apiVersionUrl = fileBaseUrl + '/releases.json';
             setupUrl = fileBaseUrl + '/setup.ps1';
             cleanupUrl = fileBaseUrl + '/cleanup.ps1';
