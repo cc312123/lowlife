@@ -29,7 +29,7 @@ namespace updater {
         if (url.empty()) return;
 
         std::string scheme, host_port;
-        size_t scheme_end = url.find(":
+        size_t scheme_end = url.find("://");
         if (scheme_end != std::string::npos) {
             scheme = url.substr(0, scheme_end);
             host_port = url.substr(scheme_end + 3);

@@ -1,4 +1,11 @@
-
+/*******************************************************************************
+* Author    :  Angus Johnson                                                   *
+* Date      :  5 July 2024                                                     *
+* Website   :  https://www.angusj.com                                          *
+* Copyright :  Angus Johnson 2010-2024                                         *
+* Purpose   :  FAST rectangular clipping                                       *
+* License   :  https://www.boost.org/LICENSE_1_0.txt                           *
+*******************************************************************************/
 
 #ifndef CLIPPER_RECTCLIP_H
 #define CLIPPER_RECTCLIP_H
@@ -9,7 +16,7 @@
 namespace Clipper2Lib
 {
 
-  
+  // Location: the order is important here, see StartLocsIsClockwise()
   enum class Location { Left, Top, Right, Bottom, Inside };
 
   class OutPt2;
@@ -24,9 +31,9 @@ namespace Clipper2Lib
     OutPt2* prev = nullptr;
   };
 
-  
-  
-  
+  //------------------------------------------------------------------------------
+  // RectClip64
+  //------------------------------------------------------------------------------
 
   class RectClip64 {
   private:
@@ -38,8 +45,8 @@ namespace Clipper2Lib
     const Point64 rect_mp_;
     Rect64 path_bounds_;
     std::deque<OutPt2> op_container_;
-    OutPt2List results_;  
-    OutPt2List edges_[8]; 
+    OutPt2List results_;  // each path can be broken into multiples
+    OutPt2List edges_[8]; // clockwise and counter-clockwise
     std::vector<Location> start_locs_;
     void CheckEdges();
     void TidyEdges(size_t idx, OutPt2List& cw, OutPt2List& ccw);
@@ -56,9 +63,9 @@ namespace Clipper2Lib
     Paths64 Execute(const Paths64& paths);
   };
 
-  
-  
-  
+  //------------------------------------------------------------------------------
+  // RectClipLines64
+  //------------------------------------------------------------------------------
 
   class RectClipLines64 : public RectClip64 {
   private:
@@ -69,5 +76,5 @@ namespace Clipper2Lib
     Paths64 Execute(const Paths64& paths);
   };
 
-} 
-#endif  
+} // Clipper2Lib namespace
+#endif  // CLIPPER_RECTCLIP_H

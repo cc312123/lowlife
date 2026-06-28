@@ -193,6 +193,25 @@ document.addEventListener('keydown', e => {
         </a>
     </div>
 
+    
+    <div id="yt-player" style="position: fixed; width: 1px; height: 1px; opacity: 0; pointer-events: none; left: -100px; bottom: -100px;"></div>
+    <div class="music-widget" id="music-widget">
+        <div class="music-visualizer" id="music-visualizer">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="music-info">
+            <span class="music-title">Love Galore</span>
+            <span class="music-artist">FBG Fatslime</span>
+        </div>
+        <button class="music-btn" id="music-play-pause" aria-label="Play or Pause Music">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+    </div>
+
     <script>
         const lblVersion = document.getElementById('lbl-version');
         const lblDownloads = document.getElementById('lbl-downloads');
@@ -549,6 +568,89 @@ document.addEventListener('keydown', e => {
                  actFeedback.innerHTML = '<span style="color: var(--neon-rose);">Connection failed.</span>';
              }
          });
-    </script>
+    
+        // YouTube Background Music Integration
+        const playIcon = '<svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+        const pauseIcon = '<svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+
+        let ytPlayer;
+        let hasInteracted = false;
+        let isPlayerReady = false;
+        const playPauseBtn = document.getElementById('music-play-pause');
+        const visualizer = document.getElementById('music-visualizer');
+
+        window.onYouTubeIframeAPIReady = function() {
+            let originParam = window.location.origin;
+            if (!originParam || originParam === 'null') {
+                originParam = '*';
+            }
+            ytPlayer = new YT.Player('yt-player', {
+                height: '0',
+                width: '0',
+                videoId: 'u-t3TzJ6r0E',
+                playerVars: {
+                    'autoplay': 1,
+                    'controls': 0,
+                    'loop': 1,
+                    'playlist': 'u-t3TzJ6r0E',
+                    'playsinline': 1,
+                    'mute': 0,
+                    'origin': originParam
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        };
+
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        function onPlayerReady(event) {
+            isPlayerReady = true;
+            event.target.setVolume(40);
+            if (hasInteracted) {
+                event.target.playVideo();
+            } else {
+                event.target.playVideo();
+            }
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+                if (playPauseBtn) playPauseBtn.innerHTML = pauseIcon;
+                if (visualizer) visualizer.classList.add('playing');
+            } else {
+                if (playPauseBtn) playPauseBtn.innerHTML = playIcon;
+                if (visualizer) visualizer.classList.remove('playing');
+            }
+        }
+
+        const handleInteraction = () => {
+            hasInteracted = true;
+            if (ytPlayer && isPlayerReady && typeof ytPlayer.playVideo === 'function') {
+                ytPlayer.playVideo();
+            }
+        };
+        document.addEventListener('click', handleInteraction);
+        document.addEventListener('keydown', handleInteraction);
+
+        if (playPauseBtn) {
+            playPauseBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (!ytPlayer || !isPlayerReady) return;
+                const state = ytPlayer.getPlayerState();
+                if (state === YT.PlayerState.PLAYING) {
+                    ytPlayer.pauseVideo();
+                } else {
+                    ytPlayer.playVideo();
+                }
+            });
+        }
+
+</script>
 </body>
 </html>

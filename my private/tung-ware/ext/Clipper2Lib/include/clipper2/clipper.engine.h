@@ -1,4 +1,11 @@
-
+/*******************************************************************************
+* Author    :  Angus Johnson                                                   *
+* Date      :  17 September 2024                                               *
+* Website   :  https://www.angusj.com                                          *
+* Copyright :  Angus Johnson 2010-2024                                         *
+* Purpose   :  This is the main polygon clipping module                        *
+* License   :  https://www.boost.org/LICENSE_1_0.txt                           *
+*******************************************************************************/
 
 #ifndef CLIPPER_ENGINE_H
 #define CLIPPER_ENGINE_H
@@ -18,7 +25,7 @@ namespace Clipper2Lib {
 	struct OutRec;
 	struct HorzSegment;
 
-	
+	//Note: all clipping operations except for Difference are commutative.
 	enum class ClipType { NoClip, Intersection, Union, Difference, Xor };
 
 	enum class PathType { Subject, Clip };
@@ -67,8 +74,8 @@ namespace Clipper2Lib {
 	struct OutRec;
 	typedef std::vector<OutRec*> OutRecList;
 
-	
-	
+	//OutRec: contains a path in the clipping solution. Edges in the AEL will
+	//have OutRec pointers assigned when they form part of the clipping solution.
 	struct OutRec {
 		size_t idx = 0;
 		OutRec* owner = nullptr;
@@ -84,39 +91,39 @@ namespace Clipper2Lib {
 
 		~OutRec() {
 			if (splits) delete splits;
-			
-			
+			// nb: don't delete the split pointers
+			// as these are owned by ClipperBase's outrec_list_
 		};
 	};
 
-	
-	
-	
-	
+	///////////////////////////////////////////////////////////////////
+	//Important: UP and DOWN here are premised on Y-axis positive down
+	//displays, which is the orientation used in Clipper's development.
+	///////////////////////////////////////////////////////////////////
 
 	struct Active {
 		Point64 bot;
 		Point64 top;
-		int64_t curr_x = 0;		
+		int64_t curr_x = 0;		//current (updated at every new scanline)
 		double dx = 0.0;
-		int wind_dx = 1;			
+		int wind_dx = 1;			//1 or -1 depending on winding direction
 		int wind_cnt = 0;
-		int wind_cnt2 = 0;		
+		int wind_cnt2 = 0;		//winding count of the opposite polytype
 		OutRec* outrec = nullptr;
-		
-		
-		
-		
+		//AEL: 'active edge list' (Vatti's AET - active edge table)
+		//     a linked list of all edges (from left to right) that are present
+		//     (or 'active') within the current scanbeam (a horizontal 'beam' that
+		//     sweeps from bottom to top over the paths in the clipping operation).
 		Active* prev_in_ael = nullptr;
 		Active* next_in_ael = nullptr;
-		
-		
-		
+		//SEL: 'sorted edge list' (Vatti's ST - sorted table)
+		//     linked list used when sorting edges into their new positions at the
+		//     top of scanbeams, but also (re)used to process horizontals.
 		Active* prev_in_sel = nullptr;
 		Active* next_in_sel = nullptr;
 		Active* jump = nullptr;
 		Vertex* vertex_top = nullptr;
-		LocalMinima* local_min = nullptr;  
+		LocalMinima* local_min = nullptr;  // the bottom of an edge 'bound' (also Vatti)
 		bool is_left_bound = false;
 		JoinWith join_with = JoinWith::NoJoin;
 	};
@@ -166,7 +173,7 @@ namespace Clipper2Lib {
 	typedef std::vector<LocalMinima_ptr> LocalMinimaList;
 	typedef std::vector<IntersectNode> IntersectNodeList;
 
-	
+	// ReuseableDataContainer64 ------------------------------------------------
 
 	class ReuseableDataContainer64 {
 	private:
@@ -180,7 +187,7 @@ namespace Clipper2Lib {
 		void AddPaths(const Paths64& paths, PathType polytype, bool is_open);
 	};
 
-	
+	// ClipperBase -------------------------------------------------------------
 
 	class ClipperBase {
 	private:
@@ -192,7 +199,7 @@ namespace Clipper2Lib {
 		bool using_polytree_ = false;
 		Active* actives_ = nullptr;
 		Active *sel_ = nullptr;
-		LocalMinimaList minima_list_;		
+		LocalMinimaList minima_list_;		//pointers in case of memory reallocs
 		LocalMinimaList::iterator current_locmin_iter_;
 		std::vector<Vertex*> vertex_lists_;
 		std::priority_queue<int64_t> scanline_list_;
@@ -254,7 +261,7 @@ namespace Clipper2Lib {
 		int error_code_ = 0;
 		bool has_open_paths_ = false;
 		bool succeeded_ = true;
-		OutRecList outrec_list_; 
+		OutRecList outrec_list_; //pointers in case list memory reallocated
 		bool ExecuteInternal(ClipType ct, FillRule ft, bool use_polytrees);
 		void CleanCollinear(OutRec* outrec);
 		bool CheckBounds(OutRec* outrec);
@@ -264,7 +271,7 @@ namespace Clipper2Lib {
 		ZCallback64 zCallback_ = nullptr;
 		void SetZ(const Active& e1, const Active& e2, Point64& pt);
 #endif
-		void CleanUp();  
+		void CleanUp();  // unlike Clear, CleanUp preserves added paths
 		void AddPath(const Path64& path, PathType polytype, bool is_open);
 		void AddPaths(const Paths64& paths, PathType polytype, bool is_open);
 	public:
@@ -281,12 +288,12 @@ namespace Clipper2Lib {
 #endif
 	};
 
-	
+	// PolyPath / PolyTree --------------------------------------------------------
 
-	
-	
-	
-	
+	//PolyTree: is intended as a READ-ONLY data structure for CLOSED paths returned
+	//by clipping operations. While this structure is more complex than the
+	//alternative Paths structure, it does preserve path 'ownership' - ie those
+	//paths that contain (or own) other paths. This will be useful to some users.
 
 	class PolyPath {
 	protected:
@@ -294,7 +301,7 @@ namespace Clipper2Lib {
 	public:
 		PolyPath(PolyPath* parent = nullptr): parent_(parent){}
 		virtual ~PolyPath() {};
-		
+		//https://en.cppreference.com/w/cpp/language/rule_of_three
 		PolyPath(const PolyPath&) = delete;
 		PolyPath& operator=(const PolyPath&) = delete;
 
@@ -316,7 +323,7 @@ namespace Clipper2Lib {
 		bool IsHole() const
 		{
 			unsigned lvl = Level();
-			
+			//Even levels except level 0
 			return lvl && !(lvl & 1);
 		}
 	};
@@ -338,7 +345,7 @@ namespace Clipper2Lib {
 
 		PolyPath64* operator [] (size_t index) const
 		{
-			return childs_[index].get(); 
+			return childs_[index].get(); //std::unique_ptr
 		}
 
 		PolyPath64* Child(size_t index) const
@@ -522,8 +529,8 @@ namespace Clipper2Lib {
 		explicit ClipperD(int precision = 2) : ClipperBase()
 		{
 			CheckPrecisionRange(precision, error_code_);
-			
-			
+			// to optimize scaling / descaling precision
+			// set the scale to a power of double's radix (2) (#25)
 			scale_ = std::pow(std::numeric_limits<double>::radix,
 				std::ilogb(std::pow(10, precision)) + 1);
 			invScale_ = 1 / scale_;
@@ -535,24 +542,24 @@ namespace Clipper2Lib {
 		void ZCB(const Point64& e1bot, const Point64& e1top,
 			const Point64& e2bot, const Point64& e2top, Point64& pt)
 		{
-			
-			
-			
-			
+			// de-scale (x & y)
+			// temporarily convert integers to their initial float values
+			// this will slow clipping marginally but will make it much easier
+			// to understand the coordinates passed to the callback function
 			PointD tmp = PointD(pt) * invScale_;
 			PointD e1b = PointD(e1bot) * invScale_;
 			PointD e1t = PointD(e1top) * invScale_;
 			PointD e2b = PointD(e2bot) * invScale_;
 			PointD e2t = PointD(e2top) * invScale_;
 			zCallbackD_(e1b,e1t, e2b, e2t, tmp);
-			pt.z = tmp.z; 
+			pt.z = tmp.z; // only update 'z'
 		};
 
 		void CheckCallback()
 		{
 			if(zCallbackD_)
-				
-				
+				// if the user defined float point callback has been assigned
+				// then assign the proxy callback function
 				ClipperBase::zCallback_ =
 					std::bind(&ClipperD::ZCB, this, std::placeholders::_1,
 					std::placeholders::_2, std::placeholders::_3,
@@ -623,6 +630,6 @@ namespace Clipper2Lib {
 
 	};
 
-}  
+}  // namespace
 
-#endif  
+#endif  // CLIPPER_ENGINE_H
