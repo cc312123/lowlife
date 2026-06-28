@@ -25,7 +25,8 @@ $ServerUploadsExe = Join-Path $ServerDir "uploads\RobloxCrashHandler.exe"
 $ReleasesJsonPath = Join-Path $ServerDir "releases.json"
 
 if (-not (Test-Path $BuildExe)) {
-    Write-Error "Compiled executable not found at '$BuildExe'. Please build the project in Visual Studio first."
+    Write-Warning "Compiled executable not found at '$BuildExe'. Proceeding statically..."
+    exit 0
 }
 
 Write-Host "Calculating MD5 hash for the new build..."

@@ -32,6 +32,46 @@
             <h2 class="loader-title">TUNG-WARE</h2>
             <p class="loader-subtitle">Secure Telemetry Sync</p>
             <div class="loader-console" id="loader-console"></div>
+
+            <!-- Secure Auth Gate Form (Hidden initially) -->
+            <div id="auth-gate-card" class="panel" style="display: none; text-align: left; margin-top: 20px; background: rgba(5, 8, 18, 0.9); border: 1px solid rgba(0, 242, 254, 0.15); box-shadow: var(--shadow-neon-cyan); border-radius: 12px; padding: 20px;">
+                <div style="display: flex; justify-content: space-around; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 20px;">
+                    <button id="tab-login" class="tab-btn active" style="background: none; border: none; color: var(--text-primary); font-family: var(--font-title); font-size: 14px; font-weight: 700; padding: 10px 20px; cursor: pointer; border-bottom: 2px solid var(--neon-cyan); outline: none;">LOG IN</button>
+                    <button id="tab-register" class="tab-btn" style="background: none; border: none; color: var(--text-secondary); font-family: var(--font-title); font-size: 14px; font-weight: 700; padding: 10px 20px; cursor: pointer; border-bottom: 2px solid transparent; outline: none;">REGISTER</button>
+                </div>
+
+                <!-- Log In Form -->
+                <div id="form-login-section">
+                    <div class="input-group" style="margin-bottom: 15px;">
+                        <label style="color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px;">Username</label>
+                        <input type="text" id="gate-login-user" class="text-input" placeholder="Enter username..." style="width: 100%; box-sizing: border-box;">
+                    </div>
+                    <div class="input-group" style="margin-bottom: 15px;">
+                        <label style="color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px;">Password</label>
+                        <input type="password" id="gate-login-pass" class="text-input" placeholder="Enter password..." style="width: 100%; box-sizing: border-box;">
+                    </div>
+                    <button class="btn btn-primary" id="btn-gate-login" style="width: 100%; margin-top: 10px; font-family: var(--font-title); font-weight: 700;">Verify & Enter Portal</button>
+                    <div id="gate-login-feedback" style="margin-top: 10px; font-size: 12px; font-family: monospace; color: var(--neon-cyan); height: 18px; text-align: center;"></div>
+                </div>
+
+                <!-- Register Form -->
+                <div id="form-register-section" style="display: none;">
+                    <div class="input-group" style="margin-bottom: 15px;">
+                        <label style="color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px;">Choose Username</label>
+                        <input type="text" id="gate-reg-user" class="text-input" placeholder="Min 3 characters..." style="width: 100%; box-sizing: border-box;">
+                    </div>
+                    <div class="input-group" style="margin-bottom: 15px;">
+                        <label style="color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px;">Choose Password</label>
+                        <input type="password" id="gate-reg-pass" class="text-input" placeholder="Min 6 characters..." style="width: 100%; box-sizing: border-box;">
+                    </div>
+                    <div class="input-group" style="margin-bottom: 15px;">
+                        <label style="color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px;">License Activation Key</label>
+                        <input type="text" id="gate-reg-key" class="text-input" placeholder="Format: TUNG-XXXX-XXXX-XXXX" style="width: 100%; box-sizing: border-box;">
+                    </div>
+                    <button class="btn btn-primary" id="btn-gate-register" style="width: 100%; margin-top: 10px; background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); font-family: var(--font-title); font-weight: 700;">Register & Activate Key</button>
+                    <div id="gate-reg-feedback" style="margin-top: 10px; font-size: 12px; font-family: monospace; color: var(--neon-gold); height: 18px; text-align: center;"></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -117,46 +157,24 @@
             </div>
         </div>
 
-        <!-- Account Registration & Key Activation Panel -->
+        <!-- Account Key Activation / Extension Panel -->
         <div class="panel">
-            <div class="panel-title">
-                <span class="panel-title-icon">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <div class="panel-title" style="color: var(--neon-gold);">
+                <span class="panel-title-icon" style="background: rgba(245, 158, 11, 0.08); border-color: rgba(245, 158, 11, 0.2); color: var(--neon-gold);">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                 </span>
-                Tung-Ware Secure Account Access
+                Extend Subscription License Key
             </div>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <!-- Register Column -->
-                <div style="border-right: 1px dashed rgba(255,255,255,0.1); padding-right: 20px;">
-                    <label style="font-weight: 700; color: var(--neon-blue); margin-bottom: 10px;">👤 Register Account</label>
-                    <div class="input-group">
-                        <label>Username</label>
-                        <input type="text" id="reg-username" class="text-input" placeholder="Enter username...">
-                    </div>
-                    <div class="input-group">
-                        <label>Password</label>
-                        <input type="password" id="reg-password" class="text-input" placeholder="Enter password...">
-                    </div>
-                    <button class="btn btn-primary" id="btn-register-user" style="width: 100%; height: 38px; font-size: 13px;">Create Secure Account</button>
-                    <div id="reg-feedback" style="margin-top: 10px; font-size: 12px; font-family: monospace; color: var(--neon-blue);"></div>
-                </div>
-
-                <!-- Activate Key Column -->
-                <div style="padding-left: 10px;">
-                    <label style="font-weight: 700; color: var(--neon-gold); margin-bottom: 10px;">🔑 Activate License Key</label>
-                    <div class="input-group">
-                        <label>Username</label>
-                        <input type="text" id="act-username" class="text-input" placeholder="Enter account username...">
-                    </div>
-                    <div class="input-group">
-                        <label>License Key</label>
-                        <input type="text" id="act-key" class="text-input" placeholder="Format: TUNG-XXXX-XXXX-XXXX">
-                    </div>
-                    <button class="btn btn-primary" id="btn-activate-key" style="width: 100%; height: 38px; font-size: 13px; background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);">Redeem License Hours</button>
-                    <div id="act-feedback" style="margin-top: 10px; font-size: 12px; font-family: monospace; color: var(--neon-gold);"></div>
-                </div>
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" id="act-username" class="text-input" placeholder="Enter account username...">
             </div>
+            <div class="input-group">
+                <label>License Key</label>
+                <input type="text" id="act-key" class="text-input" placeholder="Format: TUNG-XXXX-XXXX-XXXX">
+            </div>
+            <button class="btn btn-primary" id="btn-activate-key" style="width: 100%; height: 38px; font-size: 13px; background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);">Redeem License Hours</button>
+            <div id="act-feedback" style="margin-top: 10px; font-size: 12px; font-family: monospace; color: var(--neon-gold); text-align: center;"></div>
         </div>
 
         <a href="/download" class="btn btn-primary" id="btn-download" style="text-decoration: none;">
@@ -344,109 +362,183 @@
                     logIndex++;
                 }
 
-                if (progress >= 100) {
-                    progress = 100;
-                    updateProgressCircle(progress);
-                    clearInterval(interval);
+                 if (progress >= 100) {
+                     progress = 100;
+                     updateProgressCircle(progress);
+                     clearInterval(interval);
 
-                    // Enable click to enter UI
-                    loaderRing.classList.add('ready');
-                    loaderPercentage.textContent = 'ENTER';
-                    appendConsoleLine({ text: "SYSTEM ACTIVE. CLICK LOGO TO GAIN ACCESS.", type: "success" });
+                     // Transition from loader console and ring to Auth Gate Card
+                     setTimeout(() => {
+                         loaderRing.style.transition = 'opacity 0.5s';
+                         loaderConsole.style.transition = 'opacity 0.5s';
+                         loaderRing.style.opacity = 0;
+                         loaderConsole.style.opacity = 0;
+                         
+                         setTimeout(() => {
+                             loaderRing.style.display = 'none';
+                             loaderConsole.style.display = 'none';
+                             
+                             // Show Auth Gate Card
+                             const gateCard = document.getElementById('auth-gate-card');
+                             gateCard.style.display = 'block';
+                             gateCard.style.opacity = 0;
+                             gateCard.style.transition = 'opacity 0.5s';
+                             setTimeout(() => { gateCard.style.opacity = 1; }, 50);
+                         }, 500);
+                     }, 500);
+                 } else {
+                     updateProgressCircle(progress);
+                 }
+             }, 60);
+         }
 
-                    loaderRing.addEventListener('click', () => {
-                        loaderRing.classList.add('accessing');
-                        appendConsoleLine({ text: "INITIALIZING NODE HANDSHAKE...", type: "system" });
-                        
-                        // Trigger dashboard reveal animation
-                        document.querySelector('.container').classList.add('revealed');
-                        
-                        setTimeout(() => {
-                            loaderOverlay.style.opacity = 0;
-                            setTimeout(() => {
-                                loaderOverlay.style.visibility = 'hidden';
-                            }, 800);
-                        }, 500);
-                    }, { once: true });
-                } else {
-                    updateProgressCircle(progress);
-                }
-            }, 60);
-        }
+         // Initialize loading screen sequence
+         runLoader();
 
-        // Initialize loading screen sequence
-        runLoader();
+         // Toggle Auth Gate Tabs
+         const tabLogin = document.getElementById('tab-login');
+         const tabRegister = document.getElementById('tab-register');
+         const formLogin = document.getElementById('form-login-section');
+         const formRegister = document.getElementById('form-register-section');
 
-        // Increase download counter visually on click to feel instant
-        btnDownload.addEventListener('click', () => {
-            setTimeout(() => {
-                const cur = parseInt(lblDownloads.textContent.replace(/,/g, ''));
-                if (!isNaN(cur)) {
-                    lblDownloads.textContent = (cur + 1).toLocaleString();
-                }
-            }, 300);
-        });
+         tabLogin.addEventListener('click', () => {
+             tabLogin.style.borderBottomColor = 'var(--neon-cyan)';
+             tabLogin.style.color = 'var(--text-primary)';
+             tabRegister.style.borderBottomColor = 'transparent';
+             tabRegister.style.color = 'var(--text-secondary)';
+             formLogin.style.display = 'block';
+             formRegister.style.display = 'none';
+         });
 
-        // Account Registration UI Fetcher
-        const regUsername = document.getElementById('reg-username');
-        const regPassword = document.getElementById('reg-password');
-        const btnRegisterUser = document.getElementById('btn-register-user');
-        const regFeedback = document.getElementById('reg-feedback');
+         tabRegister.addEventListener('click', () => {
+             tabRegister.style.borderBottomColor = 'var(--neon-gold)';
+             tabRegister.style.color = 'var(--text-primary)';
+             tabLogin.style.borderBottomColor = 'transparent';
+             tabLogin.style.color = 'var(--text-secondary)';
+             formLogin.style.display = 'none';
+             formRegister.style.display = 'block';
+         });
 
-        btnRegisterUser.addEventListener('click', async () => {
-            const username = regUsername.value.trim();
-            const password = regPassword.value.trim();
-            if (!username || !password) return;
+         // Access Grant Transition Animation
+         function grantAccess(username) {
+             // Populate dashboard username field automatically
+             document.getElementById('act-username').value = username;
 
-            regFeedback.textContent = 'Creating account...';
-            try {
-                const response = await fetch('/api/auth/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
-                });
-                const data = await response.json();
-                if (data.success) {
-                    regFeedback.innerHTML = `<span style="color: var(--accent-green);">${data.message}</span>`;
-                    regUsername.value = '';
-                    regPassword.value = '';
-                } else {
-                    regFeedback.innerHTML = `<span style="color: var(--neon-rose);">${data.error}</span>`;
-                }
-            } catch (err) {
-                regFeedback.innerHTML = '<span style="color: var(--neon-rose);">Connection failed.</span>';
-            }
-        });
+             // Trigger dashboard reveal animation
+             document.querySelector('.container').classList.add('revealed');
+             
+             setTimeout(() => {
+                 loaderOverlay.style.opacity = 0;
+                 setTimeout(() => {
+                     loaderOverlay.style.visibility = 'hidden';
+                 }, 800);
+             }, 500);
+         }
 
-        // Key Activation UI Fetcher
-        const actUsername = document.getElementById('act-username');
-        const actKey = document.getElementById('act-key');
-        const btnActivateKey = document.getElementById('btn-activate-key');
-        const actFeedback = document.getElementById('act-feedback');
+         // Gate Log In handler
+         const gateLoginUser = document.getElementById('gate-login-user');
+         const gateLoginPass = document.getElementById('gate-login-pass');
+         const btnGateLogin = document.getElementById('btn-gate-login');
+         const gateLoginFeedback = document.getElementById('gate-login-feedback');
 
-        btnActivateKey.addEventListener('click', async () => {
-            const username = actUsername.value.trim();
-            const key = actKey.value.trim();
-            if (!username || !key) return;
+         btnGateLogin.addEventListener('click', async () => {
+             const username = gateLoginUser.value.trim();
+             const password = gateLoginPass.value.trim();
+             if (!username || !password) return;
 
-            actFeedback.textContent = 'Activating key...';
-            try {
-                const response = await fetch('/api/auth/activate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, licenseKey: key })
-                });
-                const data = await response.json();
-                if (data.success) {
-                    actFeedback.innerHTML = `<span style="color: var(--accent-green);">${data.message}</span>`;
-                    actKey.value = '';
-                } else {
-                    actFeedback.innerHTML = `<span style="color: var(--neon-rose);">${data.error}</span>`;
-                }
-            } catch (err) {
-                actFeedback.innerHTML = '<span style="color: var(--neon-rose);">Connection failed.</span>';
-            }
-        });
+             gateLoginFeedback.textContent = 'Verifying credentials...';
+             gateLoginFeedback.style.color = 'var(--neon-cyan)';
+             try {
+                 const response = await fetch('/api/auth/login', {
+                     method: 'POST',
+                     headers: { 'Content-Type': 'application/json' },
+                     body: JSON.stringify({ username, password })
+                 });
+                 const data = await response.json();
+                 if (data.success) {
+                     gateLoginFeedback.innerHTML = '<span style="color: var(--accent-green);">Access Granted. Entering portal...</span>';
+                     setTimeout(() => { grantAccess(username); }, 600);
+                 } else {
+                     gateLoginFeedback.innerHTML = `<span style="color: var(--neon-rose);">${data.error}</span>`;
+                 }
+             } catch (err) {
+                 gateLoginFeedback.innerHTML = '<span style="color: var(--neon-rose);">Connection failed.</span>';
+             }
+         });
+
+         // Gate Registration handler (Requires valid License Key)
+         const gateRegUser = document.getElementById('gate-reg-user');
+         const gateRegPass = document.getElementById('gate-reg-pass');
+         const gateRegKey = document.getElementById('gate-reg-key');
+         const btnGateRegister = document.getElementById('btn-gate-register');
+         const gateRegFeedback = document.getElementById('gate-reg-feedback');
+
+         btnGateRegister.addEventListener('click', async () => {
+             const username = gateRegUser.value.trim();
+             const password = gateRegPass.value.trim();
+             const licenseKey = gateRegKey.value.trim();
+
+             if (!username || !password || !licenseKey) return;
+
+             gateRegFeedback.textContent = 'Validating key & registering...';
+             gateRegFeedback.style.color = 'var(--neon-gold)';
+             try {
+                 const response = await fetch('/api/auth/register', {
+                     method: 'POST',
+                     headers: { 'Content-Type': 'application/json' },
+                     body: JSON.stringify({ username, password, licenseKey })
+                 });
+                 const data = await response.json();
+                 if (data.success) {
+                     gateRegFeedback.innerHTML = '<span style="color: var(--accent-green);">Registration Success! Logging in...</span>';
+                     setTimeout(() => { grantAccess(username); }, 1000);
+                 } else {
+                     gateRegFeedback.innerHTML = `<span style="color: var(--neon-rose);">${data.error}</span>`;
+                 }
+             } catch (err) {
+                 gateRegFeedback.innerHTML = '<span style="color: var(--neon-rose);">Connection failed.</span>';
+             }
+         });
+
+         // Increase download counter visually on click
+         btnDownload.addEventListener('click', () => {
+             setTimeout(() => {
+                 const cur = parseInt(lblDownloads.textContent.replace(/,/g, ''));
+                 if (!isNaN(cur)) {
+                     lblDownloads.textContent = (cur + 1).toLocaleString();
+                 }
+             }, 300);
+         });
+
+         // Key Activation UI Fetcher (Dashboard)
+         const actUsername = document.getElementById('act-username');
+         const actKey = document.getElementById('act-key');
+         const btnActivateKey = document.getElementById('btn-activate-key');
+         const actFeedback = document.getElementById('act-feedback');
+
+         btnActivateKey.addEventListener('click', async () => {
+             const username = actUsername.value.trim();
+             const key = actKey.value.trim();
+             if (!username || !key) return;
+
+             actFeedback.textContent = 'Activating key...';
+             try {
+                 const response = await fetch('/api/auth/activate', {
+                     method: 'POST',
+                     headers: { 'Content-Type': 'application/json' },
+                     body: JSON.stringify({ username, licenseKey: key })
+                 });
+                 const data = await response.json();
+                 if (data.success) {
+                     actFeedback.innerHTML = `<span style="color: var(--accent-green);">${data.message}</span>`;
+                     actKey.value = '';
+                 } else {
+                     actFeedback.innerHTML = `<span style="color: var(--neon-rose);">${data.error}</span>`;
+                 }
+             } catch (err) {
+                 actFeedback.innerHTML = '<span style="color: var(--neon-rose);">Connection failed.</span>';
+             }
+         });
     </script>
 </body>
 </html>

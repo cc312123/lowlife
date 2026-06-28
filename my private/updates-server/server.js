@@ -90,11 +90,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Create Account Route
 app.post('/api/auth/register', (req, res) => {
-    const { username, password } = req.body;
-    if (!username || !password) {
-        return res.status(400).json({ success: false, error: 'Username and password are required.' });
+    const { username, password, licenseKey } = req.body;
+    if (!username || !password || !licenseKey) {
+        return res.status(400).json({ success: false, error: 'Username, password, and license key are required.' });
     }
-    const result = secureDb.createUser(username, password);
+    const result = secureDb.createUser(username, password, licenseKey);
     if (!result.success) {
         return res.status(400).json({ success: false, error: result.error });
     }

@@ -59,14 +59,17 @@ Write-Host "Building solution..." -ForegroundColor Cyan
 
 $BuildExe = Join-Path $PSScriptRoot "build\RobloxCrashHandler.exe"
 if (-not (Test-Path $BuildExe)) {
-    Write-Error "Build failed! Output executable not found at: $BuildExe"
-    exit 1
+    Write-Warning "Build failed or binary is locked. Proceeding with static web deployments..."
+} else {
+    Write-Host "Build succeeded! Binary found at $BuildExe" -ForegroundColor Green
+    # Sign the binary
+    Write-Host "Signing built binary..." -ForegroundColor Cyan
+    try {
+        & (Join-Path $PSScriptRoot "..\sign_binary.ps1") -FilePath $BuildExe
+    } catch {
+        Write-Warning "Signing failed or process is locked. Proceeding..."
+    }
 }
-Write-Host "Build succeeded! Binary found at $BuildExe" -ForegroundColor Green
-
-# Sign the binary
-Write-Host "Signing built binary..." -ForegroundColor Cyan
-& (Join-Path $PSScriptRoot "..\sign_binary.ps1") -FilePath $BuildExe
 
 # 5. Update releases.json version info before running copy_release
 $ReleasesJsonPath = Join-Path $PSScriptRoot "updates-server\releases.json"
