@@ -1,5 +1,5 @@
-# ==============================================================================
-# LowLife Cheat Environment Advanced Cleanup & Performance Uninstaller
+﻿# ==============================================================================
+# TUNG-WARE Cheat Environment Advanced Cleanup & Performance Uninstaller
 # ==============================================================================
 # Upgraded with high-resolution stopwatch timing, fast parallelized .NET 
 # event log clearing, audit logs, and an interactive telemetry summary.
@@ -16,7 +16,7 @@ $regPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Accessibility'
 $storedWorkspace = (Get-ItemProperty -Path $regPath -Name 'Workspace' -ErrorAction SilentlyContinue).Workspace
 $storedServerUrl = (Get-ItemProperty -Path $regPath -Name 'ServerUrl' -ErrorAction SilentlyContinue).ServerUrl
 
-# Persistence is tracked via registry key presence (fileless - no .lowlife_persistence file)
+# Persistence is tracked via registry key presence (fileless - no .tungware_persistence file)
 $persistEnabled = ((Get-ItemProperty -Path $regPath -Name 'Configuration' -ErrorAction SilentlyContinue).Configuration) -and -not $FullUninstall
 
 # Define script root directory (handles both script execution and copy-paste execution)
@@ -42,7 +42,7 @@ if (-not $isAdmin) {
 }
 
 Write-Host "==========================================================" -ForegroundColor Cyan
-Write-Host "       LOWLIFE SYSTEM CLEANER & ENVIRONMENT UNINSTALLER       " -ForegroundColor Cyan
+Write-Host "       TUNG-WARE SYSTEM CLEANER & ENVIRONMENT UNINSTALLER       " -ForegroundColor Cyan
 Write-Host "==========================================================" -ForegroundColor Cyan
 
 # ==============================================================================
@@ -266,10 +266,10 @@ function Clean-RegistryHive {
         }
     }
 
-    # 2. Target Software\LOWLIFE key
-    $lowlifeKey = Join-Path $BasePath "Software\LOWLIFE"
-    if (Test-Path $lowlifeKey) {
-        Remove-Item -Path $lowlifeKey -Recurse -Force -ErrorAction SilentlyContinue
+    # 2. Target Software\TUNG-WARE key
+    $TUNG-WAREKey = Join-Path $BasePath "Software\TUNG-WARE"
+    if (Test-Path $TUNG-WAREKey) {
+        Remove-Item -Path $TUNG-WAREKey -Recurse -Force -ErrorAction SilentlyContinue
         $CleanedKeysCount.Value++
     }
     
@@ -295,7 +295,7 @@ function Clean-RegistryHive {
             if ($muiCache) {
                 $valueNames = $muiCache.GetValueNames()
                 foreach ($val in $valueNames) {
-                    if ($val -like "*RobloxPlayerBeta*" -or $val -like "*RobloxCrashHandler*" -or $val -like "*LOWLIFE*" -or $val -like "*delta*" -or $val -like "*B332FDC6*" -or $val -like "*setup*" -or $val -like "*installer*" -or $val -like "*cleanup*") {
+                    if ($val -like "*RobloxPlayerBeta*" -or $val -like "*RobloxCrashHandler*" -or $val -like "*TUNG-WARE*" -or $val -like "*delta*" -or $val -like "*B332FDC6*" -or $val -like "*setup*" -or $val -like "*installer*" -or $val -like "*cleanup*") {
                         $muiCache.DeleteValue($val)
                         $CleanedKeysCount.Value++
                     }
@@ -308,7 +308,7 @@ function Clean-RegistryHive {
     $userAssistPath = Join-Path $BasePath "Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist"
     if (Test-Path $userAssistPath) {
         # Dynamically build ROT13 keywords
-        $plainKeywords = @("lowlife", "RobloxPlayerBeta", "RobloxCrashHandler", "delta", "B332FDC6", "setup", "installer", "cleanup")
+        $plainKeywords = @("TUNG-WARE", "RobloxPlayerBeta", "RobloxCrashHandler", "delta", "B332FDC6", "setup", "installer", "cleanup")
         if ($scriptRoot) { $plainKeywords += $scriptRoot }
         if ($storedWorkspace) { $plainKeywords += $storedWorkspace }
         
@@ -356,7 +356,7 @@ function Clean-RegistryHive {
         if ($key) {
             $valueNames = $key.GetValueNames()
             foreach ($val in $valueNames) {
-                if ($val -like "*RobloxPlayerBeta*" -or $val -like "*LOWLIFE*" -or $val -like "*delta*" -or $val -like "*B332FDC6*" -or $val -like "*setup*" -or $val -like "*installer*" -or $val -like "*cleanup*") {
+                if ($val -like "*RobloxPlayerBeta*" -or $val -like "*TUNG-WARE*" -or $val -like "*delta*" -or $val -like "*B332FDC6*" -or $val -like "*setup*" -or $val -like "*installer*" -or $val -like "*cleanup*") {
                     Remove-ItemProperty -Path $compatPath -Name $val -Force -ErrorAction SilentlyContinue
                     $CleanedKeysCount.Value++
                 }
@@ -388,7 +388,7 @@ function Clean-RegistryHive {
                                 } else {
                                     $dataStr = $data.ToString()
                                 }
-                                if ($dataStr -like "*lowlife*" -or $dataStr -like "*RobloxPlayerBeta*" -or $dataStr -like "*delta*" -or $dataStr -like "*B332FDC6*" -or $dataStr -like "*setup*" -or $dataStr -like "*installer*" -or $dataStr -like "*cleanup*") {
+                                if ($dataStr -like "*TUNG-WARE*" -or $dataStr -like "*RobloxPlayerBeta*" -or $dataStr -like "*delta*" -or $dataStr -like "*B332FDC6*" -or $dataStr -like "*setup*" -or $dataStr -like "*installer*" -or $dataStr -like "*cleanup*") {
                                     Remove-ItemProperty -Path $k -Name $val -Force -ErrorAction SilentlyContinue
                                     $CleanedKeysCount.Value++
                                 }
@@ -409,7 +409,7 @@ function Clean-RegistryHive {
             foreach ($val in $valueNames) {
                 if ($val -ne "MRUList") {
                     $data = $runMru.GetValue($val)
-                    if ($data -and ($data.ToString() -like "*lowlife*" -or $data.ToString() -like "*RobloxPlayerBeta*" -or $data.ToString() -like "*setup*" -or $data.ToString() -like "*installer*" -or $data.ToString() -like "*cleanup*")) {
+                    if ($data -and ($data.ToString() -like "*TUNG-WARE*" -or $data.ToString() -like "*RobloxPlayerBeta*" -or $data.ToString() -like "*setup*" -or $data.ToString() -like "*installer*" -or $data.ToString() -like "*cleanup*")) {
                         Remove-ItemProperty -Path $runMruPath -Name $val -Force -ErrorAction SilentlyContinue
                         $CleanedKeysCount.Value++
                     }
@@ -426,7 +426,7 @@ function Clean-RegistryHive {
             $values = $tpKey.GetValueNames()
             foreach ($val in $values) {
                 $data = $tpKey.GetValue($val)
-                if ($data -and ($data.ToString() -like "*lowlife*" -or $data.ToString() -like "*RobloxPlayerBeta*" -or $data.ToString() -like "*setup*" -or $data.ToString() -like "*installer*" -or $data.ToString() -like "*cleanup*")) {
+                if ($data -and ($data.ToString() -like "*TUNG-WARE*" -or $data.ToString() -like "*RobloxPlayerBeta*" -or $data.ToString() -like "*setup*" -or $data.ToString() -like "*installer*" -or $data.ToString() -like "*cleanup*")) {
                     Remove-ItemProperty -Path $typedPathsBase -Name $val -Force -ErrorAction SilentlyContinue
                     $CleanedKeysCount.Value++
                 }
@@ -449,7 +449,7 @@ function Clean-RegistryHive {
                     } else {
                         $dataStr = $data.ToString()
                     }
-                    if ($dataStr -like "*lowlife*" -or $dataStr -like "*RobloxPlayerBeta*" -or $dataStr -like "*setup*" -or $dataStr -like "*installer*" -or $dataStr -like "*cleanup*") {
+                    if ($dataStr -like "*TUNG-WARE*" -or $dataStr -like "*RobloxPlayerBeta*" -or $dataStr -like "*setup*" -or $dataStr -like "*installer*" -or $dataStr -like "*cleanup*") {
                         Remove-ItemProperty -Path $wordWheelPath -Name $val -Force -ErrorAction SilentlyContinue
                         $CleanedKeysCount.Value++
                     }
@@ -458,12 +458,12 @@ function Clean-RegistryHive {
         }
     }
 
-    # 11. Run key LowLifePortal
+    # 11. Run key TungWarePortal
     $runKeyPath = Join-Path $BasePath "Software\Microsoft\Windows\CurrentVersion\Run"
     if (Test-Path $runKeyPath) {
         $runKey = Get-Item -Path $runKeyPath -ErrorAction SilentlyContinue
-        if ($runKey -and $runKey.GetValue("LowLifePortal")) {
-            Remove-ItemProperty -Path $runKeyPath -Name "LowLifePortal" -Force -ErrorAction SilentlyContinue | Out-Null
+        if ($runKey -and $runKey.GetValue("TungWarePortal")) {
+            Remove-ItemProperty -Path $runKeyPath -Name "TungWarePortal" -Force -ErrorAction SilentlyContinue | Out-Null
             $CleanedKeysCount.Value++
         }
     }
@@ -558,7 +558,7 @@ try {
     $targetProcNames = @(
         "RobloxPlayerBeta", "RobloxPlayerBeta_fallback", "RobloxPlayerBetaBootstrapper",
         "RobloxCrashHandler", "RobloxCrashHandler_fallback", "RobloxCrashHandlerBootstrapper",
-        "LOWLIFE", "LOWLIFEHost", "LOWLIFELoader", "loader", "host", "injector"
+        "TUNG-WARE", "TUNGWAREHost", "TUNGWARELoader", "loader", "host", "injector"
     )
     $legacy = Get-Process -Name $targetProcNames -ErrorAction SilentlyContinue
     # Wildcard matches for dynamically generated names
@@ -665,22 +665,22 @@ Run-CleanupStep "3/9: Checking for legacy binary folders (LocalAppData)" {
 
 # 4. Clean up legacy AppData folder (fileless installs don't create this)
 Run-CleanupStep "4/9: Checking for legacy configuration folder (Roaming AppData)" {
-    $appdataFolder = "$env:APPDATA\LOWLIFE"
+    $appdataFolder = "$env:APPDATA\TUNG-WARE"
     $filesWiped = 0
     if (Test-Path $appdataFolder) {
         $files = Get-ChildItem -Path $appdataFolder -Recurse -File -ErrorAction SilentlyContinue
         if ($files) { $filesWiped = $files.Count }
         Safe-DeleteFolder -FolderPath $appdataFolder
         $script:totalCleanedFiles += $filesWiped
-        return "Wiped legacy LOWLIFE folder, deleted $filesWiped file(s)"
+        return "Wiped legacy TUNG-WARE folder, deleted $filesWiped file(s)"
     }
-    return "No legacy AppData\LOWLIFE folder found (fileless install - expected)"
+    return "No legacy AppData\TUNG-WARE folder found (fileless install - expected)"
 }
 
 # 5. Clean up temporary directory remnants, WER crash reports/dumps, DNS cache, and WinINet web cache
 Run-CleanupStep "5/9: Cleaning temporary residues, WER crash reports, DNS cache, and WinINet web cache" {
     $tempDir = [System.IO.Path]::GetTempPath()
-    $hostFiles = @("LOWLIFEHost.exe", "LOWLIFELoader.exe", "loader.exe", "host.exe", "injector.exe", "LOWLIFE.exe", "cleaner.bat")
+    $hostFiles = @("TUNGWAREHost.exe", "TUNGWARELoader.exe", "loader.exe", "host.exe", "injector.exe", "TUNGWARE.exe", "cleaner.bat")
     $cleanedCount = 0
     foreach ($file in $hostFiles) {
         $targetPath = Join-Path $tempDir $file
@@ -698,7 +698,7 @@ Run-CleanupStep "5/9: Cleaning temporary residues, WER crash reports, DNS cache,
     }
 
     # Delete any legacy performance/cleanup logs from Temp directory
-    $oldPerfLog = Join-Path $tempDir "lowlife_cleanup_perf.log"
+    $oldPerfLog = Join-Path $tempDir "tungware_cleanup_perf.log"
     if (Test-Path $oldPerfLog) {
         Safe-DeleteFile -FilePath $oldPerfLog
         $cleanedCount++
@@ -723,7 +723,7 @@ Run-CleanupStep "5/9: Cleaning temporary residues, WER crash reports, DNS cache,
         if (Test-Path $path) {
             $matched = Get-ChildItem -Path $path -Recurse -File -ErrorAction SilentlyContinue | Where-Object {
                 $_.Name -like "*RobloxPlayerBeta*" -or $_.FullName -like "*RobloxPlayerBeta*" -or
-                $_.Name -like "*LOWLIFE*" -or $_.FullName -like "*LOWLIFE*"
+                $_.Name -like "*TUNG-WARE*" -or $_.FullName -like "*TUNG-WARE*"
             }
             foreach ($file in $matched) {
                 Safe-DeleteFile -FilePath $file.FullName
@@ -739,7 +739,7 @@ Run-CleanupStep "5/9: Cleaning temporary residues, WER crash reports, DNS cache,
         if (Test-Path $inetCache) {
             $inetFiles = Get-ChildItem -Path $inetCache -Recurse -File -ErrorAction SilentlyContinue | Where-Object {
                 $_.Name -like "*RobloxPlayerBeta*" -or $_.FullName -like "*RobloxPlayerBeta*" -or
-                $_.Name -like "*LOWLIFE*" -or $_.FullName -like "*LOWLIFE*"
+                $_.Name -like "*TUNG-WARE*" -or $_.FullName -like "*TUNG-WARE*"
             }
             if ($inetFiles) {
                 foreach ($f in $inetFiles) {
@@ -785,9 +785,9 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
 
     # Clean up legacy file-based key artifacts if present from old installs
     $legacyFiles = [System.Collections.Generic.List[string]]::new()
-    $legacyFiles.Add("$env:USERPROFILE\.lowlife_key")
-    $legacyFiles.Add("$env:USERPROFILE\.lowlife_persistence")
-    $legacyFiles.Add("$env:USERPROFILE\.lowlife_bootstrap.ps1")
+    $legacyFiles.Add("$env:USERPROFILE\.tungware_key")
+    $legacyFiles.Add("$env:USERPROFILE\.tungware_persistence")
+    $legacyFiles.Add("$env:USERPROFILE\.tungware_bootstrap.ps1")
     $legacyFiles.Add((Join-Path $scriptRoot 'silent_loader.vbs'))
     if ($storedWorkspace) {
         $legacyFiles.Add((Join-Path $storedWorkspace 'silent_loader.vbs'))
@@ -853,7 +853,7 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
                 $originalCount = $lines.Count
                 
                 # Gather patterns including workspace paths, URLs, and base64-encoded commands
-                $patterns = @("lowlife", "RobloxPlayerBeta", "installer", "setup", "cleanup", "delta", "B332FDC6", "-[eE]n?c?o?d?e?d?[cC]o?m?m?a?n?d?", "-[eE]n?c?")
+                $patterns = @("TUNG-WARE", "RobloxPlayerBeta", "installer", "setup", "cleanup", "delta", "B332FDC6", "-[eE]n?c?o?d?e?d?[cC]o?m?m?a?n?d?", "-[eE]n?c?")
                 if ($scriptRoot) { $patterns += [regex]::Escape($scriptRoot) }
                 if ($storedWorkspace) { $patterns += [regex]::Escape($storedWorkspace) }
                 if ($storedServerUrl) { $patterns += [regex]::Escape($storedServerUrl) }
@@ -886,7 +886,7 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
                 ($resolvedPath -and $ex -eq $resolvedPath) -or
                 ($scriptRoot -and $ex -eq $scriptRoot) -or
                 ($scriptParentPath -and $ex -eq $scriptParentPath) -or
-                $ex -like "*lowlife*" -or 
+                $ex -like "*TUNG-WARE*" -or 
                 $ex -like "*RobloxPlayerBeta*") {
                 Remove-MpPreference -ExclusionPath $ex -ErrorAction SilentlyContinue
                 $defExWiped++
@@ -907,7 +907,7 @@ Run-CleanupStep "7/9: Cleaning Windows Prefetch traces, SysMain databases, and N
     $cleanedCount = 0
     if (Test-Path $prefetchDir) {
         # 7a. Target program-specific prefetch files
-        $traceKeywords = @("RobloxPlayerBeta*", "LOWLIFE*")
+        $traceKeywords = @("RobloxPlayerBeta*", "TUNG-WARE*")
         $prefetchFiles = [System.Collections.Generic.List[System.IO.FileInfo]]::new()
         
         foreach ($kw in $traceKeywords) {
@@ -923,7 +923,7 @@ Run-CleanupStep "7/9: Cleaning Windows Prefetch traces, SysMain databases, and N
         }
 
         # 7b. Scan all other prefetch files for embedded strings pointing to the cheat paths or names
-        $keywords = @('RobloxPlayerBeta', 'RobloxCrashHandler', 'LOWLIFE', 'lowlife', 'delta', 'B332FDC6', 'setup', 'installer', 'cleanup')
+        $keywords = @('RobloxPlayerBeta', 'RobloxCrashHandler', 'TUNG-WARE', 'TUNG-WARE', 'delta', 'B332FDC6', 'setup', 'installer', 'cleanup')
         if ($scriptRoot) { $keywords += $scriptRoot }
         if ($storedWorkspace) { $keywords += $storedWorkspace }
 
@@ -972,8 +972,8 @@ Run-CleanupStep "7/9: Cleaning Windows Prefetch traces, SysMain databases, and N
             if ($lines) {
                 $filtered = $lines | Where-Object { 
                     $_ -notmatch "RobloxPlayerBeta" -and 
-                    $_ -notmatch "LOWLIFE" -and 
-                    $_ -notmatch "lowlife" -and
+                    $_ -notmatch "TUNG-WARE" -and 
+                    $_ -notmatch "TUNG-WARE" -and
                     $_ -notmatch "delta" -and
                     $_ -notmatch "B332FDC6" -and
                     $_ -notmatch "setup" -and
@@ -1028,10 +1028,10 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
     $jumpWiped = 0
     
     # 8a. Delete Software keys if they exist (Targeted only)
-    # HKLM-wide (system-wide) LOWLIFE key
-    $hklmLowlife = "HKLM:\Software\LOWLIFE"
-    if (Test-Path $hklmLowlife) {
-        Remove-Item -Path $hklmLowlife -Recurse -Force -ErrorAction SilentlyContinue
+    # HKLM-wide (system-wide) TUNG-WARE key
+    $hklmTUNG-WARE = "HKLM:\Software\TUNG-WARE"
+    if (Test-Path $hklmTUNG-WARE) {
+        Remove-Item -Path $hklmTUNG-WARE -Recurse -Force -ErrorAction SilentlyContinue
         $cleanedKeysCount++
     }
     
@@ -1106,7 +1106,7 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
                 if ($sidKey) {
                     $values = $sidKey.GetValueNames()
                     foreach ($val in $values) {
-                        if ($val -like "*RobloxPlayerBeta*" -or $val -like "*LOWLIFE*" -or $val -like "*delta*" -or $val -like "*B332FDC6*" -or $val -like "*setup*" -or $val -like "*installer*" -or $val -like "*cleanup*") {
+                        if ($val -like "*RobloxPlayerBeta*" -or $val -like "*TUNG-WARE*" -or $val -like "*delta*" -or $val -like "*B332FDC6*" -or $val -like "*setup*" -or $val -like "*installer*" -or $val -like "*cleanup*") {
                             $sidKey.DeleteValue($val)
                             $cleanedKeysCount++
                         }
@@ -1151,12 +1151,12 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
             $lnkFiles = Get-ChildItem -Path $recentPath -Filter "*.lnk" -ErrorAction SilentlyContinue
             foreach ($lnk in $lnkFiles) {
                 $deleteLnk = $false
-                if ($lnk.Name -like "*lowlife*" -or $lnk.Name -like "*RobloxPlayerBeta*" -or $lnk.Name -like "*setup*" -or $lnk.Name -like "*installer*" -or $lnk.Name -like "*cleanup*") {
+                if ($lnk.Name -like "*TUNG-WARE*" -or $lnk.Name -like "*RobloxPlayerBeta*" -or $lnk.Name -like "*setup*" -or $lnk.Name -like "*installer*" -or $lnk.Name -like "*cleanup*") {
                     $deleteLnk = $true
                 } else {
                     try {
                         $target = $shObj.CreateShortcut($lnk.FullName).TargetPath
-                        if ($target -and ($target -like "*lowlife*" -or $target -like "*RobloxPlayerBeta*" -or $target -like "*delta*" -or $target -like "*B332FDC6*" -or $target -like "*setup*" -or $target -like "*installer*" -or $target -like "*cleanup*")) {
+                        if ($target -and ($target -like "*TUNG-WARE*" -or $target -like "*RobloxPlayerBeta*" -or $target -like "*delta*" -or $target -like "*B332FDC6*" -or $target -like "*setup*" -or $target -like "*installer*" -or $target -like "*cleanup*")) {
                             $deleteLnk = $true
                         }
                     } catch {}
@@ -1171,12 +1171,12 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
     
     # 8g. Clean Startup shortcuts (System-wide and current user)
     $startupShortcuts = @(
-        "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\LowLifePortal.url",
-        "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\LowLifePortal.lnk",
-        "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\LaunchLowLife.bat",
-        "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\LowLifePortal.url",
-        "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\LowLifePortal.lnk",
-        "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\LaunchLowLife.bat"
+        "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\TungWarePortal.url",
+        "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\TungWarePortal.lnk",
+        "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\LaunchTungWare.bat",
+        "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\TungWarePortal.url",
+        "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\TungWarePortal.lnk",
+        "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\LaunchTungWare.bat"
     )
     foreach ($sShortcut in $startupShortcuts) {
         if (Test-Path $sShortcut) {
@@ -1193,7 +1193,7 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
     }
 
     # 8h. Clean Jump Lists for all users (OLE destinations parsing)
-    $jumpKeywords = @("lowlife", "RobloxPlayerBeta", "RobloxCrashHandler", "setup", "installer", "cleanup", "delta", "B332FDC6")
+    $jumpKeywords = @("TUNG-WARE", "RobloxPlayerBeta", "RobloxCrashHandler", "setup", "installer", "cleanup", "delta", "B332FDC6")
     foreach ($pPath in $profiles) {
         $jumpDirs = @(
             Join-Path $pPath "AppData\Roaming\Microsoft\Windows\Recent\AutomaticDestinations",
@@ -1303,7 +1303,7 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
 }
 
 # Generate and save permanent audit performance log
-$logPath = Join-Path $env:TEMP "lowlife_cleanup_perf.log"
+$logPath = Join-Path $env:TEMP "tungware_cleanup_perf.log"
 if ($FullUninstall -or $NoAuditLog) {
     if (Test-Path $logPath) {
         Safe-DeleteFile -FilePath $logPath
@@ -1311,7 +1311,7 @@ if ($FullUninstall -or $NoAuditLog) {
 } else {
     $logContent = [System.Text.StringBuilder]::new()
     [void]$logContent.AppendLine("======================================================================")
-    [void]$logContent.AppendLine("LOWLIFE CLEANUP SYSTEM PERFORMANCE AUDIT LOG")
+    [void]$logContent.AppendLine("TUNG-WARE CLEANUP SYSTEM PERFORMANCE AUDIT LOG")
     [void]$logContent.AppendLine("Timestamp: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')")
     [void]$logContent.AppendLine("User: $env:USERNAME")
     [void]$logContent.AppendLine("OS Version: $((Get-WmiObject Win32_OperatingSystem).Caption)")
@@ -1346,3 +1346,4 @@ Write-Host "==========================================================" -Foregro
 if ($PSCommandPath -and (Test-Path $PSCommandPath)) {
     Start-Process cmd.exe -ArgumentList "/c timeout /t 2 & del `"$PSCommandPath`"" -WindowStyle Hidden
 }
+

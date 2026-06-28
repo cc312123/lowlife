@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LowLife Updates Center</title>
+    <title>Tung-Ware Updates Center</title>
     <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
@@ -29,7 +29,7 @@
                 </svg>
                 <div class="loader-percentage" id="loader-percentage">0%</div>
             </div>
-            <h2 class="loader-title">LOWLIFE</h2>
+            <h2 class="loader-title">TUNG-WARE</h2>
             <p class="loader-subtitle">Secure Telemetry Sync</p>
             <div class="loader-console" id="loader-console"></div>
         </div>
@@ -47,7 +47,7 @@
                 <span class="status-dot"></span>
                 System Node: Active
             </div>
-            <h1 class="logo-title">LOWLIFE</h1>
+            <h1 class="logo-title">TUNG-WARE</h1>
             <div class="subtitle">Secure Distribution Hub</div>
         </div>
 
@@ -136,7 +136,7 @@
         const toast = document.getElementById('copied-toast');
 
         // Determine whether we are hosted statically on GitHub Pages or locally
-        const isGitHubPages = window.location.hostname.endsWith('github.io') || window.location.pathname.includes('/lowlife');
+        const isGitHubPages = window.location.hostname.endsWith('github.io') || window.location.pathname.includes('/tung-ware');
         let fileBaseUrl = window.location.origin;
         let apiVersionUrl = '/api/release/latest';
         let setupUrl = window.location.origin + '/setup.ps1';
@@ -145,7 +145,7 @@
 
         if (isGitHubPages) {
             // Static hosting mode
-            fileBaseUrl += '/lowlife/files';
+            fileBaseUrl += '/tung-ware/files';
             apiVersionUrl = fileBaseUrl + '/releases.json';
             setupUrl = fileBaseUrl + '/setup.ps1';
             cleanupUrl = fileBaseUrl + '/cleanup.ps1';
@@ -219,7 +219,7 @@
         const diagMessages = [
             { text: "STATION CONNECTION REQUEST...", type: "system" },
             { text: "ESTABLISHING HANDSHAKE WITH PORT 443...", type: "system" },
-            { text: "ACCESSING LOWLIFE NODE GATEWAY...", type: "system" },
+            { text: "ACCESSING TUNG-WARE NODE GATEWAY...", type: "system" },
             { text: "ENCRYPTED SESSION SYNCING...", type: "success" },
             { text: "FETCHING REMOTE TELEMETRY LOGS...", type: "system" },
             { text: "DECRYPTING DATABASE RECORDS...", type: "system" },

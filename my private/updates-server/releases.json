@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.45",
-    "latestChangelog":  "Fix Roblox crash occurring when using Silent Aim by resolving mutex deadlocks, stale cached pointers, and unsafe InputObject writes.",
+    "latestVersion":  "1.0.46",
+    "latestChangelog":  "Add manual click-to-enter confirmation on the loader intro screen.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -325,7 +325,14 @@
                         "changelog":  "Fix Roblox crash occurring when using Silent Aim by resolving mutex deadlocks, stale cached pointers, and unsafe InputObject writes.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "cc0dde055b761b66b8e9dede55a021b9"
+                    },
+                    {
+                        "version":  "1.0.46",
+                        "date":  "2026-06-28",
+                        "changelog":  "Add manual click-to-enter confirmation on the loader intro screen.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "ac11f59f67d5081a620c8ed5f6d1671e"
                     }
                 ],
-    "latestHash":  "cc0dde055b761b66b8e9dede55a021b9"
+    "latestHash":  "ac11f59f67d5081a620c8ed5f6d1671e"
 }

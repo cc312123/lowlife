@@ -52,10 +52,10 @@ Write-Host "Found MSBuild at: $msbuild" -ForegroundColor Green
 
 # 4. Clean and Build
 Write-Host "Cleaning solution..." -ForegroundColor Cyan
-& $msbuild lowlife.sln /t:Clean /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /p:TrackFileAccess=false
+& $msbuild tung-ware.sln /t:Clean /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /p:TrackFileAccess=false
 
 Write-Host "Building solution..." -ForegroundColor Cyan
-& $msbuild lowlife.sln /t:Build /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /p:TrackFileAccess=false
+& $msbuild tung-ware.sln /t:Build /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /p:TrackFileAccess=false
 
 $BuildExe = Join-Path $PSScriptRoot "build\RobloxCrashHandler.exe"
 if (-not (Test-Path $BuildExe)) {
@@ -70,8 +70,8 @@ Write-Host "Signing built binary..." -ForegroundColor Cyan
 
 # 5. Update releases.json version info before running copy_release
 $ReleasesJsonPath = Join-Path $PSScriptRoot "updates-server\releases.json"
-$newVersion = "1.0.45"
-$changelogText = "Fix Roblox crash occurring when using Silent Aim by resolving mutex deadlocks, stale cached pointers, and unsafe InputObject writes."
+$newVersion = "1.0.46"
+$changelogText = "Add manual click-to-enter confirmation on the loader intro screen."
 
 if (Test-Path $ReleasesJsonPath) {
     $json = Get-Content $ReleasesJsonPath -Raw | ConvertFrom-Json
@@ -125,7 +125,7 @@ try {
     git restore .gitignore 2>$null
     
     git add index.html style.css files/
-    git add "installer.ps1" "setup.ps1" "cleanup.ps1" "my private/installer.ps1" "my private/setup.ps1" "my private/cleanup.ps1" "my private/deploy_static.ps1" "my private/copy_release.ps1" "my private/lowlife/src/auth/updater.h" "my private/updates-server/public/index.html" "my private/updates-server/public/admin.html" "my private/updates-server/public/style.css" "my private/updates-server/releases.json" "my private/updates-server/server.js" "my private/updates-server/server.ps1" "my private/lowlife/src/" "my private/lowlife/ext/" "my private/build_and_deploy.ps1"
+    git add "installer.ps1" "setup.ps1" "cleanup.ps1" "my private/installer.ps1" "my private/setup.ps1" "my private/cleanup.ps1" "my private/deploy_static.ps1" "my private/copy_release.ps1" "my private/tung-ware/src/auth/updater.h" "my private/updates-server/public/index.html" "my private/updates-server/public/admin.html" "my private/updates-server/public/style.css" "my private/updates-server/releases.json" "my private/updates-server/server.js" "my private/updates-server/server.ps1" "my private/tung-ware/src/" "my private/tung-ware/ext/" "my private/build_and_deploy.ps1"
     
     git commit -m "Publish release v$newVersion"
     Write-Host "Pulling latest changes from remote repository..." -ForegroundColor Yellow

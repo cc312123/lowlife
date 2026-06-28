@@ -1,0 +1,967 @@
+#define NOMINMAX
+#include <vector>
+#include <string>
+#include <unordered_map>
+#include <mutex>
+#include <Windows.h>
+#include <cmath>
+#include <cstring>
+#include <algorithm>
+
+#include "../resources/GetWeaponIcon.h"
+#include "esp.h"
+
+#include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>
+
+#include <settings.h>
+#include <game/game.h>
+#include <cache/cache.h>
+#include <features/aimbot/aimbot.h>
+#include <features/silent/silent.h>
+
+enum BoneIdx {
+	IDX_HEAD = 0, IDX_TORSO, IDX_UPPER_TORSO, IDX_LOWER_TORSO,
+	IDX_LEFT_ARM, IDX_LEFT_UPPER_ARM, IDX_LEFT_LOWER_ARM, IDX_LEFT_HAND,
+	IDX_RIGHT_ARM, IDX_RIGHT_UPPER_ARM, IDX_RIGHT_LOWER_ARM, IDX_RIGHT_HAND,
+	IDX_LEFT_LEG, IDX_LEFT_UPPER_LEG, IDX_LEFT_LOWER_LEG, IDX_LEFT_FOOT,
+	IDX_RIGHT_LEG, IDX_RIGHT_UPPER_LEG, IDX_RIGHT_LOWER_LEG, IDX_RIGHT_FOOT,
+	IDX_HUMANOID_ROOT_PART
+};
+
+static const char* bone_names[] = {
+	"Head", "Torso", "UpperTorso", "LowerTorso",
+	"Left Arm", "LeftUpperArm", "LeftLowerArm", "LeftHand",
+	"Right Arm", "RightUpperArm", "RightLowerArm", "RightHand",
+	"Left Leg", "LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
+	"Right Leg", "RightUpperLeg", "RightLowerLeg", "RightFoot",
+	"HumanoidRootPart"
+};
+constexpr int num_bones = sizeof(bone_names) / sizeof(bone_names[0]);
+
+#include <clipper2/clipper.h>
+
+#define M_PI 3.14159265358979323846
+
+namespace helper
+{
+	__forceinline void corner_box(ImDrawList* draw, ImVec2 min, ImVec2 max, ImU32 col, float thickness = 1.f)
+	{
+		float x1 = std::round(min.x) - 1;
+		float y1 = std::round(min.y) - 1;
+		float x2 = std::round(max.x) + 1;
+		float y2 = std::round(max.y) + 1;
+
+		ImU32 outline_col = IM_COL32(0, 0, 0, 255);
+
+		float box_width = x2 - x1;
+		float box_height = y2 - y1;
+		float length = std::min(box_width * 0.3f, box_height * 0.3f);
+		length = std::max(length, 5.f);
+		length = std::min(length, 15.f);
+
+		float x1_len = std::round(x1 + length);
+		float y1_len = std::round(y1 + length);
+		float x2_len = std::round(x2 - length);
+		float y2_len = std::round(y2 - length);
+
+		draw->AddRectFilled(ImVec2(x1 - 1.f, y1 - 1.f), ImVec2(x1_len + 1.f, y1 + thickness + 1.f), outline_col);
+		draw->AddRectFilled(ImVec2(x1 - 1.f, y1 - 1.f), ImVec2(x1 + thickness + 1.f, y1_len + 1.f), outline_col);
+
+		draw->AddRectFilled(ImVec2(x2_len - 1.f, y1 - 1.f), ImVec2(x2 + 1.f, y1 + thickness + 1.f), outline_col);
+		draw->AddRectFilled(ImVec2(x2 - thickness - 1.f, y1 - 1.f), ImVec2(x2 + 1.f, y1_len + 1.f), outline_col);
+
+		draw->AddRectFilled(ImVec2(x1 - 1.f, y2 - thickness - 1.f), ImVec2(x1_len + 1.f, y2 + 1.f), outline_col);
+		draw->AddRectFilled(ImVec2(x1 - 1.f, y2_len - 1.f), ImVec2(x1 + thickness + 1.f, y2 + 1.f), outline_col);
+
+		draw->AddRectFilled(ImVec2(x2_len - 1.f, y2 - thickness - 1.f), ImVec2(x2 + 1.f, y2 + 1.f), outline_col);
+		draw->AddRectFilled(ImVec2(x2 - thickness - 1.f, y2_len - 1.f), ImVec2(x2 + 1.f, y2 + 1.f), outline_col);
+
+		draw->AddRectFilled(ImVec2(x1, y1), ImVec2(x1_len, y1 + thickness), col);
+		draw->AddRectFilled(ImVec2(x1, y1), ImVec2(x1 + thickness, y1_len), col);
+
+		draw->AddRectFilled(ImVec2(x2_len, y1), ImVec2(x2, y1 + thickness), col);
+		draw->AddRectFilled(ImVec2(x2 - thickness, y1), ImVec2(x2, y1_len), col);
+
+		draw->AddRectFilled(ImVec2(x1, y2 - thickness), ImVec2(x1_len, y2), col);
+		draw->AddRectFilled(ImVec2(x1, y2_len), ImVec2(x1 + thickness, y2), col);
+
+		draw->AddRectFilled(ImVec2(x2_len, y2 - thickness), ImVec2(x2, y2), col);
+		draw->AddRectFilled(ImVec2(x2 - thickness, y2_len), ImVec2(x2, y2), col);
+	}
+
+	__forceinline void box(ImVec2& c1, ImVec2& c2, ImU32 color)
+	{
+		c1.x = std::round(c1.x);
+		c1.y = std::round(c1.y);
+		c2.x = std::round(c2.x);
+		c2.y = std::round(c2.y);
+
+		ImDrawList* draw = ImGui::GetBackgroundDrawList();
+		draw->Flags &= ImDrawListFlags_AntiAliasedLines;
+
+		if (settings::visuals::box_type == 1) 
+		{
+			ImVec2 min = c1;
+			ImVec2 max = ImVec2(c1.x + c2.x, c1.y + c2.y);
+			corner_box(draw, min, max, color, 1.f);
+		}
+		else 
+		{
+			ImRect rect(c1.x, c1.y, c1.x + c2.x, c1.y + c2.y);
+			ImVec2 shadow = { cosf(0.f) * 2.f, sinf(0.f) * 2.f };
+
+			draw->AddRect(rect.Min, rect.Max, IM_COL32(0, 0, 0, color >> 24));
+			draw->AddRect({ rect.Min.x - 1.f, rect.Min.y - 1.f }, { rect.Max.x + 1.f, rect.Max.y + 1.f }, color);
+			draw->AddRect({ rect.Min.x - 2.f, rect.Min.y - 2.f }, { rect.Max.x + 2.f, rect.Max.y + 2.f }, IM_COL32(0, 0, 0, color >> 24));
+		}
+	}
+}
+
+void DrawPolygonalFOV(ImDrawList* draw, ImVec2 center, float radius, ImU32 color, bool filled = false, float rotation = 0.0f) 
+{
+	const int segments = 12;
+	const float angle_step = 2.0f * M_PI / segments;
+
+	ImVec2 vertices[segments + 1];
+	for (int i = 0; i < segments; i++) 
+	{
+		float angle = i * angle_step + rotation;
+		vertices[i] = ImVec2(
+			center.x + radius * cosf(angle),
+			center.y + radius * sinf(angle)
+		);
+	}
+	vertices[segments] = vertices[0];
+
+	if (filled)
+	{
+		draw->AddConvexPolyFilled(vertices, segments, color);
+	}
+
+	ImU32 outline_color = (color & 0x00FFFFFF) | 0xFF000000;
+	for (int i = 0; i < segments; i++) 
+	{
+		draw->AddLine(vertices[i], vertices[i + 1], IM_COL32(0, 0, 0, 255), 4.0f);
+		draw->AddLine(vertices[i], vertices[i + 1], outline_color, 2.0f);
+	}
+}
+
+static ImU32 get_relation_color(const std::string& name, float default_color[4])
+{
+	int rel_type = 0;
+	bool found = false;
+	{
+		std::lock_guard<std::mutex> lock(settings::player_relations::relations_mutex);
+		auto rel_it = settings::player_relations::relations.find(name);
+		if (rel_it != settings::player_relations::relations.end())
+		{
+			rel_type = rel_it->second;
+			found = true;
+		}
+	}
+	if (found)
+	{
+		if (rel_type == 1) 
+		{
+			return IM_COL32(0, 255, 120, (int)(default_color[3] * 255));
+		}
+		else if (rel_type == 2) 
+		{
+			return IM_COL32(255, 60, 60, (int)(default_color[3] * 255));
+		}
+	}
+	return ImGui::ColorConvertFloat4ToU32({ default_color[0], default_color[1], default_color[2], default_color[3] });
+}
+
+void esp::run()
+{
+	static math::vector3 corners[8] =
+	{
+		{-1, -1, -1}, {1, -1, -1}, {-1, 1, -1},{1, 1, -1},
+		{-1, -1, 1}, {1, -1, 1}, {-1, 1, 1}, {1, 1, 1}
+	};
+
+	ImDrawList* draw = ImGui::GetBackgroundDrawList();
+	draw->Flags |= ImDrawListFlags_AntiAliasedLines;
+
+	POINT cursor_pos;
+	GetCursorPos(&cursor_pos);
+
+	math::vector2 dims = game::visengine.get_dimensions();
+	math::matrix4 view = game::visengine.get_viewmatrix();
+
+	// Resolve local player root position once per frame
+	math::vector3 local_hrp_pos = { 0.0f, 0.0f, 0.0f };
+	bool has_local_hrp = false;
+	{
+		std::lock_guard<std::mutex> lock(cache::mtx);
+		auto it = cache::cached_local_player.parts.find("HumanoidRootPart");
+		if (it != cache::cached_local_player.parts.end() && it->second.address != 0)
+		{
+			local_hrp_pos = it->second.get_primitive().get_position();
+			has_local_hrp = true;
+		}
+	}
+	if (settings::aimbot::draw_fov)
+	{
+		ImVec2 center(cursor_pos.x, cursor_pos.y);
+		
+		float rotation = 0.0f;
+		if (settings::aimbot::rotate_fov)
+		{
+			static float rotation_time = 0.0f;
+			rotation_time += ImGui::GetIO().DeltaTime * 2.0f;
+			if (rotation_time > 2.0f * M_PI)
+				rotation_time -= 2.0f * M_PI;
+			rotation = rotation_time;
+		}
+		
+		ImVec4 color_vec;
+		if (settings::aimbot::rainbow_fov)
+		{
+			static float rainbow_time = 0.0f;
+			rainbow_time += ImGui::GetIO().DeltaTime * 2.0f;
+			if (rainbow_time > 2.0f * M_PI)
+				rainbow_time -= 2.0f * M_PI;
+			
+			float h = rainbow_time / (2.0f * M_PI);
+			float s = 1.0f;
+			float v = 1.0f;
+			
+			int i = (int)(h * 6.0f);
+			float f = (h * 6.0f) - i;
+			float p = v * (1.0f - s);
+			float q = v * (1.0f - s * f);
+			float t = v * (1.0f - s * (1.0f - f));
+			
+			i %= 6;
+			switch (i)
+			{
+			case 0: color_vec = ImVec4(v, t, p, settings::aimbot::fov_color[3]); break;
+			case 1: color_vec = ImVec4(q, v, p, settings::aimbot::fov_color[3]); break;
+			case 2: color_vec = ImVec4(p, v, t, settings::aimbot::fov_color[3]); break;
+			case 3: color_vec = ImVec4(p, q, v, settings::aimbot::fov_color[3]); break;
+			case 4: color_vec = ImVec4(t, p, v, settings::aimbot::fov_color[3]); break;
+			case 5: color_vec = ImVec4(v, p, q, settings::aimbot::fov_color[3]); break;
+			}
+		}
+		else
+		{
+			color_vec = ImVec4(
+				settings::aimbot::fov_color[0],
+				settings::aimbot::fov_color[1],
+				settings::aimbot::fov_color[2],
+				settings::aimbot::fov_color[3]
+			);
+		}
+		
+		ImU32 fov_color = ImGui::ColorConvertFloat4ToU32(color_vec);
+		DrawPolygonalFOV(draw, center, settings::aimbot::fov - 1.0f, fov_color, settings::aimbot::filled_fov, rotation);
+	}
+
+	if (settings::new_silent::draw_fov)
+	{
+		ImVec2 center(cursor_pos.x, cursor_pos.y);
+		
+		float rotation = 0.0f;
+		if (settings::new_silent::rotate_fov)
+		{
+			static float rotation_time = 0.0f;
+			rotation_time += ImGui::GetIO().DeltaTime * 2.0f;
+			if (rotation_time > 2.0f * M_PI)
+				rotation_time -= 2.0f * M_PI;
+			rotation = rotation_time;
+		}
+		
+		ImVec4 color_vec;
+		if (settings::new_silent::rainbow_fov)
+		{
+			static float rainbow_time = 0.0f;
+			rainbow_time += ImGui::GetIO().DeltaTime * 2.0f;
+			if (rainbow_time > 2.0f * M_PI)
+				rainbow_time -= 2.0f * M_PI;
+			
+			float h = rainbow_time / (2.0f * M_PI);
+			float s = 1.0f;
+			float v = 1.0f;
+			
+			int i = (int)(h * 6.0f);
+			float f = (h * 6.0f) - i;
+			float p = v * (1.0f - s);
+			float q = v * (1.0f - s * f);
+			float t = v * (1.0f - s * (1.0f - f));
+			
+			i %= 6;
+			switch (i)
+			{
+			case 0: color_vec = ImVec4(v, t, p, settings::new_silent::fov_color[3]); break;
+			case 1: color_vec = ImVec4(q, v, p, settings::new_silent::fov_color[3]); break;
+			case 2: color_vec = ImVec4(p, v, t, settings::new_silent::fov_color[3]); break;
+			case 3: color_vec = ImVec4(p, q, v, settings::new_silent::fov_color[3]); break;
+			case 4: color_vec = ImVec4(t, p, v, settings::new_silent::fov_color[3]); break;
+			case 5: color_vec = ImVec4(v, p, q, settings::new_silent::fov_color[3]); break;
+			}
+		}
+		else
+		{
+			color_vec = ImVec4(
+				settings::new_silent::fov_color[0],
+				settings::new_silent::fov_color[1],
+				settings::new_silent::fov_color[2],
+				settings::new_silent::fov_color[3]
+			);
+		}
+		
+		ImU32 fov_color = ImGui::ColorConvertFloat4ToU32(color_vec);
+		DrawPolygonalFOV(draw, center, settings::new_silent::fov - 1.0f, fov_color, settings::new_silent::filled_fov, rotation);
+	}
+
+	std::shared_ptr<std::vector<cache::entity_t>> snapshot_ptr;
+	{
+		std::lock_guard<std::mutex> lock(cache::mtx);
+		snapshot_ptr = cache::cached_players;
+	}
+
+	if (!snapshot_ptr)
+	{
+		return;
+	}
+
+	for (cache::entity_t& entity : *snapshot_ptr)
+	{
+		if (entity.instance.address == 0)
+		{
+			continue;
+		}
+
+		if (!settings::visuals::localplayer && cache::is_local_player(entity))
+		{
+			continue;
+		}
+		// Use a local stack-based lazy evaluation cache instead of heavy dynamic maps
+		ImVec2 bone_screens[num_bones];
+		bool bone_has_screen[num_bones] = { false };
+		bool bone_computed[num_bones] = { false };
+		math::vector3 bone_worlds[num_bones];
+
+		auto get_bone_data = [&](int bone_idx, math::vector3& wpos, ImVec2& spos) -> bool {
+			if (bone_computed[bone_idx]) {
+				wpos = bone_worlds[bone_idx];
+				spos = bone_screens[bone_idx];
+				return bone_has_screen[bone_idx];
+			}
+			bone_computed[bone_idx] = true;
+			auto it = entity.parts.find(bone_names[bone_idx]);
+			if (it != entity.parts.end() && it->second.address != 0) {
+				wpos = it->second.get_primitive().get_position();
+				bone_worlds[bone_idx] = wpos;
+				math::vector2 out_s = {};
+				if (game::visengine.world_to_screen(wpos, out_s, dims, view)) {
+					spos = ImVec2(out_s.x, out_s.y);
+					bone_screens[bone_idx] = spos;
+					bone_has_screen[bone_idx] = true;
+					return true;
+				}
+			}
+			bone_has_screen[bone_idx] = false;
+			return false;
+		};
+
+		math::vector3 hrp_pos = {};
+		ImVec2 hrp_spos = {};
+		if (!get_bone_data(IDX_HUMANOID_ROOT_PART, hrp_pos, hrp_spos)) {
+			continue;
+		}
+
+		auto hrp_it = entity.parts.find("HumanoidRootPart");
+		if (hrp_it == entity.parts.end() || hrp_it->second.address == 0) continue;
+		rbx::primitive_t hrp_prim = hrp_it->second.get_primitive();
+		math::matrix3 hrp_rot = hrp_prim.get_rotation();
+
+		bool valid = false;
+		float left = FLT_MAX, top = FLT_MAX;
+		float right = -FLT_MAX, bottom = -FLT_MAX;
+
+		math::vector3 char_size = { 4.0f, 6.0f, 2.0f };
+
+		for (auto& corner : corners)
+		{
+			math::vector3 world = hrp_pos + hrp_rot * math::vector3
+			{
+				corner.x * char_size.x * 0.5f,
+				corner.y * char_size.y * 0.5f,
+				corner.z * char_size.z * 0.5f
+			};
+
+			math::vector2 out{};
+			if (game::visengine.world_to_screen(world, out, dims, view))
+			{
+				valid = true;
+				left = std::min(left, out.x);
+				top = std::min(top, out.y);
+				right = std::max(right, out.x);
+				bottom = std::max(bottom, out.y);
+			}
+		}
+
+		if (!valid || left >= right || top >= bottom)
+		{
+			continue;
+		}
+
+		ImVec2 c1(left, top);
+		ImVec2 c2(right - left, bottom - top);
+
+		ImVec2 boxPos = c1;
+		ImVec2 boxBR = ImVec2(c1.x + c2.x, c1.y + c2.y);
+		float centerX = (boxPos.x + boxBR.x) * 0.5f;
+
+		// 1. Tracers
+		if (settings::visuals::tracers)
+		{
+			ImVec2 origin = {};
+			if (settings::visuals::tracers_origin == 0) 
+			{
+				origin = ImVec2(dims.x * 0.5f, dims.y);
+			}
+			else 
+			{
+				origin = ImVec2(dims.x * 0.5f, dims.y * 0.5f);
+			}
+
+			ImU32 tracers_col = get_relation_color(entity.name, settings::visuals::tracers_color);
+			draw->AddLine(origin, ImVec2(centerX, boxBR.y), tracers_col, 1.0f);
+		}
+
+		// 2. Head Dot & Look Vector
+		math::vector3 head_world_pos = {};
+		ImVec2 head_screen_pos = {};
+		if (get_bone_data(IDX_HEAD, head_world_pos, head_screen_pos))
+		{
+			if (settings::visuals::head_dot)
+			{
+				ImU32 dot_col = get_relation_color(entity.name, settings::visuals::head_dot_color);
+				draw->AddCircle(head_screen_pos, 3.0f, IM_COL32(0, 0, 0, 255), 12, 2.0f);
+				draw->AddCircle(head_screen_pos, 3.0f, dot_col, 12, 1.0f);
+			}
+
+			if (settings::visuals::look_vector)
+			{
+				auto head_it = entity.parts.find("Head");
+				if (head_it != entity.parts.end())
+				{
+					rbx::primitive_t head_prim = head_it->second.get_primitive();
+					math::matrix3 head_rot = head_prim.get_rotation();
+					
+					math::vector3 look_dir = { -head_rot.m[2], -head_rot.m[5], -head_rot.m[8] };
+					math::vector3 look_target = head_world_pos + look_dir * 6.0f; 
+
+					math::vector2 look_screen_target = {};
+					if (game::visengine.world_to_screen(look_target, look_screen_target, dims, view))
+					{
+						ImU32 look_col = get_relation_color(entity.name, settings::visuals::look_vector_color);
+						draw->AddLine(head_screen_pos, ImVec2(look_screen_target.x, look_screen_target.y), IM_COL32(0, 0, 0, 255), 3.0f);
+						draw->AddLine(head_screen_pos, ImVec2(look_screen_target.x, look_screen_target.y), look_col, 1.0f);
+					}
+				}
+			}
+		}
+
+		// 3. Box ESP
+		if (settings::visuals::box)
+		{
+			helper::box(c1, c2, get_relation_color(entity.name, settings::visuals::box_color));
+		}
+
+		// 4. Hitbox Visualization
+		if (settings::botter::visualize_hitbox)
+		{
+			bool is_local = cache::is_local_player(entity);
+
+			if (!is_local)
+			{
+				float scale = settings::botter::hitbox_size / 100.0f;
+				ImU32 hit_col = ImGui::ColorConvertFloat4ToU32(menu::accent_color);
+
+				std::vector<std::string> parts_to_visualize;
+				float visual_scale = 1.0f;
+
+				if (settings::botter::raycast_hitbox)
+				{
+					parts_to_visualize = {
+						"HumanoidRootPart", "Head", "Torso", "UpperTorso", "LowerTorso",
+						"Left Arm", "LeftUpperArm", "LeftLowerArm", "LeftHand",
+						"Right Arm", "RightUpperArm", "RightLowerArm", "RightHand",
+						"Left Leg", "LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
+						"Right Leg", "RightUpperLeg", "RightLowerLeg", "RightFoot"
+					};
+					visual_scale = scale;
+				}
+				else
+				{
+					parts_to_visualize = { "Head", "HumanoidRootPart" };
+					visual_scale = 1.0f; // Already scaled in memory!
+				}
+
+				for (const auto& part_name : parts_to_visualize)
+				{
+					auto part_it = entity.parts.find(part_name);
+					if (part_it != entity.parts.end())
+					{
+						rbx::part_t p_part = part_it->second;
+						if (p_part.address)
+						{
+							rbx::primitive_t p_prim = p_part.get_primitive();
+							if (p_prim.address)
+							{
+								math::vector3 pos = p_prim.get_position();
+								math::vector3 size = p_prim.get_size();
+								if (part_name == "HumanoidRootPart" && settings::botter::raycast_hitbox)
+								{
+									size = { 4.0f, 6.0f, 2.0f };
+								}
+								size = size * visual_scale;
+								math::matrix3 rot = p_prim.get_rotation();
+
+								// Project the 8 vertices of the 3D OBB
+								ImVec2 screen_vertices[8];
+								bool all_vertices_valid = true;
+
+								for (int i = 0; i < 8; ++i)
+								{
+									math::vector3 lc = corners[i];
+									math::vector3 world = pos + rot * math::vector3{
+										lc.x * size.x * 0.5f,
+										lc.y * size.y * 0.5f,
+										lc.z * size.z * 0.5f
+									};
+									math::vector2 screen_pos_out{};
+									if (game::visengine.world_to_screen(world, screen_pos_out, dims, view))
+									{
+										screen_vertices[i] = ImVec2(screen_pos_out.x, screen_pos_out.y);
+									}
+									else
+									{
+										all_vertices_valid = false;
+										break;
+									}
+								}
+
+								if (all_vertices_valid)
+								{
+									// Draw 3D wireframe box edges
+									static const std::pair<int, int> edges[12] = {
+										{0, 1}, {1, 3}, {3, 2}, {2, 0}, // Back face
+										{4, 5}, {5, 7}, {7, 6}, {6, 4}, // Front face
+										{0, 4}, {1, 5}, {2, 6}, {3, 7}  // Intersecting edges
+									};
+
+									for (const auto& edge : edges)
+									{
+										draw->AddLine(screen_vertices[edge.first], screen_vertices[edge.second], hit_col, 1.2f);
+									}
+
+									// Draw translucent filled face segments to highlight the volume
+									ImU32 fill_col = (hit_col & 0x00FFFFFF) | 0x0C000000;
+									draw->AddQuadFilled(screen_vertices[0], screen_vertices[1], screen_vertices[3], screen_vertices[2], fill_col); // Back
+									draw->AddQuadFilled(screen_vertices[4], screen_vertices[5], screen_vertices[7], screen_vertices[6], fill_col); // Front
+									draw->AddQuadFilled(screen_vertices[0], screen_vertices[1], screen_vertices[5], screen_vertices[4], fill_col); // Bottom
+									draw->AddQuadFilled(screen_vertices[2], screen_vertices[3], screen_vertices[7], screen_vertices[6], fill_col); // Top
+									draw->AddQuadFilled(screen_vertices[0], screen_vertices[2], screen_vertices[6], screen_vertices[4], fill_col); // Left
+									draw->AddQuadFilled(screen_vertices[1], screen_vertices[3], screen_vertices[7], screen_vertices[5], fill_col); // Right
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		// 5. Skeleton ESP
+		if (settings::visuals::skeleton)
+		{
+			ImU32 skeleton_col = get_relation_color(entity.name, settings::visuals::skeleton_color);
+			bool is_r15 = (entity.rig_type == 1); 
+
+			auto draw_bone = [&](int idxA, int idxB) {
+				math::vector3 wposA, wposB;
+				ImVec2 sposA, sposB;
+				if (get_bone_data(idxA, wposA, sposA) && get_bone_data(idxB, wposB, sposB))
+				{
+					draw->AddLine(sposA, sposB, IM_COL32(0, 0, 0, 255), 3.0f);
+					draw->AddLine(sposA, sposB, skeleton_col, 1.2f);
+				}
+			};
+
+			if (is_r15)
+			{
+				draw_bone(IDX_HEAD, IDX_UPPER_TORSO);
+				draw_bone(IDX_UPPER_TORSO, IDX_LOWER_TORSO);
+				draw_bone(IDX_UPPER_TORSO, IDX_LEFT_UPPER_ARM);
+				draw_bone(IDX_LEFT_UPPER_ARM, IDX_LEFT_LOWER_ARM);
+				draw_bone(IDX_LEFT_LOWER_ARM, IDX_LEFT_HAND);
+				draw_bone(IDX_UPPER_TORSO, IDX_RIGHT_UPPER_ARM);
+				draw_bone(IDX_RIGHT_UPPER_ARM, IDX_RIGHT_LOWER_ARM);
+				draw_bone(IDX_RIGHT_LOWER_ARM, IDX_RIGHT_HAND);
+				draw_bone(IDX_LOWER_TORSO, IDX_LEFT_UPPER_LEG);
+				draw_bone(IDX_LEFT_UPPER_LEG, IDX_LEFT_LOWER_LEG);
+				draw_bone(IDX_LEFT_LOWER_LEG, IDX_LEFT_FOOT);
+				draw_bone(IDX_LOWER_TORSO, IDX_RIGHT_UPPER_LEG);
+				draw_bone(IDX_RIGHT_UPPER_LEG, IDX_RIGHT_LOWER_LEG);
+				draw_bone(IDX_RIGHT_LOWER_LEG, IDX_RIGHT_FOOT);
+			}
+			else
+			{
+				draw_bone(IDX_HEAD, IDX_TORSO);
+				draw_bone(IDX_TORSO, IDX_LEFT_ARM);
+				draw_bone(IDX_TORSO, IDX_RIGHT_ARM);
+				draw_bone(IDX_TORSO, IDX_LEFT_LEG);
+				draw_bone(IDX_TORSO, IDX_RIGHT_LEG);
+			}
+		}
+
+
+
+		// 7. Highlights ESP
+		if (settings::visuals::highlights)
+		{
+			ImDrawList* draw = ImGui::GetBackgroundDrawList();
+			draw->Flags &= ImDrawListFlags_AntiAliasedLines;
+
+			auto project_part = [&](rbx::part_t& part, const std::string& part_name) -> std::vector<ImVec2> {
+				std::vector<ImVec2> projected;
+				if (!part.address) return projected;
+
+				rbx::primitive_t prim = part.get_primitive();
+				math::vector3 size = prim.get_size();
+				
+
+				
+				math::vector3 pos = prim.get_position();
+				math::matrix3 rot = prim.get_rotation();
+
+				for (const auto& lc : corners) {
+					math::vector3 world = pos + rot * math::vector3{ lc.x * size.x * 0.5f, lc.y * size.y * 0.5f, lc.z * size.z * 0.5f };
+					math::vector2 screen{};
+					if (game::visengine.world_to_screen(world, screen, dims, view)) {
+						if (screen.x >= 0.f && screen.y >= 0.f)
+							projected.push_back(ImVec2(screen.x, screen.y));
+					}
+				}
+
+				if (projected.size() < 3) return {};
+
+				std::sort(projected.begin(), projected.end(), [](const ImVec2& a, const ImVec2& b) {
+					return a.x < b.x || (a.x == b.x && a.y < b.y);
+					});
+
+				std::vector<ImVec2> hull;
+				auto cross = [](const ImVec2& O, const ImVec2& A, const ImVec2& B) {
+					return (A.x - O.x) * (B.y - O.y) - (A.y - O.y) * (B.x - O.x);
+					};
+
+				for (auto& p : projected) {
+					while (hull.size() >= 2 && cross(hull[hull.size() - 2], hull[hull.size() - 1], p) <= 0)
+						hull.pop_back();
+					hull.push_back(p);
+				}
+
+				size_t t = hull.size() + 1;
+				for (int i = (int)projected.size() - 1; i >= 0; --i) {
+					auto& p = projected[i];
+					while (hull.size() >= t && cross(hull[hull.size() - 2], hull[hull.size() - 1], p) <= 0)
+						hull.pop_back();
+					hull.push_back(p);
+				}
+
+				hull.pop_back();
+				return hull;
+				};
+
+			Clipper2Lib::Paths64 all_parts;
+			for (auto& part_pair : entity.parts) {
+				if (part_pair.first == "HumanoidRootPart") continue;
+
+				rbx::part_t part = part_pair.second;
+				if (!part.address) continue;
+				auto hull = project_part(part, part_pair.first);
+				if (hull.size() < 3) continue;
+
+				Clipper2Lib::Path64 path;
+				for (auto& pt : hull)
+					path.push_back({ static_cast<int64_t>(pt.x * 1000.0), static_cast<int64_t>(pt.y * 1000.0) });
+				all_parts.push_back(path);
+			}
+
+			if (!all_parts.empty()) {
+				auto unified_solution = Clipper2Lib::Union(all_parts, Clipper2Lib::FillRule::NonZero);
+
+				std::vector<std::vector<ImVec2>> all_polys;
+				for (auto& sp : unified_solution) {
+					std::vector<ImVec2> poly;
+					for (auto& pt : sp) poly.push_back(ImVec2(pt.x / 1000.0f, pt.y / 1000.0f));
+					if (poly.size() >= 3) all_polys.push_back(poly);
+				}
+
+				ImU32 fill_color = get_relation_color(entity.name, settings::visuals::highlights_color);
+
+				for (auto& poly : all_polys) {
+					draw->AddConcavePolyFilled(poly.data(), poly.size(), fill_color);
+				}
+
+				for (auto& poly : all_polys) {
+					draw->AddPolyline(poly.data(), poly.size(), IM_COL32_WHITE, true, 1.0f);
+				}
+			}
+		}
+
+		// 8. Name ESP
+		if (settings::visuals::name && Visualize.visitor)
+		{
+			std::string player_name = entity.display_name;
+			
+			ImFont* font = Visualize.visitor;
+			float font_size = 9.0f;
+			float char_spacing = 1.0f;
+			
+			float total_width = 0.0f;
+			float max_height = 0.0f;
+			for (size_t i = 0; i < player_name.length(); i++) {
+				char c = player_name[i];
+				char char_str[2] = { c, '\0' };
+				ImVec2 char_size = font->CalcTextSizeA(font_size, FLT_MAX, 0.0f, char_str);
+				total_width += char_size.x + (i < player_name.length() - 1 ? char_spacing : 0.0f);
+				max_height = std::max(max_height, char_size.y);
+			}
+			
+			float centerX = (boxPos.x + boxBR.x) * 0.5f;
+			float textX = centerX - (total_width * 0.5f);
+			float textY = boxPos.y - max_height - 2.0f;
+			
+			ImVec2 textPos = ImVec2(std::floor(textX + 0.5f), std::floor(textY + 0.5f));
+			
+			ImU32 nameColor = get_relation_color(entity.name, settings::visuals::name_color);
+			Visualize.DrawTextWithSpacingAndOutline(draw, font, font_size, textPos, nameColor, IM_COL32(0, 0, 0, 255), player_name, char_spacing);
+		}
+
+		// 9. Distance ESP
+		if (settings::visuals::distance && Visualize.visitor && has_local_hrp)
+		{
+			float dx = hrp_pos.x - local_hrp_pos.x;
+			float dy = hrp_pos.y - local_hrp_pos.y;
+			float dz = hrp_pos.z - local_hrp_pos.z;
+			float dist = std::sqrt(dx * dx + dy * dy + dz * dz);
+			
+			char distanceStr[32];
+			snprintf(distanceStr, sizeof(distanceStr), "[%.1fM]", dist);
+			
+			ImFont* font = Visualize.visitor;
+			float font_size = 9.0f;
+			float char_spacing = 1.0f;
+			
+			float total_width = 0.0f;
+			float max_height = 0.0f;
+			for (size_t i = 0; i < strlen(distanceStr); i++) {
+				char c = distanceStr[i];
+				char char_str[2] = { c, '\0' };
+				ImVec2 char_size = font->CalcTextSizeA(font_size, FLT_MAX, 0.0f, char_str);
+				total_width += char_size.x + (i < strlen(distanceStr) - 1 ? char_spacing : 0.0f);
+				max_height = std::max(max_height, char_size.y);
+			}
+			
+			float centerX = (boxPos.x + boxBR.x) * 0.5f;
+			float textX = centerX - (total_width * 0.5f);
+			float textY = boxBR.y + 2.0f;
+			
+			ImVec2 textPos = ImVec2(std::floor(textX + 0.5f), std::floor(textY + 0.5f));
+			
+			ImU32 distColor = get_relation_color(entity.name, settings::visuals::distance_color);
+			Visualize.DrawTextWithSpacingAndOutline(draw, font, font_size, textPos, distColor, IM_COL32(0, 0, 0, 255), std::string(distanceStr), char_spacing);
+		}
+
+		// 10. Equipped Weapon/Tool ESP
+		if (settings::visuals::tool && Visualize.visitor)
+		{
+			std::string toolName = entity.tool_name;
+			
+			if (!toolName.empty())
+			{
+				ImFont* font = Visualize.visitor;
+				float font_size = 9.0f;
+				float char_spacing = 1.0f;
+				
+				float total_width = 0.0f;
+				float max_height = 0.0f;
+				for (size_t i = 0; i < toolName.length(); i++) {
+					char c = toolName[i];
+					char char_str[2] = { c, '\0' };
+					ImVec2 char_size = font->CalcTextSizeA(font_size, FLT_MAX, 0.0f, char_str);
+					total_width += char_size.x + (i < toolName.length() - 1 ? char_spacing : 0.0f);
+					max_height = std::max(max_height, char_size.y);
+				}
+				
+				float centerX = (boxPos.x + boxBR.x) * 0.5f;
+				float textX = centerX - (total_width * 0.5f);
+				float textY = boxBR.y + 2.0f;
+				
+				if (settings::visuals::distance)
+					textY += 8.0f;
+				
+				ImVec2 textPos = ImVec2(std::floor(textX + 0.5f), std::floor(textY + 0.5f));
+				
+				ImU32 toolColor = get_relation_color(entity.name, settings::visuals::tool_color);
+				Visualize.DrawTextWithSpacingAndOutline(draw, font, font_size, textPos, toolColor, IM_COL32(0, 0, 0, 255), toolName, char_spacing);
+			}
+		}
+
+		// 11. Weapon Icon ESP
+		if (settings::visuals::weapon_icon && Visualize.weapon_icon_font)
+		{
+			std::string toolName = entity.tool_name;
+			
+			if (!toolName.empty())
+			{
+				const char* weaponIcon = GetWeaponIcon(toolName);
+				
+				if (weaponIcon && strlen(weaponIcon) > 0)
+				{
+					float iconFontSize = 12.0f;
+					ImVec2 iconTextSize = Visualize.weapon_icon_font->CalcTextSizeA(iconFontSize, FLT_MAX, 0.0f, weaponIcon);
+					
+					float centerX = (boxPos.x + boxBR.x) * 0.5f;
+					float iconX = centerX - (iconTextSize.x * 0.5f);
+					float iconY = boxBR.y + 2.0f;
+					
+					if (settings::visuals::distance)
+						iconY += 8.0f;
+					if (settings::visuals::tool)
+						iconY += 8.0f;
+					
+					ImVec2 iconPos = ImVec2(std::floor(iconX + 0.5f), std::floor(iconY + 0.5f));
+					
+					ImU32 iconColor = get_relation_color(entity.name, settings::visuals::weapon_icon_color);
+					
+					draw->AddText(Visualize.weapon_icon_font, iconFontSize, ImVec2(iconPos.x + 1, iconPos.y + 1), IM_COL32(0, 0, 0, 255), weaponIcon);
+					draw->AddText(Visualize.weapon_icon_font, iconFontSize, ImVec2(iconPos.x - 1, iconPos.y + 1), IM_COL32(0, 0, 0, 255), weaponIcon);
+					draw->AddText(Visualize.weapon_icon_font, iconFontSize, ImVec2(iconPos.x + 1, iconPos.y - 1), IM_COL32(0, 0, 0, 255), weaponIcon);
+					draw->AddText(Visualize.weapon_icon_font, iconFontSize, ImVec2(iconPos.x - 1, iconPos.y - 1), IM_COL32(0, 0, 0, 255), weaponIcon);
+					
+					draw->AddText(Visualize.weapon_icon_font, iconFontSize, iconPos, iconColor, weaponIcon);
+				}
+			}
+		}
+
+		// 12. Healthbar ESP
+		if (settings::visuals::healthbar)
+		{
+			float health = entity.health;
+			float max_health = entity.max_health;
+
+			if (max_health > 0.0f)
+			{
+				constexpr float healthBarWidth = 1.0f;
+				float boxHeight = c2.y;
+
+				ImVec2 barPos = ImVec2(boxPos.x - 5.0f, boxPos.y - 1.0f);
+				ImVec2 barSize = ImVec2(healthBarWidth, boxHeight + 2.0f);
+
+				Visualize.draw_health_bar(draw, max_health, health, barPos, barSize, 1.0f, settings::visuals::health_text);
+			}
+		}
+	}
+
+}
+
+void esp_render_t::draw_health_bar(ImDrawList* draw, float max, float current, ImVec2 pos, ImVec2 size, float alpha_factor, bool show_text)
+{
+	if (max <= 0.0f) max = 100.0f;
+	
+	float clamped_current = std::clamp(current, 0.0f, max);
+	float health_percent = (max > 0.0f) ? (clamped_current / max) : 0.0f;
+	health_percent = std::clamp(health_percent, 0.0f, 1.0f);
+	
+	float bar_width = 1.0f;
+	float bar_height = size.y;
+	float bar_x = std::round(pos.x);
+	float bar_y = std::round(pos.y);
+
+	ImDrawListFlags old_flags = draw->Flags;
+	draw->Flags &= ~ImDrawListFlags_AntiAliasedLines;
+
+	float outline_x1 = std::round(bar_x - 1);
+	float outline_y1 = std::round(bar_y - 1);
+	float outline_x2 = std::round(bar_x + bar_width + 1);
+	float outline_y2 = std::round(bar_y + bar_height + 1);
+	
+	draw->AddRectFilled(
+		ImVec2(outline_x1, outline_y1),
+		ImVec2(outline_x2, outline_y2),
+		IM_COL32(0, 0, 0, 255)
+	);
+
+	float fill_height = bar_height * health_percent;
+	
+	ImU32 health_color = IM_COL32(
+		static_cast<int>(settings::visuals::healthbar_color[0] * 255.f),  
+		static_cast<int>(settings::visuals::healthbar_color[1] * 255.f),          
+		static_cast<int>(settings::visuals::healthbar_color[2] * 255.f),
+		static_cast<int>(255 * alpha_factor)
+	);
+
+	float bg_x1 = std::round(bar_x);
+	float bg_y1 = std::round(bar_y);
+	float bg_x2 = std::round(bar_x + bar_width);
+	float bg_y2 = std::round(bar_y + bar_height);
+	
+	draw->AddRectFilled(
+		ImVec2(bg_x1, bg_y1),
+		ImVec2(bg_x2, bg_y2),
+		IM_COL32(50, 50, 50, 255)
+	);
+	
+	if (fill_height > 0.1f) {
+		float fill_start_y = bar_y + bar_height - fill_height;
+		float fill_y1 = std::round(fill_start_y);
+		float fill_y2 = std::round(bar_y + bar_height);
+		
+		draw->AddRectFilled(
+			ImVec2(bg_x1, fill_y1),
+			ImVec2(bg_x2, fill_y2),
+			health_color
+		);
+	}
+	
+	draw->Flags = old_flags;
+
+	if (show_text && settings::visuals::health_text && health_percent < 1.0f && visitor)
+	{
+		char buffer[32];
+		sprintf_s(buffer, "%.0f", current);
+
+		ImFont* font = visitor;
+		float font_size = 9.0f;
+		ImVec2 text_size = font->CalcTextSizeA(font_size, FLT_MAX, 0.0f, buffer);
+
+		float text_center_y = bar_y + (bar_height * 0.5f);
+		
+		ImVec2 text_pos = ImVec2(
+			std::round(bar_x - (text_size.x / 2.0f) + (bar_width / 2.0f)),
+			std::round(text_center_y - (text_size.y / 2.0f))
+		);
+
+		ImU32 text_color = IM_COL32(
+			static_cast<int>(settings::visuals::health_text_color[0] * 255.f),
+			static_cast<int>(settings::visuals::health_text_color[1] * 255.f),
+			static_cast<int>(settings::visuals::health_text_color[2] * 255.f),
+			255
+		);
+
+		draw->AddText(font, font_size, ImVec2(text_pos.x + 1, text_pos.y + 1), IM_COL32(0, 0, 0, 255), buffer);
+		draw->AddText(font, font_size, ImVec2(text_pos.x - 1, text_pos.y + 1), IM_COL32(0, 0, 0, 255), buffer);
+		draw->AddText(font, font_size, ImVec2(text_pos.x + 1, text_pos.y - 1), IM_COL32(0, 0, 0, 255), buffer);
+		draw->AddText(font, font_size, ImVec2(text_pos.x - 1, text_pos.y - 1), IM_COL32(0, 0, 0, 255), buffer);
+		
+		draw->AddText(font, font_size, text_pos, text_color, buffer);
+	}
+}

