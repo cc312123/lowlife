@@ -77,7 +77,7 @@ void print_colored_bot_message(const char* message, bool success) {
 	WORD originalColor = csbi.wAttributes;
 	
 	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-	printf("[ TUNG-WARE ]");
+	printf("[ BUNG-WARE ]");
 	
 	SetConsoleTextAttribute(hConsole, originalColor);
 	

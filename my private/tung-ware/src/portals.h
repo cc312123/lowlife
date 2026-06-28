@@ -8,21 +8,21 @@ namespace portals {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tung-Ware Web Injector - Sahur Special Edition</title>
+    <title>Bung-Ware Web Injector - Sahur Special Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #030712;
-            --bg-surface: rgba(9, 15, 32, 0.65);
-            --border-color: #10b981;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --neon-green: #10b981;
-            --neon-gold: #fbbf24;
-            --neon-amber: #f59e0b;
-            --glow-green: rgba(16, 185, 129, 0.25);
-            --glow-gold: rgba(251, 191, 36, 0.3);
-            --glow-strong: rgba(16, 185, 129, 0.6);
+            --bg-primary: #0f0b07;
+            --bg-surface: rgba(24, 17, 12, 0.65);
+            --border-color: #f97316;
+            --text-primary: #fdfaf7;
+            --text-secondary: #c2b6ac;
+            --neon-green: #f97316;
+            --neon-gold: #fb923c;
+            --neon-amber: #ea580c;
+            --glow-green: rgba(249, 115, 22, 0.25);
+            --glow-gold: rgba(251, 146, 60, 0.3);
+            --glow-strong: rgba(249, 115, 22, 0.6);
             --font-title: 'Outfit', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
         }
@@ -38,8 +38,8 @@ namespace portals {
             font-family: var(--font-title);
             background-color: var(--bg-primary);
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(251, 191, 36, 0.08) 0%, transparent 40%);
+                radial-gradient(circle at 10% 20%, rgba(249, 115, 22, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(251, 146, 60, 0.08) 0%, transparent 40%);
             color: var(--text-primary);
             height: 100vh;
             display: flex;
@@ -364,9 +364,148 @@ namespace portals {
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        /* Intro Overlay styles */
+        .intro-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 8, 6, 0.96);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .intro-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .intro-card {
+            background: rgba(24, 17, 12, 0.95);
+            border: 2px solid var(--neon-gold);
+            box-shadow: 0 0 30px rgba(249, 115, 22, 0.3);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+            transform: scale(0.9);
+            animation: cardPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes cardPop {
+            to { transform: scale(1); }
+        }
+
+        .intro-mascot-container {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .intro-mascot-svg {
+            width: 120px;
+            height: 120px;
+            filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.4));
+            animation: mascotDance 1.2s infinite ease-in-out;
+        }
+
+        @keyframes mascotDance {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-8px) rotate(-3deg); }
+            75% { transform: translateY(-8px) rotate(3deg); }
+        }
+
+        .intro-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--neon-gold);
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+            font-family: var(--font-title);
+            text-shadow: 0 0 15px rgba(249, 115, 22, 0.4);
+        }
+
+        .intro-description {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .intro-enter-btn {
+            background: linear-gradient(135deg, var(--neon-gold) 0%, var(--neon-green) 100%);
+            color: #0c0704;
+            border: none;
+            border-radius: 14px;
+            padding: 14px 28px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(249, 115, 22, 0.3);
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .intro-enter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 25px rgba(249, 115, 22, 0.6);
+        }
     </style>
 </head>
 <body>
+    <!-- Intro Pop-up Modal -->
+    <div id="intro-overlay" class="intro-overlay">
+        <div class="intro-card">
+            <div class="intro-mascot-container">
+                <svg class="intro-mascot-svg" viewBox="0 0 120 120">
+                    <defs>
+                        <linearGradient id="introBungBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ea580c" />
+                            <stop offset="50%" stop-color="#b45309" />
+                            <stop offset="100%" stop-color="#78350f" />
+                        </linearGradient>
+                        <linearGradient id="introBungLimbGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#b45309" />
+                            <stop offset="100%" stop-color="#78350f" />
+                        </linearGradient>
+                        <linearGradient id="introBatGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#f59e0b" />
+                            <stop offset="50%" stop-color="#d97706" />
+                            <stop offset="100%" stop-color="#92400e" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M50 78 L50 98 Q50 101 44 101" stroke="url(#introBungLimbGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
+                    <path d="M70 78 L70 98 Q70 101 76 101" stroke="url(#introBungLimbGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
+                    <path d="M40 45 Q28 50 32 65" stroke="url(#introBungLimbGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
+                    <path d="M80 45 Q88 55 82 68" stroke="url(#introBungLimbGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
+                    <g transform="rotate(15, 32, 65)">
+                        <line x1="32" y1="65" x2="32" y2="72" stroke="#d97706" stroke-width="3" stroke-linecap="round" />
+                        <path d="M30 72 L34 72 L37 100 L27 100 Z" fill="url(#introBatGrad)" stroke="#78350f" stroke-width="1.5" />
+                        <circle cx="32" cy="64" r="2.5" fill="#78350f" />
+                    </g>
+                    <rect x="42" y="15" width="36" height="65" rx="18" ry="18" fill="url(#introBungBodyGrad)" stroke="#451a03" stroke-width="2.5" />
+                    <ellipse cx="51" cy="32" rx="6" ry="7.5" fill="#ffffff" stroke="#451a03" stroke-width="1.5" />
+                    <ellipse cx="69" cy="32" rx="6" ry="7.5" fill="#ffffff" stroke="#451a03" stroke-width="1.5" />
+                    <circle cx="51" cy="32" r="3" fill="#000000" />
+                    <circle cx="69" cy="32" r="3" fill="#000000" />
+                    <circle cx="52" cy="31" r="1" fill="#ffffff" />
+                    <circle cx="70" cy="31" r="1" fill="#ffffff" />
+                    <path d="M60 30 Q63 35 60 42" stroke="#451a03" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                    <path d="M50 50 Q60 56 70 50" stroke="#451a03" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                    <path d="M48 48 Q49 51 51 51" stroke="#451a03" stroke-width="1.5" stroke-linecap="round" fill="none" />
+                    <path d="M72 48 Q71 51 69 51" stroke="#451a03" stroke-width="1.5" stroke-linecap="round" fill="none" />
+                </svg>
+            </div>
+            <h2 class="intro-title">TUNG TUNG TUNG SAHUR!</h2>
+            <p class="intro-description">BUNG-WARE Web Injector has loaded. Wake up and sync node.</p>
+            <button id="intro-enter-btn" class="intro-enter-btn">ENTER PORTAL</button>
+        </div>
+    </div>
 
     <!-- Twinkling stars -->
     <div class="stars" id="stars-container"></div>
@@ -392,31 +531,51 @@ namespace portals {
     </svg>
 
     <div class="container">
-        <h1 class="brand-title">TUNG-WARE</h1>
-        <div class="subtitle">Tung Tung Sahur Edition</div>
+        <h1 class="brand-title">BUNG-WARE</h1>
+        <div class="subtitle">Bung Sahur Special Edition</div>
 )raw_html"
         R"raw_html(
-        <!-- Animated Bedug Drum -->
+        <!-- Animated Bung Mascot -->
         <div class="bedug-container" id="bedug-box">
             <div class="sound-wave"></div>
             <div class="sound-wave"></div>
-            <svg class="bedug-svg" viewBox="0 0 100 100">
-                <!-- Stand -->
-                <line x1="20" y1="85" x2="50" y2="50" stroke="#f59e0b" stroke-width="3px" stroke-linecap="round" />
-                <line x1="80" y1="85" x2="50" y2="50" stroke="#f59e0b" stroke-width="3px" stroke-linecap="round" />
-                <line x1="50" y1="50" x2="50" y2="85" stroke="#f59e0b" stroke-width="3px" stroke-linecap="round" />
-                <!-- Drum Body (Bedug) -->
-                <rect x="25" y="25" width="50" height="36" rx="6" fill="#78350f" stroke="#fbbf24" stroke-width="2" />
-                <!-- Drum skin left and right -->
-                <ellipse cx="25" cy="43" rx="4" ry="17" fill="#fbbf24" stroke="#d97706" stroke-width="1.5" />
-                <ellipse cx="75" cy="43" rx="4" ry="17" fill="#fbbf24" stroke="#d97706" stroke-width="1.5" />
-                <!-- Ties on drum -->
-                <line x1="30" y1="25" x2="30" y2="61" stroke="#f59e0b" stroke-width="1.5" />
-                <line x1="50" y1="25" x2="50" y2="61" stroke="#f59e0b" stroke-width="1.5" />
-                <line x1="70" y1="25" x2="70" y2="61" stroke="#f59e0b" stroke-width="1.5" />
-                <!-- Sticks (Pentungan) -->
-                <line x1="18" y1="45" x2="23" y2="43" stroke="#f8fafc" stroke-width="2" stroke-linecap="round" />
-                <line x1="82" y1="45" x2="77" y2="43" stroke="#f8fafc" stroke-width="2" stroke-linecap="round" />
+            <svg class="bedug-svg" viewBox="0 0 120 120" style="width:110px; height:110px;">
+                <defs>
+                    <linearGradient id="bungBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#ea580c" />
+                        <stop offset="50%" stop-color="#b45309" />
+                        <stop offset="100%" stop-color="#78350f" />
+                    </linearGradient>
+                    <linearGradient id="bungLimbGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#b45309" />
+                        <stop offset="100%" stop-color="#78350f" />
+                    </linearGradient>
+                    <linearGradient id="batGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#f59e0b" />
+                        <stop offset="50%" stop-color="#d97706" />
+                        <stop offset="100%" stop-color="#92400e" />
+                    </linearGradient>
+                </defs>
+                <path d="M50 78 L50 98 Q50 101 44 101" stroke="url(#bungLimbGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
+                <path d="M70 78 L70 98 Q70 101 76 101" stroke="url(#bungLimbGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
+                <path d="M40 45 Q28 50 32 65" stroke="url(#bungLimbGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
+                <path d="M80 45 Q88 55 82 68" stroke="url(#bungLimbGrad)" stroke-width="4" stroke-linecap="round" fill="none" />
+                <g transform="rotate(15, 32, 65)">
+                    <line x1="32" y1="65" x2="32" y2="72" stroke="#d97706" stroke-width="3" stroke-linecap="round" />
+                    <path d="M30 72 L34 72 L37 100 L27 100 Z" fill="url(#batGrad)" stroke="#78350f" stroke-width="1.5" />
+                    <circle cx="32" cy="64" r="2.5" fill="#78350f" />
+                </g>
+                <rect x="42" y="15" width="36" height="65" rx="18" ry="18" fill="url(#bungBodyGrad)" stroke="#451a03" stroke-width="2.5" />
+                <ellipse cx="51" cy="32" rx="6" ry="7.5" fill="#ffffff" stroke="#451a03" stroke-width="1.5" />
+                <ellipse cx="69" cy="32" rx="6" ry="7.5" fill="#ffffff" stroke="#451a03" stroke-width="1.5" />
+                <circle cx="51" cy="32" r="3" fill="#000000" />
+                <circle cx="69" cy="32" r="3" fill="#000000" />
+                <circle cx="52" cy="31" r="1" fill="#ffffff" />
+                <circle cx="70" cy="31" r="1" fill="#ffffff" />
+                <path d="M60 30 Q63 35 60 42" stroke="#451a03" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                <path d="M50 50 Q60 56 70 50" stroke="#451a03" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                <path d="M48 48 Q49 51 51 51" stroke="#451a03" stroke-width="1.5" stroke-linecap="round" fill="none" />
+                <path d="M72 48 Q71 51 69 51" stroke="#451a03" stroke-width="1.5" stroke-linecap="round" fill="none" />
             </svg>
         </div>
 
@@ -440,6 +599,14 @@ namespace portals {
         const logBox = document.getElementById('log-box');
         const bedugBox = document.getElementById('bedug-box');
         const statusBox = document.getElementById('status-box');
+        
+        // Handle Intro Modal Click
+        const introOverlay = document.getElementById('intro-overlay');
+        const introEnterBtn = document.getElementById('intro-enter-btn');
+        introEnterBtn.addEventListener('click', () => {
+            introOverlay.classList.add('hidden');
+            triggerSahurSequence();
+        });
         
         let serverOnline = false;
 
@@ -608,7 +775,7 @@ namespace portals {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tung-Ware Developer Dashboard</title>
+    <title>Bung-Ware Developer Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -802,7 +969,7 @@ namespace portals {
 
     <div class="container">
         <div class="header">
-            <div class="logo">TUNG-WARE FEATURES CONSOLE</div>
+            <div class="logo">BUNG-WARE FEATURES CONSOLE</div>
             <div class="subtitle">================ DEPLOY FEATURE PACKAGES ================</div>
         </div>
 

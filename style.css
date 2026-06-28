@@ -1,26 +1,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 :root {
-    --bg-dark: #030408;
-    --bg-panel: rgba(9, 11, 20, 0.45);
-    --bg-panel-hover: rgba(14, 18, 36, 0.6);
-    --card-border: rgba(0, 242, 254, 0.08);
-    --card-border-hover: rgba(99, 102, 241, 0.35);
+    --bg-dark: #0f0b07;
+    --bg-panel: rgba(24, 17, 12, 0.45);
+    --bg-panel-hover: rgba(35, 25, 18, 0.6);
+    --card-border: rgba(249, 115, 22, 0.08);
+    --card-border-hover: rgba(251, 146, 60, 0.35);
     
-    --input-bg: rgba(5, 7, 15, 0.75);
+    --input-bg: rgba(15, 11, 7, 0.75);
     --input-border: rgba(255, 255, 255, 0.06);
-    --input-border-focus: rgba(0, 242, 254, 0.5);
+    --input-border-focus: rgba(249, 115, 22, 0.5);
 
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --text-muted: #475569;
+    --text-primary: #fdfaf7;
+    --text-secondary: #c2b6ac;
+    --text-muted: #786b5f;
     
-    --neon-cyan: #00f2fe;
-    --neon-indigo: #6366f1;
-    --neon-purple: #a855f7;
-    --neon-rose: #f43f5e;
-    --neon-green: #10b981;
-    --neon-orange: #f59e0b;
+    --neon-cyan: #f97316;
+    --neon-indigo: #ea580c;
+    --neon-purple: #92400e;
+    --neon-rose: #f97316;
+    --neon-green: #d97706;
+    --neon-orange: #fbbf24;
 
     /* Compatibility Mappings */
     --accent-indigo: var(--neon-indigo);
