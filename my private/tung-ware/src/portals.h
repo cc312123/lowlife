@@ -2,22 +2,29 @@
 #include <string_view>
 
 namespace portals {
-    inline constexpr std::string_view injector_html = R"raw_html(<!DOCTYPE html>
+    inline constexpr std::string_view injector_html = 
+        R"raw_html(<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tung-Ware Web Injector</title>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <title>Tung-Ware Web Injector - Sahur Special Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #020503;
-            --bg-surface: #040905;
-            --border-color: #00ff66;
-            --text-primary: #33ff33;
-            --text-secondary: rgba(0, 255, 102, 0.6);
-            --glow-green: rgba(0, 255, 102, 0.25);
-            --glow-strong: rgba(0, 255, 102, 0.5);
+            --bg-primary: #030712;
+            --bg-surface: rgba(9, 15, 32, 0.65);
+            --border-color: #10b981;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --neon-green: #10b981;
+            --neon-gold: #fbbf24;
+            --neon-amber: #f59e0b;
+            --glow-green: rgba(16, 185, 129, 0.25);
+            --glow-gold: rgba(251, 191, 36, 0.3);
+            --glow-strong: rgba(16, 185, 129, 0.6);
+            --font-title: 'Outfit', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
         }
 
         * {
@@ -28,8 +35,11 @@ namespace portals {
         }
 
         body {
-            font-family: 'Share Tech Mono', 'Courier New', Courier, monospace;
+            font-family: var(--font-title);
             background-color: var(--bg-primary);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(251, 191, 36, 0.08) 0%, transparent 40%);
             color: var(--text-primary);
             height: 100vh;
             display: flex;
@@ -39,138 +49,316 @@ namespace portals {
             position: relative;
         }
 
-        /* CRT Screen Scanline & Vignette Effect */
-        body::before {
-            content: " ";
-            display: block;
-            position: fixed;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
-            background-size: 100% 4px;
-            z-index: 9999;
-            pointer-events: none;
-        }
-
-        body::after {
-            content: '';
-            position: fixed;
+        /* Twinkling Stars Background */
+        .stars {
+            position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, rgba(0, 255, 102, 0.03) 0%, rgba(0, 0, 0, 0.8) 100%);
-            z-index: 9998;
+            z-index: 1;
             pointer-events: none;
         }
 
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 8px rgba(255,255,255,0.8); }
+        }
+
+        /* Glowing Moon */
+        .crescent-moon {
+            position: absolute;
+            top: 40px;
+            right: 50px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            box-shadow: 18px 18px 0 0 var(--neon-gold);
+            filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.4));
+            z-index: 2;
+            transform: rotate(-15deg);
+            animation: floatMoon 8s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes floatMoon {
+            0%, 100% { transform: rotate(-15deg) translateY(0); }
+            50% { transform: rotate(-10deg) translateY(-10px); }
+        }
+
+        /* Lantern */
+        .lantern {
+            position: absolute;
+            top: 30px;
+            left: 60px;
+            width: 40px;
+            height: 60px;
+            z-index: 2;
+            animation: swing 4s infinite ease-in-out;
+            transform-origin: top center;
+            pointer-events: none;
+        }
+
+        @keyframes swing {
+            0%, 100% { transform: rotate(-8deg); }
+            50% { transform: rotate(8deg); }
+        }
+
+        /* Glassmorphic Container */
         .container {
             position: relative;
             z-index: 10;
             width: 480px;
-            padding: 40px;
-            border: 2px solid var(--border-color);
+            padding: 40px 30px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
             background: var(--bg-surface);
-            box-shadow: 0 0 25px var(--glow-green), inset 0 0 15px rgba(0, 255, 102, 0.05);
+            backdrop-filter: blur(16px);
+            border-radius: 24px;
+            box-shadow: 
+                0 20px 50px rgba(0, 0, 0, 0.5), 
+                0 0 40px rgba(16, 185, 129, 0.05),
+                inset 0 0 20px rgba(255, 255, 255, 0.02);
             text-align: center;
+            transition: all 0.3s ease;
         }
 
-        .logo-box {
-            margin-bottom: 20px;
+        .container:hover {
+            border-color: rgba(251, 191, 36, 0.3);
+            box-shadow: 
+                0 20px 50px rgba(0, 0, 0, 0.6), 
+                0 0 50px rgba(251, 191, 36, 0.08),
+                inset 0 0 25px rgba(255, 255, 255, 0.03);
+        }
+
+        /* Title / Brand */
+        .brand-title {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--neon-gold) 0%, var(--neon-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(16, 185, 129, 0.1);
+            margin-bottom: 5px;
         }
 
         .subtitle {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-bottom: 30px;
-            letter-spacing: 1px;
+            font-size: 11px;
+            font-family: var(--font-mono);
+            color: var(--neon-gold);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 25px;
+            opacity: 0.85;
         }
 
+        /* Bedug / Drum visualizer */
+        .bedug-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px auto 25px auto;
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+
+        .bedug-svg {
+            width: 90px;
+            height: 90px;
+            fill: none;
+            stroke: var(--neon-gold);
+            stroke-width: 1.5;
+            filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.3));
+            transition: transform 0.1s ease;
+            z-index: 2;
+        }
+
+        .bedug-container.beating .bedug-svg {
+            animation: drumBeat 0.4s infinite alternate ease-in-out;
+        }
+
+        @keyframes drumBeat {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.08) rotate(-2deg); filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.6)); }
+            100% { transform: scale(1.02) rotate(2deg); }
+        }
+
+        .sound-wave {
+            position: absolute;
+            border: 1px solid var(--neon-gold);
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            opacity: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+)raw_html"
+        R"raw_html(
+        .bedug-container.beating .sound-wave {
+            animation: ripple 1.6s infinite linear;
+        }
+
+        .bedug-container.beating .sound-wave:nth-child(2) {
+            animation-delay: 0.8s;
+        }
+
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(2.2); opacity: 0; border-color: var(--neon-green); }
+        }
+
+        /* Status Display */
         .status-container {
-            margin-bottom: 30px;
-            padding: 15px;
-            border: 1px solid var(--border-color);
-            background: rgba(0, 255, 102, 0.02);
+            margin-bottom: 25px;
+            padding: 18px 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(16, 185, 129, 0.1);
+            background: rgba(16, 185, 129, 0.02);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: border-color 0.3s ease;
+        }
+
+        .status-container.online {
+            border-color: rgba(251, 191, 36, 0.15);
+            background: rgba(251, 191, 36, 0.02);
         }
 
         .status-label {
-            font-size: 13px;
+            font-size: 12px;
+            font-family: var(--font-mono);
             color: var(--text-secondary);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
         }
 
         .status-badge {
-            font-size: 12px;
-            font-weight: 600;
-            padding: 4px 10px;
-            border: 1px solid var(--border-color);
-            background: transparent;
+            font-size: 11px;
+            font-family: var(--font-mono);
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.02);
             color: var(--text-primary);
-            box-shadow: 0 0 5px var(--glow-green);
+            letter-spacing: 0.5px;
+            box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
         }
 
         .status-badge.online {
-            color: #33ff33;
-            border-color: #00ff66;
-            box-shadow: 0 0 10px var(--glow-strong);
+            color: var(--neon-gold);
+            border-color: rgba(251, 191, 36, 0.4);
+            background: rgba(251, 191, 36, 0.08);
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.15);
         }
 
         .status-badge.success {
-            color: #33ff33;
-            border-color: #00ff66;
-            box-shadow: 0 0 12px var(--glow-strong);
+            color: #10b981;
+            border-color: rgba(16, 185, 129, 0.4);
+            background: rgba(16, 185, 129, 0.08);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.15);
         }
 
+        /* Inject Button */
         .inject-btn {
             width: 100%;
-            height: 54px;
-            border: 1px solid var(--border-color);
-            background: transparent;
+            height: 58px;
+            border-radius: 16px;
+            border: 1px solid var(--neon-green);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(251, 191, 36, 0.1) 100%);
             color: var(--text-primary);
             font-family: inherit;
             font-size: 15px;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
+            letter-spacing: 2px;
             cursor: pointer;
             outline: none;
-            box-shadow: 0 0 5px var(--glow-green);
-            transition: all 0.2s ease;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.1);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .inject-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+            transition: 0.5s;
+        }
+
+        .inject-btn:hover:not(:disabled)::before {
+            left: 100%;
         }
 
         .inject-btn:hover:not(:disabled) {
-            background: var(--border-color);
-            color: var(--bg-primary);
-            box-shadow: 0 0 15px var(--glow-strong);
+            transform: translateY(-2px);
+            border-color: var(--neon-gold);
+            background: linear-gradient(135deg, var(--neon-green) 0%, var(--neon-gold) 100%);
+            color: #030712;
+            box-shadow: 0 8px 25px rgba(251, 191, 36, 0.25);
+        }
+
+        .inject-btn:active:not(:disabled) {
+            transform: translateY(0);
         }
 
         .inject-btn:disabled {
-            border-color: rgba(0, 255, 102, 0.15);
-            color: rgba(0, 255, 102, 0.15);
+            border-color: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.02);
+            color: rgba(255, 255, 255, 0.25);
             box-shadow: none;
             cursor: not-allowed;
         }
 
+        /* Log / Terminal Console */
         .log-box {
             margin-top: 25px;
-            padding: 15px;
-            border: 1px solid var(--border-color);
-            background: #010302;
-            font-size: 12px;
+            padding: 16px 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: #02040a;
+            font-family: var(--font-mono);
+            font-size: 11px;
             text-align: left;
-            min-height: 70px;
-            line-height: 1.5;
-            box-shadow: inset 0 0 5px rgba(0, 255, 102, 0.15);
+            min-height: 80px;
+            line-height: 1.6;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.8);
+            color: #a5b4fc;
         }
 
+        .log-line {
+            margin-bottom: 4px;
+        }
+
+        .log-sys {
+            color: var(--neon-gold);
+        }
+
+        .log-success {
+            color: var(--neon-green);
+        }
+
+        /* Spinner */
         .spinner {
             display: inline-block;
             width: 12px;
             height: 12px;
-            border: 2px solid rgba(0, 255, 102, 0.2);
+            border: 2px solid rgba(251, 191, 36, 0.2);
             border-radius: 50%;
-            border-top-color: var(--border-color);
+            border-top-color: var(--neon-gold);
             animation: spin 0.8s linear infinite;
             margin-right: 6px;
+            vertical-align: middle;
         }
 
         @keyframes spin {
@@ -180,30 +368,69 @@ namespace portals {
 </head>
 <body>
 
-    <div class="container">
-        <div class="logo-box">
-            <pre style="font-family: monospace; font-size: 6px; line-height: 1.2; text-shadow: 0 0 5px var(--border-color); display: inline-block; text-align: left; color: var(--border-color);">
- _     _____ _      _     ___ _____ _____ 
-| |   |  _  | |    | |   |_ _|_   _|  ___|
-| |   | | | | |    | |    | |  | | | |__  
-| |   | | | | |  _ | |  _ | |  | | |  __| 
-| |___| |_| | |_| || |_| || |  | | | |___ 
-\_____/\_____/\___/ \___/|___| \_/ \____/ 
-            </pre>
-        </div>
-        <div class="subtitle">================ MEMORY INJECTION TERMINAL ================</div>
+    <!-- Twinkling stars -->
+    <div class="stars" id="stars-container"></div>
 
-        <div class="status-container">
-            <span class="status-label">LOADER_STATUS:</span>
+    <!-- Glowing Moon -->
+    <div class="crescent-moon"></div>
+
+    <!-- Swing Lantern -->
+    <svg class="lantern" viewBox="0 0 100 150">
+        <!-- Wire -->
+        <line x1="50" y1="0" x2="50" y2="40" stroke="#fbbf24" stroke-width="2" />
+        <!-- Cap -->
+        <path d="M30 40 L70 40 L60 55 L40 55 Z" fill="#fbbf24" />
+        <!-- Glass Body -->
+        <rect x="35" y="55" width="30" height="40" rx="5" fill="rgba(251, 191, 36, 0.2)" stroke="#fbbf24" stroke-width="2" />
+        <!-- Glow Inside -->
+        <circle cx="50" cy="75" r="10" fill="#fbbf24" filter="blur(3px)" />
+        <!-- Bottom Guard -->
+        <rect x="30" y="95" width="40" height="8" rx="2" fill="#fbbf24" />
+        <!-- Loop tassel -->
+        <line x1="50" y1="103" x2="50" y2="120" stroke="#fbbf24" stroke-width="1.5" />
+        <circle cx="50" cy="122" r="3" fill="#fbbf24" />
+    </svg>
+
+    <div class="container">
+        <h1 class="brand-title">TUNG-WARE</h1>
+        <div class="subtitle">Tung Tung Sahur Edition</div>
+)raw_html"
+        R"raw_html(
+        <!-- Animated Bedug Drum -->
+        <div class="bedug-container" id="bedug-box">
+            <div class="sound-wave"></div>
+            <div class="sound-wave"></div>
+            <svg class="bedug-svg" viewBox="0 0 100 100">
+                <!-- Stand -->
+                <line x1="20" y1="85" x2="50" y2="50" stroke="#f59e0b" stroke-width="3px" stroke-linecap="round" />
+                <line x1="80" y1="85" x2="50" y2="50" stroke="#f59e0b" stroke-width="3px" stroke-linecap="round" />
+                <line x1="50" y1="50" x2="50" y2="85" stroke="#f59e0b" stroke-width="3px" stroke-linecap="round" />
+                <!-- Drum Body (Bedug) -->
+                <rect x="25" y="25" width="50" height="36" rx="6" fill="#78350f" stroke="#fbbf24" stroke-width="2" />
+                <!-- Drum skin left and right -->
+                <ellipse cx="25" cy="43" rx="4" ry="17" fill="#fbbf24" stroke="#d97706" stroke-width="1.5" />
+                <ellipse cx="75" cy="43" rx="4" ry="17" fill="#fbbf24" stroke="#d97706" stroke-width="1.5" />
+                <!-- Ties on drum -->
+                <line x1="30" y1="25" x2="30" y2="61" stroke="#f59e0b" stroke-width="1.5" />
+                <line x1="50" y1="25" x2="50" y2="61" stroke="#f59e0b" stroke-width="1.5" />
+                <line x1="70" y1="25" x2="70" y2="61" stroke="#f59e0b" stroke-width="1.5" />
+                <!-- Sticks (Pentungan) -->
+                <line x1="18" y1="45" x2="23" y2="43" stroke="#f8fafc" stroke-width="2" stroke-linecap="round" />
+                <line x1="82" y1="45" x2="77" y2="43" stroke="#f8fafc" stroke-width="2" stroke-linecap="round" />
+            </svg>
+        </div>
+
+        <div class="status-container" id="status-box">
+            <span class="status-label">SAHUR_STATUS:</span>
             <span id="status-badge" class="status-badge">[ AWAITING LOADER ]</span>
         </div>
 
         <button id="inject-btn" class="inject-btn" disabled>
-            [ EXECUTE MEMORY INJECTION ]
+            [ Wake Up & Inject ]
         </button>
 
         <div id="log-box" class="log-box">
-            SYS > Please launch RobloxPlayerBeta on your PC to attach loader...
+            <div class="log-line log-sys">SAHUR > Awaiting connection from loader. Please launch RobloxPlayerBeta to sync node...</div>
         </div>
     </div>
 
@@ -211,8 +438,98 @@ namespace portals {
         const statusBadge = document.getElementById('status-badge');
         const injectBtn = document.getElementById('inject-btn');
         const logBox = document.getElementById('log-box');
+        const bedugBox = document.getElementById('bedug-box');
+        const statusBox = document.getElementById('status-box');
         
         let serverOnline = false;
+
+        // Generate Twinkling Stars dynamically
+        const starsContainer = document.getElementById('stars-container');
+        for (let i = 0; i < 40; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = Math.random() * 3 + 'px';
+            star.style.height = star.style.width;
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            star.style.animationDuration = Math.random() * 2 + 2 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // Web Audio Synthesizer for "Tung! Tung! Sahur!" rhythm
+        let audioCtx = null;
+        function getAudioContext() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            return audioCtx;
+        }
+
+        function playSynthBeep(freq, duration, type = 'triangle', volume = 0.3) {
+            try {
+                const ctx = getAudioContext();
+                if (ctx.state === 'suspended') {
+                    ctx.resume();
+                }
+                const osc = ctx.createOscillator();
+                const gainNode = ctx.createGain();
+                
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                if (type === 'triangle') {
+                    // Woodblock decay effect
+                    osc.frequency.exponentialRampToValueAtTime(10, ctx.currentTime + duration);
+                }
+                
+                gainNode.gain.setValueAtTime(volume, ctx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+                
+                osc.connect(gainNode);
+                gainNode.connect(ctx.destination);
+                
+                osc.start();
+                osc.stop(ctx.currentTime + duration);
+            } catch (e) {
+                // AudioContext blocked or unsupported
+            }
+        }
+
+        // Sound patterns
+        function playTung() {
+            playSynthBeep(280, 0.18, 'triangle', 0.45); // Low wooden drum sound
+        }
+
+        // Sound patterns (continued)
+        function playTek() {
+            playSynthBeep(650, 0.08, 'triangle', 0.25); // High stick sound
+        }
+
+        function playSahurChords() {
+            // Harmonic arpeggio/chord for success
+            const now = getAudioContext().currentTime;
+            playSynthBeep(440, 0.3, 'sine', 0.15); // A4
+            setTimeout(() => playSynthBeep(554.37, 0.3, 'sine', 0.15), 60); // C#5
+            setTimeout(() => playSynthBeep(659.25, 0.4, 'sine', 0.15), 120); // E5
+        }
+
+        function triggerSahurSequence() {
+            // Plays: Tung... Tung... Sahur!
+            // Time markers: 0ms (Tung), 300ms (Tung), 600ms (Sahur!)
+            playTung();
+            setTimeout(playTung, 250);
+            setTimeout(() => {
+                playSynthBeep(320, 0.2, 'triangle', 0.45); // Final bedug beat
+                playSahurChords();
+            }, 500);
+        }
+
+        // Hook up sound events
+        injectBtn.addEventListener('mouseenter', () => {
+            if (!injectBtn.disabled) {
+                playTek();
+            }
+        });
 
         // Ping the local C++ app's HTTP listener to see if it is running and waiting for injection
         async function checkServerStatus() {
@@ -224,18 +541,24 @@ namespace portals {
                 
                 if (!serverOnline) {
                     serverOnline = true;
-                    statusBadge.textContent = '[ VERIFIED / READY ]';
+                    statusBadge.textContent = '[ READY TO WAKE UP ]';
                     statusBadge.className = 'status-badge online';
+                    statusBox.classList.add('online');
                     injectBtn.removeAttribute('disabled');
-                    logBox.textContent = 'SYS > Loader process verified. Execution queue primed. Click to attach.';
+                    bedugBox.classList.add('beating');
+                    logBox.innerHTML = '<div class="log-line log-success">SAHUR > Loader verified. The neighborhoods are ready! Click below to trigger sahur injection.</div>';
+                    // Play introductory invite sound
+                    playTung();
                 }
             } catch (err) {
                 if (serverOnline) {
                     serverOnline = false;
                     statusBadge.textContent = '[ AWAITING LOADER ]';
                     statusBadge.className = 'status-badge';
+                    statusBox.classList.remove('online');
                     injectBtn.setAttribute('disabled', 'true');
-                    logBox.textContent = 'SYS > Please launch RobloxPlayerBeta on your PC to attach loader...';
+                    bedugBox.classList.remove('beating');
+                    logBox.innerHTML = '<div class="log-line log-sys">SAHUR > Connection lost. Please keep RobloxPlayerBeta running to sync node...</div>';
                 }
             }
         }
@@ -245,8 +568,11 @@ namespace portals {
             if (!serverOnline) return;
 
             injectBtn.setAttribute('disabled', 'true');
-            statusBadge.textContent = '[ ATTACHING... ]';
-            logBox.innerHTML = '<div class="spinner"></div> SYS > Allocating virtual memory & injecting payload...';
+            statusBadge.textContent = '[ INJECTING... ]';
+            logBox.innerHTML = '<div class="log-line"><div class="spinner"></div> SAHUR > Beating bedug and waking up memory processes...</div>';
+            
+            // Play "Tung! Tung! Sahur!" audio synth
+            triggerSahurSequence();
 
             try {
                 const response = await fetch('http://127.0.0.1:9876/inject', {
@@ -256,9 +582,9 @@ namespace portals {
                 
                 const data = await response.json();
                 if (data.status === 'success') {
-                    statusBadge.textContent = '[ INJECTED ]';
+                    statusBadge.textContent = '[ INJECTED / SUCCESS ]';
                     statusBadge.className = 'status-badge success';
-                    logBox.textContent = 'SYS > Execution complete! Payload injected. You may now close this browser tab.';
+                    logBox.innerHTML = '<div class="log-line log-success">SAHUR > WAKE UP! Injection completed successfully! Enjoy your game. You may now close this tab.</div>';
                 } else {
                     throw new Error('Failed injection response');
                 }
@@ -266,7 +592,7 @@ namespace portals {
                 statusBadge.textContent = '[ ERROR ]';
                 statusBadge.className = 'status-badge';
                 injectBtn.removeAttribute('disabled');
-                logBox.textContent = 'SYS > Injection aborted. Ensure Roblox process is running elevated.';
+                logBox.innerHTML = '<div class="log-line log-sys">SAHUR > Injection failed. Check if Roblox is running with proper privileges.</div>';
             }
         });
 
