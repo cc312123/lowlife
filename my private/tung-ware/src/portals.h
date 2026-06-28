@@ -568,7 +568,122 @@ namespace portals {
             }
         }
 
+
+        /* Background Music Widget styling */
+        .music-widget {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 99999;
+            background: rgba(15, 11, 7, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(249, 115, 22, 0.2);
+            border-radius: 30px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(249, 115, 22, 0.1);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .music-widget:hover {
+            border-color: rgba(249, 115, 22, 0.5);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5), 0 0 20px rgba(249, 115, 22, 0.25);
+            transform: translateY(-2px);
+        }
+        .music-visualizer {
+            display: flex;
+            align-items: flex-end;
+            gap: 2.5px;
+            height: 14px;
+            width: 20px;
+        }
+        .music-visualizer span {
+            display: block;
+            width: 2px;
+            height: 100%;
+            background-color: var(--neon-green);
+            transform-origin: bottom;
+            transform: scaleY(0.2);
+            transition: transform 0.2s ease;
+        }
+        .music-visualizer.playing span {
+            animation: bounce 1.2s ease-in-out infinite alternate;
+        }
+        .music-visualizer.playing span:nth-child(1) { animation-delay: 0.1s; }
+        .music-visualizer.playing span:nth-child(2) { animation-delay: 0.4s; }
+        .music-visualizer.playing span:nth-child(3) { animation-delay: 0.2s; }
+        .music-visualizer.playing span:nth-child(4) { animation-delay: 0.6s; }
+        .music-visualizer.playing span:nth-child(5) { animation-delay: 0.3s; }
+
+        @keyframes bounce {
+            0% { transform: scaleY(0.2); }
+            100% { transform: scaleY(1); }
+        }
+        .music-info {
+            display: flex;
+            flex-direction: column;
+            pointer-events: none;
+            max-width: 140px;
+        }
+        .music-title {
+            font-family: var(--font-title);
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .music-artist {
+            font-family: var(--font-mono);
+            font-size: 8px;
+            color: var(--neon-green);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
+        }
+        .music-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.2s ease;
+            outline: none;
+        }
+        .music-btn:hover {
+            background: rgba(249, 115, 22, 0.2);
+            color: var(--neon-green);
+            border-color: rgba(249, 115, 22, 0.4);
+            transform: scale(1.08);
+        }
+        .music-btn:active {
+            transform: scale(0.92);
+        }
+        @media (max-width: 480px) {
+            .music-widget {
+                bottom: 16px;
+                right: 16px;
+                padding: 6px 12px;
+                gap: 8px;
+            }
+            .music-info {
+                max-width: 100px;
+            }
+        }
+
     </style>
+)raw_html"
+        R"raw_html(
 </head>
 <body>
     <!-- Intro Pop-up Modal -->
@@ -705,6 +820,25 @@ namespace portals {
         <div id="log-box" class="log-box">
             <div class="log-line log-sys">SAHUR > Awaiting connection from loader. Please launch RobloxPlayerBeta to sync node...</div>
         </div>
+    </div>
+
+    
+    <div id="yt-player" style="position: fixed; width: 1px; height: 1px; opacity: 0; pointer-events: none; left: -100px; bottom: -100px;"></div>
+    <div class="music-widget" id="music-widget">
+        <div class="music-visualizer" id="music-visualizer">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="music-info">
+            <span class="music-title">Love Galore</span>
+            <span class="music-artist">FBG Fatslime</span>
+        </div>
+        <button class="music-btn" id="music-play-pause" aria-label="Play or Pause Music">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </button>
     </div>
 
     
