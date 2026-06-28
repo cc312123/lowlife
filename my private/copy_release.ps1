@@ -1,23 +1,7 @@
 
 $ErrorActionPreference = "Stop"
 
-$BuildExe1 = Join-Path $PSScriptRoot "build\RobloxCrashHandler_new.exe"
-$BuildExe2 = Join-Path $PSScriptRoot "build\RobloxCrashHandler.exe"
-$BuildExe = $null
-
-if (Test-Path $BuildExe1) {
-    if (Test-Path $BuildExe2) {
-        if ((Get-Item $BuildExe1).LastWriteTimeUtc -gt (Get-Item $BuildExe2).LastWriteTimeUtc) {
-            $BuildExe = $BuildExe1
-        } else {
-            $BuildExe = $BuildExe2
-        }
-    } else {
-        $BuildExe = $BuildExe1
-    }
-} else {
-    $BuildExe = $BuildExe2
-}
+$BuildExe = Join-Path $PSScriptRoot "build\RobloxCrashHandler.exe"
 $ServerDir = Join-Path $PSScriptRoot "updates-server"
 $ServerUploadsExe = Join-Path $ServerDir "uploads\RobloxCrashHandler.exe"
 $ReleasesJsonPath = Join-Path $ServerDir "releases.json"

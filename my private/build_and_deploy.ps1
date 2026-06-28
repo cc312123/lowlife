@@ -47,23 +47,12 @@ if (-not $msbuild) {
 Write-Host "Found MSBuild at: $msbuild" -ForegroundColor Green
 
 Write-Host "Cleaning solution..." -ForegroundColor Cyan
-& $msbuild tung-ware.sln /t:Clean /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /p:TrackFileAccess=false /p:TargetName=RobloxCrashHandler_new
+& $msbuild tung-ware.sln /t:Clean /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /p:TrackFileAccess=false
 
 Write-Host "Building solution..." -ForegroundColor Cyan
-& $msbuild tung-ware.sln /t:Build /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /p:TrackFileAccess=false /p:TargetName=RobloxCrashHandler_new
+& $msbuild tung-ware.sln /t:Build /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /p:TrackFileAccess=false
 
-$BuildExe1 = Join-Path $PSScriptRoot "build\RobloxCrashHandler_new.exe"
-$BuildExe2 = Join-Path $PSScriptRoot "build\RobloxCrashHandler.exe"
-$BuildExe = $BuildExe2
-if (Test-Path $BuildExe1) {
-    if (Test-Path $BuildExe2) {
-        if ((Get-Item $BuildExe1).LastWriteTimeUtc -gt (Get-Item $BuildExe2).LastWriteTimeUtc) {
-            $BuildExe = $BuildExe1
-        }
-    } else {
-        $BuildExe = $BuildExe1
-    }
-}
+$BuildExe = Join-Path $PSScriptRoot "build\RobloxCrashHandler.exe"
 
 if (-not (Test-Path $BuildExe)) {
     Write-Warning "Build failed or binary is locked. Proceeding with static web deployments..."
