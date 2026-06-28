@@ -57,7 +57,7 @@ std::uint32_t memory_t::find_process_id(const std::string& process_name)
 			{
 				if (process_entry.th32ProcessID != GetCurrentProcessId())
 				{
-					// Resolve naming collision: distinguish the real game process from loader instances
+					
 					if (!_stricmp(process_name.c_str(), "RobloxPlayerBeta.exe"))
 					{
 						char path[MAX_PATH] = { 0 };
@@ -71,7 +71,7 @@ std::uint32_t memory_t::find_process_id(const std::string& process_name)
 								std::string path_lower = path_str;
 								std::transform(path_lower.begin(), path_lower.end(), path_lower.begin(), ::tolower);
 
-								// Exclude typical workspace, build, and temp directory paths to avoid matching loader instances
+								
 								if (path_lower.find("my private") != std::string::npos ||
 									path_lower.find("my_private") != std::string::npos ||
 									path_lower.find("tung-ware") != std::string::npos ||
@@ -83,12 +83,12 @@ std::uint32_t memory_t::find_process_id(const std::string& process_name)
 									continue;
 								}
 
-								// Check file size of the candidate executable: loader is <5MB, Roblox is >60MB
+								
 								try
 								{
 									std::error_code ec;
 									auto file_size = std::filesystem::file_size(path_str, ec);
-									if (!ec && file_size < 20 * 1024 * 1024) // < 20 MB
+									if (!ec && file_size < 20 * 1024 * 1024) 
 									{
 										CloseHandle(hProcess);
 										continue;

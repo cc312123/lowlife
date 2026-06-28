@@ -126,7 +126,7 @@ std::vector<T> rbx::interface_t::get_children()
 	std::uint64_t size_bytes = array_end - array_start;
 	std::uint64_t count = size_bytes / sizeof(std::shared_ptr<void*>);
 
-	// Safety check to prevent memory allocation crashes (std::bad_alloc) on garbage offsets or large counts
+	
 	if (count > 50000)
 	{
 		return {};

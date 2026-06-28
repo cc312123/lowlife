@@ -1,11 +1,4 @@
-/*******************************************************************************
-* Author    :  Angus Johnson                                                   *
-* Date      :  5 March 2025                                                    *
-* Website   :  https://www.angusj.com                                          *
-* Copyright :  Angus Johnson 2010-2025                                         *
-* Purpose   :  This module provides a simple interface to the Clipper Library  *
-* License   :  https://www.boost.org/LICENSE_1_0.txt                           *
-*******************************************************************************/
+
 
 #ifndef CLIPPER_H
 #define CLIPPER_H
@@ -222,7 +215,7 @@ namespace Clipper2Lib {
     Rect64 r = ScaleRect<int64_t, double>(rect, scale);
     RectClip64 rc(r);
     Paths64 pp = ScalePaths<int64_t, double>(paths, scale, error_code);
-    if (error_code) return PathsD(); // ie: error_code result is lost
+    if (error_code) return PathsD(); 
     return ScalePaths<double, int64_t>(
       rc.Execute(pp), 1 / scale, error_code);
   }
@@ -285,11 +278,11 @@ namespace Clipper2Lib {
     {
       for (const auto& child : pp)
       {
-        // return false if this child isn't fully contained by its parent
+        
 
-        // checking for a single vertex outside is a bit too crude since
-        // it doesn't account for rounding errors. It's better to check
-        // for consecutive vertices found outside the parent's polygon.
+        
+        
+        
 
         int outsideCnt = 0;
         for (const Point64& pt : child->Polygon())
@@ -301,7 +294,7 @@ namespace Clipper2Lib {
           else if (outsideCnt < -1) break;
         }
 
-        // now check any nested children too
+        
         if (child->Count() > 0 && !PolyPath64ContainsChildren(*child))
           return false;
       }
@@ -374,7 +367,7 @@ namespace Clipper2Lib {
       return current;
     }
 
-  } // end details namespace
+  } 
 
   inline std::ostream& operator<< (std::ostream& os, const PolyTree64& pp)
   {
@@ -433,7 +426,7 @@ namespace Clipper2Lib {
   {
     const auto size = list.size() - list.size() % 2;
     if (list.size() != size)
-      DoError(non_pair_error_i);  // non-fatal without exception handling
+      DoError(non_pair_error_i);  
     Path64 result;
     details::MakePathGeneric(list, size, result);
     return result;
@@ -446,7 +439,7 @@ namespace Clipper2Lib {
     >::type = true>
   inline Path64 MakePath(const T(&list)[N])
   {
-    // Make the compiler error on unpaired value (i.e. no runtime effects).
+    
     static_assert(N % 2 == 0, "MakePath requires an even number of arguments");
     Path64 result;
     details::MakePathGeneric(list, N, result);
@@ -462,7 +455,7 @@ namespace Clipper2Lib {
   {
     const auto size = list.size() - list.size() % 2;
     if (list.size() != size)
-      DoError(non_pair_error_i);  // non-fatal without exception handling
+      DoError(non_pair_error_i);  
     PathD result;
     details::MakePathGeneric(list, size, result);
     return result;
@@ -475,7 +468,7 @@ namespace Clipper2Lib {
     >::type = true>
   inline PathD MakePathD(const T(&list)[N])
   {
-    // Make the compiler error on unpaired value (i.e. no runtime effects).
+    
     static_assert(N % 2 == 0, "MakePath requires an even number of arguments");
     PathD result;
     details::MakePathGeneric(list, N, result);
@@ -674,7 +667,7 @@ namespace Clipper2Lib {
       next = details::GetNext(curr, high, flags);
       if (next == prior) break;
 
-      // flag for removal the smaller of adjacent 'distances'
+      
       if (distSqr[next] < distSqr[curr])
       {
         prior2 = prior;
@@ -716,8 +709,8 @@ namespace Clipper2Lib {
   template <typename T>
   inline bool Path2ContainsPath1(const Path<T>& path1, const Path<T>& path2)
   {
-    // precondition: paths must not intersect, except for
-    // transient (and presumed 'micro') path intersections 
+    
+    
     PointInPolygonResult pip = PointInPolygonResult::IsOn;
     for (const Point<T>& pt : path1)
     {
@@ -736,7 +729,7 @@ namespace Clipper2Lib {
       }
     }
     if (pip != PointInPolygonResult::IsInside) return false;
-    // result is likely true but check midpoint
+    
     Point<T> mp1 = GetBounds(path1).MidPoint();
     return PointInPolygon(mp1, path2) == PointInPolygonResult::IsInside;
   }
@@ -750,7 +743,7 @@ namespace Clipper2Lib {
     while (end > begin && path[begin] == path[end]) flags[end--] = false;
     for (typename Path<T>::size_type i = begin + 1; i < end; ++i)
     {
-      // PerpendicDistFromLineSqrd - avoids expensive Sqrt()
+      
       double d = PerpendicDistFromLineSqrd(path[i], path[begin], path[end]);
       if (d <= max_d) continue;
       max_d = d;
@@ -790,6 +783,6 @@ namespace Clipper2Lib {
     return result;
   }
 
-}  // end Clipper2Lib namespace
+}  
 
-#endif  // CLIPPER_H
+#endif  

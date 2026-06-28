@@ -23,7 +23,7 @@ static std::string get_equipped_tool_name(std::uint64_t character_address)
 	}
 
 	std::uint64_t size_bytes = array_end - array_start;
-	std::uint64_t count = size_bytes / 16; // 16 bytes per shared_ptr
+	std::uint64_t count = size_bytes / 16; 
 
 	if (count == 0 || count > 1000)
 	{
@@ -75,7 +75,7 @@ static std::string get_equipped_tool_name(std::uint64_t character_address)
 		std::uint64_t child_address = ptr_buf[i].ptr;
 		if (child_address == 0) continue;
 
-		// Class descriptor address
+		
 		std::uint64_t class_descriptor = memory->read<std::uint64_t>(child_address + Offsets::Instance::ClassDescriptor);
 		if (class_descriptor == 0) continue;
 
@@ -93,11 +93,11 @@ static std::string get_equipped_tool_name(std::uint64_t character_address)
 
 		if (!found)
 		{
-			// Class name address
+			
 			std::uint64_t class_name_addr = memory->read<std::uint64_t>(class_descriptor + Offsets::Instance::ClassName);
 			if (class_name_addr != 0)
 			{
-				// Read class name string structure
+				
 				msvc_string_layout layout{};
 				Luck_ReadVirtualMemory(memory->get_process_handle(), reinterpret_cast<void*>(class_name_addr), &layout, sizeof(msvc_string_layout), nullptr);
 				if (layout.size > 0 && layout.size <= 255)
@@ -269,8 +269,8 @@ void cache::run()
 			cache::entity_t& cached_entity = persistent_cache[player.address];
 			rbx::model_instance_t model_instance = player.get_model_instance();
 
-			// Re-cache character parts only if model address has changed (e.g. respawn),
-			// or if the character parts have finished replicating/loading since the initial cache.
+			
+			
 			bool model_changed = (model_instance.address != cached_model_addresses[player.address]);
 			bool needs_recache = model_changed;
 
@@ -362,7 +362,7 @@ void cache::run()
 				}
 			}
 
-			// Active properties to update every iteration
+			
 			if (model_instance.address != 0)
 			{
 				if (player.address == game::local_player.address)
@@ -464,7 +464,7 @@ void cache::run()
 			temp_cache.push_back(cached_entity);
 		}
 
-		// Purge players from cache who left the server
+		
 		for (auto it_pc = persistent_cache.begin(); it_pc != persistent_cache.end();)
 		{
 			if (active_addresses.find(it_pc->first) == active_addresses.end())

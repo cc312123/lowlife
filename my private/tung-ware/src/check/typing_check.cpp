@@ -24,7 +24,7 @@ namespace check
 
 			bool is_typing = false;
 
-			// 1. Try checking UserInputService -> WindowInputState -> CurrentTextBox
+			
 			try
 			{
 				rbx::instance_t uis = game::datamodel.find_first_child_by_class("UserInputService");
@@ -48,7 +48,7 @@ namespace check
 			}
 			catch (...) {}
 
-			// 2. Fallback to ChatInputBarConfiguration removed due to unreliable magic offsets (0x156) causing permanent menu lock.
+			
 
 			if (is_typing && !check::was_typing)
 			{

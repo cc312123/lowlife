@@ -1,11 +1,4 @@
-/*******************************************************************************
-* Author    :  Angus Johnson                                                   *
-* Date      :  1 November 2023                                                 *
-* Website   :  https://www.angusj.com                                          *
-* Copyright :  Angus Johnson 2010-2023                                         *
-* Purpose   :  Minkowski Sum and Difference                                    *
-* License   :  https://www.boost.org/LICENSE_1_0.txt                           *
-*******************************************************************************/
+
 
 #ifndef CLIPPER_MINKOWSKI_H
 #define CLIPPER_MINKOWSKI_H
@@ -80,7 +73,7 @@ namespace Clipper2Lib
       return result;
     }
 
-  } // namespace internal
+  } 
 
   inline Paths64 MinkowskiSum(const Path64& pattern, const Path64& path, bool isClosed)
   {
@@ -112,6 +105,6 @@ namespace Clipper2Lib
     return ScalePaths<double, int64_t>(tmp, 1 / scale, error_code);
   }
 
-} // Clipper2Lib namespace
+} 
 
-#endif  // CLIPPER_MINKOWSKI_H
+#endif  

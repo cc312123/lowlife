@@ -26,7 +26,7 @@ namespace walkspeed
         {
             Sleep(1);
 
-            // Calculate deltaTime
+            
             auto current_time = std::chrono::high_resolution_clock::now();
             float deltaTime = std::chrono::duration<float>(current_time - last_time).count();
             last_time = current_time;
@@ -55,17 +55,17 @@ namespace walkspeed
                 continue;
             }
 
-            // Keybind validation
+            
             bool key_pressed = false;
             if (settings::expl::walkspeed_keybind == 0 || settings::expl::walkspeed_keybind_mode == 2)
             {
                 key_pressed = true;
             }
-            else if (settings::expl::walkspeed_keybind_mode == 0) // Hold
+            else if (settings::expl::walkspeed_keybind_mode == 0) 
             {
                 key_pressed = GetAsyncKeyState(settings::expl::walkspeed_keybind) & 0x8000;
             }
-            else if (settings::expl::walkspeed_keybind_mode == 1) // Toggle
+            else if (settings::expl::walkspeed_keybind_mode == 1) 
             {
                 bool key_is_down = GetAsyncKeyState(settings::expl::walkspeed_keybind) & 0x8000;
                 if (key_is_down && !key_was_down)
@@ -78,7 +78,7 @@ namespace walkspeed
 
             bool should_activate = settings::expl::walkspeed && key_pressed && !check::textchatopen;
 
-            // Check conditions if walkspeed is active
+            
             if (should_activate)
             {
                 rbx::player_t local_player_obj = { game::local_player.address };
@@ -88,10 +88,10 @@ namespace walkspeed
                 {
                     switch (settings::expl::walkspeed_mode)
                     {
-                    case 0: // Normal
+                    case 0: 
                         should_activate = true;
                         break;
-                    case 1: // Reloading
+                    case 1: 
                         {
                             should_activate = false;
                             rbx::instance_t body_effects = model_instance.find_first_child("BodyEffects");
@@ -105,7 +105,7 @@ namespace walkspeed
                             }
                             break;
                         }
-                    case 2: // Low Health
+                    case 2: 
                         {
                             float health = memory->read<float>(humanoid_address + Offsets::Humanoid::Health);
                             should_activate = (health < settings::expl::walkspeed_health_threshold);
@@ -124,7 +124,7 @@ namespace walkspeed
                 rbx::player_t local_player_obj = { game::local_player.address };
                 rbx::model_instance_t model_instance = local_player_obj.get_model_instance();
 
-                if (settings::expl::walkspeed_method == 0) // Walkspeed Property
+                if (settings::expl::walkspeed_method == 0) 
                 {
                     if (!original_speed_set)
                     {
@@ -136,7 +136,7 @@ namespace walkspeed
                     float current_speed = memory->read<float>(humanoid_address + Offsets::Humanoid::Walkspeed);
                     if (std::abs(current_speed - settings::expl::walkspeed_speed) > 0.1f)
                     {
-                        // Write a few times to win race conditions against localscripts
+                        
                         for (int i = 0; i < 5; i++)
                         {
                             memory->write<float>(humanoid_address + Offsets::Humanoid::Walkspeed, settings::expl::walkspeed_speed);
@@ -144,9 +144,9 @@ namespace walkspeed
                         }
                     }
                 }
-                else // Bypass modes (CFrame / Velocity)
+                else 
                 {
-                    // Restore property if previously set
+                    
                     if (original_speed_set)
                     {
                         memory->write<float>(humanoid_address + Offsets::Humanoid::Walkspeed, original_speed);
@@ -170,20 +170,20 @@ namespace walkspeed
                             rbx::primitive_t prim = part.get_primitive();
                             if (prim.address != 0)
                             {
-                                if (settings::expl::walkspeed_method == 1) // CFrame Bypass
+                                if (settings::expl::walkspeed_method == 1) 
                                 {
                                     math::vector3 pos = prim.get_position();
-                                    // Default speed is 16, so boost speed is target_speed - 16
+                                    
                                     float boost = settings::expl::walkspeed_speed - 16.0f;
                                     if (boost > 0.0f)
                                     {
                                         pos.x += move_dir.x * boost * deltaTime;
                                         pos.z += move_dir.z * boost * deltaTime;
-                                        // Write directly to position
+                                        
                                         memory->write<math::vector3>(prim.address + Offsets::Primitive::Position, pos);
                                     }
                                 }
-                                else if (settings::expl::walkspeed_method == 2) // Velocity Bypass
+                                else if (settings::expl::walkspeed_method == 2) 
                                 {
                                     math::vector3 vel = prim.get_velocity();
                                     vel.x = move_dir.x * settings::expl::walkspeed_speed;
@@ -197,7 +197,7 @@ namespace walkspeed
             }
             else
             {
-                // Restore original speed if it was set
+                
                 if (original_speed_set)
                 {
                     memory->write<float>(humanoid_address + Offsets::Humanoid::Walkspeed, original_speed);

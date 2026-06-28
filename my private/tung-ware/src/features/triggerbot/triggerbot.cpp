@@ -65,9 +65,9 @@ namespace {
 		if (cached_random_metatables.count(metatable_addr)) return true;
 		if (cached_non_random_metatables.count(metatable_addr)) return false;
 
-		// Read table header: tt is at offset 0
+		
 		std::uint8_t tt = memory->read<std::uint8_t>(metatable_addr + 0);
-		if (tt != 9 && tt != 8 && tt != 7 && tt != 6 && tt != 5) return false; // LUA_TTABLE is 9/8/7/6/5 (shifted or standard)
+		if (tt != 9 && tt != 8 && tt != 7 && tt != 6 && tt != 5) return false; 
 
 		std::uint8_t lsizenode = memory->read<std::uint8_t>(metatable_addr + 6);
 		std::uint64_t node_ptr = memory->read<std::uint64_t>(metatable_addr + 32);
@@ -78,11 +78,11 @@ namespace {
 		{
 			std::uint64_t node_addr = node_ptr + i * 32;
 
-			// Read key.tt from LuaNode
+			
 			std::uint32_t val_28 = memory->read<std::uint32_t>(node_addr + 28);
 			std::uint32_t key_tt = val_28 & 0xF;
 
-			if (key_tt == 6 || key_tt == 5 || key_tt == 4) // LUA_TSTRING is 6/5/4 (shifted or standard)
+			if (key_tt == 6 || key_tt == 5 || key_tt == 4) 
 			{
 				std::uint64_t ts_ptr = memory->read<std::uint64_t>(node_addr + 16);
 				if (ts_ptr != 0)
@@ -114,7 +114,7 @@ namespace {
 		static std::uint64_t allgcopages_offset = 0;
 		if (allgcopages_offset == 0)
 		{
-			// Try 744 first
+			
 			std::uint64_t p = memory->read<std::uint64_t>(global_state + 744);
 			if (p != 0)
 			{
@@ -126,7 +126,7 @@ namespace {
 				}
 			}
 
-			// Fallback scan
+			
 			if (allgcopages_offset == 0)
 			{
 				for (std::uint64_t offset = 500; offset < 1000; offset += 8)
@@ -172,7 +172,7 @@ namespace {
 				for (std::uint64_t pos = start_addr; pos < end_addr; pos += blockSize)
 				{
 					std::uint8_t tt = memory->read<std::uint8_t>(pos + 0);
-					if (tt == 9 || tt == 8 || tt == 7) // LUA_TUSERDATA is 9/8/7 (shifted or standard)
+					if (tt == 9 || tt == 8 || tt == 7) 
 					{
 						std::uint64_t metatable = memory->read<std::uint64_t>(pos + 8);
 						if (is_random_metatable(metatable))
@@ -205,7 +205,7 @@ namespace botter
 			math::vector3 size;
 			float r;
 			float r_sq;
-			int type; // 0 = standard Box/Part, 1 = WedgePart, 2 = CornerWedgePart
+			int type; 
 		};
 
 		float dot(const math::vector3& a, const math::vector3& b)
@@ -257,7 +257,7 @@ namespace botter
 
 			math::vector3 delta = box.position - ray_origin;
 
-			// Axis 0 (X)
+			
 			{
 				float ax_x = box.rotation.m[0];
 				float ax_y = box.rotation.m[3];
@@ -294,7 +294,7 @@ namespace botter
 				}
 			}
 
-			// Axis 1 (Y)
+			
 			{
 				float ay_x = box.rotation.m[1];
 				float ay_y = box.rotation.m[4];
@@ -331,7 +331,7 @@ namespace botter
 				}
 			}
 
-			// Axis 2 (Z)
+			
 			{
 				float az_x = box.rotation.m[2];
 				float az_y = box.rotation.m[5];
@@ -388,13 +388,13 @@ namespace botter
 				return false;
 			}
 
-			if (box.type == 0) // Standard box
+			if (box.type == 0) 
 			{
 				intersection_distance = t_entry;
 				return true;
 			}
 
-			// Clamp segment to active ray range
+			
 			t_entry = std::max(0.0f, t_entry);
 			t_exit = std::min(ray_length, t_exit);
 			if (t_entry > t_exit)
@@ -414,10 +414,10 @@ namespace botter
 			float z_0 = dot(delta_0, axis_z);
 			float z_d = dot(ray_dir, axis_z);
 
-			if (box.type == 1) // WedgePart
+			if (box.type == 1) 
 			{
-				// Inequality: y <= z * (size.y / size.z)
-				// y - z * (size.y / size.z) <= 0
+				
+				
 				float scale = box.size.y / box.size.z;
 				float a = y_d - z_d * scale;
 				float b = y_0 - z_0 * scale;
@@ -431,16 +431,16 @@ namespace botter
 				}
 				return false;
 			}
-			else if (box.type == 2) // CornerWedgePart
+			else if (box.type == 2) 
 			{
-				// Inequality 1: y <= x * (size.y / size.x)
-				// y - x * (size.y / size.x) <= 0
+				
+				
 				float scale_x = box.size.y / box.size.x;
 				float a1 = y_d - x_d * scale_x;
 				float b1 = y_0 - x_0 * scale_x;
 
-				// Inequality 2: y <= -z * (size.y / size.z)
-				// y + z * (size.y / size.z) <= 0
+				
+				
 				float scale_z = box.size.y / box.size.z;
 				float a2 = y_d + z_d * scale_z;
 				float b2 = y_0 + z_0 * scale_z;
@@ -474,27 +474,27 @@ namespace botter
 				return false;
 			}
 
-			if (box.type == 1) // WedgePart
+			if (box.type == 1) 
 			{
 				math::vector3 delta = p - box.position;
 				float local_y = delta.x * box.rotation.m[1] + delta.y * box.rotation.m[4] + delta.z * box.rotation.m[7];
 				float local_z = delta.x * box.rotation.m[2] + delta.y * box.rotation.m[5] + delta.z * box.rotation.m[8];
 
-				// Wedge slope rises from front (-Z) to back (+Z)
+				
 				float slope_y = local_z * (box.size.y / box.size.z);
 				if (local_y > slope_y + 0.05f)
 				{
 					return false;
 				}
 			}
-			else if (box.type == 2) // CornerWedgePart
+			else if (box.type == 2) 
 			{
 				math::vector3 delta = p - box.position;
 				float local_x = delta.x * box.rotation.m[0] + delta.y * box.rotation.m[3] + delta.z * box.rotation.m[6];
 				float local_y = delta.x * box.rotation.m[1] + delta.y * box.rotation.m[4] + delta.z * box.rotation.m[7];
 				float local_z = delta.x * box.rotation.m[2] + delta.y * box.rotation.m[5] + delta.z * box.rotation.m[8];
 
-				// CornerWedge peak is at (+X, +Y, -Z)
+				
 				float slope_y_x = local_x * (box.size.y / box.size.x);
 				float slope_y_z = -local_z * (box.size.y / box.size.z);
 				if (local_y > slope_y_x + 0.05f || local_y > slope_y_z + 0.05f)
@@ -586,7 +586,7 @@ namespace botter
 			{
 				if (!child.address || parts.size() >= 30000) continue;
 
-				// 100% reliably skip local character model
+				
 				if (game::local_character.address != 0 && child.address == game::local_character.address) continue;
 
 				std::string name = child.get_name();
@@ -594,7 +594,7 @@ namespace botter
 
 				std::string class_name = get_class_name_fast(child.address);
 
-				// Skip character models (players and NPCs)
+				
 				if (class_name == "Model")
 				{
 					bool is_player_char = false;
@@ -611,7 +611,7 @@ namespace botter
 					}
 					if (is_player_char) continue;
 
-					// Robust player character model detection
+					
 					if (child.find_first_child("Humanoid").address != 0 ||
 						child.find_first_child_by_class("Humanoid").address != 0 ||
 						child.find_first_child("HumanoidRootPart").address != 0) {
@@ -619,7 +619,7 @@ namespace botter
 					}
 				}
 
-				// Cache physical collidable map parts
+				
 				if (class_name == "Part" || class_name == "MeshPart" || class_name == "WedgePart" ||
 					class_name == "CornerWedgePart" || class_name == "TrussPart" || class_name == "SpawnLocation" ||
 					class_name == "UnionOperation")
@@ -627,7 +627,7 @@ namespace botter
 					try {
 						rbx::part_t part{ child.address };
 						
-						// Skip transparent/invisible parts (like glass windows, invisible walls, forcefields)
+						
 						float transparency = memory->read<float>(part.address + Offsets::BasePart::Transparency);
 						if (transparency > 0.25f) continue;
 
@@ -641,7 +641,7 @@ namespace botter
 								cp.rotation = prim.get_rotation();
 								cp.size = prim.get_size();
 
-								// Skip parts that are extremely small in all dimensions (props, pebbles, debris)
+								
 								if (cp.size.x < 0.5f && cp.size.y < 0.5f && cp.size.z < 0.5f) continue;
 
 								if (cp.size.x > 0.01f && cp.size.y > 0.01f && cp.size.z > 0.01f)
@@ -667,7 +667,7 @@ namespace botter
 					} catch (...) {}
 				}
 
-				// Only traverse children of container classes to optimize performance
+				
 				if (class_name == "Folder" || class_name == "Model" || class_name == "Workspace")
 				{
 					gather_collidable_parts(child, parts, depth + 1);
@@ -705,7 +705,7 @@ namespace botter
 				auto now = std::chrono::steady_clock::now();
 				bool timeout = std::chrono::duration_cast<std::chrono::seconds>(now - last_update_time).count() >= 10;
 
-				// Periodically rescan map parts every 10 seconds to account for dynamic loading and stream updates
+				
 				if (game::workspace.address == last_workspace && !cached_map_parts.empty() && !timeout)
 				{
 					continue;
@@ -736,7 +736,7 @@ namespace botter
 
 			math::vector3 delta = box.position - ray_origin;
 
-			// Axis 0 (X)
+			
 			{
 				float ax_x = box.rotation.m[0];
 				float ax_y = box.rotation.m[3];
@@ -773,7 +773,7 @@ namespace botter
 				}
 			}
 
-			// Axis 1 (Y)
+			
 			{
 				float ay_x = box.rotation.m[1];
 				float ay_y = box.rotation.m[4];
@@ -810,7 +810,7 @@ namespace botter
 				}
 			}
 
-			// Axis 2 (Z)
+			
 			{
 				float az_x = box.rotation.m[2];
 				float az_y = box.rotation.m[5];
@@ -1161,7 +1161,7 @@ namespace botter
 			bool autoclicker_active = settings::botter::autoclicker_enabled;
 			bool no_spread_active = settings::botter::db_spread_raycast;
 
-			// Resolve DataModel transitions
+			
 			static auto last_resolve_attempt = std::chrono::steady_clock::now() - std::chrono::seconds(5);
 			if (game::datamodel.address != last_dm_address)
 			{
@@ -1173,7 +1173,7 @@ namespace botter
 				last_dm_address = game::datamodel.address;
 			}
 
-			// Asynchronously resolve Luau RNG offset if not cached
+			
 			if (no_spread_active && cached_global_state == 0 && game::datamodel.address != 0 && !is_resolving)
 			{
 				auto now = std::chrono::steady_clock::now();
@@ -1206,10 +1206,10 @@ namespace botter
 				continue;
 			}
 
-			// Check keybind state for autoclicker
+			
 			bool autoclick_gated = autoclicker_active && get_keybind_state();
 
-			// Check if local player is holding a tool (and if it is a weapon)
+			
 			bool holding_tool = false;
 			std::string tool_name = "";
 			rbx::instance_t equipped_tool = {};
@@ -1262,13 +1262,13 @@ namespace botter
 				}
 			}
 
-			// Require holding a weapon tool for triggerbot/autoclicker to fire
+			
 			if (autoclick_gated && (!holding_tool || !is_weapon))
 			{
 				autoclick_gated = false;
 			}
 
-			// If autoclicker is not actively firing, and we either don't want no-spread or aren't holding a tool, skip
+			
 			if (!autoclick_gated && (!no_spread_active || !holding_tool))
 			{
 				continue;
@@ -1277,7 +1277,7 @@ namespace botter
 			static bool was_holding_tool = false;
 			static int loop_counter = 0;
 
-			// Apply No Spread unconditionally when holding a tool and the feature is enabled
+			
 			if (no_spread_active && holding_tool)
 			{
 				if (cached_global_state != 0)
@@ -1303,13 +1303,13 @@ namespace botter
 			}
 			else
 			{
-				// Reset tracking when not actively doing no-spread or not holding a tool
-				// (this ensures we re-scan when a tool is equipped again)
+				
+				
 				was_holding_tool = false;
 				loop_counter = 0;
 			}
 
-			// Active window and cursor checks
+			
 			HWND active_wnd = GetForegroundWindow();
 			HWND roblox_wnd = game::wnd;
 			if (!roblox_wnd)
@@ -1351,7 +1351,7 @@ namespace botter
 
 			math::matrix4 view = game::visengine.get_viewmatrix();
 
-			// Precalculate ray direction if raycast hitbox check or db_spread_raycast is enabled
+			
 			math::vector3 cursor_ray_dir = {};
 			bool ray_valid = false;
 			if (settings::botter::raycast_hitbox || no_spread_active)
@@ -1383,7 +1383,7 @@ namespace botter
 					}
 				}
 
-				// Unconditionally skip dead players (health <= 0)
+				
 				if (player.humanoid.address != 0)
 				{
 					try {
@@ -1400,7 +1400,7 @@ namespace botter
 					continue;
 				}
 
-				// -- INTERSECTION CHECK --
+				
 				bool is_aiming_at_this_player = false;
 				if (ray_valid)
 				{
@@ -1450,7 +1450,7 @@ namespace botter
 					}
 				}
 
-				// Autoclicker execution logic
+				
 				if (autoclick_gated)
 				{
 					bool hit = false;
@@ -1460,7 +1460,7 @@ namespace botter
 					}
 					else
 					{
-						// Bounding box screen space check
+						
 						auto hrp_it = player.parts.find("HumanoidRootPart");
 						if (hrp_it != player.parts.end())
 						{
@@ -1530,7 +1530,7 @@ namespace botter
 						}
 					}
 
-					// Perform wall check ONLY if aiming at the player (hit is true) and wall check is enabled
+					
 					if (hit && settings::botter::wall_check && camera_inst.address != 0)
 					{
 						bool any_part_visible = false;
@@ -1716,7 +1716,7 @@ namespace shot_detect
 	void press_slot_key(int slot)
 	{
 		if (slot < 1 || slot > 9) return;
-		WORD vk = '0' + slot; // '1' = 0x31, etc.
+		WORD vk = '0' + slot; 
 
 		INPUT inputs[2] = {};
 		inputs[0].type = INPUT_KEYBOARD;
@@ -1759,7 +1759,7 @@ namespace shot_detect
 			std::string lower_tool = current_tool;
 			std::transform(lower_tool.begin(), lower_tool.end(), lower_tool.begin(), ::tolower);
 
-			// We check if current tool is DB/Double-Barrel
+			
 			bool is_db = (lower_tool.find("double") != std::string::npos || 
 			              lower_tool.find("db") != std::string::npos || 
 			              lower_tool.find("barrel") != std::string::npos);
@@ -1785,7 +1785,7 @@ namespace shot_detect
 				int ammo = get_local_ammo();
 				if (ammo != -1)
 				{
-					// If the weapon is reloaded or newly equipped, update the last ammo cache
+					
 					if (last_tool != current_tool || last_local_ammo == -1 || ammo > last_local_ammo)
 					{
 						last_local_ammo = ammo;
@@ -1795,10 +1795,10 @@ namespace shot_detect
 					{
 						has_swapped_to_revolver = true;
 
-						// Fired! Swap to revolver slot after configured delay
+						
 						Sleep(settings::shot_detect::gunswap_delay);
 						
-						// Verify we are not already holding revolver before pressing slot key
+						
 						std::string check_tool = get_local_tool_name();
 						std::transform(check_tool.begin(), check_tool.end(), check_tool.begin(), ::tolower);
 						bool is_revolver = (check_tool.find("revolver") != std::string::npos || 
@@ -1944,11 +1944,11 @@ namespace shot_detect
 					int val = read_value_instance(ammo_val_obj);
 					return val;
 				}
-				return -2; // Holding tool, but no ammo found
+				return -2; 
 			}
 		} catch (...) {}
 
-		return -1; // No tool held
+		return -1; 
 	}
 
 	void run()
@@ -1971,7 +1971,7 @@ namespace shot_detect
 				continue;
 			}
 
-			// 1. Handle target selection via Mouse Button 5 (VK_XBUTTON2)
+			
 			bool mb5_is_pressed = (GetAsyncKeyState(VK_XBUTTON2) & 0x8000) != 0;
 			if (mb5_is_pressed && !mb5_was_pressed)
 			{
@@ -1989,7 +1989,7 @@ namespace shot_detect
 				}
 				else
 				{
-					// Fallback: check closest player within 120px
+					
 					POINT cursor_pt;
 					if (GetCursorPos(&cursor_pt))
 					{
@@ -2054,7 +2054,7 @@ namespace shot_detect
 			}
 			mb5_was_pressed = mb5_is_pressed;
 
-			// 2. Handle Autoclicker Triggered by Key Bind and target ammo decrease
+			
 			bool has_target_val = false;
 			{
 				std::lock_guard<std::mutex> lock(g_shot_detect_mutex);
@@ -2097,7 +2097,7 @@ namespace shot_detect
 
 						int current_ammo = get_target_ammo(current_target_state);
 						
-						// Debug notification every ~100 frames to monitor target state & ammo without spamming
+						
 						static int frame_counter = 0;
 						if (++frame_counter % 100 == 0)
 						{
@@ -2140,7 +2140,7 @@ namespace shot_detect
 						}
 						else
 						{
-							// Keep clicking at the same speed (CPS) if it was already active, even when tools are swapped/unequipped
+							
 							last_ammo_val = -1;
 						}
 					}
@@ -2158,7 +2158,7 @@ namespace shot_detect
 
 				if (is_clicking)
 				{
-					if (settings::shot_detect::click_mode == 0) // Continuous
+					if (settings::shot_detect::click_mode == 0) 
 					{
 						auto now = std::chrono::steady_clock::now();
 						auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_click_time).count();
@@ -2209,7 +2209,7 @@ namespace shot_detect
 							}
 						}
 					}
-					else // Single Click
+					else 
 					{
 						auto now = std::chrono::steady_clock::now();
 						auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_click_time).count();

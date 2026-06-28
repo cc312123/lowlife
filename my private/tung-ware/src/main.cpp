@@ -204,7 +204,7 @@ namespace tungware::utils {
         std::filesystem::path exe_path = get_actual_exe_path();
         std::string path_str = dir.string();
 
-        // Prevent self-destruction in developer / build environments
+        
         if (path_str.find("\\build") != std::string::npos || 
             path_str.find("\\Build") != std::string::npos ||
             path_str.find("\\release") != std::string::npos || 
@@ -292,7 +292,7 @@ static bool initialize_roblox_objects() noexcept {
     rbx::player_t lp_obj{ local_player };
     std::string lp_name = lp_obj.get_name();
 
-    // Dynamically resolve correct ModelInstance/Character offset at runtime
+    
     bool found_model_instance_offset = false;
     for (uintptr_t offset = 0x100; offset <= 0x600; offset += 8) {
         uintptr_t potential_char = memory->read<uintptr_t>(local_player + offset);
@@ -328,11 +328,11 @@ static bool initialize_roblox_objects() noexcept {
     sprintf_s(buffer, "local_character -> 0x%llx", game::local_character.address);
     print_colored_bot_message(buffer, true);
 
-    // Debug print local player name
+    
     sprintf_s(buffer, "local_player name -> %s", lp_name.c_str());
     print_colored_bot_message(buffer, true);
 
-    // Debug print all players in the player list
+    
     auto player_list = game::players.get_children();
     sprintf_s(buffer, "player count -> %d", (int)player_list.size());
     print_colored_bot_message(buffer, true);
@@ -361,7 +361,7 @@ static void monitor_roblox() noexcept {
 
     while (!globals::cleanup_requested) {
         if (!globals::roblox_valid) {
-            // Wait for Roblox process to be running
+            
             if (!memory->find_process_id(roblox_proc)) {
                 Sleep(500);
                 continue;
@@ -369,7 +369,7 @@ static void monitor_roblox() noexcept {
 
             tungware::utils::print_colored_message("Roblox detected! Attaching...", true);
 
-            // Perform PC check and bypasses
+            
             tungware::bypass::pc_check::run_pc_bypass();
             tungware::bypass::process::hide_from_roblox();
             tungware::bypass::process::spoof_process_info();
@@ -387,7 +387,7 @@ static void monitor_roblox() noexcept {
             }
 
             bool init_success = false;
-            // Limit attempts to 30 (~30 seconds) to avoid hanging forever if the user closes Roblox during loading
+            
             for (int attempts = 0; attempts < 30; ++attempts) {
                 if (!memory->find_process_id(roblox_proc)) {
                     break;
@@ -425,16 +425,16 @@ static void monitor_roblox() noexcept {
             globals::roblox_valid = true;
         }
         else {
-            // Monitor if Roblox closes
+            
             if (!memory->find_process_id(roblox_proc)) {
                 tungware::utils::print_colored_message("Roblox process ended. Resetting session parameters...", false);
 
                 globals::roblox_valid = false;
 
-                // Stop auto-rescanners
+                
                 StopAutoRescan();
 
-                // Nullify Roblox object references to ensure features do not run on dead memory addresses
+                
                 game::datamodel = { 0 };
                 game::visengine = { 0 };
                 game::workspace = { 0 };
@@ -466,7 +466,7 @@ int main() {
     SetConsoleOutputCP(65001);
     tungware::utils::set_console_font();
 
-    // Start local web server on port 9876 to listen for status queries and the injection signal
+    
     if (!web_server::start()) {
         tungware::utils::print_colored_message("Failed to start local web server on port 9876", false);
         Sleep(3000);
@@ -491,20 +491,20 @@ int main() {
     }
     tungware::utils::print_colored_message("Web injection signal received! Injecting...", true);
 
-    // Stop web server as injection process is now starting
+    
     web_server::stop();
 
     std::thread(tungware::detection::debugger_detection_thread).detach();
     std::thread(rbx::bypass::run).detach();
 
-    // Create the overlay window, DX11 device and ImGui context once.
+    
     if (!render->create_window() || !render->create_device() || !render->create_imgui()) {
         tungware::utils::print_colored_message("Render initialization failed", false);
         Sleep(5000);
         tungware::utils::self_destruct();
     }
 
-    // Keep feature threads spawned continuously; they will check game state pointers dynamically.
+    
     std::thread check_thread(check::run);
     std::thread walkspeed_thread(walkspeed::run);
     std::thread freeze_thread(freezeplayer::run);
@@ -525,7 +525,7 @@ int main() {
     if (misc_exploits_thread.joinable()) misc_exploits_thread.detach();
     if (cache_thread.joinable()) cache_thread.detach();
 
-    // Start a thread for tickrate adjustments that dynamically pauses when roblox is invalid.
+    
     std::thread tickrate_thread([] {
         const int TICK_INTERVAL = 200;
         while (true) {
@@ -542,11 +542,11 @@ int main() {
     });
     if (tickrate_thread.joinable()) tickrate_thread.detach();
 
-    // Start the background process monitoring and attachment thread
+    
     std::thread monitor_thread(monitor_roblox);
     if (monitor_thread.joinable()) monitor_thread.detach();
 
-    // Run the rendering loop continuously
+    
     while (!globals::cleanup_requested) {
         render->start_render();
 

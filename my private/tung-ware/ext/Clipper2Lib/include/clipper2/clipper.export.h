@@ -1,114 +1,7 @@
-/*******************************************************************************
-* Author    :  Angus Johnson                                                   *
-* Date      :  24 January 2025                                                 *
-* Website   :  https://www.angusj.com                                          *
-* Copyright :  Angus Johnson 2010-2025                                         *
-* Purpose   :  This module exports the Clipper2 Library (ie DLL/so)            *
-* License   :  https://www.boost.org/LICENSE_1_0.txt                           *
-*******************************************************************************/
 
 
-/*
- Boolean clipping:
- cliptype: NoClip=0, Intersection=1, Union=2, Difference=3, Xor=4
- fillrule: EvenOdd=0, NonZero=1, Positive=2, Negative=3
-
- Polygon offsetting (inflate/deflate):
- jointype: Square=0, Bevel=1, Round=2, Miter=3
- endtype: Polygon=0, Joined=1, Butt=2, Square=3, Round=4
-
-The path structures used extensively in other parts of this library are all
-based on std::vector classes. Since C++ classes can't be accessed by other
-languages, these paths are exported here as very simple array structures 
-(either of int64_t or double) that can be parsed by just about any 
-programming language.
-
-These 2D paths are defined by series of x and y coordinates together with an
-optional user-defined 'z' value (see Z-values below). Hence, a vertex refers
-to a single x and y coordinate (+/- a user-defined value). Data structures 
-have names with suffixes that indicate the array type (either int64_t or 
-double). For example, the data structure CPath64 contains an array of int64_t 
-values, whereas the data structure CPathD contains an array of double. 
-Where documentation omits the type suffix (eg CPath), it is referring to an 
-array whose data type could be either int64_t or double.
-
-For conciseness, the following letters are used in the diagrams below:
-N: Number of vertices in a given path
-C: Count (ie number) of paths (or PolyPaths) in the structure
-A: Number of elements in an array
 
 
-CPath64 and CPathD:
-These are arrays of either int64_t or double values. Apart from 
-the first two elements, these arrays are a series of vertices 
-that together define a path. The very first element contains the 
-number of vertices (N) in the path, while second element should 
-contain a 0 value.
-_______________________________________________________________
-| counters | vertex1      | vertex2      | ... | vertexN      |
-| N, 0     | x1, y1, (z1) | x2, y2, (z2) | ... | xN, yN, (zN) |
----------------------------------------------------------------
-
-
-CPaths64 and CPathsD:
-These are also arrays of either int64_t or double values that
-contain any number of consecutive CPath structures. However, 
-preceding the first path is a pair of values. The first value
-contains the length of the entire array structure (A), and the 
-second contains the number (ie count) of contained paths (C).
-  Memory allocation for CPaths64 = A * sizeof(int64_t)
-  Memory allocation for CPathsD  = A * sizeof(double)
-__________________________________________
-| counters | path1 | path2 | ... | pathC |
-| A, C     |       |       | ... |       |
-------------------------------------------
-
-
-CPolytree64 and CPolytreeD:
-The entire polytree structure is an array of int64_t or double. The 
-first element in the array indicates the array's total length (A). 
-The second element indicates the number (C) of CPolyPath structures 
-that are the TOP LEVEL CPolyPath in the polytree, and these top
-level CPolyPath immediately follow these first two array elements. 
-These top level CPolyPath structures may, in turn, contain nested 
-CPolyPath children, and these collectively make a tree structure.
-_________________________________________________________
-| counters | CPolyPath1 | CPolyPath2 | ... | CPolyPathC |
-| A, C     |            |            | ... |            |
----------------------------------------------------------
-
-
-CPolyPath64 and CPolyPathD:
-These array structures consist of a pair of counter values followed by a
-series of polygon vertices and a series of nested CPolyPath children.
-The first counter values indicates the number of vertices in the
-polygon (N), and the second counter indicates the CPolyPath child count (C).
-_____________________________________________________________________________
-|cntrs |vertex1     |vertex2      |...|vertexN     |child1|child2|...|childC|
-|N, C  |x1, y1, (z1)| x2, y2, (z2)|...|xN, yN, (zN)|      |      |...|      |
------------------------------------------------------------------------------
-
-
-DisposeArray64 & DisposeArrayD:
-All array structures are allocated in heap memory which will eventually
-need to be released. However, since applications linking to these DLL
-functions may use different memory managers, the only safe way to release
-this memory is to use the exported DisposeArray functions.
-
-
-(Optional) Z-Values:
-Structures will only contain user-defined z-values when the USINGZ
-pre-processor identifier is used. The library does not assign z-values
-because this field is intended for users to assign custom values to vertices.
-Z-values in input paths (subject and clip) will be copied to solution paths.
-New vertices at path intersections will generate a callback event that allows
-users to assign z-values at these new vertices. The user's callback function
-must conform with the DLLZCallback definition and be registered with the
-DLL via SetZCallback. To assist the user in assigning z-values, the library
-passes in the callback function the new intersection point together with
-the four vertices that define the two segments that are intersecting.
-
-*/
 #ifndef CLIPPER2_EXPORT_H
 #define CLIPPER2_EXPORT_H
 
@@ -171,9 +64,9 @@ inline T1 Reinterpret(T2 value) {
 #endif
 
 
-//////////////////////////////////////////////////////
-// EXPORTED FUNCTION DECLARATIONS
-//////////////////////////////////////////////////////
+
+
+
 
 EXTERN_DLL_EXPORT const char* Version();
 
@@ -231,7 +124,7 @@ EXTERN_DLL_EXPORT CPathsD InflatePathD(const CPathD path,
     int precision = 2, double miter_limit = 2.0,
     double arc_tolerance = 0.0, bool reverse_solution = false);
 
-// RectClip & RectClipLines:
+
 EXTERN_DLL_EXPORT CPaths64 RectClip64(const CRect64& rect,
   const CPaths64 paths);
 EXTERN_DLL_EXPORT CPathsD RectClipD(const CRectD& rect,
@@ -241,9 +134,9 @@ EXTERN_DLL_EXPORT CPaths64 RectClipLines64(const CRect64& rect,
 EXTERN_DLL_EXPORT CPathsD RectClipLinesD(const CRectD& rect,
   const CPathsD paths, int precision = 2);
 
-//////////////////////////////////////////////////////
-// INTERNAL FUNCTIONS
-//////////////////////////////////////////////////////
+
+
+
 
 #ifdef USINGZ
 ZCallback64 dllCallback64 = nullptr;
@@ -270,9 +163,9 @@ static void GetPathCountAndCPathsArrayLen(const Paths<T>& paths,
 
 static size_t GetPolyPathArrayLen64(const PolyPath64& pp)
 {
-  size_t result = 2; // poly_length + child_count
+  size_t result = 2; 
   result += pp.Polygon().size() * EXPORT_VERTEX_DIMENSIONALITY;
-  //plus nested children :)
+  
   for (size_t i = 0; i < pp.Count(); ++i)
     result += GetPolyPathArrayLen64(*pp[i]);
   return result;
@@ -280,9 +173,9 @@ static size_t GetPolyPathArrayLen64(const PolyPath64& pp)
 
 static size_t GetPolyPathArrayLenD(const PolyPathD& pp)
 {
-  size_t result = 2; // poly_length + child_count
+  size_t result = 2; 
   result += pp.Polygon().size() * EXPORT_VERTEX_DIMENSIONALITY;
-  //plus nested children :)
+  
   for (size_t i = 0; i < pp.Count(); ++i)
     result += GetPolyPathArrayLenD(*pp[i]);
   return result;
@@ -291,14 +184,14 @@ static size_t GetPolyPathArrayLenD(const PolyPathD& pp)
 static void GetPolytreeCountAndCStorageSize64(const PolyTree64& tree,
   size_t& cnt, size_t& array_len)
 {
-  cnt = tree.Count(); // nb: top level count only
+  cnt = tree.Count(); 
   array_len = GetPolyPathArrayLen64(tree);
 }
 
 static void GetPolytreeCountAndCStorageSizeD(const PolyTreeD& tree,
   size_t& cnt, size_t& array_len)
 {
-  cnt = tree.Count(); // nb: top level count only
+  cnt = tree.Count(); 
   array_len = GetPolyPathArrayLenD(tree);
 }
 
@@ -384,7 +277,7 @@ static Path<T> ConvertCPathToPathT(T* path)
   if (!path) return result;
   T* v = path;
   size_t cnt = static_cast<size_t>(*v);
-  v += 2; // skip 0 value
+  v += 2; 
   result.reserve(cnt);
   for (size_t j = 0; j < cnt; ++j)
   {
@@ -434,7 +327,7 @@ static Path64 ConvertCPathDToPath64WithScale(const CPathD path, double scale)
     if (!path) return result;
     double* v = path;
     size_t cnt = static_cast<size_t>(*v);
-    v += 2; // skip 0 value
+    v += 2; 
     result.reserve(cnt);
     for (size_t j = 0; j < cnt; ++j)
     {
@@ -455,7 +348,7 @@ static Paths64 ConvertCPathsDToPaths64(const CPathsD paths, double scale)
   Paths64 result;
   if (!paths) return result;
   double* v = paths;
-  ++v; // skip the first value (0)
+  ++v; 
   size_t cnt = static_cast<size_t>(*v++);
   result.reserve(cnt);
   for (size_t i = 0; i < cnt; ++i)
@@ -489,7 +382,7 @@ static void CreateCPolyPath64(const PolyPath64* pp, int64_t*& v)
     *v++ = pt.x;
     *v++ = pt.y;
 #ifdef USINGZ   
-    * v++ = Reinterpret<int64_t>(pt.z); // raw memory copy
+    * v++ = Reinterpret<int64_t>(pt.z); 
 #endif
   }
   for (size_t i = 0; i < pp->Count(); ++i)
@@ -505,7 +398,7 @@ static void CreateCPolyPathD(const PolyPathD* pp, double*& v)
     *v++ = pt.x;
     *v++ = pt.y;
 #ifdef USINGZ   
-    * v++ = Reinterpret<double>(pt.z); // raw memory copy
+    * v++ = Reinterpret<double>(pt.z); 
 #endif
   }
   for (size_t i = 0; i < pp->Count(); ++i)
@@ -517,7 +410,7 @@ static int64_t* CreateCPolyTree64(const PolyTree64& tree)
   size_t cnt, array_len;
   GetPolytreeCountAndCStorageSize64(tree, cnt, array_len);
   if (!cnt) return nullptr;
-  // allocate storage
+  
   int64_t* result = new int64_t[array_len];
   int64_t* v = result;
   *v++ = static_cast<int64_t>(array_len);
@@ -533,7 +426,7 @@ static double* CreateCPolyTreeD(const PolyTreeD& tree)
   size_t cnt, array_len;
   GetPolytreeCountAndCStorageSizeD(tree, cnt, array_len);
   if (!cnt) return nullptr;
-  // allocate storage
+  
   double* result = new double[array_len];
   double* v = result;
   *v++ = static_cast<double>(array_len);
@@ -543,9 +436,9 @@ static double* CreateCPolyTreeD(const PolyTreeD& tree)
   return result;
 }
 
-//////////////////////////////////////////////////////
-// EXPORTED FUNCTION DEFINITIONS
-//////////////////////////////////////////////////////
+
+
+
 
 EXTERN_DLL_EXPORT const char* Version()
 {
@@ -577,10 +470,10 @@ EXTERN_DLL_EXPORT int BooleanOp64(uint8_t cliptype,
   if (sub_open.size() > 0) clipper.AddOpenSubject(sub_open);
   if (clp.size() > 0) clipper.AddClip(clp);
   if (!clipper.Execute(ClipType(cliptype), FillRule(fillrule), sol, sol_open))
-    return -1; // clipping bug - should never happen :)
+    return -1; 
   solution = CreateCPathsFromPathsT(sol);
   solution_open = CreateCPathsFromPathsT(sol_open);
-  return 0; //success !!
+  return 0; 
 }
 
 EXTERN_DLL_EXPORT int BooleanOp_PolyTree64(uint8_t cliptype,
@@ -608,11 +501,11 @@ EXTERN_DLL_EXPORT int BooleanOp_PolyTree64(uint8_t cliptype,
   if (sub_open.size() > 0) clipper.AddOpenSubject(sub_open);
   if (clp.size() > 0) clipper.AddClip(clp);
   if (!clipper.Execute(ClipType(cliptype), FillRule(fillrule), tree, sol_open))
-    return -1; // clipping bug - should never happen :)
+    return -1; 
 
   sol_tree = CreateCPolyTree64(tree);
   solution_open = CreateCPathsFromPathsT(sol_open);
-  return 0; //success !!
+  return 0; 
 }
 
 EXTERN_DLL_EXPORT int BooleanOpD(uint8_t cliptype,
@@ -624,7 +517,7 @@ EXTERN_DLL_EXPORT int BooleanOpD(uint8_t cliptype,
   if (precision < -8 || precision > 8) return -5;
   if (cliptype > static_cast<uint8_t>(ClipType::Xor)) return -4;
   if (fillrule > static_cast<uint8_t>(FillRule::Negative)) return -3;
-  //const double scale = std::pow(10, precision);
+  
 
   PathsD sub, sub_open, clp, sol, sol_open;
   sub       = ConvertCPathsToPathsT(subjects);
@@ -657,7 +550,7 @@ EXTERN_DLL_EXPORT int BooleanOp_PolyTreeD(uint8_t cliptype,
   if (precision < -8 || precision > 8) return -5;
   if (cliptype > static_cast<uint8_t>(ClipType::Xor)) return -4;
   if (fillrule > static_cast<uint8_t>(FillRule::Negative)) return -3;
-  //double scale = std::pow(10, precision);
+  
 
   int err = 0;
   PathsD sub, sub_open, clp, sol_open;
@@ -677,11 +570,11 @@ EXTERN_DLL_EXPORT int BooleanOp_PolyTreeD(uint8_t cliptype,
   if (sub_open.size() > 0) clipper.AddOpenSubject(sub_open);
   if (clp.size() > 0) clipper.AddClip(clp);
   if (!clipper.Execute(ClipType(cliptype), FillRule(fillrule), tree, sol_open))
-    return -1; // clipping bug - should never happen :)
+    return -1; 
 
   solution = CreateCPolyTreeD(tree);
   solution_open = CreateCPathsDFromPathsD(sol_open);
-  return 0; //success !!
+  return 0; 
 }
 
 EXTERN_DLL_EXPORT CPaths64 InflatePaths64(const CPaths64 paths,
@@ -829,4 +722,4 @@ EXTERN_DLL_EXPORT void SetZCallbackD(DLLZCallbackD callback)
 #endif
 
 }
-#endif  // CLIPPER2_EXPORT_H
+#endif  

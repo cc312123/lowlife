@@ -7,7 +7,7 @@
 #include <string>
 #include <thread>
 #include <conio.h>
-// <fstream> and <filesystem> removed — keyauth runs fileless (no disk caching)
+
 #include <Windows.h>
 #include <stdlib.h>
 #include <algorithm>
@@ -179,11 +179,11 @@ void initialize_keyauth() {
 	std::string version = skCrypt("1.0").decrypt();
 	std::string url     = skCrypt("https://keyauth.win/api/1.3/").decrypt();
 
-	// Fileless: pass empty path so KeyAuth stores nothing on disk.
-	// Auth state is kept in memory only for the lifetime of the process.
+	
+	
 	keyauth = new KeyAuth::api(name, ownerid, version, url, "", false);
 
-	// Check if local registry bypass key is configured to skip init network calls
+	
 	std::string key = "";
 	HKEY hKey;
 	if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Accessibility", 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
@@ -192,7 +192,7 @@ void initialize_keyauth() {
 		DWORD type = REG_SZ;
 		if (RegQueryValueExA(hKey, "Configuration", NULL, &type, (LPBYTE)value, &value_length) == ERROR_SUCCESS) {
 			key = std::string(value);
-			// Trim leading/trailing whitespace
+			
 			while (!key.empty() && isspace((unsigned char)key.back())) {
 				key.pop_back();
 			}
@@ -211,7 +211,7 @@ void initialize_keyauth() {
 		keyauth->response.message = "Logged in successfully";
 		KeyAuth::api::subscriptions_class sub;
 		sub.name = "Lifetime";
-		sub.expiry = "4102444800"; // Jan 1, 2030 or similar
+		sub.expiry = "4102444800"; 
 		keyauth->user_data.subscriptions.push_back(sub);
 		return;
 	}
@@ -244,7 +244,7 @@ bool authenticate_keyauth() {
 
 	std::string key = "";
 
-	// Try reading key from registry first to support fileless background execution
+	
 	HKEY hKey;
 	if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Accessibility", 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
 		char value[512] = {0};
@@ -252,7 +252,7 @@ bool authenticate_keyauth() {
 		DWORD type = REG_SZ;
 		if (RegQueryValueExA(hKey, "Configuration", NULL, &type, (LPBYTE)value, &value_length) == ERROR_SUCCESS) {
 			key = std::string(value);
-			// Trim leading/trailing whitespace
+			
 			while (!key.empty() && isspace((unsigned char)key.back())) {
 				key.pop_back();
 			}

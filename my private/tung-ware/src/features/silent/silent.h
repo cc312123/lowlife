@@ -17,7 +17,7 @@ namespace rbx
 	}
 }
 
-// Global target variables for ESP and HUD integration
+
 inline bool g_silent_aim_locked{ false };
 inline cache::entity_t g_silent_cached_target{};
 inline math::vector2 g_silent_partpos{};

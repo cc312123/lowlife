@@ -3,4 +3,4 @@
 
 constexpr auto CLIPPER2_VERSION = "1.5.4";
 
-#endif  // CLIPPER_VERSION_H
+#endif  

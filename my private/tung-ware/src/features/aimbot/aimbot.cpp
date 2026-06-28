@@ -439,14 +439,14 @@ namespace rbx::aimbot {
                     last_written_pitch = current_pitch;
                     virtual_angles_initialized = true;
                 } else {
-                    // Detect manual camera rotation changes from user mouse or script override
+                    
                     float manual_yaw_diff = current_yaw - last_written_yaw;
                     manual_yaw_diff = std::atan2(std::sin(manual_yaw_diff), std::cos(manual_yaw_diff));
 
                     float manual_pitch_diff = current_pitch - last_written_pitch;
                     manual_pitch_diff = std::atan2(std::sin(manual_pitch_diff), std::cos(manual_pitch_diff));
 
-                    // Propagate user manual movements to the virtual tracking state
+                    
                     if (std::abs(manual_yaw_diff) > 0.0001f) {
                         virtual_yaw += manual_yaw_diff;
                     }
@@ -505,8 +505,8 @@ namespace rbx::aimbot {
             float ref_x = static_cast<float>(cursor_pt.x);
             float ref_y = static_cast<float>(cursor_pt.y);
 
-            // In shift-lock or first-person, the mouse cursor is centered.
-            // If the cursor is close to the center, use the exact center to prevent jitter/stutter.
+            
+            
             if (std::abs(ref_x - center_x) <= 1.5f && std::abs(ref_y - center_y) <= 1.5f) {
                 ref_x = center_x;
                 ref_y = center_y;
@@ -606,8 +606,8 @@ namespace rbx::aimbot {
             auto now = std::chrono::high_resolution_clock::now();
             float dt = std::chrono::duration<float>(now - last_tick).count();
             
-            // Limit update rate to ~1000Hz to avoid flooding Windows/game with mouse input deltas,
-            // which causes input processing queue lag and stuttering.
+            
+            
             if (dt < 0.001f) {
                 continue;
             }
@@ -661,7 +661,7 @@ namespace rbx::aimbot {
             }
             if (!roblox_wnd || !ScreenToClient(roblox_wnd, &cursor_pt)) continue;
 
-            // Fetch visual engine parameters once per frame
+            
             math::vector2 dims = game::visengine.get_dimensions();
             math::matrix4 view = game::visengine.get_viewmatrix();
 
@@ -698,7 +698,7 @@ namespace rbx::aimbot {
 
             cache::entity_t target = {};
 
-            // Manual lock has priority
+            
             bool is_manual_locked = false;
             cache::entity_t manual_target_snap = {};
             {
@@ -757,7 +757,7 @@ namespace rbx::aimbot {
                                 }
                             } catch (...) {}
                         }
-                        // Keep locked_target and has_locked_target active so we do not switch targets.
+                        
                     }
                 }
                 else {
@@ -771,7 +771,7 @@ namespace rbx::aimbot {
             }
 
             if (target.instance.address == 0) {
-                // If sticky aim is enabled and we already have a locked target, do NOT find a new target
+                
                 if (!(settings::aimbot::sticky_aim && has_locked_target && locked_target.instance.address != 0)) {
                     target = find_best_target(local_crew_id, cursor_pt, dims, view, local_player_addr);
                     if (target.instance.address != 0) {
@@ -807,8 +807,8 @@ namespace rbx::aimbot {
                 filtered_target_pos = raw_target_pos;
                 target_pos_initialized = true;
             } else {
-                // Apply a 3D exponential moving average (EMA) filter on target position
-                // filter_constant of 35.0f provides ~30ms response time while smoothing 60Hz physics stepping.
+                
+                
                 float filter_constant = 35.0f;
                 float alpha = std::clamp(dt * filter_constant, 0.0f, 1.0f);
                 filtered_target_pos.x += (raw_target_pos.x - filtered_target_pos.x) * alpha;
@@ -877,6 +877,6 @@ namespace rbx::aimbot {
     }
 
     void render() {
-        // Stub signature compatibility
+        
     }
 }

@@ -27,7 +27,7 @@ namespace cache
 		std::unordered_map<std::string, rbx::part_t> parts;
 		std::uint64_t head_mesh_address{ 0 };
 
-		// Optimized cached fields
+		
 		float health{ 0.0f };
 		float max_health{ 0.0f };
 		bool is_knocked{ false };

@@ -70,7 +70,7 @@ namespace settings
 		inline int easing_style{ 0 }; 
 		inline float ease_time{ 0.25f };
 
-		inline int target_selection_mode{ 0 }; // 0 = Crosshair, 1 = 3D Distance, 2 = Health
+		inline int target_selection_mode{ 0 }; 
 		inline bool smart_bone{ false };
 		inline bool bone_random_offset{ false };
 		inline float bone_random_offset_val{ 0.2f };
@@ -85,16 +85,16 @@ namespace settings
 	namespace new_silent
 	{
 		inline bool enabled{ false };
-		inline int target_mode{ 0 }; // 0: Closest to Cursor, 1: Closest Distance, 2: Lowest Health
-		inline int hit_chance{ 100 }; // 0 to 100%
+		inline int target_mode{ 0 }; 
+		inline int hit_chance{ 100 }; 
 		inline bool sticky_aim{ false };
 		inline bool prediction_enabled{ true };
 		inline float prediction_scale_x{ 1.0f };
 		inline float prediction_scale_y{ 1.0f };
 		inline bool auto_prediction{ true };
 		inline int keybind{ 0 };
-		inline int keybind_mode{ 0 }; // 0: Hold, 1: Toggle, 2: Always Active
-		inline int aim_part{ 0 }; // 0: Head, 1: UpperTorso, 2: LowerTorso, 3: HumanoidRootPart, 4: Smart, 5: Random
+		inline int keybind_mode{ 0 }; 
+		inline int aim_part{ 0 }; 
 		inline bool fov_check{ true };
 		inline bool knocked_check{ true };
 		inline bool team_check{ false };
@@ -235,10 +235,10 @@ namespace settings
 	namespace shot_detect
 	{
 		inline bool enabled{ false };
-		inline int click_mode{ 0 }; // 0 = Continuous, 1 = Single Click
+		inline int click_mode{ 0 }; 
 		inline int cps{ 50 };
 		inline int trigger_keybind{ 'C' };
-		inline int trigger_keybind_mode{ 0 }; // 0 = Hold, 1 = Toggle, 2 = Always
+		inline int trigger_keybind_mode{ 0 }; 
 		inline int min_delay{ 50 };
 		inline int max_delay{ 150 };
 		inline bool randomize_delay{ false };

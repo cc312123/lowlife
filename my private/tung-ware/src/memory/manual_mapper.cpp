@@ -10,14 +10,14 @@ namespace memory::pe {
             return nullptr;
         }
 
-        // 1. Verify DOS Header Signature
+        
         auto* dos_header = reinterpret_cast<const IMAGE_DOS_HEADER*>(pe_data);
         if (dos_header->e_magic != IMAGE_DOS_SIGNATURE) {
             printf("[ManualMapper] Error: Invalid DOS Signature (MZ missing).\n");
             return nullptr;
         }
 
-        // 2. Verify NT Headers Signature
+        
         if (static_cast<size_t>(dos_header->e_lfanew) + sizeof(IMAGE_NT_HEADERS) > pe_size) {
             printf("[ManualMapper] Error: Buffer size too small to contain NT headers.\n");
             return nullptr;
@@ -29,7 +29,7 @@ namespace memory::pe {
             return nullptr;
         }
 
-        // 3. Verify Target Machine Architecture (64-bit check)
+        
         if (nt_headers->FileHeader.Machine != IMAGE_FILE_MACHINE_AMD64) {
             printf("[ManualMapper] Error: Only 64-bit PEs are supported for x64 architecture.\n");
             return nullptr;
@@ -38,7 +38,7 @@ namespace memory::pe {
         printf("[ManualMapper] Verification complete. Allocating image space (Size: 0x%X)...\n", 
             nt_headers->OptionalHeader.SizeOfImage);
 
-        // 4. Allocate contiguous memory block for the PE image in RAM
+        
         uint8_t* image_base = reinterpret_cast<uint8_t*>(VirtualAlloc(
             nullptr,
             nt_headers->OptionalHeader.SizeOfImage,
@@ -51,15 +51,15 @@ namespace memory::pe {
             return nullptr;
         }
 
-        // 5. Copy PE headers to allocated memory
+        
         std::memcpy(image_base, pe_data, nt_headers->OptionalHeader.SizeOfHeaders);
 
-        // 6. Copy Sections to their respective virtual addresses
+        
         auto* section_header = IMAGE_FIRST_SECTION(nt_headers);
         for (size_t i = 0; i < nt_headers->FileHeader.NumberOfSections; ++i, ++section_header) {
             if (section_header->SizeOfRawData == 0) continue;
 
-            // Bounds check for source section data
+            
             if (static_cast<size_t>(section_header->PointerToRawData) + section_header->SizeOfRawData > pe_size) {
                 printf("[ManualMapper] Error: Section data out of bounds.\n");
                 VirtualFree(image_base, 0, MEM_RELEASE);
@@ -72,7 +72,7 @@ namespace memory::pe {
             std::memcpy(dest_address, src_address, section_header->SizeOfRawData);
         }
 
-        // 7. Resolve Base Relocations if the image was not loaded at its preferred base address
+        
         DWORD_PTR delta = reinterpret_cast<DWORD_PTR>(image_base) - nt_headers->OptionalHeader.ImageBase;
         if (delta != 0) {
             printf("[ManualMapper] Relocating PE image base delta (Delta: 0x%I64X)...\n", delta);
@@ -99,7 +99,7 @@ namespace memory::pe {
             }
         }
 
-        // 8. Resolve Import Address Table (IAT)
+        
         printf("[ManualMapper] Resolving IAT imported libraries...\n");
         auto& import_dir = nt_headers->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT];
         
@@ -150,7 +150,7 @@ namespace memory::pe {
             }
         }
 
-        // 9. Execute Thread Local Storage (TLS) Callbacks if present
+        
         auto& tls_dir = nt_headers->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_TLS];
         if (tls_dir.Size > 0) {
             printf("[ManualMapper] Executing TLS Callbacks...\n");
@@ -165,7 +165,7 @@ namespace memory::pe {
             }
         }
 
-        // 10. Execute Entry Point (DllMain)
+        
         if (nt_headers->OptionalHeader.AddressOfEntryPoint != 0) {
             printf("[ManualMapper] Executing DLL entry point (DllMain)...\n");
             using DllMainFn = BOOL(WINAPI*)(HINSTANCE, DWORD, LPVOID);
@@ -197,7 +197,7 @@ namespace memory::pe {
             return false;
         }
 
-        // 1. Call DllMain with DLL_PROCESS_DETACH
+        
         if (nt_headers->OptionalHeader.AddressOfEntryPoint != 0) {
             printf("[ManualMapper] Executing DllMain DLL_PROCESS_DETACH for unmapping...\n");
             using DllMainFn = BOOL(WINAPI*)(HINSTANCE, DWORD, LPVOID);
@@ -205,7 +205,7 @@ namespace memory::pe {
             entry_point(reinterpret_cast<HINSTANCE>(image_base), DLL_PROCESS_DETACH, nullptr);
         }
 
-        // 2. Release allocated virtual memory
+        
         bool released = VirtualFree(module_base, 0, MEM_RELEASE) != 0;
         if (released) {
             printf("[ManualMapper] Released virtual memory block successfully. Memory leak safeguarded.\n");

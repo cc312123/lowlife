@@ -15,7 +15,7 @@ namespace rbx
 		void run();
 		void render();  
 
-		// Manual target lock functions/variables
+		
 		extern bool g_aimbot_manual_locked;
 		extern cache::entity_t g_aimbot_manual_target;
 		inline std::mutex g_aimbot_mutex;

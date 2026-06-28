@@ -1,11 +1,4 @@
-/*******************************************************************************
-* Author    :  Angus Johnson                                                   *
-* Date      :  22 January 2025                                                 *
-* Website   :  https://www.angusj.com                                          *
-* Copyright :  Angus Johnson 2010-2025                                         *
-* Purpose   :  Path Offset (Inflate/Shrink)                                    *
-* License   :  https://www.boost.org/LICENSE_1_0.txt                           *
-*******************************************************************************/
+
 
 #ifndef CLIPPER_OFFSET_H_
 #define CLIPPER_OFFSET_H_
@@ -17,15 +10,15 @@
 namespace Clipper2Lib {
 
 enum class JoinType { Square, Bevel, Round, Miter };
-//Square : Joins are 'squared' at exactly the offset distance (more complex code)
-//Bevel  : Similar to Square, but the offset distance varies with angle (simple code & faster)
+
+
 
 enum class EndType {Polygon, Joined, Butt, Square, Round};
-//Butt   : offsets both sides of a path, with square blunt ends
-//Square : offsets both sides of a path, with square extended ends
-//Round  : offsets both sides of a path, with round extended ends
-//Joined : offsets both sides of a path, with joined ends
-//Polygon: offsets only one side of a closed path
+
+
+
+
+
 
 typedef std::function<double(const Path64& path, const PathD& path_normals, size_t curr_idx, size_t prev_idx)> DeltaCallback64;
 
@@ -104,7 +97,7 @@ public:
 	double MiterLimit() const { return miter_limit_; }
 	void MiterLimit(double miter_limit) { miter_limit_ = miter_limit; }
 
-	//ArcTolerance: needed for rounded offsets (See offset_triginometry2.svg)
+	
 	double ArcTolerance() const { return arc_tolerance_; }
 	void ArcTolerance(double arc_tolerance) { arc_tolerance_ = arc_tolerance; }
 
@@ -122,4 +115,4 @@ public:
 };
 
 }
-#endif /* CLIPPER_OFFSET_H_ */
+#endif 

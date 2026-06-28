@@ -63,7 +63,7 @@ namespace fly
         {
             Sleep(1);
 
-            // Calculate deltaTime
+            
             auto current_time = std::chrono::high_resolution_clock::now();
             float deltaTime = std::chrono::duration<float>(current_time - last_time).count();
             last_time = current_time;
@@ -203,13 +203,13 @@ namespace fly
                 
                 if (settings::expl::fly_mode == 0)
                 {
-                    // Velocity mode (moving): write once per frame
+                    
                     math::vector3 new_velocity = rotated_direction * settings::expl::fly_speed;
                     memory->write<math::vector3>(prim.address + Offsets::Primitive::AssemblyLinearVelocity, new_velocity);
                 }
                 else if (settings::expl::fly_mode == 1)
                 {
-                    // CFrame mode (moving): write once per frame and update target position
+                    
                     hover_position = hover_position + (rotated_direction * settings::expl::fly_speed * deltaTime);
                     
                     memory->write<math::vector3>(prim.address + Offsets::Primitive::Position, hover_position);
@@ -225,7 +225,7 @@ namespace fly
                     was_moving_last_frame = false;
                 }
 
-                // Hovering (stationary): Lock position and zero velocity
+                
                 memory->write<math::vector3>(prim.address + Offsets::Primitive::Position, hover_position);
                 memory->write<math::matrix3>(prim.address + Offsets::Primitive::Rotation, current_rotation);
                 memory->write<math::vector3>(prim.address + Offsets::Primitive::AssemblyLinearVelocity, math::vector3(0.0f, 0.0f, 0.0f));

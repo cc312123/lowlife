@@ -49,7 +49,7 @@ namespace portals {
             position: relative;
         }
 
-        /* Twinkling Stars Background */
+        
         .stars {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -69,7 +69,7 @@ namespace portals {
             50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 8px rgba(255,255,255,0.8); }
         }
 
-        /* Glowing Moon */
+        
         .crescent-moon {
             position: absolute;
             top: 40px;
@@ -90,7 +90,7 @@ namespace portals {
             50% { transform: rotate(-10deg) translateY(-10px); }
         }
 
-        /* Lantern */
+        
         .lantern {
             position: absolute;
             top: 30px;
@@ -108,7 +108,7 @@ namespace portals {
             50% { transform: rotate(8deg); }
         }
 
-        /* Glassmorphic Container */
+        
         .container {
             position: relative;
             z-index: 10;
@@ -134,7 +134,7 @@ namespace portals {
                 inset 0 0 25px rgba(255, 255, 255, 0.03);
         }
 
-        /* Title / Brand */
+        
         .brand-title {
             font-size: 32px;
             font-weight: 800;
@@ -156,7 +156,7 @@ namespace portals {
             opacity: 0.85;
         }
 
-        /* Bedug / Drum visualizer */
+        
         .bedug-container {
             display: flex;
             justify-content: center;
@@ -213,7 +213,7 @@ namespace portals {
             100% { transform: scale(2.2); opacity: 0; border-color: var(--neon-green); }
         }
 
-        /* Status Display */
+        
         .status-container {
             margin-bottom: 25px;
             padding: 18px 20px;
@@ -267,7 +267,7 @@ namespace portals {
             box-shadow: 0 0 15px rgba(16, 185, 129, 0.15);
         }
 
-        /* Inject Button */
+        
         .inject-btn {
             width: 100%;
             height: 58px;
@@ -320,7 +320,7 @@ namespace portals {
             cursor: not-allowed;
         }
 
-        /* Log / Terminal Console */
+        
         .log-box {
             margin-top: 25px;
             padding: 16px 20px;
@@ -348,7 +348,7 @@ namespace portals {
             color: var(--neon-green);
         }
 
-        /* Spinner */
+        
         .spinner {
             display: inline-block;
             width: 12px;
@@ -365,7 +365,7 @@ namespace portals {
             to { transform: rotate(360deg); }
         }
 
-        /* Intro Overlay styles */
+        
         .intro-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -601,7 +601,7 @@ namespace portals {
         const bedugBox = document.getElementById('bedug-box');
         const statusBox = document.getElementById('status-box');
         
-        // Handle Intro Modal Click
+        
         const introOverlay = document.getElementById('intro-overlay');
         const introEnterBtn = document.getElementById('intro-enter-btn');
         introEnterBtn.addEventListener('click', () => {
@@ -611,7 +611,7 @@ namespace portals {
         
         let serverOnline = false;
 
-        // Generate Twinkling Stars dynamically
+        
         const starsContainer = document.getElementById('stars-container');
         for (let i = 0; i < 40; i++) {
             const star = document.createElement('div');
@@ -625,7 +625,7 @@ namespace portals {
             starsContainer.appendChild(star);
         }
 
-        // Web Audio Synthesizer for "Tung! Tung! Sahur!" rhythm
+        
         let audioCtx = null;
         function getAudioContext() {
             if (!audioCtx) {
@@ -646,7 +646,7 @@ namespace portals {
                 osc.type = type;
                 osc.frequency.setValueAtTime(freq, ctx.currentTime);
                 if (type === 'triangle') {
-                    // Woodblock decay effect
+                    
                     osc.frequency.exponentialRampToValueAtTime(10, ctx.currentTime + duration);
                 }
                 
@@ -659,47 +659,47 @@ namespace portals {
                 osc.start();
                 osc.stop(ctx.currentTime + duration);
             } catch (e) {
-                // AudioContext blocked or unsupported
+                
             }
         }
 
-        // Sound patterns
+        
         function playTung() {
-            playSynthBeep(280, 0.18, 'triangle', 0.45); // Low wooden drum sound
+            playSynthBeep(280, 0.18, 'triangle', 0.45); 
         }
 
-        // Sound patterns (continued)
+        
         function playTek() {
-            playSynthBeep(650, 0.08, 'triangle', 0.25); // High stick sound
+            playSynthBeep(650, 0.08, 'triangle', 0.25); 
         }
 
         function playSahurChords() {
-            // Harmonic arpeggio/chord for success
+            
             const now = getAudioContext().currentTime;
-            playSynthBeep(440, 0.3, 'sine', 0.15); // A4
-            setTimeout(() => playSynthBeep(554.37, 0.3, 'sine', 0.15), 60); // C#5
-            setTimeout(() => playSynthBeep(659.25, 0.4, 'sine', 0.15), 120); // E5
+            playSynthBeep(440, 0.3, 'sine', 0.15); 
+            setTimeout(() => playSynthBeep(554.37, 0.3, 'sine', 0.15), 60); 
+            setTimeout(() => playSynthBeep(659.25, 0.4, 'sine', 0.15), 120); 
         }
 
         function triggerSahurSequence() {
-            // Plays: Tung... Tung... Sahur!
-            // Time markers: 0ms (Tung), 300ms (Tung), 600ms (Sahur!)
+            
+            
             playTung();
             setTimeout(playTung, 250);
             setTimeout(() => {
-                playSynthBeep(320, 0.2, 'triangle', 0.45); // Final bedug beat
+                playSynthBeep(320, 0.2, 'triangle', 0.45); 
                 playSahurChords();
             }, 500);
         }
 
-        // Hook up sound events
+        
         injectBtn.addEventListener('mouseenter', () => {
             if (!injectBtn.disabled) {
                 playTek();
             }
         });
 
-        // Ping the local C++ app's HTTP listener to see if it is running and waiting for injection
+        
         async function checkServerStatus() {
             try {
                 const res = await fetch('http://127.0.0.1:9876/status', {
@@ -715,7 +715,7 @@ namespace portals {
                     injectBtn.removeAttribute('disabled');
                     bedugBox.classList.add('beating');
                     logBox.innerHTML = '<div class="log-line log-success">SAHUR > Loader verified. The neighborhoods are ready! Click below to trigger sahur injection.</div>';
-                    // Play introductory invite sound
+                    
                     playTung();
                 }
             } catch (err) {
@@ -731,7 +731,7 @@ namespace portals {
             }
         }
 
-        // Send the HTTP POST /inject signal to run the memory-attachment loops in the C++ backend
+        
         injectBtn.addEventListener('click', async () => {
             if (!serverOnline) return;
 
@@ -739,7 +739,7 @@ namespace portals {
             statusBadge.textContent = '[ INJECTING... ]';
             logBox.innerHTML = '<div class="log-line"><div class="spinner"></div> SAHUR > Beating bedug and waking up memory processes...</div>';
             
-            // Play "Tung! Tung! Sahur!" audio synth
+            
             triggerSahurSequence();
 
             try {
@@ -764,7 +764,7 @@ namespace portals {
             }
         });
 
-        // Continuously check status every 1.5 seconds
+        
         setInterval(checkServerStatus, 1500);
         checkServerStatus();
     </script>
@@ -808,7 +808,7 @@ namespace portals {
             overflow: hidden;
         }
 
-        /* CRT Screen Scanline Effect */
+        
         body::before {
             content: " ";
             display: block;
@@ -1040,7 +1040,7 @@ namespace portals {
                     method: 'POST',
                     mode: 'cors'
                 }).catch(err => {
-                    // Ignore, loader shuts down as part of the cleanup
+                    
                 });
 
                 setTimeout(() => {
@@ -1095,7 +1095,7 @@ namespace portals {
             padding: 20px;
         }
 
-        /* CRT Screen Scanline Effect */
+        
         body::before {
             content: " ";
             display: block;
@@ -1272,7 +1272,7 @@ namespace portals {
         <div class="editor-container">
             <div class="pane">
                 <label for="offsets-editor">Offsets definitions (.hpp format)</label>
-                <textarea id="offsets-editor" placeholder="// Paste your Offsets.hpp content here...
+                <textarea id="offsets-editor" placeholder="
 namespace Offsets {
     inline constexpr std::string_view ClientVersion = &quot;version-xxxxxxxxxxxxx&quot;;
     namespace DataModel {

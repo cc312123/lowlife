@@ -34,16 +34,16 @@ struct esp_render_t
 			
 			ImVec2 char_pos = ImVec2(pos.x + x_offset, pos.y);
 			
-			// 4-way cross outline: sharper, cleaner, 2x faster than 8-way, and avoids looping text 9 times
+			
 			draw->AddText(font, font_size, ImVec2(char_pos.x - 1.0f, char_pos.y), outline_col, char_str);
 			draw->AddText(font, font_size, ImVec2(char_pos.x + 1.0f, char_pos.y), outline_col, char_str);
 			draw->AddText(font, font_size, ImVec2(char_pos.x, char_pos.y - 1.0f), outline_col, char_str);
 			draw->AddText(font, font_size, ImVec2(char_pos.x, char_pos.y + 1.0f), outline_col, char_str);
 			
-			// Draw main character
+			
 			draw->AddText(font, font_size, char_pos, col, char_str);
 			
-			// Calc size exactly once per character instead of 9 times!
+			
 			ImVec2 char_size = font->CalcTextSizeA(font_size, FLT_MAX, 0.0f, char_str);
 			x_offset += char_size.x + char_spacing;
 		}

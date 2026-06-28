@@ -191,7 +191,7 @@ void esp::run()
 	math::vector2 dims = game::visengine.get_dimensions();
 	math::matrix4 view = game::visengine.get_viewmatrix();
 
-	// Resolve local player root position once per frame
+	
 	math::vector3 local_hrp_pos = { 0.0f, 0.0f, 0.0f };
 	bool has_local_hrp = false;
 	{
@@ -339,7 +339,7 @@ void esp::run()
 		{
 			continue;
 		}
-		// Use a local stack-based lazy evaluation cache instead of heavy dynamic maps
+		
 		ImVec2 bone_screens[num_bones];
 		bool bone_has_screen[num_bones] = { false };
 		bool bone_computed[num_bones] = { false };
@@ -417,7 +417,7 @@ void esp::run()
 		ImVec2 boxBR = ImVec2(c1.x + c2.x, c1.y + c2.y);
 		float centerX = (boxPos.x + boxBR.x) * 0.5f;
 
-		// 1. Tracers
+		
 		if (settings::visuals::tracers)
 		{
 			ImVec2 origin = {};
@@ -434,7 +434,7 @@ void esp::run()
 			draw->AddLine(origin, ImVec2(centerX, boxBR.y), tracers_col, 1.0f);
 		}
 
-		// 2. Head Dot & Look Vector
+		
 		math::vector3 head_world_pos = {};
 		ImVec2 head_screen_pos = {};
 		if (get_bone_data(IDX_HEAD, head_world_pos, head_screen_pos))
@@ -468,13 +468,13 @@ void esp::run()
 			}
 		}
 
-		// 3. Box ESP
+		
 		if (settings::visuals::box)
 		{
 			helper::box(c1, c2, get_relation_color(entity.name, settings::visuals::box_color));
 		}
 
-		// 4. Hitbox Visualization
+		
 		if (settings::botter::visualize_hitbox)
 		{
 			bool is_local = cache::is_local_player(entity);
@@ -501,7 +501,7 @@ void esp::run()
 				else
 				{
 					parts_to_visualize = { "Head", "HumanoidRootPart" };
-					visual_scale = 1.0f; // Already scaled in memory!
+					visual_scale = 1.0f; 
 				}
 
 				for (const auto& part_name : parts_to_visualize)
@@ -524,7 +524,7 @@ void esp::run()
 								size = size * visual_scale;
 								math::matrix3 rot = p_prim.get_rotation();
 
-								// Project the 8 vertices of the 3D OBB
+								
 								ImVec2 screen_vertices[8];
 								bool all_vertices_valid = true;
 
@@ -550,11 +550,11 @@ void esp::run()
 
 								if (all_vertices_valid)
 								{
-									// Draw 3D wireframe box edges
+									
 									static const std::pair<int, int> edges[12] = {
-										{0, 1}, {1, 3}, {3, 2}, {2, 0}, // Back face
-										{4, 5}, {5, 7}, {7, 6}, {6, 4}, // Front face
-										{0, 4}, {1, 5}, {2, 6}, {3, 7}  // Intersecting edges
+										{0, 1}, {1, 3}, {3, 2}, {2, 0}, 
+										{4, 5}, {5, 7}, {7, 6}, {6, 4}, 
+										{0, 4}, {1, 5}, {2, 6}, {3, 7}  
 									};
 
 									for (const auto& edge : edges)
@@ -562,14 +562,14 @@ void esp::run()
 										draw->AddLine(screen_vertices[edge.first], screen_vertices[edge.second], hit_col, 1.2f);
 									}
 
-									// Draw translucent filled face segments to highlight the volume
+									
 									ImU32 fill_col = (hit_col & 0x00FFFFFF) | 0x0C000000;
-									draw->AddQuadFilled(screen_vertices[0], screen_vertices[1], screen_vertices[3], screen_vertices[2], fill_col); // Back
-									draw->AddQuadFilled(screen_vertices[4], screen_vertices[5], screen_vertices[7], screen_vertices[6], fill_col); // Front
-									draw->AddQuadFilled(screen_vertices[0], screen_vertices[1], screen_vertices[5], screen_vertices[4], fill_col); // Bottom
-									draw->AddQuadFilled(screen_vertices[2], screen_vertices[3], screen_vertices[7], screen_vertices[6], fill_col); // Top
-									draw->AddQuadFilled(screen_vertices[0], screen_vertices[2], screen_vertices[6], screen_vertices[4], fill_col); // Left
-									draw->AddQuadFilled(screen_vertices[1], screen_vertices[3], screen_vertices[7], screen_vertices[5], fill_col); // Right
+									draw->AddQuadFilled(screen_vertices[0], screen_vertices[1], screen_vertices[3], screen_vertices[2], fill_col); 
+									draw->AddQuadFilled(screen_vertices[4], screen_vertices[5], screen_vertices[7], screen_vertices[6], fill_col); 
+									draw->AddQuadFilled(screen_vertices[0], screen_vertices[1], screen_vertices[5], screen_vertices[4], fill_col); 
+									draw->AddQuadFilled(screen_vertices[2], screen_vertices[3], screen_vertices[7], screen_vertices[6], fill_col); 
+									draw->AddQuadFilled(screen_vertices[0], screen_vertices[2], screen_vertices[6], screen_vertices[4], fill_col); 
+									draw->AddQuadFilled(screen_vertices[1], screen_vertices[3], screen_vertices[7], screen_vertices[5], fill_col); 
 								}
 							}
 						}
@@ -578,7 +578,7 @@ void esp::run()
 			}
 		}
 
-		// 5. Skeleton ESP
+		
 		if (settings::visuals::skeleton)
 		{
 			ImU32 skeleton_col = get_relation_color(entity.name, settings::visuals::skeleton_color);
@@ -623,7 +623,7 @@ void esp::run()
 
 
 
-		// 7. Highlights ESP
+		
 		if (settings::visuals::highlights)
 		{
 			ImDrawList* draw = ImGui::GetBackgroundDrawList();
@@ -716,7 +716,7 @@ void esp::run()
 			}
 		}
 
-		// 8. Name ESP
+		
 		if (settings::visuals::name && Visualize.visitor)
 		{
 			std::string player_name = entity.display_name;
@@ -745,7 +745,7 @@ void esp::run()
 			Visualize.DrawTextWithSpacingAndOutline(draw, font, font_size, textPos, nameColor, IM_COL32(0, 0, 0, 255), player_name, char_spacing);
 		}
 
-		// 9. Distance ESP
+		
 		if (settings::visuals::distance && Visualize.visitor && has_local_hrp)
 		{
 			float dx = hrp_pos.x - local_hrp_pos.x;
@@ -780,7 +780,7 @@ void esp::run()
 			Visualize.DrawTextWithSpacingAndOutline(draw, font, font_size, textPos, distColor, IM_COL32(0, 0, 0, 255), std::string(distanceStr), char_spacing);
 		}
 
-		// 10. Equipped Weapon/Tool ESP
+		
 		if (settings::visuals::tool && Visualize.visitor)
 		{
 			std::string toolName = entity.tool_name;
@@ -815,7 +815,7 @@ void esp::run()
 			}
 		}
 
-		// 11. Weapon Icon ESP
+		
 		if (settings::visuals::weapon_icon && Visualize.weapon_icon_font)
 		{
 			std::string toolName = entity.tool_name;
@@ -852,7 +852,7 @@ void esp::run()
 			}
 		}
 
-		// 12. Healthbar ESP
+		
 		if (settings::visuals::healthbar)
 		{
 			float health = entity.health;

@@ -1,18 +1,5 @@
-﻿#pragma once
-/* =============================================================
-/*                       RbxDumperV2                            
-/*               https://imtheo.lol/Offsets                     
-/* -------------------------------------------------------------
-/*  Dumped By       : theo (https://imtheo.lol)                 
-/*  Roblox Version  : version-8884371d30284041
-/*  Dumper Version  : 2.1.7
-/*  Dumped At       : 21:03 16/06/2026 (GMT)
-/*  Total Offsets   : 390
-/* -------------------------------------------------------------
-/*  Join the discord!                                           
-/*  https://discord.gg/rbxoffsets                               
-/* =============================================================
-*/
+#pragma once
+
 
 #include <cstdint>
 #include <string>

@@ -1,19 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><script>
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('keydown', e => {
+    if (e.key === 'F12' || 
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
+        (e.ctrlKey && (e.key === 'U' || e.key === 'u'))) {
+        e.preventDefault();
+        return false;
+    }
+});
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tung-Ware Updates Center</title>
     <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
-    <!-- Background Effects -->
+    
     <div class="bg-grid"></div>
     <div class="bg-radial"></div>
     <div class="bg-blob-1"></div>
     <div class="bg-blob-2"></div>
 
-    <!-- Cyberpunk Loader Overlay -->
+    
     <div id="loader-overlay">
         <div class="loader-content">
             <div class="loader-ring">
@@ -33,14 +43,14 @@
             <p class="loader-subtitle">Secure Telemetry Sync</p>
             <div class="loader-console" id="loader-console"></div>
 
-            <!-- Secure Auth Gate Form (Hidden initially) -->
+            
             <div id="auth-gate-card" class="panel" style="display: none; text-align: left; margin-top: 20px; background: rgba(5, 8, 18, 0.9); border: 1px solid rgba(0, 242, 254, 0.15); box-shadow: var(--shadow-neon-cyan); border-radius: 12px; padding: 20px;">
                 <div style="display: flex; justify-content: space-around; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 20px;">
                     <button id="tab-login" class="tab-btn active" style="background: none; border: none; color: var(--text-primary); font-family: var(--font-title); font-size: 14px; font-weight: 700; padding: 10px 20px; cursor: pointer; border-bottom: 2px solid var(--neon-cyan); outline: none;">LOG IN</button>
                     <button id="tab-register" class="tab-btn" style="background: none; border: none; color: var(--text-secondary); font-family: var(--font-title); font-size: 14px; font-weight: 700; padding: 10px 20px; cursor: pointer; border-bottom: 2px solid transparent; outline: none;">REGISTER</button>
                 </div>
 
-                <!-- Log In Form -->
+                
                 <div id="form-login-section">
                     <div class="input-group" style="margin-bottom: 15px;">
                         <label style="color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px;">Username</label>
@@ -54,7 +64,7 @@
                     <div id="gate-login-feedback" style="margin-top: 10px; font-size: 12px; font-family: monospace; color: var(--neon-cyan); height: 18px; text-align: center;"></div>
                 </div>
 
-                <!-- Register Form -->
+                
                 <div id="form-register-section" style="display: none;">
                     <div class="input-group" style="margin-bottom: 15px;">
                         <label style="color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px;">Choose Username</label>
@@ -75,7 +85,7 @@
         </div>
     </div>
 
-    <!-- Toast Notification -->
+    
     <div class="copied-toast" id="copied-toast">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
         <span>Command Copied to Clipboard</span>
@@ -157,7 +167,7 @@
             </div>
         </div>
 
-        <!-- Account Key Activation / Extension Panel -->
+        
         <div class="panel">
             <div class="panel-title" style="color: var(--neon-gold);">
                 <span class="panel-title-icon" style="background: rgba(245, 158, 11, 0.08); border-color: rgba(245, 158, 11, 0.2); color: var(--neon-gold);">
@@ -195,7 +205,7 @@
         const btnCopyCleanup = document.getElementById('btn-copy-cleanup');
         const toast = document.getElementById('copied-toast');
 
-        // Determine whether we are hosted statically on GitHub Pages or locally
+        
         const isGitHubPages = window.location.hostname.endsWith('github.io') || window.location.pathname.includes('/tung-ware');
         let fileBaseUrl = window.location.origin;
         let apiVersionUrl = '/api/release/latest';
@@ -204,7 +214,7 @@
         let downloadButtonUrl = '/download';
 
         if (isGitHubPages) {
-            // Static hosting mode
+            
             fileBaseUrl += '/tung-ware/files';
             apiVersionUrl = fileBaseUrl + '/releases.json';
             setupUrl = fileBaseUrl + '/setup.ps1';
@@ -212,14 +222,14 @@
             downloadButtonUrl = fileBaseUrl + '/setup.ps1';
         }
 
-        // Set the download button link
+        
         btnDownload.setAttribute('href', downloadButtonUrl);
 
-        // Dynamically replace the hosted IP/domain in the PowerShell one-liners
+        
         powershellCmd.value = powershellCmd.value.replace('__HOST_URL__/setup.ps1', setupUrl);
         cleanupCmd.value = cleanupCmd.value.replace('__HOST_URL__/cleanup', cleanupUrl);
 
-        // Toast Trigger Function
+        
         function showToast(text) {
             toast.querySelector('span').textContent = text;
             toast.classList.add('show');
@@ -228,7 +238,7 @@
             }, 3000);
         }
 
-        // Copy button handler (Installation)
+        
         btnCopy.addEventListener('click', () => {
             powershellCmd.select();
             powershellCmd.setSelectionRange(0, 99999);
@@ -243,7 +253,7 @@
             }, 2000);
         });
 
-        // Copy button handler (Cleanup)
+        
         btnCopyCleanup.addEventListener('click', () => {
             cleanupCmd.select();
             cleanupCmd.setSelectionRange(0, 99999);
@@ -258,7 +268,7 @@
             }, 2000);
         });
 
-        // Mouse Parallax Glow effect on panels
+        
         document.querySelectorAll('.panel').forEach(panel => {
             panel.addEventListener('mousemove', e => {
                 const rect = panel.getBoundingClientRect();
@@ -269,7 +279,7 @@
             });
         });
 
-        // Diagnostic Loader sequence and API loading
+        
         const loaderConsole = document.getElementById('loader-console');
         const loaderProgress = document.getElementById('loader-progress');
         const loaderPercentage = document.getElementById('loader-percentage');
@@ -325,17 +335,17 @@
             }
         }
 
-        // Start fetching data in the background immediately
+        
         fetchLatestRelease();
 
-        // Run the animated loading sequence
+        
         let progress = 0;
         let logIndex = 0;
         const totalSteps = diagMessages.length;
 
         function updateProgressCircle(pct) {
             const radius = 54;
-            const circumference = 2 * Math.PI * radius; // 339.29
+            const circumference = 2 * Math.PI * radius; 
             const offset = circumference - (pct / 100) * circumference;
             loaderProgress.style.strokeDashoffset = offset;
             loaderPercentage.textContent = `${Math.floor(pct)}%`;
@@ -352,10 +362,10 @@
 
         function runLoader() {
             const interval = setInterval(() => {
-                // Increment loader progress
-                progress += (100 / totalSteps) / 4; // micro-increments
+                
+                progress += (100 / totalSteps) / 4; 
 
-                // Sync printing log messages
+                
                 const currentMsgIndex = Math.floor((progress / 100) * totalSteps);
                 if (logIndex < currentMsgIndex && logIndex < totalSteps) {
                     appendConsoleLine(diagMessages[logIndex]);
@@ -367,7 +377,7 @@
                      updateProgressCircle(progress);
                      clearInterval(interval);
 
-                     // Transition from loader console and ring to Auth Gate Card
+                     
                      setTimeout(() => {
                          loaderRing.style.transition = 'opacity 0.5s';
                          loaderConsole.style.transition = 'opacity 0.5s';
@@ -378,7 +388,7 @@
                              loaderRing.style.display = 'none';
                              loaderConsole.style.display = 'none';
                              
-                             // Show Auth Gate Card
+                             
                              const gateCard = document.getElementById('auth-gate-card');
                              gateCard.style.display = 'block';
                              gateCard.style.opacity = 0;
@@ -392,10 +402,10 @@
              }, 60);
          }
 
-         // Initialize loading screen sequence
+         
          runLoader();
 
-         // Toggle Auth Gate Tabs
+         
          const tabLogin = document.getElementById('tab-login');
          const tabRegister = document.getElementById('tab-register');
          const formLogin = document.getElementById('form-login-section');
@@ -419,12 +429,12 @@
              formRegister.style.display = 'block';
          });
 
-         // Access Grant Transition Animation
+         
          function grantAccess(username) {
-             // Populate dashboard username field automatically
+             
              document.getElementById('act-username').value = username;
 
-             // Trigger dashboard reveal animation
+             
              document.querySelector('.container').classList.add('revealed');
              
              setTimeout(() => {
@@ -435,7 +445,7 @@
              }, 500);
          }
 
-         // Gate Log In handler
+         
          const gateLoginUser = document.getElementById('gate-login-user');
          const gateLoginPass = document.getElementById('gate-login-pass');
          const btnGateLogin = document.getElementById('btn-gate-login');
@@ -466,7 +476,7 @@
              }
          });
 
-         // Gate Registration handler (Requires valid License Key)
+         
          const gateRegUser = document.getElementById('gate-reg-user');
          const gateRegPass = document.getElementById('gate-reg-pass');
          const gateRegKey = document.getElementById('gate-reg-key');
@@ -500,7 +510,7 @@
              }
          });
 
-         // Increase download counter visually on click
+         
          btnDownload.addEventListener('click', () => {
              setTimeout(() => {
                  const cur = parseInt(lblDownloads.textContent.replace(/,/g, ''));
@@ -510,7 +520,7 @@
              }, 300);
          });
 
-         // Key Activation UI Fetcher (Dashboard)
+         
          const actUsername = document.getElementById('act-username');
          const actKey = document.getElementById('act-key');
          const btnActivateKey = document.getElementById('btn-activate-key');

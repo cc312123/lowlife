@@ -4,7 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 
-// AES Key and IV matching client decryptor
+
 const AES_KEY = Buffer.from([
     0x4C,0x4F,0x57,0x4C,0x49,0x46,0x45,0x32,0x35,0x36,0x4B,0x45,0x59,0x21,0x40,0x23,
     0x24,0x25,0x5E,0x26,0x2A,0x28,0x29,0x5F,0x2B,0x3D,0x7B,0x7D,0x7C,0x3A,0x3B,0x22
@@ -28,10 +28,10 @@ function decryptBinary(encryptedBuffer) {
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Security PIN for Developer Dashboard
+
 const ADMIN_PIN = '1337'; 
 
-// Ensure required directories exist
+
 const UPLOADS_DIR = path.join(__dirname, 'uploads');
 const DATA_FILE = path.join(__dirname, 'releases.json');
 
@@ -39,7 +39,7 @@ if (!fs.existsSync(UPLOADS_DIR)) {
     fs.mkdirSync(UPLOADS_DIR);
 }
 
-// Initial releases configuration if it doesn't exist
+
 if (!fs.existsSync(DATA_FILE)) {
     const initialData = {
         latestVersion: '1.0.0',
@@ -58,13 +58,13 @@ if (!fs.existsSync(DATA_FILE)) {
     fs.writeFileSync(DATA_FILE, JSON.stringify(initialData, null, 4));
 }
 
-// Configure storage for file uploads
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, UPLOADS_DIR);
     },
     filename: (req, file, cb) => {
-        // Always name the file RobloxPlayerBeta.exe to preserve the target executable name
+        
         cb(null, 'RobloxPlayerBeta.exe');
     }
 });
@@ -84,11 +84,11 @@ const secureDb = require('./secure-db');
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ==========================================
-// CUSTOM DATABASE AUTHENTICATION & LICENSE ENDPOINTS
-// ==========================================
 
-// Create Account Route
+
+
+
+
 app.post('/api/auth/register', (req, res) => {
     const { username, password, licenseKey } = req.body;
     if (!username || !password || !licenseKey) {
@@ -101,7 +101,7 @@ app.post('/api/auth/register', (req, res) => {
     res.json({ success: true, message: result.message });
 });
 
-// Authenticate / Login User Route (Checks Expiry and HWID binding)
+
 app.post('/api/auth/login', (req, res) => {
     const { username, password, hwid } = req.body;
     if (!username || !password) {
@@ -120,7 +120,7 @@ app.post('/api/auth/login', (req, res) => {
     });
 });
 
-// Activate License Key Route
+
 app.post('/api/auth/activate', (req, res) => {
     const { username, licenseKey } = req.body;
     if (!username || !licenseKey) {
@@ -137,7 +137,7 @@ app.post('/api/auth/activate', (req, res) => {
     });
 });
 
-// Generate License Key (Admin Protected)
+
 app.post('/api/admin/generate-key', (req, res) => {
     const { pin, durationHours } = req.body;
     if (pin !== ADMIN_PIN) {
@@ -147,7 +147,7 @@ app.post('/api/admin/generate-key', (req, res) => {
     res.json(result);
 });
 
-// Reset User HWID (Admin Protected)
+
 app.post('/api/admin/reset-hwid', (req, res) => {
     const { pin, username } = req.body;
     if (pin !== ADMIN_PIN) {
@@ -163,17 +163,17 @@ app.post('/api/admin/reset-hwid', (req, res) => {
     res.json(result);
 });
 
-// Read release data utility
+
 function getReleaseData() {
     return JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
 }
 
-// Write release data utility
+
 function saveReleaseData(data) {
     fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 4));
 }
 
-// 1. API: Get Latest Version Info
+
 app.get('/api/release/latest', (req, res) => {
     try {
         const data = getReleaseData();
@@ -191,9 +191,9 @@ app.get('/api/release/latest', (req, res) => {
     }
 });
 
-// 2. API: Download Latest Setup Script / Encrypted Binary
+
 app.get('/download', (req, res) => {
-    // If request is from the self-updater client, serve the decrypted binary instead of setup.ps1
+    
     const userAgent = req.headers['user-agent'] || '';
     if (userAgent.includes('LOWLIFE-SelfUpdater')) {
         return res.redirect('/api/release/download-binary');
@@ -206,7 +206,7 @@ app.get('/download', (req, res) => {
 
     try {
         let content = fs.readFileSync(setupPath, 'utf8');
-        const hostUrl = `${req.protocol}://${req.get('host')}`;
+        const hostUrl = `${req.protocol}:
         content = content.replace(/(\$ServerBaseUrl\s*=\s*")[^"]*(")/g, `$1${hostUrl}$2`);
 
         res.setHeader('Content-Disposition', 'attachment; filename="setup.ps1"');
@@ -217,7 +217,7 @@ app.get('/download', (req, res) => {
     }
 });
 
-// 2a. API: Download Latest Decrypted Binary
+
 app.get('/api/release/download-binary', (req, res) => {
     const encPath = path.join(UPLOADS_DIR, 'RobloxPlayerBeta.enc');
     if (!fs.existsSync(encPath)) {
@@ -264,7 +264,7 @@ app.get('/setup.ps1', (req, res) => {
     }
     try {
         let content = fs.readFileSync(setupPath, 'utf8');
-        const hostUrl = `${req.protocol}://${req.get('host')}`;
+        const hostUrl = `${req.protocol}:
         content = content.replace(/(\$ServerBaseUrl\s*=\s*")[^"]*(")/g, `$1${hostUrl}$2`);
         res.setHeader('Content-Type', 'text/plain');
         res.send(content);
@@ -280,7 +280,7 @@ app.get('/installer.ps1', (req, res) => {
     }
     try {
         let content = fs.readFileSync(installerPath, 'utf8');
-        const hostUrl = `${req.protocol}://${req.get('host')}`;
+        const hostUrl = `${req.protocol}:
         content = content.replace(/(\$ServerBaseUrl\s*=\s*")[^"]*(")/g, `$1${hostUrl}$2`);
         res.setHeader('Content-Type', 'text/plain');
         res.send(content);
@@ -289,7 +289,7 @@ app.get('/installer.ps1', (req, res) => {
     }
 });
 
-// 2b. API: Download Latest Cleanup Script
+
 app.get('/cleanup', (req, res) => {
     const filePath = path.join(__dirname, '..', 'cleanup.ps1');
     if (!fs.existsSync(filePath)) {
@@ -298,7 +298,7 @@ app.get('/cleanup', (req, res) => {
     res.download(filePath, 'cleanup.ps1');
 });
 
-// 3. API: Publish New Release Update
+
 app.post('/api/release/publish', upload.single('binary'), (req, res) => {
     const { pin, version, changelog } = req.body;
 
@@ -324,14 +324,14 @@ app.post('/api/release/publish', upload.single('binary'), (req, res) => {
         const exePath = req.file.path;
         const encPath = path.join(UPLOADS_DIR, 'RobloxPlayerBeta.enc');
 
-        // Read binary bytes and compute MD5
+        
         const fileBytes = fs.readFileSync(exePath);
         const md5Hash = crypto.createHash('md5').update(fileBytes).digest('hex');
 
-        // Encrypt the binary
+        
         const encBytes = encryptBinary(fileBytes);
 
-        // Write encrypted file and clean up raw EXE
+        
         fs.writeFileSync(encPath, encBytes);
         fs.unlinkSync(exePath);
 
@@ -360,7 +360,7 @@ app.post('/api/release/publish', upload.single('binary'), (req, res) => {
     }
 });
 
-// 4. API: Get Release History Logs & Analytics
+
 app.post('/api/release/analytics', (req, res) => {
     const { pin } = req.body;
     if (pin !== ADMIN_PIN) {

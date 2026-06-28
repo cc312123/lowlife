@@ -568,7 +568,7 @@ bool Offsets::Update(const std::string& current_version) {
             return false;
         }
 
-        // Cache in RAM memory
+        
         ram_cache_ver = current_version;
         ram_cache_content = hpp_content;
         printf("[Offsets] Successfully cached offsets in RAM.\n");

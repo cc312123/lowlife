@@ -248,7 +248,7 @@ GameState CaptureCurrentState() {
 }
 bool PerformSmartRescan(GameState::StateType expectedState) {
     try {
-        // Clear old global variables to prevent stale/garbage pointers if the rescan fails or is in lobby
+        
         game::workspace = { 0 };
         game::players = { 0 };
         game::local_player = { 0 };
@@ -279,7 +279,7 @@ bool PerformSmartRescan(GameState::StateType expectedState) {
 
                 game::wnd = FindWindowA(nullptr, "Roblox");
 
-                // Update offsets for the new process version
+                
                 char path[MAX_PATH] = { 0 };
                 DWORD pathSize = sizeof(path);
                 if (QueryFullProcessImageNameA(memory->get_process_handle(), 0, path, &pathSize)) {

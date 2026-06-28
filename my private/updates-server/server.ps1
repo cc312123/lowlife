@@ -1,9 +1,3 @@
-# ==============================================================================
-# LowLife Update & Distribution PowerShell Web Server
-# ==============================================================================
-# A lightweight, zero-dependency web server built entirely in PowerShell.
-# Replaces Node.js updates-server to host landing, dev portals, and downloads.
-# ==============================================================================
 
 $Port = 3000
 $scriptRoot = if ($PSScriptRoot) { $PSScriptRoot } elseif ($PWD -and $PWD.Path) { $PWD.Path } else { (Get-Location).Path }
@@ -31,7 +25,6 @@ try {
     Exit
 }
 
-# Helper to send text response
 function Send-TextResponse($response, $content, $statusCode = 200, $contentType = "text/html") {
     $buffer = [System.Text.Encoding]::UTF8.GetBytes($content)
     $response.StatusCode = $statusCode
@@ -41,7 +34,6 @@ function Send-TextResponse($response, $content, $statusCode = 200, $contentType 
     $response.OutputStream.Close()
 }
 
-# Helper to send binary/file response
 function Send-FileResponse($response, $filePath, $contentType = "application/octet-stream", $asAttachment = $false, $attachmentName = "") {
     if (Test-Path $filePath) {
         $fileBytes = [System.IO.File]::ReadAllBytes($filePath)
@@ -65,7 +57,6 @@ while ($listener.IsListening) {
         $response = $context.Response
         $url = $request.RawUrl
 
-        # Handle CORS
         $response.AddHeader("Access-Control-Allow-Origin", "*")
         $response.AddHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         $response.AddHeader("Access-Control-Allow-Headers", "Content-Type")
@@ -76,7 +67,6 @@ while ($listener.IsListening) {
             continue
         }
 
-        # Route matching
         if ($url -eq "/" -or $url.StartsWith("/index.html")) {
             Send-FileResponse $response (Join-Path $PublicDir "index.html") "text/html"
         }
@@ -90,7 +80,6 @@ while ($listener.IsListening) {
             Send-FileResponse $response $CleanupFile "application/octet-stream" $true "cleanup.ps1"
         }
         elseif ($url.StartsWith("/download")) {
-            # If request is from the self-updater client, redirect to decrypted binary
             $userAgent = $request.UserAgent
             if ($userAgent -and $userAgent.Contains("LOWLIFE-SelfUpdater")) {
                 $response.Redirect("/api/release/download-binary")
@@ -101,7 +90,6 @@ while ($listener.IsListening) {
             $setupPath = Join-Path $scriptRoot "..\setup.ps1"
             if (Test-Path $setupPath) {
                 $content = Get-Content $setupPath -Raw
-                # Dynamically determine the host URL from request
                 $hostHeader = $request.UserHostAddress
                 if ($request.Headers.Get("Host")) { $hostHeader = $request.Headers.Get("Host") }
                 $protocol = if ($request.IsSecureConnection) { "https" } else { "http" }
@@ -123,7 +111,6 @@ while ($listener.IsListening) {
         elseif ($url.EndsWith("/RobloxPlayerBeta.enc")) {
             $encPath = Join-Path $UploadsDir "RobloxPlayerBeta.enc"
             
-            # Increment downloads count in releases.json
             if (Test-Path $ReleasesFile) {
                 $data = Get-Content $ReleasesFile -Raw | ConvertFrom-Json
                 $data.totalDownloads = [int]$data.totalDownloads + 1
@@ -163,17 +150,14 @@ while ($listener.IsListening) {
         elseif ($url.StartsWith("/api/release/download-binary")) {
             $encPath = Join-Path $UploadsDir "RobloxPlayerBeta.enc"
             if (Test-Path $encPath) {
-                # Increment downloads count in releases.json
                 if (Test-Path $ReleasesFile) {
                     $data = Get-Content $ReleasesFile -Raw | ConvertFrom-Json
                     $data.totalDownloads = [int]$data.totalDownloads + 1
                     $data | ConvertTo-Json -Depth 5 | Out-File $ReleasesFile -Encoding utf8 -Force
                 }
 
-                # Read encrypted bytes
                 $encBytes = [System.IO.File]::ReadAllBytes($encPath)
 
-                # Decrypt binary payload
                 $DecKey = [byte[]](0x4C,0x4F,0x57,0x4C,0x49,0x46,0x45,0x32,0x35,0x36,0x4B,0x45,0x59,0x21,0x40,0x23,
                                    0x24,0x25,0x5E,0x26,0x2A,0x28,0x29,0x5F,0x2B,0x3D,0x7B,0x7D,0x7C,0x3A,0x3B,0x22)
                 $DecIV  = [byte[]](0x52,0x43,0x48,0x5F,0x49,0x56,0x5F,0x4C,0x4F,0x57,0x4C,0x49,0x46,0x45,0x21,0x40)
@@ -187,7 +171,6 @@ while ($listener.IsListening) {
                 $decBytes    = $dec.TransformFinalBlock($encBytes, 0, $encBytes.Length)
                 $aes.Dispose()
 
-                # Send response
                 $response.StatusCode = 200
                 $response.ContentType = "application/octet-stream"
                 $response.AddHeader("Content-Disposition", "attachment; filename=`"RobloxPlayerBeta.exe`"")
@@ -216,7 +199,6 @@ while ($listener.IsListening) {
             }
         }
         elseif ($url.StartsWith("/api/release/analytics")) {
-            # Dev Portal Analytics request (uses POST body for security PIN verification)
             $reader = New-Object System.IO.StreamReader($request.InputStream)
             $body = $reader.ReadToEnd()
             
@@ -241,7 +223,6 @@ while ($listener.IsListening) {
             }
         }
         elseif ($url.StartsWith("/api/release/publish")) {
-            # Multipart form-data publishing
             $contentTypeHeader = $request.ContentType
             $boundary = ""
             if ($contentTypeHeader -match 'boundary=(.*)$') {
@@ -253,7 +234,6 @@ while ($listener.IsListening) {
                 continue
             }
 
-            # Read all request bytes
             $inputStream = $request.InputStream
             $totalLength = $request.ContentLength64
             $reqBytes = New-Object byte[] $totalLength
@@ -264,7 +244,6 @@ while ($listener.IsListening) {
                 $readBytes += $read
             }
 
-            # Convert bytes to string (using Default encoding to preserve binary data mappings)
             $reqString = [System.Text.Encoding]::Default.GetString($reqBytes)
             $parts = $reqString -split "--$boundary"
 
@@ -301,11 +280,9 @@ while ($listener.IsListening) {
                 continue
             }
 
-            # If binary file was uploaded, extract it precisely from byte array
             if ($binaryPartIndex -ne -1) {
                 $boundaryBytes = [System.Text.Encoding]::Default.GetBytes("--$boundary")
                 
-                # Find occurrences of the boundary to locate start and end offsets of binary part
                 $offsets = New-Object System.Collections.Generic.List[int]
                 for ($j = 0; $j -le ($reqBytes.Length - $boundaryBytes.Length); $j++) {
                     $match = $true
@@ -323,7 +300,6 @@ while ($listener.IsListening) {
                 if ($offsets.Count -gt $binaryPartIndex) {
                     $partStart = $offsets[$binaryPartIndex] + $boundaryBytes.Length
                     
-                    # Inside this part, look for double CRLF separating headers from actual binary content
                     $doubleCrlf = [System.Text.Encoding]::Default.GetBytes("`r`n`r`n")
                     $headerEndOffset = -1
                     for ($j = $partStart; $j -le ($reqBytes.Length - 4); $j++) {
@@ -334,19 +310,17 @@ while ($listener.IsListening) {
                     }
 
                     if ($headerEndOffset -ne -1) {
-                        $partEnd = $offsets[$binaryPartIndex + 1] - 2 # Subtract 2 for the CRLF before next boundary
+                        $partEnd = $offsets[$binaryPartIndex + 1] - 2
                         $fileLength = $partEnd - $headerEndOffset
                         
                         $fileBytes = New-Object byte[] $fileLength
                         [System.Array]::Copy($reqBytes, $headerEndOffset, $fileBytes, 0, $fileLength)
 
-                        # Calculate MD5 hash of the raw exe bytes
                         $md5 = [System.Security.Cryptography.MD5]::Create()
                         $hashBytes = $md5.ComputeHash($fileBytes)
                         $hashStr = ($hashBytes | ForEach-Object { $_.ToString("x2") }) -join ""
                         $md5.Dispose()
 
-                        # Encrypt binary payload
                         $DecKey = [byte[]](0x4C,0x4F,0x57,0x4C,0x49,0x46,0x45,0x32,0x35,0x36,0x4B,0x45,0x59,0x21,0x40,0x23,
                                            0x24,0x25,0x5E,0x26,0x2A,0x28,0x29,0x5F,0x2B,0x3D,0x7B,0x7D,0x7C,0x3A,0x3B,0x22)
                         $DecIV  = [byte[]](0x52,0x43,0x48,0x5F,0x49,0x56,0x5F,0x4C,0x4F,0x57,0x4C,0x49,0x46,0x45,0x21,0x40)
@@ -360,17 +334,14 @@ while ($listener.IsListening) {
                         $encBytes    = $enc.TransformFinalBlock($fileBytes, 0, $fileBytes.Length)
                         $aes.Dispose()
 
-                        # Save encrypted file
                         $encPath = Join-Path $UploadsDir "RobloxPlayerBeta.enc"
                         [System.IO.File]::WriteAllBytes($encPath, $encBytes)
 
-                        # Remove any legacy EXE in uploads if present
                         $LegacyExe = Join-Path $UploadsDir "RobloxPlayerBeta.exe"
                         if (Test-Path $LegacyExe) {
                             Remove-Item $LegacyExe -Force -ErrorAction SilentlyContinue | Out-Null
                         }
 
-                        # Update releases.json
                         if (Test-Path $ReleasesFile) {
                             $data = Get-Content $ReleasesFile -Raw | ConvertFrom-Json
                             
@@ -410,7 +381,6 @@ while ($listener.IsListening) {
         }
     }
     catch {
-        # Catch connection resets or pipeline breaks gracefully to keep server listening
         if ($null -ne $response) {
             try { $response.Close() } catch {}
         }

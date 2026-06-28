@@ -1,13 +1,11 @@
 $ErrorActionPreference = "Stop"
 Set-Location $PSScriptRoot
 
-# Add portable git to path if it exists
 $portableGitCmd = Join-Path $PSScriptRoot "temp\PortableGit\cmd"
 if (Test-Path $portableGitCmd) {
     $env:PATH = "$portableGitCmd;$env:PATH"
 }
 
-# 1. Stop processes
 Write-Host "Stopping running loader and game processes..." -ForegroundColor Cyan
 Stop-Process -Name "RobloxPlayerBeta" -Force -ErrorAction SilentlyContinue
 Stop-Process -Name "RobloxCrashHandler" -Force -ErrorAction SilentlyContinue
@@ -20,7 +18,6 @@ if ($listening) {
     Stop-Process -Id $listening.OwningProcess -Force -ErrorAction SilentlyContinue
 }
 
-# 2. Setup environment temp variables
 $localTemp = Join-Path $PSScriptRoot "temp"
 if (-not (Test-Path $localTemp)) {
     New-Item -ItemType Directory -Path $localTemp -Force | Out-Null
@@ -28,7 +25,6 @@ if (-not (Test-Path $localTemp)) {
 $env:TEMP = $localTemp
 $env:TMP = $localTemp
 
-# 3. Locate MSBuild
 $msbuild = Get-Command msbuild -ErrorAction SilentlyContinue
 if (-not $msbuild) {
     $vsPath = 'C:\Program Files (x86)\Microsoft Visual Studio'
@@ -50,7 +46,6 @@ if (-not $msbuild) {
 
 Write-Host "Found MSBuild at: $msbuild" -ForegroundColor Green
 
-# 4. Clean and Build
 Write-Host "Cleaning solution..." -ForegroundColor Cyan
 & $msbuild tung-ware.sln /t:Clean /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /p:TrackFileAccess=false
 
@@ -62,7 +57,6 @@ if (-not (Test-Path $BuildExe)) {
     Write-Warning "Build failed or binary is locked. Proceeding with static web deployments..."
 } else {
     Write-Host "Build succeeded! Binary found at $BuildExe" -ForegroundColor Green
-    # Sign the binary
     Write-Host "Signing built binary..." -ForegroundColor Cyan
     try {
         & (Join-Path $PSScriptRoot "..\sign_binary.ps1") -FilePath $BuildExe
@@ -71,7 +65,6 @@ if (-not (Test-Path $BuildExe)) {
     }
 }
 
-# 5. Update releases.json version info before running copy_release
 $ReleasesJsonPath = Join-Path $PSScriptRoot "updates-server\releases.json"
 $newVersion = "1.0.46"
 $changelogText = "Add manual click-to-enter confirmation on the loader intro screen."
@@ -83,7 +76,6 @@ if (Test-Path $ReleasesJsonPath) {
     $json.latestChangelog = $changelogText
     $json.fileName = "RobloxCrashHandler.exe"
     
-    # Check if history entry already exists for 1.0.31, otherwise add it
     $historyExists = $json.history | Where-Object { $_.version -eq $newVersion }
     if (-not $historyExists) {
         $newEntry = [PSCustomObject]@{
@@ -102,11 +94,9 @@ if (Test-Path $ReleasesJsonPath) {
     Write-Host "releases.json version bumped to $newVersion." -ForegroundColor Green
 }
 
-# 6. Run copy_release.ps1 to encrypt and calculate MD5
 Write-Host "Running copy_release.ps1..." -ForegroundColor Cyan
 & (Join-Path $PSScriptRoot "copy_release.ps1")
 
-# 7. Copy files to static deployment directories
 Write-Host "Copying files to static deployment directories..." -ForegroundColor Cyan
 Copy-Item "$PSScriptRoot\updates-server\public\index.html" "$PSScriptRoot\..\index.html" -Force
 Copy-Item "$PSScriptRoot\updates-server\public\style.css" "$PSScriptRoot\..\style.css" -Force
@@ -119,12 +109,10 @@ Copy-Item "$PSScriptRoot\cleanup.ps1" "$PSScriptRoot\..\cleanup.ps1" -Force
 Copy-Item "$PSScriptRoot\updates-server\releases.json" "$PSScriptRoot\..\files\releases.json" -Force
 Copy-Item "$PSScriptRoot\updates-server\uploads\RobloxCrashHandler.enc" "$PSScriptRoot\..\files\RobloxCrashHandler.enc" -Force
 
-# 8. Git Commit and Push
 $RepoRoot = Resolve-Path "$PSScriptRoot\.."
 Write-Host "Staging and pushing new release (v$newVersion) to GitHub... " -ForegroundColor Cyan
 Push-Location $RepoRoot.Path
 try {
-    # Restore .gitignore if deleted
     git restore .gitignore 2>$null
     
     git add index.html style.css files/

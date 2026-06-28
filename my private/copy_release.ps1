@@ -1,5 +1,3 @@
-# copy_release.ps1
-# Automates copying the compiled binary to the server and updating releases.json with the new MD5 hash.
 
 $ErrorActionPreference = "Stop"
 
@@ -62,7 +60,6 @@ if (-not (Test-Path (Split-Path $ServerUploadsEnc))) {
 }
 [System.IO.File]::WriteAllBytes($ServerUploadsEnc, $encBytes)
 
-# Remove any legacy/unencrypted EXE in uploads if present
 $LegacyExe = Join-Path $ServerDir "uploads\RobloxCrashHandler.exe"
 if (Test-Path $LegacyExe) {
     Remove-Item $LegacyExe -Force
@@ -72,14 +69,12 @@ Write-Host "Updating releases.json with the new MD5 hash ($Hash)..."
 if (Test-Path $ReleasesJsonPath) {
     $json = Get-Content $ReleasesJsonPath -Raw | ConvertFrom-Json
     
-    # Update top-level latestHash
     if (-not (Get-Member -InputObject $json -Name "latestHash")) {
         $json | Add-Member -MemberType NoteProperty -Name "latestHash" -Value $Hash
     } else {
         $json.latestHash = $Hash
     }
     
-    # Update latest history entry hash if it exists
     if ($json.history -and $json.history.Count -gt 0) {
         $lastHistory = $json.history | Where-Object { $_.version -eq $json.latestVersion }
         if (-not $lastHistory) {
@@ -92,7 +87,6 @@ if (Test-Path $ReleasesJsonPath) {
         }
     }
     
-    # Save back to file with proper formatting
     $json | ConvertTo-Json -Depth 10 | Out-File $ReleasesJsonPath -Encoding utf8
     Write-Host "Success! releases.json updated."
 } else {

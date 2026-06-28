@@ -12,15 +12,15 @@
 #pragma comment(lib, "winhttp.lib")
 
 namespace updater {
-    // Current Local Loader Version (fallback matches server releases.json)
+    
     inline const std::string CURRENT_VERSION = "1.0.44";
 
     
-    // Configurable Update Distribution Endpoint
+    
     inline const std::wstring SERVER_HOST = L"localhost";
     inline const INTERNET_PORT SERVER_PORT = 3000; 
 
-    // Helper: URL parsing
+    
     inline void parse_server_url(const std::string& url, std::wstring& out_host, INTERNET_PORT& out_port, bool& out_secure) {
         out_host = L"localhost";
         out_port = 3000;
@@ -29,7 +29,7 @@ namespace updater {
         if (url.empty()) return;
 
         std::string scheme, host_port;
-        size_t scheme_end = url.find("://");
+        size_t scheme_end = url.find(":
         if (scheme_end != std::string::npos) {
             scheme = url.substr(0, scheme_end);
             host_port = url.substr(scheme_end + 3);
@@ -64,7 +64,7 @@ namespace updater {
         out_host.assign(host_str.begin(), host_str.end());
     }
 
-    // Helper: Read ServerUrl from registry
+    
     inline std::string get_registry_server_url() {
         HKEY hKey;
         std::string server_url = "";
@@ -119,7 +119,7 @@ namespace updater {
         return p;
     } 
 
-    // Helper: Trim Whitespace
+    
     inline std::string trim(const std::string& str) {
         size_t first = str.find_first_not_of(" \t\r\n");
         if (first == std::string::npos) return "";
@@ -127,7 +127,7 @@ namespace updater {
         return str.substr(first, (last - first + 1));
     }
 
-    // Helper: Parse value by key from a JSON string (avoiding external json dependency)
+    
     inline std::string parse_json_value(const std::string& json, const std::string& key) {
         size_t key_pos = json.find("\"" + key + "\"");
         if (key_pos == std::string::npos) return "";
@@ -139,9 +139,9 @@ namespace updater {
         if (val_start == std::string::npos) return "";
         
         size_t val_end;
-        if (json[val_start - 1] == '"') { // String value
+        if (json[val_start - 1] == '"') { 
             val_end = json.find("\"", val_start);
-        } else { // Numeric or boolean value
+        } else { 
             val_end = json.find_first_of(" \t,}", val_start);
         }
         
@@ -149,7 +149,7 @@ namespace updater {
         return json.substr(val_start, val_end - val_start);
     }
 
-    // Helper: Compute MD5 Hash of the running executable using Windows CryptoAPI
+    
     inline std::string get_current_file_md5() {
         std::filesystem::path szPath = get_actual_exe_path();
 
@@ -192,13 +192,13 @@ namespace updater {
         return md5_str;
     }
 
-    // Perform Self Update and Process Replacement
+    
     inline bool run() {
-        // Retrieve actual workspace path to check for developer environment
+        
         std::filesystem::path p_check = get_actual_workspace();
         std::string path_str = p_check.string();
 
-        // Skip updater check entirely for developer builds (build/Release/Debug folders)
+        
         if (path_str.find("\\build") != std::string::npos || 
             path_str.find("\\Build") != std::string::npos ||
             path_str.find("\\release") != std::string::npos || 
@@ -232,7 +232,7 @@ namespace updater {
         
         if (!hSession) return false;
 
-        // Set strict 1-second timeouts so we don't hang startup if the update server is offline
+        
         WinHttpSetTimeouts(hSession, 1000, 1000, 1000, 1000);
 
         HINTERNET hConnect = WinHttpConnect(hSession, server_host.c_str(), server_port, 0);
@@ -301,7 +301,7 @@ namespace updater {
             return true;
         }
 
-        // New Update Detected!
+        
         printf("\n==================================================\n");
         printf("[ UPDATER ] A NEW VERSION IS LIVE! (v%s)\n", server_version.c_str());
         printf("[ UPDATER ] MD5 mismatch: local[%s] vs server[%s]\n", 
@@ -312,7 +312,7 @@ namespace updater {
         printf("[ UPDATER ] Downloading release build...\n");
         printf("==================================================\n\n");
 
-        // Download the New Executable Binary
+        
         hRequest = WinHttpOpenRequest(hConnect, L"GET", L"/api/release/download-binary",
             NULL, WINHTTP_NO_REFERER, WINHTTP_DEFAULT_ACCEPT_TYPES, is_secure ? WINHTTP_FLAG_SECURE : 0);
 
@@ -354,7 +354,7 @@ namespace updater {
             return false;
         }
 
-        // Retrieve parent directory and actual exe path
+        
         std::filesystem::path p = get_actual_exe_path();
         std::string current_exe_name = "RobloxCrashHandler.exe";
         std::filesystem::path parent_dir = get_actual_workspace();
@@ -362,7 +362,7 @@ namespace updater {
         std::filesystem::path new_exe_path = parent_dir / "RobloxCrashHandler_new.exe";
         std::filesystem::path bat_file_path = parent_dir / "updater.bat";
 
-        // Save new binary using absolute path
+        
         std::ofstream out_file(new_exe_path, std::ios::binary);
         if (!out_file.is_open()) {
             printf("[ UPDATER ] Error: Failed to write new binary to disk.\n");
@@ -371,7 +371,7 @@ namespace updater {
         out_file.write(exe_buffer.data(), exe_buffer.size());
         out_file.close();
 
-        // Write the background batch self-replacer script using absolute path
+        
         std::ofstream bat_file(bat_file_path);
         if (bat_file.is_open()) {
             DWORD loader_pid = GetCurrentProcessId();
@@ -395,10 +395,10 @@ namespace updater {
 
         printf("[ UPDATER ] Applying changes and restarting Tung-Ware...\n");
 
-        // Execute batch file silently in the background
+        
         STARTUPINFOA si = { sizeof(si) };
         si.dwFlags = STARTF_USESHOWWINDOW;
-        si.wShowWindow = SW_HIDE; // Run completely invisible to user
+        si.wShowWindow = SW_HIDE; 
         PROCESS_INFORMATION pi;
         
         std::string cmd_line = "cmd.exe /c \"" + bat_file_path.string() + "\"";
@@ -406,7 +406,7 @@ namespace updater {
             CloseHandle(pi.hProcess);
             CloseHandle(pi.hThread);
             
-            // Shut down current process to allow updater.bat to replace the file
+            
             exit(0);
         } else {
             printf("[ UPDATER ] Error: Failed to trigger process self-updater.\n");

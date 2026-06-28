@@ -1,11 +1,4 @@
-/*******************************************************************************
-* Author    :  Angus Johnson                                                   *
-* Date      :  24 March 2025                                                   *
-* Website   :  https://www.angusj.com                                          *
-* Copyright :  Angus Johnson 2010-2025                                         *
-* Purpose   :  Core Clipper Library structures and functions                   *
-* License   :  https://www.boost.org/LICENSE_1_0.txt                           *
-*******************************************************************************/
+
 
 #ifndef CLIPPER_CORE_H
 #define CLIPPER_CORE_H
@@ -45,11 +38,11 @@ namespace Clipper2Lib
     "There is an undefined error in Clipper2";
 #endif
 
-  // error codes (2^n)
-  const int precision_error_i   = 1;  // non-fatal
-  const int scale_error_i       = 2;  // non-fatal
-  const int non_pair_error_i    = 4;  // non-fatal
-  const int undefined_error_i   = 32; // fatal
+  
+  const int precision_error_i   = 1;  
+  const int scale_error_i       = 2;  
+  const int non_pair_error_i    = 4;  
+  const int undefined_error_i   = 32; 
   const int range_error_i       = 64;
 
 #ifndef PI
@@ -59,7 +52,7 @@ namespace Clipper2Lib
 #ifdef CLIPPER2_MAX_DECIMAL_PRECISION
   const int CLIPPER2_MAX_DEC_PRECISION = CLIPPER2_MAX_DECIMAL_PRECISION;
 #else
-  const int CLIPPER2_MAX_DEC_PRECISION = 8; // see Discussions #564
+  const int CLIPPER2_MAX_DEC_PRECISION = 8; 
 #endif
 
   static const int64_t MAX_COORD = INT64_MAX >> 2;
@@ -85,16 +78,16 @@ namespace Clipper2Lib
       throw Clipper2Exception(undefined_error);
     case range_error_i:
       throw Clipper2Exception(range_error);
-    // Should never happen, but adding this to stop a compiler warning
+    
     default:
       throw Clipper2Exception("Unknown error");
     }
 #else
-    ++error_code; // only to stop compiler warning
+    ++error_code; 
 #endif
   }
 
-  // can we call std::round on T? (default false) (#824)
+  
   template <typename T, typename = void>
   struct is_round_invocable : std::false_type {};
 
@@ -102,16 +95,16 @@ namespace Clipper2Lib
   struct is_round_invocable<T, std::void_t<decltype(std::round(std::declval<T>()))>> : std::true_type {};
 
 
-  //By far the most widely used filling rules for polygons are EvenOdd
-  //and NonZero, sometimes called Alternate and Winding respectively.
-  //https://en.wikipedia.org/wiki/Nonzero-rule
+  
+  
+  
   enum class FillRule { EvenOdd, NonZero, Positive, Negative };
 
 #ifdef USINGZ
   using z_type = int64_t;
 #endif
 
-  // Point ------------------------------------------------------------------------
+  
 
   template <typename T>
   struct Point {
@@ -239,7 +232,7 @@ namespace Clipper2Lib
 
   };
 
-  //nb: using 'using' here (instead of typedef) as they can be used in templates
+  
   using Point64 = Point<int64_t>;
   using PointD = Point<double>;
 
@@ -283,7 +276,7 @@ namespace Clipper2Lib
     return result;
   }
 
-  // Rect ------------------------------------------------------------------------
+  
 
   template <typename T>
   struct Rect;
@@ -529,7 +522,7 @@ namespace Clipper2Lib
     {
       error_code |= scale_error_i;
       DoError(scale_error_i);
-      // if no exception, treat as non-fatal error
+      
       if (scale_x == 0) scale_x = 1.0;
       if (scale_y == 0) scale_y = 1.0;
     }
@@ -570,7 +563,7 @@ namespace Clipper2Lib
       {
         error_code |= range_error_i;
         DoError(range_error_i);
-        return result; // empty path
+        return result; 
       }
     }
 
@@ -661,7 +654,7 @@ namespace Clipper2Lib
   template<typename T>
   inline void StripDuplicates( Path<T>& path, bool is_closed_path)
   {
-    //https://stackoverflow.com/questions/1041620/whats-the-most-efficient-way-to-erase-duplicates-and-sort-a-vector#:~:text=Let%27s%20compare%20three%20approaches%3A
+    
     path.erase(std::unique(path.begin(), path.end()), path.end());
     if (is_closed_path)
       while (path.size() > 1 && path.back() == path.front()) path.pop_back();
@@ -677,14 +670,14 @@ namespace Clipper2Lib
     }
   }
 
-  // Miscellaneous ------------------------------------------------------------
+  
 
   inline void CheckPrecisionRange(int& precision, int& error_code)
   {
     if (precision >= -CLIPPER2_MAX_DEC_PRECISION &&
       precision <= CLIPPER2_MAX_DEC_PRECISION) return;
-    error_code |= precision_error_i; // non-fatal error
-    DoError(precision_error_i);      // does nothing when exceptions are disabled
+    error_code |= precision_error_i; 
+    DoError(precision_error_i);      
     precision = precision > 0 ? CLIPPER2_MAX_DEC_PRECISION : -CLIPPER2_MAX_DEC_PRECISION;
   }
 
@@ -694,7 +687,7 @@ namespace Clipper2Lib
     CheckPrecisionRange(precision, error_code);
   }
 
-  inline int TriSign(int64_t x) // returns 0, 1 or -1
+  inline int TriSign(int64_t x) 
   {
     return (x > 0) - (x < 0); 
   }
@@ -710,9 +703,9 @@ namespace Clipper2Lib
     };
   };
 
-  inline UInt128Struct Multiply(uint64_t a, uint64_t b) // #834, #835
+  inline UInt128Struct Multiply(uint64_t a, uint64_t b) 
   {
-    // note to self - lamba expressions follow
+    
     const auto lo = [](uint64_t x) { return x & 0xFFFFFFFF; };
     const auto hi = [](uint64_t x) { return x >> 32; };
 
@@ -725,7 +718,7 @@ namespace Clipper2Lib
     return { lobits, hibits };
   }
 
-  // returns true if (and only if) a * b == c * d
+  
   inline bool ProductsAreEqual(int64_t a, int64_t b, int64_t c, int64_t d)
   {
 #if (defined(__clang__) || defined(__GNUC__)) && UINTPTR_MAX >= UINT64_MAX
@@ -733,7 +726,7 @@ namespace Clipper2Lib
     const auto cd = static_cast<__int128_t>(c) * static_cast<__int128_t>(d);
     return ab == cd;
 #else
-    // nb: unsigned values needed for calculating overflow carry
+    
     const auto abs_a = static_cast<uint64_t>(std::abs(a));
     const auto abs_b = static_cast<uint64_t>(std::abs(b));
     const auto abs_c = static_cast<uint64_t>(std::abs(c));
@@ -742,7 +735,7 @@ namespace Clipper2Lib
     const auto ab = Multiply(abs_a, abs_b);
     const auto cd = Multiply(abs_c, abs_d);
 
-    // nb: it's important to differentiate 0 values here from other values
+    
     const auto sign_ab = TriSign(a) * TriSign(b);
     const auto sign_cd = TriSign(c) * TriSign(d);
 
@@ -765,7 +758,7 @@ namespace Clipper2Lib
     else if (ab < cd) return -1;
     else return 0;
 #else
-    // nb: unsigned values needed for calculating carry into 'hi'
+    
     const auto abs_a = static_cast<uint64_t>(std::abs(a));
     const auto abs_b = static_cast<uint64_t>(std::abs(b));
     const auto abs_c = static_cast<uint64_t>(std::abs(c));
@@ -794,14 +787,14 @@ namespace Clipper2Lib
 
   template <typename T>
   inline bool IsCollinear(const Point<T>& pt1,
-    const Point<T>& sharedPt, const Point<T>& pt2) // #777
+    const Point<T>& sharedPt, const Point<T>& pt2) 
   {
     const auto a = sharedPt.x - pt1.x;
     const auto b = pt2.y - sharedPt.y;
     const auto c = sharedPt.y - pt1.y;
     const auto d = pt2.x - sharedPt.x;
-    // When checking for collinearity with very large coordinate values
-    // then ProductsAreEqual is more accurate than using CrossProduct.
+    
+    
     return ProductsAreEqual(a, b, c, d);
   }
 
@@ -840,8 +833,8 @@ namespace Clipper2Lib
   inline double PerpendicDistFromLineSqrd(const Point<T>& pt,
     const Point<T>& line1, const Point<T>& line2)
   {
-    //perpendicular distance of point (x³,y³) = (Ax³ + By³ + C)/Sqrt(A² + B²)
-    //see https://en.wikipedia.org/wiki/Perpendicular_distance
+    
+    
     double a = static_cast<double>(pt.x - line1.x);
     double b = static_cast<double>(pt.y - line1.y);
     double c = static_cast<double>(line2.x - line1.x);
@@ -885,17 +878,17 @@ namespace Clipper2Lib
   template <typename T>
   inline bool IsPositive(const Path<T>& poly)
   {
-    // A curve has positive orientation [and area] if a region 'R'
-    // is on the left when traveling around the outside of 'R'.
-    //https://mathworld.wolfram.com/CurveOrientation.html
-    //nb: This statement is premised on using Cartesian coordinates
+    
+    
+    
+    
     return Area<T>(poly) >= 0;
   }
 
 #if CLIPPER2_HI_PRECISION
-  // caution: this will compromise performance
-  // https://github.com/AngusJohnson/Clipper2/issues/317#issuecomment-1314023253
-  // See also CPP/BenchMark/GetIntersectPtBenchmark.cpp
+  
+  
+  
   #define CC_MIN(x,y) ((x)>(y)?(y):(x))
   #define CC_MAX(x,y) ((x)<(y)?(y):(x))
   template<typename T>
@@ -952,7 +945,7 @@ namespace Clipper2Lib
   inline bool GetSegmentIntersectPt(const Point<T>& ln1a, const Point<T>& ln1b,
     const Point<T>& ln2a, const Point<T>& ln2b, Point<T>& ip)
   {
-    // https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
+    
     double dx1 = static_cast<double>(ln1b.x - ln1a.x);
     double dy1 = static_cast<double>(ln1b.y - ln1a.y);
     double dx2 = static_cast<double>(ln2b.x - ln2a.x);
@@ -1011,7 +1004,7 @@ namespace Clipper2Lib
       double res3 = CrossProduct(seg2a, seg1a, seg1b);
       double res4 = CrossProduct(seg2b, seg1a, seg1b);
       if (res3 * res4 > 0) return false;
-      return (res1 || res2 || res3 || res4); // ensures not collinear
+      return (res1 || res2 || res3 || res4); 
     }
     else {
       return (GetSign(CrossProduct(seg1a, seg2a, seg2b)) *
@@ -1056,7 +1049,7 @@ namespace Clipper2Lib
     typename Path<T>::const_iterator cend = polygon.cend();
 
     while (first != cend && first->y == pt.y) ++first;
-    if (first == cend) // not a proper polygon
+    if (first == cend) 
       return PointInPolygonResult::IsOutside;
 
     bool is_above = first->y < pt.y, starting_above = is_above;
@@ -1082,7 +1075,7 @@ namespace Clipper2Lib
       }
 
       if (curr == cbegin)
-        prev = polygon.cend() - 1; //nb: NOT cend (since might equal first)
+        prev = polygon.cend() - 1; 
       else
         prev = curr - 1;
 
@@ -1099,10 +1092,10 @@ namespace Clipper2Lib
 
       if (pt.x < curr->x && pt.x < prev->x)
       {
-        // we're only interested in edges crossing on the left
+        
       }
       else if (pt.x > prev->x && pt.x > curr->x)
-        val = 1 - val; // toggle val
+        val = 1 - val; 
       else
       {
         double d = CrossProduct(*prev, *curr, pt);
@@ -1129,6 +1122,6 @@ namespace Clipper2Lib
       PointInPolygonResult::IsInside;
   }
 
-}  // namespace
+}  
 
-#endif  // CLIPPER_CORE_H
+#endif  

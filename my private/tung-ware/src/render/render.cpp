@@ -69,23 +69,23 @@ static bool IsWindows11OrGreater()
 
 static void configure_window_transparency(HWND hwnd, bool menu_open)
 {
-    // Always use DWM frame extension to enable per-pixel alpha composition.
-    // This makes the clear_color (alpha = 0.0f) background transparent and click-through,
-    // while keeping the ImGui menu (alpha = 1.0f) fully solid and clickable.
+    
+    
+    
     MARGINS margins = { -1, -1, -1, -1 };
     DwmExtendFrameIntoClientArea(hwnd, &margins);
 
-    // Call SetLayeredWindowAttributes with LWA_ALPHA to initialize/enable layered window rendering.
-    // We use LWA_ALPHA with 255 (fully opaque constant multiplier) so that DWM uses the per-pixel
-    // alpha of our D3D11 backbuffer directly, without any color keying.
+    
+    
+    
     SetLayeredWindowAttributes(hwnd, 0, 255, LWA_ALPHA);
 }
 
 struct CleanerLogEvent {
     std::string timestamp;
-    std::string level; // "INFO", "SUCCESS", "WARNING", "ERROR"
+    std::string level; 
     std::string message;
-    long long duration_us; // duration in microseconds
+    long long duration_us; 
 };
 
 static std::vector<CleanerLogEvent> cleaner_log_events;
@@ -112,7 +112,7 @@ static void add_cleaner_log(const std::string& level, const std::string& message
     evt.duration_us = duration_us;
     cleaner_log_events.push_back(evt);
 
-    // Keep last 150 events
+    
     if (cleaner_log_events.size() > 150) {
         cleaner_log_events.erase(cleaner_log_events.begin());
     }
@@ -162,7 +162,7 @@ static bool log_contains_traces(const wchar_t* w_log_name) {
     auto pEvtClose = (BOOL(WINAPI*)(HANDLE))GetProcAddress(hWevtapi, "EvtClose");
 
     if (pEvtQuery && pEvtNext && pEvtRender && pEvtClose) {
-        // Query the latest 50 events in reverse order: EvtQueryChannelPath (0x1) | EvtQueryReverseDirection (0x200)
+        
         HANDLE hQuery = pEvtQuery(NULL, w_log_name, NULL, 0x201);
         if (hQuery) {
             HANDLE hEvents[50];
@@ -176,21 +176,21 @@ static bool log_contains_traces(const wchar_t* w_log_name) {
 
                     DWORD dwBufferUsed = 0;
                     DWORD dwPropertyCount = 0;
-                    // Get buffer size first (EvtRenderEventXml = 1)
+                    
                     pEvtRender(NULL, hEvents[i], 1, 0, NULL, &dwBufferUsed, &dwPropertyCount);
                     if (dwBufferUsed > 0) {
                         std::vector<wchar_t> buffer(dwBufferUsed);
                         if (pEvtRender(NULL, hEvents[i], 1, dwBufferUsed, &buffer[0], &dwBufferUsed, &dwPropertyCount)) {
                             std::wstring xml_str(&buffer[0]);
                             
-                            // Convert xml_str to lowercase (English characters only)
+                            
                             for (auto& c : xml_str) {
                                 if (c >= L'A' && c <= L'Z') {
                                     c = c - L'A' + L'a';
                                 }
                             }
                             
-                            // Check for keywords
+                            
                             std::wstring search_terms[] = { L"tung-ware", L"robloxplayerbeta", L"delta", L"b332fdc6" };
                             for (const auto& term : search_terms) {
                                 if (xml_str.find(term) != std::wstring::npos) {
@@ -222,10 +222,10 @@ static void run_async_cpp_cleaner(bool slow_transition = false, bool is_continuo
 
     add_cleaner_log("INFO", "Initializing Advanced System Cleaner Engine...");
     if (slow_transition) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(300)); // Aesthetic transition delay
+        std::this_thread::sleep_for(std::chrono::milliseconds(300)); 
     }
 
-    // 1. Registry Keys Wiping
+    
     if (settings::cleaner::clean_registry) {
         add_cleaner_log("INFO", "Wiping Registry traces of execution history...");
         auto start_step = std::chrono::high_resolution_clock::now();
@@ -280,7 +280,7 @@ static void run_async_cpp_cleaner(bool slow_transition = false, bool is_continuo
         }
     }
 
-    // 2. Temporary Files Wiping
+    
     if (settings::cleaner::clean_temp) {
         add_cleaner_log("INFO", "Wiping System Temp File residues...");
         auto start_step = std::chrono::high_resolution_clock::now();
@@ -309,7 +309,7 @@ static void run_async_cpp_cleaner(bool slow_transition = false, bool is_continuo
         }
     }
 
-    // 3. Prefetch & Recent Files Wiping
+    
     if (settings::cleaner::clean_prefetch) {
         add_cleaner_log("INFO", "Wiping Windows Prefetch & Recent Items traces...");
         auto start_step = std::chrono::high_resolution_clock::now();
@@ -337,7 +337,7 @@ static void run_async_cpp_cleaner(bool slow_transition = false, bool is_continuo
                     std::string lower_file_name = file_name;
                     std::transform(lower_file_name.begin(), lower_file_name.end(), lower_file_name.begin(), ::tolower);
 
-                    // Sweep all possible cheat launching process layouts & build tools
+                    
                     if (lower_file_name.find("roblox") != std::string::npos ||
                         lower_file_name.find("crash") != std::string::npos ||
                         lower_file_name.find("tung-ware") != std::string::npos ||
@@ -350,7 +350,7 @@ static void run_async_cpp_cleaner(bool slow_transition = false, bool is_continuo
                         lower_file_name.find("dllhost") != std::string::npos ||
                         lower_file_name.find("dll.host") != std::string::npos ||
                         lower_file_name.find("dll") != std::string::npos ||
-                        (lower_file_name.find("ag") == 0 && lower_file_name.find(".db") != std::string::npos)) { // Clear Superfetch DBs
+                        (lower_file_name.find("ag") == 0 && lower_file_name.find(".db") != std::string::npos)) { 
                         
                         std::string file_path = prefetch_dir + "\\" + fd.cFileName;
                         SetFileAttributesA(file_path.c_str(), FILE_ATTRIBUTE_NORMAL);
@@ -368,7 +368,7 @@ static void run_async_cpp_cleaner(bool slow_transition = false, bool is_continuo
             FindClose(hFind);
         }
 
-        // Clean out Superfetch/ReadyBoot database indexes as well
+        
         std::string rb_search = prefetch_dir + "\\ReadyBoot\\*";
         HANDLE hRb = FindFirstFileA(rb_search.c_str(), &fd);
         if (hRb != INVALID_HANDLE_VALUE) {
@@ -396,15 +396,15 @@ static void run_async_cpp_cleaner(bool slow_transition = false, bool is_continuo
         }
     }
 
-    // 4. Windows Event Logs Clearing (Smart Targeted Operational Trace Wiping)
+    
     if (settings::cleaner::clean_eventlogs && !is_continuous_loop) {
         add_cleaner_log("INFO", "Executing Smart Event Log Wiping (Preserving Major Logs)...");
         auto start_step = std::chrono::high_resolution_clock::now();
 
         int step_logs_cleared = 0;
 
-        // Selective operational logs that store installer scripts and startup registries.
-        // We completely preserve standard logs (Security, System, Application) to maintain high stealth.
+        
+        
         const char* hidden_logs[] = {
             "Microsoft-Windows-PowerShell/Operational",
             "Microsoft-Windows-TaskScheduler/Operational",
@@ -422,12 +422,12 @@ static void run_async_cpp_cleaner(bool slow_transition = false, bool is_continuo
             auto pEvtClearLog = (BOOL(WINAPI*)(HANDLE, LPCWSTR, LPCWSTR, DWORD))GetProcAddress(hWevtapi, "EvtClearLog");
             if (pEvtClearLog) {
                 for (const char* log_name : hidden_logs) {
-                    // Convert log_name to wide string
+                    
                     wchar_t w_log_name[256];
                     size_t converted = 0;
                     mbstowcs_s(&converted, w_log_name, log_name, _TRUNCATE);
 
-                    // Smart check: only clear if it contains program traces
+                    
                     if (log_contains_traces(w_log_name)) {
                         auto sub_start = std::chrono::high_resolution_clock::now();
 
@@ -481,7 +481,7 @@ static void run_async_cpp_cleaner(bool slow_transition = false, bool is_continuo
 static std::atomic<bool> continuous_cleaner_should_exit{ false };
 
 static void run_continuous_cleaner_loop() {
-    // Wait a brief period after startup to let the program load before first clean
+    
     for (int i = 0; i < 20; ++i) {
         if (continuous_cleaner_should_exit) return;
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -1281,7 +1281,7 @@ render_t::render_t()
 render_t::~render_t()
 {
     continuous_cleaner_should_exit = true;
-    run_async_cpp_cleaner(false, false); // One final synchronous clean on unload!
+    run_async_cpp_cleaner(false, false); 
     destroy_imgui();
     destroy_window();
     destroy_device();
@@ -1598,13 +1598,13 @@ void render_t::start_render()
 
     if (running && detail->window)
     {
-        bool interactive = true; // Always interactive when menu is open!
+        bool interactive = true; 
         static bool last_interactive_state = false;
         
         static bool last_running_state = false;
         if (running != last_running_state)
         {
-            last_interactive_state = !interactive; // Force update
+            last_interactive_state = !interactive; 
             last_running_state = running;
         }
 
@@ -1721,59 +1721,59 @@ static void draw_mascot(ImDrawList* draw_list, ImVec2 pos, float size, bool acti
 {
     ImVec2 center = ImVec2(pos.x + size * 0.5f, pos.y + size * 0.45f);
     
-    // Scale factor relative to a base size of 60.0f
+    
     float scale = size / 60.0f;
     
-    // Theme colors for body:
-    ImU32 body_color = active ? IM_COL32(234, 88, 12, 255) : IM_COL32(180, 83, 9, 255); // Orange/Amber
-    ImU32 stroke_color = IM_COL32(69, 26, 3, 255); // Dark brown outline
-    ImU32 limb_color = IM_COL32(120, 53, 15, 255);
-    ImU32 bat_color = active ? IM_COL32(251, 146, 60, 255) : IM_COL32(245, 158, 11, 255); // Gold / Glowing peach
     
-    // Draw legs
-    // Left leg
+    ImU32 body_color = active ? IM_COL32(234, 88, 12, 255) : IM_COL32(180, 83, 9, 255); 
+    ImU32 stroke_color = IM_COL32(69, 26, 3, 255); 
+    ImU32 limb_color = IM_COL32(120, 53, 15, 255);
+    ImU32 bat_color = active ? IM_COL32(251, 146, 60, 255) : IM_COL32(245, 158, 11, 255); 
+    
+    
+    
     draw_list->AddLine(ImVec2(center.x - 6 * scale, center.y + 15 * scale), ImVec2(center.x - 10 * scale, center.y + 25 * scale), limb_color, 2.5f * scale);
     draw_list->AddLine(ImVec2(center.x - 10 * scale, center.y + 25 * scale), ImVec2(center.x - 14 * scale, center.y + 25 * scale), limb_color, 2.5f * scale);
-    // Right leg
+    
     draw_list->AddLine(ImVec2(center.x + 6 * scale, center.y + 15 * scale), ImVec2(center.x + 10 * scale, center.y + 25 * scale), limb_color, 2.5f * scale);
     draw_list->AddLine(ImVec2(center.x + 10 * scale, center.y + 25 * scale), ImVec2(center.x + 14 * scale, center.y + 25 * scale), limb_color, 2.5f * scale);
     
-    // Draw arms
-    // Left arm holding stick
+    
+    
     draw_list->AddLine(ImVec2(center.x - 10 * scale, center.y), ImVec2(center.x - 18 * scale, center.y + 5 * scale), limb_color, 2.5f * scale);
-    // Right arm
+    
     draw_list->AddLine(ImVec2(center.x + 10 * scale, center.y), ImVec2(center.x + 18 * scale, center.y + 5 * scale), limb_color, 2.5f * scale);
     
-    // Draw stick (bat) in left hand
+    
     ImVec2 bat_start = ImVec2(center.x - 18 * scale, center.y + 5 * scale);
     ImVec2 bat_end = ImVec2(center.x - 22 * scale, center.y - 8 * scale);
     draw_list->AddLine(bat_start, bat_end, bat_color, 3.5f * scale);
     
-    // Draw capsule body
+    
     ImVec2 body_min = ImVec2(center.x - 9 * scale, center.y - 18 * scale);
     ImVec2 body_max = ImVec2(center.x + 9 * scale, center.y + 16 * scale);
     draw_list->AddRectFilled(body_min, body_max, body_color, 9.0f * scale);
     draw_list->AddRect(body_min, body_max, stroke_color, 9.0f * scale, 0, 1.5f * scale);
     
-    // Draw eyes
+    
     ImVec2 left_eye = ImVec2(center.x - 4 * scale, center.y - 8 * scale);
     ImVec2 right_eye = ImVec2(center.x + 4 * scale, center.y - 8 * scale);
     draw_list->AddCircleFilled(left_eye, 2.5f * scale, IM_COL32_WHITE);
     draw_list->AddCircle(left_eye, 2.5f * scale, stroke_color, 0, 0.8f * scale);
-    draw_list->AddCircleFilled(left_eye, 1.0f * scale, IM_COL32_BLACK); // Pupil
+    draw_list->AddCircleFilled(left_eye, 1.0f * scale, IM_COL32_BLACK); 
     
     draw_list->AddCircleFilled(right_eye, 2.5f * scale, IM_COL32_WHITE);
     draw_list->AddCircle(right_eye, 2.5f * scale, stroke_color, 0, 0.8f * scale);
-    draw_list->AddCircleFilled(right_eye, 1.0f * scale, IM_COL32_BLACK); // Pupil
+    draw_list->AddCircleFilled(right_eye, 1.0f * scale, IM_COL32_BLACK); 
     
-    // Draw smile
+    
     draw_list->AddLine(ImVec2(center.x - 3 * scale, center.y + 2 * scale), ImVec2(center.x, center.y + 4 * scale), stroke_color, 1.2f * scale);
     draw_list->AddLine(ImVec2(center.x, center.y + 4 * scale), ImVec2(center.x + 3 * scale, center.y + 2 * scale), stroke_color, 1.2f * scale);
 }
 
 void render_t::render_menu()
 {
-    // Helper functions for sliders with typing input
+    
     auto SliderFloatWithInput = [](const char* label, float* v, float v_min, float v_max, const char* format = "%.1f") -> bool {
         static std::unordered_map<void*, bool> editing_map;
         bool& editing = editing_map[(void*)v];
@@ -1899,7 +1899,7 @@ void render_t::render_menu()
     foreground_dl->Flags &= ImDrawListFlags_AntiAliasedLines;
     draw_list->Flags &= ImDrawListFlags_AntiAliasedLines;
 
-    // Mocha Theme & Sahur Theme configuration
+    
     ImVec4 accent;
     ImU32 window_bg_col;
     ImU32 sidebar_bg_col;
@@ -1908,39 +1908,39 @@ void render_t::render_menu()
     ImU32 border_col;
 
     if (!menu::sahur_theme_active) {
-        // Mocha Theme
-        accent = ImVec4(250.f / 255.f, 179.f / 255.f, 135.f / 255.f, 1.0f); // Catppuccin Peach (#fab387)
-        window_bg_col = IM_COL32(30, 30, 46, 245); // Base (#1e1e2e)
-        sidebar_bg_col = IM_COL32(24, 24, 37, 255); // Mantle (#181825)
-        pill_bg_col = IM_COL32(49, 50, 68, 255); // Surface0 (#313244)
-        card_bg_col = IM_COL32(17, 17, 27, 255); // Crust (#11111b)
+        
+        accent = ImVec4(250.f / 255.f, 179.f / 255.f, 135.f / 255.f, 1.0f); 
+        window_bg_col = IM_COL32(30, 30, 46, 245); 
+        sidebar_bg_col = IM_COL32(24, 24, 37, 255); 
+        pill_bg_col = IM_COL32(49, 50, 68, 255); 
+        card_bg_col = IM_COL32(17, 17, 27, 255); 
         border_col = IM_COL32(49, 50, 68, 180);
     } else {
-        // Sahur Night Theme
-        accent = ImVec4(234.f / 255.f, 88.f / 255.f, 12.f / 255.f, 1.0f); // Glowing Amber Orange (#ea580c)
-        window_bg_col = IM_COL32(21, 13, 10, 245); // Deep Espresso
-        sidebar_bg_col = IM_COL32(36, 23, 18, 255); // Night Surface
-        pill_bg_col = IM_COL32(64, 36, 22, 255); // Roasted coffee
-        card_bg_col = IM_COL32(27, 17, 11, 255); // Deep Charcoal Coffee
+        
+        accent = ImVec4(234.f / 255.f, 88.f / 255.f, 12.f / 255.f, 1.0f); 
+        window_bg_col = IM_COL32(21, 13, 10, 245); 
+        sidebar_bg_col = IM_COL32(36, 23, 18, 255); 
+        pill_bg_col = IM_COL32(64, 36, 22, 255); 
+        card_bg_col = IM_COL32(27, 17, 11, 255); 
         border_col = IM_COL32(234, 88, 12, 160);
     }
     menu::accent_color = accent;
 
-    // Dynamically update active colors in ImGui style
+    
     ImGuiStyle& style = ImGui::GetStyle();
     
-    // Set Mocha/Sahur Text and general colors
-    style.Colors[ImGuiCol_Text] = ImVec4(205.f/255.f, 214.f/255.f, 244.f/255.f, 1.0f); // Text (#cdd6f4)
-    style.Colors[ImGuiCol_TextDisabled] = ImVec4(108.f/255.f, 112.f/255.f, 134.f/255.f, 1.0f); // Overlay0 (#6c7086)
+    
+    style.Colors[ImGuiCol_Text] = ImVec4(205.f/255.f, 214.f/255.f, 244.f/255.f, 1.0f); 
+    style.Colors[ImGuiCol_TextDisabled] = ImVec4(108.f/255.f, 112.f/255.f, 134.f/255.f, 1.0f); 
     style.Colors[ImGuiCol_WindowBg] = ImGui::ColorConvertU32ToFloat4(window_bg_col);
     style.Colors[ImGuiCol_ChildBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-    style.Colors[ImGuiCol_PopupBg] = ImVec4(24.f/255.f, 24.f/255.f, 37.f/255.f, 0.95f); // Mantle (#181825)
+    style.Colors[ImGuiCol_PopupBg] = ImVec4(24.f/255.f, 24.f/255.f, 37.f/255.f, 0.95f); 
     style.Colors[ImGuiCol_Border] = ImGui::ColorConvertU32ToFloat4(border_col);
     style.Colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
     
-    style.Colors[ImGuiCol_FrameBg] = ImVec4(17.f/255.f, 17.f/255.f, 27.f/255.f, 0.5f); // Crust (#11111b)
-    style.Colors[ImGuiCol_FrameBgHovered] = ImVec4(49.f/255.f, 50.f/255.f, 68.f/255.f, 0.5f); // Surface0 (#313244)
-    style.Colors[ImGuiCol_FrameBgActive] = ImVec4(69.f/255.f, 71.f/255.f, 90.f/255.f, 0.5f); // Surface1 (#45475a)
+    style.Colors[ImGuiCol_FrameBg] = ImVec4(17.f/255.f, 17.f/255.f, 27.f/255.f, 0.5f); 
+    style.Colors[ImGuiCol_FrameBgHovered] = ImVec4(49.f/255.f, 50.f/255.f, 68.f/255.f, 0.5f); 
+    style.Colors[ImGuiCol_FrameBgActive] = ImVec4(69.f/255.f, 71.f/255.f, 90.f/255.f, 0.5f); 
     
     style.Colors[ImGuiCol_TitleBg] = ImVec4(24.f/255.f, 24.f/255.f, 37.f/255.f, 1.0f);
     style.Colors[ImGuiCol_TitleBgActive] = ImVec4(24.f/255.f, 24.f/255.f, 37.f/255.f, 1.0f);
@@ -1949,7 +1949,7 @@ void render_t::render_menu()
     style.Colors[ImGuiCol_SliderGrab] = accent;
     style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(accent.x * 1.1f, accent.y * 1.1f, accent.z * 1.1f, 1.0f);
     
-    style.Colors[ImGuiCol_Button] = ImVec4(49.f/255.f, 50.f/255.f, 68.f/255.f, 0.8f); // Surface0 (#313244)
+    style.Colors[ImGuiCol_Button] = ImVec4(49.f/255.f, 50.f/255.f, 68.f/255.f, 0.8f); 
     style.Colors[ImGuiCol_ButtonHovered] = ImVec4(accent.x, accent.y, accent.z, 0.35f);
     style.Colors[ImGuiCol_ButtonActive] = accent;
     
@@ -1969,12 +1969,12 @@ void render_t::render_menu()
     static bool welcome_clicked = false;
     static float fade_out_timer = 0.0f;
 
-    // 1. Draw outer glow pulse animation on custom chamfered octagonal path
+    
     static float glow_time = 0.0f;
     glow_time += ImGui::GetIO().DeltaTime * 1.5f; 
     float pulse_factor = 0.7f + sinf(glow_time) * 0.3f; 
 
-    float c = 24.0f; // Chamfer cut size
+    float c = 24.0f; 
     ImVec2 pts[8] = {
         ImVec2(window_pos.x + c, window_pos.y),
         ImVec2(window_pos.x + window_size.x - c, window_pos.y),
@@ -1986,12 +1986,12 @@ void render_t::render_menu()
         ImVec2(window_pos.x, window_pos.y + c)
     };
 
-    // Fill background
+    
     draw_list->PathClear();
     for (int i = 0; i < 8; i++) draw_list->PathLineTo(pts[i]);
     draw_list->PathFillConvex(window_bg_col);
 
-    // Outer glow layers
+    
     for (int j = 1; j <= 4; j++) {
         int alpha_val = (int)((25 * pulse_factor) / j);
         if (alpha_val > 0) {
@@ -2008,12 +2008,12 @@ void render_t::render_menu()
         }
     }
 
-    // 2. Draw Main Borders
+    
     draw_list->PathClear();
     for (int i = 0; i < 8; i++) draw_list->PathLineTo(pts[i]);
     draw_list->PathStroke(IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 255), true, 1.5f);
 
-    // Inner subtle border
+    
     draw_list->PathClear();
     draw_list->PathLineTo(ImVec2(window_pos.x + c + 1, window_pos.y + 1));
     draw_list->PathLineTo(ImVec2(window_pos.x + window_size.x - c - 1, window_pos.y + 1));
@@ -2025,29 +2025,29 @@ void render_t::render_menu()
     draw_list->PathLineTo(ImVec2(window_pos.x + 1, window_pos.y + c + 1));
     draw_list->PathStroke(IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, 80), true, 1.0f);
 
-    // Technical Corner Brackets
+    
     ImU32 white_glow = IM_COL32(255, 255, 255, 200);
     ImU32 white_bold = IM_COL32(255, 255, 255, 255);
-    // Top-Left Tech Bracket
+    
     draw_list->AddLine(ImVec2(window_pos.x, window_pos.y + c + 15), ImVec2(window_pos.x, window_pos.y + c), white_glow, 2.5f);
     draw_list->AddLine(ImVec2(window_pos.x, window_pos.y + c), ImVec2(window_pos.x + c, window_pos.y), white_bold, 3.0f);
     draw_list->AddLine(ImVec2(window_pos.x + c, window_pos.y), ImVec2(window_pos.x + c + 15, window_pos.y), white_glow, 2.5f);
-    // Top-Right Tech Bracket
+    
     draw_list->AddLine(ImVec2(window_pos.x + window_size.x - c - 15, window_pos.y), ImVec2(window_pos.x + window_size.x - c, window_pos.y), white_glow, 2.5f);
     draw_list->AddLine(ImVec2(window_pos.x + window_size.x - c, window_pos.y), ImVec2(window_pos.x + window_size.x, window_pos.y + c), white_bold, 3.0f);
     draw_list->AddLine(ImVec2(window_pos.x + window_size.x, window_pos.y + c), ImVec2(window_pos.x + window_size.x, window_pos.y + c + 15), white_glow, 2.5f);
-    // Bottom-Left Tech Bracket
+    
     draw_list->AddLine(ImVec2(window_pos.x, window_pos.y + window_size.y - c - 15), ImVec2(window_pos.x, window_pos.y + window_size.y - c), white_glow, 2.5f);
     draw_list->AddLine(ImVec2(window_pos.x, window_pos.y + window_size.y - c), ImVec2(window_pos.x + c, window_pos.y + window_size.y), white_bold, 3.0f);
     draw_list->AddLine(ImVec2(window_pos.x + c, window_pos.y + window_size.y), ImVec2(window_pos.x + c + 15, window_pos.y + window_size.y), white_glow, 2.5f);
-    // Bottom-Right Tech Bracket
+    
     draw_list->AddLine(ImVec2(window_pos.x + window_size.x - c - 15, window_pos.y + window_size.y), ImVec2(window_pos.x + window_size.x - c, window_pos.y + window_size.y), white_glow, 2.5f);
     draw_list->AddLine(ImVec2(window_pos.x + window_size.x - c, window_pos.y + window_size.y), ImVec2(window_pos.x + window_size.x, window_pos.y + window_size.y - c), white_bold, 3.0f);
     draw_list->AddLine(ImVec2(window_pos.x + window_size.x, window_pos.y + window_size.y - c), ImVec2(window_pos.x + window_size.x, window_pos.y + window_size.y - c - 15), white_glow, 2.5f);
 
-    // Sweeping laser scanline animation
+    
     static float scan_y = 0.0f;
-    scan_y += ImGui::GetIO().DeltaTime * 140.0f; // Speed of scan
+    scan_y += ImGui::GetIO().DeltaTime * 140.0f; 
     if (scan_y > window_size.y) scan_y = 0.0f;
 
     draw_list->AddRectFilled(
@@ -2061,7 +2061,7 @@ void render_t::render_menu()
         IM_COL32(255, 255, 255, 120)
     );
 
-    // 3. Shared Cyber-constellation particle network background (replaces the jewels & old particles)
+    
     struct ParticleNode {
         ImVec2 pos;
         ImVec2 vel;
@@ -2110,7 +2110,7 @@ void render_t::render_menu()
         }
     }
 
-    // 4. Intro sequence & welcome launcher screen
+    
     if (!intro_done) {
         static bool clicked_to_enter = false;
         static float anim_time = 0.0f;
@@ -2118,7 +2118,7 @@ void render_t::render_menu()
 
         anim_time += ImGui::GetIO().DeltaTime;
 
-        // If we reached the end of the slow drift phase (duration - 1.0f), wait for a click
+        
         if (intro_time >= (duration - 1.0f) && !clicked_to_enter) {
             intro_time = duration - 1.0f;
         } else {
@@ -2129,7 +2129,7 @@ void render_t::render_menu()
             intro_done = true;
         }
 
-        // Draw solid dark background overlay
+        
         float bg_alpha = 255.0f;
         if (intro_time > (duration - 0.5f)) {
             float t = (intro_time - (duration - 0.5f)) / 0.5f;
@@ -2138,13 +2138,13 @@ void render_t::render_menu()
         }
         draw_list->AddRectFilled(window_pos, ImVec2(window_pos.x + window_size.x, window_pos.y + window_size.y), IM_COL32(0, 0, 0, (int)bg_alpha), 8.0f);
 
-        // Calculate animation parameters
+        
         float logo_alpha = 1.0f;
         float scale = 1.0f;
         float angle = 0.0f;
         ImVec2 offset = ImVec2(0.0f, 0.0f);
 
-        // Determine if mouse is hovering the logo center
+        
         bool is_hovered = false;
         ImVec2 center = ImVec2(window_pos.x + window_size.x * 0.5f, window_pos.y + window_size.y * 0.5f);
         
@@ -2163,69 +2163,69 @@ void render_t::render_menu()
         }
 
         if (intro_time < 0.8f) {
-            // Initial delay: Completely black screen before logo starts
+            
             scale = 0.0f;
             angle = 0.0f;
             logo_alpha = 0.0f;
         } else if (intro_time < 2.3f) {
-            // Swoop in like superman (from far top-left, rapidly scaling up with rotation spin)
+            
             float t = (intro_time - 0.8f) / 1.5f;
-            float ease = 1.0f - powf(1.0f - t, 3.0f); // Ease-out cubic
+            float ease = 1.0f - powf(1.0f - t, 3.0f); 
             scale = ease * 1.2f;
-            angle = (1.0f - ease) * -6.2831853f * 2.0f; // Spin twice on swoop
+            angle = (1.0f - ease) * -6.2831853f * 2.0f; 
             offset.x = (1.0f - ease) * -500.0f;
             offset.y = (1.0f - ease) * -400.0f;
             logo_alpha = t;
         } else if (intro_time < 3.8f) {
-            // Stabilize and do a cool spin
+            
             float t = (intro_time - 2.3f) / 1.5f;
-            scale = 1.2f - t * 0.2f; // Settle scale to 1.0
-            angle = t * 6.2831853f; // Full spin
+            scale = 1.2f - t * 0.2f; 
+            angle = t * 6.2831853f; 
             logo_alpha = 1.0f;
         } else if (intro_time <= (duration - 1.0f)) {
-            // Slow drift floating and pulse
+            
             float drift_t = (anim_time - 3.8f);
-            scale = 1.0f + sinf(drift_t * 4.0f) * 0.06f; // Pulse scale
-            angle = drift_t * 0.1f; // Slow rotation
-            offset.y = sinf(drift_t * 2.5f) * 12.0f; // Float drift
+            scale = 1.0f + sinf(drift_t * 4.0f) * 0.06f; 
+            angle = drift_t * 0.1f; 
+            offset.y = sinf(drift_t * 2.5f) * 12.0f; 
             logo_alpha = 1.0f;
 
-            // If we are at the wait limit, show pointer and handle click
+            
             if (intro_time >= (duration - 1.01f) && !clicked_to_enter) {
                 if (is_hovered) {
                     ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
-                    scale += 0.05f; // Slight zoom on hover when ready
+                    scale += 0.05f; 
                     if (ImGui::IsMouseClicked(0)) {
                         clicked_to_enter = true;
                     }
                 }
             }
         } else {
-            // Zoom out and fade
+            
             float t = (intro_time - (duration - 1.0f)) / 1.0f;
             if (t > 1.0f) t = 1.0f;
-            scale = 1.0f + t * 1.8f; // Fly out / zoom into camera
+            scale = 1.0f + t * 1.8f; 
             angle = ((duration - 1.0f) - 3.8f) * 0.1f + t * 0.4f;
             logo_alpha = 1.0f - t;
         }
 
-        // We want to draw in the center of the window
+        
         center = ImVec2(window_pos.x + window_size.x * 0.5f, window_pos.y + window_size.y * 0.5f);
 
-        // Record start index of vertex buffer to apply rotation/scaling/translation transformations
+        
         int vtx_start = draw_list->VtxBuffer.Size;
 
-        // Draw mascot inside ring
+        
         ImVec2 mascot_center_pos = ImVec2(center.x - 70.0f, center.y - 95.0f);
         draw_mascot(draw_list, mascot_center_pos, 140.0f, menu::sahur_theme_active);
 
-        // Draw text "TUNG SAHUR" below mascot
+        
         ImGui::SetWindowFontScale(2.8f);
         const char* logo_text = "TUNG SAHUR";
         ImVec2 text_sz = ImGui::CalcTextSize(logo_text);
         ImVec2 text_pos = ImVec2(center.x - text_sz.x * 0.5f, center.y + 45.0f);
 
-        // Neon glow for text
+        
         ImU32 shadow_c = IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, (int)(120 * logo_alpha));
         for (int i = 1; i <= 3; i++) {
             draw_list->AddText(ImVec2(text_pos.x - i, text_pos.y), shadow_c, logo_text);
@@ -2234,36 +2234,36 @@ void render_t::render_menu()
             draw_list->AddText(ImVec2(text_pos.x, text_pos.y + i), shadow_c, logo_text);
         }
         draw_list->AddText(text_pos, IM_COL32(255, 255, 255, (int)(255 * logo_alpha)), logo_text);
-        ImGui::SetWindowFontScale(1.0f); // Restore font scale
+        ImGui::SetWindowFontScale(1.0f); 
 
-        // Draw neon ring around text
+        
         float ring_radius = text_sz.x * 0.6f;
         draw_list->AddCircle(center, ring_radius, IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, (int)(100 * logo_alpha)), 64, 2.0f);
 
-        // Draw outer brackets
+        
         float br = ring_radius + 15.0f;
-        // Top-left bracket
+        
         draw_list->AddLine(ImVec2(center.x - br, center.y - br), ImVec2(center.x - br + 20.f, center.y - br), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, (int)(180 * logo_alpha)), 2.0f);
         draw_list->AddLine(ImVec2(center.x - br, center.y - br), ImVec2(center.x - br, center.y - br + 20.f), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, (int)(180 * logo_alpha)), 2.0f);
 
-        // Bottom-right bracket
+        
         draw_list->AddLine(ImVec2(center.x + br, center.y + br), ImVec2(center.x + br - 20.f, center.y + br), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, (int)(180 * logo_alpha)), 2.0f);
         draw_list->AddLine(ImVec2(center.x + br, center.y + br), ImVec2(center.x + br, center.y + br - 20.f), IM_COL32(accent.x * 255, accent.y * 255, accent.z * 255, (int)(180 * logo_alpha)), 2.0f);
 
-        // Rotate, scale, and translate all drawn elements in the vertex buffer from vtx_start to now
+        
         float s = sinf(angle);
         float c = cosf(angle);
         for (int i = vtx_start; i < draw_list->VtxBuffer.Size; i++) {
             ImDrawVert& v = draw_list->VtxBuffer[i];
             float x = v.pos.x - center.x;
             float y = v.pos.y - center.y;
-            // scale
+            
             x *= scale;
             y *= scale;
-            // rotate
+            
             float rx = x * c - y * s;
             float ry = x * s + y * c;
-            // translate
+            
             v.pos.x = rx + center.x + offset.x;
             v.pos.y = ry + center.y + offset.y;
         }
@@ -2273,13 +2273,13 @@ void render_t::render_menu()
         return;
     }
 
-    // DRAW REDESIGNED SIDEBAR
-    // Background
+    
+    
     draw_list->AddRectFilled(ImVec2(window_pos.x + 4.f, window_pos.y + 4.f), ImVec2(window_pos.x + 220.f, window_pos.y + window_size.y - 4.f), sidebar_bg_col, 8.0f, ImDrawFlags_RoundCornersLeft);
-    // Vertical separator
+    
     draw_list->AddLine(ImVec2(window_pos.x + 220.f, window_pos.y + 4.f), ImVec2(window_pos.x + 220.f, window_pos.y + window_size.y - 4.f), border_col, 1.0f);
 
-    // Dynamic Sliding Tab Selector Pill
+    
     static float sliding_tab_y = 0.0f;
     float target_tab_y = window_pos.y + 90.f + (selected_tab_index * 44.f);
     if (sliding_tab_y == 0.0f) {
@@ -2294,14 +2294,14 @@ void render_t::render_menu()
     draw_list->AddRectFilled(ImVec2(pill_min.x, pill_min.y + 4.f), ImVec2(pill_min.x + 3.f, pill_max.y - 4.f), ImGui::ColorConvertFloat4ToU32(menu::accent_color), 0.f);
     draw_list->AddRect(pill_min, pill_max, border_col, 8.f, 0, 1.0f);
 
-    // Sidebar Header: brand mascot & title
+    
     ImVec2 mascot_pos = ImVec2(window_pos.x + 20.f, window_pos.y + 15.f);
     float mascot_size = 44.f;
     
-    // Draw mascot
+    
     draw_mascot(draw_list, mascot_pos, mascot_size, menu::sahur_theme_active);
     
-    // Mouse hover and click detection on mascot to toggle theme
+    
     ImVec2 mouse_pos = ImGui::GetIO().MousePos;
     bool mascot_hovered = (mouse_pos.x >= mascot_pos.x && mouse_pos.x <= mascot_pos.x + mascot_size &&
                            mouse_pos.y >= mascot_pos.y && mouse_pos.y <= mascot_pos.y + mascot_size);
@@ -2313,7 +2313,7 @@ void render_t::render_menu()
         }
     }
     
-    // Brand title text next to mascot
+    
     const char* logo_text1 = "tung";
     const char* logo_text2 = " sahur";
     ImVec2 lpos = ImVec2(window_pos.x + 72.f, window_pos.y + 22.f);
@@ -2329,16 +2329,16 @@ void render_t::render_menu()
     draw_list->AddText(lpos, IM_COL32(255, 255, 255, 255), logo_text1);
     draw_list->AddText(ImVec2(lpos.x + size1.x, lpos.y), ImGui::ColorConvertFloat4ToU32(menu::accent_color), logo_text2);
 
-    // Subtitle / tag next to mascot
+    
     const char* sub = "SECURED ENGINE";
     draw_list->AddText(ImVec2(window_pos.x + 72.f, window_pos.y + 42.f), IM_COL32(140, 140, 150, 255), sub);
 
-    // Horizontal logo divider
+    
     draw_list->AddLine(ImVec2(window_pos.x + 15.f, window_pos.y + 70.f), ImVec2(window_pos.x + 205.f, window_pos.y + 70.f), border_col, 1.0f);
 
-    // Expiry Info card at the bottom of the sidebar
+    
     if (menu::authenticated && keyauth) {
-        // Draw Injection Status Card
+        
         float status_card_y = window_pos.y + 465.f;
         ImVec2 status_card_min = ImVec2(window_pos.x + 14.f, status_card_y);
         ImVec2 status_card_max = ImVec2(window_pos.x + 206.f, status_card_y + 60.f);
@@ -2353,7 +2353,7 @@ void render_t::render_menu()
             draw_list->AddText(ImVec2(status_card_min.x + 12.f, status_card_min.y + 26.f), IM_COL32(255, 165, 0, 255), "AWAITING GAME...");
         }
 
-        // Draw License Key Card
+        
         std::string dur_str = get_remaining_duration_string();
         float card_y = window_pos.y + 540.f;
         ImVec2 card_min = ImVec2(window_pos.x + 14.f, card_y);
@@ -2379,11 +2379,11 @@ void render_t::render_menu()
         }
     }
 
-    // DRAW CONTENT PANE BACKGROUND ON THE RIGHT
+    
     draw_list->AddRectFilled(ImVec2(window_pos.x + 226.f, window_pos.y + 71.f), ImVec2(window_pos.x + window_size.x - 14.f, window_pos.y + window_size.y - 14.f), card_bg_col, 6.0f);
     draw_list->AddRect(ImVec2(window_pos.x + 226.f, window_pos.y + 71.f), ImVec2(window_pos.x + window_size.x - 14.f, window_pos.y + window_size.y - 14.f), border_col, 6.0f);
 
-    // DRAW TOP HEADER ON THE RIGHT
+    
     const char* active_tab_name = "AIMBOT";
     switch (selected_tab_index) {
         case 0: active_tab_name = "AIMBOT CONTROLS"; break;
@@ -2397,14 +2397,14 @@ void render_t::render_menu()
         case 8: active_tab_name = "SILENT AIM TARGETING"; break;
     }
     
-    // Header Text
+    
     draw_list->AddText(ImVec2(window_pos.x + 240.f, window_pos.y + 24.f), IM_COL32(255, 255, 255, 255), active_tab_name);
-    // Sub-info
+    
     char diagnostics_buf[128];
     sprintf_s(diagnostics_buf, "Engine status: OK | Latency: --ms | %.0f FPS", ImGui::GetIO().Framerate);
     draw_list->AddText(ImVec2(window_pos.x + 240.f, window_pos.y + 44.f), IM_COL32(110, 110, 125, 255), diagnostics_buf);
 
-    // Draw vertical tab navigation in the sidebar
+    
     if (add_sidebar_tab("Aimbot", "", 0, selected_tab_index == 0)) selected_tab_index = 0;
     if (add_sidebar_tab("Visuals", "", 1, selected_tab_index == 1)) selected_tab_index = 1;
     if (add_sidebar_tab("Misc", "", 2, selected_tab_index == 2)) selected_tab_index = 2;
@@ -2415,7 +2415,7 @@ void render_t::render_menu()
     if (add_sidebar_tab("Players", "", 7, selected_tab_index == 7)) selected_tab_index = 7;
     if (add_sidebar_tab("Silent Aim", "", 8, selected_tab_index == 8)) selected_tab_index = 8;
 
-    // Shift coordinates dynamically for the switch case child rendering
+    
 #define SetCursorPos(pos) SetCursorPos(adjust_menu_pos(pos))
 
     static int tab_subpages[9] = { 0 };
@@ -2452,7 +2452,7 @@ void render_t::render_menu()
     ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4.f);
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(12.f, 6.f));
 
-    // Page 1
+    
     bool page1_selected = (current_page == 0);
     if (page1_selected) {
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 0.25f));
@@ -2473,7 +2473,7 @@ void render_t::render_menu()
 
     ImGui::SameLine(0, 8.f);
 
-    // Page 2
+    
     bool page2_selected = (current_page == 1);
     if (page2_selected) {
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 0.25f));
@@ -3241,7 +3241,7 @@ void render_t::render_menu()
                         }
                     }
 
-                    // Auto scroll to bottom
+                    
                     if (is_cleaner_running || ImGui::GetScrollY() >= ImGui::GetScrollMaxY() - 30.0f)
                     {
                         ImGui::SetScrollHereY(1.0f);
@@ -3581,7 +3581,7 @@ void render_t::render_menu()
                     ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "no tool held");
                 }
 
-                // Real-time Distance Tracking & Rolling Graph
+                
                 float dist = 0.0f;
                 auto local_hrp_it = local_player_snapshot.parts.find("HumanoidRootPart");
                 auto enemy_hrp_it = sd_target_player.parts.find("HumanoidRootPart");
@@ -3599,19 +3599,19 @@ void render_t::render_menu()
                 ImGui::SameLine();
                 ImGui::TextColored(menu::accent_color, "%.1f Studs", dist);
 
-                // Rolling history buffer
+                
                 static float distance_history[50] = { 0.0f };
                 static int history_offset = 0;
                 static float update_timer = 0.0f;
 
                 update_timer += ImGui::GetIO().DeltaTime;
-                if (update_timer >= 0.05f) { // Update history at 20Hz
+                if (update_timer >= 0.05f) { 
                     distance_history[history_offset] = dist;
                     history_offset = (history_offset + 1) % 50;
                     update_timer = 0.0f;
                 }
 
-                // Re-order data for plotting
+                
                 float plot_data[50];
                 for (int i = 0; i < 50; i++) {
                     plot_data[i] = distance_history[(history_offset + i) % 50];

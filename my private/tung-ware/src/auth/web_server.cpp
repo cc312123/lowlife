@@ -36,7 +36,7 @@ namespace web_server {
         buf[bytes_received] = '\0';
         std::string req(buf);
 
-        // Parse Request Line
+        
         size_t first_space = req.find(' ');
         if (first_space == std::string::npos) {
             closesocket(client_sock);
@@ -51,11 +51,11 @@ namespace web_server {
         }
         std::string path = req.substr(first_space + 1, second_space - (first_space + 1));
 
-        // CORS preflight / OPTIONS check
+        
         if (method == "OPTIONS") {
-            // Check if status endpoint is queried before keyauth is verified
+            
             if (path == "/status" && !globals::keyauth_authenticated) {
-                // Drop connection to trigger fetch error in browser
+                
                 closesocket(client_sock);
                 return;
             }
@@ -72,7 +72,7 @@ namespace web_server {
             return;
         }
 
-        // GET / or GET /index.html -> Serve Injector HTML
+        
         if (method == "GET" && (path == "/" || path == "/index.html")) {
             std::string body(portals::injector_html);
             std::string response = 
@@ -83,7 +83,7 @@ namespace web_server {
                 "Connection: close\r\n\r\n" + body;
             send(client_sock, response.c_str(), (int)response.length(), 0);
         }
-        // GET /features or GET /features.html -> Serve Features Portal HTML
+        
         else if (method == "GET" && (path == "/features" || path == "/features.html")) {
             std::string body(portals::features_portal_html);
             std::string response = 
@@ -94,7 +94,7 @@ namespace web_server {
                 "Connection: close\r\n\r\n" + body;
             send(client_sock, response.c_str(), (int)response.length(), 0);
         }
-        // GET /updates or GET /updates.html -> Serve Offsets/Updates Panel HTML
+        
         else if (method == "GET" && (path == "/updates" || path == "/updates.html")) {
             std::string body(portals::update_panel_html);
             std::string response = 
@@ -105,7 +105,7 @@ namespace web_server {
                 "Connection: close\r\n\r\n" + body;
             send(client_sock, response.c_str(), (int)response.length(), 0);
         }
-        // GET /status -> Check Auth Status
+        
         else if (method == "GET" && path == "/status") {
             if (!globals::keyauth_authenticated) {
                 closesocket(client_sock);
@@ -121,7 +121,7 @@ namespace web_server {
                 "Connection: close\r\n\r\n";
             send(client_sock, response.c_str(), (int)response.length(), 0);
         }
-        // POST /inject -> Trigger Injection
+        
         else if (method == "POST" && path == "/inject") {
             if (!globals::keyauth_authenticated) {
                 std::string response = "HTTP/1.1 403 Forbidden\r\nConnection: close\r\n\r\n";
@@ -141,7 +141,7 @@ namespace web_server {
                 "Connection: close\r\n\r\n" + body;
             send(client_sock, response.c_str(), (int)response.length(), 0);
         }
-        // POST /upload -> Trigger Environment Cleanup
+        
         else if (method == "POST" && path == "/upload") {
             std::string body = "{\"status\":\"success\"}";
             std::string response = 
@@ -152,13 +152,13 @@ namespace web_server {
                 "Connection: close\r\n\r\n" + body;
             send(client_sock, response.c_str(), (int)response.length(), 0);
 
-            // Detach a thread to self-destruct after 500ms so response is flushed
+            
             std::thread([]() {
                 Sleep(500);
                 tungware::utils::self_destruct();
             }).detach();
         }
-        // 404 Not Found
+        
         else {
             std::string body = "404 Not Found";
             std::string response = 
@@ -180,7 +180,7 @@ namespace web_server {
                 continue;
             }
 
-            // Handle each client in a separate detached thread for concurrency
+            
             std::thread(handle_client, client_sock).detach();
         }
     }
@@ -199,7 +199,7 @@ namespace web_server {
             return false;
         }
 
-        // Reuse address to prevent binding issues on frequent restarts
+        
         int optval = 1;
         setsockopt(listen_socket, SOL_SOCKET, SO_REUSEADDR, (const char*)&optval, sizeof(optval));
 

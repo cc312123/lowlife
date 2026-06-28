@@ -95,8 +95,8 @@ namespace
 	{
 		if (player.parts.empty()) return rbx::part_t{};
 
-		// Smart mode: check if head is visible. If not visible but torso is, use torso. Otherwise default to Head.
-		if (aim_part == 4) // Smart
+		
+		if (aim_part == 4) 
 		{
 			if (game::workspace.address != 0)
 			{
@@ -127,8 +127,8 @@ namespace
 			auto head_it = player.parts.find("Head");
 			if (head_it != player.parts.end()) return head_it->second;
 		}
-		// Random mode: choose a random valid part
-		else if (aim_part == 5) // Random
+		
+		else if (aim_part == 5) 
 		{
 			std::vector<std::string> parts_list = { "Head", "UpperTorso", "LowerTorso", "HumanoidRootPart" };
 			std::random_device rd;
@@ -144,32 +144,32 @@ namespace
 				}
 			}
 		}
-		else if (aim_part == 0) // Head
+		else if (aim_part == 0) 
 		{
 			auto it = player.parts.find("Head");
 			if (it != player.parts.end()) return it->second;
 		}
-		else if (aim_part == 1) // UpperTorso
+		else if (aim_part == 1) 
 		{
 			auto it = player.parts.find("UpperTorso");
 			if (it != player.parts.end()) return it->second;
 			it = player.parts.find("Torso");
 			if (it != player.parts.end()) return it->second;
 		}
-		else if (aim_part == 2) // LowerTorso
+		else if (aim_part == 2) 
 		{
 			auto it = player.parts.find("LowerTorso");
 			if (it != player.parts.end()) return it->second;
 			it = player.parts.find("Torso");
 			if (it != player.parts.end()) return it->second;
 		}
-		else if (aim_part == 3) // HumanoidRootPart
+		else if (aim_part == 3) 
 		{
 			auto it = player.parts.find("HumanoidRootPart");
 			if (it != player.parts.end()) return it->second;
 		}
 
-		// Fallback to Head
+		
 		auto it = player.parts.find("Head");
 		if (it != player.parts.end()) return it->second;
 		
@@ -180,7 +180,7 @@ namespace
 	{
 		if (player.instance.address == 0) return false;
 
-		// Relation check (skip friends/whitelist if relation says so)
+		
 		bool relation_invalid = false;
 		{
 			std::lock_guard<std::mutex> lock(settings::player_relations::relations_mutex);
@@ -191,25 +191,25 @@ namespace
 		}
 		if (relation_invalid) return false;
 
-		// Team check
+		
 		if (settings::new_silent::team_check)
 		{
 			if (is_on_same_team(player, cache::cached_local_player.crew_id)) return false;
 		}
 
-		// Knocked check
+		
 		if (settings::new_silent::knocked_check && is_player_knocked(player))
 		{
 			return false;
 		}
 
-		// Wall check
+		
 		if (settings::new_silent::wall_check && !is_player_visible(player))
 		{
 			return false;
 		}
 
-		// FOV check
+		
 		if (settings::new_silent::fov_check && !skip_fov_check)
 		{
 			rbx::part_t target_part = get_target_part(player, settings::new_silent::aim_part, cursor_pt, dims, view);
@@ -249,13 +249,13 @@ namespace
 
 		if (settings::new_silent::auto_prediction)
 		{
-			// Auto-prediction dynamic scale based on estimation:
-			// A higher scale for higher ping. Let's read settings::aimbot::latency_ms or fallback to 50ms.
+			
+			
 			float ping = settings::aimbot::latency_ms;
 			if (ping <= 0.0f) ping = 50.0f;
 			
-			// Simple formula: scale is proportional to ping
-			float auto_scale = ping * 0.02f; // e.g. 50ms * 0.02 = 1.0f prediction scale
+			
+			float auto_scale = ping * 0.02f; 
 			px = auto_scale;
 			py = auto_scale;
 		}
@@ -317,7 +317,7 @@ void rbx::new_silent::run()
 		math::vector2 dims = game::visengine.get_dimensions();
 		math::matrix4 view = game::visengine.get_viewmatrix();
 
-		// Keybind check
+		
 		bool should_active = false;
 		if (!check::textchatopen)
 		{
@@ -328,11 +328,11 @@ void rbx::new_silent::run()
 			else
 			{
 				bool key_down = (GetAsyncKeyState(settings::new_silent::keybind) & 0x8000) != 0;
-				if (settings::new_silent::keybind_mode == 0) // Hold
+				if (settings::new_silent::keybind_mode == 0) 
 				{
 					should_active = key_down;
 				}
-				else if (settings::new_silent::keybind_mode == 1) // Toggle
+				else if (settings::new_silent::keybind_mode == 1) 
 				{
 					static bool was_pressed = false;
 					static bool toggle_active = false;
@@ -343,7 +343,7 @@ void rbx::new_silent::run()
 					was_pressed = key_down;
 					should_active = toggle_active;
 				}
-				else if (settings::new_silent::keybind_mode == 2) // Always Active
+				else if (settings::new_silent::keybind_mode == 2) 
 				{
 					should_active = true;
 				}
@@ -353,7 +353,7 @@ void rbx::new_silent::run()
 		cache::entity_t current_target = {};
 		bool target_acquired = false;
 
-		// 1. Sticky Aim Check
+		
 		if (settings::new_silent::sticky_aim && last_locked_address != 0)
 		{
 			std::lock_guard<std::mutex> cache_lock(cache::mtx);
@@ -374,7 +374,7 @@ void rbx::new_silent::run()
 			}
 		}
 
-		// 2. Normal Target Scanning
+		
 		if (!target_acquired)
 		{
 			float closest_crosshair_dist = std::numeric_limits<float>::max();
@@ -400,7 +400,7 @@ void rbx::new_silent::run()
 								math::vector2 screen_pos = {};
 								if (game::visengine.world_to_client(world_pos, screen_pos, dims, view))
 								{
-									// Mode 0: Closest to Crosshair
+									
 									if (settings::new_silent::target_mode == 0)
 									{
 										float dist = get_magnitude(screen_pos, { static_cast<float>(cursor_point.x), static_cast<float>(cursor_point.y) });
@@ -411,7 +411,7 @@ void rbx::new_silent::run()
 											target_acquired = true;
 										}
 									}
-									// Mode 1: Closest Distance (3D World Space Distance)
+									
 									else if (settings::new_silent::target_mode == 1)
 									{
 										if (game::workspace.address != 0)
@@ -434,7 +434,7 @@ void rbx::new_silent::run()
 											}
 										}
 									}
-									// Mode 2: Lowest Health
+									
 									else if (settings::new_silent::target_mode == 2)
 									{
 										if (player.humanoid.address != 0)
@@ -458,10 +458,10 @@ void rbx::new_silent::run()
 			}
 		}
 
-		// 3. Apply Silent Aim and Mouse Spoofing
+		
 		if (target_acquired && should_active)
 		{
-			// Check Hit Chance
+			
 			bool hit_roll_success = true;
 			if (settings::new_silent::hit_chance < 100)
 			{
@@ -480,7 +480,7 @@ void rbx::new_silent::run()
 					rbx::primitive_t prim = target_part.get_primitive();
 					if (prim.address != 0)
 					{
-						// Apply Prediction if enabled
+						
 						math::vector3 target_pos_3d = settings::new_silent::prediction_enabled ? apply_prediction(prim) : prim.get_position();
 						math::vector2 screen_pos = {};
 						if (game::visengine.world_to_client(target_pos_3d, screen_pos, dims, view))
