@@ -630,13 +630,19 @@ document.addEventListener('keydown', e => {
         }
 
         const handleInteraction = () => {
+            if (hasInteracted) return;
             hasInteracted = true;
             if (ytPlayer && isPlayerReady && typeof ytPlayer.playVideo === 'function') {
                 ytPlayer.playVideo();
             }
+            interactionEvents.forEach(event => {
+                document.removeEventListener(event, handleInteraction);
+            });
         };
-        document.addEventListener('click', handleInteraction);
-        document.addEventListener('keydown', handleInteraction);
+        const interactionEvents = ['click', 'keydown', 'mousedown', 'pointerdown', 'touchstart', 'scroll', 'wheel'];
+        interactionEvents.forEach(event => {
+            document.addEventListener(event, handleInteraction, { passive: true });
+        });
 
         if (playPauseBtn) {
             playPauseBtn.addEventListener('click', (e) => {
