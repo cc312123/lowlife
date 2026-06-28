@@ -79,8 +79,89 @@ const upload = multer({
     }
 });
 
+const secureDb = require('./secure-db');
+
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// ==========================================
+// CUSTOM DATABASE AUTHENTICATION & LICENSE ENDPOINTS
+// ==========================================
+
+// Create Account Route
+app.post('/api/auth/register', (req, res) => {
+    const { username, password } = req.body;
+    if (!username || !password) {
+        return res.status(400).json({ success: false, error: 'Username and password are required.' });
+    }
+    const result = secureDb.createUser(username, password);
+    if (!result.success) {
+        return res.status(400).json({ success: false, error: result.error });
+    }
+    res.json({ success: true, message: result.message });
+});
+
+// Authenticate / Login User Route (Checks Expiry and HWID binding)
+app.post('/api/auth/login', (req, res) => {
+    const { username, password, hwid } = req.body;
+    if (!username || !password) {
+        return res.status(400).json({ success: false, error: 'Username and password are required.' });
+    }
+    const result = secureDb.authenticateUser(username, password, hwid);
+    if (!result.success) {
+        return res.status(403).json({ success: false, error: result.error });
+    }
+    res.json({
+        success: true,
+        message: 'Authentication successful.',
+        username: result.username,
+        timeLeftSeconds: result.timeLeftSeconds,
+        expiryDate: result.expiryDate
+    });
+});
+
+// Activate License Key Route
+app.post('/api/auth/activate', (req, res) => {
+    const { username, licenseKey } = req.body;
+    if (!username || !licenseKey) {
+        return res.status(400).json({ success: false, error: 'Username and license key are required.' });
+    }
+    const result = secureDb.activateLicense(username, licenseKey);
+    if (!result.success) {
+        return res.status(400).json({ success: false, error: result.error });
+    }
+    res.json({
+        success: true,
+        message: result.message,
+        expiryDate: result.expiryDate
+    });
+});
+
+// Generate License Key (Admin Protected)
+app.post('/api/admin/generate-key', (req, res) => {
+    const { pin, durationHours } = req.body;
+    if (pin !== ADMIN_PIN) {
+        return res.status(403).json({ success: false, error: 'Unauthorized: Invalid Admin PIN.' });
+    }
+    const result = secureDb.generateLicenseKey(durationHours || 24);
+    res.json(result);
+});
+
+// Reset User HWID (Admin Protected)
+app.post('/api/admin/reset-hwid', (req, res) => {
+    const { pin, username } = req.body;
+    if (pin !== ADMIN_PIN) {
+        return res.status(403).json({ success: false, error: 'Unauthorized: Invalid Admin PIN.' });
+    }
+    if (!username) {
+        return res.status(400).json({ success: false, error: 'Username is required.' });
+    }
+    const result = secureDb.resetHwid(username);
+    if (!result.success) {
+        return res.status(400).json({ success: false, error: result.error });
+    }
+    res.json(result);
+});
 
 // Read release data utility
 function getReleaseData() {

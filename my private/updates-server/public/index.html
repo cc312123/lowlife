@@ -117,6 +117,48 @@
             </div>
         </div>
 
+        <!-- Account Registration & Key Activation Panel -->
+        <div class="panel">
+            <div class="panel-title">
+                <span class="panel-title-icon">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </span>
+                Tung-Ware Secure Account Access
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <!-- Register Column -->
+                <div style="border-right: 1px dashed rgba(255,255,255,0.1); padding-right: 20px;">
+                    <label style="font-weight: 700; color: var(--neon-blue); margin-bottom: 10px;">👤 Register Account</label>
+                    <div class="input-group">
+                        <label>Username</label>
+                        <input type="text" id="reg-username" class="text-input" placeholder="Enter username...">
+                    </div>
+                    <div class="input-group">
+                        <label>Password</label>
+                        <input type="password" id="reg-password" class="text-input" placeholder="Enter password...">
+                    </div>
+                    <button class="btn btn-primary" id="btn-register-user" style="width: 100%; height: 38px; font-size: 13px;">Create Secure Account</button>
+                    <div id="reg-feedback" style="margin-top: 10px; font-size: 12px; font-family: monospace; color: var(--neon-blue);"></div>
+                </div>
+
+                <!-- Activate Key Column -->
+                <div style="padding-left: 10px;">
+                    <label style="font-weight: 700; color: var(--neon-gold); margin-bottom: 10px;">🔑 Activate License Key</label>
+                    <div class="input-group">
+                        <label>Username</label>
+                        <input type="text" id="act-username" class="text-input" placeholder="Enter account username...">
+                    </div>
+                    <div class="input-group">
+                        <label>License Key</label>
+                        <input type="text" id="act-key" class="text-input" placeholder="Format: TUNG-XXXX-XXXX-XXXX">
+                    </div>
+                    <button class="btn btn-primary" id="btn-activate-key" style="width: 100%; height: 38px; font-size: 13px; background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);">Redeem License Hours</button>
+                    <div id="act-feedback" style="margin-top: 10px; font-size: 12px; font-family: monospace; color: var(--neon-gold);"></div>
+                </div>
+            </div>
+        </div>
+
         <a href="/download" class="btn btn-primary" id="btn-download" style="text-decoration: none;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
             Download Setup Script (setup.ps1)
@@ -343,6 +385,67 @@
                     lblDownloads.textContent = (cur + 1).toLocaleString();
                 }
             }, 300);
+        });
+
+        // Account Registration UI Fetcher
+        const regUsername = document.getElementById('reg-username');
+        const regPassword = document.getElementById('reg-password');
+        const btnRegisterUser = document.getElementById('btn-register-user');
+        const regFeedback = document.getElementById('reg-feedback');
+
+        btnRegisterUser.addEventListener('click', async () => {
+            const username = regUsername.value.trim();
+            const password = regPassword.value.trim();
+            if (!username || !password) return;
+
+            regFeedback.textContent = 'Creating account...';
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    regFeedback.innerHTML = `<span style="color: var(--accent-green);">${data.message}</span>`;
+                    regUsername.value = '';
+                    regPassword.value = '';
+                } else {
+                    regFeedback.innerHTML = `<span style="color: var(--neon-rose);">${data.error}</span>`;
+                }
+            } catch (err) {
+                regFeedback.innerHTML = '<span style="color: var(--neon-rose);">Connection failed.</span>';
+            }
+        });
+
+        // Key Activation UI Fetcher
+        const actUsername = document.getElementById('act-username');
+        const actKey = document.getElementById('act-key');
+        const btnActivateKey = document.getElementById('btn-activate-key');
+        const actFeedback = document.getElementById('act-feedback');
+
+        btnActivateKey.addEventListener('click', async () => {
+            const username = actUsername.value.trim();
+            const key = actKey.value.trim();
+            if (!username || !key) return;
+
+            actFeedback.textContent = 'Activating key...';
+            try {
+                const response = await fetch('/api/auth/activate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, licenseKey: key })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    actFeedback.innerHTML = `<span style="color: var(--accent-green);">${data.message}</span>`;
+                    actKey.value = '';
+                } else {
+                    actFeedback.innerHTML = `<span style="color: var(--neon-rose);">${data.error}</span>`;
+                }
+            } catch (err) {
+                actFeedback.innerHTML = '<span style="color: var(--neon-rose);">Connection failed.</span>';
+            }
         });
     </script>
 </body>
