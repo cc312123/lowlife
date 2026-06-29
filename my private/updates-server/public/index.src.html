@@ -408,11 +408,7 @@ document.addEventListener('keydown', e => {
                              loaderConsole.style.display = 'none';
                              
                              
-                             const gateCard = document.getElementById('auth-gate-card');
-                             gateCard.style.display = 'block';
-                             gateCard.style.opacity = 0;
-                             gateCard.style.transition = 'opacity 0.5s';
-                             setTimeout(() => { gateCard.style.opacity = 1; }, 50);
+                             grantAccess('User');
                          }, 500);
                      }, 500);
                  } else {
