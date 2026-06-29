@@ -1460,71 +1460,87 @@ namespace botter
 					}
 					else
 					{
-						// Bounding box screen space check
-						auto hrp_it = player.parts.find("HumanoidRootPart");
-						if (hrp_it != player.parts.end())
+						// Bounding box screen space check for all bones (hitbox detector)
+						static const std::vector<std::string> target_bones = {
+							"Head", "Torso", "UpperTorso", "LowerTorso",
+							"Left Arm", "LeftUpperArm", "LeftLowerArm", "LeftHand",
+							"Right Arm", "RightUpperArm", "RightLowerArm", "RightHand",
+							"Left Leg", "LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
+							"Right Leg", "RightUpperLeg", "RightLowerLeg", "RightFoot",
+							"HumanoidRootPart"
+						};
+
+						for (const auto& bone_name : target_bones)
 						{
-							rbx::part_t part = hrp_it->second;
-							if (part.address)
+							auto part_it = player.parts.find(bone_name);
+							if (part_it == player.parts.end()) continue;
+
+							rbx::part_t part = part_it->second;
+							if (!part.address) continue;
+
+							rbx::primitive_t prim = part.get_primitive();
+							if (!prim.address) continue;
+
+							math::vector3 pos = prim.get_position();
+							math::vector3 size = prim.get_size();
+							if (bone_name == "HumanoidRootPart")
 							{
-								rbx::primitive_t prim = part.get_primitive();
-								if (prim.address)
+								size = { 4.0f, 6.0f, 2.0f };
+							}
+							math::matrix3 rot = prim.get_rotation();
+
+							if (size.x < 0.01f || size.y < 0.01f || size.z < 0.01f) continue;
+
+							bool valid = false;
+							float left = FLT_MAX, top = FLT_MAX;
+							float right = -FLT_MAX, bottom = -FLT_MAX;
+
+							static math::vector3 local_corners[8] =
+							{
+								{-1, -1, -1}, {1, -1, -1}, {-1, 1, -1}, {1, 1, -1},
+								{-1, -1, 1}, {1, -1, 1}, {-1, 1, 1}, {1, 1, 1}
+							};
+
+							for (auto& corner : local_corners)
+							{
+								math::vector3 world = pos + rot * math::vector3
 								{
-									math::vector3 pos = prim.get_position();
-									math::vector3 size = { 4.0f, 6.0f, 2.0f };
-									math::matrix3 rot = prim.get_rotation();
+									corner.x * size.x * 0.5f,
+									corner.y * size.y * 0.5f,
+									corner.z * size.z * 0.5f
+								};
 
-									bool valid = false;
-									float left = FLT_MAX, top = FLT_MAX;
-									float right = -FLT_MAX, bottom = -FLT_MAX;
+								math::vector2 out{};
+								if (game::visengine.world_to_client(world, out, dims, view))
+								{
+									valid = true;
+									left = std::min(left, out.x);
+									top = std::min(top, out.y);
+									right = std::max(right, out.x);
+									bottom = std::max(bottom, out.y);
+								}
+							}
 
-									static math::vector3 local_corners[8] =
-									{
-										{-1, -1, -1}, {1, -1, -1}, {-1, 1, -1}, {1, 1, -1},
-										{-1, -1, 1}, {1, -1, 1}, {-1, 1, 1}, {1, 1, 1}
-									};
+							if (valid && left < right && top < bottom)
+							{
+								float client_cursor_x = (float)cursor_pt.x;
+								float client_cursor_y = (float)cursor_pt.y;
 
-									for (auto& corner : local_corners)
-									{
-										math::vector3 world = pos + rot * math::vector3
-										{
-											corner.x * size.x * 0.5f,
-											corner.y * size.y * 0.5f,
-											corner.z * size.z * 0.5f
-										};
+								float scale = settings::botter::hitbox_size / 100.0f;
+								float width = right - left;
+								float height = bottom - top;
+								float delta_w = (width * scale - width) * 0.5f;
+								float delta_h = (height * scale - height) * 0.5f;
+								float target_left = left - delta_w;
+								float target_right = right + delta_w;
+								float target_top = top - delta_h;
+								float target_bottom = bottom + delta_h;
 
-										math::vector2 out{};
-										if (game::visengine.world_to_client(world, out, dims, view))
-										{
-											valid = true;
-											left = std::min(left, out.x);
-											top = std::min(top, out.y);
-											right = std::max(right, out.x);
-											bottom = std::max(bottom, out.y);
-										}
-									}
-
-									if (valid && left < right && top < bottom)
-									{
-										float client_cursor_x = (float)cursor_pt.x;
-										float client_cursor_y = (float)cursor_pt.y;
-
-										float scale = settings::botter::hitbox_size / 100.0f;
-										float width = right - left;
-										float height = bottom - top;
-										float delta_w = (width * scale - width) * 0.5f;
-										float delta_h = (height * scale - height) * 0.5f;
-										float target_left = left - delta_w;
-										float target_right = right + delta_w;
-										float target_top = top - delta_h;
-										float target_bottom = bottom + delta_h;
-
-										if (client_cursor_x >= target_left && client_cursor_x <= target_right &&
-											client_cursor_y >= target_top && client_cursor_y <= target_bottom)
-										{
-											hit = true;
-										}
-									}
+								if (client_cursor_x >= target_left && client_cursor_x <= target_right &&
+									client_cursor_y >= target_top && client_cursor_y <= target_bottom)
+								{
+									hit = true;
+									break;
 								}
 							}
 						}

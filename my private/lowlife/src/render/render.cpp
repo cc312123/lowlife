@@ -2977,7 +2977,6 @@ void render_t::render_menu()
             ImGui::SameLine();
             inline_keybind_button("menu_keybind", &menu::menu_keybind);
 
-            ImGui::Checkbox("Watermark", &menu::watermark);
             ImGui::Checkbox("Streamproof", &menu::streamproof);
             ImGui::Checkbox("Hide Console", &menu::hide_console);
             ImGui::Checkbox("Dex Explorer", &settings::dex_explorer::enabled);
@@ -3884,85 +3883,6 @@ void render_t::render_menu()
 
 void render_t::render_visuals()
 {
-    if (menu::watermark)
-    {
-        ImDrawList* draw = ImGui::GetForegroundDrawList();
-        draw->Flags &= ~ImDrawListFlags_AntiAliasedLines;
-
-        ImVec2 size = ImVec2(120, 28);
-        ImVec2 display_size = ImGui::GetIO().DisplaySize;
-
-        if (menu::watermark_pos.x < 0)
-            menu::watermark_pos.x = (display_size.x - size.x) * 0.5f;
-
-        static bool dragging = false;
-        static ImVec2 drag_offset;
-
-        ImVec2 mouse_pos = ImGui::GetIO().MousePos;
-        bool mouse_down = ImGui::GetIO().MouseDown[0];
-
-        ImVec2 pos = menu::watermark_pos;
-
-        bool hovered = mouse_pos.x >= pos.x && mouse_pos.x <= pos.x + size.x &&
-            mouse_pos.y >= pos.y && mouse_pos.y <= pos.y + size.y;
-
-        if (hovered && mouse_down && !dragging)
-        {
-            dragging = true;
-            drag_offset = ImVec2(mouse_pos.x - pos.x, mouse_pos.y - pos.y);
-        }
-
-        if (dragging)
-        {
-            if (mouse_down)
-            {
-                menu::watermark_pos.x = mouse_pos.x - drag_offset.x;
-                menu::watermark_pos.y = mouse_pos.y - drag_offset.y;
-                pos = menu::watermark_pos;
-            }
-            else
-            {
-                dragging = false;
-            }
-        }
-
-        draw->AddRectFilled(ImVec2(pos.x, pos.y), ImVec2(pos.x + size.x, pos.y + size.y), IM_COL32(20, 20, 20, 255));
-        draw->AddRect(ImVec2(pos.x + 1, pos.y + 1), ImVec2(pos.x + size.x - 1, pos.y + size.y - 1), IM_COL32(60, 60, 60, 255));
-        draw->AddRect(ImVec2(pos.x + 2, pos.y + 2), ImVec2(pos.x + size.x - 2, pos.y + size.y - 2), IM_COL32(0, 0, 0, 255));
-
-        ImU32 accent = ImGui::ColorConvertFloat4ToU32(menu::accent_color);
-        draw->AddRectFilled(ImVec2(pos.x + 2, pos.y + 2), ImVec2(pos.x + size.x - 2, pos.y + 4), accent);
-
-        draw->AddRectFilled(ImVec2(pos.x + 5, pos.y + 7), ImVec2(pos.x + size.x - 5, pos.y + size.y - 5), IM_COL32(35, 35, 35, 255));
-        draw->AddRect(ImVec2(pos.x + 5, pos.y + 7), ImVec2(pos.x + size.x - 5, pos.y + size.y - 5), IM_COL32(0, 0, 0, 255));
-        draw->AddRect(ImVec2(pos.x + 6, pos.y + 8), ImVec2(pos.x + size.x - 6, pos.y + size.y - 6), IM_COL32(60, 60, 60, 255));
-
-        ImVec2 size_low = ImGui::CalcTextSize("low");
-        ImVec2 size_life = ImGui::CalcTextSize("life");
-        float total_w = size_low.x + size_life.x;
-        
-        ImVec2 text_pos = ImVec2(pos.x + (size.x - total_w) * 0.5f, pos.y + 7 + ((size.y - 12) - size_low.y) * 0.5f);
-        
-        ImU32 outline_color = IM_COL32(0, 0, 0, 255);
-        ImU32 text_color = IM_COL32(255, 255, 255, 255);
-        ImU32 accent_col = ImGui::ColorConvertFloat4ToU32(menu::accent_color);
-
-        
-        draw->AddText(ImVec2(text_pos.x - 1, text_pos.y - 1), outline_color, "low");
-        draw->AddText(ImVec2(text_pos.x + 1, text_pos.y - 1), outline_color, "low");
-        draw->AddText(ImVec2(text_pos.x - 1, text_pos.y + 1), outline_color, "low");
-        draw->AddText(ImVec2(text_pos.x + 1, text_pos.y + 1), outline_color, "low");
-        draw->AddText(text_pos, text_color, "low");
-
-        
-        ImVec2 life_pos = ImVec2(text_pos.x + size_low.x, text_pos.y);
-        draw->AddText(ImVec2(life_pos.x - 1, life_pos.y - 1), outline_color, "life");
-        draw->AddText(ImVec2(life_pos.x + 1, life_pos.y - 1), outline_color, "life");
-        draw->AddText(ImVec2(life_pos.x - 1, life_pos.y + 1), outline_color, "life");
-        draw->AddText(ImVec2(life_pos.x + 1, life_pos.y + 1), outline_color, "life");
-        draw->AddText(life_pos, accent_col, "life");
-    }
-
     esp::run();
 
     render_feature_indicator();
