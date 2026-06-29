@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.49",
-    "latestChangelog":  "Restore multi-bone screen-space hitbox detection in triggerbot and remove visual watermark.",
+    "latestVersion":  "1.0.50",
+    "latestChangelog":  "Add Hitbox Size slider and Raycast Hitbox toggle directly to the Triggerbot settings menu.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -353,7 +353,14 @@
                         "changelog":  "Restore multi-bone screen-space hitbox detection in triggerbot and remove visual watermark.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "151a16dfd6d72a4d5eaa5a37ab617f23"
+                    },
+                    {
+                        "version":  "1.0.50",
+                        "date":  "2026-06-28",
+                        "changelog":  "Add Hitbox Size slider and Raycast Hitbox toggle directly to the Triggerbot settings menu.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "8c29d72bc2aaa06c5da2ce6bf8c612b1"
                     }
                 ],
-    "latestHash":  "151a16dfd6d72a4d5eaa5a37ab617f23"
+    "latestHash":  "8c29d72bc2aaa06c5da2ce6bf8c612b1"
 }

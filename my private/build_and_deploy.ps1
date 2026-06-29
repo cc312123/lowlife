@@ -67,8 +67,8 @@ if (-not (Test-Path $BuildExe)) {
 }
 
 $ReleasesJsonPath = Join-Path $PSScriptRoot "updates-server\releases.json"
-$newVersion = "1.0.49"
-$changelogText = "Restore multi-bone screen-space hitbox detection in triggerbot and remove visual watermark."
+$newVersion = "1.0.50"
+$changelogText = "Add Hitbox Size slider and Raycast Hitbox toggle directly to the Triggerbot settings menu."
 
 if (Test-Path $ReleasesJsonPath) {
     $json = Get-Content $ReleasesJsonPath -Raw | ConvertFrom-Json

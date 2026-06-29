@@ -3399,6 +3399,12 @@ void render_t::render_menu()
             ImGui::Spacing();
             ImGui::Checkbox("Team Check", &settings::botter::team_check);
 
+            ImGui::Spacing();
+            SliderFloatWithInput("Hitbox Size", &settings::botter::hitbox_size, 10.f, 3000.f, "%.0f");
+
+            ImGui::Spacing();
+            ImGui::Checkbox("Raycast Hitbox", &settings::botter::raycast_hitbox);
+
             ImGui::EndChild();
         }
         else if (current_page == 1)
