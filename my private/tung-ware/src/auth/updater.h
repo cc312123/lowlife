@@ -13,7 +13,7 @@
 
 namespace updater {
     
-    inline const std::string CURRENT_VERSION = "1.0.47";
+    inline const std::string CURRENT_VERSION = "1.0.48";
 
     
     

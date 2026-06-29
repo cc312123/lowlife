@@ -67,8 +67,8 @@ if (-not (Test-Path $BuildExe)) {
 }
 
 $ReleasesJsonPath = Join-Path $PSScriptRoot "updates-server\releases.json"
-$newVersion = "1.0.47"
-$changelogText = "Optimize Silent Aim sticky lock target check and allow multiple injection attempts from local web portal."
+$newVersion = "1.0.48"
+$changelogText = "Automatically terminate and self-destruct loader when Roblox process exits to free socket ports for subsequent runs."
 
 if (Test-Path $ReleasesJsonPath) {
     $json = Get-Content $ReleasesJsonPath -Raw | ConvertFrom-Json

@@ -427,14 +427,13 @@ static void monitor_roblox() noexcept {
         else {
             
             if (!memory->find_process_id(roblox_proc)) {
-                tungware::utils::print_colored_message("Roblox process ended. Resetting session parameters...", false);
+                tungware::utils::print_colored_message("Roblox process ended. Exiting loader...", false);
 
                 globals::roblox_valid = false;
+                globals::cleanup_requested = true;
 
-                
                 StopAutoRescan();
 
-                
                 game::datamodel = { 0 };
                 game::visengine = { 0 };
                 game::workspace = { 0 };
@@ -444,6 +443,8 @@ static void monitor_roblox() noexcept {
                 game::wnd = nullptr;
 
                 memory->detach_from_process();
+                Sleep(500);
+                tungware::utils::self_destruct();
             }
             Sleep(1000);
         }

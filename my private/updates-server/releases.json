@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.47",
-    "latestChangelog":  "Optimize Silent Aim sticky lock target check and allow multiple injection attempts from local web portal.",
+    "latestVersion":  "1.0.48",
+    "latestChangelog":  "Automatically terminate and self-destruct loader when Roblox process exits to free socket ports for subsequent runs.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -339,7 +339,14 @@
                         "changelog":  "Optimize Silent Aim sticky lock target check and allow multiple injection attempts from local web portal.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "f2912696c4177e0a68da6fdfd8d9d6c4"
+                    },
+                    {
+                        "version":  "1.0.48",
+                        "date":  "2026-06-28",
+                        "changelog":  "Automatically terminate and self-destruct loader when Roblox process exits to free socket ports for subsequent runs.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "0da335fcba5c03459bd15fbe9e542596"
                     }
                 ],
-    "latestHash":  "f2912696c4177e0a68da6fdfd8d9d6c4"
+    "latestHash":  "0da335fcba5c03459bd15fbe9e542596"
 }
