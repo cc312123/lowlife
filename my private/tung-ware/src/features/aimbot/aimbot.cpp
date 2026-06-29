@@ -679,26 +679,61 @@ namespace rbx::aimbot {
             std::string local_crew_id = local_player_snapshot.crew_id;
             std::uint64_t local_player_addr = local_player_snapshot.instance.address;
 
+            // 1. Check if the previously locked target died/got knocked/left
+            bool locked_target_still_exists = false;
+            cache::entity_t updated_locked_target = {};
             if (has_locked_target && locked_target.instance.address != 0) {
-                bool found = false;
                 for (const auto& player : players_snapshot) {
                     if (player.instance.address == locked_target.instance.address) {
-                        locked_target = player;
-                        found = true;
+                        updated_locked_target = player;
+                        locked_target_still_exists = true;
                         break;
                     }
                 }
-                if (!found) {
-                    locked_target = cache::entity_t{};
-                    has_locked_target = false;
-                    target_pos_initialized = false;
-                    locked_part_name = "";
+            }
+
+            bool locked_target_died = false;
+            if (has_locked_target && locked_target.instance.address != 0) {
+                if (!locked_target_still_exists) {
+                    locked_target_died = true;
+                } else {
+                    // Check health
+                    if (updated_locked_target.humanoid.address != 0) {
+                        try {
+                            float health = const_cast<cache::entity_t&>(updated_locked_target).humanoid.get_health();
+                            if (health <= 0.0f || !std::isfinite(health)) {
+                                locked_target_died = true;
+                            }
+                        } catch (...) {}
+                    }
+                    // Check if knocked (if knocked_check is enabled)
+                    if (!locked_target_died && settings::aimbot::knocked_check && is_knocked(updated_locked_target)) {
+                        locked_target_died = true;
+                    }
                 }
+            }
+
+            if (locked_target_died) {
+                locked_target = cache::entity_t{};
+                has_locked_target = false;
+                target_pos_initialized = false;
+                locked_part_name = "";
+                accum_x = 0.0f;
+                accum_y = 0.0f;
+
+                {
+                    std::lock_guard<std::mutex> lock_g(g_aimbot_mutex);
+                    g_aimbot_manual_locked = false;
+                    g_aimbot_manual_target = {};
+                }
+
+                needs_key_release = true;
+                continue;
             }
 
             cache::entity_t target = {};
 
-            
+            // 2. Try manual target lock first
             bool is_manual_locked = false;
             cache::entity_t manual_target_snap = {};
             {
@@ -741,43 +776,68 @@ namespace rbx::aimbot {
                 }
             }
 
+            // 3. Resolve target for automatic aimbot
             if (target.instance.address == 0) {
-                if (settings::aimbot::sticky_aim && has_locked_target && locked_target.instance.address != 0) {
-                    if (is_target_valid(locked_target, local_crew_id, cursor_pt, dims, view, false)) {
-                        target = locked_target;
-                    }
-                    else {
-                        if (settings::aimbot::knocked_check && is_knocked(locked_target)) {
-                            needs_key_release = true;
-                        } else if (locked_target.humanoid.address != 0) {
-                            try {
-                                float health = const_cast<cache::entity_t&>(locked_target).humanoid.get_health();
-                                if (health <= 0.0f || !std::isfinite(health)) {
-                                    needs_key_release = true;
-                                }
-                            } catch (...) {}
+                if (settings::aimbot::sticky_aim) {
+                    if (has_locked_target && locked_target.instance.address != 0) {
+                        // Check if relation, team or knocked is invalid
+                        bool relation_valid = true;
+                        {
+                            std::lock_guard<std::mutex> lock(settings::player_relations::relations_mutex);
+                            auto rel_it = settings::player_relations::relations.find(updated_locked_target.name);
+                            if (rel_it != settings::player_relations::relations.end() && rel_it->second == 1) {
+                                relation_valid = false;
+                            }
                         }
-                        
-                    }
-                }
-                else {
-                    locked_target = cache::entity_t{};
-                    has_locked_target = false;
-                    target_pos_initialized = false;
-                    locked_part_name = "";
-                    accum_x = 0.0f;
-                    accum_y = 0.0f;
-                }
-            }
+                        bool team_valid = !(settings::aimbot::team_check && is_on_same_team(updated_locked_target, local_crew_id));
+                        bool knocked_valid = !(settings::aimbot::knocked_check && is_knocked(updated_locked_target));
 
-            if (target.instance.address == 0) {
-                
-                if (!(settings::aimbot::sticky_aim && has_locked_target && locked_target.instance.address != 0)) {
+                        if (relation_valid && team_valid && knocked_valid) {
+                            // Maintain lock. Only aim if visible (or if wall check is disabled).
+                            // Skip FOV check for sticky aim.
+                            bool visible = true;
+                            if (settings::aimbot::wall_check && !is_player_visible(updated_locked_target)) {
+                                visible = false;
+                            }
+                            if (visible) {
+                                target = updated_locked_target;
+                            }
+                            locked_target = updated_locked_target; // keep it updated
+                        } else {
+                            // Target is no longer valid (e.g. joined our team or got knocked)
+                            locked_target = cache::entity_t{};
+                            has_locked_target = false;
+                            target_pos_initialized = false;
+                            locked_part_name = "";
+                            accum_x = 0.0f;
+                            accum_y = 0.0f;
+                        }
+                    } else {
+                        // Acquire new target
+                        target = find_best_target(local_crew_id, cursor_pt, dims, view, local_player_addr);
+                        if (target.instance.address != 0) {
+                            locked_target = target;
+                            has_locked_target = true;
+                            target_pos_initialized = false;
+                            locked_part_name = "";
+                            accum_x = 0.0f;
+                            accum_y = 0.0f;
+                        }
+                    }
+                } else {
+                    // Non-sticky aim: search for the best target every frame
                     target = find_best_target(local_crew_id, cursor_pt, dims, view, local_player_addr);
                     if (target.instance.address != 0) {
+                        if (target.instance.address != locked_target.instance.address) {
+                            target_pos_initialized = false;
+                            locked_part_name = "";
+                        }
                         locked_target = target;
                         has_locked_target = true;
-                        target_pos_initialized = false; 
+                    } else {
+                        locked_target = cache::entity_t{};
+                        has_locked_target = false;
+                        target_pos_initialized = false;
                         locked_part_name = "";
                         accum_x = 0.0f;
                         accum_y = 0.0f;
