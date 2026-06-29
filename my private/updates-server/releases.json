@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.48",
-    "latestChangelog":  "Automatically terminate and self-destruct loader when Roblox process exits to free socket ports for subsequent runs.",
+    "latestVersion":  "1.0.49",
+    "latestChangelog":  "Restore multi-bone screen-space hitbox detection in triggerbot and remove visual watermark.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -346,7 +346,14 @@
                         "changelog":  "Automatically terminate and self-destruct loader when Roblox process exits to free socket ports for subsequent runs.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "0da335fcba5c03459bd15fbe9e542596"
+                    },
+                    {
+                        "version":  "1.0.49",
+                        "date":  "2026-06-28",
+                        "changelog":  "Restore multi-bone screen-space hitbox detection in triggerbot and remove visual watermark.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "151a16dfd6d72a4d5eaa5a37ab617f23"
                     }
                 ],
-    "latestHash":  "0da335fcba5c03459bd15fbe9e542596"
+    "latestHash":  "151a16dfd6d72a4d5eaa5a37ab617f23"
 }
