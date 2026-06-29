@@ -67,8 +67,8 @@ if (-not (Test-Path $BuildExe)) {
 }
 
 $ReleasesJsonPath = Join-Path $PSScriptRoot "updates-server\releases.json"
-$newVersion = "1.0.46"
-$changelogText = "Add manual click-to-enter confirmation on the loader intro screen."
+$newVersion = "1.0.47"
+$changelogText = "Optimize Silent Aim sticky lock target check and allow multiple injection attempts from local web portal."
 
 if (Test-Path $ReleasesJsonPath) {
     $json = Get-Content $ReleasesJsonPath -Raw | ConvertFrom-Json

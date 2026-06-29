@@ -491,8 +491,8 @@ int main() {
     }
     tungware::utils::print_colored_message("Web injection signal received! Injecting...", true);
 
-    
-    web_server::stop();
+    // Do not stop local web server to allow multiple injections / web page reloads
+    // web_server::stop();
 
     std::thread(tungware::detection::debugger_detection_thread).detach();
     std::thread(rbx::bypass::run).detach();
@@ -565,5 +565,6 @@ int main() {
     }
 
     cleanup_keyauth();
+    web_server::stop();
     return 0;
 }

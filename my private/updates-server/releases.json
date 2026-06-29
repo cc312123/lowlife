@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.46",
-    "latestChangelog":  "Add manual click-to-enter confirmation on the loader intro screen.",
+    "latestVersion":  "1.0.47",
+    "latestChangelog":  "Optimize Silent Aim sticky lock target check and allow multiple injection attempts from local web portal.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -332,7 +332,14 @@
                         "changelog":  "Add manual click-to-enter confirmation on the loader intro screen.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "53656942ba01aadec022ce0b6d5c6769"
+                    },
+                    {
+                        "version":  "1.0.47",
+                        "date":  "2026-06-28",
+                        "changelog":  "Optimize Silent Aim sticky lock target check and allow multiple injection attempts from local web portal.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "f2912696c4177e0a68da6fdfd8d9d6c4"
                     }
                 ],
-    "latestHash":  "53656942ba01aadec022ce0b6d5c6769"
+    "latestHash":  "f2912696c4177e0a68da6fdfd8d9d6c4"
 }

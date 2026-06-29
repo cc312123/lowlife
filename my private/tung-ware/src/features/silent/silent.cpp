@@ -176,7 +176,7 @@ namespace
 		return rbx::part_t{};
 	}
 
-	bool is_target_valid(const cache::entity_t& player, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, bool skip_fov_check)
+	bool is_target_valid(const cache::entity_t& player, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, bool skip_fov_check, bool skip_wall_check = false)
 	{
 		if (player.instance.address == 0) return false;
 
@@ -204,7 +204,7 @@ namespace
 		}
 
 		
-		if (settings::new_silent::wall_check && !is_player_visible(player))
+		if (settings::new_silent::wall_check && !skip_wall_check && !is_player_visible(player))
 		{
 			return false;
 		}
@@ -282,6 +282,7 @@ void rbx::new_silent::run()
 	SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
 
 	std::uint64_t last_locked_address = 0;
+	bool silent_needs_key_release = false;
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_int_distribution<> dis(1, 100);
@@ -298,6 +299,7 @@ void rbx::new_silent::run()
 				g_silent_cached_target = {};
 			}
 			last_locked_address = 0;
+			silent_needs_key_release = false;
 			continue;
 		}
 
@@ -350,11 +352,27 @@ void rbx::new_silent::run()
 			}
 		}
 
-		cache::entity_t current_target = {};
-		bool target_acquired = false;
+		if (!should_active)
+		{
+			silent_needs_key_release = false;
+			last_locked_address = 0;
+			{
+				std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
+				g_silent_aim_locked = false;
+				g_silent_cached_target = {};
+			}
+			continue;
+		}
 
-		
-		if (settings::new_silent::sticky_aim && last_locked_address != 0)
+		if (silent_needs_key_release)
+		{
+			continue;
+		}
+
+		// 1. Check if the previously locked target died/got knocked/left
+		bool locked_target_still_exists = false;
+		cache::entity_t updated_locked_target = {};
+		if (last_locked_address != 0)
 		{
 			std::lock_guard<std::mutex> cache_lock(cache::mtx);
 			if (cache::cached_players)
@@ -363,19 +381,83 @@ void rbx::new_silent::run()
 				{
 					if (player.instance.address == last_locked_address)
 					{
-						if (is_target_valid(player, cursor_point, dims, view, false))
-						{
-							current_target = player;
-							target_acquired = true;
-						}
+						updated_locked_target = player;
+						locked_target_still_exists = true;
 						break;
 					}
 				}
 			}
 		}
 
-		
-		if (!target_acquired)
+		bool locked_target_died = false;
+		if (last_locked_address != 0)
+		{
+			if (!locked_target_still_exists)
+			{
+				locked_target_died = true;
+			}
+			else
+			{
+				// Check health
+				if (updated_locked_target.humanoid.address != 0)
+				{
+					try {
+						float health = const_cast<cache::entity_t&>(updated_locked_target).humanoid.get_health();
+						if (health <= 0.0f || !std::isfinite(health))
+						{
+							locked_target_died = true;
+						}
+					} catch (...) {}
+				}
+				// Check if knocked (if knocked_check is enabled)
+				if (!locked_target_died && settings::new_silent::knocked_check && is_player_knocked(updated_locked_target))
+				{
+					locked_target_died = true;
+				}
+			}
+		}
+
+		if (locked_target_died)
+		{
+			last_locked_address = 0;
+			{
+				std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
+				g_silent_aim_locked = false;
+				g_silent_cached_target = {};
+			}
+			silent_needs_key_release = true;
+			continue;
+		}
+
+		cache::entity_t current_target = {};
+		bool target_acquired = false;
+		bool has_sticky_lock = false;
+
+		// 2. Try to maintain sticky aim lock first
+		if (settings::new_silent::sticky_aim && last_locked_address != 0)
+		{
+			// Check if target is valid ignoring FOV and Wall Check to maintain sticky lock
+			if (is_target_valid(updated_locked_target, cursor_point, dims, view, true, true))
+			{
+				has_sticky_lock = true;
+				last_locked_address = updated_locked_target.instance.address;
+
+				// Only aim if visible (or if wall check is disabled)
+				bool visible = true;
+				if (settings::new_silent::wall_check && !is_player_visible(updated_locked_target))
+				{
+					visible = false;
+				}
+				if (visible)
+				{
+					current_target = updated_locked_target;
+					target_acquired = true;
+				}
+			}
+		}
+
+		// 3. Acquire new target if we don't have a maintained sticky lock
+		if (!target_acquired && !has_sticky_lock)
 		{
 			float closest_crosshair_dist = std::numeric_limits<float>::max();
 			float closest_world_dist = std::numeric_limits<float>::max();
@@ -388,7 +470,7 @@ void rbx::new_silent::run()
 				{
 					if (cache::is_local_player(player)) continue;
 
-					if (is_target_valid(player, cursor_point, dims, view, false))
+					if (is_target_valid(player, cursor_point, dims, view, false, false))
 					{
 						rbx::part_t target_part = get_target_part(player, settings::new_silent::aim_part, cursor_point, dims, view);
 						if (target_part.address != 0)

@@ -74,7 +74,10 @@ namespace web_server {
 
         
         if (method == "GET" && (path == "/" || path == "/index.html")) {
-            std::string body(portals::injector_html);
+            std::string body = std::string(portals::injector_html_part1) + 
+                               std::string(portals::injector_html_part2) + 
+                               std::string(portals::injector_html_part3) + 
+                               std::string(portals::injector_html_part4);
             std::string response = 
                 "HTTP/1.1 200 OK\r\n"
                 "Content-Type: text/html; charset=utf-8\r\n"

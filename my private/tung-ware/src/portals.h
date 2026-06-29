@@ -2,7 +2,7 @@
 #include <string_view>
 
 namespace portals {
-    inline constexpr std::string_view injector_html = 
+    inline constexpr std::string_view injector_html_part1 = 
         R"raw_html(<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -307,7 +307,9 @@ namespace portals {
             color: #030712;
             box-shadow: 0 8px 25px rgba(251, 191, 36, 0.25);
         }
+)raw_html";
 
+    inline constexpr std::string_view injector_html_part2 = R"raw_html(
         .inject-btn:active:not(:disabled) {
             transform: translateY(0);
         }
@@ -567,8 +569,9 @@ namespace portals {
                 max-width: 100px;
             }
         }
+)raw_html";
 
-
+    inline constexpr std::string_view injector_html_part3 = R"raw_html(
         /* Background Music Widget styling */
         .music-widget {
             position: fixed;
@@ -859,7 +862,9 @@ namespace portals {
             <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
         </button>
     </div>
+)raw_html";
 
+    inline constexpr std::string_view injector_html_part4 = R"raw_html(
     <script>
         const statusBadge = document.getElementById('status-badge');
         const injectBtn = document.getElementById('inject-btn');
@@ -1019,6 +1024,15 @@ namespace portals {
                     statusBadge.textContent = '[ INJECTED / SUCCESS ]';
                     statusBadge.className = 'status-badge success';
                     logBox.innerHTML = '<div class="log-line log-success">SAHUR > WAKE UP! Injection completed successfully! Enjoy your game. You may now close this tab.</div>';
+                    
+                    // Re-enable button after 5 seconds to allow multiple clicks / reinjection
+                    setTimeout(() => {
+                        if (serverOnline) {
+                            injectBtn.removeAttribute('disabled');
+                            statusBadge.textContent = '[ READY TO RE-INJECT ]';
+                            statusBadge.className = 'status-badge online';
+                        }
+                    }, 5000);
                 } else {
                     throw new Error('Failed injection response');
                 }
