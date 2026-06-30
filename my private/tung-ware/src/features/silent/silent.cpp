@@ -283,6 +283,8 @@ void rbx::new_silent::run()
 
 	std::uint64_t last_locked_address = 0;
 	bool silent_needs_key_release = false;
+	auto silent_occlusion_start_time = std::chrono::steady_clock::now();
+	bool silent_is_currently_occluded = false;
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_int_distribution<> dis(1, 100);
@@ -452,6 +454,26 @@ void rbx::new_silent::run()
 				{
 					current_target = updated_locked_target;
 					target_acquired = true;
+					silent_is_currently_occluded = false;
+				}
+				else
+				{
+					if (!silent_is_currently_occluded)
+					{
+						silent_is_currently_occluded = true;
+						silent_occlusion_start_time = std::chrono::steady_clock::now();
+					}
+					else
+					{
+						auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+							std::chrono::steady_clock::now() - silent_occlusion_start_time
+						).count();
+						if (elapsed > 500)
+						{
+							has_sticky_lock = false;
+							silent_is_currently_occluded = false;
+						}
+					}
 				}
 			}
 		}
@@ -583,12 +605,19 @@ void rbx::new_silent::run()
 			}
 		}
 
+		if (has_sticky_lock)
 		{
 			std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
 			g_silent_aim_locked = false;
 			g_silent_cached_target = {};
 		}
-		last_locked_address = 0;
+		else
+		{
+			std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
+			g_silent_aim_locked = false;
+			g_silent_cached_target = {};
+			last_locked_address = 0;
+		}
 	}
 }
 

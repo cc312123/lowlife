@@ -81,6 +81,7 @@ namespace settings
 		inline bool adaptive_smoothing{ false };
 		inline float adaptive_smooth_min{ 2.0f };
 		inline float adaptive_smooth_max{ 10.0f };
+		inline bool spring_damping{ true };
 	}
 	namespace new_silent
 	{
