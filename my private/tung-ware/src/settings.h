@@ -86,6 +86,7 @@ namespace settings
 	namespace new_silent
 	{
 		inline bool enabled{ false };
+		inline int silent_mode{ 0 }; // 0 = Mouse Snap, 1 = Memory Write
 		inline int target_mode{ 0 }; 
 		inline int hit_chance{ 100 }; 
 		inline bool sticky_aim{ false };

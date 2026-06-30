@@ -3988,6 +3988,9 @@ void render_t::render_menu()
             const char* targeting_modes[] = { "Closest to Crosshair", "Closest Distance", "Lowest Health" };
             ImGui::Combo("Target Mode", &settings::new_silent::target_mode, targeting_modes, IM_ARRAYSIZE(targeting_modes));
 
+            const char* silent_modes[] = { "Mouse Snap (Universal)", "Memory Write (Silent)" };
+            ImGui::Combo("Silent Aim Method", &settings::new_silent::silent_mode, silent_modes, IM_ARRAYSIZE(silent_modes));
+
             const char* silent_parts[] = {
                 "Head", "Upper Torso", "Lower Torso", "HumanoidRootPart", "Smart (Head/Torso)", "Random"
             };

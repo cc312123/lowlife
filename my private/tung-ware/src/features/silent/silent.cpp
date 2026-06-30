@@ -11,6 +11,7 @@
 #include <random>
 
 #include <memory/memory.h>
+#include <memory/driver.h>
 #include <sdk/sdk.h>
 #include <sdk/offsets.h>
 #include <cache/cache.h>
@@ -589,7 +590,33 @@ void rbx::new_silent::run()
 						math::vector2 screen_pos = {};
 						if (game::visengine.world_to_client(target_pos_3d, screen_pos, dims, view))
 						{
-							write_mouse_position(mouse_svc_addr, screen_pos.x, screen_pos.y);
+							if (settings::new_silent::silent_mode == 1)
+							{
+								write_mouse_position(mouse_svc_addr, screen_pos.x, screen_pos.y);
+							}
+							else
+							{
+								POINT target_pt = { static_cast<LONG>(screen_pos.x), static_cast<LONG>(screen_pos.y) };
+								ClientToScreen(roblox_window, &target_pt);
+
+								POINT orig_pt = {};
+								if (GetCursorPos(&orig_pt))
+								{
+									POINT current_pt = {};
+									GetCursorPos(&current_pt);
+									int dx = target_pt.x - current_pt.x;
+									int dy = target_pt.y - current_pt.y;
+
+									input::move_mouse_relative(dx, dy);
+									std::this_thread::sleep_for(std::chrono::milliseconds(2));
+
+									GetCursorPos(&current_pt);
+									int back_dx = orig_pt.x - current_pt.x;
+									int back_dy = orig_pt.y - current_pt.y;
+									input::move_mouse_relative(back_dx, back_dy);
+									std::this_thread::sleep_for(std::chrono::milliseconds(2));
+								}
+							}
 
 							{
 								std::lock_guard<std::mutex> lock(g_silent_aim_mutex);

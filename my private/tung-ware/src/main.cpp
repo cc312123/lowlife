@@ -16,6 +16,7 @@
 #pragma comment(lib, "winmm.lib")
 
 #include <memory/memory.h>
+#include <memory/driver.h>
 #include <sdk/offsets.h>
 #include <sdk/sdk.h>
 #include <game/game.h>
@@ -80,6 +81,7 @@ static BOOL WINAPI cleanup_handler(DWORD ctrlType) noexcept {
     if (ctrlType == CTRL_CLOSE_EVENT || ctrlType == CTRL_C_EVENT || ctrlType == CTRL_BREAK_EVENT) {
         globals::cleanup_requested = true;
         globals::roblox_valid = false;
+        input::close();
         Sleep(500);
         tungware::utils::self_destruct();
     }
@@ -452,7 +454,7 @@ static void monitor_roblox() noexcept {
 }
 
 int main() {
-    MessageBoxA(NULL, "Tung Tung Tung Sahur!", "TUNG", MB_OK | MB_ICONINFORMATION | MB_SETFOREGROUND);
+    // MessageBoxA(NULL, "Tung Tung Tung Sahur!", "TUNG", MB_OK | MB_ICONINFORMATION | MB_SETFOREGROUND);
 
     setvbuf(stdout, NULL, _IONBF, 0);
     setvbuf(stderr, NULL, _IONBF, 0);
@@ -466,6 +468,7 @@ int main() {
     SetConsoleCP(65001);
     SetConsoleOutputCP(65001);
     tungware::utils::set_console_font();
+    input::init();
 
     
     if (!web_server::start()) {
@@ -567,5 +570,6 @@ int main() {
 
     cleanup_keyauth();
     web_server::stop();
+    input::close();
     return 0;
 }

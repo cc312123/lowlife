@@ -137,6 +137,7 @@ namespace config
 
 		file << "  \"new_silent\": {\n";
 		file << "    \"enabled\": " << (settings::new_silent::enabled ? "true" : "false") << ",\n";
+		file << "    \"silent_mode\": " << settings::new_silent::silent_mode << ",\n";
 		file << "    \"target_mode\": " << settings::new_silent::target_mode << ",\n";
 		file << "    \"hit_chance\": " << settings::new_silent::hit_chance << ",\n";
 		file << "    \"sticky_aim\": " << (settings::new_silent::sticky_aim ? "true" : "false") << ",\n";
@@ -539,6 +540,8 @@ namespace config
 		{
 			if (parse_json_value(section, "enabled", value))
 				settings::new_silent::enabled = (value == "true");
+			if (parse_json_value(section, "silent_mode", value))
+				settings::new_silent::silent_mode = std::stoi(value);
 			if (parse_json_value(section, "target_mode", value))
 				settings::new_silent::target_mode = std::stoi(value);
 			if (parse_json_value(section, "hit_chance", value))
