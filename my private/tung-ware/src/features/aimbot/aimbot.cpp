@@ -242,7 +242,9 @@ namespace rbx::aimbot {
                             return true;
                         }
                     }
-                } catch (...) {}
+                } catch (...) {
+                    return true;
+                }
             }
             return false;
         }
@@ -254,7 +256,7 @@ namespace rbx::aimbot {
             auto cache_it = vis_cache.find(player.instance.address);
             if (cache_it != vis_cache.end()) {
                 auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - cache_it->second.last_check).count();
-                if (elapsed < 30) {
+                if (elapsed < 60) {
                     return cache_it->second.visible;
                 }
             }
@@ -515,7 +517,7 @@ namespace rbx::aimbot {
                 return false;
             }
 
-            if (settings::aimbot::knocked_check && is_knocked(player)) return false;
+            if (settings::aimbot::knocked_check && (player.is_knocked || player.health <= 0.0f)) return false;
 
             if (settings::aimbot::fov_check && !skip_fov_check) {
                 rbx::part_t target_part = get_target_part(player, settings::aimbot::aimpart, cursor_pt, dims, view);
@@ -790,6 +792,9 @@ namespace rbx::aimbot {
                 screen_dist = std::sqrt(dx * dx + dy * dy);
             }
 
+            float final_yaw = 0.0f;
+            float final_pitch = 0.0f;
+
             if (settings::aimbot::camera_smooth) {
                 float sx = std::clamp(settings::aimbot::camera_smooth_x, 1.0f, 200.0f);
                 float sy = std::clamp(settings::aimbot::camera_smooth_y, 1.0f, 200.0f);
@@ -832,8 +837,8 @@ namespace rbx::aimbot {
                 }
 
                 if (settings::aimbot::spring_damping) {
-                    float natural_freq_x = 100.0f / sx;
-                    float natural_freq_y = 100.0f / sy;
+                    float natural_freq_x = 800.0f / sx;
+                    float natural_freq_y = 800.0f / sy;
                     virtual_yaw = apply_spring_damper_angle(virtual_yaw, target_yaw, camera_yaw_vel, natural_freq_x, dt);
                     virtual_pitch = apply_spring_damper(virtual_pitch, target_pitch, camera_pitch_vel, natural_freq_y, dt);
                 } else {
@@ -870,8 +875,8 @@ namespace rbx::aimbot {
                         float pitch_diff = target_pitch - virtual_pitch;
                         pitch_diff = std::atan2(std::sin(pitch_diff), std::cos(pitch_diff));
 
-                        float t_x = (sx <= 1.05f) ? 1.0f : std::clamp(1.0f - std::exp(-(100.0f / sx) * dt), 0.0f, 1.0f);
-                        float t_y = (sy <= 1.05f) ? 1.0f : std::clamp(1.0f - std::exp(-(100.0f / sy) * dt), 0.0f, 1.0f);
+                        float t_x = (sx <= 1.05f) ? 1.0f : std::clamp(1.0f - std::exp(-(800.0f / sx) * dt), 0.0f, 1.0f);
+                        float t_y = (sy <= 1.05f) ? 1.0f : std::clamp(1.0f - std::exp(-(800.0f / sy) * dt), 0.0f, 1.0f);
 
                         virtual_yaw += yaw_diff * t_x;
                         virtual_pitch += pitch_diff * t_y;
@@ -882,27 +887,18 @@ namespace rbx::aimbot {
 
                 last_written_yaw = virtual_yaw;
                 last_written_pitch = virtual_pitch;
-            }
 
-            float step_yaw = 0.0f;
-            float step_pitch = 0.0f;
-
-            if (settings::aimbot::camera_smooth) {
-                step_yaw = virtual_yaw - current_yaw;
-                step_pitch = virtual_pitch - current_pitch;
+                final_yaw = virtual_yaw;
+                final_pitch = virtual_pitch;
             } else {
                 float target_yaw = 0.0f, target_pitch = 0.0f;
                 vector_to_angles(target_forward, target_yaw, target_pitch);
-                step_yaw = target_yaw - current_yaw;
-                step_pitch = target_pitch - current_pitch;
+                final_yaw = target_yaw;
+                final_pitch = target_pitch;
             }
 
-            step_yaw = std::atan2(std::sin(step_yaw), std::cos(step_yaw));
-            step_pitch = std::atan2(std::sin(step_pitch), std::cos(step_pitch));
-
-            float sensitivity_factor = 0.0022f;
-            float raw_dx = -step_yaw / sensitivity_factor;
-            float raw_dy = -step_pitch / sensitivity_factor;
+            math::vector3 smoothed_forward = angles_to_vector(final_yaw, final_pitch);
+            smoothed_forward = normalize(smoothed_forward);
 
             if (settings::aimbot::shake) {
                 float sx = settings::aimbot::shake_x;
@@ -910,28 +906,15 @@ namespace rbx::aimbot {
                 if (std::abs(sx) > 0.001f || std::abs(sy) > 0.001f) {
                     float factor_x = sx * 0.01f;
                     float factor_y = sy * 0.01f;
-                    raw_dx += (static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0f - 1.0f) * factor_x * 100.0f;
-                    raw_dy += (static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0f - 1.0f) * factor_y * 100.0f;
+                    smoothed_forward.x += (static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0f - 1.0f) * factor_x;
+                    smoothed_forward.y += (static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0f - 1.0f) * factor_y;
+                    smoothed_forward.z += (static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0f - 1.0f) * factor_x;
+                    smoothed_forward = normalize(smoothed_forward);
                 }
             }
 
-            if (std::isfinite(raw_dx) && std::isfinite(raw_dy)) {
-                accum_x += raw_dx;
-                accum_y += raw_dy;
-
-                LONG move_x = static_cast<LONG>(accum_x);
-                LONG move_y = static_cast<LONG>(accum_y);
-
-                accum_x -= static_cast<float>(move_x);
-                accum_y -= static_cast<float>(move_y);
-
-                if (move_x != 0 || move_y != 0) {
-                    input::move_mouse_relative(move_x, move_y);
-                }
-            } else {
-                accum_x = 0.0f;
-                accum_y = 0.0f;
-            }
+            math::matrix3 target_matrix = make_rotation_matrix(smoothed_forward);
+            camera.write_rotation(target_matrix);
         }
 
         void execute_mouse_aim(const math::vector3& target_pos, const POINT& cursor_pt, float dt, const math::vector2& dims, const math::matrix4& view) {
@@ -967,8 +950,8 @@ namespace rbx::aimbot {
                         sy = adaptive_val;
                     }
 
-                    float natural_freq_x = 100.0f / sx;
-                    float natural_freq_y = 100.0f / sy;
+                    float natural_freq_x = 800.0f / sx;
+                    float natural_freq_y = 800.0f / sy;
 
                     float y0_x = -dx;
                     float y0_y = -dy;
@@ -1028,8 +1011,8 @@ namespace rbx::aimbot {
                             sy = adaptive_val;
                         }
 
-                        float t_x = (sx <= 1.05f) ? 1.0f : std::clamp(1.0f - std::exp(-(100.0f / sx) * dt), 0.0f, 1.0f);
-                        float t_y = (sy <= 1.05f) ? 1.0f : std::clamp(1.0f - std::exp(-(100.0f / sy) * dt), 0.0f, 1.0f);
+                        float t_x = (sx <= 1.05f) ? 1.0f : std::clamp(1.0f - std::exp(-(800.0f / sx) * dt), 0.0f, 1.0f);
+                        float t_y = (sy <= 1.05f) ? 1.0f : std::clamp(1.0f - std::exp(-(800.0f / sy) * dt), 0.0f, 1.0f);
 
                         dx = dx * t_x;
                         dy = dy * t_y;
@@ -1192,6 +1175,10 @@ namespace rbx::aimbot {
             std::uint64_t local_player_addr = local_player_snapshot.instance.address;
 
             // 1. Check if the previously locked target died/got knocked/left
+            static std::uint64_t aimbot_last_seen_address = 0;
+            static std::chrono::steady_clock::time_point aimbot_last_seen_time = std::chrono::steady_clock::now();
+            static cache::entity_t last_known_aimbot_target = {};
+
             bool locked_target_still_exists = false;
             cache::entity_t updated_locked_target = {};
             if (has_locked_target && locked_target.instance.address != 0) {
@@ -1206,17 +1193,38 @@ namespace rbx::aimbot {
 
             bool locked_target_died = false;
             if (has_locked_target && locked_target.instance.address != 0) {
-                if (!locked_target_still_exists) {
-                    locked_target_died = true;
+                if (locked_target.instance.address != aimbot_last_seen_address) {
+                    aimbot_last_seen_address = locked_target.instance.address;
+                    aimbot_last_seen_time = std::chrono::steady_clock::now();
+                }
+
+                if (locked_target_still_exists) {
+                    last_known_aimbot_target = updated_locked_target;
                 } else {
+                    auto missing_duration = std::chrono::duration_cast<std::chrono::milliseconds>(
+                        std::chrono::steady_clock::now() - aimbot_last_seen_time
+                    ).count();
+                    if (missing_duration > 150) {
+                        locked_target_died = true;
+                    } else {
+                        updated_locked_target = last_known_aimbot_target;
+                        locked_target_still_exists = true;
+                    }
+                }
+
+                if (!locked_target_died) {
                     // Check health
-                    if (updated_locked_target.humanoid.address != 0) {
+                    if (updated_locked_target.humanoid.address == 0) {
+                        locked_target_died = true;
+                    } else {
                         try {
                             float health = const_cast<cache::entity_t&>(updated_locked_target).humanoid.get_health();
                             if (health <= 0.0f || !std::isfinite(health)) {
                                 locked_target_died = true;
                             }
-                        } catch (...) {}
+                        } catch (...) {
+                            locked_target_died = true;
+                        }
                     }
                     // Check if knocked (if knocked_check is enabled)
                     if (!locked_target_died && settings::aimbot::knocked_check && is_knocked(updated_locked_target)) {
@@ -1288,7 +1296,11 @@ namespace rbx::aimbot {
                     }
 
                     if (!relation_invalid) {
-                        if (is_target_valid(manual_target_snap, local_crew_id, cursor_pt, dims, view, true)) {
+                        bool knocked_invalid = false;
+                        if (settings::aimbot::knocked_check && is_knocked(manual_target_snap)) {
+                            knocked_invalid = true;
+                        }
+                        if (!knocked_invalid && is_target_valid(manual_target_snap, local_crew_id, cursor_pt, dims, view, true)) {
                             target = manual_target_snap;
                             {
                                 std::lock_guard<std::mutex> lock(g_aimbot_mutex);
@@ -1386,6 +1398,7 @@ namespace rbx::aimbot {
                                                 g_aimbot_manual_target = {};
                                             }
                                             needs_key_release = true;
+                                            continue;
                                         }
                                     }
                                     if (has_locked_target) {
@@ -1465,6 +1478,11 @@ namespace rbx::aimbot {
                             std::lock_guard<std::mutex> lock_g(g_aimbot_mutex);
                             g_aimbot_manual_locked = false;
                             g_aimbot_manual_target = {};
+                        }
+
+                        if (settings::aimbot::sticky_aim) {
+                            needs_key_release = true;
+                            continue;
                         }
                     }
                 }

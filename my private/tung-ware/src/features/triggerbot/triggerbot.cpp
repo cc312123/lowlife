@@ -1102,10 +1102,6 @@ namespace botter
 
 		for (const auto& box : cached_map_parts)
 		{
-			if (is_point_inside_part(start, box) || is_point_inside_part(end, box))
-			{
-				return true;
-			}
 			float r = box.r;
 			if (box.position.x + r < ray_min_x || box.position.x - r > ray_max_x ||
 				box.position.y + r < ray_min_y || box.position.y - r > ray_max_y ||

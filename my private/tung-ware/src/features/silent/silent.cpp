@@ -52,36 +52,91 @@ namespace
 						return true;
 					}
 				}
-			} catch (...) {}
+			} catch (...) {
+				return true;
+			}
 		}
 		return false;
 	}
 
+	struct visibility_cache_t {
+		bool visible;
+		std::chrono::steady_clock::time_point last_check;
+	};
+	std::unordered_map<std::uint64_t, visibility_cache_t> vis_cache;
+
 	bool is_player_visible(const cache::entity_t& player)
 	{
+		if (player.instance.address == 0) return false;
+
+		auto now = std::chrono::steady_clock::now();
+		auto cache_it = vis_cache.find(player.instance.address);
+		if (cache_it != vis_cache.end()) {
+			auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - cache_it->second.last_check).count();
+			if (elapsed < 60) {
+				return cache_it->second.visible;
+			}
+		}
+
 		if (game::workspace.address == 0) return true;
 		rbx::instance_t camera_inst = { memory->read<std::uint64_t>(game::workspace.address + Offsets::Workspace::CurrentCamera) };
 		if (camera_inst.address != 0) {
 			rbx::camera_t camera{ camera_inst.address };
 			math::vector3 camera_pos = camera.get_position();
 			
-			const std::unordered_set<std::string> target_parts = {
-				"Head", "UpperTorso", "LowerTorso", "HumanoidRootPart"
+			const std::vector<std::string> target_parts = {
+				"Head", "HumanoidRootPart"
 			};
 
-			for (const auto& pair : player.parts) {
-				if (target_parts.find(pair.first) == target_parts.end()) continue;
-				rbx::part_t part = pair.second;
+			// Screen check first to avoid raycasting for off-screen players
+			math::vector2 dims = game::visengine.get_dimensions();
+			math::matrix4 view = game::visengine.get_viewmatrix();
+			bool on_screen = false;
+
+			for (const auto& name : target_parts) {
+				auto it = player.parts.find(name);
+				if (it == player.parts.end()) continue;
+				rbx::part_t part = it->second;
+				if (!part.address) continue;
+				rbx::primitive_t primitive = part.get_primitive();
+				if (!primitive.address) continue;
+				
+				math::vector3 world_pos = primitive.get_position();
+				math::vector2 screen_pos = {};
+				if (game::visengine.world_to_client(world_pos, screen_pos, dims, view)) {
+					if (screen_pos.x >= -100.0f && screen_pos.x <= dims.x + 100.0f &&
+						screen_pos.y >= -100.0f && screen_pos.y <= dims.y + 100.0f) {
+						on_screen = true;
+						break;
+					}
+				}
+			}
+
+			if (!on_screen) {
+				vis_cache[player.instance.address] = { false, now };
+				return false;
+			}
+
+			bool is_visible = false;
+			for (const auto& name : target_parts) {
+				auto it = player.parts.find(name);
+				if (it == player.parts.end()) continue;
+				rbx::part_t part = it->second;
 				if (!part.address) continue;
 				rbx::primitive_t primitive = part.get_primitive();
 				if (!primitive.address) continue;
 				math::vector3 world_pos = primitive.get_position();
 				if (!botter::is_occluded(camera_pos, world_pos)) {
-					return true;
+					is_visible = true;
+					break;
 				}
 			}
-			return false;
+
+			vis_cache[player.instance.address] = { is_visible, now };
+			return is_visible;
 		}
+
+		vis_cache[player.instance.address] = { true, now };
 		return true;
 	}
 
@@ -199,18 +254,12 @@ namespace
 		}
 
 		
-		if (settings::new_silent::knocked_check && is_player_knocked(player))
+		if (settings::new_silent::knocked_check && (player.is_knocked || player.health <= 0.0f))
 		{
 			return false;
 		}
 
-		
-		if (settings::new_silent::wall_check && !skip_wall_check && !is_player_visible(player))
-		{
-			return false;
-		}
-
-		
+		// FOV check
 		if (settings::new_silent::fov_check && !skip_fov_check)
 		{
 			rbx::part_t target_part = get_target_part(player, settings::new_silent::aim_part, cursor_pt, dims, view);
@@ -228,6 +277,12 @@ namespace
 			float cursor_y = static_cast<float>(cursor_pt.y);
 			float dist = get_magnitude(screen_pos, { cursor_x, cursor_y });
 			if (dist > settings::new_silent::fov) return false;
+		}
+
+		// Wall check
+		if (settings::new_silent::wall_check && !skip_wall_check && !is_player_visible(player))
+		{
+			return false;
 		}
 
 		return true;
@@ -355,7 +410,19 @@ void rbx::new_silent::run()
 			}
 		}
 
-		if (!should_active)
+		static auto silent_last_key_press_time = std::chrono::steady_clock::now();
+		if (should_active)
+		{
+			silent_last_key_press_time = std::chrono::steady_clock::now();
+		}
+
+		auto silent_time_since_keypress = std::chrono::duration_cast<std::chrono::milliseconds>(
+			std::chrono::steady_clock::now() - silent_last_key_press_time
+		).count();
+
+		bool active_with_grace = should_active || (silent_time_since_keypress <= 100);
+
+		if (!active_with_grace)
 		{
 			silent_needs_key_release = false;
 			last_locked_address = 0;
@@ -373,6 +440,10 @@ void rbx::new_silent::run()
 		}
 
 		// 1. Check if the previously locked target died/got knocked/left
+		static auto silent_last_seen_time = std::chrono::steady_clock::now();
+		static std::uint64_t silent_last_seen_address = 0;
+		static cache::entity_t last_known_locked_target = {};
+
 		bool locked_target_still_exists = false;
 		cache::entity_t updated_locked_target = {};
 		if (last_locked_address != 0)
@@ -395,14 +466,41 @@ void rbx::new_silent::run()
 		bool locked_target_died = false;
 		if (last_locked_address != 0)
 		{
-			if (!locked_target_still_exists)
+			if (last_locked_address != silent_last_seen_address)
 			{
-				locked_target_died = true;
+				silent_last_seen_address = last_locked_address;
+				silent_last_seen_time = std::chrono::steady_clock::now();
+			}
+
+			if (locked_target_still_exists)
+			{
+				silent_last_seen_time = std::chrono::steady_clock::now();
+				last_known_locked_target = updated_locked_target;
 			}
 			else
 			{
+				auto missing_duration = std::chrono::duration_cast<std::chrono::milliseconds>(
+					std::chrono::steady_clock::now() - silent_last_seen_time
+				).count();
+				if (missing_duration > 150)
+				{
+					locked_target_died = true;
+				}
+				else
+				{
+					updated_locked_target = last_known_locked_target;
+					locked_target_still_exists = true;
+				}
+			}
+
+			if (!locked_target_died)
+			{
 				// Check health
-				if (updated_locked_target.humanoid.address != 0)
+				if (updated_locked_target.humanoid.address == 0)
+				{
+					locked_target_died = true;
+				}
+				else
 				{
 					try {
 						float health = const_cast<cache::entity_t&>(updated_locked_target).humanoid.get_health();
@@ -410,7 +508,9 @@ void rbx::new_silent::run()
 						{
 							locked_target_died = true;
 						}
-					} catch (...) {}
+					} catch (...) {
+						locked_target_died = true;
+					}
 				}
 				// Check if knocked (if knocked_check is enabled)
 				if (!locked_target_died && settings::new_silent::knocked_check && is_player_knocked(updated_locked_target))
@@ -428,7 +528,10 @@ void rbx::new_silent::run()
 				g_silent_aim_locked = false;
 				g_silent_cached_target = {};
 			}
-			silent_needs_key_release = true;
+			if (settings::new_silent::sticky_aim)
+			{
+				silent_needs_key_release = true;
+			}
 			continue;
 		}
 
@@ -473,8 +576,21 @@ void rbx::new_silent::run()
 						{
 							has_sticky_lock = false;
 							silent_is_currently_occluded = false;
+							last_locked_address = 0;
+							silent_needs_key_release = true;
+							continue;
 						}
 					}
+				}
+			}
+			else
+			{
+				has_sticky_lock = false;
+				last_locked_address = 0;
+				if (settings::new_silent::sticky_aim)
+				{
+					silent_needs_key_release = true;
+					continue;
 				}
 			}
 		}
