@@ -1543,6 +1543,7 @@ namespace botter
 					}
 
 					
+					/*
 					if (hit && settings::botter::wall_check && camera_inst.address != 0)
 					{
 						bool any_part_visible = false;
@@ -1571,6 +1572,7 @@ namespace botter
 						}
 						hit = any_part_visible;
 					}
+					*/
 
 					if (hit)
 					{

@@ -254,7 +254,21 @@ namespace
 		}
 
 		
-		if (settings::new_silent::knocked_check && (player.is_knocked || player.health <= 0.0f))
+		// Unconditionally skip dead players
+		if (player.health <= 0.0f) return false;
+		if (player.humanoid.address == 0) return false;
+		try {
+			float health = const_cast<cache::entity_t&>(player).humanoid.get_health();
+			if (health <= 0.0f || !std::isfinite(health))
+			{
+				return false;
+			}
+		} catch (...) {
+			return false;
+		}
+
+		// Knocked check
+		if (settings::new_silent::knocked_check && is_player_knocked(player))
 		{
 			return false;
 		}
@@ -277,12 +291,6 @@ namespace
 			float cursor_y = static_cast<float>(cursor_pt.y);
 			float dist = get_magnitude(screen_pos, { cursor_x, cursor_y });
 			if (dist > settings::new_silent::fov) return false;
-		}
-
-		// Wall check
-		if (settings::new_silent::wall_check && !skip_wall_check && !is_player_visible(player))
-		{
-			return false;
 		}
 
 		return true;
@@ -550,10 +558,10 @@ void rbx::new_silent::run()
 
 				// Only aim if visible (or if wall check is disabled)
 				bool visible = true;
-				if (settings::new_silent::wall_check && !is_player_visible(updated_locked_target))
-				{
-					visible = false;
-				}
+				// if (settings::new_silent::wall_check && !is_player_visible(updated_locked_target))
+				// {
+				// 	visible = false;
+				// }
 				if (visible)
 				{
 					current_target = updated_locked_target;
@@ -574,10 +582,31 @@ void rbx::new_silent::run()
 						).count();
 						if (elapsed > 500)
 						{
+							bool is_dead = false;
+							if (updated_locked_target.humanoid.address == 0)
+							{
+								is_dead = true;
+							}
+							else
+							{
+								try {
+									float health = const_cast<cache::entity_t&>(updated_locked_target).humanoid.get_health();
+									if (health <= 0.0f || !std::isfinite(health))
+									{
+										is_dead = true;
+									}
+								} catch (...) {
+									is_dead = true;
+								}
+							}
+
 							has_sticky_lock = false;
 							silent_is_currently_occluded = false;
 							last_locked_address = 0;
-							silent_needs_key_release = true;
+							if (!is_dead)
+							{
+								silent_needs_key_release = true;
+							}
 							continue;
 						}
 					}
@@ -585,14 +614,35 @@ void rbx::new_silent::run()
 			}
 			else
 			{
+				bool is_dead = false;
+				if (updated_locked_target.humanoid.address == 0)
+				{
+					is_dead = true;
+				}
+				else
+				{
+					try {
+						float health = const_cast<cache::entity_t&>(updated_locked_target).humanoid.get_health();
+						if (health <= 0.0f || !std::isfinite(health))
+						{
+							is_dead = true;
+						}
+					} catch (...) {
+						is_dead = true;
+					}
+				}
+
 				has_sticky_lock = false;
 				last_locked_address = 0;
 				if (settings::new_silent::sticky_aim)
 				{
-					if (!settings::new_silent::knocked_check || 
-					    (!is_player_knocked(updated_locked_target) && updated_locked_target.health > 0.0f))
+					if (!is_dead)
 					{
-						silent_needs_key_release = true;
+						if (!settings::new_silent::knocked_check || 
+						    (!is_player_knocked(updated_locked_target) && updated_locked_target.health > 0.0f))
+						{
+							silent_needs_key_release = true;
+						}
 					}
 					continue;
 				}

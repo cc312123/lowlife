@@ -517,7 +517,18 @@ namespace rbx::aimbot {
                 return false;
             }
 
-            if (settings::aimbot::knocked_check && (player.is_knocked || player.health <= 0.0f)) return false;
+            if (player.health <= 0.0f) return false;
+            if (player.humanoid.address == 0) return false;
+            try {
+                float health = const_cast<cache::entity_t&>(player).humanoid.get_health();
+                if (health <= 0.0f || !std::isfinite(health)) {
+                    return false;
+                }
+            } catch (...) {
+                return false;
+            }
+
+            if (settings::aimbot::knocked_check && is_knocked(player)) return false;
 
             if (settings::aimbot::fov_check && !skip_fov_check) {
                 rbx::part_t target_part = get_target_part(player, settings::aimbot::aimpart, cursor_pt, dims, view);
@@ -533,10 +544,6 @@ namespace rbx::aimbot {
                 float cursor_y = static_cast<float>(cursor_pt.y);
                 float dist = vector2_distance(screen_pos.x, screen_pos.y, cursor_x, cursor_y);
                 if (dist > settings::aimbot::fov) return false;
-            }
-
-            if (settings::aimbot::wall_check && !is_player_visible(player)) {
-                return false;
             }
 
             return true;
@@ -1359,9 +1366,9 @@ namespace rbx::aimbot {
 
                         if (within_fov) {
                             bool visible = true;
-                            if (settings::aimbot::wall_check && !is_player_visible(updated_locked_target)) {
-                                visible = false;
-                            }
+                            // if (settings::aimbot::wall_check && !is_player_visible(updated_locked_target)) {
+                            //     visible = false;
+                            // }
                             if (visible) {
                                 target = updated_locked_target;
                                 is_currently_occluded = false;
@@ -1376,6 +1383,20 @@ namespace rbx::aimbot {
                                             std::chrono::steady_clock::now() - occlusion_start_time
                                         ).count();
                                         if (elapsed_occluded > 500) {
+                                            bool is_dead = false;
+                                            if (updated_locked_target.humanoid.address == 0) {
+                                                is_dead = true;
+                                            } else {
+                                                try {
+                                                    float health = const_cast<cache::entity_t&>(updated_locked_target).humanoid.get_health();
+                                                    if (health <= 0.0f || !std::isfinite(health)) {
+                                                        is_dead = true;
+                                                    }
+                                                } catch (...) {
+                                                    is_dead = true;
+                                                }
+                                            }
+
                                             locked_target = cache::entity_t{};
                                             has_locked_target = false;
                                             is_currently_occluded = false;
@@ -1399,7 +1420,9 @@ namespace rbx::aimbot {
                                                 g_aimbot_manual_locked = false;
                                                 g_aimbot_manual_target = {};
                                             }
-                                            needs_key_release = true;
+                                            if (!is_dead) {
+                                                needs_key_release = true;
+                                            }
                                             continue;
                                         }
                                     }
@@ -1459,6 +1482,20 @@ namespace rbx::aimbot {
                         }
                     } else {
                         // Dead/knocked/team change/relations: break lock
+                        bool is_dead = false;
+                        if (updated_locked_target.humanoid.address == 0) {
+                            is_dead = true;
+                        } else {
+                            try {
+                                float health = const_cast<cache::entity_t&>(updated_locked_target).humanoid.get_health();
+                                if (health <= 0.0f || !std::isfinite(health)) {
+                                    is_dead = true;
+                                }
+                            } catch (...) {
+                                is_dead = true;
+                            }
+                        }
+
                         locked_target = cache::entity_t{};
                         has_locked_target = false;
                         target_pos_initialized = false;
@@ -1483,8 +1520,10 @@ namespace rbx::aimbot {
                         }
 
                         if (settings::aimbot::sticky_aim) {
-                            if (!settings::aimbot::knocked_check || knocked_valid) {
-                                needs_key_release = true;
+                            if (!is_dead) {
+                                if (!settings::aimbot::knocked_check || knocked_valid) {
+                                    needs_key_release = true;
+                                }
                             }
                             continue;
                         }
