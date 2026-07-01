@@ -366,8 +366,8 @@
                         "date":  "2026-07-01",
                         "changelog":  "Update offsets to version-5cf2272675e145f5 and fix target lock persistence/switching behavior when knocked check is enabled.",
                         "fileName":  "RobloxCrashHandler.exe",
-                        "md5":  "7830d39757c73d5bb62624e6a10181c0"
+                        "md5":  "584aa8fc28e072ff4b116fa76d960b4c"
                     }
                 ],
-    "latestHash":  "7830d39757c73d5bb62624e6a10181c0"
+    "latestHash":  "584aa8fc28e072ff4b116fa76d960b4c"
 }
