@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.50",
-    "latestChangelog":  "Add Hitbox Size slider and Raycast Hitbox toggle directly to the Triggerbot settings menu.",
+    "latestVersion":  "1.0.51",
+    "latestChangelog":  "Update offsets to version-5cf2272675e145f5 and fix target lock persistence/switching behavior when knocked check is enabled.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -360,7 +360,14 @@
                         "changelog":  "Add Hitbox Size slider and Raycast Hitbox toggle directly to the Triggerbot settings menu.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "9d64d77dc90b5014d8611401efac293b"
+                    },
+                    {
+                        "version":  "1.0.51",
+                        "date":  "2026-07-01",
+                        "changelog":  "Update offsets to version-5cf2272675e145f5 and fix target lock persistence/switching behavior when knocked check is enabled.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "7830d39757c73d5bb62624e6a10181c0"
                     }
                 ],
-    "latestHash":  "9d64d77dc90b5014d8611401efac293b"
+    "latestHash":  "7830d39757c73d5bb62624e6a10181c0"
 }

@@ -528,7 +528,7 @@ void rbx::new_silent::run()
 				g_silent_aim_locked = false;
 				g_silent_cached_target = {};
 			}
-			if (settings::new_silent::sticky_aim)
+			if (settings::new_silent::sticky_aim && !settings::new_silent::knocked_check)
 			{
 				silent_needs_key_release = true;
 			}
@@ -589,7 +589,11 @@ void rbx::new_silent::run()
 				last_locked_address = 0;
 				if (settings::new_silent::sticky_aim)
 				{
-					silent_needs_key_release = true;
+					if (!settings::new_silent::knocked_check || 
+					    (!is_player_knocked(updated_locked_target) && updated_locked_target.health > 0.0f))
+					{
+						silent_needs_key_release = true;
+					}
 					continue;
 				}
 			}

@@ -67,8 +67,8 @@ if (-not (Test-Path $BuildExe)) {
 }
 
 $ReleasesJsonPath = Join-Path $PSScriptRoot "updates-server\releases.json"
-$newVersion = "1.0.50"
-$changelogText = "Add Hitbox Size slider and Raycast Hitbox toggle directly to the Triggerbot settings menu."
+$newVersion = "1.0.51"
+$changelogText = "Update offsets to version-5cf2272675e145f5 and fix target lock persistence/switching behavior when knocked check is enabled."
 
 if (Test-Path $ReleasesJsonPath) {
     $json = Get-Content $ReleasesJsonPath -Raw | ConvertFrom-Json

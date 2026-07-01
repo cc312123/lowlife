@@ -1258,7 +1258,9 @@ namespace rbx::aimbot {
                     g_aimbot_manual_target = {};
                 }
 
-                needs_key_release = true;
+                if (!settings::aimbot::knocked_check) {
+                    needs_key_release = true;
+                }
                 continue;
             }
 
@@ -1481,7 +1483,9 @@ namespace rbx::aimbot {
                         }
 
                         if (settings::aimbot::sticky_aim) {
-                            needs_key_release = true;
+                            if (!settings::aimbot::knocked_check || knocked_valid) {
+                                needs_key_release = true;
+                            }
                             continue;
                         }
                     }
