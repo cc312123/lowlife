@@ -1264,10 +1264,6 @@ namespace rbx::aimbot {
                     g_aimbot_manual_locked = false;
                     g_aimbot_manual_target = {};
                 }
-
-                if (!settings::aimbot::knocked_check) {
-                    needs_key_release = true;
-                }
                 continue;
             }
 
