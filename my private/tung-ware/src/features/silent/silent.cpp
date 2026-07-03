@@ -536,6 +536,10 @@ void rbx::new_silent::run()
 				g_silent_aim_locked = false;
 				g_silent_cached_target = {};
 			}
+			if (settings::new_silent::knocked_check)
+			{
+				silent_needs_key_release = true;
+			}
 			continue;
 		}
 
@@ -610,36 +614,11 @@ void rbx::new_silent::run()
 			}
 			else
 			{
-				bool is_dead = false;
-				if (updated_locked_target.humanoid.address == 0)
-				{
-					is_dead = true;
-				}
-				else
-				{
-					try {
-						float health = const_cast<cache::entity_t&>(updated_locked_target).humanoid.get_health();
-						if (health <= 0.0f || !std::isfinite(health))
-						{
-							is_dead = true;
-						}
-					} catch (...) {
-						is_dead = true;
-					}
-				}
-
 				has_sticky_lock = false;
 				last_locked_address = 0;
 				if (settings::new_silent::sticky_aim)
 				{
-					if (!is_dead)
-					{
-						if (!settings::new_silent::knocked_check || 
-						    (!is_player_knocked(updated_locked_target) && updated_locked_target.health > 0.0f))
-						{
-							silent_needs_key_release = true;
-						}
-					}
+					silent_needs_key_release = true;
 					continue;
 				}
 			}

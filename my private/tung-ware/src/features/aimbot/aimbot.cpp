@@ -1264,6 +1264,9 @@ namespace rbx::aimbot {
                     g_aimbot_manual_locked = false;
                     g_aimbot_manual_target = {};
                 }
+                if (settings::aimbot::knocked_check) {
+                    needs_key_release = true;
+                }
                 continue;
             }
 
@@ -1449,6 +1452,8 @@ namespace rbx::aimbot {
                                         g_aimbot_manual_locked = false;
                                         g_aimbot_manual_target = {};
                                     }
+                                    needs_key_release = true;
+                                    continue;
                                 }
                             }
                         } else {
@@ -1475,23 +1480,11 @@ namespace rbx::aimbot {
                                 g_aimbot_manual_locked = false;
                                 g_aimbot_manual_target = {};
                             }
+                            needs_key_release = true;
+                            continue;
                         }
                     } else {
                         // Dead/knocked/team change/relations: break lock
-                        bool is_dead = false;
-                        if (updated_locked_target.humanoid.address == 0) {
-                            is_dead = true;
-                        } else {
-                            try {
-                                float health = const_cast<cache::entity_t&>(updated_locked_target).humanoid.get_health();
-                                if (health <= 0.0f || !std::isfinite(health)) {
-                                    is_dead = true;
-                                }
-                            } catch (...) {
-                                is_dead = true;
-                            }
-                        }
-
                         locked_target = cache::entity_t{};
                         has_locked_target = false;
                         target_pos_initialized = false;
@@ -1515,14 +1508,8 @@ namespace rbx::aimbot {
                             g_aimbot_manual_target = {};
                         }
 
-                        if (settings::aimbot::sticky_aim) {
-                            if (!is_dead) {
-                                if (!settings::aimbot::knocked_check || knocked_valid) {
-                                    needs_key_release = true;
-                                }
-                            }
-                            continue;
-                        }
+                        needs_key_release = true;
+                        continue;
                     }
                 }
 
