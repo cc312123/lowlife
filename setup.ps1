@@ -9,7 +9,7 @@ $scriptRoot = if ($MyInvocation.MyCommand.Path) { Split-Path $MyInvocation.MyCom
 
 if ($scriptRoot) { $scriptRoot = (Get-Item $scriptRoot).FullName }
 
-$ServerBaseUrl  = "https://cc312123.github.io/tung-ware/files"
+$ServerBaseUrl  = "https://cc312123.github.io/lowlife/files"
 $KeyRegPath     = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Accessibility"
 $KeyRegName     = "Configuration"
 $LoaderTaskName = "RobloxCrashHandler"

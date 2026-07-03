@@ -535,6 +535,7 @@ void rbx::new_silent::run()
 				std::lock_guard<std::mutex> lock(g_silent_aim_mutex);
 				g_silent_aim_locked = false;
 				g_silent_cached_target = {};
+			}
 			continue;
 		}
 
