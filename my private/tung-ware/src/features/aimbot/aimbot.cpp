@@ -498,7 +498,7 @@ namespace rbx::aimbot {
             return local_crew_id == player.crew_id;
         }
 
-        bool is_target_valid(const cache::entity_t& player, const std::string& local_crew_id, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, bool skip_fov_check = false) {
+        bool is_target_valid(const cache::entity_t& player, const std::string& local_crew_id, const POINT& cursor_pt, const math::vector2& dims, const math::matrix4& view, bool skip_fov_check = false, bool skip_wall_check = false) {
             if (player.instance.address == 0) return false;
 
             bool relation_invalid = false;
@@ -529,6 +529,8 @@ namespace rbx::aimbot {
             }
 
             if (settings::aimbot::knocked_check && is_knocked(player)) return false;
+
+            if (settings::aimbot::wall_check && !skip_wall_check && !is_player_visible(player)) return false;
 
             if (settings::aimbot::fov_check && !skip_fov_check) {
                 rbx::part_t target_part = get_target_part(player, settings::aimbot::aimpart, cursor_pt, dims, view);
@@ -1370,9 +1372,9 @@ namespace rbx::aimbot {
 
                         if (within_fov) {
                             bool visible = true;
-                            // if (settings::aimbot::wall_check && !is_player_visible(updated_locked_target)) {
-                            //     visible = false;
-                            // }
+                            if (settings::aimbot::wall_check && !is_player_visible(updated_locked_target)) {
+                                visible = false;
+                            }
                             if (visible) {
                                 target = updated_locked_target;
                                 is_currently_occluded = false;

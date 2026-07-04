@@ -273,6 +273,12 @@ namespace
 			return false;
 		}
 
+		// Wall check
+		if (settings::new_silent::wall_check && !skip_wall_check && !is_player_visible(player))
+		{
+			return false;
+		}
+
 		// FOV check
 		if (settings::new_silent::fov_check && !skip_fov_check)
 		{
@@ -565,10 +571,10 @@ void rbx::new_silent::run()
 
 				// Only aim if visible (or if wall check is disabled)
 				bool visible = true;
-				// if (settings::new_silent::wall_check && !is_player_visible(updated_locked_target))
-				// {
-				// 	visible = false;
-				// }
+				if (settings::new_silent::wall_check && !is_player_visible(updated_locked_target))
+				{
+					visible = false;
+				}
 				if (visible)
 				{
 					current_target = updated_locked_target;

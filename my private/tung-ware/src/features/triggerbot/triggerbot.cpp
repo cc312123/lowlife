@@ -1606,6 +1606,11 @@ namespace shot_detect
 	bool has_target = false;
 	int last_ammo_val = -1;
 
+	// Caching target state to eliminate lag/CPU overhead
+	std::uint64_t cached_target_address = 0;
+	std::uint64_t cached_equipped_tool_address = 0;
+	std::uint64_t cached_ammo_object_address = 0;
+
 	void trigger_immediate_click()
 	{
 		notifications::add("Clicking...", notifications::NotificationType::Success, 1.0f);
@@ -1866,9 +1871,6 @@ namespace shot_detect
 			{-1, -1, 1}, {1, -1, 1}, {-1, 1, 1}, {1, 1, 1}
 		};
 
-		cache::entity_t best_target = {};
-		float best_target_dist_from_cursor = FLT_MAX;
-
 		for (const auto& player : *players_snapshot)
 		{
 			if (cache::is_local_player(player))
@@ -1915,27 +1917,23 @@ namespace shot_detect
 				if (cursor_pt.x >= left && cursor_pt.x <= right &&
 					cursor_pt.y >= top && cursor_pt.y <= bottom)
 				{
-					float center_x = (left + right) * 0.5f;
-					float center_y = (top + bottom) * 0.5f;
-					float dx = (float)cursor_pt.x - center_x;
-					float dy = (float)cursor_pt.y - center_y;
-					float dist = std::sqrt(dx*dx + dy*dy);
-					if (dist < best_target_dist_from_cursor)
-					{
-						best_target_dist_from_cursor = dist;
-						best_target = player;
-					}
+					return player;
 				}
 			}
 		}
 
-		return best_target;
+		return {};
 	}
 
 	int get_target_ammo(const cache::entity_t& target)
 	{
 		if (target.instance.address == 0 || target.model_address == 0)
+		{
+			cached_target_address = 0;
+			cached_equipped_tool_address = 0;
+			cached_ammo_object_address = 0;
 			return -1;
+		}
 
 		try {
 			rbx::instance_t model_inst{ target.model_address };
@@ -1950,19 +1948,52 @@ namespace shot_detect
 				}
 			}
 
-			if (equipped_tool.address != 0)
+			if (equipped_tool.address == 0)
 			{
-				rbx::instance_t ammo_val_obj = equipped_tool.find_descendant_value_by_name_substrings({ "ammo", "clip" });
-				if (ammo_val_obj.address != 0)
+				cached_equipped_tool_address = 0;
+				cached_ammo_object_address = 0;
+				return -1;
+			}
+
+			// Read directly from cached address if target and tool are unchanged
+			if (target.instance.address == cached_target_address && 
+				equipped_tool.address == cached_equipped_tool_address && 
+				cached_ammo_object_address != 0)
+			{
+				rbx::instance_t ammo_val_obj{ cached_ammo_object_address };
+				return read_value_instance(ammo_val_obj);
+			}
+
+			cached_target_address = target.instance.address;
+			cached_equipped_tool_address = equipped_tool.address;
+			cached_ammo_object_address = 0;
+
+			// Quick scan of immediate children first
+			for (auto& child : equipped_tool.get_children())
+			{
+				std::string name = child.get_name();
+				std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+				if (name == "ammo" || name == "clip")
 				{
-					int val = read_value_instance(ammo_val_obj);
-					return val;
+					std::string cclass = child.get_class_name();
+					if (cclass.find("Value") != std::string::npos)
+					{
+						cached_ammo_object_address = child.address;
+						return read_value_instance(child);
+					}
 				}
-				return -2; 
+			}
+
+			// Recursive descendant search fallback
+			rbx::instance_t ammo_val_obj = equipped_tool.find_descendant_value_by_name_substrings({ "ammo", "clip" });
+			if (ammo_val_obj.address != 0)
+			{
+				cached_ammo_object_address = ammo_val_obj.address;
+				return read_value_instance(ammo_val_obj);
 			}
 		} catch (...) {}
 
-		return -1; 
+		return -1;
 	}
 
 	void run()
@@ -1998,72 +2029,11 @@ namespace shot_detect
 						has_target = true;
 					}
 					last_ammo_val = -1;
+					cached_target_address = target.instance.address;
+					cached_equipped_tool_address = 0;
+					cached_ammo_object_address = 0;
 					is_clicking = false;
 					notifications::add("Shot Detect Target: " + target.display_name, notifications::NotificationType::Success, 3.0f);
-				}
-				else
-				{
-					
-					POINT cursor_pt;
-					if (GetCursorPos(&cursor_pt))
-					{
-						HWND roblox_wnd = game::wnd;
-						if (!roblox_wnd) roblox_wnd = FindWindowA(nullptr, "Roblox");
-						if (roblox_wnd && ScreenToClient(roblox_wnd, &cursor_pt))
-						{
-							math::vector2 dims = game::visengine.get_dimensions();
-							math::matrix4 view = game::visengine.get_viewmatrix();
-
-							std::shared_ptr<std::vector<cache::entity_t>> players_snapshot;
-							{
-								std::lock_guard<std::mutex> lock(cache::mtx);
-								players_snapshot = cache::cached_players;
-							}
-
-							if (players_snapshot)
-							{
-								cache::entity_t closest_player = {};
-								float min_dist = 120.0f;
-
-								for (const auto& player : *players_snapshot)
-								{
-									if (cache::is_local_player(player))
-										continue;
-
-									auto hrp_it = player.parts.find("HumanoidRootPart");
-									if (hrp_it == player.parts.end() || hrp_it->second.address == 0)
-										continue;
-
-									rbx::part_t hrp_part = hrp_it->second;
-									math::vector3 world_pos = hrp_part.get_primitive().get_position();
-									math::vector2 screen_pos = {};
-									if (game::visengine.world_to_client(world_pos, screen_pos, dims, view))
-									{
-										float dx = (float)cursor_pt.x - screen_pos.x;
-										float dy = (float)cursor_pt.y - screen_pos.y;
-										float dist = std::sqrt(dx*dx + dy*dy);
-										if (dist < min_dist)
-										{
-											min_dist = dist;
-											closest_player = player;
-										}
-									}
-								}
-
-								if (closest_player.instance.address != 0)
-								{
-									{
-										std::lock_guard<std::mutex> lock(g_shot_detect_mutex);
-										target_player = closest_player;
-										has_target = true;
-									}
-									last_ammo_val = -1;
-									is_clicking = false;
-									notifications::add("Shot Detect Target: " + closest_player.display_name, notifications::NotificationType::Success, 3.0f);
-								}
-							}
-						}
-					}
 				}
 			}
 			mb5_was_pressed = mb5_is_pressed;
