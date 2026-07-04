@@ -1265,7 +1265,12 @@ namespace rbx::aimbot {
                     g_aimbot_manual_target = {};
                 }
                 if (settings::aimbot::knocked_check) {
-                    needs_key_release = true;
+                    if (settings::aimbot::keybind_mode == 1) {
+                        toggle_state = false;
+                    }
+                    if (settings::aimbot::keybind_mode != 2) {
+                        needs_key_release = true;
+                    }
                 }
                 continue;
             }
@@ -1419,7 +1424,7 @@ namespace rbx::aimbot {
                                                 g_aimbot_manual_locked = false;
                                                 g_aimbot_manual_target = {};
                                             }
-                                            if (!is_dead) {
+                                            if (!is_dead && settings::aimbot::keybind_mode != 2) {
                                                 needs_key_release = true;
                                             }
                                             continue;
@@ -1452,7 +1457,9 @@ namespace rbx::aimbot {
                                         g_aimbot_manual_locked = false;
                                         g_aimbot_manual_target = {};
                                     }
-                                    needs_key_release = true;
+                                    if (settings::aimbot::keybind_mode != 2) {
+                                        needs_key_release = true;
+                                    }
                                     continue;
                                 }
                             }
@@ -1480,7 +1487,9 @@ namespace rbx::aimbot {
                                 g_aimbot_manual_locked = false;
                                 g_aimbot_manual_target = {};
                             }
-                            needs_key_release = true;
+                            if (settings::aimbot::keybind_mode != 2) {
+                                needs_key_release = true;
+                            }
                             continue;
                         }
                     } else {
@@ -1508,7 +1517,12 @@ namespace rbx::aimbot {
                             g_aimbot_manual_target = {};
                         }
 
-                        needs_key_release = true;
+                        if (settings::aimbot::knocked_check && settings::aimbot::keybind_mode == 1) {
+                            toggle_state = false;
+                        }
+                        if (settings::aimbot::keybind_mode != 2) {
+                            needs_key_release = true;
+                        }
                         continue;
                     }
                 }

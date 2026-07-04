@@ -349,6 +349,8 @@ void rbx::new_silent::run()
 	bool silent_needs_key_release = false;
 	auto silent_occlusion_start_time = std::chrono::steady_clock::now();
 	bool silent_is_currently_occluded = false;
+	bool was_pressed = false;
+	bool toggle_active = false;
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_int_distribution<> dis(1, 100);
@@ -402,8 +404,6 @@ void rbx::new_silent::run()
 				}
 				else if (settings::new_silent::keybind_mode == 1) 
 				{
-					static bool was_pressed = false;
-					static bool toggle_active = false;
 					if (key_down && !was_pressed)
 					{
 						toggle_active = !toggle_active;
@@ -538,7 +538,14 @@ void rbx::new_silent::run()
 			}
 			if (settings::new_silent::knocked_check)
 			{
-				silent_needs_key_release = true;
+				if (settings::new_silent::keybind_mode == 1)
+				{
+					toggle_active = false;
+				}
+				if (settings::new_silent::keybind_mode != 2)
+				{
+					silent_needs_key_release = true;
+				}
 			}
 			continue;
 		}
@@ -603,7 +610,7 @@ void rbx::new_silent::run()
 							has_sticky_lock = false;
 							silent_is_currently_occluded = false;
 							last_locked_address = 0;
-							if (!is_dead)
+							if (!is_dead && settings::new_silent::keybind_mode != 2)
 							{
 								silent_needs_key_release = true;
 							}
@@ -618,7 +625,10 @@ void rbx::new_silent::run()
 				last_locked_address = 0;
 				if (settings::new_silent::sticky_aim)
 				{
-					silent_needs_key_release = true;
+					if (settings::new_silent::keybind_mode != 2)
+					{
+						silent_needs_key_release = true;
+					}
 					continue;
 				}
 			}
