@@ -1925,9 +1925,43 @@ namespace shot_detect
 		return {};
 	}
 
+	rbx::instance_t get_target_character_model(const cache::entity_t& target)
+	{
+		if (target.instance.address == 0) return {};
+
+		if (game::workspace.address != 0)
+		{
+			// 1. Try finding it in game.Workspace.Characters
+			rbx::instance_t characters_folder = game::workspace.find_first_child("Characters");
+			if (characters_folder.address != 0)
+			{
+				rbx::instance_t char_model = characters_folder.find_first_child(target.name);
+				if (char_model.address != 0)
+				{
+					return char_model;
+				}
+			}
+
+			// 2. Try finding it directly in game.Workspace
+			rbx::instance_t char_model = game::workspace.find_first_child(target.name);
+			if (char_model.address != 0)
+			{
+				return char_model;
+			}
+		}
+
+		// 3. Fallback to cached target.model_address
+		if (target.model_address != 0)
+		{
+			return rbx::instance_t{ target.model_address };
+		}
+
+		return {};
+	}
+
 	int get_target_ammo(const cache::entity_t& target)
 	{
-		if (target.instance.address == 0 || target.model_address == 0)
+		if (target.instance.address == 0)
 		{
 			cached_target_address = 0;
 			cached_equipped_tool_address = 0;
@@ -1936,7 +1970,15 @@ namespace shot_detect
 		}
 
 		try {
-			rbx::instance_t model_inst{ target.model_address };
+			rbx::instance_t model_inst = get_target_character_model(target);
+			if (model_inst.address == 0)
+			{
+				cached_target_address = 0;
+				cached_equipped_tool_address = 0;
+				cached_ammo_object_address = 0;
+				return -1;
+			}
+
 			rbx::instance_t equipped_tool = {};
 			for (auto& child : model_inst.get_children())
 			{
