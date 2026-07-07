@@ -27,11 +27,20 @@ std::uint64_t luau::find_lua_state(std::uint64_t* out_script_context)
 		if (L == 0 || (L % 8) != 0 || L < 0x100000 || L > 0x7FFFFFFFFFFF)
 			continue;
 
+		// Skip self-referential pointers — ScriptContext stores pointers to itself
+		// and to the DataModel which are false positives for the LuaState scan
+		if (L == script_context || L == game::datamodel.address)
+			continue;
+
 		// Widened: 0x10 to 0x60 (was 0x40)
 		for (std::uint64_t offset_global = 0x10; offset_global <= 0x60; offset_global += 8)
 		{
 			std::uint64_t global_state = memory->read<std::uint64_t>(L + offset_global);
 			if (global_state == 0 || (global_state % 8) != 0 || global_state < 0x100000 || global_state > 0x7FFFFFFFFFFF)
+				continue;
+
+			// Skip global_state that circles back to known non-LuaState addresses
+			if (global_state == L || global_state == script_context || global_state == game::datamodel.address)
 				continue;
 
 			// Widened: 0x10 to 0x120 (was 0xE0)
