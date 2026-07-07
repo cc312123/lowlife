@@ -67,7 +67,7 @@ if (-not (Test-Path $BuildExe)) {
 }
 
 $ReleasesJsonPath = Join-Path $PSScriptRoot "updates-server\releases.json"
-$newVersion = "1.0.62"
+$newVersion = "1.0.63"
 $changelogText = "Fix DB No Spread: zero Muzzle attachment local position so distToBarrel = 0 <= 2.23 always, ensuring 1 pellet and zero spread regardless of range."
 
 if (Test-Path $ReleasesJsonPath) {
@@ -137,6 +137,7 @@ try {
 } finally {
     Pop-Location
 }
+
 
 
 

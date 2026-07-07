@@ -66,34 +66,52 @@ namespace {
 		if (cached_random_metatables.count(metatable_addr)) return true;
 		if (cached_non_random_metatables.count(metatable_addr)) return false;
 
-		
-		std::uint8_t tt = memory->read<std::uint8_t>(metatable_addr + 0);
-		if (tt != 9 && tt != 8 && tt != 7 && tt != 6 && tt != 5) return false; 
+		// Try multiple Luau Table struct layouts — different Roblox versions vary.
+		// {tt_off, lsizenode_off, node_ptr_off}
+		struct Layout { int tt_off; int lsz_off; int node_off; };
+		static const Layout layouts[] = {
+			{8, 11, 32},  // Standard Luau: [next@0][tt@8][..][lsizenode@11][..][node@32]
+			{8, 13, 32},  // Variant: lsizenode at +13
+			{8, 11, 40},  // Variant: node at +40 (with extra fields between)
+			{8, 12, 32},  // Variant: lsizenode at +12
+			{0,  6, 32},  // Legacy/custom: tt first (original assumption)
+		};
 
-		std::uint8_t lsizenode = memory->read<std::uint8_t>(metatable_addr + 6);
-		std::uint64_t node_ptr = memory->read<std::uint64_t>(metatable_addr + 32);
-		if (node_ptr == 0) return false;
-
-		int size = 1 << lsizenode;
-		for (int i = 0; i < size; ++i)
+		for (const auto& L : layouts)
 		{
-			std::uint64_t node_addr = node_ptr + i * 32;
+			std::uint8_t tt = memory->read<std::uint8_t>(metatable_addr + L.tt_off);
+			if (tt < 5 || tt > 9) continue; // must be a valid GCObject type
 
-			
-			std::uint32_t val_28 = memory->read<std::uint32_t>(node_addr + 28);
-			std::uint32_t key_tt = val_28 & 0xF;
+			std::uint8_t lsizenode = memory->read<std::uint8_t>(metatable_addr + L.lsz_off);
+			if (lsizenode > 8) continue; // max 256 nodes sanity check
 
-			if (key_tt == 6 || key_tt == 5 || key_tt == 4) 
+			std::uint64_t node_ptr = memory->read<std::uint64_t>(metatable_addr + L.node_off);
+			if (node_ptr < 0x10000 || node_ptr > 0x7FFFFFFFFFFF || (node_ptr % 8) != 0) continue;
+
+			int size = 1 << lsizenode;
+			if (size > 256) continue;
+
+			for (int ni = 0; ni < size; ++ni)
 			{
-				std::uint64_t ts_ptr = memory->read<std::uint64_t>(node_addr + 16);
-				if (ts_ptr != 0)
+				std::uint64_t node_addr = node_ptr + ni * 32;
+
+				// In Roblox's Luau Node: key type tag packed at +28 (lower 4 bits)
+				std::uint32_t val_28 = memory->read<std::uint32_t>(node_addr + 28);
+				std::uint32_t key_tt = val_28 & 0xF;
+
+				if (key_tt == 4 || key_tt == 5 || key_tt == 6) // string / table / function key
 				{
+					std::uint64_t ts_ptr = memory->read<std::uint64_t>(node_addr + 16);
+					if (ts_ptr < 0x10000 || ts_ptr > 0x7FFFFFFFFFFF) continue;
+
 					unsigned int len = memory->read<unsigned int>(ts_ptr + 20);
-					if (len > 0 && len < 64)
+					// "NextNumber"=10, "NextInteger"=11, "NextUnitVector"=13
+					if (len == 10 || len == 11 || len == 13)
 					{
-						std::vector<char> buf(len + 1, 0);
-						Luck_ReadVirtualMemory(memory->get_process_handle(), reinterpret_cast<void*>(ts_ptr + 24), buf.data(), len, nullptr);
-						std::string str(buf.data(), len);
+						std::vector<char> sbuf(len + 1, 0);
+						Luck_ReadVirtualMemory(memory->get_process_handle(),
+							reinterpret_cast<void*>(ts_ptr + 24), sbuf.data(), len, nullptr);
+						std::string str(sbuf.data(), len);
 						if (str == "NextNumber" || str == "NextInteger" || str == "NextUnitVector")
 						{
 							cached_random_metatables.insert(metatable_addr);
@@ -125,17 +143,26 @@ namespace {
 		vmq_call_count++;
 
 		// --- Zero all cached Random objects every call (~200ms) ---
+		// Addresses are tagged in lower 3 bits (safe: Random objects are 8-byte aligned):
+		//   bits 0-1 == 0 → Layout A: state@+16, inc@+24
+		//   bits 0-1 == 1 → Layout B: state@+24, inc@+32  (standard Luau, tt@+8)
+		//   bits 0-1 == 2 → Layout C: state@+32, inc@+40  (standard Luau, env ptr before data)
 		int zeroed = 0;
 		{
 			std::lock_guard<std::mutex> lock(vmq_mutex);
-			for (std::uint64_t addr : vmq_random_addrs)
+			for (std::uint64_t tagged : vmq_random_addrs)
 			{
-				std::uint64_t state = memory->read<std::uint64_t>(addr + 16);
-				std::uint64_t inc   = memory->read<std::uint64_t>(addr + 24);
+				std::uint64_t addr  = tagged & ~7uLL;
+				int layout          = (int)(tagged & 7);
+				int state_off       = (layout == 1) ? 24 : (layout == 2) ? 32 : 16;
+				int inc_off         = state_off + 8;
+
+				std::uint64_t state = memory->read<std::uint64_t>(addr + state_off);
+				std::uint64_t inc   = memory->read<std::uint64_t>(addr + inc_off);
 				if (state != 0 || inc != 0)
 				{
-					memory->write<std::uint64_t>(addr + 16, 0);
-					memory->write<std::uint64_t>(addr + 24, 0);
+					memory->write<std::uint64_t>(addr + state_off, 0);
+					memory->write<std::uint64_t>(addr + inc_off,   0);
 					zeroed++;
 				}
 			}
@@ -175,22 +202,48 @@ namespace {
 						continue;
 					regions++;
 
-					for (std::size_t i = 0; i + 32 <= bytesRead; i += 8)
+					for (std::size_t i = 0; i + 48 <= bytesRead; i += 8)
 					{
-						if (buf[i] != 7) continue; // tt != userdata
-
-						std::uint64_t mt = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 8);
-						if (mt < 0x10000 || mt > 0x7FFFFFFFFFFuLL || (mt % 8) != 0) continue;
-
-						std::uint64_t state = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 16);
-						std::uint64_t inc   = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 24);
-
-						// PCG property: inc must be odd and non-zero; state must be non-zero
-						if (state == 0 || inc == 0 || (inc & 1) == 0) continue;
-
 						std::uint64_t obj_addr = reinterpret_cast<std::uint64_t>(mbi.BaseAddress) + i;
-						if (is_random_metatable(mt))
-							found.push_back(obj_addr);
+
+						// === Layout B (standard Luau Udata) ===
+						// [GCObject* next @0][tt=7 @8][marked @9][memcat @10][pad @11]
+						// [int len @12][Table* metatable @16][data: state @24, inc @32]
+						if (buf[i + 8] == 7)
+						{
+							std::uint64_t mt = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 16);
+							if (mt >= 0x10000 && mt <= 0x7FFFFFFFFFFuLL && (mt % 8) == 0)
+							{
+								// state@+24, inc@+32 (no env ptr, data immediately after mt)
+								std::uint64_t state = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 24);
+								std::uint64_t inc   = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 32);
+								if (state != 0 && inc != 0 && (inc & 1) == 1)
+									if (is_random_metatable(mt))
+										found.push_back(obj_addr | 1); // tag=1: layout B
+
+								// state@+32, inc@+40 (with Table* env @24 before data)
+								state = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 32);
+								inc   = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 40);
+								if (state != 0 && inc != 0 && (inc & 1) == 1)
+									if (is_random_metatable(mt))
+										found.push_back(obj_addr | 2); // tag=2: layout C
+							}
+						}
+
+						// === Layout A (Roblox custom: tt first) ===
+						// [tt=7 @0][... @1-7][Table* metatable @8][state @16][inc @24]
+						if (buf[i] == 7)
+						{
+							std::uint64_t mt = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 8);
+							if (mt >= 0x10000 && mt <= 0x7FFFFFFFFFFuLL && (mt % 8) == 0)
+							{
+								std::uint64_t state = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 16);
+								std::uint64_t inc   = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 24);
+								if (state != 0 && inc != 0 && (inc & 1) == 1)
+									if (is_random_metatable(mt))
+										found.push_back(obj_addr); // tag=0: layout A
+							}
+						}
 					}
 				}
 
