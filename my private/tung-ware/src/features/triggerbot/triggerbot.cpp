@@ -1297,113 +1297,53 @@ namespace botter
 					memory->write<std::uint64_t>(cached_global_state + cached_rngstate_offset, 0);
 				}
 
-				// --- DB No Spread: zero Muzzle attachment local position so distToBarrel = 0 ---
-				// The game's GunClientShotgun script computes:
-				//   distToBarrel = (muzzle.WorldPosition - handle.Position).Magnitude
-				// When distToBarrel <= 2.23 the script fires 1 pellet with no spread.
-				// muzzle.WorldPosition is derived from Handle.CFrame * muzzle.Position (local).
-				// Writing (0,0,0) to the Muzzle's local Position collapses barrelLength to 0,
-				// so distToBarrel == 0 <= 2.23 always -> 1 pellet, zero spread.
-				// Unlike primitive positions (overridden by physics/welds), Attachment local
-				// positions are NOT managed by the physics engine, so the write is durable.
-				if (equipped_tool.address != 0)
+				// --- DB No Spread: RNG state diagnostics ---
+				// Muzzle position zeroing confirmed useless (game ignores it for spread).
+				// The real mechanism is zeroing cached_global_state + cached_rngstate_offset.
+				// These notifications tell us exactly whether that is happening.
 				{
-					try
+					static int  rng_diag_counter   = 0;
+					static bool rng_fired_once     = false;
+					rng_diag_counter++;
+
+					bool gs_ok  = (cached_global_state    != 0);
+					bool rng_ok = (cached_rngstate_offset != 0);
+
+					// One-shot: first time the actual zero-write executes
+					if (gs_ok && rng_ok && !rng_fired_once)
 					{
-						static bool muzzle_zeroed_once    = false;
-						static int  db_diag_counter       = 0;
-						static bool last_handle_found     = false;
-						static bool last_muzzle_found     = false;
-						db_diag_counter++;
+						rng_fired_once = true;
+						char buf[128];
+						std::snprintf(buf, sizeof(buf),
+							"DB NoSpread RNG: zeroing gs=0x%llX off=0x%llX",
+							(unsigned long long)cached_global_state,
+							(unsigned long long)cached_rngstate_offset);
+						notifications::add(buf, notifications::NotificationType::Success, 6.0f);
+					}
 
-						rbx::instance_t handle_inst = equipped_tool.find_first_child("Handle");
-						if (handle_inst.address != 0)
+					// Periodic status every ~200 ticks (~400ms)
+					if (rng_diag_counter % 200 == 0)
+					{
+						char buf[160];
+						if (gs_ok && rng_ok)
 						{
-							last_handle_found = true;
-							bool muzzle_found_this_tick = false;
-
-							// Iterate Handle's children to find the Muzzle attachment
-							for (rbx::instance_t& child : handle_inst.get_children<rbx::instance_t>())
-							{
-								std::string child_name = child.get_name();
-								// Also catch any barrel/origin attachment the script might use
-								std::string lower_child = child_name;
-								std::transform(lower_child.begin(), lower_child.end(), lower_child.begin(), ::tolower);
-
-								bool is_muzzle = (
-									lower_child == "muzzle" ||
-									lower_child.find("muzzle") != std::string::npos ||
-									lower_child.find("barrel") != std::string::npos ||
-									lower_child.find("origin") != std::string::npos ||
-									lower_child.find("shoot") != std::string::npos
-								);
-
-								if (is_muzzle)
-								{
-									// Only process Attachment instances
-									std::string c_class = child.get_class_name();
-									if (c_class == "Attachment")
-									{
-										muzzle_found_this_tick = true;
-										last_muzzle_found = true;
-
-										// Read current local position (Attachment::Position offset 0xc4)
-										math::vector3 att_pos = memory->read<math::vector3>(child.address + Offsets::Attachment::Position);
-
-										// Zero it out if not already zero - this makes muzzle.WorldPosition
-										// == handle.Position, so distToBarrel = 0 <= 2.23 -> 1 pellet
-										constexpr float EPS = 0.001f;
-										if (std::abs(att_pos.x) > EPS || std::abs(att_pos.y) > EPS || std::abs(att_pos.z) > EPS)
-										{
-											const math::vector3 zero_pos = { 0.0f, 0.0f, 0.0f };
-											memory->write<math::vector3>(child.address + Offsets::Attachment::Position, zero_pos);
-
-											// One-shot notification: first time we zero the muzzle
-											if (!muzzle_zeroed_once)
-											{
-												muzzle_zeroed_once = true;
-												char buf[128];
-												std::snprintf(buf, sizeof(buf),
-													"DB NoSpread: Muzzle \"%s\" zeroed (%.2f,%.2f,%.2f)->0",
-													child_name.c_str(), att_pos.x, att_pos.y, att_pos.z);
-												notifications::add(buf, notifications::NotificationType::Success, 5.0f);
-											}
-										}
-
-										// Periodic status: every ~200 ticks (~400ms) show current muzzle pos
-										if (db_diag_counter % 200 == 0)
-										{
-											math::vector3 cur = memory->read<math::vector3>(child.address + Offsets::Attachment::Position);
-											char buf[128];
-											std::snprintf(buf, sizeof(buf),
-												"DB NoSpread | Muzzle \"%s\" pos=(%.3f,%.3f,%.3f)",
-												child_name.c_str(), cur.x, cur.y, cur.z);
-											notifications::add(buf, notifications::NotificationType::Info, 2.0f);
-										}
-									}
-								}
-							}
-
-							// Warn if Handle found but no matching Attachment inside it
-							if (!muzzle_found_this_tick && db_diag_counter % 200 == 0)
-							{
-								last_muzzle_found = false;
-								notifications::add("DB NoSpread: Handle found but NO Muzzle attachment!", notifications::NotificationType::Warning, 2.0f);
-							}
+							// Show what value is currently at the RNG address
+							std::uint64_t cur_rng = memory->read<std::uint64_t>(cached_global_state + cached_rngstate_offset);
+							std::snprintf(buf, sizeof(buf),
+								"DB RNG OK | gs=0x%llX rng_val=0x%llX",
+								(unsigned long long)cached_global_state,
+								(unsigned long long)cur_rng);
+							notifications::add(buf, notifications::NotificationType::Info, 2.0f);
+						}
+						else if (!gs_ok)
+						{
+							notifications::add("DB NoSpread: global_state NOT resolved (RNG inactive)", notifications::NotificationType::Warning, 2.0f);
 						}
 						else
 						{
-							// Warn if the tool has no Handle at all
-							if (db_diag_counter % 200 == 0)
-							{
-								last_handle_found = false;
-								notifications::add("DB NoSpread: NO Handle found in equipped tool!", notifications::NotificationType::Warning, 2.0f);
-							}
-
-							// Reset one-shot flag when tool changes
-							muzzle_zeroed_once = false;
+							notifications::add("DB NoSpread: rngstate_offset NOT resolved (RNG inactive)", notifications::NotificationType::Warning, 2.0f);
 						}
-					} catch (...) {}
+					}
 				}
 			}
 			else
