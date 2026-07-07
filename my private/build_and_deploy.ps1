@@ -67,8 +67,8 @@ if (-not (Test-Path $BuildExe)) {
 }
 
 $ReleasesJsonPath = Join-Path $PSScriptRoot "updates-server\releases.json"
-$newVersion = "1.0.51"
-$changelogText = "Update offsets to version-5cf2272675e145f5 and fix target lock persistence/switching behavior when knocked check is enabled."
+$newVersion = "1.0.52"
+$changelogText = "DB No Spread: clamp Handle position to <= 2.23 studs from HRP origin so distance-to-barrel always reads minimal, and enforce 1 pellet per shot for zero spread."
 
 if (Test-Path $ReleasesJsonPath) {
     $json = Get-Content $ReleasesJsonPath -Raw | ConvertFrom-Json

@@ -228,7 +228,7 @@ namespace settings
 		inline bool raycast_hitbox{ false };
 		inline bool db_spread_raycast{ false };
 		inline float db_spread_angle{ 0.12f };
-		inline int db_min_pellets{ 3 };
+		inline int db_min_pellets{ 1 };
 		inline int cps{ 45 };
 		inline bool knocked_check{ false };
 		inline bool team_check{ false };

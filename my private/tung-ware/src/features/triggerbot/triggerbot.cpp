@@ -1296,6 +1296,98 @@ namespace botter
 				{
 					memory->write<std::uint64_t>(cached_global_state + cached_rngstate_offset, 0);
 				}
+
+				// --- DB No Spread: clamp Handle position to <= 2.23 studs from HRP (origin) ---
+				// The game's GunClientShotgun script uses the Handle part's world position as the
+				// shooting origin. By keeping the Handle within 2.23 studs of the HumanoidRootPart,
+				// the distance-to-barrel used in spread calculations always reads <= 2.23,
+				// resulting in zero (minimum) spread regardless of actual range.
+				if (equipped_tool.address != 0 && game::local_character.address != 0)
+				{
+					try
+					{
+						constexpr float DB_MAX_BARREL_DIST = 2.23f;
+
+						// Get local HumanoidRootPart position (origin of the gun)
+						math::vector3 hrp_pos = {};
+						rbx::instance_t char_inst{ game::local_character.address };
+						rbx::instance_t hrp_inst = char_inst.find_first_child("HumanoidRootPart");
+						if (hrp_inst.address != 0)
+						{
+							rbx::part_t hrp_part{ hrp_inst.address };
+							rbx::primitive_t hrp_prim = hrp_part.get_primitive();
+							if (hrp_prim.address != 0)
+							{
+								hrp_pos = hrp_prim.get_position();
+							}
+						}
+
+						// Find the Handle Part inside the equipped tool
+						rbx::instance_t handle_inst = equipped_tool.find_first_child("Handle");
+						if (handle_inst.address != 0)
+						{
+							std::uint64_t handle_prim_addr = memory->read<std::uint64_t>(handle_inst.address + Offsets::BasePart::Primitive);
+							if (handle_prim_addr != 0)
+							{
+								math::vector3 handle_pos = memory->read<math::vector3>(handle_prim_addr + Offsets::Primitive::Position);
+
+								// Compute vector from HRP (origin) to Handle
+								math::vector3 delta = {
+									handle_pos.x - hrp_pos.x,
+									handle_pos.y - hrp_pos.y,
+									handle_pos.z - hrp_pos.z
+								};
+								float dist = std::sqrt(delta.x * delta.x + delta.y * delta.y + delta.z * delta.z);
+
+								// If Handle is farther than 2.23 from origin, clamp it
+								if (dist > DB_MAX_BARREL_DIST && dist > 0.001f)
+								{
+									float scale = DB_MAX_BARREL_DIST / dist;
+									math::vector3 clamped_pos = {
+										hrp_pos.x + delta.x * scale,
+										hrp_pos.y + delta.y * scale,
+										hrp_pos.z + delta.z * scale
+									};
+									memory->write<math::vector3>(handle_prim_addr + Offsets::Primitive::Position, clamped_pos);
+								}
+							}
+						}
+
+						// Force pellet count to 1 so only 1 pellet is ever fired (no spread)
+						for (rbx::instance_t& child : equipped_tool.get_children<rbx::instance_t>())
+						{
+							std::string child_name = child.get_name();
+							std::string lower_child = child_name;
+							std::transform(lower_child.begin(), lower_child.end(), lower_child.begin(), ::tolower);
+
+							bool is_pellet_val = (
+								lower_child.find("pellet") != std::string::npos ||
+								lower_child.find("numpellet") != std::string::npos ||
+								lower_child.find("num_pellet") != std::string::npos ||
+								lower_child.find("bulletcount") != std::string::npos ||
+								lower_child.find("bullet_count") != std::string::npos ||
+								lower_child.find("pelletcount") != std::string::npos
+							);
+
+							if (is_pellet_val)
+							{
+								std::string c_class = child.get_class_name();
+								if (c_class == "IntValue")
+								{
+									int cur = memory->read<int>(child.address + Offsets::Misc::Value);
+									if (cur != settings::botter::db_min_pellets)
+										memory->write<int>(child.address + Offsets::Misc::Value, settings::botter::db_min_pellets);
+								}
+								else if (c_class == "NumberValue")
+								{
+									double cur = memory->read<double>(child.address + Offsets::Misc::Value);
+									if (cur != (double)settings::botter::db_min_pellets)
+										memory->write<double>(child.address + Offsets::Misc::Value, (double)settings::botter::db_min_pellets);
+								}
+							}
+						}
+					} catch (...) {}
+				}
 			}
 			else
 			{
