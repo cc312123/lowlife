@@ -1561,53 +1561,56 @@ namespace botter
 						}
 					}
 
-					if (enemy_found)
+				if (enemy_found)
+				{
+					// Compute direction LP → enemy
+					float dx   = nearest_enemy_pos.x - lp_real_pos.x;
+					float dy   = nearest_enemy_pos.y - lp_real_pos.y;
+					float dz   = nearest_enemy_pos.z - lp_real_pos.z;
+					float dist = std::sqrt(dx*dx + dy*dy + dz*dz);
+
+					if (dist > 0.001f)
 					{
-						// Compute direction LP → enemy, then fake pos = enemy - dir*2.23
-						// (LP side) so distance(fakeLP, enemy) = 2.23
-						float dx   = nearest_enemy_pos.x - lp_real_pos.x;
-						float dy   = nearest_enemy_pos.y - lp_real_pos.y;
-						float dz   = nearest_enemy_pos.z - lp_real_pos.z;
-						float dist = std::sqrt(dx*dx + dy*dy + dz*dz);
+						float nx = dx / dist, ny = dy / dist, nz = dz / dist;
+						// fake_shooter = 2.23 studs behind enemy along LP→enemy axis
+						math::vector3 fake_shooter = {
+							nearest_enemy_pos.x - nx * 2.23f,
+							nearest_enemy_pos.y - ny * 2.23f,
+							nearest_enemy_pos.z - nz * 2.23f
+						};
 
-						if (dist > 0.001f)
+						// Always write tool part primitives (Handle, Barrel, etc.)
+						// These don't visually move the player character.
+						for (std::uint64_t p : db_part_prims)
+							memory->write<math::vector3>(p + Offsets::Primitive::Position, fake_shooter);
+
+						// Write local player HRP ONLY while LMB is held (shot window).
+						// Continuous write teleports the player; this gates it to the
+						// exact frame(s) where the gun script fires and reads HRP.Position.
+						bool lmb_held = (GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0;
+						if (lmb_held && db_lp_hrp_prim_addr != 0)
+							memory->write<math::vector3>(
+								db_lp_hrp_prim_addr + Offsets::Primitive::Position, fake_shooter);
+
+						// Diagnostic: every ~500 ticks (~1 s)
+						if (db_dist_ctr % 500 == 0)
 						{
-							float nx = dx / dist, ny = dy / dist, nz = dz / dist;
-							// Fake positions for "shooter-side" parts = enemy + (-dir)*2.23
-							math::vector3 fake_shooter = {
-								nearest_enemy_pos.x - nx * 2.23f,
-								nearest_enemy_pos.y - ny * 2.23f,
-								nearest_enemy_pos.z - nz * 2.23f
-							};
-
-							// Write every tool part primitive to fake_shooter
-							for (std::uint64_t p : db_part_prims)
-								memory->write<math::vector3>(p + Offsets::Primitive::Position, fake_shooter);
-
-							// Write local player HRP to fake_shooter
-							if (db_lp_hrp_prim_addr != 0)
-								memory->write<math::vector3>(
-									db_lp_hrp_prim_addr + Offsets::Primitive::Position, fake_shooter);
-
-							// Diagnostic: every ~500 ticks (~1 s) show real distance & parts count
-							if (db_dist_ctr % 500 == 0)
-							{
-								char nb[160];
-								std::snprintf(nb, sizeof(nb),
-									"DB Dist: real=%.1f parts=%d lp_hrp=%s",
-									dist,
-									(int)db_part_prims.size(),
-									db_lp_hrp_prim_addr ? "OK" : "NO");
-								notifications::add(nb, notifications::NotificationType::Info, 3.0f);
-							}
+							char nb[160];
+							std::snprintf(nb, sizeof(nb),
+								"DB Dist: real=%.1f parts=%d lmb=%s",
+								dist,
+								(int)db_part_prims.size(),
+								lmb_held ? "SHOT" : "idle");
+							notifications::add(nb, notifications::NotificationType::Info, 3.0f);
 						}
 					}
-					else if (db_dist_ctr % 500 == 0)
-					{
-						notifications::add("DB Dist: no enemy found", notifications::NotificationType::Warning, 2.0f);
-					}
 				}
-				// =========================================================
+				else if (db_dist_ctr % 500 == 0)
+				{
+					notifications::add("DB Dist: no enemy found", notifications::NotificationType::Warning, 2.0f);
+				}
+			}
+			// =====================================================================
 
 			}
 			else
