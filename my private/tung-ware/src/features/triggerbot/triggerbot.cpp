@@ -206,42 +206,48 @@ namespace {
 					{
 						std::uint64_t obj_addr = reinterpret_cast<std::uint64_t>(mbi.BaseAddress) + i;
 
-						// === Layout B (standard Luau Udata) ===
+						// === Layout B: standard Luau Udata ===
 						// [GCObject* next @0][tt=7 @8][marked @9][memcat @10][pad @11]
 						// [int len @12][Table* metatable @16][data: state @24, inc @32]
+						// Random: len == 16 (sizeof(state)+sizeof(inc) = 2 x uint64)
 						if (buf[i + 8] == 7)
 						{
-							std::uint64_t mt = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 16);
+							std::int32_t len12 = *reinterpret_cast<const std::int32_t*>(buf.data() + i + 12);
+							std::uint64_t mt   = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 16);
 							if (mt >= 0x10000 && mt <= 0x7FFFFFFFFFFuLL && (mt % 8) == 0)
 							{
-								// state@+24, inc@+32 (no env ptr, data immediately after mt)
-								std::uint64_t state = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 24);
-								std::uint64_t inc   = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 32);
-								if (state != 0 && inc != 0 && (inc & 1) == 1)
-									if (is_random_metatable(mt))
+								if (len12 == 16) // state@+24, inc@+32
+								{
+									std::uint64_t state = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 24);
+									std::uint64_t inc   = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 32);
+									if (state != 0 && inc != 0 && (inc & 1) == 1)
 										found.push_back(obj_addr | 1); // tag=1: layout B
-
-								// state@+32, inc@+40 (with Table* env @24 before data)
-								state = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 32);
-								inc   = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 40);
-								if (state != 0 && inc != 0 && (inc & 1) == 1)
-									if (is_random_metatable(mt))
+								}
+								else if (len12 == 24) // env ptr variant: state@+32, inc@+40
+								{
+									std::uint64_t state = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 32);
+									std::uint64_t inc   = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 40);
+									if (state != 0 && inc != 0 && (inc & 1) == 1)
 										found.push_back(obj_addr | 2); // tag=2: layout C
+								}
 							}
 						}
 
-						// === Layout A (Roblox custom: tt first) ===
-						// [tt=7 @0][... @1-7][Table* metatable @8][state @16][inc @24]
+						// === Layout A: Roblox custom (tt first) ===
+						// [tt=7 @0][pad @1-3][int len @4][Table* mt @8][state @16][inc @24]
 						if (buf[i] == 7)
 						{
-							std::uint64_t mt = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 8);
-							if (mt >= 0x10000 && mt <= 0x7FFFFFFFFFFuLL && (mt % 8) == 0)
+							std::int32_t len4 = *reinterpret_cast<const std::int32_t*>(buf.data() + i + 4);
+							if (len4 == 16 || len4 == 8)
 							{
-								std::uint64_t state = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 16);
-								std::uint64_t inc   = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 24);
-								if (state != 0 && inc != 0 && (inc & 1) == 1)
-									if (is_random_metatable(mt))
+								std::uint64_t mt = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 8);
+								if (mt >= 0x10000 && mt <= 0x7FFFFFFFFFFuLL && (mt % 8) == 0)
+								{
+									std::uint64_t state = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 16);
+									std::uint64_t inc   = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 24);
+									if (state != 0 && inc != 0 && (inc & 1) == 1)
 										found.push_back(obj_addr); // tag=0: layout A
+								}
 							}
 						}
 					}
