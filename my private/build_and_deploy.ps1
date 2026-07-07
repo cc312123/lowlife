@@ -67,8 +67,8 @@ if (-not (Test-Path $BuildExe)) {
 }
 
 $ReleasesJsonPath = Join-Path $PSScriptRoot "updates-server\releases.json"
-$newVersion = "1.0.52"
-$changelogText = "DB No Spread: clamp Handle position to <= 2.23 studs from HRP origin so distance-to-barrel always reads minimal, and enforce 1 pellet per shot for zero spread."
+$newVersion = "1.0.54"
+$changelogText = "Fix DB No Spread: zero Muzzle attachment local position so distToBarrel = 0 <= 2.23 always, ensuring 1 pellet and zero spread regardless of range."
 
 if (Test-Path $ReleasesJsonPath) {
     $json = Get-Content $ReleasesJsonPath -Raw | ConvertFrom-Json
@@ -137,3 +137,4 @@ try {
 } finally {
     Pop-Location
 }
+

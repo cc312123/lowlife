@@ -1297,94 +1297,111 @@ namespace botter
 					memory->write<std::uint64_t>(cached_global_state + cached_rngstate_offset, 0);
 				}
 
-				// --- DB No Spread: clamp Handle position to <= 2.23 studs from HRP (origin) ---
-				// The game's GunClientShotgun script uses the Handle part's world position as the
-				// shooting origin. By keeping the Handle within 2.23 studs of the HumanoidRootPart,
-				// the distance-to-barrel used in spread calculations always reads <= 2.23,
-				// resulting in zero (minimum) spread regardless of actual range.
-				if (equipped_tool.address != 0 && game::local_character.address != 0)
+				// --- DB No Spread: zero Muzzle attachment local position so distToBarrel = 0 ---
+				// The game's GunClientShotgun script computes:
+				//   distToBarrel = (muzzle.WorldPosition - handle.Position).Magnitude
+				// When distToBarrel <= 2.23 the script fires 1 pellet with no spread.
+				// muzzle.WorldPosition is derived from Handle.CFrame * muzzle.Position (local).
+				// Writing (0,0,0) to the Muzzle's local Position collapses barrelLength to 0,
+				// so distToBarrel == 0 <= 2.23 always -> 1 pellet, zero spread.
+				// Unlike primitive positions (overridden by physics/welds), Attachment local
+				// positions are NOT managed by the physics engine, so the write is durable.
+				if (equipped_tool.address != 0)
 				{
 					try
 					{
-						constexpr float DB_MAX_BARREL_DIST = 2.23f;
+						static bool muzzle_zeroed_once    = false;
+						static int  db_diag_counter       = 0;
+						static bool last_handle_found     = false;
+						static bool last_muzzle_found     = false;
+						db_diag_counter++;
 
-						// Get local HumanoidRootPart position (origin of the gun)
-						math::vector3 hrp_pos = {};
-						rbx::instance_t char_inst{ game::local_character.address };
-						rbx::instance_t hrp_inst = char_inst.find_first_child("HumanoidRootPart");
-						if (hrp_inst.address != 0)
-						{
-							rbx::part_t hrp_part{ hrp_inst.address };
-							rbx::primitive_t hrp_prim = hrp_part.get_primitive();
-							if (hrp_prim.address != 0)
-							{
-								hrp_pos = hrp_prim.get_position();
-							}
-						}
-
-						// Find the Handle Part inside the equipped tool
 						rbx::instance_t handle_inst = equipped_tool.find_first_child("Handle");
 						if (handle_inst.address != 0)
 						{
-							std::uint64_t handle_prim_addr = memory->read<std::uint64_t>(handle_inst.address + Offsets::BasePart::Primitive);
-							if (handle_prim_addr != 0)
+							last_handle_found = true;
+							bool muzzle_found_this_tick = false;
+
+							// Iterate Handle's children to find the Muzzle attachment
+							for (rbx::instance_t& child : handle_inst.get_children<rbx::instance_t>())
 							{
-								math::vector3 handle_pos = memory->read<math::vector3>(handle_prim_addr + Offsets::Primitive::Position);
+								std::string child_name = child.get_name();
+								// Also catch any barrel/origin attachment the script might use
+								std::string lower_child = child_name;
+								std::transform(lower_child.begin(), lower_child.end(), lower_child.begin(), ::tolower);
 
-								// Compute vector from HRP (origin) to Handle
-								math::vector3 delta = {
-									handle_pos.x - hrp_pos.x,
-									handle_pos.y - hrp_pos.y,
-									handle_pos.z - hrp_pos.z
-								};
-								float dist = std::sqrt(delta.x * delta.x + delta.y * delta.y + delta.z * delta.z);
+								bool is_muzzle = (
+									lower_child == "muzzle" ||
+									lower_child.find("muzzle") != std::string::npos ||
+									lower_child.find("barrel") != std::string::npos ||
+									lower_child.find("origin") != std::string::npos ||
+									lower_child.find("shoot") != std::string::npos
+								);
 
-								// If Handle is farther than 2.23 from origin, clamp it
-								if (dist > DB_MAX_BARREL_DIST && dist > 0.001f)
+								if (is_muzzle)
 								{
-									float scale = DB_MAX_BARREL_DIST / dist;
-									math::vector3 clamped_pos = {
-										hrp_pos.x + delta.x * scale,
-										hrp_pos.y + delta.y * scale,
-										hrp_pos.z + delta.z * scale
-									};
-									memory->write<math::vector3>(handle_prim_addr + Offsets::Primitive::Position, clamped_pos);
+									// Only process Attachment instances
+									std::string c_class = child.get_class_name();
+									if (c_class == "Attachment")
+									{
+										muzzle_found_this_tick = true;
+										last_muzzle_found = true;
+
+										// Read current local position (Attachment::Position offset 0xc4)
+										math::vector3 att_pos = memory->read<math::vector3>(child.address + Offsets::Attachment::Position);
+
+										// Zero it out if not already zero - this makes muzzle.WorldPosition
+										// == handle.Position, so distToBarrel = 0 <= 2.23 -> 1 pellet
+										constexpr float EPS = 0.001f;
+										if (std::abs(att_pos.x) > EPS || std::abs(att_pos.y) > EPS || std::abs(att_pos.z) > EPS)
+										{
+											const math::vector3 zero_pos = { 0.0f, 0.0f, 0.0f };
+											memory->write<math::vector3>(child.address + Offsets::Attachment::Position, zero_pos);
+
+											// One-shot notification: first time we zero the muzzle
+											if (!muzzle_zeroed_once)
+											{
+												muzzle_zeroed_once = true;
+												char buf[128];
+												std::snprintf(buf, sizeof(buf),
+													"DB NoSpread: Muzzle \"%s\" zeroed (%.2f,%.2f,%.2f)->0",
+													child_name.c_str(), att_pos.x, att_pos.y, att_pos.z);
+												notifications::add(buf, notifications::NotificationType::Success, 5.0f);
+											}
+										}
+
+										// Periodic status: every ~200 ticks (~400ms) show current muzzle pos
+										if (db_diag_counter % 200 == 0)
+										{
+											math::vector3 cur = memory->read<math::vector3>(child.address + Offsets::Attachment::Position);
+											char buf[128];
+											std::snprintf(buf, sizeof(buf),
+												"DB NoSpread | Muzzle \"%s\" pos=(%.3f,%.3f,%.3f)",
+												child_name.c_str(), cur.x, cur.y, cur.z);
+											notifications::add(buf, notifications::NotificationType::Info, 2.0f);
+										}
+									}
 								}
+							}
+
+							// Warn if Handle found but no matching Attachment inside it
+							if (!muzzle_found_this_tick && db_diag_counter % 200 == 0)
+							{
+								last_muzzle_found = false;
+								notifications::add("DB NoSpread: Handle found but NO Muzzle attachment!", notifications::NotificationType::Warning, 2.0f);
 							}
 						}
-
-						// Force pellet count to 1 so only 1 pellet is ever fired (no spread)
-						for (rbx::instance_t& child : equipped_tool.get_children<rbx::instance_t>())
+						else
 						{
-							std::string child_name = child.get_name();
-							std::string lower_child = child_name;
-							std::transform(lower_child.begin(), lower_child.end(), lower_child.begin(), ::tolower);
-
-							bool is_pellet_val = (
-								lower_child.find("pellet") != std::string::npos ||
-								lower_child.find("numpellet") != std::string::npos ||
-								lower_child.find("num_pellet") != std::string::npos ||
-								lower_child.find("bulletcount") != std::string::npos ||
-								lower_child.find("bullet_count") != std::string::npos ||
-								lower_child.find("pelletcount") != std::string::npos
-							);
-
-							if (is_pellet_val)
+							// Warn if the tool has no Handle at all
+							if (db_diag_counter % 200 == 0)
 							{
-								std::string c_class = child.get_class_name();
-								if (c_class == "IntValue")
-								{
-									int cur = memory->read<int>(child.address + Offsets::Misc::Value);
-									if (cur != settings::botter::db_min_pellets)
-										memory->write<int>(child.address + Offsets::Misc::Value, settings::botter::db_min_pellets);
-								}
-								else if (c_class == "NumberValue")
-								{
-									double cur = memory->read<double>(child.address + Offsets::Misc::Value);
-									if (cur != (double)settings::botter::db_min_pellets)
-										memory->write<double>(child.address + Offsets::Misc::Value, (double)settings::botter::db_min_pellets);
-								}
+								last_handle_found = false;
+								notifications::add("DB NoSpread: NO Handle found in equipped tool!", notifications::NotificationType::Warning, 2.0f);
 							}
+
+							// Reset one-shot flag when tool changes
+							muzzle_zeroed_once = false;
 						}
 					} catch (...) {}
 				}

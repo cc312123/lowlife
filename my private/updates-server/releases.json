@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.52",
-    "latestChangelog":  "DB No Spread: clamp Handle position to \u003c= 2.23 studs from HRP origin so distance-to-barrel always reads minimal, and enforce 1 pellet per shot for zero spread.",
+    "latestVersion":  "1.0.53",
+    "latestChangelog":  "Fix DB No Spread: zero Muzzle attachment local position so distToBarrel = 0 \u003c= 2.23 always, ensuring 1 pellet and zero spread regardless of range.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -374,6 +374,13 @@
                         "changelog":  "DB No Spread: clamp Handle position to \u003c= 2.23 studs from HRP origin so distance-to-barrel always reads minimal, and enforce 1 pellet per shot for zero spread.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "93a73876c75f889b051fee2d72282a61"
+                    },
+                    {
+                        "version":  "1.0.53",
+                        "date":  "2026-07-06",
+                        "changelog":  "Fix DB No Spread: zero Muzzle attachment local position so distToBarrel = 0 \u003c= 2.23 always, ensuring 1 pellet and zero spread regardless of range.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  ""
                     }
                 ],
     "latestHash":  "93a73876c75f889b051fee2d72282a61"
