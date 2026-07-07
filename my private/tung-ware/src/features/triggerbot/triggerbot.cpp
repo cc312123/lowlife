@@ -6,6 +6,7 @@
 #include <cmath>
 #include <limits>
 #include <mutex>
+#include <atomic>
 #include <chrono>
 #include <random>
 #include <unordered_map>
@@ -107,113 +108,119 @@ namespace {
 		return false;
 	}
 
-	void scan_gc_heap_for_random_objects(std::uint64_t global_state)
+	// --- VirtualQueryEx-based Random object scan ---
+	// Replaces the broken allgcopages GC traversal.
+	// Scans all committed readwrite memory regions <= 4MB for Luau Random userdata objects
+	// (tt=7, valid metatable, non-zero state, odd inc). Results are cached and zeroed every
+	// 200ms. A full rescan runs in a background thread every 5 seconds.
+	static std::vector<std::uint64_t> vmq_random_addrs;
+	static std::mutex                 vmq_mutex;
+	static std::atomic<bool>          vmq_running{false};
+	static std::chrono::steady_clock::time_point vmq_last_scan =
+		std::chrono::steady_clock::now() - std::chrono::seconds(10);
+	static int vmq_call_count = 0;
+
+	void scan_gc_heap_for_random_objects(std::uint64_t /*global_state*/)
 	{
-		if (global_state == 0) return;
+		vmq_call_count++;
 
-		static std::uint64_t allgcopages_offset = 0;
-		static int scan_call_count = 0;
-		scan_call_count++;
-
-		if (allgcopages_offset == 0)
+		// --- Zero all cached Random objects every call (~200ms) ---
+		int zeroed = 0;
 		{
-			std::uint64_t p = memory->read<std::uint64_t>(global_state + 744);
-			if (p != 0)
+			std::lock_guard<std::mutex> lock(vmq_mutex);
+			for (std::uint64_t addr : vmq_random_addrs)
 			{
-				int pageSize = memory->read<int>(p + 32);
-				int blockSize = memory->read<int>(p + 36);
-				if (pageSize >= 4096 && pageSize <= 65536 && blockSize >= 8 && blockSize <= pageSize)
+				std::uint64_t state = memory->read<std::uint64_t>(addr + 16);
+				std::uint64_t inc   = memory->read<std::uint64_t>(addr + 24);
+				if (state != 0 || inc != 0)
 				{
-					allgcopages_offset = 744;
+					memory->write<std::uint64_t>(addr + 16, 0);
+					memory->write<std::uint64_t>(addr + 24, 0);
+					zeroed++;
 				}
 			}
+		}
 
-			if (allgcopages_offset == 0)
-			{
-				for (std::uint64_t offset = 500; offset < 1000; offset += 8)
+		// --- Trigger background VMQ rescan every 5 seconds ---
+		auto now = std::chrono::steady_clock::now();
+		bool scan_due = !vmq_running.load() &&
+			std::chrono::duration_cast<std::chrono::seconds>(now - vmq_last_scan).count() >= 5;
+
+		if (scan_due)
+		{
+			vmq_last_scan = now;
+			vmq_running   = true;
+			HANDLE hProc  = memory->get_process_handle();
+
+			std::thread([hProc]() {
+				std::vector<std::uint64_t> found;
+				MEMORY_BASIC_INFORMATION mbi = {};
+				std::uintptr_t addr = 0x10000;
+				int regions = 0;
+
+				while (addr < 0x7FFFFFFFFFFuLL)
 				{
-					std::uint64_t ptr = memory->read<std::uint64_t>(global_state + offset);
-					if (ptr == 0 || (ptr % 8) != 0 || ptr < 0x100000 || ptr > 0x7FFFFFFFFFFF)
-						continue;
-
-					int pageSize = memory->read<int>(ptr + 32);
-					int blockSize = memory->read<int>(ptr + 36);
-					int busyBlocks = memory->read<int>(ptr + 52);
-
-					if (pageSize >= 4096 && pageSize <= 65536 && blockSize >= 8 && blockSize <= pageSize && busyBlocks >= 0)
-					{
-						allgcopages_offset = offset;
-						printf("[ TUNG-WARE ]: Dynamically resolved allgcopages offset to 0x%llx\n", offset);
-						char buf[128];
-						std::snprintf(buf, sizeof(buf), "DB GC: allgcopages_offset=0x%llX found!", (unsigned long long)offset);
-						notifications::add(buf, notifications::NotificationType::Success, 5.0f);
+					if (VirtualQueryEx(hProc, reinterpret_cast<LPCVOID>(addr), &mbi, sizeof(mbi)) != sizeof(mbi))
 						break;
-					}
-				}
-			}
+					addr = reinterpret_cast<std::uintptr_t>(mbi.BaseAddress) + mbi.RegionSize;
 
-			// Notify if still not found after a few tries
-			if (allgcopages_offset == 0 && scan_call_count % 10 == 0)
-			{
-				notifications::add("DB GC: allgcopages NOT found (heap scan broken)", notifications::NotificationType::Warning, 3.0f);
-			}
-		}
+					// Only committed, readwrite regions of ≤ 4MB
+					if (mbi.State   != MEM_COMMIT)    continue;
+					if ((mbi.Protect & (PAGE_READWRITE | PAGE_EXECUTE_READWRITE)) == 0) continue;
+					if (mbi.RegionSize < 32 || mbi.RegionSize > 4u * 1024 * 1024) continue;
 
-		if (allgcopages_offset == 0) return;
+					std::vector<std::uint8_t> buf(mbi.RegionSize);
+					SIZE_T bytesRead = 0;
+					if (!ReadProcessMemory(hProc, mbi.BaseAddress, buf.data(), mbi.RegionSize, &bytesRead))
+						continue;
+					regions++;
 
-		std::uint64_t page = memory->read<std::uint64_t>(global_state + allgcopages_offset);
-		int page_count = 0;
-		int random_found = 0;
-		int random_zeroed = 0;
-
-		while (page != 0 && page_count < 2000)
-		{
-			page_count++;
-
-			int pageSize = memory->read<int>(page + 32);
-			int blockSize = memory->read<int>(page + 36);
-			int freeNext = memory->read<int>(page + 48);
-			int busyBlocks = memory->read<int>(page + 52);
-
-			if (pageSize > 0 && blockSize > 0 && busyBlocks > 0)
-			{
-				int blockCount = (pageSize - 64) / blockSize;
-				std::uint64_t start_addr = page + 64 + freeNext + blockSize;
-				std::uint64_t end_addr = page + 64 + blockCount * blockSize;
-
-				for (std::uint64_t pos = start_addr; pos < end_addr; pos += blockSize)
-				{
-					std::uint8_t tt = memory->read<std::uint8_t>(pos + 0);
-					if (tt == 9 || tt == 8 || tt == 7)
+					for (std::size_t i = 0; i + 32 <= bytesRead; i += 8)
 					{
-						std::uint64_t metatable = memory->read<std::uint64_t>(pos + 8);
-						if (is_random_metatable(metatable))
-						{
-							random_found++;
-							std::uint64_t state = memory->read<std::uint64_t>(pos + 16);
-							std::uint64_t inc = memory->read<std::uint64_t>(pos + 24);
-							if (state != 0 || inc != 0)
-							{
-								random_zeroed++;
-								memory->write<std::uint64_t>(pos + 16, 0);
-								memory->write<std::uint64_t>(pos + 24, 0);
-								printf("[ TUNG-WARE ]: Zeroed out Random userdata state and increment at 0x%llx\n", pos);
-							}
-						}
+						if (buf[i] != 7) continue; // tt != userdata
+
+						std::uint64_t mt = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 8);
+						if (mt < 0x10000 || mt > 0x7FFFFFFFFFFuLL || (mt % 8) != 0) continue;
+
+						std::uint64_t state = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 16);
+						std::uint64_t inc   = *reinterpret_cast<const std::uint64_t*>(buf.data() + i + 24);
+
+						// PCG property: inc must be odd and non-zero; state must be non-zero
+						if (state == 0 || inc == 0 || (inc & 1) == 0) continue;
+
+						std::uint64_t obj_addr = reinterpret_cast<std::uint64_t>(mbi.BaseAddress) + i;
+						if (is_random_metatable(mt))
+							found.push_back(obj_addr);
 					}
 				}
-			}
 
-			page = memory->read<std::uint64_t>(page + 24);
+				{
+					std::lock_guard<std::mutex> lock(vmq_mutex);
+					vmq_random_addrs = std::move(found);
+				}
+
+				char nbuf[160];
+				std::snprintf(nbuf, sizeof(nbuf),
+					"DB VMQ scan done: %d regions, %d Random objs",
+					regions, (int)vmq_random_addrs.size());
+				notifications::add(nbuf, notifications::NotificationType::Success, 6.0f);
+
+				vmq_running = false;
+			}).detach();
 		}
 
-		// Periodic status every ~10 scan calls (~2 seconds)
-		if (scan_call_count % 10 == 0)
+		// Periodic status every ~10 calls (~2 seconds)
+		if (vmq_call_count % 10 == 0)
 		{
+			int cached;
+			{
+				std::lock_guard<std::mutex> lock(vmq_mutex);
+				cached = static_cast<int>(vmq_random_addrs.size());
+			}
 			char buf[160];
 			std::snprintf(buf, sizeof(buf),
-				"DB GC: pages=%d Random found=%d zeroed=%d",
-				page_count, random_found, random_zeroed);
+				"DB VMQ: cached=%d zeroed/call=%d %s",
+				cached, zeroed, vmq_running.load() ? "(scanning...)" : "");
 			notifications::add(buf, notifications::NotificationType::Info, 2.0f);
 		}
 	}
