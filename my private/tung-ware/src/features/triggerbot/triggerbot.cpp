@@ -1185,20 +1185,33 @@ namespace botter
 						{
 							std::uint64_t g = 0;
 							std::uint64_t offset = luau::find_rngstate_offset(L, g);
-							if (g != 0 && offset != 0)
+							if (g != 0)
 							{
+								// Cache global_state EVEN IF rngstate_offset == 0.
+								// The DB gun uses Random.new() (not global math.random()), so
+								// scan_gc_heap_for_random_objects needs global_state to find and
+								// zero those objects in the GC heap.
 								cached_lua_state = L;
 								cached_global_state = g;
-								cached_rngstate_offset = offset;
-								printf("[ TUNG-WARE ]: Asynchronously resolved global_State to 0x%llx, rngstate offset to 0x%llx\n", g, offset);
-								char buf[128];
-								std::snprintf(buf, sizeof(buf), "DB NoSpread: RNG resolved! gs=0x%llX off=0x%llX", (unsigned long long)g, (unsigned long long)offset);
-								notifications::add(buf, notifications::NotificationType::Success, 8.0f);
+								cached_rngstate_offset = offset; // 0 if LCG scan failed, non-zero if found
+
+								printf("[ TUNG-WARE ]: Resolved global_State=0x%llx, rngstate_offset=0x%llx\n", g, offset);
+								char buf[160];
+								if (offset != 0)
+								{
+									std::snprintf(buf, sizeof(buf), "DB NoSpread: FULL RNG resolved! gs=0x%llX off=0x%llX", (unsigned long long)g, (unsigned long long)offset);
+									notifications::add(buf, notifications::NotificationType::Success, 8.0f);
+								}
+								else
+								{
+									std::snprintf(buf, sizeof(buf), "DB NoSpread: gs=0x%llX found! GC heap scan ACTIVE (no LCG off)", (unsigned long long)g);
+									notifications::add(buf, notifications::NotificationType::Info, 8.0f);
+								}
 							}
 							else
 							{
 								char buf[160];
-								std::snprintf(buf, sizeof(buf), "DB NoSpread: L=0x%llX sc=0x%llX but RNG offset scan FAILED", (unsigned long long)L, (unsigned long long)sc);
+								std::snprintf(buf, sizeof(buf), "DB NoSpread: L=0x%llX sc=0x%llX but global_state NOT found", (unsigned long long)L, (unsigned long long)sc);
 								notifications::add(buf, notifications::NotificationType::Warning, 8.0f);
 							}
 						}
@@ -1315,9 +1328,6 @@ namespace botter
 				}
 
 				// --- DB No Spread: RNG state diagnostics ---
-				// Muzzle position zeroing confirmed useless (game ignores it for spread).
-				// The real mechanism is zeroing cached_global_state + cached_rngstate_offset.
-				// These notifications tell us exactly whether that is happening.
 				{
 					static int  rng_diag_counter   = 0;
 					static bool rng_fired_once     = false;
@@ -1344,24 +1354,28 @@ namespace botter
 						char buf[160];
 						if (gs_ok && rng_ok)
 						{
-							// Show what value is currently at the RNG address
 							std::uint64_t cur_rng = memory->read<std::uint64_t>(cached_global_state + cached_rngstate_offset);
 							std::snprintf(buf, sizeof(buf),
-								"DB RNG OK | gs=0x%llX rng_val=0x%llX",
+								"DB RNG FULL | gs=0x%llX rng_val=0x%llX",
 								(unsigned long long)cached_global_state,
 								(unsigned long long)cur_rng);
 							notifications::add(buf, notifications::NotificationType::Info, 2.0f);
 						}
-						else if (!gs_ok)
+						else if (gs_ok && !rng_ok)
 						{
-							notifications::add("DB NoSpread: global_state NOT resolved (RNG inactive)", notifications::NotificationType::Warning, 2.0f);
+							// global_state found, GC heap scan is active zeroing Random.new() objects
+							std::snprintf(buf, sizeof(buf),
+								"DB NoSpread: GC heap scan ACTIVE | gs=0x%llX",
+								(unsigned long long)cached_global_state);
+							notifications::add(buf, notifications::NotificationType::Info, 2.0f);
 						}
 						else
 						{
-							notifications::add("DB NoSpread: rngstate_offset NOT resolved (RNG inactive)", notifications::NotificationType::Warning, 2.0f);
+							notifications::add("DB NoSpread: global_state NOT resolved (RNG inactive)", notifications::NotificationType::Warning, 2.0f);
 						}
 					}
 				}
+
 			}
 			else
 			{
