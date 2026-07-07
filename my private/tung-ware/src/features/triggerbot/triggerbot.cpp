@@ -112,9 +112,11 @@ namespace {
 		if (global_state == 0) return;
 
 		static std::uint64_t allgcopages_offset = 0;
+		static int scan_call_count = 0;
+		scan_call_count++;
+
 		if (allgcopages_offset == 0)
 		{
-			
 			std::uint64_t p = memory->read<std::uint64_t>(global_state + 744);
 			if (p != 0)
 			{
@@ -126,7 +128,6 @@ namespace {
 				}
 			}
 
-			
 			if (allgcopages_offset == 0)
 			{
 				for (std::uint64_t offset = 500; offset < 1000; offset += 8)
@@ -143,9 +144,18 @@ namespace {
 					{
 						allgcopages_offset = offset;
 						printf("[ TUNG-WARE ]: Dynamically resolved allgcopages offset to 0x%llx\n", offset);
+						char buf[128];
+						std::snprintf(buf, sizeof(buf), "DB GC: allgcopages_offset=0x%llX found!", (unsigned long long)offset);
+						notifications::add(buf, notifications::NotificationType::Success, 5.0f);
 						break;
 					}
 				}
+			}
+
+			// Notify if still not found after a few tries
+			if (allgcopages_offset == 0 && scan_call_count % 10 == 0)
+			{
+				notifications::add("DB GC: allgcopages NOT found (heap scan broken)", notifications::NotificationType::Warning, 3.0f);
 			}
 		}
 
@@ -153,6 +163,8 @@ namespace {
 
 		std::uint64_t page = memory->read<std::uint64_t>(global_state + allgcopages_offset);
 		int page_count = 0;
+		int random_found = 0;
+		int random_zeroed = 0;
 
 		while (page != 0 && page_count < 2000)
 		{
@@ -172,15 +184,17 @@ namespace {
 				for (std::uint64_t pos = start_addr; pos < end_addr; pos += blockSize)
 				{
 					std::uint8_t tt = memory->read<std::uint8_t>(pos + 0);
-					if (tt == 9 || tt == 8 || tt == 7) 
+					if (tt == 9 || tt == 8 || tt == 7)
 					{
 						std::uint64_t metatable = memory->read<std::uint64_t>(pos + 8);
 						if (is_random_metatable(metatable))
 						{
+							random_found++;
 							std::uint64_t state = memory->read<std::uint64_t>(pos + 16);
 							std::uint64_t inc = memory->read<std::uint64_t>(pos + 24);
 							if (state != 0 || inc != 0)
 							{
+								random_zeroed++;
 								memory->write<std::uint64_t>(pos + 16, 0);
 								memory->write<std::uint64_t>(pos + 24, 0);
 								printf("[ TUNG-WARE ]: Zeroed out Random userdata state and increment at 0x%llx\n", pos);
@@ -191,6 +205,16 @@ namespace {
 			}
 
 			page = memory->read<std::uint64_t>(page + 24);
+		}
+
+		// Periodic status every ~10 scan calls (~2 seconds)
+		if (scan_call_count % 10 == 0)
+		{
+			char buf[160];
+			std::snprintf(buf, sizeof(buf),
+				"DB GC: pages=%d Random found=%d zeroed=%d",
+				page_count, random_found, random_zeroed);
+			notifications::add(buf, notifications::NotificationType::Info, 2.0f);
 		}
 	}
 }
