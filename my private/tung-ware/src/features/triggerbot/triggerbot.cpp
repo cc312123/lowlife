@@ -1560,7 +1560,8 @@ namespace botter
 								auto it = ent.parts.find("HumanoidRootPart");
 								if (it == ent.parts.end()) continue;
 
-								math::vector3 epos = it->second.get_primitive().get_position();
+								rbx::part_t hrp_copy = it->second; // mutable copy — get_primitive() is non-const
+								math::vector3 epos = hrp_copy.get_primitive().get_position();
 								float dx = epos.x - barrel_pos.x;
 								float dy = epos.y - barrel_pos.y;
 								float dz = epos.z - barrel_pos.z;
