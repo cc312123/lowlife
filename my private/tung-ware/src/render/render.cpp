@@ -2383,7 +2383,8 @@ void render_t::render_menu()
     draw_list->AddRectFilled(ImVec2(window_pos.x + 226.f, window_pos.y + 71.f), ImVec2(window_pos.x + window_size.x - 14.f, window_pos.y + window_size.y - 14.f), card_bg_col, 6.0f);
     draw_list->AddRect(ImVec2(window_pos.x + 226.f, window_pos.y + 71.f), ImVec2(window_pos.x + window_size.x - 14.f, window_pos.y + window_size.y - 14.f), border_col, 6.0f);
 
-    
+    static int tab_subpages[9] = { 0 };
+
     const char* active_tab_name = "AIMBOT";
     switch (selected_tab_index) {
         case 0: active_tab_name = "AIMBOT CONTROLS"; break;
@@ -2421,7 +2422,6 @@ void render_t::render_menu()
     
 #define SetCursorPos(pos) SetCursorPos(adjust_menu_pos(pos))
 
-    static int tab_subpages[9] = { 0 };
     int& current_page = tab_subpages[selected_tab_index];
 
     const char* page1_names[] = { 
