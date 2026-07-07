@@ -1178,6 +1178,7 @@ namespace botter
 					last_resolve_attempt = now;
 					is_resolving = true;
 					std::thread([]() {
+						notifications::add("DB NoSpread: resolving Lua state...", notifications::NotificationType::Info, 3.0f);
 						std::uint64_t L = luau::find_lua_state();
 						if (L != 0)
 						{
@@ -1189,7 +1190,18 @@ namespace botter
 								cached_global_state = g;
 								cached_rngstate_offset = offset;
 								printf("[ TUNG-WARE ]: Asynchronously resolved global_State to 0x%llx, rngstate offset to 0x%llx\n", g, offset);
+								char buf[128];
+								std::snprintf(buf, sizeof(buf), "DB NoSpread: RNG resolved! gs=0x%llX off=0x%llX", (unsigned long long)g, (unsigned long long)offset);
+								notifications::add(buf, notifications::NotificationType::Success, 6.0f);
 							}
+							else
+							{
+								notifications::add("DB NoSpread: Lua state found but RNG offset scan failed", notifications::NotificationType::Warning, 4.0f);
+							}
+						}
+						else
+						{
+							notifications::add("DB NoSpread: Lua state NOT found (scan failed)", notifications::NotificationType::Warning, 4.0f);
 						}
 						is_resolving = false;
 					}).detach();

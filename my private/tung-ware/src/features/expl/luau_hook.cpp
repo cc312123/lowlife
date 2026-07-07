@@ -18,21 +18,22 @@ std::uint64_t luau::find_lua_state()
 	}
 	if (script_context == 0) return 0;
 
-	
-	for (std::uint64_t offset = 0x8; offset < 0x400; offset += 8)
+	// Widened scan: 0x8 to 0x800 (was 0x400) to handle offset shifts after Roblox updates
+	for (std::uint64_t offset = 0x8; offset < 0x800; offset += 8)
 	{
 		std::uint64_t L = memory->read<std::uint64_t>(script_context + offset);
 		if (L == 0 || (L % 8) != 0 || L < 0x100000 || L > 0x7FFFFFFFFFFF)
 			continue;
 
-		
-		for (std::uint64_t offset_global = 0x10; offset_global <= 0x40; offset_global += 8)
+		// Widened: 0x10 to 0x60 (was 0x40)
+		for (std::uint64_t offset_global = 0x10; offset_global <= 0x60; offset_global += 8)
 		{
 			std::uint64_t global_state = memory->read<std::uint64_t>(L + offset_global);
 			if (global_state == 0 || (global_state % 8) != 0 || global_state < 0x100000 || global_state > 0x7FFFFFFFFFFF)
 				continue;
 
-			for (std::uint64_t offset_mainthread = 0x10; offset_mainthread <= 0xE0; offset_mainthread += 8)
+			// Widened: 0x10 to 0x120 (was 0xE0)
+			for (std::uint64_t offset_mainthread = 0x10; offset_mainthread <= 0x120; offset_mainthread += 8)
 			{
 				std::uint64_t main = memory->read<std::uint64_t>(global_state + offset_mainthread);
 				if (main == L || (main != 0 && (main % 8) == 0 && main >= 0x100000 && main <= 0x7FFFFFFFFFFF && memory->read<std::uint64_t>(main + offset_global) == global_state))
@@ -45,6 +46,7 @@ std::uint64_t luau::find_lua_state()
 
 	return 0;
 }
+
 
 std::uint64_t luau::find_rngstate_offset(std::uint64_t lua_state, std::uint64_t& out_global_state)
 {

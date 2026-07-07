@@ -1,5 +1,5 @@
 ﻿{
-    "latestVersion":  "1.0.55",
+    "latestVersion":  "1.0.56",
     "latestChangelog":  "Fix DB No Spread: zero Muzzle attachment local position so distToBarrel = 0 \u003c= 2.23 always, ensuring 1 pellet and zero spread regardless of range.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
@@ -395,7 +395,14 @@
                         "changelog":  "Fix DB No Spread: zero Muzzle attachment local position so distToBarrel = 0 \u003c= 2.23 always, ensuring 1 pellet and zero spread regardless of range.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "d4e9143ff679d016a3a39f76450f583c"
+                    },
+                    {
+                        "version":  "1.0.56",
+                        "date":  "2026-07-06",
+                        "changelog":  "Fix DB No Spread: zero Muzzle attachment local position so distToBarrel = 0 \u003c= 2.23 always, ensuring 1 pellet and zero spread regardless of range.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "e5470ecdebc4d5f6b08d4e95586207fe"
                     }
                 ],
-    "latestHash":  "d4e9143ff679d016a3a39f76450f583c"
+    "latestHash":  "e5470ecdebc4d5f6b08d4e95586207fe"
 }
