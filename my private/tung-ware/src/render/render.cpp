@@ -2391,7 +2391,10 @@ void render_t::render_menu()
         case 2: active_tab_name = "MISCELLANEOUS HACKS"; break;
         case 3: active_tab_name = "SYSTEM CONFIGURATIONS"; break;
         case 4: active_tab_name = "DATABASE PROFILES"; break;
-        case 5: active_tab_name = "SHOT DIAGNOSTICS"; break;
+        case 5:
+            if (tab_subpages[5] == 2) active_tab_name = "COLOR BULLET DETECT";
+            else active_tab_name = "SHOT DIAGNOSTICS";
+            break;
         case 6: active_tab_name = "AUTOMATIC TRIGGERBOT"; break;
         case 7: active_tab_name = "PLAYERS DATABASE"; break;
         case 8: active_tab_name = "SILENT AIM TARGETING"; break;
@@ -2491,7 +2494,29 @@ void render_t::render_menu()
         current_page = 1;
     }
     ImGui::PopStyleColor(4);
-    
+
+    // Extra "Color Detect" page button only for Shot Detect tab (5)
+    if (selected_tab_index == 5)
+    {
+        ImGui::SameLine(0, 8.f);
+        bool page3_selected = (current_page == 2);
+        if (page3_selected) {
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 0.25f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 0.35f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 0.45f));
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+        } else {
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(24.f/255.f, 24.f/255.f, 30.f/255.f, 0.6f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(35.f/255.f, 35.f/255.f, 45.f/255.f, 0.8f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(45.f/255.f, 45.f/255.f, 55.f/255.f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.6f, 0.6f, 0.65f, 1.0f));
+        }
+        if (ImGui::Button("Color Detect", ImVec2(btn_width, 28.f))) {
+            current_page = 2;
+        }
+        ImGui::PopStyleColor(4);
+    }
+
     ImGui::PopStyleVar(2);
     
     switch (selected_tab_index)
@@ -3631,6 +3656,167 @@ void render_t::render_menu()
             } else {
                 ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "[None]");
             }
+
+            ImGui::EndChild();
+            ImGui::PopStyleVar();
+        }
+        else if (current_page == 2)
+        {
+            ImGui::SetCursorPos(ImVec2(22.f, 114.f));
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
+            ImGui::BeginChild("Color Detect Page", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
+
+            ImGui::TextColored(menu::accent_color, "Color-Based Bullet Detection");
+            ImGui::TextColored(ImVec4(0.6f,0.6f,0.6f,1.f), "Detects bullets by BrickColor appearing in workspace.");
+            ImGui::Spacing();
+            ImGui::Separator();
+            ImGui::Spacing();
+
+            ImGui::Checkbox("Enable Color Detect", &settings::color_detect::enabled);
+            if (settings::color_detect::enabled)
+            {
+                ImGui::SameLine();
+                inline_keybind_button("color_detect_keybind", &settings::color_detect::trigger_keybind, &settings::color_detect::trigger_keybind_mode);
+            }
+
+            ImGui::Spacing();
+            ImGui::Separator();
+            ImGui::Spacing();
+
+            ImGui::TextColored(menu::accent_color, "Da Hood Skin Preset");
+            ImGui::TextColored(ImVec4(0.6f,0.6f,0.6f,1.f), "Select a skin to auto-fill bullet color:");
+            ImGui::Spacing();
+
+            static const char* skin_presets[] = {
+                "Custom (set manually)",
+                "Default / White  [1.00, 1.00, 1.00]",
+                "Icy Blue         [0.50, 0.80, 1.00]",
+                "Crimson Red      [0.80, 0.10, 0.10]",
+                "Neon Green       [0.10, 0.90, 0.20]",
+                "Gold             [1.00, 0.80, 0.00]",
+                "Purple           [0.50, 0.00, 0.80]",
+                "Orange           [1.00, 0.50, 0.00]",
+                "Hot Pink         [1.00, 0.40, 0.70]",
+                "Cyan             [0.00, 0.90, 0.90]",
+                "Black            [0.05, 0.05, 0.05]",
+                "Yellow           [1.00, 1.00, 0.00]",
+                "Dark Blue        [0.10, 0.10, 0.80]",
+                "Lime             [0.50, 1.00, 0.00]",
+                "Silver           [0.75, 0.75, 0.75]",
+            };
+            static const float skin_colors[][3] = {
+                {-1.f,-1.f,-1.f},
+                {1.00f,1.00f,1.00f},
+                {0.50f,0.80f,1.00f},
+                {0.80f,0.10f,0.10f},
+                {0.10f,0.90f,0.20f},
+                {1.00f,0.80f,0.00f},
+                {0.50f,0.00f,0.80f},
+                {1.00f,0.50f,0.00f},
+                {1.00f,0.40f,0.70f},
+                {0.00f,0.90f,0.90f},
+                {0.05f,0.05f,0.05f},
+                {1.00f,1.00f,0.00f},
+                {0.10f,0.10f,0.80f},
+                {0.50f,1.00f,0.00f},
+                {0.75f,0.75f,0.75f},
+            };
+
+            ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - 10.f);
+            if (ImGui::Combo("##SkinPreset", &settings::color_detect::selected_preset, skin_presets, IM_ARRAYSIZE(skin_presets)))
+            {
+                int idx = settings::color_detect::selected_preset;
+                if (idx > 0 && skin_colors[idx][0] >= 0.f)
+                {
+                    settings::color_detect::bullet_color[0] = skin_colors[idx][0];
+                    settings::color_detect::bullet_color[1] = skin_colors[idx][1];
+                    settings::color_detect::bullet_color[2] = skin_colors[idx][2];
+                }
+            }
+            ImGui::PopItemWidth();
+
+            ImGui::Spacing();
+            ImGui::Separator();
+            ImGui::Spacing();
+
+            ImGui::TextColored(menu::accent_color, "Bullet Color (RGB)");
+            ImGui::Spacing();
+            ImVec4 swatch_col(settings::color_detect::bullet_color[0], settings::color_detect::bullet_color[1], settings::color_detect::bullet_color[2], 1.f);
+            ImGui::PushStyleColor(ImGuiCol_Button, swatch_col);
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, swatch_col);
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, swatch_col);
+            ImGui::Button("##ColorSwatch", ImVec2(32.f, 32.f));
+            ImGui::PopStyleColor(3);
+            ImGui::SameLine();
+            ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - 10.f);
+            if (ImGui::ColorEdit3("##BulletColor", settings::color_detect::bullet_color, ImGuiColorEditFlags_Float | ImGuiColorEditFlags_DisplayRGB))
+                settings::color_detect::selected_preset = 0;
+            ImGui::PopItemWidth();
+
+            ImGui::Spacing();
+            ImGui::Text("Color Tolerance:");
+            ImGui::SameLine();
+            ImGui::TextColored(menu::accent_color, "%.3f", settings::color_detect::color_tolerance);
+            ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - 10.f);
+            ImGui::SliderFloat("##ColorTol", &settings::color_detect::color_tolerance, 0.01f, 0.5f, "%.3f");
+            ImGui::PopItemWidth();
+
+            ImGui::Spacing();
+            ImGui::Separator();
+            ImGui::Spacing();
+
+            ImGui::TextColored(menu::accent_color, "Scan Settings");
+            ImGui::Spacing();
+            ImGui::Text("Radius (studs):");
+            ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - 10.f);
+            ImGui::SliderFloat("##ScanRadius", &settings::color_detect::scan_radius, 10.f, 2000.f, "%.0f");
+            ImGui::PopItemWidth();
+            ImGui::Spacing();
+            ImGui::Text("Scan Interval (ms):");
+            ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - 10.f);
+            ImGui::SliderInt("##ScanInterval", &settings::color_detect::scan_interval_ms, 1, 100);
+            ImGui::PopItemWidth();
+
+            ImGui::Spacing();
+            ImGui::Separator();
+            ImGui::Spacing();
+
+            ImGui::TextColored(menu::accent_color, "Click Settings");
+            ImGui::Spacing();
+            const char* cd_modes[] = { "Continuous", "Single Click" };
+            ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - 10.f);
+            ImGui::Combo("##CDClickMode", &settings::color_detect::click_mode, cd_modes, IM_ARRAYSIZE(cd_modes));
+            ImGui::PopItemWidth();
+            ImGui::Spacing();
+            ImGui::Checkbox("Randomize Delay##CD", &settings::color_detect::randomize_delay);
+            ImGui::Spacing();
+            if (settings::color_detect::randomize_delay)
+            {
+                ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - 10.f);
+                ImGui::SliderInt("Min Delay (ms)##CD", &settings::color_detect::min_delay, 1, 1000);
+                ImGui::Spacing();
+                ImGui::SliderInt("Max Delay (ms)##CD", &settings::color_detect::max_delay, 1, 1000);
+                ImGui::PopItemWidth();
+            }
+            else
+            {
+                ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - 10.f);
+                ImGui::SliderInt("Reaction Delay (ms)##CD", &settings::color_detect::click_delay, 1, 1000);
+                ImGui::Spacing();
+                if (settings::color_detect::click_mode == 0)
+                    ImGui::SliderInt("Autoclick CPS##CD", &settings::color_detect::cps, 1, 100);
+                ImGui::PopItemWidth();
+            }
+
+            ImGui::Spacing();
+            ImGui::Separator();
+            ImGui::Spacing();
+            ImGui::Text("Color Detect:");
+            ImGui::SameLine();
+            if (settings::color_detect::enabled)
+                ImGui::TextColored(menu::accent_color, "ACTIVE");
+            else
+                ImGui::TextColored(ImVec4(0.6f,0.6f,0.6f,1.f), "DISABLED");
 
             ImGui::EndChild();
             ImGui::PopStyleVar();

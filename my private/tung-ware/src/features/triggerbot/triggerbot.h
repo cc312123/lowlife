@@ -20,3 +20,13 @@ namespace shot_detect
 	int get_target_ammo(const cache::entity_t& target);
 }
 
+namespace color_detect
+{
+	// Set to true when the color detect loop fires a shot detection
+	extern std::atomic<bool> shot_fired;
+	// Shared mutex for color_detect state
+	inline std::mutex g_color_detect_mutex;
+
+	void run();
+}
+

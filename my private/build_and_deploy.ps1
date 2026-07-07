@@ -67,8 +67,8 @@ if (-not (Test-Path $BuildExe)) {
 }
 
 $ReleasesJsonPath = Join-Path $PSScriptRoot "updates-server\releases.json"
-$newVersion = "1.0.68"
-$changelogText = "Fix DB No Spread: zero Muzzle attachment local position so distToBarrel = 0 <= 2.23 always, ensuring 1 pellet and zero spread regardless of range."
+$newVersion = "1.0.69"
+$changelogText = "Shot Detect: exhaustive ammo search (tool, DataFolder, character, Backpack) + ammo-found notification. New Color Detect tab: scan workspace for bullet BrickColor, 15 Da Hood skin presets, color picker, tolerance, radius, keybind, click settings."
 
 if (Test-Path $ReleasesJsonPath) {
     $json = Get-Content $ReleasesJsonPath -Raw | ConvertFrom-Json

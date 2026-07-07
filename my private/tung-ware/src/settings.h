@@ -252,6 +252,31 @@ namespace settings
 		inline bool always_start_with_db{ false };
 	}
 
+	namespace color_detect
+	{
+		inline bool enabled{ false };
+		inline int trigger_keybind{ 'C' };
+		inline int trigger_keybind_mode{ 0 };
+		inline int click_mode{ 0 };     // 0 = Continuous, 1 = Single
+		inline int cps{ 50 };
+		inline int click_delay{ 100 };
+		inline bool randomize_delay{ false };
+		inline int min_delay{ 50 };
+		inline int max_delay{ 150 };
+
+		// Target bullet color (R,G,B 0.0-1.0)
+		inline float bullet_color[3]{ 1.0f, 0.0f, 0.0f }; // default red
+		inline float color_tolerance{ 0.15f };             // how close RGB must be
+
+		// Scan settings
+		inline float scan_radius{ 500.0f };                // stud radius around local player to scan
+		inline int scan_interval_ms{ 16 };                 // how often to scan (ms)
+
+		// Preset skin colors – names for the combo
+		// These can be selected from the UI to auto-fill bullet_color
+		inline int selected_preset{ 0 };                   // index into preset list
+	}
+
 	namespace player_relations
 	{
 		inline std::mutex relations_mutex;

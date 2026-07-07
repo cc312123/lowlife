@@ -2295,6 +2295,7 @@ namespace shot_detect
 				return -1;
 			}
 
+			// Find the equipped tool in the character
 			rbx::instance_t equipped_tool = {};
 			for (auto& child : model_inst.get_children())
 			{
@@ -2306,6 +2307,27 @@ namespace shot_detect
 				}
 			}
 
+			// If no tool equipped in character, try Backpack
+			if (equipped_tool.address == 0 && target.instance.address != 0)
+			{
+				try {
+					rbx::instance_t player_inst{ target.instance.address };
+					rbx::instance_t backpack = player_inst.find_first_child("Backpack");
+					if (backpack.address != 0)
+					{
+						for (auto& child : backpack.get_children())
+						{
+							std::string cclass = child.get_class_name();
+							if (cclass == "Tool" || cclass == "HopperBin")
+							{
+								equipped_tool = child;
+								break;
+							}
+						}
+					}
+				} catch (...) {}
+			}
+
 			if (equipped_tool.address == 0)
 			{
 				cached_equipped_tool_address = 0;
@@ -2314,8 +2336,8 @@ namespace shot_detect
 			}
 
 			// Read directly from cached address if target and tool are unchanged
-			if (target.instance.address == cached_target_address && 
-				equipped_tool.address == cached_equipped_tool_address && 
+			if (target.instance.address == cached_target_address &&
+				equipped_tool.address == cached_equipped_tool_address &&
 				cached_ammo_object_address != 0)
 			{
 				rbx::instance_t ammo_val_obj{ cached_ammo_object_address };
@@ -2326,28 +2348,80 @@ namespace shot_detect
 			cached_equipped_tool_address = equipped_tool.address;
 			cached_ammo_object_address = 0;
 
-			// Quick scan of immediate children first
-			for (auto& child : equipped_tool.get_children())
-			{
-				std::string name = child.get_name();
-				std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-				if (name == "ammo" || name == "clip")
-				{
-					std::string cclass = child.get_class_name();
-					if (cclass.find("Value") != std::string::npos)
+			// Helper lambda: try to find ammo in a container instance
+			auto try_find_ammo = [&](rbx::instance_t& container) -> rbx::instance_t {
+				if (container.address == 0) return {};
+				// 1. Direct children scan (exact name match)
+				try {
+					for (auto& child : container.get_children())
 					{
-						cached_ammo_object_address = child.address;
-						return read_value_instance(child);
+						std::string name = child.get_name();
+						std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+						if (name == "ammo" || name == "clip" || name == "bullets" || name == "rounds" || name == "magazine")
+						{
+							std::string cclass = child.get_class_name();
+							if (cclass.find("Value") != std::string::npos)
+								return child;
+						}
 					}
-				}
+				} catch (...) {}
+				// 2. Substring descendant search (deep scan)
+				try {
+					return container.find_descendant_value_by_name_substrings({ "ammo", "clip", "bullets", "rounds", "mag" });
+				} catch (...) {}
+				return {};
+			};
+
+			// --- Pass 1: equipped tool (character) ---
+			rbx::instance_t ammo_val_obj = try_find_ammo(equipped_tool);
+
+			// --- Pass 2: DataFolder inside the tool ---
+			if (ammo_val_obj.address == 0)
+			{
+				try {
+					rbx::instance_t data_folder = equipped_tool.find_first_child("DataFolder");
+					if (data_folder.address != 0)
+						ammo_val_obj = try_find_ammo(data_folder);
+				} catch (...) {}
 			}
 
-			// Recursive descendant search fallback
-			rbx::instance_t ammo_val_obj = equipped_tool.find_descendant_value_by_name_substrings({ "ammo", "clip" });
+			// --- Pass 3: try the character model itself (some games store ammo there) ---
+			if (ammo_val_obj.address == 0)
+				ammo_val_obj = try_find_ammo(model_inst);
+
+			// --- Pass 4: try the Backpack's version of the same tool ---
+			if (ammo_val_obj.address == 0 && target.instance.address != 0)
+			{
+				try {
+					rbx::instance_t player_inst{ target.instance.address };
+					rbx::instance_t backpack = player_inst.find_first_child("Backpack");
+					if (backpack.address != 0)
+					{
+						std::string tool_name = equipped_tool.get_name();
+						rbx::instance_t bp_tool = backpack.find_first_child(tool_name);
+						if (bp_tool.address != 0)
+							ammo_val_obj = try_find_ammo(bp_tool);
+						if (ammo_val_obj.address == 0)
+							ammo_val_obj = try_find_ammo(backpack);
+					}
+				} catch (...) {}
+			}
+
 			if (ammo_val_obj.address != 0)
 			{
+				bool newly_cached = (cached_ammo_object_address == 0);
 				cached_ammo_object_address = ammo_val_obj.address;
-				return read_value_instance(ammo_val_obj);
+				int val = read_value_instance(ammo_val_obj);
+				if (newly_cached)
+				{
+					// Notify user that ammo value was found
+					char notif[128];
+					std::snprintf(notif, sizeof(notif),
+						"Ammo Found! Tool: %s | Val: %d",
+						equipped_tool.get_name().c_str(), val);
+					notifications::add(notif, notifications::NotificationType::Success, 3.0f);
+				}
+				return val;
 			}
 		} catch (...) {}
 
@@ -2574,6 +2648,313 @@ namespace shot_detect
 			{
 				is_clicking = false;
 				last_ammo_val = -1;
+			}
+		}
+	}
+}
+
+// ============================================================
+// color_detect – bullet-color-based shot detection
+// Scans workspace for newly spawned BaseParts whose Color3
+// matches the configured bullet color, within a radius of the
+// local player. On match, fires a click just like shot_detect.
+// ============================================================
+namespace color_detect
+{
+	std::atomic<bool> shot_fired{ false };
+
+	static void trigger_immediate_click()
+	{
+		notifications::add("Color Detect: Clicking...", notifications::NotificationType::Success, 1.0f);
+		INPUT input = {};
+		input.type = INPUT_MOUSE;
+		input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+		SendInput(1, &input, sizeof(INPUT));
+		Sleep(15);
+		input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
+		SendInput(1, &input, sizeof(INPUT));
+	}
+
+	static bool get_keybind_state()
+	{
+		switch (settings::color_detect::trigger_keybind_mode)
+		{
+		case 0:
+			return (GetAsyncKeyState(settings::color_detect::trigger_keybind) & 0x8000) != 0;
+		case 1:
+			{
+				static bool key_was_pressed = false;
+				static bool toggle_state = false;
+				bool pressed = (GetAsyncKeyState(settings::color_detect::trigger_keybind) & 0x8000) != 0;
+				if (pressed && !key_was_pressed) toggle_state = !toggle_state;
+				key_was_pressed = pressed;
+				return toggle_state;
+			}
+		case 2:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	// Returns true if (r,g,b) are within tolerance of the configured bullet_color
+	static bool color_matches(float r, float g, float b)
+	{
+		float dr = r - settings::color_detect::bullet_color[0];
+		float dg = g - settings::color_detect::bullet_color[1];
+		float db = b - settings::color_detect::bullet_color[2];
+		float dist = std::sqrt(dr*dr + dg*dg + db*db);
+		return dist <= settings::color_detect::color_tolerance;
+	}
+
+	// Returns the Color3 of a part (r,g,b in 0..1). Returns false on failure.
+	static bool get_part_color(std::uint64_t part_addr, float& r, float& g, float& b)
+	{
+		try {
+			// Color3 is stored as 3 floats at Offsets::BasePart::Color3
+			std::uint64_t color_addr = part_addr + Offsets::BasePart::Color3;
+			r = memory->read<float>(color_addr);
+			g = memory->read<float>(color_addr + 4);
+			b = memory->read<float>(color_addr + 8);
+			// Sanity check
+			if (r < 0.0f || r > 1.0f || g < 0.0f || g > 1.0f || b < 0.0f || b > 1.0f)
+				return false;
+			return true;
+		} catch (...) { return false; }
+	}
+
+	// Recursively scans an instance's children for bullet-colored parts.
+	// Returns true if a matching part is found.
+	static bool scan_for_bullet_color(rbx::instance_t parent, math::vector3 local_pos, float radius_sq, int depth = 0)
+	{
+		if (depth > 6 || !parent.address) return false;
+		std::vector<rbx::instance_t> children;
+		try { children = parent.get_children(); } catch (...) { return false; }
+
+		for (auto& child : children)
+		{
+			if (!child.address) continue;
+			try {
+				std::string cname = child.get_class_name();
+				if (cname == "Part" || cname == "MeshPart" || cname == "SpecialMesh")
+				{
+					// Check transparency – bullets should be mostly opaque
+					float trans = memory->read<float>(child.address + Offsets::BasePart::Transparency);
+					if (trans > 0.5f) continue;
+
+					// Get color
+					float r, g, b;
+					if (!get_part_color(child.address, r, g, b)) continue;
+					if (!color_matches(r, g, b)) continue;
+
+					// Get position – check radius
+					try {
+						rbx::part_t part_inst{ child.address };
+						math::vector3 pos = part_inst.get_primitive().get_position();
+						float dx = pos.x - local_pos.x;
+						float dy = pos.y - local_pos.y;
+						float dz = pos.z - local_pos.z;
+						float dist_sq = dx*dx + dy*dy + dz*dz;
+						if (dist_sq <= radius_sq)
+						{
+							char notif[128];
+							std::snprintf(notif, sizeof(notif),
+								"Color Detect: Bullet found (%.2f,%.2f,%.2f) dist=%.1f",
+								r, g, b, std::sqrt(dist_sq));
+							notifications::add(notif, notifications::NotificationType::Success, 2.0f);
+							return true;
+						}
+					} catch (...) {}
+				}
+				// Recurse into Folders/Models (not into characters)
+				else if (cname == "Folder" || cname == "Model")
+				{
+					if (scan_for_bullet_color(child, local_pos, radius_sq, depth + 1))
+						return true;
+				}
+			} catch (...) {}
+		}
+		return false;
+	}
+
+	void run()
+	{
+		bool is_clicking = false;
+		bool is_first_click = true;
+		auto last_click_time = std::chrono::steady_clock::now();
+		int current_delay = 100;
+
+		// Track part address set to detect NEW parts (not re-report existing ones)
+		std::unordered_set<std::uint64_t> seen_parts;
+		auto last_seen_clear = std::chrono::steady_clock::now();
+
+		while (true)
+		{
+			Sleep(settings::color_detect::scan_interval_ms > 0 ? settings::color_detect::scan_interval_ms : 16);
+
+			if (!settings::color_detect::enabled || !game::workspace.address || !game::local_character.address)
+			{
+				is_clicking = false;
+				seen_parts.clear();
+				continue;
+			}
+
+			if (!get_keybind_state())
+			{
+				is_clicking = false;
+				continue;
+			}
+
+			// Clear stale part set every 2 seconds to avoid memory bloat
+			auto now_ts = std::chrono::steady_clock::now();
+			if (std::chrono::duration_cast<std::chrono::seconds>(now_ts - last_seen_clear).count() >= 2)
+			{
+				seen_parts.clear();
+				last_seen_clear = now_ts;
+			}
+
+			// Get local player position
+			math::vector3 local_pos = {};
+			try {
+				rbx::instance_t local_char{ game::local_character.address };
+				rbx::instance_t hrp = local_char.find_first_child("HumanoidRootPart");
+				if (hrp.address != 0)
+				{
+					rbx::part_t hrp_part{ hrp.address };
+					local_pos = hrp_part.get_primitive().get_position();
+				}
+			} catch (...) { continue; }
+
+			float r_sq = settings::color_detect::scan_radius * settings::color_detect::scan_radius;
+
+			// Scan workspace top-level for new colored parts
+			bool bullet_detected = false;
+			try {
+				rbx::instance_t workspace{ game::workspace.address };
+				auto top_children = workspace.get_children();
+				for (auto& child : top_children)
+				{
+					if (!child.address) continue;
+					// Skip already seen parts
+					if (seen_parts.count(child.address)) continue;
+
+					try {
+						std::string cname = child.get_class_name();
+						if (cname == "Part" || cname == "MeshPart")
+						{
+							float trans = memory->read<float>(child.address + Offsets::BasePart::Transparency);
+							if (trans > 0.5f) { seen_parts.insert(child.address); continue; }
+
+							float cr, cg, cb;
+							if (get_part_color(child.address, cr, cg, cb) && color_matches(cr, cg, cb))
+							{
+								try {
+									rbx::part_t part_inst{ child.address };
+									math::vector3 pos = part_inst.get_primitive().get_position();
+									float dx = pos.x - local_pos.x;
+									float dy = pos.y - local_pos.y;
+									float dz = pos.z - local_pos.z;
+									if (dx*dx + dy*dy + dz*dz <= r_sq)
+									{
+										char notif[128];
+										std::snprintf(notif, sizeof(notif),
+											"Color Detect: Bullet (%.2f,%.2f,%.2f) dist=%.1f",
+											cr, cg, cb, std::sqrt(dx*dx+dy*dy+dz*dz));
+										notifications::add(notif, notifications::NotificationType::Success, 2.0f);
+										bullet_detected = true;
+									}
+								} catch (...) {}
+							}
+							seen_parts.insert(child.address);
+						}
+						else if (cname == "Folder" || cname == "Model")
+						{
+							if (scan_for_bullet_color(child, local_pos, r_sq))
+								bullet_detected = true;
+						}
+						seen_parts.insert(child.address);
+					} catch (...) {}
+				}
+			} catch (...) {}
+
+			if (bullet_detected && !is_clicking)
+			{
+				is_clicking = true;
+				is_first_click = true;
+
+				if (settings::color_detect::randomize_delay)
+				{
+					int mn = settings::color_detect::min_delay;
+					int mx = settings::color_detect::max_delay;
+					if (mn > mx) std::swap(mn, mx);
+					if (mn < 1) mn = 1;
+					if (mx < 1) mx = 1;
+					std::random_device rd;
+					std::mt19937 gen(rd());
+					std::uniform_int_distribution<> distrib(mn, mx);
+					current_delay = distrib(gen);
+				}
+				else
+				{
+					current_delay = settings::color_detect::click_delay;
+				}
+				last_click_time = std::chrono::steady_clock::now();
+			}
+
+			if (is_clicking)
+			{
+				if (settings::color_detect::click_mode == 0) // Continuous
+				{
+					auto now = std::chrono::steady_clock::now();
+					auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_click_time).count();
+
+					int target_delay = current_delay;
+					if (!settings::color_detect::randomize_delay)
+					{
+						if (is_first_click)
+							target_delay = settings::color_detect::click_delay;
+						else
+						{
+							int cps = settings::color_detect::cps;
+							if (cps < 1) cps = 1;
+							target_delay = 1000 / cps;
+						}
+					}
+					if (duration >= target_delay)
+					{
+						trigger_immediate_click();
+						last_click_time = now;
+						is_first_click = false;
+						if (settings::color_detect::randomize_delay)
+						{
+							int mn = settings::color_detect::min_delay;
+							int mx = settings::color_detect::max_delay;
+							if (mn > mx) std::swap(mn, mx);
+							if (mn < 1) mn = 1; if (mx < 1) mx = 1;
+							std::random_device rd;
+							std::mt19937 gen(rd());
+							std::uniform_int_distribution<> distrib(mn, mx);
+							current_delay = distrib(gen);
+						}
+						else
+						{
+							int cps = settings::color_detect::cps;
+							if (cps < 1) cps = 1;
+							current_delay = 1000 / cps;
+						}
+					}
+				}
+				else // Single Click
+				{
+					auto now = std::chrono::steady_clock::now();
+					auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_click_time).count();
+					int target_delay = settings::color_detect::randomize_delay ? current_delay : settings::color_detect::click_delay;
+					if (duration >= target_delay)
+					{
+						trigger_immediate_click();
+						is_clicking = false;
+					}
+				}
 			}
 		}
 	}
