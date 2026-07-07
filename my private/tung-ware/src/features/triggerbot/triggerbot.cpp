@@ -1466,6 +1466,137 @@ namespace botter
 					}
 				}
 
+				// =========================================================
+				// DB No Spread: DISTANCE-BASED approach
+				// The DB gun calculates spread as f(distance_to_barrel).
+				// At distance <= 2.23 studs, spread = 0.
+				// Strategy A: zero any Spread/Accuracy NumberValue in the tool.
+				// Strategy B: write Handle position to be exactly 2.23 studs
+				//             from nearest enemy so gun script reads distance=2.23.
+				// =========================================================
+				{
+					static std::uint64_t db_spread_val_addr  = 0; // Spread NumberValue address
+					static std::uint64_t db_handle_prim_addr = 0; // Handle primitive address
+					static std::uint64_t db_last_tool_addr   = 0; // detect tool changes
+					static int           db_rescan_ctr       = 0;
+					static bool          db_notif_sent       = false;
+
+					// Reset on tool change
+					if (equipped_tool.address != db_last_tool_addr)
+					{
+						db_last_tool_addr   = equipped_tool.address;
+						db_spread_val_addr  = 0;
+						db_handle_prim_addr = 0;
+						db_notif_sent       = false;
+						db_rescan_ctr       = 0;
+					}
+
+					// Re-scan every ~500 ticks (~1 second at 2ms sleep)
+					db_rescan_ctr++;
+					if (db_handle_prim_addr == 0 || db_rescan_ctr % 500 == 1)
+					{
+						// Strategy A: find Spread NumberValue
+						if (db_spread_val_addr == 0)
+						{
+							rbx::instance_t sv = equipped_tool.find_descendant_value_by_name_substrings(
+								{"spread", "scatter", "accuracy", "deviation"}, 8);
+							if (sv.address != 0)
+							{
+								db_spread_val_addr = sv.address;
+								if (!db_notif_sent)
+								{
+									db_notif_sent = true;
+									char nb[128];
+									std::snprintf(nb, sizeof(nb),
+										"DB Dist: Spread cfg 0x%llX -> 0",
+										(unsigned long long)db_spread_val_addr);
+									notifications::add(nb, notifications::NotificationType::Success, 5.0f);
+								}
+							}
+						}
+
+						// Strategy B: find Handle primitive
+						if (db_handle_prim_addr == 0)
+						{
+							rbx::instance_t h = equipped_tool.find_first_child("Handle");
+							if (h.address != 0)
+							{
+								rbx::part_t     hp{ h.address };
+								rbx::primitive_t prim = hp.get_primitive();
+								if (prim.address != 0)
+									db_handle_prim_addr = prim.address;
+							}
+						}
+					}
+
+					// Strategy A: zero spread config value every tick
+					if (db_spread_val_addr != 0)
+						memory->write<double>(db_spread_val_addr + Offsets::Misc::Value, 0.0);
+
+					// Strategy B: fake barrel position = 2.23 studs from nearest enemy
+					if (db_handle_prim_addr != 0)
+					{
+						math::vector3 barrel_pos = memory->read<math::vector3>(
+							db_handle_prim_addr + Offsets::Primitive::Position);
+
+						// Find nearest alive enemy from entity cache
+						math::vector3 nearest_pos   = {};
+						float         nearest_dist_sq = 1e18f;
+						bool          found           = false;
+
+						std::shared_ptr<std::vector<cache::entity_t>> snap;
+						{
+							std::lock_guard<std::mutex> lk(cache::mtx);
+							snap = cache::cached_players;
+						}
+						if (snap)
+						{
+							for (const auto& ent : *snap)
+							{
+								if (cache::is_local_player(ent)) continue;
+								if (ent.is_knocked)             continue;
+								if (ent.health <= 0.0f)         continue;
+
+								auto it = ent.parts.find("HumanoidRootPart");
+								if (it == ent.parts.end()) continue;
+
+								math::vector3 epos = it->second.get_primitive().get_position();
+								float dx = epos.x - barrel_pos.x;
+								float dy = epos.y - barrel_pos.y;
+								float dz = epos.z - barrel_pos.z;
+								float dsq = dx * dx + dy * dy + dz * dz;
+								if (dsq < nearest_dist_sq)
+								{
+									nearest_dist_sq = dsq;
+									nearest_pos     = epos;
+									found           = true;
+								}
+							}
+						}
+
+						if (found)
+						{
+							// Direction from enemy toward barrel, scaled to 2.23 studs
+							float dx   = barrel_pos.x - nearest_pos.x;
+							float dy   = barrel_pos.y - nearest_pos.y;
+							float dz   = barrel_pos.z - nearest_pos.z;
+							float dist = std::sqrt(dx * dx + dy * dy + dz * dz);
+							if (dist > 0.001f)
+							{
+								float inv = 2.23f / dist;
+								math::vector3 fake_pos = {
+									nearest_pos.x + dx * inv,
+									nearest_pos.y + dy * inv,
+									nearest_pos.z + dz * inv
+								};
+								memory->write<math::vector3>(
+									db_handle_prim_addr + Offsets::Primitive::Position, fake_pos);
+							}
+						}
+					}
+				}
+				// =========================================================
+
 			}
 			else
 			{
