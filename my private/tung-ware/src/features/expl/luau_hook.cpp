@@ -7,7 +7,7 @@
 #include <thread>
 #include <chrono>
 
-std::uint64_t luau::find_lua_state()
+std::uint64_t luau::find_lua_state(std::uint64_t* out_script_context)
 {
 	if (game::datamodel.address == 0) return 0;
 
@@ -16,6 +16,8 @@ std::uint64_t luau::find_lua_state()
 	{
 		script_context = memory->read<std::uint64_t>(game::datamodel.address + Offsets::DataModel::ScriptContext);
 	}
+
+	if (out_script_context) *out_script_context = script_context;
 	if (script_context == 0) return 0;
 
 	// Widened scan: 0x8 to 0x800 (was 0x400) to handle offset shifts after Roblox updates
