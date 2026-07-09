@@ -2450,7 +2450,8 @@ void render_t::render_menu()
     ImGui::SetCursorPos(ImVec2(22.f, 78.f));
     
     float avail_width = ImGui::GetContentRegionAvail().x - 13.f;
-    float btn_width = (avail_width - 8.f) / 2.f;
+    bool has_three_pages = (selected_tab_index == 5);
+    float btn_width = has_three_pages ? (avail_width - 16.f) / 3.f : (avail_width - 8.f) / 2.f;
 
     ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4.f);
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(12.f, 6.f));
@@ -2495,8 +2496,8 @@ void render_t::render_menu()
     }
     ImGui::PopStyleColor(4);
 
-    // Extra "Color Detect" page button only for Shot Detect tab (5)
-    if (selected_tab_index == 5)
+    // Third "Color Detect" button only for Shot Detect tab (5)
+    if (has_three_pages)
     {
         ImGui::SameLine(0, 8.f);
         bool page3_selected = (current_page == 2);
