@@ -2701,20 +2701,20 @@ namespace shot_detect
 				}
 			}
 
-			// === SOUND OFFSET SCANNER (always-on while target locked) ===
+			// === SOUND OFFSET SCANNER (Full 0x000 - 0x350 range) ===
 			if (has_target_val && target_still_valid)
 			{
 				std::uint64_t scan_sound_addr = get_target_shoot_sound(current_target_state, current_tool_addr);
 				if (scan_sound_addr != 0)
 				{
-					static std::uint8_t snd_snap[0x100] = {};
+					static std::uint8_t snd_snap[0x350] = {};
 					static std::uint64_t snd_snap_addr = 0;
 					static auto snd_snap_t = std::chrono::steady_clock::now();
 					static auto snd_ping_t = std::chrono::steady_clock::now();
 
-					// Ping every 2s so user knows scanner is alive
+					// Ping every 3s so user knows scanner is alive
 					auto now_snd = std::chrono::steady_clock::now();
-					if (std::chrono::duration_cast<std::chrono::seconds>(now_snd - snd_ping_t).count() >= 2)
+					if (std::chrono::duration_cast<std::chrono::seconds>(now_snd - snd_ping_t).count() >= 3)
 					{
 						snd_ping_t = now_snd;
 						char ping[64];
@@ -2726,22 +2726,22 @@ namespace shot_detect
 					if (scan_sound_addr != snd_snap_addr)
 					{
 						snd_snap_addr = scan_sound_addr;
-						for (int i = 0; i < 0x100; i++)
-							try { snd_snap[i] = memory->read<std::uint8_t>(scan_sound_addr + 0x100 + i); } catch (...) { snd_snap[i] = 0; }
+						for (int i = 0; i < 0x350; i++)
+							try { snd_snap[i] = memory->read<std::uint8_t>(scan_sound_addr + i); } catch (...) { snd_snap[i] = 0; }
 					}
 
-					// Scan every 3ms - detect ANY change
-					if (std::chrono::duration_cast<std::chrono::milliseconds>(now_snd - snd_snap_t).count() >= 3)
+					// Scan full 0x000 - 0x350 range every 2ms
+					if (std::chrono::duration_cast<std::chrono::milliseconds>(now_snd - snd_snap_t).count() >= 2)
 					{
 						snd_snap_t = now_snd;
-						for (int i = 0; i < 0x100; i++)
+						for (int i = 0; i < 0x350; i++)
 						{
 							try {
-								std::uint8_t cur = memory->read<std::uint8_t>(scan_sound_addr + 0x100 + i);
+								std::uint8_t cur = memory->read<std::uint8_t>(scan_sound_addr + i);
 								if (cur != snd_snap[i])
 								{
 									char notif[64];
-									std::snprintf(notif, sizeof(notif), "+0x%X: %d->%d", 0x100 + i, (int)snd_snap[i], (int)cur);
+									std::snprintf(notif, sizeof(notif), "+0x%X: %d->%d", i, (int)snd_snap[i], (int)cur);
 									notifications::add(notif, notifications::NotificationType::Success, 5.0f);
 									snd_snap[i] = cur;
 								}
