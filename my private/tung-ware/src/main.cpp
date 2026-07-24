@@ -400,12 +400,10 @@ static void monitor_roblox() noexcept {
             globals::roblox_valid = true;
         }
         else {
-            
             if (!memory->find_process_id(roblox_proc)) {
-                tungware::utils::print_colored_message("Roblox process ended. Exiting loader...", false);
+                tungware::utils::print_colored_message("Roblox process closed/teleported. Waiting for Roblox to restart...", false);
 
                 globals::roblox_valid = false;
-                globals::cleanup_requested = true;
 
                 StopAutoRescan();
 
@@ -418,8 +416,7 @@ static void monitor_roblox() noexcept {
                 game::wnd = nullptr;
 
                 memory->detach_from_process();
-                Sleep(500);
-                tungware::utils::self_destruct();
+                Sleep(2000);
             }
             Sleep(1000);
         }
