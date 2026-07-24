@@ -2604,7 +2604,10 @@ namespace shot_detect
 					{
 						notifications::add("Target: " + current_target_state.display_name + " | Ammo: " + std::to_string(current_target_ammo), notifications::NotificationType::Info, 0.5f);
 					}
-				if (settings::shot_detect::enabled && has_target_val)
+				}
+			}
+
+			if (settings::shot_detect::enabled && has_target_val)
 			{
 				bool key_active = get_keybind_state();
 				if (key_active && target_still_valid)
