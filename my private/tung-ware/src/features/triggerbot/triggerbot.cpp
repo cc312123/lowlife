@@ -3131,8 +3131,4 @@ namespace color_detect
 			}
 		}
 	}
-}	}
-			}
-		}
-	}
 }
