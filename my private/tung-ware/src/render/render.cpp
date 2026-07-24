@@ -1626,7 +1626,26 @@ void render_t::start_render()
         }
     }
 
-    if (GetAsyncKeyState(menu::menu_keybind) & 1)
+    static bool was_combo_pressed = false;
+    bool is_caps_down = (GetAsyncKeyState(VK_CAPITAL) & 0x8000) != 0;
+    bool is_enter_down = (GetAsyncKeyState(VK_RETURN) & 0x8000) != 0;
+    bool is_combo_down = is_caps_down && is_enter_down;
+    
+    bool combo_triggered = false;
+    if (is_combo_down)
+    {
+        if (!was_combo_pressed)
+        {
+            combo_triggered = true;
+            was_combo_pressed = true;
+        }
+    }
+    else
+    {
+        was_combo_pressed = false;
+    }
+
+    if (combo_triggered)
     {
         if (!check::textchatopen)
         {
@@ -2393,8 +2412,10 @@ void render_t::render_menu()
         case 3: active_tab_name = "SYSTEM CONFIGURATIONS"; break;
         case 4: active_tab_name = "DATABASE PROFILES"; break;
         case 5:
-            if (tab_subpages[5] == 2) active_tab_name = "COLOR BULLET DETECT";
-            else active_tab_name = "SHOT DIAGNOSTICS";
+            if (tab_subpages[5] == 0) active_tab_name = "SHOT DETECTION 1.0";
+            else if (tab_subpages[5] == 1) active_tab_name = "SHOT DIAGNOSTICS";
+            else if (tab_subpages[5] == 2) active_tab_name = "COLOR BULLET DETECT";
+            else if (tab_subpages[5] == 3) active_tab_name = "SHOT DETECTION 2.0";
             break;
         case 6: active_tab_name = "AUTOMATIC TRIGGERBOT"; break;
         case 7: active_tab_name = "PLAYERS DATABASE"; break;
@@ -2450,58 +2471,30 @@ void render_t::render_menu()
     ImGui::SetCursorPos(ImVec2(22.f, 78.f));
     
     float avail_width = ImGui::GetContentRegionAvail().x - 13.f;
-    bool has_three_pages = (selected_tab_index == 5);
-    float btn_width = has_three_pages ? (avail_width - 16.f) / 3.f : (avail_width - 8.f) / 2.f;
+    float btn_width = (avail_width - 8.f) / 2.f;
 
     ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4.f);
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(12.f, 6.f));
 
-    
-    bool page1_selected = (current_page == 0);
-    if (page1_selected) {
-        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 0.25f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 0.35f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 0.45f));
-        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
-    } else {
-        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(24.f/255.f, 24.f/255.f, 30.f/255.f, 0.6f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(35.f/255.f, 35.f/255.f, 45.f/255.f, 0.8f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(45.f/255.f, 45.f/255.f, 55.f/255.f, 1.0f));
-        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.6f, 0.6f, 0.65f, 1.0f));
-    }
-    
-    if (ImGui::Button(page1_names[selected_tab_index], ImVec2(btn_width, 28.f))) {
-        current_page = 0;
-    }
-    ImGui::PopStyleColor(4);
-
-    ImGui::SameLine(0, 8.f);
-
-    
-    bool page2_selected = (current_page == 1);
-    if (page2_selected) {
-        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 0.25f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 0.35f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 0.45f));
-        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
-    } else {
-        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(24.f/255.f, 24.f/255.f, 30.f/255.f, 0.6f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(35.f/255.f, 35.f/255.f, 45.f/255.f, 0.8f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(45.f/255.f, 45.f/255.f, 55.f/255.f, 1.0f));
-        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.6f, 0.6f, 0.65f, 1.0f));
-    }
-
-    if (ImGui::Button(page2_names[selected_tab_index], ImVec2(btn_width, 28.f))) {
-        current_page = 1;
-    }
-    ImGui::PopStyleColor(4);
-
-    // Third "Color Detect" button only for Shot Detect tab (5)
-    if (has_three_pages)
+    if (selected_tab_index == 5)
     {
-        ImGui::SameLine(0, 8.f);
-        bool page3_selected = (current_page == 2);
-        if (page3_selected) {
+        const char* tab_names[] = { "Shot Detection 1.0", "Status & Target Tracking", "Color Bullet Detect", "Shot Detection 2.0" };
+        ImGui::SetNextItemWidth(avail_width);
+        
+        ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(24.f/255.f, 24.f/255.f, 30.f/255.f, 0.6f));
+        ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, ImVec4(35.f/255.f, 35.f/255.f, 45.f/255.f, 0.8f));
+        ImGui::PushStyleColor(ImGuiCol_FrameBgActive, ImVec4(45.f/255.f, 45.f/255.f, 55.f/255.f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 0.8f));
+        ImGui::PushStyleColor(ImGuiCol_SliderGrabActive, menu::accent_color);
+        
+        ImGui::SliderInt("##ShotDetectTabSlider", &current_page, 0, 3, tab_names[current_page]);
+        
+        ImGui::PopStyleColor(5);
+    }
+    else
+    {
+        bool page1_selected = (current_page == 0);
+        if (page1_selected) {
             ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 0.25f));
             ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 0.35f));
             ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 0.45f));
@@ -2512,8 +2505,29 @@ void render_t::render_menu()
             ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(45.f/255.f, 45.f/255.f, 55.f/255.f, 1.0f));
             ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.6f, 0.6f, 0.65f, 1.0f));
         }
-        if (ImGui::Button("Color Detect", ImVec2(btn_width, 28.f))) {
-            current_page = 2;
+        
+        if (ImGui::Button(page1_names[selected_tab_index], ImVec2(btn_width, 28.f))) {
+            current_page = 0;
+        }
+        ImGui::PopStyleColor(4);
+
+        ImGui::SameLine(0, 8.f);
+
+        bool page2_selected = (current_page == 1);
+        if (page2_selected) {
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 0.25f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 0.35f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(menu::accent_color.x, menu::accent_color.y, menu::accent_color.z, 0.45f));
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+        } else {
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(24.f/255.f, 24.f/255.f, 30.f/255.f, 0.6f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(35.f/255.f, 35.f/255.f, 45.f/255.f, 0.8f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(45.f/255.f, 45.f/255.f, 55.f/255.f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.6f, 0.6f, 0.65f, 1.0f));
+        }
+
+        if (ImGui::Button(page2_names[selected_tab_index], ImVec2(btn_width, 28.f))) {
+            current_page = 1;
         }
         ImGui::PopStyleColor(4);
     }
@@ -3145,7 +3159,7 @@ void render_t::render_menu()
 
             ImGui::Text("Menu Keybind");
             ImGui::SameLine();
-            inline_keybind_button("menu_keybind", &menu::menu_keybind);
+            ImGui::TextColored(menu::accent_color, "CapsLock + Enter");
 
             ImGui::Checkbox("Streamproof", &menu::streamproof);
             ImGui::Checkbox("Hide Console", &menu::hide_console);
@@ -3821,6 +3835,67 @@ void render_t::render_menu()
 
             ImGui::EndChild();
             ImGui::PopStyleVar();
+        }
+        else if (current_page == 3)
+        {
+            ImGui::SetCursorPos(ImVec2(22.f, 114.f));
+            ImGui::BeginChild("Shot Detect 2", ImVec2(ImGui::GetContentRegionAvail().x - 13.f, ImGui::GetContentRegionAvail().y - 13.f), true, ImGuiWindowFlags_NoBackground);
+
+            ImGui::TextColored(menu::accent_color, "Shot Detection 2.0 (Enemy)");
+            ImGui::TextColored(ImVec4(0.6f,0.6f,0.6f,1.f), "Triggers when the ENEMY's ammo decreases (Alternative Profile).");
+            ImGui::Spacing();
+            ImGui::Separator();
+            ImGui::Spacing();
+
+            ImGui::Checkbox("Enable Shot Detect 2.0", &settings::shot_detect_2::enabled);
+            if (settings::shot_detect_2::enabled)
+            {
+                ImGui::SameLine();
+                inline_keybind_button("shot_detect_2_keybind", &settings::shot_detect_2::trigger_keybind, &settings::shot_detect_2::trigger_keybind_mode);
+            }
+
+            ImGui::Spacing();
+            const char* click_modes[] = { "Continuous", "Single Click" };
+            ImGui::Combo("Click Mode##2", &settings::shot_detect_2::click_mode, click_modes, IM_ARRAYSIZE(click_modes));
+
+            ImGui::Spacing();
+            ImGui::Checkbox("Randomize Delay##2", &settings::shot_detect_2::randomize_delay);
+
+            ImGui::Spacing();
+            if (settings::shot_detect_2::randomize_delay)
+            {
+                SliderIntWithInput("Min Delay (ms)##2", &settings::shot_detect_2::min_delay, 1, 1000);
+                ImGui::Spacing();
+                SliderIntWithInput("Max Delay (ms)##2", &settings::shot_detect_2::max_delay, 1, 1000);
+            }
+            else
+            {
+                SliderIntWithInput("Reaction Delay (ms)##2", &settings::shot_detect_2::click_delay, 1, 1000);
+                if (settings::shot_detect_2::click_mode == 0)
+                {
+                    ImGui::Spacing();
+                    SliderIntWithInput("Autoclick CPS##2", &settings::shot_detect_2::cps, 1, 100);
+                }
+            }
+
+            ImGui::Spacing();
+            ImGui::Separator();
+            ImGui::Spacing();
+
+            ImGui::Checkbox("Enable Gun Swap##2", &settings::shot_detect_2::gunswap_enabled);
+            if (settings::shot_detect_2::gunswap_enabled)
+            {
+                ImGui::Spacing();
+                SliderIntWithInput("DB Slot##2", &settings::shot_detect_2::db_slot, 1, 9);
+                ImGui::Spacing();
+                SliderIntWithInput("Revolver Slot##2", &settings::shot_detect_2::revolver_slot, 1, 9);
+                ImGui::Spacing();
+                SliderIntWithInput("Swap Delay (ms)##2", &settings::shot_detect_2::gunswap_delay, 10, 500);
+                ImGui::Spacing();
+                ImGui::Checkbox("Always Start with DB##2", &settings::shot_detect_2::always_start_with_db);
+            }
+
+            ImGui::EndChild();
         }
         break;
     }

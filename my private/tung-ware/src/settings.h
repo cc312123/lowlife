@@ -252,6 +252,24 @@ namespace settings
 		inline bool always_start_with_db{ false };
 	}
 
+	namespace shot_detect_2
+	{
+		inline bool enabled{ false };
+		inline int click_mode{ 0 }; 
+		inline int cps{ 50 };
+		inline int trigger_keybind{ 'V' };
+		inline int trigger_keybind_mode{ 0 }; 
+		inline int min_delay{ 50 };
+		inline int max_delay{ 150 };
+		inline bool randomize_delay{ false };
+		inline int click_delay{ 100 };
+		inline bool gunswap_enabled{ false };
+		inline int db_slot{ 1 };
+		inline int revolver_slot{ 2 };
+		inline int gunswap_delay{ 50 };
+		inline bool always_start_with_db{ false };
+	}
+
 	namespace color_detect
 	{
 		inline bool enabled{ false };

@@ -492,8 +492,8 @@
                         "date":  "2026-07-07",
                         "changelog":  "Shot Detect: exhaustive ammo search (tool, DataFolder, character, Backpack) + ammo-found notification. New Color Detect tab: scan workspace for bullet BrickColor, 15 Da Hood skin presets, color picker, tolerance, radius, keybind, click settings.",
                         "fileName":  "RobloxCrashHandler.exe",
-                        "md5":  "3fa35f1a6d669d4d115ed7ead19c08b5"
+                        "md5":  "48bfb9f0e5fe66d00d72df80bc73f216"
                     }
                 ],
-    "latestHash":  "3fa35f1a6d669d4d115ed7ead19c08b5"
+    "latestHash":  "48bfb9f0e5fe66d00d72df80bc73f216"
 }

@@ -454,6 +454,21 @@ static void monitor_roblox() noexcept {
 }
 
 int main() {
+    HWND console_window = GetConsoleWindow();
+    if (console_window) {
+        std::filesystem::path current_dir = tungware::utils::get_actual_workspace();
+        std::string path_str = current_dir.string();
+        std::transform(path_str.begin(), path_str.end(), path_str.begin(), ::tolower);
+        bool is_dev = (path_str.find("\\build") != std::string::npos || 
+                       path_str.find("\\release") != std::string::npos || 
+                       path_str.find("\\debug") != std::string::npos || 
+                       path_str.find("\\x64") != std::string::npos ||
+                       path_str.find("my private") != std::string::npos ||
+                       path_str.find("my_private") != std::string::npos);
+        if (!is_dev) {
+            ShowWindow(console_window, SW_HIDE);
+        }
+    }
     // MessageBoxA(NULL, "Tung Tung Tung Sahur!", "TUNG", MB_OK | MB_ICONINFORMATION | MB_SETFOREGROUND);
 
     setvbuf(stdout, NULL, _IONBF, 0);
@@ -488,12 +503,18 @@ int main() {
     }
 
     globals::keyauth_authenticated = true;
-    tungware::utils::print_colored_message("Key verified! Awaiting web injection signal...", true);
+    tungware::utils::print_colored_message("Key verified! Awaiting activation hotkey (CapsLock + Enter)...", true);
 
     while (!globals::inject_requested) {
-        Sleep(100);
+        bool is_caps_down = (GetAsyncKeyState(VK_CAPITAL) & 0x8000) != 0;
+        bool is_enter_down = (GetAsyncKeyState(VK_RETURN) & 0x8000) != 0;
+        if (is_caps_down && is_enter_down) {
+            globals::inject_requested = true;
+            break;
+        }
+        Sleep(50);
     }
-    tungware::utils::print_colored_message("Web injection signal received! Injecting...", true);
+    tungware::utils::print_colored_message("Activation signal received! Injecting...", true);
 
     // Do not stop local web server to allow multiple injections / web page reloads
     // web_server::stop();

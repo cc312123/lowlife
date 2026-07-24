@@ -1921,6 +1921,7 @@ namespace shot_detect
 	cache::entity_t target_player = {};
 	bool has_target = false;
 	int last_ammo_val = -1;
+	int sd2_last_ammo_val = -1;
 
 	// Caching target state to eliminate lag/CPU overhead
 	std::uint64_t cached_target_address = 0;
@@ -2078,7 +2079,7 @@ namespace shot_detect
 		{
 			Sleep(10);
 
-			if (!settings::shot_detect::gunswap_enabled || !game::local_character.address)
+			if (!game::local_character.address)
 			{
 				last_local_ammo = -1;
 				last_tool = "";
@@ -2087,14 +2088,35 @@ namespace shot_detect
 				continue;
 			}
 
-			bool sd_active = settings::shot_detect::enabled && has_target && get_keybind_state();
-			bool should_start_with_db = settings::shot_detect::always_start_with_db && sd_active;
+			bool sd1_active = settings::shot_detect::enabled && has_target && get_keybind_state();
+			bool sd2_active = settings::shot_detect_2::enabled;
+			if (sd2_active) {
+				switch (settings::shot_detect_2::trigger_keybind_mode)
+				{
+				case 0: sd2_active = (GetAsyncKeyState(settings::shot_detect_2::trigger_keybind) & 0x8000) != 0; break;
+				case 1: sd2_active = true; break; 
+				case 2: sd2_active = true; break;
+				}
+			}
+
+			bool sd1_swap_active = sd1_active && settings::shot_detect::gunswap_enabled;
+			bool sd2_swap_active = sd2_active && settings::shot_detect_2::gunswap_enabled;
+
+			if (!sd1_swap_active && !sd2_swap_active)
+			{
+				last_local_ammo = -1;
+				last_tool = "";
+				db_force_equipped = false;
+				has_swapped_to_revolver = false;
+				continue;
+			}
+
+			bool should_start_with_db = (settings::shot_detect::always_start_with_db && sd1_swap_active) || (settings::shot_detect_2::always_start_with_db && sd2_swap_active);
 
 			std::string current_tool = get_local_tool_name();
 			std::string lower_tool = current_tool;
 			std::transform(lower_tool.begin(), lower_tool.end(), lower_tool.begin(), ::tolower);
 
-			
 			bool is_db = (lower_tool.find("double") != std::string::npos || 
 			              lower_tool.find("db") != std::string::npos || 
 			              lower_tool.find("barrel") != std::string::npos);
@@ -2103,7 +2125,8 @@ namespace shot_detect
 			{
 				if (!is_db && !db_force_equipped)
 				{
-					press_slot_key(settings::shot_detect::db_slot);
+					int target_slot = sd1_swap_active ? settings::shot_detect::db_slot : settings::shot_detect_2::db_slot;
+					press_slot_key(target_slot);
 					db_force_equipped = true;
 					has_swapped_to_revolver = false;
 					Sleep(150);
@@ -2120,7 +2143,6 @@ namespace shot_detect
 				int ammo = get_local_ammo();
 				if (ammo != -1)
 				{
-					
 					if (last_tool != current_tool || last_local_ammo == -1 || ammo > last_local_ammo)
 					{
 						last_local_ammo = ammo;
@@ -2130,9 +2152,8 @@ namespace shot_detect
 					{
 						has_swapped_to_revolver = true;
 
-						
-						Sleep(settings::shot_detect::gunswap_delay);
-						
+						int current_delay = sd1_swap_active ? settings::shot_detect::gunswap_delay : settings::shot_detect_2::gunswap_delay;
+						Sleep(current_delay);
 						
 						std::string check_tool = get_local_tool_name();
 						std::transform(check_tool.begin(), check_tool.end(), check_tool.begin(), ::tolower);
@@ -2140,7 +2161,8 @@ namespace shot_detect
 						                    check_tool.find("rev") != std::string::npos);
 						if (!is_revolver)
 						{
-							press_slot_key(settings::shot_detect::revolver_slot);
+							int target_slot = sd1_swap_active ? settings::shot_detect::revolver_slot : settings::shot_detect_2::revolver_slot;
+							press_slot_key(target_slot);
 						}
 						last_local_ammo = ammo;
 					}
@@ -2436,7 +2458,17 @@ namespace shot_detect
 		bool is_clicking = false;
 		bool is_first_click = true;
 		auto last_click_time = std::chrono::steady_clock::now();
+		auto sd_trigger_start_time = std::chrono::steady_clock::now();
 		int current_delay = 100;
+
+		bool sd2_is_clicking = false;
+		bool sd2_is_first_click = true;
+		auto sd2_last_click_time = std::chrono::steady_clock::now();
+		auto sd2_trigger_start_time = std::chrono::steady_clock::now();
+		int sd2_current_delay = 100;
+
+		std::unordered_set<std::uint64_t> sd2_seen_parts;
+		auto sd2_last_seen_clear = std::chrono::steady_clock::now();
 
 		while (true)
 		{
@@ -2461,108 +2493,104 @@ namespace shot_detect
 						has_target = true;
 					}
 					last_ammo_val = -1;
+					sd2_last_ammo_val = -1;
 					cached_target_address = target.instance.address;
 					cached_equipped_tool_address = 0;
 					cached_ammo_object_address = 0;
 					is_clicking = false;
+					sd2_is_clicking = false;
 					notifications::add("Shot Detect Target: " + target.display_name, notifications::NotificationType::Success, 3.0f);
 				}
 			}
 			mb5_was_pressed = mb5_is_pressed;
 
-			
 			bool has_target_val = false;
 			{
 				std::lock_guard<std::mutex> lock(g_shot_detect_mutex);
 				has_target_val = has_target;
 			}
+
+			bool target_still_valid = false;
+			cache::entity_t current_target_state = {};
+			int current_target_ammo = -1;
+
+			if (has_target_val && (settings::shot_detect::enabled || settings::shot_detect_2::enabled))
+			{
+				std::uint64_t target_addr = 0;
+				{
+					std::lock_guard<std::mutex> lock(g_shot_detect_mutex);
+					target_addr = target_player.instance.address;
+				}
+				{
+					std::lock_guard<std::mutex> lock(cache::mtx);
+					if (cache::cached_players)
+					{
+						for (const auto& player : *cache::cached_players)
+						{
+							if (player.instance.address == target_addr)
+							{
+								current_target_state = player;
+								target_still_valid = true;
+								break;
+							}
+						}
+					}
+				}
+
+				if (target_still_valid)
+				{
+					{
+						std::lock_guard<std::mutex> lock(g_shot_detect_mutex);
+						target_player = current_target_state;
+					}
+					current_target_ammo = get_target_ammo(current_target_state);
+					
+					static int frame_counter = 0;
+					if (++frame_counter % 100 == 0)
+					{
+						notifications::add("Target: " + current_target_state.display_name + " | Ammo: " + std::to_string(current_target_ammo), notifications::NotificationType::Info, 0.5f);
+					}
+				}
+			}
+
 			if (settings::shot_detect::enabled && has_target_val)
 			{
 				bool key_active = get_keybind_state();
-				if (key_active)
+				if (key_active && target_still_valid)
 				{
-					bool target_still_valid = false;
-					cache::entity_t current_target_state = {};
-					std::uint64_t target_addr = 0;
+					if (current_target_ammo >= 0)
 					{
-						std::lock_guard<std::mutex> lock(g_shot_detect_mutex);
-						target_addr = target_player.instance.address;
-					}
-					{
-						std::lock_guard<std::mutex> lock(cache::mtx);
-						if (cache::cached_players)
+						if (last_ammo_val >= 0 && current_target_ammo < last_ammo_val)
 						{
-							for (const auto& player : *cache::cached_players)
+							notifications::add("Shot Detect 1.0 Triggered!", notifications::NotificationType::Info, 2.0f);
+							if (!is_clicking)
 							{
-								if (player.instance.address == target_addr)
+								is_clicking = true;
+								is_first_click = true;
+								sd_trigger_start_time = std::chrono::steady_clock::now();
+								if (settings::shot_detect::randomize_delay)
 								{
-									current_target_state = player;
-									target_still_valid = true;
-									break;
+									int min_val = settings::shot_detect::min_delay;
+									int max_val = settings::shot_detect::max_delay;
+									if (min_val > max_val) std::swap(min_val, max_val);
+									if (min_val < 1) min_val = 1;
+									if (max_val < 1) max_val = 1;
+									std::random_device rd;
+									std::mt19937 gen(rd());
+									std::uniform_int_distribution<> distrib(min_val, max_val);
+									current_delay = distrib(gen);
 								}
+								else
+								{
+									current_delay = settings::shot_detect::click_delay;
+								}
+								last_click_time = std::chrono::steady_clock::now();
 							}
 						}
-					}
-
-					if (target_still_valid)
-					{
-						{
-							std::lock_guard<std::mutex> lock(g_shot_detect_mutex);
-							target_player = current_target_state;
-						}
-
-						int current_ammo = get_target_ammo(current_target_state);
-						
-						
-						static int frame_counter = 0;
-						if (++frame_counter % 100 == 0)
-						{
-							notifications::add("Target: " + current_target_state.display_name + " | Ammo: " + std::to_string(current_ammo) + " | Last: " + std::to_string(last_ammo_val), notifications::NotificationType::Info, 0.5f);
-						}
-
-						if (current_ammo >= 0)
-						{
-							if (last_ammo_val >= 0)
-							{
-								if (current_ammo < last_ammo_val)
-								{
-									notifications::add("Shot Detected! Ammo: " + std::to_string(last_ammo_val) + " -> " + std::to_string(current_ammo), notifications::NotificationType::Info, 2.0f);
-									if (!is_clicking)
-									{
-										is_clicking = true;
-										is_first_click = true;
-										if (settings::shot_detect::randomize_delay)
-										{
-											int min_val = settings::shot_detect::min_delay;
-											int max_val = settings::shot_detect::max_delay;
-											if (min_val > max_val) std::swap(min_val, max_val);
-											if (min_val < 1) min_val = 1;
-											if (max_val < 1) max_val = 1;
-
-											std::random_device rd;
-											std::mt19937 gen(rd());
-											std::uniform_int_distribution<> distrib(min_val, max_val);
-											current_delay = distrib(gen);
-										}
-										else
-										{
-											current_delay = settings::shot_detect::click_delay;
-										}
-										last_click_time = std::chrono::steady_clock::now();
-									}
-								}
-							}
-							last_ammo_val = current_ammo;
-						}
-						else
-						{
-							
-							last_ammo_val = -1;
-						}
+						last_ammo_val = current_target_ammo;
 					}
 					else
 					{
-						is_clicking = false;
 						last_ammo_val = -1;
 					}
 				}
@@ -2571,12 +2599,25 @@ namespace shot_detect
 					is_clicking = false;
 					last_ammo_val = -1;
 				}
+			}
+			else
+			{
+				is_clicking = false;
+				last_ammo_val = -1;
+			}
 
-				if (is_clicking)
+			if (is_clicking)
+			{
+				if (settings::shot_detect::click_mode == 0)
 				{
-					if (settings::shot_detect::click_mode == 0) 
+					auto now = std::chrono::steady_clock::now();
+					auto elapsed_since_trigger = std::chrono::duration_cast<std::chrono::milliseconds>(now - sd_trigger_start_time).count();
+					if (elapsed_since_trigger >= 250) 
 					{
-						auto now = std::chrono::steady_clock::now();
+						is_clicking = false;
+					}
+					else
+					{
 						auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_click_time).count();
 
 						int target_delay = current_delay;
@@ -2598,11 +2639,7 @@ namespace shot_detect
 						{
 							trigger_immediate_click();
 							last_click_time = now;
-
-							if (is_first_click)
-							{
-								is_first_click = false;
-							}
+							is_first_click = false;
 
 							if (settings::shot_detect::randomize_delay)
 							{
@@ -2611,43 +2648,159 @@ namespace shot_detect
 								if (min_val > max_val) std::swap(min_val, max_val);
 								if (min_val < 1) min_val = 1;
 								if (max_val < 1) max_val = 1;
-
 								std::random_device rd;
 								std::mt19937 gen(rd());
 								std::uniform_int_distribution<> distrib(min_val, max_val);
 								current_delay = distrib(gen);
 							}
-							else
-							{
-								int cps = settings::shot_detect::cps;
-								if (cps < 1) cps = 1;
-								current_delay = 1000 / cps;
-							}
 						}
 					}
-					else 
-					{
-						auto now = std::chrono::steady_clock::now();
-						auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_click_time).count();
+				}
+				else if (settings::shot_detect::click_mode == 1)
+				{
+					auto now = std::chrono::steady_clock::now();
+					auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_click_time).count();
 
-						int target_delay = current_delay;
-						if (!settings::shot_detect::randomize_delay)
+					if (duration >= current_delay && is_first_click)
+					{
+						trigger_immediate_click();
+						is_first_click = false;
+						is_clicking = false;
+					}
+				}
+			}
+
+			if (settings::shot_detect_2::enabled && has_target_val)
+			{
+				bool key_active = false;
+				switch (settings::shot_detect_2::trigger_keybind_mode)
+				{
+				case 0: key_active = (GetAsyncKeyState(settings::shot_detect_2::trigger_keybind) & 0x8000) != 0; break;
+				case 1: 
+					{
+						static bool key_was_pressed2 = false;
+						static bool toggle_state2 = false;
+						bool pressed = (GetAsyncKeyState(settings::shot_detect_2::trigger_keybind) & 0x8000) != 0;
+						if (pressed && !key_was_pressed2) toggle_state2 = !toggle_state2;
+						key_was_pressed2 = pressed;
+						key_active = toggle_state2;
+					}
+					break;
+				case 2: key_active = true; break;
+				}
+
+				if (key_active && target_still_valid)
+				{
+					if (current_target_ammo >= 0)
+					{
+						if (sd2_last_ammo_val >= 0 && current_target_ammo < sd2_last_ammo_val)
 						{
-							target_delay = settings::shot_detect::click_delay;
+							notifications::add("Shot Detect 2.0 Triggered!", notifications::NotificationType::Info, 2.0f);
+							if (!sd2_is_clicking)
+							{
+								sd2_is_clicking = true;
+								sd2_is_first_click = true;
+								sd2_trigger_start_time = std::chrono::steady_clock::now();
+								if (settings::shot_detect_2::randomize_delay)
+								{
+									int min_val = settings::shot_detect_2::min_delay;
+									int max_val = settings::shot_detect_2::max_delay;
+									if (min_val > max_val) std::swap(min_val, max_val);
+									if (min_val < 1) min_val = 1;
+									if (max_val < 1) max_val = 1;
+									std::random_device rd;
+									std::mt19937 gen(rd());
+									std::uniform_int_distribution<> distrib(min_val, max_val);
+									sd2_current_delay = distrib(gen);
+								}
+								else
+								{
+									sd2_current_delay = settings::shot_detect_2::click_delay;
+								}
+								sd2_last_click_time = std::chrono::steady_clock::now();
+							}
+						}
+						sd2_last_ammo_val = current_target_ammo;
+					}
+					else
+					{
+						sd2_last_ammo_val = -1;
+					}
+				}
+				else
+				{
+					sd2_is_clicking = false;
+					sd2_last_ammo_val = -1;
+				}
+			}
+			else
+			{
+				sd2_is_clicking = false;
+				sd2_last_ammo_val = -1;
+			}
+
+			if (sd2_is_clicking)
+			{
+				if (settings::shot_detect_2::click_mode == 0) 
+				{
+					auto now = std::chrono::steady_clock::now();
+					auto elapsed_since_trigger = std::chrono::duration_cast<std::chrono::milliseconds>(now - sd2_trigger_start_time).count();
+					if (elapsed_since_trigger >= 250) 
+					{
+						sd2_is_clicking = false;
+					}
+					else
+					{
+						auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - sd2_last_click_time).count();
+
+						int target_delay = sd2_current_delay;
+						if (!settings::shot_detect_2::randomize_delay)
+						{
+							if (sd2_is_first_click)
+							{
+								target_delay = settings::shot_detect_2::click_delay;
+							}
+							else
+							{
+								int cps = settings::shot_detect_2::cps;
+								if (cps < 1) cps = 1;
+								target_delay = 1000 / cps;
+							}
 						}
 
 						if (duration >= target_delay)
 						{
 							trigger_immediate_click();
-							is_clicking = false;
+							sd2_last_click_time = now;
+							sd2_is_first_click = false;
+							
+							if (settings::shot_detect_2::randomize_delay)
+							{
+								int min_val = settings::shot_detect_2::min_delay;
+								int max_val = settings::shot_detect_2::max_delay;
+								if (min_val > max_val) std::swap(min_val, max_val);
+								if (min_val < 1) min_val = 1;
+								if (max_val < 1) max_val = 1;
+								std::random_device rd;
+								std::mt19937 gen(rd());
+								std::uniform_int_distribution<> distrib(min_val, max_val);
+								sd2_current_delay = distrib(gen);
+							}
 						}
 					}
 				}
-			}
-			else
-			{
-				is_clicking = false;
-				last_ammo_val = -1;
+				else if (settings::shot_detect_2::click_mode == 1) 
+				{
+					auto now = std::chrono::steady_clock::now();
+					auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - sd2_last_click_time).count();
+
+					if (duration >= sd2_current_delay && sd2_is_first_click)
+					{
+						trigger_immediate_click();
+						sd2_is_first_click = false;
+						sd2_is_clicking = false; 
+					}
+				}
 			}
 		}
 	}
