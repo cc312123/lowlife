@@ -2709,21 +2709,46 @@ namespace shot_detect
 					bool flash_triggered = check_target_muzzle_flash(current_target_state);
 					bool ammo_triggered = (current_target_ammo >= 0 && current_tool_addr == last_tool_addr && last_ammo_val >= 0 && current_target_ammo < last_ammo_val);
 
-					// ShootSound IsPlaying detection (false -> true edge = shot fired)
+					// Sound offset scanner: find real IsPlaying offset by detecting byte flips
 					std::uint64_t shoot_sound_addr = get_target_shoot_sound(current_target_state, current_tool_addr);
-					bool sound_is_playing_now = read_sound_is_playing(shoot_sound_addr);
-					static bool last_sound_playing = false;
-					bool sound_triggered = (sound_is_playing_now && !last_sound_playing);
-					last_sound_playing = sound_is_playing_now;
+					if (shoot_sound_addr != 0)
+					{
+						static std::uint8_t last_sound_bytes[0x40] = {};
+						static std::uint64_t last_scanned_addr = 0;
+						static auto last_scan_t = std::chrono::steady_clock::now();
+						if (shoot_sound_addr != last_scanned_addr)
+						{
+							last_scanned_addr = shoot_sound_addr;
+							for (int i = 0; i < 0x40; i++)
+								try { last_sound_bytes[i] = memory->read<std::uint8_t>(shoot_sound_addr + 0x118 + i); } catch (...) { last_sound_bytes[i] = 0; }
+						}
+						auto now_s = std::chrono::steady_clock::now();
+						if (std::chrono::duration_cast<std::chrono::milliseconds>(now_s - last_scan_t).count() >= 5)
+						{
+							last_scan_t = now_s;
+							for (int i = 0; i < 0x40; i++)
+							{
+								try {
+									std::uint8_t cur = memory->read<std::uint8_t>(shoot_sound_addr + 0x118 + i);
+									if (cur != 0 && last_sound_bytes[i] == 0)
+									{
+										char notif[64];
+										std::snprintf(notif, sizeof(notif), "Sound +0x%X flipped: %d", 0x118 + i, (int)cur);
+										notifications::add(notif, notifications::NotificationType::Success, 4.0f);
+									}
+									last_sound_bytes[i] = cur;
+								} catch (...) {}
+							}
+						}
+					}
 
 					if (current_tool_addr != last_tool_addr)
 					{
 						last_ammo_val = current_target_ammo;
 						last_tool_addr = current_tool_addr;
-						last_sound_playing = false; // reset on weapon switch
 					}
 
-					if (flash_triggered || ammo_triggered || sound_triggered)
+					if (flash_triggered || ammo_triggered)
 					{
 						notifications::add("Shot Detect 1.0 Triggered!", notifications::NotificationType::Info, 2.0f);
 						if (!is_clicking)
