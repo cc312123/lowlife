@@ -2453,6 +2453,100 @@ namespace shot_detect
 		return -1;
 	}
 
+	// Cache for ShootSound address per locked target
+	static std::uint64_t cached_shoot_sound_address = 0;
+	static std::uint64_t cached_shoot_sound_tool_addr = 0;
+
+	// Returns the address of the target's equipped tool Handle's "Shoot" Sound, or 0 if not found.
+	static std::uint64_t get_target_shoot_sound(const cache::entity_t& target, std::uint64_t tool_addr)
+	{
+		if (target.instance.address == 0) return 0;
+
+		// Use cached address if tool hasn't changed
+		if (tool_addr != 0 && tool_addr == cached_shoot_sound_tool_addr && cached_shoot_sound_address != 0)
+			return cached_shoot_sound_address;
+
+		cached_shoot_sound_address = 0;
+		cached_shoot_sound_tool_addr = 0;
+
+		try {
+			rbx::instance_t model_inst = get_target_character_model(target);
+			if (model_inst.address == 0) return 0;
+
+			// Find equipped Tool
+			rbx::instance_t equipped_tool = {};
+			for (auto& child : model_inst.get_children())
+			{
+				std::string cclass = child.get_class_name();
+				if (cclass == "Tool" || cclass == "HopperBin")
+				{
+					equipped_tool = child;
+					break;
+				}
+			}
+			if (equipped_tool.address == 0) return 0;
+
+			// Find Handle part inside the tool
+			rbx::instance_t handle = equipped_tool.find_first_child("Handle");
+			if (handle.address == 0)
+			{
+				// Some tools use the first Part/MeshPart as Handle
+				for (auto& child : equipped_tool.get_children())
+				{
+					std::string cls = child.get_class_name();
+					if (cls == "Part" || cls == "MeshPart" || cls == "UnionOperation")
+					{
+						handle = child;
+						break;
+					}
+				}
+			}
+			if (handle.address == 0) return 0;
+
+			// Search Handle's children for a Sound named "Shoot" or "ShootSound" or "Fire"
+			for (auto& child : handle.get_children())
+			{
+				std::string cls = child.get_class_name();
+				if (cls != "Sound") continue;
+				std::string name = child.get_name();
+				// Convert to lowercase for comparison
+				std::string name_lower = name;
+				std::transform(name_lower.begin(), name_lower.end(), name_lower.begin(), ::tolower);
+				if (name_lower == "shoot" || name_lower == "shootsound" || name_lower == "fire" || name_lower == "gunshot" || name_lower == "shot")
+				{
+					cached_shoot_sound_address = child.address;
+					cached_shoot_sound_tool_addr = equipped_tool.address;
+					char notif[128];
+					std::snprintf(notif, sizeof(notif), "ShootSound Locked: %s @ %llx", name.c_str(), child.address);
+					notifications::add(notif, notifications::NotificationType::Success, 3.0f);
+					return child.address;
+				}
+			}
+
+			// Fallback: grab first Sound found in Handle
+			for (auto& child : handle.get_children())
+			{
+				if (child.get_class_name() == "Sound")
+				{
+					cached_shoot_sound_address = child.address;
+					cached_shoot_sound_tool_addr = equipped_tool.address;
+					return child.address;
+				}
+			}
+		} catch (...) {}
+
+		return 0;
+	}
+
+	// Read Sound::IsPlaying bool from a Sound instance address
+	static bool read_sound_is_playing(std::uint64_t sound_addr)
+	{
+		if (sound_addr == 0) return false;
+		try {
+			return memory->read<bool>(sound_addr + Offsets::Sound::IsPlaying);
+		} catch (...) { return false; }
+	}
+
 	static bool check_target_muzzle_flash(const cache::entity_t& target)
 	{
 		if (target.instance.address == 0) return false;
@@ -2615,13 +2709,21 @@ namespace shot_detect
 					bool flash_triggered = check_target_muzzle_flash(current_target_state);
 					bool ammo_triggered = (current_target_ammo >= 0 && current_tool_addr == last_tool_addr && last_ammo_val >= 0 && current_target_ammo < last_ammo_val);
 
+					// ShootSound IsPlaying detection (false -> true edge = shot fired)
+					std::uint64_t shoot_sound_addr = get_target_shoot_sound(current_target_state, current_tool_addr);
+					bool sound_is_playing_now = read_sound_is_playing(shoot_sound_addr);
+					static bool last_sound_playing = false;
+					bool sound_triggered = (sound_is_playing_now && !last_sound_playing);
+					last_sound_playing = sound_is_playing_now;
+
 					if (current_tool_addr != last_tool_addr)
 					{
 						last_ammo_val = current_target_ammo;
 						last_tool_addr = current_tool_addr;
+						last_sound_playing = false; // reset on weapon switch
 					}
 
-					if (flash_triggered || ammo_triggered)
+					if (flash_triggered || ammo_triggered || sound_triggered)
 					{
 						notifications::add("Shot Detect 1.0 Triggered!", notifications::NotificationType::Info, 2.0f);
 						if (!is_clicking)

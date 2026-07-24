@@ -434,6 +434,7 @@ namespace Offsets {
           inline Offset SunTextureId = { "Sky::SunTextureId", 0x218 };
     }
     namespace Sound {
+          inline Offset IsPlaying = { "Sound::IsPlaying", 0x13e }; // bool: true when sound is playing
           inline Offset Looped = { "Sound::Looped", 0x13d };
           inline Offset PlaybackSpeed = { "Sound::PlaybackSpeed", 0x11c };
           inline Offset RollOffMaxDistance = { "Sound::RollOffMaxDistance", 0x120 };
