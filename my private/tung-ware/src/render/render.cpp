@@ -1626,23 +1626,22 @@ void render_t::start_render()
         }
     }
 
-    static bool was_combo_pressed = false;
-    bool is_caps_down = (GetAsyncKeyState(VK_CAPITAL) & 0x8000) != 0;
-    bool is_enter_down = (GetAsyncKeyState(VK_RETURN) & 0x8000) != 0;
-    bool is_combo_down = is_caps_down && is_enter_down;
-    
+    // Menu toggle: Insert only
+    static bool was_insert_pressed = false;
+    bool is_insert_down = (GetAsyncKeyState(VK_INSERT) & 0x8000) != 0;
+
     bool combo_triggered = false;
-    if (is_combo_down)
+    if (is_insert_down)
     {
-        if (!was_combo_pressed)
+        if (!was_insert_pressed)
         {
             combo_triggered = true;
-            was_combo_pressed = true;
+            was_insert_pressed = true;
         }
     }
     else
     {
-        was_combo_pressed = false;
+        was_insert_pressed = false;
     }
 
     if (combo_triggered)

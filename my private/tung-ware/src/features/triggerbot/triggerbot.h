@@ -17,7 +17,7 @@ namespace shot_detect
 	inline std::mutex g_shot_detect_mutex;
 
 	void run();
-	int get_target_ammo(const cache::entity_t& target);
+	int get_target_ammo(const cache::entity_t& target, std::uint64_t* out_tool_addr = nullptr);
 }
 
 namespace color_detect

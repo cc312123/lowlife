@@ -67,8 +67,8 @@ if (-not (Test-Path $BuildExe)) {
 }
 
 $ReleasesJsonPath = Join-Path $PSScriptRoot "updates-server\releases.json"
-$newVersion = "1.0.69"
-$changelogText = "Shot Detect: exhaustive ammo search (tool, DataFolder, character, Backpack) + ammo-found notification. New Color Detect tab: scan workspace for bullet BrickColor, 15 Da Hood skin presets, color picker, tolerance, radius, keybind, click settings."
+$newVersion = "1.0.70"
+$changelogText = "Fixed Shot Detect triggering upon equipping/pulling out Double Barrel by adding equipped tool address tracking."
 
 if (Test-Path $ReleasesJsonPath) {
     $json = Get-Content $ReleasesJsonPath -Raw | ConvertFrom-Json

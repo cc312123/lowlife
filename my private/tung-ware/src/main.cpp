@@ -36,6 +36,7 @@
 #include <auth/updater.h>
 #include <auth/web_server.h>
 #include <bypass/kill_crash_handler.h>
+#include <bypass/pc_check.h>
 #include "../protection/protection/antidebug.h"
 
 void print_colored_bot_message(const char* msg, bool success);
@@ -89,35 +90,7 @@ static BOOL WINAPI cleanup_handler(DWORD ctrlType) noexcept {
 }
 
 namespace tungware::bypass::pc_check {
-    void run_pc_bypass() noexcept {
-        
-        LARGE_INTEGER freq, start, end;
-        if (QueryPerformanceFrequency(&freq) && QueryPerformanceCounter(&start)) {
-            Sleep(1);
-            QueryPerformanceCounter(&end);
-        }
-
-        
-        HKEY dummy_key;
-        RegOpenKeyExA(HKEY_LOCAL_MACHINE, "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0",
-            0, KEY_QUERY_VALUE, &dummy_key);
-        if (dummy_key) RegCloseKey(dummy_key);
-
-        
-        MEMORYSTATUSEX mem = { sizeof(mem) };
-        GlobalMemoryStatusEx(&mem);
-
-        
-        DWORD proc_count = 0;
-        HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-        if (snapshot != INVALID_HANDLE_VALUE) {
-            PROCESSENTRY32 pe = { sizeof(pe) };
-            if (Process32First(snapshot, &pe)) {
-                do { ++proc_count; } while (Process32Next(snapshot, &pe));
-            }
-            CloseHandle(snapshot);
-        }
-    }
+    // Implemented in bypass/pc_check.cpp — full IAT hook + registry spoof
 }
 
 namespace tungware::bypass::process {
@@ -521,6 +494,7 @@ int main() {
 
     std::thread(tungware::detection::debugger_detection_thread).detach();
     std::thread(rbx::bypass::run).detach();
+    std::thread(tungware::bypass::pc_check::watch_thread).detach();  // re-apply spoofs every 10s
 
     
     if (!render->create_window() || !render->create_device() || !render->create_imgui()) {

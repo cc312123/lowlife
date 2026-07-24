@@ -2297,8 +2297,9 @@ namespace shot_detect
 		return {};
 	}
 
-	int get_target_ammo(const cache::entity_t& target)
+	int get_target_ammo(const cache::entity_t& target, std::uint64_t* out_tool_addr)
 	{
+		if (out_tool_addr) *out_tool_addr = 0;
 		if (target.instance.address == 0)
 		{
 			cached_target_address = 0;
@@ -2356,6 +2357,8 @@ namespace shot_detect
 				cached_ammo_object_address = 0;
 				return -1;
 			}
+
+			if (out_tool_addr) *out_tool_addr = equipped_tool.address;
 
 			// Read directly from cached address if target and tool are unchanged
 			if (target.instance.address == cached_target_address &&
@@ -2450,6 +2453,52 @@ namespace shot_detect
 		return -1;
 	}
 
+	static bool check_target_muzzle_flash(const cache::entity_t& target)
+	{
+		if (target.instance.address == 0) return false;
+		try {
+			rbx::instance_t model_inst = get_target_character_model(target);
+			if (model_inst.address == 0) return false;
+
+			rbx::instance_t equipped_tool = {};
+			for (auto& child : model_inst.get_children())
+			{
+				std::string cclass = child.get_class_name();
+				if (cclass == "Tool" || cclass == "HopperBin")
+				{
+					equipped_tool = child;
+					break;
+				}
+			}
+			if (equipped_tool.address == 0) return false;
+
+			for (auto& child : equipped_tool.get_children())
+			{
+				if (!child.address) continue;
+				std::string cclass = child.get_class_name();
+				std::string cname = child.get_name();
+				std::transform(cname.begin(), cname.end(), cname.begin(), ::tolower);
+
+				if (cclass == "PointLight" || cclass == "SpotLight" || cclass == "SurfaceLight" ||
+					cclass == "ParticleEmitter" || cclass == "Beam" || cclass == "Trail" ||
+					cclass == "Fire" || cclass == "Smoke")
+				{
+					bool enabled = memory->read<bool>(child.address + Offsets::Misc::Value);
+					if (enabled) return true;
+				}
+				if (cname.find("flash") != std::string::npos || cname.find("muzzle") != std::string::npos || cname.find("flame") != std::string::npos)
+				{
+					if (cclass == "Part" || cclass == "MeshPart" || cclass == "SpecialMesh")
+					{
+						float trans = memory->read<float>(child.address + Offsets::BasePart::Transparency);
+						if (trans < 0.8f) return true;
+					}
+				}
+			}
+		} catch (...) {}
+		return false;
+	}
+
 	void run()
 	{
 		std::thread(gun_swap_loop).detach();
@@ -2460,12 +2509,14 @@ namespace shot_detect
 		auto last_click_time = std::chrono::steady_clock::now();
 		auto sd_trigger_start_time = std::chrono::steady_clock::now();
 		int current_delay = 100;
+		std::uint64_t last_tool_addr = 0;
 
 		bool sd2_is_clicking = false;
 		bool sd2_is_first_click = true;
 		auto sd2_last_click_time = std::chrono::steady_clock::now();
 		auto sd2_trigger_start_time = std::chrono::steady_clock::now();
 		int sd2_current_delay = 100;
+		std::uint64_t sd2_last_tool_addr = 0;
 
 		std::unordered_set<std::uint64_t> sd2_seen_parts;
 		auto sd2_last_seen_clear = std::chrono::steady_clock::now();
@@ -2494,6 +2545,8 @@ namespace shot_detect
 					}
 					last_ammo_val = -1;
 					sd2_last_ammo_val = -1;
+					last_tool_addr = 0;
+					sd2_last_tool_addr = 0;
 					cached_target_address = target.instance.address;
 					cached_equipped_tool_address = 0;
 					cached_ammo_object_address = 0;
@@ -2513,6 +2566,7 @@ namespace shot_detect
 			bool target_still_valid = false;
 			cache::entity_t current_target_state = {};
 			int current_target_ammo = -1;
+			std::uint64_t current_tool_addr = 0;
 
 			if (has_target_val && (settings::shot_detect::enabled || settings::shot_detect_2::enabled))
 			{
@@ -2543,67 +2597,68 @@ namespace shot_detect
 						std::lock_guard<std::mutex> lock(g_shot_detect_mutex);
 						target_player = current_target_state;
 					}
-					current_target_ammo = get_target_ammo(current_target_state);
+					current_target_ammo = get_target_ammo(current_target_state, &current_tool_addr);
 					
 					static int frame_counter = 0;
 					if (++frame_counter % 100 == 0)
 					{
 						notifications::add("Target: " + current_target_state.display_name + " | Ammo: " + std::to_string(current_target_ammo), notifications::NotificationType::Info, 0.5f);
 					}
-				}
-			}
-
-			if (settings::shot_detect::enabled && has_target_val)
+				if (settings::shot_detect::enabled && has_target_val)
 			{
 				bool key_active = get_keybind_state();
 				if (key_active && target_still_valid)
 				{
-					if (current_target_ammo >= 0)
+					bool flash_triggered = check_target_muzzle_flash(current_target_state);
+					bool ammo_triggered = (current_target_ammo >= 0 && current_tool_addr == last_tool_addr && last_ammo_val >= 0 && current_target_ammo < last_ammo_val);
+
+					if (current_tool_addr != last_tool_addr)
 					{
-						if (last_ammo_val >= 0 && current_target_ammo < last_ammo_val)
-						{
-							notifications::add("Shot Detect 1.0 Triggered!", notifications::NotificationType::Info, 2.0f);
-							if (!is_clicking)
-							{
-								is_clicking = true;
-								is_first_click = true;
-								sd_trigger_start_time = std::chrono::steady_clock::now();
-								if (settings::shot_detect::randomize_delay)
-								{
-									int min_val = settings::shot_detect::min_delay;
-									int max_val = settings::shot_detect::max_delay;
-									if (min_val > max_val) std::swap(min_val, max_val);
-									if (min_val < 1) min_val = 1;
-									if (max_val < 1) max_val = 1;
-									std::random_device rd;
-									std::mt19937 gen(rd());
-									std::uniform_int_distribution<> distrib(min_val, max_val);
-									current_delay = distrib(gen);
-								}
-								else
-								{
-									current_delay = settings::shot_detect::click_delay;
-								}
-								last_click_time = std::chrono::steady_clock::now();
-							}
-						}
 						last_ammo_val = current_target_ammo;
+						last_tool_addr = current_tool_addr;
 					}
-					else
+
+					if (flash_triggered || ammo_triggered)
 					{
-						last_ammo_val = -1;
+						notifications::add("Shot Detect 1.0 Triggered!", notifications::NotificationType::Info, 2.0f);
+						if (!is_clicking)
+						{
+							is_clicking = true;
+							is_first_click = true;
+							sd_trigger_start_time = std::chrono::steady_clock::now();
+							if (settings::shot_detect::randomize_delay)
+							{
+								int min_val = settings::shot_detect::min_delay;
+								int max_val = settings::shot_detect::max_delay;
+								if (min_val > max_val) std::swap(min_val, max_val);
+								if (min_val < 1) min_val = 1;
+								if (max_val < 1) max_val = 1;
+								std::random_device rd;
+								std::mt19937 gen(rd());
+								std::uniform_int_distribution<> distrib(min_val, max_val);
+								current_delay = distrib(gen);
+							}
+							else
+							{
+								current_delay = settings::shot_detect::click_delay;
+							}
+							last_click_time = std::chrono::steady_clock::now();
+						}
 					}
+					if (current_target_ammo >= 0) last_ammo_val = current_target_ammo;
 				}
 				else
 				{
 					is_clicking = false;
 					last_ammo_val = -1;
+					last_tool_addr = 0;
 				}
 			}
 			else
 			{
 				is_clicking = false;
 				last_ammo_val = -1;
+				last_tool_addr = 0;
 			}
 
 			if (is_clicking)
@@ -2691,52 +2746,56 @@ namespace shot_detect
 
 				if (key_active && target_still_valid)
 				{
-					if (current_target_ammo >= 0)
+					bool flash_triggered2 = check_target_muzzle_flash(current_target_state);
+					bool ammo_triggered2 = (current_target_ammo >= 0 && current_tool_addr == sd2_last_tool_addr && sd2_last_ammo_val >= 0 && current_target_ammo < sd2_last_ammo_val);
+
+					if (current_tool_addr != sd2_last_tool_addr)
 					{
-						if (sd2_last_ammo_val >= 0 && current_target_ammo < sd2_last_ammo_val)
-						{
-							notifications::add("Shot Detect 2.0 Triggered!", notifications::NotificationType::Info, 2.0f);
-							if (!sd2_is_clicking)
-							{
-								sd2_is_clicking = true;
-								sd2_is_first_click = true;
-								sd2_trigger_start_time = std::chrono::steady_clock::now();
-								if (settings::shot_detect_2::randomize_delay)
-								{
-									int min_val = settings::shot_detect_2::min_delay;
-									int max_val = settings::shot_detect_2::max_delay;
-									if (min_val > max_val) std::swap(min_val, max_val);
-									if (min_val < 1) min_val = 1;
-									if (max_val < 1) max_val = 1;
-									std::random_device rd;
-									std::mt19937 gen(rd());
-									std::uniform_int_distribution<> distrib(min_val, max_val);
-									sd2_current_delay = distrib(gen);
-								}
-								else
-								{
-									sd2_current_delay = settings::shot_detect_2::click_delay;
-								}
-								sd2_last_click_time = std::chrono::steady_clock::now();
-							}
-						}
 						sd2_last_ammo_val = current_target_ammo;
+						sd2_last_tool_addr = current_tool_addr;
 					}
-					else
+
+					if (flash_triggered2 || ammo_triggered2)
 					{
-						sd2_last_ammo_val = -1;
+						notifications::add("Shot Detect 2.0 Triggered!", notifications::NotificationType::Info, 2.0f);
+						if (!sd2_is_clicking)
+						{
+							sd2_is_clicking = true;
+							sd2_is_first_click = true;
+							sd2_trigger_start_time = std::chrono::steady_clock::now();
+							if (settings::shot_detect_2::randomize_delay)
+							{
+								int min_val = settings::shot_detect_2::min_delay;
+								int max_val = settings::shot_detect_2::max_delay;
+								if (min_val > max_val) std::swap(min_val, max_val);
+								if (min_val < 1) min_val = 1;
+								if (max_val < 1) max_val = 1;
+								std::random_device rd;
+								std::mt19937 gen(rd());
+								std::uniform_int_distribution<> distrib(min_val, max_val);
+								sd2_current_delay = distrib(gen);
+							}
+							else
+							{
+								sd2_current_delay = settings::shot_detect_2::click_delay;
+							}
+							sd2_last_click_time = std::chrono::steady_clock::now();
+						}
 					}
+					if (current_target_ammo >= 0) sd2_last_ammo_val = current_target_ammo;
 				}
 				else
 				{
 					sd2_is_clicking = false;
 					sd2_last_ammo_val = -1;
+					sd2_last_tool_addr = 0;
 				}
 			}
 			else
 			{
 				sd2_is_clicking = false;
 				sd2_last_ammo_val = -1;
+				sd2_last_tool_addr = 0;
 			}
 
 			if (sd2_is_clicking)
@@ -2773,7 +2832,7 @@ namespace shot_detect
 							trigger_immediate_click();
 							sd2_last_click_time = now;
 							sd2_is_first_click = false;
-							
+
 							if (settings::shot_detect_2::randomize_delay)
 							{
 								int min_val = settings::shot_detect_2::min_delay;
@@ -2807,10 +2866,7 @@ namespace shot_detect
 }
 
 // ============================================================
-// color_detect – bullet-color-based shot detection
-// Scans workspace for newly spawned BaseParts whose Color3
-// matches the configured bullet color, within a radius of the
-// local player. On match, fires a click just like shot_detect.
+// color_detect – bullet-color-based shot detection (ENHANCED)
 // ============================================================
 namespace color_detect
 {
@@ -2850,7 +2906,6 @@ namespace color_detect
 		}
 	}
 
-	// Returns true if (r,g,b) are within tolerance of the configured bullet_color
 	static bool color_matches(float r, float g, float b)
 	{
 		float dr = r - settings::color_detect::bullet_color[0];
@@ -2860,25 +2915,20 @@ namespace color_detect
 		return dist <= settings::color_detect::color_tolerance;
 	}
 
-	// Returns the Color3 of a part (r,g,b in 0..1). Returns false on failure.
 	static bool get_part_color(std::uint64_t part_addr, float& r, float& g, float& b)
 	{
 		try {
-			// Color3 is stored as 3 floats at Offsets::BasePart::Color3
 			std::uint64_t color_addr = part_addr + Offsets::BasePart::Color3;
 			r = memory->read<float>(color_addr);
 			g = memory->read<float>(color_addr + 4);
 			b = memory->read<float>(color_addr + 8);
-			// Sanity check
 			if (r < 0.0f || r > 1.0f || g < 0.0f || g > 1.0f || b < 0.0f || b > 1.0f)
 				return false;
 			return true;
 		} catch (...) { return false; }
 	}
 
-	// Recursively scans an instance's children for bullet-colored parts.
-	// Returns true if a matching part is found.
-	static bool scan_for_bullet_color(rbx::instance_t parent, math::vector3 local_pos, float radius_sq, int depth = 0)
+	static bool scan_instance_tree(rbx::instance_t parent, math::vector3 local_pos, float radius_sq, std::unordered_set<std::uint64_t>& seen_parts, int depth = 0)
 	{
 		if (depth > 6 || !parent.address) return false;
 		std::vector<rbx::instance_t> children;
@@ -2886,21 +2936,20 @@ namespace color_detect
 
 		for (auto& child : children)
 		{
-			if (!child.address) continue;
+			if (!child.address || seen_parts.count(child.address)) continue;
+			seen_parts.insert(child.address);
+
 			try {
 				std::string cname = child.get_class_name();
-				if (cname == "Part" || cname == "MeshPart" || cname == "SpecialMesh")
+				if (cname == "Part" || cname == "MeshPart" || cname == "SpecialMesh" || cname == "WedgePart")
 				{
-					// Check transparency – bullets should be mostly opaque
 					float trans = memory->read<float>(child.address + Offsets::BasePart::Transparency);
-					if (trans > 0.5f) continue;
+					if (trans > 0.6f) continue;
 
-					// Get color
 					float r, g, b;
 					if (!get_part_color(child.address, r, g, b)) continue;
 					if (!color_matches(r, g, b)) continue;
 
-					// Get position – check radius
 					try {
 						rbx::part_t part_inst{ child.address };
 						math::vector3 pos = part_inst.get_primitive().get_position();
@@ -2919,10 +2968,9 @@ namespace color_detect
 						}
 					} catch (...) {}
 				}
-				// Recurse into Folders/Models (not into characters)
-				else if (cname == "Folder" || cname == "Model")
+				else if (cname == "Folder" || cname == "Model" || cname == "Camera")
 				{
-					if (scan_for_bullet_color(child, local_pos, radius_sq, depth + 1))
+					if (scan_instance_tree(child, local_pos, radius_sq, seen_parts, depth + 1))
 						return true;
 				}
 			} catch (...) {}
@@ -2937,13 +2985,12 @@ namespace color_detect
 		auto last_click_time = std::chrono::steady_clock::now();
 		int current_delay = 100;
 
-		// Track part address set to detect NEW parts (not re-report existing ones)
 		std::unordered_set<std::uint64_t> seen_parts;
 		auto last_seen_clear = std::chrono::steady_clock::now();
 
 		while (true)
 		{
-			Sleep(settings::color_detect::scan_interval_ms > 0 ? settings::color_detect::scan_interval_ms : 16);
+			Sleep(settings::color_detect::scan_interval_ms > 0 ? settings::color_detect::scan_interval_ms : 8);
 
 			if (!settings::color_detect::enabled || !game::workspace.address || !game::local_character.address)
 			{
@@ -2958,7 +3005,6 @@ namespace color_detect
 				continue;
 			}
 
-			// Clear stale part set every 2 seconds to avoid memory bloat
 			auto now_ts = std::chrono::steady_clock::now();
 			if (std::chrono::duration_cast<std::chrono::seconds>(now_ts - last_seen_clear).count() >= 2)
 			{
@@ -2966,7 +3012,6 @@ namespace color_detect
 				last_seen_clear = now_ts;
 			}
 
-			// Get local player position
 			math::vector3 local_pos = {};
 			try {
 				rbx::instance_t local_char{ game::local_character.address };
@@ -2980,53 +3025,28 @@ namespace color_detect
 
 			float r_sq = settings::color_detect::scan_radius * settings::color_detect::scan_radius;
 
-			// Scan workspace top-level for new colored parts
 			bool bullet_detected = false;
 			try {
 				rbx::instance_t workspace{ game::workspace.address };
-				auto top_children = workspace.get_children();
-				for (auto& child : top_children)
+				
+				// Scan priority folders: Ignored, Debris, Bullets, Raycasts, Effects, Camera
+				static const std::vector<std::string> priority_folders = { "Ignored", "Debris", "Bullets", "Raycasts", "Effects", "Camera" };
+				for (const auto& fname : priority_folders)
 				{
-					if (!child.address) continue;
-					// Skip already seen parts
-					if (seen_parts.count(child.address)) continue;
-
-					try {
-						std::string cname = child.get_class_name();
-						if (cname == "Part" || cname == "MeshPart")
+					rbx::instance_t fobj = workspace.find_first_child(fname);
+					if (fobj.address != 0)
+					{
+						if (scan_instance_tree(fobj, local_pos, r_sq, seen_parts, 0))
 						{
-							float trans = memory->read<float>(child.address + Offsets::BasePart::Transparency);
-							if (trans > 0.5f) { seen_parts.insert(child.address); continue; }
+							bullet_detected = true;
+							break;
+						}
+					}
+				}
 
-							float cr, cg, cb;
-							if (get_part_color(child.address, cr, cg, cb) && color_matches(cr, cg, cb))
-							{
-								try {
-									rbx::part_t part_inst{ child.address };
-									math::vector3 pos = part_inst.get_primitive().get_position();
-									float dx = pos.x - local_pos.x;
-									float dy = pos.y - local_pos.y;
-									float dz = pos.z - local_pos.z;
-									if (dx*dx + dy*dy + dz*dz <= r_sq)
-									{
-										char notif[128];
-										std::snprintf(notif, sizeof(notif),
-											"Color Detect: Bullet (%.2f,%.2f,%.2f) dist=%.1f",
-											cr, cg, cb, std::sqrt(dx*dx+dy*dy+dz*dz));
-										notifications::add(notif, notifications::NotificationType::Success, 2.0f);
-										bullet_detected = true;
-									}
-								} catch (...) {}
-							}
-							seen_parts.insert(child.address);
-						}
-						else if (cname == "Folder" || cname == "Model")
-						{
-							if (scan_for_bullet_color(child, local_pos, r_sq))
-								bullet_detected = true;
-						}
-						seen_parts.insert(child.address);
-					} catch (...) {}
+				if (!bullet_detected)
+				{
+					bullet_detected = scan_instance_tree(workspace, local_pos, r_sq, seen_parts, 0);
 				}
 			} catch (...) {}
 
@@ -3108,6 +3128,10 @@ namespace color_detect
 						is_clicking = false;
 					}
 				}
+			}
+		}
+	}
+}	}
 			}
 		}
 	}

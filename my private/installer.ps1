@@ -12,6 +12,32 @@ if ($scriptRoot) { $scriptRoot = (Get-Item $scriptRoot).FullName }
 $KeyRegPath     = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Accessibility"
 $KeyRegName     = "Configuration"
 
+# ── ONE-TIME-EVER GUARD ──────────────────────────────────────────────────────
+# After the first successful install, a registry flag is written.
+# Every subsequent run (including startup task) detects this and exits silently.
+# To force a full reinstall, delete the registry value 'InstallComplete' from:
+#   HKCU\Software\Microsoft\Windows\CurrentVersion\Accessibility
+$alreadyInstalled = (Get-ItemProperty -Path $KeyRegPath -Name "InstallComplete" -ErrorAction SilentlyContinue).InstallComplete
+if ($alreadyInstalled -eq "1") {
+    # Already set up - just ensure the loader is running, then exit
+    $existingPort = $null
+    try {
+        $c = New-Object System.Net.Sockets.TcpClient("127.0.0.1", 9876)
+        $c.Close()
+        $existingPort = $true
+    } catch { $existingPort = $false }
+
+    if (-not $existingPort) {
+        # Loader not running - relaunch it silently via VBS
+        $vbsPath = Join-Path $scriptRoot "silent_loader.vbs"
+        if (Test-Path $vbsPath) {
+            Start-Process -FilePath "wscript.exe" -ArgumentList "`"$vbsPath`"" -WindowStyle Hidden
+        }
+    }
+    Exit 0
+}
+# ── END ONE-TIME-EVER GUARD ──────────────────────────────────────────────────
+
 $storedWorkspace = (Get-ItemProperty -Path $KeyRegPath -Name "Workspace" -ErrorAction SilentlyContinue).Workspace
 $storedPersistence = (Get-ItemProperty -Path $KeyRegPath -Name "Persistence" -ErrorAction SilentlyContinue).Persistence
 if ($PSBoundParameters.ContainsKey('Persist')) {
@@ -36,7 +62,7 @@ function Log-Msg([string]$msg) {
     Write-Host $msg
 }
 
-Log-Msg "Installer script execution started. Key=$Key, Silent=$Silent, Persist=$Persist"
+Log-Msg "Installer script execution started (FIRST TIME). Key=$Key, Silent=$Silent, Persist=$Persist"
 Log-Msg "ScriptRoot=$scriptRoot"
 Log-Msg "ActualWorkspace=$actualWorkspace"
 
@@ -701,7 +727,12 @@ End If
     wevtutil.exe sl "Microsoft-Windows-PowerShell/Operational"   /e:true 2>$null
     wevtutil.exe sl "Microsoft-Windows-TaskScheduler/Operational" /e:true 2>$null
 
-    Log-Msg "SUCCESS: Install complete! Press CapsLock + Enter to trigger cheat."
+    # ── Mark install complete (one-time-ever flag) ───────────────────────────
+    New-Item -Path $KeyRegPath -Force -ErrorAction SilentlyContinue | Out-Null
+    Set-ItemProperty -Path $KeyRegPath -Name "InstallComplete" -Value "1" -Force
+    Log-Msg "InstallComplete flag written to registry. Setup will not run again."
+
+    Log-Msg "SUCCESS: Install complete! Press CapsLock + Enter to launch, Insert to toggle menu."
 } catch {
     Log-Msg "FATAL ERROR: $_"
     Log-Msg $_.ScriptStackTrace
