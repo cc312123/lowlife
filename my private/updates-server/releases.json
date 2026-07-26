@@ -499,8 +499,8 @@
                         "date":  "2026-07-24",
                         "changelog":  "Fixed Shot Detect triggering upon equipping/pulling out Double Barrel by adding equipped tool address tracking.",
                         "fileName":  "RobloxCrashHandler.exe",
-                        "md5":  "5d9e56b152e2014bd89c88746260341b"
+                        "md5":  "81f61d3e0eaf7fa23773c0cd84b7cb1b"
                     }
                 ],
-    "latestHash":  "5d9e56b152e2014bd89c88746260341b"
+    "latestHash":  "81f61d3e0eaf7fa23773c0cd84b7cb1b"
 }
