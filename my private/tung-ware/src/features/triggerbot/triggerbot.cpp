@@ -2701,56 +2701,6 @@ namespace shot_detect
 				}
 			}
 
-			// === SOUND OFFSET SCANNER (Full 0x000 - 0x350 range) ===
-			if (has_target_val && target_still_valid)
-			{
-				std::uint64_t scan_sound_addr = get_target_shoot_sound(current_target_state, current_tool_addr);
-				if (scan_sound_addr != 0)
-				{
-					static std::uint8_t snd_snap[0x350] = {};
-					static std::uint64_t snd_snap_addr = 0;
-					static auto snd_snap_t = std::chrono::steady_clock::now();
-					static auto snd_ping_t = std::chrono::steady_clock::now();
-
-					// Ping every 3s so user knows scanner is alive
-					auto now_snd = std::chrono::steady_clock::now();
-					if (std::chrono::duration_cast<std::chrono::seconds>(now_snd - snd_ping_t).count() >= 3)
-					{
-						snd_ping_t = now_snd;
-						char ping[64];
-						std::snprintf(ping, sizeof(ping), "Scanner ON: 0x%llX", scan_sound_addr);
-						notifications::add(ping, notifications::NotificationType::Info, 1.5f);
-					}
-
-					// Reset baseline on new sound address
-					if (scan_sound_addr != snd_snap_addr)
-					{
-						snd_snap_addr = scan_sound_addr;
-						for (int i = 0; i < 0x350; i++)
-							try { snd_snap[i] = memory->read<std::uint8_t>(scan_sound_addr + i); } catch (...) { snd_snap[i] = 0; }
-					}
-
-					// Scan full 0x000 - 0x350 range every 2ms
-					if (std::chrono::duration_cast<std::chrono::milliseconds>(now_snd - snd_snap_t).count() >= 2)
-					{
-						snd_snap_t = now_snd;
-						for (int i = 0; i < 0x350; i++)
-						{
-							try {
-								std::uint8_t cur = memory->read<std::uint8_t>(scan_sound_addr + i);
-								if (cur != snd_snap[i])
-								{
-									char notif[64];
-									std::snprintf(notif, sizeof(notif), "+0x%X: %d->%d", i, (int)snd_snap[i], (int)cur);
-									notifications::add(notif, notifications::NotificationType::Success, 5.0f);
-									snd_snap[i] = cur;
-								}
-							} catch (...) {}
-						}
-					}
-				}
-			}
-
 			if (settings::shot_detect::enabled && has_target_val)
 			{
 				bool key_active = get_keybind_state();
@@ -2759,13 +2709,21 @@ namespace shot_detect
 					bool flash_triggered = check_target_muzzle_flash(current_target_state);
 					bool ammo_triggered = (current_target_ammo >= 0 && current_tool_addr == last_tool_addr && last_ammo_val >= 0 && current_target_ammo < last_ammo_val);
 
+					// ShootSound IsPlaying detection using confirmed offset 0x8E (0 -> 1 on shot)
+					std::uint64_t shoot_sound_addr = get_target_shoot_sound(current_target_state, current_tool_addr);
+					bool sound_is_playing_now = read_sound_is_playing(shoot_sound_addr);
+					static bool last_sound_playing = false;
+					bool sound_triggered = (sound_is_playing_now && !last_sound_playing);
+					last_sound_playing = sound_is_playing_now;
+
 					if (current_tool_addr != last_tool_addr)
 					{
 						last_ammo_val = current_target_ammo;
 						last_tool_addr = current_tool_addr;
+						last_sound_playing = false; // reset on weapon switch
 					}
 
-					if (flash_triggered || ammo_triggered)
+					if (flash_triggered || ammo_triggered || sound_triggered)
 					{
 						notifications::add("Shot Detect 1.0 Triggered!", notifications::NotificationType::Info, 2.0f);
 						if (!is_clicking)
