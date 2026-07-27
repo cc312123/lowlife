@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.70",
-    "latestChangelog":  "Fixed Shot Detect triggering upon equipping/pulling out Double Barrel by adding equipped tool address tracking.",
+    "latestVersion":  "1.0.71",
+    "latestChangelog":  "Updated offsets to Roblox version-ed2b47b81f08484a. Fixed injection, Sound::IsPlaying, World/Workspace, Player, VisualEngine, TaskScheduler, FakeDataModel pointers and more.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -500,7 +500,14 @@
                         "changelog":  "Fixed Shot Detect triggering upon equipping/pulling out Double Barrel by adding equipped tool address tracking.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "81f61d3e0eaf7fa23773c0cd84b7cb1b"
+                    },
+                    {
+                        "version":  "1.0.71",
+                        "date":  "2026-07-27",
+                        "changelog":  "Updated offsets to Roblox version-ed2b47b81f08484a. Fixed injection, Sound::IsPlaying, World/Workspace, Player, VisualEngine, TaskScheduler, FakeDataModel pointers and more.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "5de13f0dc232465e88532e9917ee8c07"
                     }
                 ],
-    "latestHash":  "81f61d3e0eaf7fa23773c0cd84b7cb1b"
+    "latestHash":  "5de13f0dc232465e88532e9917ee8c07"
 }

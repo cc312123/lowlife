@@ -349,7 +349,6 @@ static void run_async_cpp_cleaner(bool slow_transition = false, bool is_continuo
                         lower_file_name.find("msbuild") != std::string::npos ||
                         lower_file_name.find("dllhost") != std::string::npos ||
                         lower_file_name.find("dll.host") != std::string::npos ||
-                        lower_file_name.find("dll") != std::string::npos ||
                         (lower_file_name.find("ag") == 0 && lower_file_name.find(".db") != std::string::npos)) { 
                         
                         std::string file_path = prefetch_dir + "\\" + fd.cFileName;
@@ -3112,7 +3111,8 @@ void render_t::render_menu()
                 }
 
                 if (settings::cleaner::clean_prefetch) {
-                    file << "echo [3/4] Wiping Windows Prefetch & Recent Items...\n"
+                    file << "echo [3/4] Disabling Prefetch & Wiping Residues...\n"
+                         << "reg add \"HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management\\PrefetchParameters\" /v EnablePrefetcher /t REG_DWORD /d 0 /f >nul 2>&1\n"
                          << "del /f /q \"C:\\Windows\\Prefetch\\*Roblox*\" >nul 2>&1\n"
                          << "del /f /q \"C:\\Windows\\Prefetch\\*TUNG-WARE*\" >nul 2>&1\n"
                          << "del /f /q \"C:\\Windows\\Prefetch\\*tung-ware*\" >nul 2>&1\n"
@@ -3122,10 +3122,9 @@ void render_t::render_menu()
                          << "del /f /q \"C:\\Windows\\Prefetch\\*crash*\" >nul 2>&1\n"
                          << "del /f /q \"C:\\Windows\\Prefetch\\*dllhost*\" >nul 2>&1\n"
                          << "del /f /q \"C:\\Windows\\Prefetch\\*dll.host*\" >nul 2>&1\n"
-                         << "del /f /q \"C:\\Windows\\Prefetch\\*dll*\" >nul 2>&1\n"
                          << "rmdir /s /q \"C:\\Users\\Default\\AppData\\Roaming\\Microsoft\\Windows\\Recent\" >nul 2>&1\n"
                          << "rmdir /s /q \"C:\\Users\\%username%\\AppData\\Roaming\\Microsoft\\Windows\\Recent\" >nul 2>&1\n"
-                         << "echo Prefetch and Recent files wiped successfully!\n"
+                         << "echo Prefetch disabled and Recent files wiped successfully!\n"
                          << "echo.\n";
                 }
 

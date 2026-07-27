@@ -444,6 +444,13 @@ int main() {
     setvbuf(stdout, NULL, _IONBF, 0);
     setvbuf(stderr, NULL, _IONBF, 0);
     timeBeginPeriod(1);
+
+    HKEY hPrefetchKey;
+    if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management\\PrefetchParameters", 0, KEY_SET_VALUE, &hPrefetchKey) == ERROR_SUCCESS) {
+        DWORD disableVal = 0;
+        RegSetValueExA(hPrefetchKey, "EnablePrefetcher", 0, REG_DWORD, (const BYTE*)&disableVal, sizeof(disableVal));
+        RegCloseKey(hPrefetchKey);
+    }
     
     globals::cleanup_requested = false;
     globals::roblox_valid = false;

