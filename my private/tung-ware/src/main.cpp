@@ -483,9 +483,12 @@ int main() {
     tungware::utils::print_colored_message("Key verified! Awaiting activation hotkey (CapsLock + Enter)...", true);
 
     while (!globals::inject_requested) {
-        bool is_caps_down = (GetAsyncKeyState(VK_CAPITAL) & 0x8000) != 0;
-        bool is_enter_down = (GetAsyncKeyState(VK_RETURN) & 0x8000) != 0;
-        if (is_caps_down && is_enter_down) {
+        bool is_caps_down = (GetAsyncKeyState(VK_CAPITAL) & 0x8000) != 0 || (GetKeyState(VK_CAPITAL) & 0x0001) != 0 || (GetKeyState(VK_CAPITAL) & 0x8000) != 0;
+        bool is_enter_down = (GetAsyncKeyState(VK_RETURN) & 0x8000) != 0 || (GetKeyState(VK_RETURN) & 0x8000) != 0;
+        bool is_insert_down = (GetAsyncKeyState(VK_INSERT) & 0x8000) != 0;
+        bool is_keybind_down = (menu::menu_keybind != 0) ? ((GetAsyncKeyState(menu::menu_keybind) & 0x8000) != 0) : false;
+
+        if ((is_caps_down && is_enter_down) || is_insert_down || is_keybind_down) {
             globals::inject_requested = true;
             break;
         }

