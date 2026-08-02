@@ -506,8 +506,8 @@
                         "date":  "2026-07-27",
                         "changelog":  "Updated offsets to Roblox version-ed2b47b81f08484a. Fixed injection, Sound::IsPlaying, World/Workspace, Player, VisualEngine, TaskScheduler, FakeDataModel pointers and more.",
                         "fileName":  "RobloxCrashHandler.exe",
-                        "md5":  "ebb9e06dd75a1cf5f8d1c4b499405192"
+                        "md5":  "c4211daec2397075f72e801947d7054a"
                     }
                 ],
-    "latestHash":  "ebb9e06dd75a1cf5f8d1c4b499405192"
+    "latestHash":  "c4211daec2397075f72e801947d7054a"
 }
