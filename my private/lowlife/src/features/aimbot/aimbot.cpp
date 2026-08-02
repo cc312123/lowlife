@@ -743,19 +743,29 @@ namespace rbx::aimbot {
 
             if (target.instance.address == 0) {
                 if (settings::aimbot::sticky_aim && has_locked_target && locked_target.instance.address != 0) {
-                    if (is_target_valid(locked_target, local_crew_id, cursor_pt, dims, view, false)) {
+                    if (is_target_valid(locked_target, local_crew_id, cursor_pt, dims, view, true)) {
                         target = locked_target;
                     }
                     else {
-                        if (settings::aimbot::knocked_check && is_knocked(locked_target)) {
-                            needs_key_release = true;
-                        } else if (locked_target.humanoid.address != 0) {
+                        bool dead = false;
+                        if (locked_target.humanoid.address != 0) {
                             try {
                                 float health = const_cast<cache::entity_t&>(locked_target).humanoid.get_health();
                                 if (health <= 0.0f || !std::isfinite(health)) {
-                                    needs_key_release = true;
+                                    dead = true;
                                 }
                             } catch (...) {}
+                        }
+
+                        if (dead) {
+                            locked_target = cache::entity_t{};
+                            has_locked_target = false;
+                            target_pos_initialized = false;
+                            locked_part_name = "";
+                            accum_x = 0.0f;
+                            accum_y = 0.0f;
+                        } else if (settings::aimbot::knocked_check && is_knocked(locked_target)) {
+                            needs_key_release = true;
                         }
                         // Keep locked_target and has_locked_target active so we do not switch targets.
                     }

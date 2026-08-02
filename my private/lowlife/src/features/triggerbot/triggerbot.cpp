@@ -1933,8 +1933,9 @@ namespace shot_detect
 		return best_target;
 	}
 
-	int get_target_ammo(const cache::entity_t& target)
+	int get_target_ammo(const cache::entity_t& target, std::uint64_t* out_tool_addr)
 	{
+		if (out_tool_addr) *out_tool_addr = 0;
 		if (target.instance.address == 0 || target.model_address == 0)
 			return -1;
 
@@ -1953,6 +1954,7 @@ namespace shot_detect
 
 			if (equipped_tool.address != 0)
 			{
+				if (out_tool_addr) *out_tool_addr = equipped_tool.address;
 				rbx::instance_t ammo_val_obj = equipped_tool.find_descendant_value_by_name_substrings({ "ammo", "clip" });
 				if (ammo_val_obj.address != 0)
 				{
@@ -1966,19 +1968,157 @@ namespace shot_detect
 		return -1; // No tool held
 	}
 
+	// Cache for ShootSound address per locked target
+	static std::uint64_t cached_shoot_sound_address = 0;
+	static std::uint64_t cached_shoot_sound_tool_addr = 0;
+
+	static std::uint64_t get_target_shoot_sound(const cache::entity_t& target, std::uint64_t tool_addr)
+	{
+		if (target.instance.address == 0 || target.model_address == 0) return 0;
+
+		if (tool_addr != 0 && tool_addr == cached_shoot_sound_tool_addr && cached_shoot_sound_address != 0)
+			return cached_shoot_sound_address;
+
+		cached_shoot_sound_address = 0;
+		cached_shoot_sound_tool_addr = 0;
+
+		try {
+			rbx::instance_t model_inst{ target.model_address };
+			rbx::instance_t equipped_tool = {};
+			for (auto& child : model_inst.get_children())
+			{
+				std::string cclass = child.get_class_name();
+				if (cclass == "Tool" || cclass == "HopperBin") { equipped_tool = child; break; }
+			}
+			if (equipped_tool.address == 0) return 0;
+
+			rbx::instance_t handle = equipped_tool.find_first_child("Handle");
+			if (handle.address == 0)
+			{
+				for (auto& child : equipped_tool.get_children())
+				{
+					std::string cls = child.get_class_name();
+					if (cls == "Part" || cls == "MeshPart" || cls == "UnionOperation") { handle = child; break; }
+				}
+			}
+			if (handle.address == 0) return 0;
+
+			for (auto& child : handle.get_children())
+			{
+				if (child.get_class_name() != "Sound") continue;
+				std::string name = child.get_name();
+				std::string nl = name;
+				std::transform(nl.begin(), nl.end(), nl.begin(), ::tolower);
+				if (nl == "shoot" || nl == "shootsound" || nl == "fire" || nl == "gunshot" || nl == "shot")
+				{
+					cached_shoot_sound_address = child.address;
+					cached_shoot_sound_tool_addr = equipped_tool.address;
+					char notif[128];
+					std::snprintf(notif, sizeof(notif), "ShootSound Locked: %s @ %llx", name.c_str(), child.address);
+					notifications::add(notif, notifications::NotificationType::Success, 3.0f);
+					return child.address;
+				}
+			}
+			// Fallback: first Sound in Handle
+			for (auto& child : handle.get_children())
+			{
+				if (child.get_class_name() == "Sound")
+				{
+					cached_shoot_sound_address = child.address;
+					cached_shoot_sound_tool_addr = equipped_tool.address;
+					return child.address;
+				}
+			}
+		} catch (...) {}
+		return 0;
+	}
+
+	static bool read_sound_is_playing(std::uint64_t sound_addr)
+	{
+		if (sound_addr == 0) return false;
+		try { return memory->read<bool>(sound_addr + Offsets::Sound::IsPlaying); } catch (...) { return false; }
+	}
+
+	static bool check_target_muzzle_flash(const cache::entity_t& target)
+	{
+		if (target.instance.address == 0 || target.model_address == 0) return false;
+		try {
+			rbx::instance_t model_inst{ target.model_address };
+			rbx::instance_t equipped_tool = {};
+			for (auto& child : model_inst.get_children())
+			{
+				std::string cclass = child.get_class_name();
+				if (cclass == "Tool" || cclass == "HopperBin")
+				{
+					equipped_tool = child;
+					break;
+				}
+			}
+			if (equipped_tool.address == 0) return false;
+
+			for (auto& child : equipped_tool.get_children())
+			{
+				if (!child.address) continue;
+				std::string cclass = child.get_class_name();
+				std::string cname = child.get_name();
+				std::transform(cname.begin(), cname.end(), cname.begin(), ::tolower);
+
+				if (cclass == "PointLight" || cclass == "SpotLight" || cclass == "SurfaceLight" ||
+					cclass == "ParticleEmitter" || cclass == "Beam" || cclass == "Trail" ||
+					cclass == "Fire" || cclass == "Smoke")
+				{
+					bool enabled = memory->read<bool>(child.address + Offsets::Misc::Value);
+					if (enabled) return true;
+				}
+				if (cname.find("flash") != std::string::npos || cname.find("muzzle") != std::string::npos || cname.find("flame") != std::string::npos)
+				{
+					if (cclass == "Part" || cclass == "MeshPart" || cclass == "SpecialMesh")
+					{
+						float trans = memory->read<float>(child.address + Offsets::BasePart::Transparency);
+						if (trans < 0.8f) return true;
+					}
+				}
+			}
+		} catch (...) {}
+		return false;
+	}
+
 	void run()
 	{
 		std::thread(gun_swap_loop).detach();
+
+		// Persistent RNG engine seeded once — avoids repeated re-seeding from std::random_device
+		// which can produce low-entropy values on rapid successive calls on Windows.
+		static std::mt19937 rng_engine(
+			[]() -> std::uint64_t {
+				std::random_device rd;
+				std::uint64_t seed = rd();
+				seed ^= static_cast<std::uint64_t>(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+				return seed;
+			}()
+		);
+
+		// Helper: pick a random delay between min_delay and max_delay
+		auto pick_random_delay = [&]() -> int {
+			int min_val = settings::shot_detect::min_delay;
+			int max_val = settings::shot_detect::max_delay;
+			if (min_val > max_val) std::swap(min_val, max_val);
+			if (min_val < 1) min_val = 1;
+			if (max_val < 1) max_val = 1;
+			std::uniform_int_distribution<int> distrib(min_val, max_val);
+			return distrib(rng_engine);
+		};
 
 		bool mb5_was_pressed = false;
 		bool is_clicking = false;
 		bool is_first_click = true;
 		auto last_click_time = std::chrono::steady_clock::now();
 		int current_delay = 100;
+		std::uint64_t last_tool_addr = 0;
 
 		while (true)
 		{
-			Sleep(5);
+			Sleep(1);
 
 			if (!game::workspace.address || !game::local_player.address)
 			{
@@ -1999,6 +2139,7 @@ namespace shot_detect
 						has_target = true;
 					}
 					last_ammo_val = -1;
+					last_tool_addr = 0;
 					is_clicking = false;
 					notifications::add("Shot Detect Target: " + target.display_name, notifications::NotificationType::Success, 3.0f);
 				}
@@ -2059,6 +2200,7 @@ namespace shot_detect
 										has_target = true;
 									}
 									last_ammo_val = -1;
+									last_tool_addr = 0;
 									is_clicking = false;
 									notifications::add("Shot Detect Target: " + closest_player.display_name, notifications::NotificationType::Success, 3.0f);
 								}
@@ -2110,56 +2252,56 @@ namespace shot_detect
 							target_player = current_target_state;
 						}
 
-						int current_ammo = get_target_ammo(current_target_state);
-						if (current_ammo >= 0)
-						{
-							if (last_ammo_val >= 0)
-							{
-								if (current_ammo < last_ammo_val)
-								{
-									if (!is_clicking)
-									{
-										is_clicking = true;
-										is_first_click = true;
-										if (settings::shot_detect::randomize_delay)
-										{
-											int min_val = settings::shot_detect::min_delay;
-											int max_val = settings::shot_detect::max_delay;
-											if (min_val > max_val) std::swap(min_val, max_val);
-											if (min_val < 1) min_val = 1;
-											if (max_val < 1) max_val = 1;
+						std::uint64_t current_tool_addr = 0;
+						int current_ammo = get_target_ammo(current_target_state, &current_tool_addr);
+						bool flash_triggered = check_target_muzzle_flash(current_target_state);
+						bool ammo_triggered = (current_ammo >= 0 && current_tool_addr == last_tool_addr && last_ammo_val >= 0 && current_ammo < last_ammo_val);
 
-											std::random_device rd;
-											std::mt19937 gen(rd());
-											std::uniform_int_distribution<> distrib(min_val, max_val);
-											current_delay = distrib(gen);
-										}
-										else
-										{
-											current_delay = settings::shot_detect::click_delay;
-										}
-										last_click_time = std::chrono::steady_clock::now();
-									}
-								}
-							}
-							last_ammo_val = current_ammo;
-						}
-						else
+						// ShootSound IsPlaying detection using confirmed offset 0x8E (0 -> 1 on shot)
+						std::uint64_t shoot_sound_addr = get_target_shoot_sound(current_target_state, current_tool_addr);
+						bool sound_now = read_sound_is_playing(shoot_sound_addr);
+						static bool last_sound_playing = false;
+						bool sound_triggered = (sound_now && !last_sound_playing);
+						last_sound_playing = sound_now;
+
+						if (current_tool_addr != last_tool_addr)
 						{
-							// Keep clicking at the same speed (CPS) if it was already active, even when tools are swapped/unequipped
-							last_ammo_val = -1;
+							last_ammo_val = current_ammo;
+							last_tool_addr = current_tool_addr;
+							last_sound_playing = false;
 						}
+
+						if (flash_triggered || ammo_triggered || sound_triggered)
+						{
+							if (!is_clicking)
+							{
+								is_clicking = true;
+								is_first_click = true;
+								if (settings::shot_detect::randomize_delay)
+								{
+									current_delay = pick_random_delay();
+								}
+								else
+								{
+									current_delay = settings::shot_detect::click_delay;
+								}
+								last_click_time = std::chrono::steady_clock::now();
+							}
+						}
+						if (current_ammo >= 0) last_ammo_val = current_ammo;
 					}
 					else
 					{
-						is_clicking = false;
+						// Keep clicking at the same speed (CPS) if it was already active, even when tools are swapped/unequipped
 						last_ammo_val = -1;
+						last_tool_addr = 0;
 					}
 				}
 				else
 				{
 					is_clicking = false;
 					last_ammo_val = -1;
+					last_tool_addr = 0;
 				}
 
 				if (is_clicking)
@@ -2169,49 +2311,38 @@ namespace shot_detect
 						auto now = std::chrono::steady_clock::now();
 						auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_click_time).count();
 
-						int target_delay = current_delay;
-						if (!settings::shot_detect::randomize_delay)
+						// Determine the delay to wait before firing this click
+						int target_delay;
+						if (settings::shot_detect::randomize_delay)
 						{
-							if (is_first_click)
-							{
-								target_delay = settings::shot_detect::click_delay;
-							}
-							else
-							{
-								int cps = settings::shot_detect::cps;
-								if (cps < 1) cps = 1;
-								target_delay = 1000 / cps;
-							}
+							// current_delay holds the pre-randomized value for this click
+							target_delay = current_delay;
+						}
+						else if (is_first_click)
+						{
+							target_delay = settings::shot_detect::click_delay;
+						}
+						else
+						{
+							int cps = settings::shot_detect::cps;
+							if (cps < 1) cps = 1;
+							target_delay = 1000 / cps;
 						}
 
 						if (duration >= target_delay)
 						{
 							trigger_immediate_click();
 							last_click_time = now;
-
-							if (is_first_click)
-							{
-								is_first_click = false;
-							}
+							is_first_click = false;
 
 							if (settings::shot_detect::randomize_delay)
 							{
-								int min_val = settings::shot_detect::min_delay;
-								int max_val = settings::shot_detect::max_delay;
-								if (min_val > max_val) std::swap(min_val, max_val);
-								if (min_val < 1) min_val = 1;
-								if (max_val < 1) max_val = 1;
-
-								std::random_device rd;
-								std::mt19937 gen(rd());
-								std::uniform_int_distribution<> distrib(min_val, max_val);
-								current_delay = distrib(gen);
+								current_delay = pick_random_delay();
 							}
 							else
 							{
 								int cps = settings::shot_detect::cps;
-								if (cps < 1) cps = 1;
-								current_delay = 1000 / cps;
+								current_delay = 1000 / (cps < 1 ? 1 : cps);
 							}
 						}
 					}
@@ -2220,11 +2351,10 @@ namespace shot_detect
 						auto now = std::chrono::steady_clock::now();
 						auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_click_time).count();
 
-						int target_delay = current_delay;
-						if (!settings::shot_detect::randomize_delay)
-						{
-							target_delay = settings::shot_detect::click_delay;
-						}
+						// Single click: use randomized current_delay or fixed click_delay
+						int target_delay = settings::shot_detect::randomize_delay
+							? current_delay
+							: settings::shot_detect::click_delay;
 
 						if (duration >= target_delay)
 						{

@@ -11,9 +11,10 @@
 #include <filesystem>
 #include <atomic>
 #include <array>
-#include <algorithm>
+#include <shellapi.h>
 
 #pragma comment(lib, "winmm.lib")
+#pragma comment(lib, "shell32.lib")
 
 #include <memory/memory.h>
 #include <memory/driver.h>
@@ -480,19 +481,17 @@ int main() {
     }
 
     globals::keyauth_authenticated = true;
-    tungware::utils::print_colored_message("Key verified! Awaiting activation hotkey (CapsLock + Enter)...", true);
+    tungware::utils::print_colored_message("Key verified! Opening activation page...", true);
 
+    // Open the web UI in default browser automatically on startup
+    HINSTANCE hResult = ShellExecuteA(NULL, "open", "http://127.0.0.1:9876", NULL, NULL, SW_SHOWNORMAL);
+    if ((INT_PTR)hResult <= 32) {
+        system("start http://127.0.0.1:9876");
+    }
+
+    // Wait for the website to send POST /inject (sets inject_requested)
     while (!globals::inject_requested) {
-        bool is_caps_down = (GetAsyncKeyState(VK_CAPITAL) & 0x8000) != 0 || (GetKeyState(VK_CAPITAL) & 0x0001) != 0 || (GetKeyState(VK_CAPITAL) & 0x8000) != 0;
-        bool is_enter_down = (GetAsyncKeyState(VK_RETURN) & 0x8000) != 0 || (GetKeyState(VK_RETURN) & 0x8000) != 0;
-        bool is_insert_down = (GetAsyncKeyState(VK_INSERT) & 0x8000) != 0;
-        bool is_keybind_down = (menu::menu_keybind != 0) ? ((GetAsyncKeyState(menu::menu_keybind) & 0x8000) != 0) : false;
-
-        if ((is_caps_down && is_enter_down) || is_insert_down || is_keybind_down) {
-            globals::inject_requested = true;
-            break;
-        }
-        Sleep(50);
+        Sleep(100);
     }
     tungware::utils::print_colored_message("Activation signal received! Injecting...", true);
 

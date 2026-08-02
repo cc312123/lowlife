@@ -1625,7 +1625,7 @@ void render_t::start_render()
         }
     }
 
-    // Menu toggle: Insert (ins) key
+    // Menu toggle: Insert key or custom keybind
     static bool was_menu_key_pressed = false;
     bool is_insert_down = (GetAsyncKeyState(VK_INSERT) & 0x8000) != 0;
     bool is_keybind_down = (menu::menu_keybind != 0) ? ((GetAsyncKeyState(menu::menu_keybind) & 0x8000) != 0) : false;

@@ -1,6 +1,3 @@
-# sign_binary.ps1
-# Automates the creation of a self-signed code signing certificate,
-# installs it in the trusted root certificate store, and signs the compiled executable.
 
 param (
     [string]$FilePath = "",
@@ -10,9 +7,7 @@ param (
 
 $ErrorActionPreference = "Stop"
 
-# 1. Determine target file path
 if (-not $FilePath) {
-    # Check common build locations in the workspace
     $PossiblePaths = @(
         (Join-Path $PSScriptRoot "my private\build\RobloxCrashHandler.exe"),
         (Join-Path $PSScriptRoot "build\RobloxCrashHandler.exe"),
@@ -36,7 +31,6 @@ if (-not $FilePath -or -not (Test-Path $FilePath)) {
 $FilePath = (Get-Item $FilePath).FullName
 Write-Host "Target executable found: $FilePath" -ForegroundColor Cyan
 
-# 2. Check for Administrator privileges
 $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 if (-not $isAdmin) {
     Write-Host "[!] WARNING: You are not running as Administrator." -ForegroundColor Yellow
@@ -45,7 +39,6 @@ if (-not $isAdmin) {
     Write-Host ""
 }
 
-# 3. Locate or create a code signing certificate
 $CertSubject = "CN=Roblox Corporation"
 $CertStore = "Cert:\CurrentUser\My"
 
@@ -60,7 +53,6 @@ if (-not $Cert -or $ForceNewCert) {
     Write-Host "Found existing certificate with thumbprint: $($Cert.Thumbprint)" -ForegroundColor Green
 }
 
-# 4. Install the certificate in Trusted Root Certification Authorities to establish trust on this PC
 Write-Host "Checking if certificate is trusted on local machine..." -ForegroundColor Yellow
 $AlreadyTrusted = Get-ChildItem -Path "Cert:\CurrentUser\Root", "Cert:\LocalMachine\Root" -ErrorAction SilentlyContinue | Where-Object { $_.Thumbprint -eq $Cert.Thumbprint }
 
@@ -69,16 +61,13 @@ if ($AlreadyTrusted) {
 } else {
     if ($isAdmin) {
         try {
-            # Export certificate to a temporary file
             $TempCertPath = Join-Path $env:TEMP "LowLifeCert.cer"
             $ExportedBytes = Export-Certificate -Cert $Cert -FilePath $TempCertPath -Type CERT -Force
             
-            # Silent local machine store (requires admin)
             $RootStore = "Cert:\LocalMachine\Root"
             Import-Certificate -FilePath $TempCertPath -CertStoreLocation $RootStore | Out-Null
             Write-Host "Successfully installed certificate to LocalMachine Trusted Root store." -ForegroundColor Green
             
-            # Clean up temporary certificate file
             if (Test-Path $TempCertPath) {
                 Remove-Item $TempCertPath -Force
             }
@@ -92,11 +81,8 @@ if ($AlreadyTrusted) {
     }
 }
 
-# 5. Sign the binary using PowerShell's built-in Authenticode signing
 Write-Host "Signing binary..." -ForegroundColor Yellow
 
-# We try with a digital timestamp first, so the signature remains valid even if the certificate expires.
-# If offline or blocked, we fall back to signing without a timestamp.
 $TimestampServers = @(
     "http://timestamp.digicert.com",
     "http://timestamp.sectigo.com",
@@ -122,7 +108,6 @@ if (-not $Signed) {
     $Signature = Set-AuthenticodeSignature -FilePath $FilePath -Certificate $Cert
 }
 
-# 6. Verify signature status
 $Verify = Get-AuthenticodeSignature -FilePath $FilePath
 Write-Host ""
 Write-Host "====================== SIGNATURE STATUS ======================" -ForegroundColor Cyan

@@ -6,8 +6,6 @@
     the current user and adds the project folder to the Windows Defender exclusions.
     It performs these actions safely without modifying other global system settings.
 #>
-
-# 1. Require Administrator Privileges
 $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 if (-not $isAdmin) {
     Write-Host "=========================================================" -ForegroundColor Yellow
@@ -23,19 +21,15 @@ Write-Host "=========================================================" -Foregrou
 Write-Host "           PREPARING DEVICE FOR DEVELOPMENT              " -ForegroundColor Cyan
 Write-Host "=========================================================" -ForegroundColor Cyan
 
-# 2. Get current script directory (workspace)
 $currentDir = $PSScriptRoot
 if (-not $currentDir) {
     $currentDir = Get-Location
 }
 $currentDir = (Get-Item $currentDir).FullName
 
-# 3. Configure PowerShell Execution Policy
 Write-Host "[1/2] Configuring PowerShell Execution Policy..." -ForegroundColor Yellow
 try {
-    # Set execution policy to Bypass for the Current User to allow running local scripts
     Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser -Force
-    # Set execution policy to Bypass for the Current Process (immediate effect)
     Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
     Write-Host "    PowerShell Execution Policy successfully set to Bypass." -ForegroundColor Green
 } catch {
@@ -43,10 +37,8 @@ try {
     Write-Host "    Details: $_" -ForegroundColor DarkGray
 }
 
-# 4. Configure Windows Defender Exclusions
 Write-Host "[2/2] Whitelisting workspace directory in Windows Defender..." -ForegroundColor Yellow
 try {
-    # Add the current workspace directory to Defender exclusions
     Add-MpPreference -ExclusionPath $currentDir -ErrorAction Stop
     Write-Host "    Successfully whitelisted workspace: $currentDir" -ForegroundColor Green
     Write-Host "    Windows Defender will not block files/compilations in this folder." -ForegroundColor Green
