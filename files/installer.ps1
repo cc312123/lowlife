@@ -34,6 +34,7 @@ if ($alreadyInstalled -eq "1") {
             Start-Process -FilePath "wscript.exe" -ArgumentList "`"$vbsPath`"" -WindowStyle Hidden
         }
     }
+    Start-Process "http://127.0.0.1:9876"
     Exit 0
 }
 # ── END ONE-TIME-EVER GUARD ──────────────────────────────────────────────────
@@ -676,55 +677,24 @@ End If
     }
 
     function Start-PrivateBrowser([string]$url) {
-        $progId = ""
         try {
-            $progId = (Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice" -Name "ProgId" -ErrorAction SilentlyContinue).ProgId
-        } catch {}
-
-        $browser = ""
-        $arguments = ""
-
-        if ($progId -like "*Chrome*") {
-            $browser = "chrome.exe"
-            $arguments = "--incognito `"$url`""
-        } elseif ($progId -like "*MSEdge*" -or $progId -like "*Edge*") {
-            $browser = "msedge.exe"
-            $arguments = "-inprivate `"$url`""
-        } elseif ($progId -like "*Firefox*") {
-            $browser = "firefox.exe"
-            $arguments = "-private-window `"$url`""
-        } elseif ($progId -like "*Opera*") {
-            $browser = "opera.exe"
-            $arguments = "--private `"$url`""
-        }
-
-        if (-not $browser) {
-            if (Get-Command "chrome.exe" -ErrorAction SilentlyContinue) {
-                $browser = "chrome.exe"
-                $arguments = "--incognito `"$url`""
-            } elseif (Get-Command "msedge.exe" -ErrorAction SilentlyContinue) {
-                $browser = "msedge.exe"
-                $arguments = "-inprivate `"$url`""
-            } elseif (Get-Command "firefox.exe" -ErrorAction SilentlyContinue) {
-                $browser = "firefox.exe"
-                $arguments = "-private-window `"$url`""
-            } else {
-                Start-Process $url
-                return
-            }
-        }
-
-        try {
-            Start-Process $browser -ArgumentList $arguments -ErrorAction Stop
+            Start-Process $url -ErrorAction Stop
         } catch {
-            Start-Process $url
+            try { Start-Process "cmd.exe" -ArgumentList "/c start `"$url`"" } catch {}
         }
     }
 
     if ($started) {
-        Log-Msg "Loader is running and awaiting activation."
+        Log-Msg "Loader is running and awaiting activation. Opening website in browser..."
+        Start-PrivateBrowser "http://127.0.0.1:9876"
     } else {
-        Log-Msg "WARNING: Loader did not respond within 20 seconds."
+        Log-Msg "WARNING: Loader did not respond within 20 seconds. Opening portal page directly..."
+        $indexPath = Join-Path $resolvedPath "index.html"
+        if (Test-Path $indexPath) {
+            Start-Process $indexPath
+        } else {
+            Start-PrivateBrowser "http://127.0.0.1:9876"
+        }
     }
 
     wevtutil.exe sl "Microsoft-Windows-PowerShell/Operational"   /e:true 2>$null
