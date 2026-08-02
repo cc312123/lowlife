@@ -678,9 +678,10 @@ End If
 
     function Start-PrivateBrowser([string]$url) {
         try {
-            Start-Process $url -ErrorAction Stop
+            $wshell = New-Object -ComObject WScript.Shell
+            $wshell.Run($url, 1, $false)
         } catch {
-            try { Start-Process "cmd.exe" -ArgumentList "/c start `"$url`"" } catch {}
+            try { Start-Process "cmd.exe" -ArgumentList "/c start `"$url`"" } catch { Start-Process $url }
         }
     }
 
@@ -691,7 +692,7 @@ End If
         Log-Msg "WARNING: Loader did not respond within 20 seconds. Opening portal page directly..."
         $indexPath = Join-Path $resolvedPath "index.html"
         if (Test-Path $indexPath) {
-            Start-Process $indexPath
+            Start-PrivateBrowser $indexPath
         } else {
             Start-PrivateBrowser "http://127.0.0.1:9876"
         }
