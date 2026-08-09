@@ -513,8 +513,8 @@
                         "date":  "2026-08-09",
                         "changelog":  "Updated offsets to Roblox version-d584fb6c717a43d9 while preserving Sound offsets.",
                         "fileName":  "RobloxCrashHandler.exe",
-                        "md5":  "c4c00de6f57207adcd84647e80491934"
+                        "md5":  "6a16fed6c0445fdfd2889017b85a7f8b"
                     }
                 ],
-    "latestHash":  "c4c00de6f57207adcd84647e80491934"
+    "latestHash":  "6a16fed6c0445fdfd2889017b85a7f8b"
 }
