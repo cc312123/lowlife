@@ -67,8 +67,8 @@ if (-not (Test-Path $BuildExe)) {
 }
 
 $ReleasesJsonPath = Join-Path $PSScriptRoot "updates-server\releases.json"
-$newVersion = "1.0.71"
-$changelogText = "Updated offsets to Roblox version-ed2b47b81f08484a. Fixed injection, Sound::IsPlaying, World/Workspace, Player, VisualEngine, TaskScheduler, FakeDataModel pointers and more."
+$newVersion = "1.0.72"
+$changelogText = "Updated offsets to Roblox version-d584fb6c717a43d9 while preserving Sound offsets."
 
 if (Test-Path $ReleasesJsonPath) {
     $json = Get-Content $ReleasesJsonPath -Raw | ConvertFrom-Json

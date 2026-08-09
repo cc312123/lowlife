@@ -1,6 +1,6 @@
 ﻿{
-    "latestVersion":  "1.0.71",
-    "latestChangelog":  "Updated offsets to Roblox version-ed2b47b81f08484a. Fixed injection, Sound::IsPlaying, World/Workspace, Player, VisualEngine, TaskScheduler, FakeDataModel pointers and more.",
+    "latestVersion":  "1.0.72",
+    "latestChangelog":  "Updated offsets to Roblox version-d584fb6c717a43d9 while preserving Sound offsets.",
     "fileName":  "RobloxCrashHandler.exe",
     "totalDownloads":  3,
     "history":  [
@@ -507,7 +507,14 @@
                         "changelog":  "Updated offsets to Roblox version-ed2b47b81f08484a. Fixed injection, Sound::IsPlaying, World/Workspace, Player, VisualEngine, TaskScheduler, FakeDataModel pointers and more.",
                         "fileName":  "RobloxCrashHandler.exe",
                         "md5":  "c4211daec2397075f72e801947d7054a"
+                    },
+                    {
+                        "version":  "1.0.72",
+                        "date":  "2026-08-09",
+                        "changelog":  "Updated offsets to Roblox version-d584fb6c717a43d9 while preserving Sound offsets.",
+                        "fileName":  "RobloxCrashHandler.exe",
+                        "md5":  "c4c00de6f57207adcd84647e80491934"
                     }
                 ],
-    "latestHash":  "c4211daec2397075f72e801947d7054a"
+    "latestHash":  "c4c00de6f57207adcd84647e80491934"
 }
