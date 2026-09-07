@@ -137,17 +137,20 @@ static bool ResolveModelInstanceOffset(std::uint64_t local_player_addr)
 
 	rbx::player_t lp_obj{ local_player_addr };
 	std::string lp_name = lp_obj.get_name();
-	if (lp_name.empty() || lp_name == "unknown" || lp_name == "Unknown") return false;
+	std::string lp_display = memory->read_string(local_player_addr + Offsets::Player::DisplayName);
 
 	for (std::uint64_t offset = 0x100; offset <= 0x600; offset += 8)
 	{
 		std::uint64_t potential_char = memory->read<std::uint64_t>(local_player_addr + offset);
 		if (potential_char != 0 && (potential_char & 0x7) == 0 && potential_char > 0x10000)
 		{
-			rbx::nameable_t inst{ potential_char };
+			rbx::instance_t inst{ potential_char };
 			std::string name = inst.get_name();
 			std::string class_name = inst.get_class_name();
-			if (class_name == "Model" && name == lp_name)
+			if (class_name == "Model" && (
+				(name != "unknown" && !name.empty() && (name == lp_name || name == lp_display)) ||
+				inst.find_first_child_by_class("Humanoid").address != 0
+			))
 			{
 				Offsets::Player::ModelInstance = offset;
 				return true;

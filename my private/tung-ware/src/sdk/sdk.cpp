@@ -11,45 +11,38 @@ std::string rbx::nameable_t::get_name()
 {
 	if (this->address == 0) return "unknown";
 
-	// NameContainer (0x70) holds the std::string for the instance name
-	// std::string layout: if len < 16, chars are inline at offset 0; if len >= 16, ptr to heap at offset 0
-	std::uint64_t name_container = this->address + Offsets::Instance::NameContainer;
-
-	try {
-		// Read the string length (stored 8 bytes after the char buffer in MSVC std::string: buf[0..15], len at +0x10, cap at +0x18)
-		std::uint64_t str_len = memory->read<std::uint64_t>(name_container + 0x10);
-
-		if (str_len > 0 && str_len < 512)
+	// 1. Try NameContainer offset if defined
+	if (Offsets::Instance::NameContainer != 0)
+	{
+		std::string str = memory->read_string(this->address + Offsets::Instance::NameContainer);
+		if (!str.empty() && str != "Unknown" && str != "unknown")
 		{
-			if (str_len < 16)
-			{
-				// Small string optimization: chars inline at name_container
-				char buf[16] = {};
-				Luck_ReadVirtualMemory(memory->get_process_handle(), reinterpret_cast<void*>(name_container), buf, static_cast<ULONG>(str_len), nullptr);
-				buf[str_len] = '\0';
-				std::string result(buf, str_len);
-				if (!result.empty()) return result;
-			}
-			else
-			{
-				// Large string: pointer at name_container
-				std::uint64_t str_ptr = memory->read<std::uint64_t>(name_container);
-				if (str_ptr && (str_ptr & 0x7) == 0 && str_ptr > 0x10000)
-				{
-					std::string result = memory->read_string(str_ptr);
-					if (!result.empty()) return result;
-				}
-			}
+			return str;
 		}
-	} catch (...) {}
+	}
 
-	// Fallback: try reading Name offset as a string pointer
+	// 2. Scan standard Roblox Instance Name offsets (0x70, 0x48, 0x50, 0x68, 0x78, 0x40)
+	constexpr uintptr_t candidate_offsets[] = { 0x70, 0x48, 0x50, 0x68, 0x78, 0x40 };
+	for (uintptr_t off : candidate_offsets)
+	{
+		if (off == Offsets::Instance::NameContainer) continue;
+		std::string str = memory->read_string(this->address + off);
+		if (!str.empty() && str != "Unknown" && str != "unknown")
+		{
+			return str;
+		}
+	}
+
+	// 3. Fallback: try reading pointer at Name offset
 	try {
 		std::uint64_t name_ptr = memory->read<std::uint64_t>(this->address + Offsets::Instance::Name);
 		if (name_ptr && (name_ptr & 0x7) == 0 && name_ptr > 0x10000)
 		{
-			std::string result = memory->read_string(name_ptr);
-			if (!result.empty() && result != "Unknown") return result;
+			std::string str = memory->read_string(name_ptr);
+			if (!str.empty() && str != "Unknown" && str != "unknown")
+			{
+				return str;
+			}
 		}
 	} catch (...) {}
 

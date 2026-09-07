@@ -11,22 +11,40 @@ std::string rbx::nameable_t::get_name()
 {
 	if (this->address == 0) return "unknown";
 
-	std::uint64_t name = memory->read<std::uint64_t>(this->address + Offsets::Instance::Name);
-
-	if (name && (name & 0x7) == 0 && name > 0x10000)
+	// 1. Try NameContainer offset if defined
+	if (Offsets::Instance::NameContainer != 0)
 	{
-		std::string str = memory->read_string(name);
-		if (!str.empty() && str != "Unknown")
+		std::string str = memory->read_string(this->address + Offsets::Instance::NameContainer);
+		if (!str.empty() && str != "Unknown" && str != "unknown")
 		{
 			return str;
 		}
 	}
 
-	std::string direct_str = memory->read_string(this->address + Offsets::Instance::Name);
-	if (!direct_str.empty() && direct_str != "Unknown")
+	// 2. Scan standard Roblox Instance Name offsets (0x70, 0x48, 0x50, 0x68, 0x78, 0x40)
+	constexpr uintptr_t candidate_offsets[] = { 0x70, 0x48, 0x50, 0x68, 0x78, 0x40 };
+	for (uintptr_t off : candidate_offsets)
 	{
-		return direct_str;
+		if (off == Offsets::Instance::NameContainer) continue;
+		std::string str = memory->read_string(this->address + off);
+		if (!str.empty() && str != "Unknown" && str != "unknown")
+		{
+			return str;
+		}
 	}
+
+	// 3. Fallback: try reading pointer at Name offset
+	try {
+		std::uint64_t name_ptr = memory->read<std::uint64_t>(this->address + Offsets::Instance::Name);
+		if (name_ptr && (name_ptr & 0x7) == 0 && name_ptr > 0x10000)
+		{
+			std::string str = memory->read_string(name_ptr);
+			if (!str.empty() && str != "Unknown" && str != "unknown")
+			{
+				return str;
+			}
+		}
+	} catch (...) {}
 
 	return "unknown";
 }
