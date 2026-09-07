@@ -7,42 +7,47 @@
 #include <mutex>
 #include <unordered_map>
 
+static bool is_valid_roblox_name(const std::string& str)
+{
+	if (str.empty() || str.length() < 2 || str.length() > 60) return false;
+	if (str == "Unknown" || str == "unknown" || str == "Player" || str == "Model" || str == "Folder" || str == "Part" || str == "Workspace" || str == "Camera") return false;
+
+	for (char c : str)
+	{
+		if (static_cast<unsigned char>(c) < 32 || static_cast<unsigned char>(c) > 126) return false;
+	}
+	return true;
+}
+
 std::string rbx::nameable_t::get_name()
 {
 	if (this->address == 0) return "unknown";
 
-	// 1. Try NameContainer offset if defined
+	// 1. Check NameContainer offset if non-zero
 	if (Offsets::Instance::NameContainer != 0)
 	{
 		std::string str = memory->read_string(this->address + Offsets::Instance::NameContainer);
-		if (!str.empty() && str != "Unknown" && str != "unknown")
-		{
-			return str;
-		}
+		if (is_valid_roblox_name(str)) return str;
 	}
 
-	// 2. Scan standard Roblox Instance Name offsets (0x70, 0x48, 0x50, 0x68, 0x78, 0x40)
-	constexpr uintptr_t candidate_offsets[] = { 0x70, 0x48, 0x50, 0x68, 0x78, 0x40 };
-	for (uintptr_t off : candidate_offsets)
+	// 2. Scan offsets from 0x38 to 0x140 in 8-byte steps
+	for (uintptr_t off = 0x38; off <= 0x140; off += 8)
 	{
 		if (off == Offsets::Instance::NameContainer) continue;
 		std::string str = memory->read_string(this->address + off);
-		if (!str.empty() && str != "Unknown" && str != "unknown")
+		if (is_valid_roblox_name(str))
 		{
 			return str;
 		}
 	}
 
-	// 3. Fallback: try reading pointer at Name offset
+	// 3. Fallback: pointer dereference at Name offset
 	try {
 		std::uint64_t name_ptr = memory->read<std::uint64_t>(this->address + Offsets::Instance::Name);
 		if (name_ptr && (name_ptr & 0x7) == 0 && name_ptr > 0x10000)
 		{
 			std::string str = memory->read_string(name_ptr);
-			if (!str.empty() && str != "Unknown" && str != "unknown")
-			{
-				return str;
-			}
+			if (is_valid_roblox_name(str)) return str;
 		}
 	} catch (...) {}
 
