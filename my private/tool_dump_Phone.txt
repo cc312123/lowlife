@@ -1,0 +1,15 @@
+Tool Name: Phone
+Tool Class: Tool
+
+Descendants:
+  - Name: _Extra | Class: Script @ 0x2133ff47400
+    - Name: RightGrip | Class: Weld @ 0x214a7144140
+  - Name: LocalScript | Class: LocalScript @ 0x2133ff40e00
+    - Name: received | Class: StringValue | Value: "Unknown" @ 0x2132e734800
+    - Name: sent | Class: StringValue | Value: "Unknown" @ 0x2132e73ed00
+  - Name: Handle | Class: MeshPart @ 0x214a39dc480
+    - Name: PhoneEnd | Class: StringValue | Value: "Unknown" @ 0x2132e735200
+    - Name: PhoneStart | Class: StringValue | Value: "Unknown" @ 0x2132e733100
+    - Name: iPhone (Contacts) | Class: MeshPart @ 0x214a39d4a00
+      - Name: ManualWeld | Class: ManualWeld @ 0x214a7142c40
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x2281154271360 @ 0x214a6ecf040

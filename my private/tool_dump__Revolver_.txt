@@ -1,0 +1,16 @@
+Tool Name: [Revolver]
+Tool Class: Tool
+
+Descendants:
+  - Name: Ammo | Class: IntValue | Value: 6 @ 0x2148303f040
+  - Name: Handle | Class: Part @ 0x21494e45b80
+    - Name: ShootSound | Class: Sound @ 0x2149ac56e80
+    - Name: NoAmmo | Class: Sound @ 0x2149ac56c00
+    - Name: WeldConstraint | Class: WeldConstraint @ 0x2148b462ec0
+    - Name: Fire | Class: Attachment @ 0x214899e1880
+    - Name: Flash | Class: BillboardGui @ 0x2132e12d280
+      - Name: Shoot | Class: ImageLabel @ 0x2132e8e0c80
+  - Name: Default | Class: MeshPart @ 0x213225ac800
+  - Name: LocalScript | Class: LocalScript @ 0x213222ad000
+  - Name: MaxAmmo | Class: NumberValue | Value: 6.000000 @ 0x2148303dfa0
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x2280887134336 @ 0x2148303b680

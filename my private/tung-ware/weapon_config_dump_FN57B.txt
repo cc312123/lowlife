@@ -1,0 +1,1416 @@
+=== Weapon Config Search for Tool: FN57B ===
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/CustomSystem/ClientFeedbackCustom
+- ClientFeedbackCustom (RemoteEvent) @ 0x29384ba7e80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/CustomSystem/CustomResetFeedback
+- CustomResetFeedback (RemoteEvent) @ 0x29384ba3dc0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/ClothingSystem/Accessories/BlackPaintedBag
+- BlackPaintedBag (Accessory) @ 0x29384bae5c0
+  - Handle (Part) @ 0x29215a3ecc0
+    - OriginalSize (Vector3Value) [ValueObject] @ 0x2922fbbeda0
+    - BodyBackAttachment (Attachment) @ 0x29383cced80
+    - Bagg554df (Motor6D) @ 0x292312c4e00
+  - Bagg554df (Part) @ 0x29215a3ee80
+    - SpecialMesh (SpecialMesh) @ 0x29383bfba80
+    - AvatarPartScaleType (StringValue) | Value: "Unknown" @ 0x293a06a0500
+    - BodyBackAttachment (Attachment) @ 0x29383cc9380
+      - OriginalPosition (Vector3Value) [ValueObject] @ 0x2922fbbcc60
+    - OriginalSize (Vector3Value) [ValueObject] @ 0x2922fbbcd40
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/ClothingSystem/Hairs/4BarrelTwists
+- 4BarrelTwists (Accessory) @ 0x2922e0b8ac0
+  - AccessoryWeld (Weld) @ 0x2922e0bb300
+  - Handle (Part) @ 0x29216552700
+    - SpecialMesh (SpecialMesh) @ 0x2922baa5900
+    - HairAttachment (Attachment) @ 0x292369c9080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/ClothingSystem/Hairs/4BarrelTwistsTiedBack
+- 4BarrelTwistsTiedBack (Accessory) @ 0x2922e0bd7c0
+  - ThumbnailConfiguration (Configuration) @ 0x2921dbf0800
+    - ThumbnailCameraTarget (ObjectValue) | Value: Handle (Part) @ 0x2826463160512 @ 0x2922f0275c0
+    - ThumbnailCameraValue (CFrameValue) [ValueObject] @ 0x293a06a9d00
+  - AccessoryWeld (Weld) @ 0x2922e0b52c0
+  - Handle (Part) @ 0x292165528c0
+    - SpecialMesh (SpecialMesh) @ 0x2922baa0800
+    - AvatarPartScaleType (StringValue) | Value: "Unknown" @ 0x293a06af300
+    - HairAttachment (Attachment) @ 0x292369c3380
+    - OriginalSize (Vector3Value) [ValueObject] @ 0x2922f023ce0
+    - OriginalSize (Vector3Value) [ValueObject] @ 0x2922f02e160
+    - TouchInterest (TouchTransmitter) @ 0x2922f02c8e0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/ClothingSystem/Hairs/DoubleSpikyMessyBuns
+- DoubleSpikyMessyBuns (Accessory) @ 0x2922e0b8740
+  - ThumbnailConfiguration (Configuration) @ 0x2921dbf1100
+    - ThumbnailCameraTarget (ObjectValue) | Value: Handle (Part) @ 0x2826463169472 @ 0x2922fe868a0
+    - ThumbnailCameraValue (CFrameValue) [ValueObject] @ 0x293a06a9700
+  - Handle (Part) @ 0x29216554bc0
+    - SpecialMesh (SpecialMesh) @ 0x29384efc200
+    - AvatarPartScaleType (StringValue) | Value: "Unknown" @ 0x293a06a1e00
+    - HairAttachment (Attachment) @ 0x292369ca580
+    - OriginalSize (Vector3Value) [ValueObject] @ 0x2922fe8fe40
+    - OriginalSize (Vector3Value) [ValueObject] @ 0x2922fe8f580
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/ClothingSystem/Hairs/DoubleTiedDreads
+- DoubleTiedDreads (Accessory) @ 0x2922e0be080
+  - AccessoryWeld (Weld) @ 0x2922e0bb680
+  - ThumbnailConfiguration (Configuration) @ 0x2921dbf6680
+    - ThumbnailCameraTarget (ObjectValue) | Value: Handle (Part) @ 0x2826463169920 @ 0x2922fe8ea20
+    - ThumbnailCameraValue (CFrameValue) [ValueObject] @ 0x293a06af900
+  - Handle (Part) @ 0x29216554d80
+    - SpecialMesh (SpecialMesh) @ 0x29384ef6200
+    - HairAttachment (Attachment) @ 0x292369ce000
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/ClothingSystem/Hairs/TwoBarrelsIntoTwists
+- TwoBarrelsIntoTwists (Accessory) @ 0x2922e428580
+  - ThumbnailConfiguration (Configuration) @ 0x2921e07da00
+    - ThumbnailCameraTarget (ObjectValue) | Value: Handle (Part) @ 0x2826463185600 @ 0x2922f507be0
+    - ThumbnailCameraValue (CFrameValue) [ValueObject] @ 0x29397ee5600
+  - AccessoryWeld (Weld) @ 0x2922e42f3c0
+  - Handle (Part) @ 0x29216558ac0
+    - SpecialMesh (SpecialMesh) @ 0x292369c8f00
+    - AvatarPartScaleType (StringValue) | Value: "Unknown" @ 0x29397ee8100
+    - HairAttachment (Attachment) @ 0x292369caa00
+    - TouchInterest (TouchTransmitter) @ 0x2922f50bf40
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/AKS-74U/Model/Model/AKS-74U/Barrel Assembly
+- Barrel Assembly (MeshPart) @ 0x2921654f900
+  - SurfaceAppearance (SurfaceAppearance) @ 0x293848a7b80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/AKS-74U/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29385496700
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/AKS-74U/Handle/Barrel Assembly
+- Barrel Assembly (Motor6D) @ 0x29386e9ee00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/100RndTanG19/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2938549e400
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/223DrumBeam/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2938549d500
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/223RifleDrum/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2938549b200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/223RifleDrum/Handle/SBR Barrel
+- SBR Barrel (Motor6D) @ 0x29386e98800
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/223RifleDrum/SBR Barrel
+- SBR Barrel (MeshPart) @ 0x29216519000
+  - SurfaceAppearance (SurfaceAppearance) @ 0x293848a6f80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/300ARPTan/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29385497600
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/50RounAR/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29385499e00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/50Round Ghost/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29385494e00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/50Round Ghost/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920ec52800
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/50Round Ghost/Barrel
+- Barrel (MeshPart) @ 0x2921651f580
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/60RounM16/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29385ab0080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/60RounM16/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920ec53400
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/60RounM16/Barrel
+- Barrel (MeshPart) @ 0x292167d5480
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/AK-12/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29385ab8f00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/AK-47/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29385ab5a80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/AK-Drum/Model/Model/Model/Barrel
+- Barrel (MeshPart) @ 0x29216850b00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/AK-Drum/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29385ab4900
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/AK-Drum/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920ec5b200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/AR9/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29385ab5080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/AR9/Handle/BarrelBack
+- BarrelBack (Motor6D) @ 0x2920afa0400
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/AR9/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920afa0600
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/AR9/Handle/BarrelBack
+- BarrelBack (Motor6D) @ 0x2920afa1a00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/AR9/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920afa1c00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/AR9/BarrelBack
+- BarrelBack (MeshPart) @ 0x29216854300
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/AR9/Barrel
+- Barrel (MeshPart) @ 0x29216854a00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/ARPReaper/Model/DD 10.3 Government Barrel
+- DD 10.3 Government Barrel (MeshPart) @ 0x29216857b00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/ARPReaper/Model/Standard Barrel Nut
+- Standard Barrel Nut (MeshPart) @ 0x2921685a880
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/ARPReaper/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29385abf580
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/ARPReaper/Handle/Standard Barrel Nut
+- Standard Barrel Nut (Motor6D) @ 0x2920afa5400
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/ARPReaper/Handle/DD 10.3 Government Barrel
+- DD 10.3 Government Barrel (Motor6D) @ 0x2920afa6a00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/ARPTan/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29385ab1980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/ARPistol/Model/BarrelBack
+- BarrelBack (MeshPart) @ 0x2921685f900
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/ARPistol/Model/Barrel
+- Barrel (MeshPart) @ 0x2921685fc80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/ARPistol/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29385ab7880
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/ARPistol/Handle/BarrelBack
+- BarrelBack (Motor6D) @ 0x2920afaba00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/ARPistol/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920afabe00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Angel 50Round Glock/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29385abf080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Angel 50Round Glock/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920aface00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Angel 50Round Glock/Barrel
+- Barrel (MeshPart) @ 0x29211f31200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/BABY-ARPG/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2922b7b0580
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/XMAS Uzi/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2922b7be400
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/CyanButton/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2922b7bb700
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/CyanButton/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920afb4000
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/CyanButton/Barrel
+- Barrel (MeshPart) @ 0x29211f3af80
+  - SurfaceAppearance (SurfaceAppearance) @ 0x2938544db80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Devil ARP/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2922b7b9e00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/GlockSwitch/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2922b7b4b80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Draco/Model/Model/Model/Model/Barrel
+- Barrel (MeshPart) @ 0x29211f72700
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Draco/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2922b7b6980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Draco/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920afbbe00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/FN57B
+- FN57B (Tool) @ 0x292385b4e80
+  - BackSlide (Model) @ 0x2922b4cf200
+    - BackSlide (Part) @ 0x292167aecc0
+    - BackSlide (Part) @ 0x292167aee80
+    - BackSlide (Part) @ 0x292167af040
+      - Mesh (SpecialMesh) @ 0x292011e3080
+    - BackSlide (Part) @ 0x292167af200
+      - Mesh (SpecialMesh) @ 0x292011e2f00
+    - BackSlide (Part) @ 0x292167af3c0
+    - BackSlide (Part) @ 0x292167af580
+      - Mesh (SpecialMesh) @ 0x292011e1280
+  - FrontSlide (Model) @ 0x2922b4ceb00
+    - FrontSlide (Part) @ 0x292167af740
+    - FrontSlide (Part) @ 0x292167af900
+    - FrontSlide (Part) @ 0x292167afac0
+      - Mesh (SpecialMesh) @ 0x292011eb300
+    - FrontSlide (Part) @ 0x292167afc80
+      - Mesh (SpecialMesh) @ 0x292011eb000
+    - FrontSlide (Part) @ 0x292167afe40
+    - FrontSlide (Part) @ 0x292164c0240
+      - Mesh (SpecialMesh) @ 0x292011efe00
+  - Jammed (BoolValue) | Value: false @ 0x2922f5013c0
+  - IdleAnim (Animation) @ 0x29397ee1b00
+  - FireAnim (Animation) @ 0x29397eef100
+  - ReloadAnim (Animation) @ 0x29397ee2e00
+  - HoldDownAnim (Animation) @ 0x29397ee9900
+  - EquippedAnim (Animation) @ 0x29397ee2900
+  - SlideAnim (Animation) @ 0x29397ee4d00
+  - Mag (MeshPart) @ 0x29211f73500
+    - Union (UnionOperation) @ 0x29211f63000
+    - Union (UnionOperation) @ 0x29211f63400
+    - Union (UnionOperation) @ 0x29211f63800
+    - Union (UnionOperation) @ 0x29211f63c00
+    - Union (UnionOperation) @ 0x29211f64000
+    - Union (UnionOperation) @ 0x29211f64400
+    - Union (UnionOperation) @ 0x29211f64800
+    - Union (UnionOperation) @ 0x29211f64c00
+    - Union (UnionOperation) @ 0x29211f65000
+    - Union (UnionOperation) @ 0x29211f65400
+    - Union (UnionOperation) @ 0x29211f65800
+    - Union (UnionOperation) @ 0x29211f65c00
+    - Union (UnionOperation) @ 0x29211f66000
+    - Union (UnionOperation) @ 0x29211f66400
+  - Magazine Cartridges (MeshPart) @ 0x29211f73c00
+    - SurfaceAppearance (SurfaceAppearance) @ 0x29385447b80
+  - Magazine Cartridges (MeshPart) @ 0x29211f73f80
+    - SurfaceAppearance (SurfaceAppearance) @ 0x29385447e80
+  - Magazine Cartridges (MeshPart) @ 0x29211f74300
+    - SurfaceAppearance (SurfaceAppearance) @ 0x29385449380
+  - Magazine Cartridges (MeshPart) @ 0x29211f73880
+    - SurfaceAppearance (SurfaceAppearance) @ 0x2938544fc80
+  - BEAM2 (Part) @ 0x292164c0400
+    - Beam1 (Beam) @ 0x2920afbc600
+    - Attach2 (Attachment) @ 0x292011ee000
+    - Attach1 (Attachment) @ 0x292011ed880
+  - Handle (Part) @ 0x292164c05c0
+    - SlideSound (Sound) @ 0x2922b7ba580
+    - TickSound (Sound) @ 0x2922b7b1480
+    - WindDown (Sound) @ 0x2922b7b7b00
+    - ShotgunClipin (Sound) @ 0x2922b7b1e80
+    - WindUp (Sound) @ 0x2922b7b0800
+    - EquippedSound (Sound) @ 0x2922b7b6200
+    - GunAimSound (Sound) @ 0x2922b7bc880
+    - ReloadSound (Sound) @ 0x2922b7b3c80
+    - Spring (Motor6D) @ 0x2920afbc800
+    - Magwell (Motor6D) @ 0x2920afbca00
+    - Magazine Cartridges (Motor6D) @ 0x2920afbcc00
+    - Magazine Cartridges (Motor6D) @ 0x2920afbce00
+    - Magazine Cartridges (Motor6D) @ 0x2920afbd000
+    - Magazine Cartridges (Motor6D) @ 0x2920afbd200
+    - Magazine Cartridges (Motor6D) @ 0x2920afbd400
+    - Magazine Cartridges (Motor6D) @ 0x2920afbd600
+    - Union (Motor6D) @ 0x2920afbd800
+    - Union (Motor6D) @ 0x2920afbda00
+    - Union (Motor6D) @ 0x2920afbdc00
+    - Union (Motor6D) @ 0x2920afbde00
+    - Union (Motor6D) @ 0x2920afbe000
+    - Union (Motor6D) @ 0x2920afbe200
+    - Union (Motor6D) @ 0x2920afbe400
+    - Union (Motor6D) @ 0x2920afbe600
+    - Union (Motor6D) @ 0x2920afbe800
+    - Union (Motor6D) @ 0x2920afbea00
+    - Union (Motor6D) @ 0x2920afbec00
+    - Union (Motor6D) @ 0x2920afbee00
+    - Union (Motor6D) @ 0x2920afbf000
+    - Union (Motor6D) @ 0x2920afbf200
+    - Mag (Motor6D) @ 0x2920afbf400
+    - BEAM2 (Motor6D) @ 0x2920afbf600
+    - BEAMS (Motor6D) @ 0x2920afbf800
+    - Flash3 (Motor6D) @ 0x2920afbfa00
+    - Flash3 (Motor6D) @ 0x2920afbfc00
+    - BEAM2 (Motor6D) @ 0x2920afbfe00
+    - FLashligh (Motor6D) @ 0x2920f580200
+    - FrontSlide (Motor6D) @ 0x2920f580400
+    - FrontSlide (Motor6D) @ 0x2920f580600
+    - FrontSlide (Motor6D) @ 0x2920f580800
+    - FrontSlide (Motor6D) @ 0x2920f580a00
+    - FrontSlide (Motor6D) @ 0x2920f580c00
+    - BackSlide (Motor6D) @ 0x2920f580e00
+    - FrontSlide (Motor6D) @ 0x2920f581000
+    - BackSlide (Motor6D) @ 0x2920f581200
+    - BackSlide (Motor6D) @ 0x2920f581400
+    - BackSlide (Motor6D) @ 0x2920f581600
+    - BackSlide (Motor6D) @ 0x2920f581800
+    - BackSlide (Motor6D) @ 0x2920f581a00
+    - Part (Motor6D) @ 0x2920f581c00
+    - Part (Motor6D) @ 0x2920f581e00
+    - Part (Motor6D) @ 0x2920f582000
+    - Part (Motor6D) @ 0x2920f582200
+    - Part (Motor6D) @ 0x2920f582400
+    - Part (Motor6D) @ 0x2920f582600
+    - FireSounds (Folder) @ 0x29234bebae0
+      - FireSound (Sound) @ 0x2922b7b7100
+      - FireSound (Sound) @ 0x2922b7b1700
+      - FireSound (Sound) @ 0x2922b7b8f00
+      - Test (Sound) @ 0x2922b7bf300
+    - GunFirePoint (Attachment) @ 0x292011e2000
+      - TouchPart (Part) @ 0x292164c0780
+    - GunMuzzlePoint (Attachment) @ 0x292011e1e80
+    - WeldConstraint (WeldConstraint) @ 0x29386568f00
+  - Part (Part) @ 0x292164c0940
+    - Mesh (SpecialMesh) @ 0x292011e8180
+  - Part (Part) @ 0x292164c0b00
+    - Mesh (SpecialMesh) @ 0x292011e6b00
+  - Part (Part) @ 0x292164c0cc0
+    - Weld (Weld) @ 0x29201dfa6c0
+    - Mesh (SpecialMesh) @ 0x292011ef980
+  - Part (Part) @ 0x292164c0e80
+    - Mesh (SpecialMesh) @ 0x292011ef500
+  - Part (Part) @ 0x292164c0080
+    - Mesh (SpecialMesh) @ 0x292011e7d00
+  - Part (Part) @ 0x292164c1040
+    - Mesh (SpecialMesh) @ 0x292011e9b00
+  - Flash3 (Part) @ 0x292164c1200
+  - Flash3 (Part) @ 0x292164c13c0
+  - FLashligh (MeshPart) @ 0x29211f74680
+    - SurfaceAppearance (SurfaceAppearance) @ 0x2938544c980
+  - BEAMS (Part) @ 0x292164c1580
+    - Beam1 (Beam) @ 0x2920f582800
+    - Attach2 (Attachment) @ 0x292011ec680
+    - Attach1 (Attachment) @ 0x292011e6980
+  - BEAM2 (Part) @ 0x292164c1740
+    - Beam1 (Beam) @ 0x2920f582a00
+    - Attach2 (Attachment) @ 0x292011e0b00
+    - Attach1 (Attachment) @ 0x292011e1d00
+  - Magwell (MeshPart) @ 0x29211f74a00
+  - Spring (MeshPart) @ 0x29211f74d80
+  - Magazine Cartridges (MeshPart) @ 0x29211f75100
+    - SurfaceAppearance (SurfaceAppearance) @ 0x29385445180
+  - Magazine Cartridges (MeshPart) @ 0x29211f75480
+    - SurfaceAppearance (SurfaceAppearance) @ 0x2938544ea80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Fully-ARB/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2922b7b8000
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/G17Button/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2922b7b2b00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/G17WittaButton/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2922d52b480
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/G17WittaButton/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920f58ca00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/G17WittaButton/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920f58f000
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/G17WittaButton/Barrel
+- Barrel (MeshPart) @ 0x29211f7f580
+  - SurfaceAppearance (SurfaceAppearance) @ 0x29233c1a280
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/G19XButton/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2922d52f080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/G19XButton/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920f500e00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/G19XButton/Barrel
+- Barrel (MeshPart) @ 0x29216a03500
+  - SurfaceAppearance (SurfaceAppearance) @ 0x2923491fc80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/G40MosDrum/Barrel
+- Barrel (MeshPart) @ 0x29216a05100
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/G40MosDrum/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2922d526200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/G40MosDrum/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920f504800
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/GlockSilencerBinary/Model/barrel_glock_glock_114mm_9x19_compensated_LOD0
+- barrel_glock_glock_114mm_9x19_compensated_LOD0 (MeshPart) @ 0x29216a09380
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/GlockSilencerBinary/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2922d525080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/GlockSilencerBinary/Handle/barrel_glock_glock_114mm_9x19_compensated_LOD0
+- barrel_glock_glock_114mm_9x19_compensated_LOD0 (Motor6D) @ 0x2920f507000
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Golden1911Ext/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2922d522d80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Grey100RNDARP/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29384ad1480
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/M4 TR16/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29384adcb00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/M416/Model/client/Back/Barrel
+- Barrel (SurfaceAppearance) @ 0x29234914e80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/M416/Model/client/Barrel
+- Barrel (MeshPart) @ 0x29216aa7080
+  - Barrel (SurfaceAppearance) @ 0x2923491c380
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/M416/Model/client/Front/Barrel
+- Barrel (SurfaceAppearance) @ 0x2923491d280
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/M416/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29384ad6980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/M416/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920f512400
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Fully Mac-11/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29384ad1200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Fully Mac-11/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920f515e00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Fully Mac-11/Barrel
+- Barrel (MeshPart) @ 0x29216aaa180
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Micro 300 Blackout/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29384ad8a00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Micro-Arp/BarrelBack
+- BarrelBack (MeshPart) @ 0x29216ae1200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Micro-Arp/Barrel
+- Barrel (MeshPart) @ 0x29216ae2000
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Micro-Arp/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29384ad3780
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Micro-Arp/Handle/BarrelBack
+- BarrelBack (Motor6D) @ 0x2920f51b200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Micro-Arp/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920f51c000
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Micro7.62 ARPR/Model/Model/Barrel
+- Barrel (MeshPart) @ 0x29216ae5480
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Micro7.62 ARPR/Model/Model/BarrelBack
+- BarrelBack (MeshPart) @ 0x29216ae5800
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Micro7.62 ARPR/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29383d2c880
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Micro7.62 ARPR/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920f51c400
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Micro7.62 ARPR/Handle/BarrelBack
+- BarrelBack (Motor6D) @ 0x2920f51c600
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Mini ARP/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29383d20a80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Mini ARP/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920f51fa00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Mini ARP/Barrel
+- Barrel (MeshPart) @ 0x29216ae8200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/NSR-Drum/Barrel
+- Barrel (MeshPart) @ 0x29216ae9e00
+  - SurfaceAppearance (SurfaceAppearance) @ 0x2923dd96980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/NSR-Drum/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29383d28a00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/NSR-Drum/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920f5f2400
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Obsidian AK-Drum/Model/Model/Model/Barrel
+- Barrel (MeshPart) @ 0x29216c91900
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Obsidian AK-Drum/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29383d26980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Obsidian AK-Drum/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920f5f4800
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/SFM ARP Drum/BarrelBack
+- BarrelBack (MeshPart) @ 0x29216c60780
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/SFM ARP Drum/Barrel
+- Barrel (MeshPart) @ 0x29216c62700
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/SFM ARP Drum/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29383d25580
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/SFM ARP Drum/Handle/BarrelBack
+- BarrelBack (Motor6D) @ 0x2920f5f7200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/SFM ARP Drum/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920f5f8000
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Semi-AKM/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29383d2cd80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Semi-AKM/Handle/akm.001_Barrel1Mtl
+- akm.001_Barrel1Mtl (Motor6D) @ 0x2920f5f9c00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Semi-AKM/akm.001_Barrel1Mtl
+- akm.001_Barrel1Mtl (MeshPart) @ 0x29216c63500
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Soul AR/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29383d26200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Uzi/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29383d20d00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Valentine ARP Drum/BarrelBack
+- BarrelBack (MeshPart) @ 0x29216c6c480
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Valentine ARP Drum/Barrel
+- Barrel (MeshPart) @ 0x29216c6c800
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Valentine ARP Drum/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29383d25800
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Valentine ARP Drum/Handle/BarrelBack
+- BarrelBack (Motor6D) @ 0x2920f5ff800
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Valentine ARP Drum/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920f5ffa00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/WhiteARPBeam/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29383d2c100
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/XMAS Fully-Drac/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2923f80c380
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/ClearMagDrac/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2923f807b00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Mini ARP Drum/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2923f803f00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/GoldenButton/Model/s/Barrel
+- Barrel (MeshPart) @ 0x29216dd6d00
+  - ParticleEmitter (ParticleEmitter) @ 0x2923dd99080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/GoldenButton/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2923f802380
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/GoldenButton/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920f5e6a00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/GoldenButton/Prop_GoldBar
+- Prop_GoldBar (MeshPart) @ 0x29216dd7780
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/60Rd ARP/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2923f80d500
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/ARP-Orange/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2923f808f00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/BlackedDraco/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2923f801c00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/G26WittaButton/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2923f806480
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Dark Matter BinaryTrigger/Binary trigger/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2923f803780
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Dark Matter BinaryTrigger/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2939f4d9180
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Dark Matter BinaryTrigger/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920fb29000
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Dark Matter BinaryTrigger/Barrel
+- Barrel (MeshPart) @ 0x29216e63c00
+  - Shadow (ParticleEmitter) @ 0x2923dd91280
+  - ShadowCore (ParticleEmitter) @ 0x2923dd9b780
+  - ShadowFlakes (ParticleEmitter) @ 0x2923dd9f380
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/EVENT AK-47/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2939f4d6e80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Hellfire VIP/Model/BarrelBack
+- BarrelBack (MeshPart) @ 0x29216e6a180
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Hellfire VIP/Model/Barrel
+- Barrel (MeshPart) @ 0x29216e6a500
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Hellfire VIP/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2939f4d8a00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Hellfire VIP/Handle/BarrelBack
+- BarrelBack (Motor6D) @ 0x2920fb2d400
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Hellfire VIP/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920fb2d800
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Realm ARPistol/Model/BarrelBack
+- BarrelBack (MeshPart) @ 0x292170c0080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Realm ARPistol/Model/Barrel
+- Barrel (MeshPart) @ 0x292170c0400
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Realm ARPistol/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2939f4dbc00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Realm ARPistol/Handle/BarrelBack
+- BarrelBack (Motor6D) @ 0x2920fb2f600
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Realm ARPistol/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920fb2fa00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/DrumWittaButton/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2939f4d4400
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/DrumWittaButton/Handle/Barrel
+- Barrel (Motor6D) @ 0x29210012c00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/DrumWittaButton/Barrel
+- Barrel (MeshPart) @ 0x2939e8acf00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Dark Matter Button/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2939f4dbe80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Dark Matter Button/Handle/Barrel
+- Barrel (Motor6D) @ 0x29210014000
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Dark Matter Button/Handle/Barrel
+- Barrel (Motor6D) @ 0x29210016400
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Dark Matter Button/Barrel
+- Barrel (MeshPart) @ 0x29238151200
+  - Texture (Texture) @ 0x29215a25080
+  - Texture (Texture) @ 0x29215a2dc80
+  - Texture (Texture) @ 0x29215a2cd80
+  - Texture (Texture) @ 0x29215a23780
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/EVENT Water X Fire M416/Model/client/Back/Barrel
+- Barrel (SurfaceAppearance) @ 0x293802da280
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/EVENT Water X Fire M416/Model/client/Barrel
+- Barrel (MeshPart) @ 0x2923815a500
+  - Barrel (SurfaceAppearance) @ 0x293802d9080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/EVENT Water X Fire M416/Model/client/Front/Barrel
+- Barrel (SurfaceAppearance) @ 0x293802d7880
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/EVENT Water X Fire M416/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2939f4dee00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/EVENT Water X Fire M416/Handle/Barrel
+- Barrel (Motor6D) @ 0x29210017200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/PLR-16/Model/Model/Barrel
+- Barrel (MeshPart) @ 0x2923815cf00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/PLR-16/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2939f4d1700
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/PLR-16/Handle/Barrel
+- Barrel (Motor6D) @ 0x29210019c00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/PolymerEXT/Barrel
+- Barrel (MeshPart) @ 0x29238153880
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/PolymerEXT/Barrel
+- Barrel (MeshPart) @ 0x29238152e00
+  - SurfaceAppearance (SurfaceAppearance) @ 0x293802d9980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/PolymerEXT/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29207e09b80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/PolymerEXT/Handle/Barrel
+- Barrel (Motor6D) @ 0x2921001ca00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/PolymerEXT/Handle/Barrel
+- Barrel (Motor6D) @ 0x2921001cc00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Tan G19 Button/Barrel
+- Barrel (MeshPart) @ 0x29230eae780
+  - SurfaceAppearance (SurfaceAppearance) @ 0x293802d5480
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Tan G19 Button/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29207e0d000
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Tan G19 Button/Handle/Barrel
+- Barrel (Motor6D) @ 0x2921001f000
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/BHM ARPistol/Model/BarrelBack
+- BarrelBack (MeshPart) @ 0x29230eac480
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/BHM ARPistol/Model/Barrel
+- Barrel (MeshPart) @ 0x29230ea3180
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/BHM ARPistol/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29207e0d280
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/BHM ARPistol/Handle/BarrelBack
+- BarrelBack (Motor6D) @ 0x29210026600
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/BHM ARPistol/Handle/Barrel
+- Barrel (Motor6D) @ 0x29210026a00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/10M AK-12/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29207e07100
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/EVENT Valentine AR Drum/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29207e07380
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Valentine Button/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29207e02b00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Valentine Button/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920f7c1600
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Valentine Button/Barrel
+- Barrel (MeshPart) @ 0x29397c0cf00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/P80G19Grip/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29207e0cd80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Fully-Micro AR/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29207e03280
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/MPA Defender BLK DRUM /Model/Group4/LP SST30 Barrel Extension001
+- LP SST30 Barrel Extension001 (Model) @ 0x292326c5480
+  - LP SST30 Barrel Extension001_Material #456_0_Node (Model) @ 0x292326c1900
+    - LP SST30 Barrel Extension001_Material #456_0 (MeshPart) @ 0x2923b00e400
+      - SurfaceAppearance (SurfaceAppearance) @ 0x29385575780
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/MPA Defender BLK DRUM /Model/Group4/Group001/LP SST30 Barrel
+- LP SST30 Barrel (Model) @ 0x29234e68c80
+  - LP SST30 Barrel_Material #454_0_Node (Model) @ 0x29234e6d600
+    - LP SST30 Barrel_Material #454_0 (MeshPart) @ 0x2923b006280
+      - SurfaceAppearance (SurfaceAppearance) @ 0x29385572180
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/MPA Defender BLK DRUM /Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29207e02d80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/MPA Defender FDE EXT /Model/LP SST30 Barrel002
+- LP SST30 Barrel002 (Model) @ 0x2923be9d980
+  - LP SST30 Barrel002_Material #460_0_Node (Model) @ 0x2923be9a500
+    - LP SST30 Barrel002_Material #460_0 (MeshPart) @ 0x29231107400
+      - SurfaceAppearance (SurfaceAppearance) @ 0x2939e574280
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/MPA Defender FDE EXT /Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29207e08000
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/MPA Defender GRN EXT /Model/Group4/Group002/LP SST30 Barrel001
+- LP SST30 Barrel001 (Model) @ 0x2938cdd0080
+  - LP SST30 Barrel001_Material #457_0_Node (Model) @ 0x2938cdd7b00
+    - LP SST30 Barrel001_Material #457_0 (MeshPart) @ 0x2923110c800
+      - SurfaceAppearance (SurfaceAppearance) @ 0x2939e574e80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/MPA Defender GRN EXT /Model/Group4/Group007/LP SST30 Barrel Extension
+- LP SST30 Barrel Extension (Model) @ 0x2938cdd8c80
+  - LP SST30 Barrel Extension_Material #459_0_Node (Model) @ 0x2938cddee80
+    - LP SST30 Barrel Extension_Material #459_0 (MeshPart) @ 0x29218b10b00
+      - SurfaceAppearance (SurfaceAppearance) @ 0x2939e57d280
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/MPA Defender GRN EXT /Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2939f2fd000
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/S&W Ruger Switch/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2939f2f7380
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Fully AK-Shorty/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2939f2f4e00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/.308ARPink/Model/HK416 Barrel Nut
+- HK416 Barrel Nut (MeshPart) @ 0x29218b1e400
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/.308ARPink/Model/DD 14.5 Government Barrel
+- DD 14.5 Government Barrel (MeshPart) @ 0x29218b1e780
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/.308ARPink/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2939f2f5f80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/.308ARPink/Handle/HK416 Barrel Nut
+- HK416 Barrel Nut (Motor6D) @ 0x2920f7cf000
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/.308ARPink/Handle/DD 14.5 Government Barrel
+- DD 14.5 Government Barrel (Motor6D) @ 0x2920f7cfa00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/G40DrumWittaButton/Model/Model/Model/Model/Barrel
+- Barrel (MeshPart) @ 0x29218b1f200
+  - SurfaceAppearance (SurfaceAppearance) @ 0x293881ff980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/G40DrumWittaButton/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2939f2fc100
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/EVENT G19 Pulse/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2939f2f5080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/SIG MCX/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2923623af80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/M16A4 Drum/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29236235800
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/P80 Switch/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29236231480
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/P80 Switch/Barrel
+- Barrel (MeshPart) @ 0x29219006280
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Draco Suppressed/Model/Model/Model/Model/Barrel
+- Barrel (MeshPart) @ 0x29219008900
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Draco Suppressed/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29236235f80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Draco Suppressed/Handle/Barrel
+- Barrel (Motor6D) @ 0x2920f7d3600
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Deagle/Model/Sketchfab_Scene/Sketchfab_model/62cc4509f5f24709963fbb043663c4de.fbx/RootNode/Barrel_low
+- Barrel_low (Model) @ 0x2938e028200
+  - Barrel_low_Slide_0_Node (Model) @ 0x2938e02e080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Deagle/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29236232d80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Yellowjacket AK-12/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29236230f80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Ghost M4/Model/Sketchfab_Scene/DBAL-I2
+- DBAL-I2 (MeshPart) @ 0x292170caf80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Ghost M4/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2923623d780
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Ion-11/Model/LP SST30 Barrel002
+- LP SST30 Barrel002 (Model) @ 0x292101b3880
+  - LP SST30 Barrel002_Material #460_0_Node (Model) @ 0x292101b3c00
+    - LP SST30 Barrel002_Material #460_0 (MeshPart) @ 0x2922b256d00
+      - SurfaceAppearance (SurfaceAppearance) @ 0x2923cc31b80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Ion-11/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29236237880
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Yellowjacket G3/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29236230080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Tempest-17/v_Glock Carbine w/EXT/Barrel
+- Barrel (MeshPart) @ 0x29219e40780
+  - WeldConstraint (WeldConstraint) @ 0x2922e330940
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Tempest-17/v_Glock Carbine w/EXT/Barrel
+- Barrel (MeshPart) @ 0x29219e45800
+  - SurfaceAppearance (SurfaceAppearance) @ 0x2923cc3b480
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Tempest-17/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x293848dc600
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Ghost-9/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x293848d6c00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/Desert Storm AR15/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x293848d9e00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/JULY 4 Patriot AR15/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x293848d6200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/KillFX/Arc Nova/KillEffect/Attachment/WindBlack
+- WindBlack (ParticleEmitter) @ 0x2920109ab80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Misc/BanPanelFeedback
+- BanPanelFeedback (RemoteEvent) @ 0x2938605dec0
+
+Found matching config root at path: Workspace/Workspace/IonFloating/LP SST30 Barrel002_Material #460_0
+- LP SST30 Barrel002_Material #460_0 (MeshPart) @ 0x2921b066980
+  - SurfaceAppearance (SurfaceAppearance) @ 0x29232a68180
+
+Found matching config root at path: Workspace/Workspace/Model/StarterCharacter3/Weapon/Model/BarrelBack
+- BarrelBack (MeshPart) @ 0x2922b212000
+
+Found matching config root at path: Workspace/Workspace/Model/StarterCharacter3/Weapon/Model/Barrel
+- Barrel (MeshPart) @ 0x2922b212380
+
+Found matching config root at path: Workspace/Workspace/Model/StarterCharacter3/Weapon/Handle/Barrel
+- Barrel (Motor6D) @ 0x293a0552400
+
+Found matching config root at path: Workspace/Workspace/Model/StarterCharacter3/Weapon/Handle/BarrelBack
+- BarrelBack (Motor6D) @ 0x292334b7a00
+
+Found matching config root at path: Workspace/Workspace/Model/StarterCharacter2/Weapon/Model/Model/Model/Model/Barrel
+- Barrel (MeshPart) @ 0x2922b21af80
+
+Found matching config root at path: Workspace/Workspace/Model/StarterCharacter2/Weapon/Handle/Barrel
+- Barrel (Motor6D) @ 0x2923e8baa00
+
+Found matching config root at path: Workspace/Workspace/Model/StarterCharacter2/4BarrelTwists
+- 4BarrelTwists (Accessory) @ 0x29384cc9c40
+  - AccessoryWeld (Weld) @ 0x29384cc6600
+  - Handle (Part) @ 0x292369fadc0
+    - SpecialMesh (SpecialMesh) @ 0x2922fbed700
+    - HairAttachment (Attachment) @ 0x2939f800500
+    - OriginalSize (Vector3Value) [ValueObject] @ 0x2922ee53500
+    - AccessoryRigidConstraint (RigidConstraint) @ 0x29384ccdec0
+
+Found matching config root at path: Workspace/Workspace/Model/StarterCharacter/Weapon/Barrel
+- Barrel (MeshPart) @ 0x2922b218200
+  - SurfaceAppearance (SurfaceAppearance) @ 0x29384085d80
+
+Found matching config root at path: Workspace/Workspace/Model/StarterCharacter/Weapon/Handle/Barrel
+- Barrel (Motor6D) @ 0x2939fc27400
+
+Found matching config root at path: Workspace/Workspace/Fgy_1232/Semi-AKM/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x29224048f00
+
+Found matching config root at path: Workspace/Workspace/Fgy_1232/Semi-AKM/Handle/akm.001_Barrel1Mtl
+- akm.001_Barrel1Mtl (Motor6D) @ 0x29398ae1e00
+
+Found matching config root at path: Workspace/Workspace/Fgy_1232/Semi-AKM/akm.001_Barrel1Mtl
+- akm.001_Barrel1Mtl (MeshPart) @ 0x29238349e00
+
+Found matching config root at path: Workspace/Workspace/Fgy_1232/Semi-AKM/GunScript_Local/GunGUI/MobileButtons/ReloadButton
+- ReloadButton (ImageButton) @ 0x29384f41080
+  - TextLabel (TextLabel) @ 0x2923f1f6080
+
+Found matching config root at path: Workspace/Workspace/displayyit/FN57B
+- FN57B (Tool) @ 0x2920ad23080
+  - Setting (ModuleScript) @ 0x29384121c80
+  - Price (IntValue) | Value: 1500 @ 0x2923b33caa0
+  - BackSlide (Model) @ 0x29238f49700
+    - BackSlide (Part) @ 0x2938412cd40
+    - BackSlide (Part) @ 0x2938412f740
+    - BackSlide (Part) @ 0x293841275c0
+      - Mesh (SpecialMesh) @ 0x29386f6f800
+    - BackSlide (Part) @ 0x29384120240
+      - Mesh (SpecialMesh) @ 0x29386f6c800
+    - BackSlide (Part) @ 0x293841260c0
+    - BackSlide (Part) @ 0x29384124840
+      - Mesh (SpecialMesh) @ 0x29386f62480
+  - FrontSlide (Model) @ 0x29238f44d80
+    - FrontSlide (Part) @ 0x29384120b00
+    - FrontSlide (Part) @ 0x2938412eb00
+    - FrontSlide (Part) @ 0x2938412cf00
+      - Mesh (SpecialMesh) @ 0x29386f60e00
+    - FrontSlide (Part) @ 0x29384121740
+      - Mesh (SpecialMesh) @ 0x29386f64700
+    - FrontSlide (Part) @ 0x29384121ac0
+    - FrontSlide (Part) @ 0x2938412b680
+      - Mesh (SpecialMesh) @ 0x2938558cb00
+  - Jammed (BoolValue) | Value: false @ 0x2923b338660
+  - IdleAnim (Animation) @ 0x29384d61900
+  - FireAnim (Animation) @ 0x29384d68400
+  - ReloadAnim (Animation) @ 0x29384d67f00
+  - HoldDownAnim (Animation) @ 0x29384d63d00
+  - EquippedAnim (Animation) @ 0x29384d6ae00
+  - SlideAnim (Animation) @ 0x29384d62f00
+  - Mag (Model) @ 0x29238f49a80
+    - Mag (MeshPart) @ 0x29238f48c80
+      - Union (UnionOperation) @ 0x2922d1ee800
+      - Union (UnionOperation) @ 0x2922d1ef800
+      - Union (UnionOperation) @ 0x2922d1ee400
+      - Union (UnionOperation) @ 0x2922d1e8c00
+      - Union (UnionOperation) @ 0x2922d1e0800
+      - Union (UnionOperation) @ 0x2922d1e2000
+      - Union (UnionOperation) @ 0x2922d1e8000
+      - Union (UnionOperation) @ 0x2922d1e9c00
+      - Union (UnionOperation) @ 0x2922d1e9400
+      - Union (UnionOperation) @ 0x2922d1e5400
+      - Union (UnionOperation) @ 0x2922d1eb800
+      - Union (UnionOperation) @ 0x2922d1e6800
+      - Union (UnionOperation) @ 0x2922d1ecc00
+      - Union (UnionOperation) @ 0x2922d1e3c00
+    - Magazine Cartridges (MeshPart) @ 0x29238f44680
+      - SurfaceAppearance (SurfaceAppearance) @ 0x29236f3cf80
+      - WeldConstraint (WeldConstraint) @ 0x2922d092c40
+      - WeldConstraint (WeldConstraint) @ 0x2922d096340
+      - WeldConstraint (WeldConstraint) @ 0x2922d09a580
+      - WeldConstraint (WeldConstraint) @ 0x2922d093a00
+    - Magazine Cartridges (MeshPart) @ 0x29238f42380
+      - SurfaceAppearance (SurfaceAppearance) @ 0x29236f3ea80
+      - WeldConstraint (WeldConstraint) @ 0x2922d099040
+    - Magazine Cartridges (MeshPart) @ 0x29238f4c800
+      - SurfaceAppearance (SurfaceAppearance) @ 0x29236f37280
+      - WeldConstraint (WeldConstraint) @ 0x2922d098140
+    - Magazine Cartridges (MeshPart) @ 0x29238f4d980
+      - SurfaceAppearance (SurfaceAppearance) @ 0x29236f33380
+      - WeldConstraint (WeldConstraint) @ 0x2922d0997c0
+      - WeldConstraint (WeldConstraint) @ 0x2922d094040
+      - WeldConstraint (WeldConstraint) @ 0x2922d09f940
+    - Magazine Cartridges (MeshPart) @ 0x29238f46280
+      - SurfaceAppearance (SurfaceAppearance) @ 0x29232546f80
+      - WeldConstraint (WeldConstraint) @ 0x2922d092100
+      - WeldConstraint (WeldConstraint) @ 0x2922d092ec0
+      - WeldConstraint (WeldConstraint) @ 0x2922d093c80
+    - Magazine Cartridges (MeshPart) @ 0x29238f4f900
+      - SurfaceAppearance (SurfaceAppearance) @ 0x29232541880
+      - WeldConstraint (WeldConstraint) @ 0x2922d093dc0
+      - WeldConstraint (WeldConstraint) @ 0x2922d091340
+      - WeldConstraint (WeldConstraint) @ 0x2922d0956c0
+      - WeldConstraint (WeldConstraint) @ 0x2922d091e80
+      - WeldConstraint (WeldConstraint) @ 0x2922d09b480
+    - Magwell (MeshPart) @ 0x29238f4c480
+      - WeldConstraint (WeldConstraint) @ 0x2922d093000
+    - Spring (MeshPart) @ 0x29238f4b300
+      - WeldConstraint (WeldConstraint) @ 0x2922d09b200
+      - WeldConstraint (WeldConstraint) @ 0x2922d09da00
+      - WeldConstraint (WeldConstraint) @ 0x2922d0901c0
+      - WeldConstraint (WeldConstraint) @ 0x2922d095f80
+  - BEAM2 (Part) @ 0x2938412a880
+    - Beam1 (Beam) @ 0x29219acc400
+    - Attach2 (Attachment) @ 0x29385582480
+    - Attach1 (Attachment) @ 0x29385586680
+  - BEAMS (Part) @ 0x29384122700
+    - Beam1 (Beam) @ 0x29219ac5800
+    - Attach2 (Attachment) @ 0x29385584400
+    - Attach1 (Attachment) @ 0x29385588480
+  - BEAM2 (Part) @ 0x29384124300
+    - Beam1 (Beam) @ 0x29219ac3c00
+    - Attach2 (Attachment) @ 0x2938558b600
+    - Attach1 (Attachment) @ 0x29385581400
+  - Handle (Part) @ 0x2938412e080
+    - SlideSound (Sound) @ 0x292206d4180
+    - TickSound (Sound) @ 0x292206d1c00
+    - WindDown (Sound) @ 0x292206d3780
+    - ShotgunClipin (Sound) @ 0x292206d5080
+    - WindUp (Sound) @ 0x292206d1e80
+    - EquippedSound (Sound) @ 0x292206d3c80
+    - GunAimSound (Sound) @ 0x292206d4b80
+    - ReloadSound (Sound) @ 0x292206d3f00
+    - Spring (Motor6D) @ 0x29219acca00
+    - Magwell (Motor6D) @ 0x29219acd600
+    - Magazine Cartridges (Motor6D) @ 0x29219acf400
+    - Magazine Cartridges (Motor6D) @ 0x29219acee00
+    - Magazine Cartridges (Motor6D) @ 0x29219acb000
+    - Magazine Cartridges (Motor6D) @ 0x29219ac5000
+    - Magazine Cartridges (Motor6D) @ 0x29219ac6a00
+    - Magazine Cartridges (Motor6D) @ 0x29219aca000
+    - Union (Motor6D) @ 0x29219ac9000
+    - Union (Motor6D) @ 0x29219ac7c00
+    - Union (Motor6D) @ 0x29219ac2800
+    - Union (Motor6D) @ 0x29219ac2400
+    - Union (Motor6D) @ 0x29219acea00
+    - Union (Motor6D) @ 0x29219acaa00
+    - Union (Motor6D) @ 0x29219ac1800
+    - Union (Motor6D) @ 0x29219ac6e00
+    - Union (Motor6D) @ 0x29219ac4e00
+    - Union (Motor6D) @ 0x29219acda00
+    - Union (Motor6D) @ 0x29219ac5200
+    - Union (Motor6D) @ 0x29219ac9600
+    - Union (Motor6D) @ 0x29219ac5400
+    - Union (Motor6D) @ 0x29219acc800
+    - Mag (Motor6D) @ 0x29219acf200
+    - BEAM2 (Motor6D) @ 0x29219ac7800
+    - BEAMS (Motor6D) @ 0x29219ac1600
+    - Flash3 (Motor6D) @ 0x29219acbe00
+    - Flash3 (Motor6D) @ 0x29219ac7600
+    - BEAM2 (Motor6D) @ 0x29219ac7e00
+    - FLashligh (Motor6D) @ 0x29219ac6800
+    - FrontSlide (Motor6D) @ 0x29219ac6000
+    - FrontSlide (Motor6D) @ 0x29219ac8200
+    - FrontSlide (Motor6D) @ 0x29219ac2000
+    - FrontSlide (Motor6D) @ 0x29219ac8000
+    - FrontSlide (Motor6D) @ 0x29219ac8c00
+    - BackSlide (Motor6D) @ 0x29214144800
+    - FrontSlide (Motor6D) @ 0x29214145600
+    - BackSlide (Motor6D) @ 0x29384d08200
+    - BackSlide (Motor6D) @ 0x29384d0d400
+    - BackSlide (Motor6D) @ 0x29384d00e00
+    - BackSlide (Motor6D) @ 0x29384d0d200
+    - BackSlide (Motor6D) @ 0x29384d05200
+    - Part (Motor6D) @ 0x29384d07600
+    - Part (Motor6D) @ 0x29384d04c00
+    - Part (Motor6D) @ 0x29384d0b200
+    - Part (Motor6D) @ 0x29384d0da00
+    - Part (Motor6D) @ 0x29384d05000
+    - Part (Motor6D) @ 0x29384d00a00
+    - FireSounds (Folder) @ 0x29385a1fba0
+      - FireSound (Sound) @ 0x292206d2100
+      - FireSound (Sound) @ 0x292206d4e00
+      - FireSound (Sound) @ 0x29238266980
+      - Test (Sound) @ 0x29238262100
+    - GunFirePoint (Attachment) @ 0x2938558a880
+      - TouchPart (Part) @ 0x29384121900
+        - TouchInterest (TouchTransmitter) @ 0x2922ef17240
+    - GunMuzzlePoint (Attachment) @ 0x2938558d880
+    - WeldConstraint (WeldConstraint) @ 0x2922d096980
+  - Part (Part) @ 0x2938412af80
+    - Mesh (SpecialMesh) @ 0x2938558e900
+  - Part (Part) @ 0x2938412c2c0
+    - Mesh (SpecialMesh) @ 0x2938558fc80
+  - Part (Part) @ 0x29384125b80
+    - Weld (Weld) @ 0x2938412bf40
+    - Mesh (SpecialMesh) @ 0x29385589c80
+  - Part (Part) @ 0x29231c58040
+    - Mesh (SpecialMesh) @ 0x29385582a80
+  - Part (Part) @ 0x29231c54d80
+    - Mesh (SpecialMesh) @ 0x29385581a00
+  - Part (Part) @ 0x29231c5a500
+    - Mesh (SpecialMesh) @ 0x2938558dd00
+  - Flash3 (Part) @ 0x29231c5a340
+  - Flash3 (Part) @ 0x29231c5e940
+  - FLashligh (MeshPart) @ 0x29238f41200
+    - SurfaceAppearance (SurfaceAppearance) @ 0x29232540080
+  - GunScript_Local (LocalScript) @ 0x29384d09000
+    - SpringModule (ModuleScript) @ 0x29231c5a6c0
+    - MarkerEvent (BindableEvent) @ 0x2938639e780
+  - GunScript_Server (Script) @ 0x2923e8bdc00
+    - IgniteScript (Script) @ 0x2923e8b6000
+    - IcifyScript (Script) @ 0x2923e8bf400
+    - ChangeMagAndAmmo (RemoteEvent) @ 0x2939877fe40
+    - UnusedStuffs (Folder) @ 0x292385ce5c0
+      - WhizScript (Script) @ 0x2923e8b4a00
+      - Ignore (Folder) @ 0x292385cf040
+    - PlayServerSound (RemoteEvent) @ 0x2939877eb00
+    - Mag (NumberValue) | Value: 31.000000 @ 0x29214a0bca0
+    - Ammo (NumberValue) | Value: inf @ 0x29214a08ac0
+  - IdleAnim (Animation) @ 0x2923e6f6e00
+  - FireAnim (Animation) @ 0x2923e6fec00
+  - ReloadAnim (Animation) @ 0x2923e6fa100
+  - HoldDownAnim (Animation) @ 0x2923e6fd000
+  - EquippedAnimation (Animation) @ 0x2923e6f2c00
+  - SlideAnim (Animation) @ 0x2923e6f2300
+
+Found matching config root at path: Workspace/Workspace/displayyit/4BarrelTwists
+- 4BarrelTwists (Accessory) @ 0x29231c55b80
+  - AccessoryWeld (Weld) @ 0x29231c58200
+  - Handle (Part) @ 0x29231c58740
+    - SpecialMesh (SpecialMesh) @ 0x2923c472c00
+    - HairAttachment (Attachment) @ 0x2923c475900
+    - OriginalSize (Vector3Value) [ValueObject] @ 0x29234904140
+    - AccessoryRigidConstraint (RigidConstraint) @ 0x29231c50400
+
+Found matching config root at path: Workspace/Workspace/Karjo2424/4BarrelTwists
+- 4BarrelTwists (Accessory) @ 0x29384123180
+  - AccessoryWeld (Weld) @ 0x29384127e80
+  - Handle (Part) @ 0x2938412bbc0
+    - SpecialMesh (SpecialMesh) @ 0x29384912180
+    - HairAttachment (Attachment) @ 0x29384916080
+    - OriginalSize (Vector3Value) [ValueObject] @ 0x2923b3376a0
+    - AccessoryRigidConstraint (RigidConstraint) @ 0x29384122c40
+
+Found matching config root at path: Workspace/Workspace/Cantayva/4BarrelTwists
+- 4BarrelTwists (Accessory) @ 0x29238173a40
+  - AccessoryWeld (Weld) @ 0x2923817fe40
+  - Handle (Part) @ 0x29238176600
+    - SpecialMesh (SpecialMesh) @ 0x29387f50c80
+    - HairAttachment (Attachment) @ 0x292156c7400
+    - OriginalSize (Vector3Value) [ValueObject] @ 0x293a0124ca0
+    - AccessoryRigidConstraint (RigidConstraint) @ 0x29238172e00
+
+Found matching config root at path: Workspace/Workspace/GunDisplay/Placeholder/DisplayRoot/FN57B
+- FN57B (Tool) @ 0x2922bd4b480
+  - BackSlide (Model) @ 0x292246dc480
+    - BackSlide (Part) @ 0x2922af21580
+    - BackSlide (Part) @ 0x2922af22e00
+    - BackSlide (Part) @ 0x2922af275c0
+      - Mesh (SpecialMesh) @ 0x2939f060e00
+    - BackSlide (Part) @ 0x2922af2d280
+      - Mesh (SpecialMesh) @ 0x29387f5c500
+    - BackSlide (Part) @ 0x2922af2fac0
+    - BackSlide (Part) @ 0x2922af22700
+      - Mesh (SpecialMesh) @ 0x2939f2adb80
+  - FrontSlide (Model) @ 0x292246d9380
+    - FrontSlide (Part) @ 0x2922af2bd80
+    - FrontSlide (Part) @ 0x2922af27080
+    - FrontSlide (Part) @ 0x2922af2cf00
+      - Mesh (SpecialMesh) @ 0x2923dca0e00
+    - FrontSlide (Part) @ 0x2922af26b40
+      - Mesh (SpecialMesh) @ 0x2923d4b1100
+    - FrontSlide (Part) @ 0x2922af24a00
+    - FrontSlide (Part) @ 0x2922af2e5c0
+      - Mesh (SpecialMesh) @ 0x2923eac4a00
+  - Jammed (BoolValue) | Value: false @ 0x292312f74e0
+  - IdleAnim (Animation) @ 0x2939effdf00
+  - FireAnim (Animation) @ 0x2939effda00
+  - ReloadAnim (Animation) @ 0x2939effe400
+  - HoldDownAnim (Animation) @ 0x2939eff8300
+  - EquippedAnim (Animation) @ 0x2939effd100
+  - SlideAnim (Animation) @ 0x2939eff0c00
+  - Mag (MeshPart) @ 0x292246dd280
+    - Union (UnionOperation) @ 0x2923e6d3400
+    - Union (UnionOperation) @ 0x2923e6de800
+    - Union (UnionOperation) @ 0x2923e6d0400
+    - Union (UnionOperation) @ 0x2923e6d3c00
+    - Union (UnionOperation) @ 0x2923e6d5400
+    - Union (UnionOperation) @ 0x2923e6d7800
+    - Union (UnionOperation) @ 0x2923e6d9400
+    - Union (UnionOperation) @ 0x2923e6d1800
+    - Union (UnionOperation) @ 0x2923e6d5c00
+    - Union (UnionOperation) @ 0x2923e6df000
+    - Union (UnionOperation) @ 0x2923e6da400
+    - Union (UnionOperation) @ 0x2923e6dc800
+    - Union (UnionOperation) @ 0x2923e6d6c00
+    - Union (UnionOperation) @ 0x2923e6d1000
+  - Magazine Cartridges (MeshPart) @ 0x292246d5800
+    - SurfaceAppearance (SurfaceAppearance) @ 0x2939f1d3980
+  - Magazine Cartridges (MeshPart) @ 0x292246d2380
+    - SurfaceAppearance (SurfaceAppearance) @ 0x2939f1d6c80
+  - Magazine Cartridges (MeshPart) @ 0x292246d6600
+    - SurfaceAppearance (SurfaceAppearance) @ 0x2939f1d7e80
+  - Magazine Cartridges (MeshPart) @ 0x292246d0b00
+    - SurfaceAppearance (SurfaceAppearance) @ 0x2939f1d0c80
+  - BEAM2 (Part) @ 0x2922af2e780
+    - Beam1 (Beam) @ 0x2939e381a00
+    - Attach2 (Attachment) @ 0x2923cb64580
+    - Attach1 (Attachment) @ 0x2923cb69380
+  - Handle (Part) @ 0x2922af29540
+    - SlideSound (Sound) @ 0x2922d559680
+    - TickSound (Sound) @ 0x2922d550800
+    - WindDown (Sound) @ 0x2922d55c880
+    - ShotgunClipin (Sound) @ 0x2939dc15f80
+    - WindUp (Sound) @ 0x2939dc16480
+    - EquippedSound (Sound) @ 0x2939dc14400
+    - GunAimSound (Sound) @ 0x2939dc1f580
+    - ReloadSound (Sound) @ 0x2939dc1fa80
+    - Spring (Motor6D) @ 0x2923e8b0a00
+    - Magwell (Motor6D) @ 0x2923e8b9a00
+    - Magazine Cartridges (Motor6D) @ 0x2923e8bf000
+    - Magazine Cartridges (Motor6D) @ 0x2923e8b9600
+    - Magazine Cartridges (Motor6D) @ 0x2923e8bc800
+    - Magazine Cartridges (Motor6D) @ 0x2923e8bee00
+    - Magazine Cartridges (Motor6D) @ 0x2923e8b1000
+    - Magazine Cartridges (Motor6D) @ 0x29219ab2200
+    - Union (Motor6D) @ 0x29384478600
+    - Union (Motor6D) @ 0x29384474600
+    - Union (Motor6D) @ 0x29384474800
+    - Union (Motor6D) @ 0x29388196200
+    - Union (Motor6D) @ 0x29388197600
+    - Union (Motor6D) @ 0x2938819a000
+    - Union (Motor6D) @ 0x29388197a00
+    - Union (Motor6D) @ 0x2938819f600
+    - Union (Motor6D) @ 0x29388193e00
+    - Union (Motor6D) @ 0x29388193a00
+    - Union (Motor6D) @ 0x29388194e00
+    - Union (Motor6D) @ 0x29388191800
+    - Union (Motor6D) @ 0x29388193400
+    - Union (Motor6D) @ 0x29230e12a00
+    - Mag (Motor6D) @ 0x29230e1d000
+    - BEAM2 (Motor6D) @ 0x29230e11000
+    - BEAMS (Motor6D) @ 0x29230e18400
+    - Flash3 (Motor6D) @ 0x29230e18a00
+    - Flash3 (Motor6D) @ 0x29230e17200
+    - BEAM2 (Motor6D) @ 0x29230e15a00
+    - FLashligh (Motor6D) @ 0x29230e14400
+    - FrontSlide (Motor6D) @ 0x29230e12600
+    - FrontSlide (Motor6D) @ 0x29230e1d800
+    - FrontSlide (Motor6D) @ 0x2923ce7f000
+    - FrontSlide (Motor6D) @ 0x2923ce74a00
+    - FrontSlide (Motor6D) @ 0x2923ce73a00
+    - BackSlide (Motor6D) @ 0x2923ce78800
+    - FrontSlide (Motor6D) @ 0x2922df0f200
+    - BackSlide (Motor6D) @ 0x2922df08200
+    - BackSlide (Motor6D) @ 0x29383ee1800
+    - BackSlide (Motor6D) @ 0x29383ee2c00
+    - BackSlide (Motor6D) @ 0x29383ee7000
+    - BackSlide (Motor6D) @ 0x2938447c600
+    - Part (Motor6D) @ 0x29384479000
+    - Part (Motor6D) @ 0x2923f029e00
+    - Part (Motor6D) @ 0x2923f026600
+    - Part (Motor6D) @ 0x2923dc2fa00
+    - Part (Motor6D) @ 0x2923dc2fc00
+    - Part (Motor6D) @ 0x2923dc2ce00
+    - FireSounds (Folder) @ 0x292312f8f20
+      - FireSound (Sound) @ 0x2939dc1cb00
+      - FireSound (Sound) @ 0x2939dc1d500
+      - FireSound (Sound) @ 0x2939dc17100
+      - Test (Sound) @ 0x2939dc14180
+    - GunFirePoint (Attachment) @ 0x2923f19e480
+      - TouchPart (Part) @ 0x2922af28580
+    - GunMuzzlePoint (Attachment) @ 0x2923f19ab80
+    - WeldConstraint (WeldConstraint) @ 0x2923733d640
+  - Part (Part) @ 0x2922af20080
+    - Mesh (SpecialMesh) @ 0x2939f2a1700
+  - Part (Part) @ 0x2922af2f900
+    - Mesh (SpecialMesh) @ 0x2923eacde80
+  - Part (Part) @ 0x2922af29a80
+    - Weld (Weld) @ 0x2922af2f740
+    - Mesh (SpecialMesh) @ 0x2923eac2900
+  - Part (Part) @ 0x2922af26d00
+    - Mesh (SpecialMesh) @ 0x2923eac9500
+  - Part (Part) @ 0x2922af26ec0
+    - Mesh (SpecialMesh) @ 0x2938446c380
+  - Part (Part) @ 0x2922af2a500
+    - Mesh (SpecialMesh) @ 0x2923f19e180
+  - Flash3 (Part) @ 0x2922af25100
+  - Flash3 (Part) @ 0x2922af20780
+  - FLashligh (MeshPart) @ 0x292246df580
+    - SurfaceAppearance (SurfaceAppearance) @ 0x29397f89c80
+  - BEAMS (Part) @ 0x2922af29380
+    - Beam1 (Beam) @ 0x2939e38f600
+    - Attach2 (Attachment) @ 0x2923f19fb00
+    - Attach1 (Attachment) @ 0x2923f193980
+  - BEAM2 (Part) @ 0x2922af27b00
+    - Beam1 (Beam) @ 0x2939e386e00
+    - Attach2 (Attachment) @ 0x2923f199b00
+    - Attach1 (Attachment) @ 0x2923f19e300
+  - Magwell (MeshPart) @ 0x292246d1200
+  - Spring (MeshPart) @ 0x292246d7780
+  - Magazine Cartridges (MeshPart) @ 0x292246dc800
+    - SurfaceAppearance (SurfaceAppearance) @ 0x29397f8fc80
+  - Magazine Cartridges (MeshPart) @ 0x292246d1900
+    - SurfaceAppearance (SurfaceAppearance) @ 0x29397f88d80
+  - Highlight (Highlight) @ 0x29237336980
+
+Found matching config root at path: Workspace/Workspace/STOPSTEALING055/P80G19Grip/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2922eec8a00
+
+Found matching config root at path: Workspace/Workspace/STOPSTEALING055/P80G19Grip/GunScript_Local/GunGUI/MobileButtons/ReloadButton
+- ReloadButton (ImageButton) @ 0x29384f4d080
+  - TextLabel (TextLabel) @ 0x2922b61d080
+
+Found matching config root at path: Workspace/Workspace/Spawn5645/4BarrelTwists
+- 4BarrelTwists (Accessory) @ 0x29384120780
+  - AccessoryWeld (Weld) @ 0x2938412f3c0
+  - Handle (Part) @ 0x2938412d600
+    - SpecialMesh (SpecialMesh) @ 0x2938491ce00
+    - HairAttachment (Attachment) @ 0x2938491f380
+    - OriginalSize (Vector3Value) [ValueObject] @ 0x2923b33d1a0
+    - AccessoryRigidConstraint (RigidConstraint) @ 0x293841221c0
+
+Found matching config root at path: Workspace/Workspace/Dre2x76/4BarrelTwists
+- 4BarrelTwists (Accessory) @ 0x2922e3d5b80
+  - AccessoryWeld (Weld) @ 0x2922e3d3c00
+  - Handle (Part) @ 0x2922e3d36c0
+    - SpecialMesh (SpecialMesh) @ 0x29398458d80
+    - HairAttachment (Attachment) @ 0x29398457b80
+    - OriginalSize (Vector3Value) [ValueObject] @ 0x2922e3bfac0
+    - AccessoryRigidConstraint (RigidConstraint) @ 0x2922e3d5d40
+
+Found matching config root at path: Workspace/Workspace/qfrm100k/4BarrelTwists
+- 4BarrelTwists (Accessory) @ 0x29386502fc0
+  - AccessoryWeld (Weld) @ 0x29386503180
+  - Handle (Part) @ 0x29386503340
+    - SpecialMesh (SpecialMesh) @ 0x293864e2900
+    - HairAttachment (Attachment) @ 0x293864e2a80
+    - OriginalSize (Vector3Value) [ValueObject] @ 0x293865553a0
+    - AccessoryRigidConstraint (RigidConstraint) @ 0x29386503500
+
+Found matching config root at path: Workspace/Workspace/mariomalikk/DoubleSpikyMessyBuns
+- DoubleSpikyMessyBuns (Accessory) @ 0x2922e3de400
+  - ThumbnailConfiguration (Configuration) @ 0x29220c32a80
+    - ThumbnailCameraTarget (ObjectValue) | Value: Handle (Part) @ 0x2826864243520 @ 0x2922e3b91c0
+    - ThumbnailCameraValue (CFrameValue) [ValueObject] @ 0x29398474800
+  - Handle (Part) @ 0x2922e3d3340
+    - SpecialMesh (SpecialMesh) @ 0x29398453200
+    - AvatarPartScaleType (StringValue) | Value: "Unknown" @ 0x29398471600
+    - HairAttachment (Attachment) @ 0x29398457700
+    - OriginalSize (Vector3Value) [ValueObject] @ 0x2922e3b0e80
+    - OriginalSize (Vector3Value) [ValueObject] @ 0x2922e3b8900
+    - AccessoryRigidConstraint (RigidConstraint) @ 0x292314e7940
+
+Found matching config root at path: Workspace/Workspace/jakari_risherson/DrumWittaButton/Handle/ShotgunClipin
+- ShotgunClipin (Sound) @ 0x2921bfde680
+
+Found matching config root at path: Workspace/Workspace/jakari_risherson/DrumWittaButton/Handle/Barrel
+- Barrel (Motor6D) @ 0x2923e8bd200
+
+Found matching config root at path: Workspace/Workspace/jakari_risherson/DrumWittaButton/Barrel
+- Barrel (MeshPart) @ 0x293984d8c80
+
+Found matching config root at path: Workspace/Workspace/jakari_risherson/DrumWittaButton/GunScript_Local/GunGUI/MobileButtons/ReloadButton
+- ReloadButton (ImageButton) @ 0x29397efe080
+  - TextLabel (TextLabel) @ 0x29397ef3080
+
+Found matching config root at path: Workspace/Workspace/Tj_32742/4BarrelTwists
+- 4BarrelTwists (Accessory) @ 0x29384126440
+  - AccessoryWeld (Weld) @ 0x29384124bc0
+  - Handle (Part) @ 0x2938412c480
+    - SpecialMesh (SpecialMesh) @ 0x2938491c980
+    - HairAttachment (Attachment) @ 0x2938491a700
+    - OriginalSize (Vector3Value) [ValueObject] @ 0x2923b33c560
+    - AccessoryRigidConstraint (RigidConstraint) @ 0x2938412ecc0
+

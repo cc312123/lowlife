@@ -1,0 +1,17 @@
+Tool Name: [Wallet]
+Tool Class: Tool
+
+Descendants:
+  - Name: _Extra | Class: Script @ 0x2132ebfa800
+  - Name: Handle | Class: UnionOperation @ 0x2149d7cac00
+    - Name: BillboardGui | Class: BillboardGui @ 0x2132a55e680
+      - Name: TextLabel | Class: TextLabel @ 0x2132e11d080
+    - Name: Weld | Class: ManualWeld @ 0x2149a66db40
+  - Name: C1 | Class: Part @ 0x2149a66dd00
+    - Name: Decal | Class: Decal @ 0x2132f19cd80
+    - Name: Decal | Class: Decal @ 0x2149a0f0080
+  - Name: C2 | Class: Part @ 0x2149a66dec0
+    - Name: Decal | Class: Decal @ 0x2149a0f2b00
+    - Name: Decal | Class: Decal @ 0x2149a0fe900
+    - Name: Weld | Class: ManualWeld @ 0x2149a66e080
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x2280887134336 @ 0x213300df660

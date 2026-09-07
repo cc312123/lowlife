@@ -1,0 +1,6 @@
+Tool Name: Combat
+Tool Class: Tool
+
+Descendants:
+  - Name: CombatScript | Class: Script @ 0x16045b2e400
+    - Name: TrailEffects | Class: Trail @ 0x160bee6cd80

@@ -1,0 +1,199 @@
+Tool Name: FN57B
+Tool Class: Tool
+
+Descendants:
+  - Name: Setting | Class: ModuleScript @ 0x29384121c80
+  - Name: Price | Class: IntValue | Value: 1500 @ 0x2923b33caa0
+  - Name: BackSlide | Class: Model @ 0x29238f49700
+    - Name: BackSlide | Class: Part @ 0x2938412cd40
+    - Name: BackSlide | Class: Part @ 0x2938412f740
+    - Name: BackSlide | Class: Part @ 0x293841275c0
+      - Name: Mesh | Class: SpecialMesh @ 0x29386f6f800
+    - Name: BackSlide | Class: Part @ 0x29384120240
+      - Name: Mesh | Class: SpecialMesh @ 0x29386f6c800
+    - Name: BackSlide | Class: Part @ 0x293841260c0
+    - Name: BackSlide | Class: Part @ 0x29384124840
+      - Name: Mesh | Class: SpecialMesh @ 0x29386f62480
+  - Name: FrontSlide | Class: Model @ 0x29238f44d80
+    - Name: FrontSlide | Class: Part @ 0x29384120b00
+    - Name: FrontSlide | Class: Part @ 0x2938412eb00
+    - Name: FrontSlide | Class: Part @ 0x2938412cf00
+      - Name: Mesh | Class: SpecialMesh @ 0x29386f60e00
+    - Name: FrontSlide | Class: Part @ 0x29384121740
+      - Name: Mesh | Class: SpecialMesh @ 0x29386f64700
+    - Name: FrontSlide | Class: Part @ 0x29384121ac0
+    - Name: FrontSlide | Class: Part @ 0x2938412b680
+      - Name: Mesh | Class: SpecialMesh @ 0x2938558cb00
+  - Name: Jammed | Class: BoolValue | Value: false @ 0x2923b338660
+  - Name: IdleAnim | Class: Animation @ 0x29384d61900
+  - Name: FireAnim | Class: Animation @ 0x29384d68400
+  - Name: ReloadAnim | Class: Animation @ 0x29384d67f00
+  - Name: HoldDownAnim | Class: Animation @ 0x29384d63d00
+  - Name: EquippedAnim | Class: Animation @ 0x29384d6ae00
+  - Name: SlideAnim | Class: Animation @ 0x29384d62f00
+  - Name: Mag | Class: Model @ 0x29238f49a80
+    - Name: Mag | Class: MeshPart @ 0x29238f48c80
+      - Name: Union | Class: UnionOperation @ 0x2922d1ee800
+      - Name: Union | Class: UnionOperation @ 0x2922d1ef800
+      - Name: Union | Class: UnionOperation @ 0x2922d1ee400
+      - Name: Union | Class: UnionOperation @ 0x2922d1e8c00
+      - Name: Union | Class: UnionOperation @ 0x2922d1e0800
+      - Name: Union | Class: UnionOperation @ 0x2922d1e2000
+      - Name: Union | Class: UnionOperation @ 0x2922d1e8000
+      - Name: Union | Class: UnionOperation @ 0x2922d1e9c00
+      - Name: Union | Class: UnionOperation @ 0x2922d1e9400
+      - Name: Union | Class: UnionOperation @ 0x2922d1e5400
+      - Name: Union | Class: UnionOperation @ 0x2922d1eb800
+      - Name: Union | Class: UnionOperation @ 0x2922d1e6800
+      - Name: Union | Class: UnionOperation @ 0x2922d1ecc00
+      - Name: Union | Class: UnionOperation @ 0x2922d1e3c00
+    - Name: Magazine Cartridges | Class: MeshPart @ 0x29238f44680
+      - Name: SurfaceAppearance | Class: SurfaceAppearance @ 0x29236f3cf80
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d092c40
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d096340
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d09a580
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d093a00
+    - Name: Magazine Cartridges | Class: MeshPart @ 0x29238f42380
+      - Name: SurfaceAppearance | Class: SurfaceAppearance @ 0x29236f3ea80
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d099040
+    - Name: Magazine Cartridges | Class: MeshPart @ 0x29238f4c800
+      - Name: SurfaceAppearance | Class: SurfaceAppearance @ 0x29236f37280
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d098140
+    - Name: Magazine Cartridges | Class: MeshPart @ 0x29238f4d980
+      - Name: SurfaceAppearance | Class: SurfaceAppearance @ 0x29236f33380
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d0997c0
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d094040
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d09f940
+    - Name: Magazine Cartridges | Class: MeshPart @ 0x29238f46280
+      - Name: SurfaceAppearance | Class: SurfaceAppearance @ 0x29232546f80
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d092100
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d092ec0
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d093c80
+    - Name: Magazine Cartridges | Class: MeshPart @ 0x29238f4f900
+      - Name: SurfaceAppearance | Class: SurfaceAppearance @ 0x29232541880
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d093dc0
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d091340
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d0956c0
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d091e80
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d09b480
+    - Name: Magwell | Class: MeshPart @ 0x29238f4c480
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d093000
+    - Name: Spring | Class: MeshPart @ 0x29238f4b300
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d09b200
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d09da00
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d0901c0
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d095f80
+  - Name: BEAM2 | Class: Part @ 0x2938412a880
+    - Name: Beam1 | Class: Beam @ 0x29219acc400
+    - Name: Attach2 | Class: Attachment @ 0x29385582480
+    - Name: Attach1 | Class: Attachment @ 0x29385586680
+  - Name: BEAMS | Class: Part @ 0x29384122700
+    - Name: Beam1 | Class: Beam @ 0x29219ac5800
+    - Name: Attach2 | Class: Attachment @ 0x29385584400
+    - Name: Attach1 | Class: Attachment @ 0x29385588480
+  - Name: BEAM2 | Class: Part @ 0x29384124300
+    - Name: Beam1 | Class: Beam @ 0x29219ac3c00
+    - Name: Attach2 | Class: Attachment @ 0x2938558b600
+    - Name: Attach1 | Class: Attachment @ 0x29385581400
+  - Name: Handle | Class: Part @ 0x2938412e080
+    - Name: SlideSound | Class: Sound @ 0x292206d4180
+    - Name: TickSound | Class: Sound @ 0x292206d1c00
+    - Name: WindDown | Class: Sound @ 0x292206d3780
+    - Name: ShotgunClipin | Class: Sound @ 0x292206d5080
+    - Name: WindUp | Class: Sound @ 0x292206d1e80
+    - Name: EquippedSound | Class: Sound @ 0x292206d3c80
+    - Name: GunAimSound | Class: Sound @ 0x292206d4b80
+    - Name: ReloadSound | Class: Sound @ 0x292206d3f00
+    - Name: Spring | Class: Motor6D @ 0x29219acca00
+    - Name: Magwell | Class: Motor6D @ 0x29219acd600
+    - Name: Magazine Cartridges | Class: Motor6D @ 0x29219acf400
+    - Name: Magazine Cartridges | Class: Motor6D @ 0x29219acee00
+    - Name: Magazine Cartridges | Class: Motor6D @ 0x29219acb000
+    - Name: Magazine Cartridges | Class: Motor6D @ 0x29219ac5000
+    - Name: Magazine Cartridges | Class: Motor6D @ 0x29219ac6a00
+    - Name: Magazine Cartridges | Class: Motor6D @ 0x29219aca000
+    - Name: Union | Class: Motor6D @ 0x29219ac9000
+    - Name: Union | Class: Motor6D @ 0x29219ac7c00
+    - Name: Union | Class: Motor6D @ 0x29219ac2800
+    - Name: Union | Class: Motor6D @ 0x29219ac2400
+    - Name: Union | Class: Motor6D @ 0x29219acea00
+    - Name: Union | Class: Motor6D @ 0x29219acaa00
+    - Name: Union | Class: Motor6D @ 0x29219ac1800
+    - Name: Union | Class: Motor6D @ 0x29219ac6e00
+    - Name: Union | Class: Motor6D @ 0x29219ac4e00
+    - Name: Union | Class: Motor6D @ 0x29219acda00
+    - Name: Union | Class: Motor6D @ 0x29219ac5200
+    - Name: Union | Class: Motor6D @ 0x29219ac9600
+    - Name: Union | Class: Motor6D @ 0x29219ac5400
+    - Name: Union | Class: Motor6D @ 0x29219acc800
+    - Name: Mag | Class: Motor6D @ 0x29219acf200
+    - Name: BEAM2 | Class: Motor6D @ 0x29219ac7800
+    - Name: BEAMS | Class: Motor6D @ 0x29219ac1600
+    - Name: Flash3 | Class: Motor6D @ 0x29219acbe00
+    - Name: Flash3 | Class: Motor6D @ 0x29219ac7600
+    - Name: BEAM2 | Class: Motor6D @ 0x29219ac7e00
+    - Name: FLashligh | Class: Motor6D @ 0x29219ac6800
+    - Name: FrontSlide | Class: Motor6D @ 0x29219ac6000
+    - Name: FrontSlide | Class: Motor6D @ 0x29219ac8200
+    - Name: FrontSlide | Class: Motor6D @ 0x29219ac2000
+    - Name: FrontSlide | Class: Motor6D @ 0x29219ac8000
+    - Name: FrontSlide | Class: Motor6D @ 0x29219ac8c00
+    - Name: BackSlide | Class: Motor6D @ 0x29214144800
+    - Name: FrontSlide | Class: Motor6D @ 0x29214145600
+    - Name: BackSlide | Class: Motor6D @ 0x29384d08200
+    - Name: BackSlide | Class: Motor6D @ 0x29384d0d400
+    - Name: BackSlide | Class: Motor6D @ 0x29384d00e00
+    - Name: BackSlide | Class: Motor6D @ 0x29384d0d200
+    - Name: BackSlide | Class: Motor6D @ 0x29384d05200
+    - Name: Part | Class: Motor6D @ 0x29384d07600
+    - Name: Part | Class: Motor6D @ 0x29384d04c00
+    - Name: Part | Class: Motor6D @ 0x29384d0b200
+    - Name: Part | Class: Motor6D @ 0x29384d0da00
+    - Name: Part | Class: Motor6D @ 0x29384d05000
+    - Name: Part | Class: Motor6D @ 0x29384d00a00
+    - Name: FireSounds | Class: Folder @ 0x29385a1fba0
+      - Name: FireSound | Class: Sound @ 0x292206d2100
+      - Name: FireSound | Class: Sound @ 0x292206d4e00
+      - Name: FireSound | Class: Sound @ 0x29238266980
+      - Name: Test | Class: Sound @ 0x29238262100
+    - Name: GunFirePoint | Class: Attachment @ 0x2938558a880
+      - Name: TouchPart | Class: Part @ 0x29384121900
+        - Name: TouchInterest | Class: TouchTransmitter @ 0x2922ef17240
+    - Name: GunMuzzlePoint | Class: Attachment @ 0x2938558d880
+    - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d096980
+  - Name: Part | Class: Part @ 0x2938412af80
+    - Name: Mesh | Class: SpecialMesh @ 0x2938558e900
+  - Name: Part | Class: Part @ 0x2938412c2c0
+    - Name: Mesh | Class: SpecialMesh @ 0x2938558fc80
+  - Name: Part | Class: Part @ 0x29384125b80
+    - Name: Weld | Class: Weld @ 0x2938412bf40
+    - Name: Mesh | Class: SpecialMesh @ 0x29385589c80
+  - Name: Part | Class: Part @ 0x29231c58040
+    - Name: Mesh | Class: SpecialMesh @ 0x29385582a80
+  - Name: Part | Class: Part @ 0x29231c54d80
+    - Name: Mesh | Class: SpecialMesh @ 0x29385581a00
+  - Name: Part | Class: Part @ 0x29231c5a500
+    - Name: Mesh | Class: SpecialMesh @ 0x2938558dd00
+  - Name: Flash3 | Class: Part @ 0x29231c5a340
+  - Name: Flash3 | Class: Part @ 0x29231c5e940
+  - Name: FLashligh | Class: MeshPart @ 0x29238f41200
+    - Name: SurfaceAppearance | Class: SurfaceAppearance @ 0x29232540080
+  - Name: GunScript_Local | Class: LocalScript @ 0x29384d09000
+    - Name: SpringModule | Class: ModuleScript @ 0x29231c5a6c0
+    - Name: MarkerEvent | Class: BindableEvent @ 0x2938639e780
+  - Name: GunScript_Server | Class: Script @ 0x2923e8bdc00
+    - Name: IgniteScript | Class: Script @ 0x2923e8b6000
+    - Name: IcifyScript | Class: Script @ 0x2923e8bf400
+    - Name: ChangeMagAndAmmo | Class: RemoteEvent @ 0x2939877fe40
+    - Name: UnusedStuffs | Class: Folder @ 0x292385ce5c0
+      - Name: WhizScript | Class: Script @ 0x2923e8b4a00
+      - Name: Ignore | Class: Folder @ 0x292385cf040
+    - Name: PlayServerSound | Class: RemoteEvent @ 0x2939877eb00
+    - Name: Mag | Class: NumberValue | Value: 31.000000 @ 0x29214a0bca0
+    - Name: Ammo | Class: NumberValue | Value: inf @ 0x29214a08ac0
+  - Name: IdleAnim | Class: Animation @ 0x2923e6f6e00
+  - Name: FireAnim | Class: Animation @ 0x2923e6fec00
+  - Name: ReloadAnim | Class: Animation @ 0x2923e6fa100
+  - Name: HoldDownAnim | Class: Animation @ 0x2923e6fd000
+  - Name: EquippedAnimation | Class: Animation @ 0x2923e6f2c00
+  - Name: SlideAnim | Class: Animation @ 0x2923e6f2300

@@ -1,0 +1,9 @@
+Tool Name: [Cranberry]
+Tool Class: Tool
+
+Descendants:
+  - Name: Drink | Class: Script @ 0x1511a764800
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x1447592663168 @ 0x151376a8d60
+  - Name: Animation | Class: Animation @ 0x15122dbe700
+  - Name: Handle | Class: MeshPart @ 0x1511d7b5100
+    - Name: Eat | Class: StringValue | Value: "Unknown" @ 0x15289cf1b00

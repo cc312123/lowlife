@@ -1,0 +1,14 @@
+Tool Name: Bomb
+Tool Class: Tool
+
+Descendants:
+  - Name: Data | Class: Configuration @ 0x24d0d9c05c0
+  - Name: BombHandle | Class: Part @ 0x24ccc404680
+    - Name: Click | Class: Sound @ 0x24ccc684680
+    - Name: Explode | Class: Sound @ 0x24ccc684400
+    - Name: Mesh | Class: SpecialMesh @ 0x24cd7d03c80
+    - Name: UIAttachment | Class: Attachment @ 0x24cd7546380
+      - Name: UI | Class: BillboardGui @ 0x24cc257b480
+        - Name: TimeLeft | Class: TextLabel @ 0x24cda0d1080
+    - Name: FireAttachment | Class: Attachment @ 0x24cd754f080
+      - Name: Fire | Class: Fire @ 0x24cda895800

@@ -396,6 +396,34 @@ math::matrix4 rbx::visualengine_t::get_viewmatrix()
 	return memory->read<math::matrix4>(this->address + Offsets::VisualEngine::ViewMatrix);
 }
 
+struct roblox_handle_data {
+	DWORD process_id;
+	HWND window_handle;
+};
+
+static BOOL CALLBACK enum_roblox_windows_cb(HWND handle, LPARAM lparam) {
+	roblox_handle_data& data = *reinterpret_cast<roblox_handle_data*>(lparam);
+	DWORD process_id = 0;
+	GetWindowThreadProcessId(handle, &process_id);
+	if (data.process_id != process_id) return TRUE;
+	if (GetWindow(handle, GW_OWNER) != (HWND)0 || !IsWindowVisible(handle)) return TRUE;
+	RECT rc{};
+	if (GetClientRect(handle, &rc) && (rc.right - rc.left) > 100) {
+		data.window_handle = handle;
+		return FALSE;
+	}
+	return TRUE;
+}
+
+HWND game::get_roblox_window_handle() {
+	DWORD pid = memory->get_process_id();
+	if (!pid) return FindWindowA(nullptr, "Roblox");
+	roblox_handle_data data{ pid, nullptr };
+	EnumWindows(enum_roblox_windows_cb, reinterpret_cast<LPARAM>(&data));
+	if (data.window_handle) return data.window_handle;
+	return FindWindowA(nullptr, "Roblox");
+}
+
 bool rbx::visualengine_t::world_to_screen(const math::vector3& world, math::vector2& out, const math::vector2& dims, const math::matrix4& view)
 {
 	math::vector4 clip = view.multiply({ world.x, world.y, world.z, 1.0f });
@@ -412,14 +440,17 @@ bool rbx::visualengine_t::world_to_screen(const math::vector3& world, math::vect
 	out.y = -(dims.y * 0.5f * clip.y) + (dims.y * 0.5f);
 
 	HWND roblox_window = game::wnd;
+	if (!roblox_window || !IsWindow(roblox_window)) {
+		game::wnd = game::get_roblox_window_handle();
+		roblox_window = game::wnd;
+	}
+
 	if (roblox_window)
 	{
 		RECT client_rect{};
-		POINT client_pos{};
+		POINT client_pos{ 0, 0 };
 		if (GetClientRect(roblox_window, &client_rect))
 		{
-			client_pos.x = client_rect.left;
-			client_pos.y = client_rect.top;
 			ClientToScreen(roblox_window, &client_pos);
 			out.x += (float)client_pos.x;
 			out.y += (float)client_pos.y;

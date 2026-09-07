@@ -1,0 +1,88 @@
+=== Weapon Config Search for Tool: ClassicSword ===
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Templates/Spinner/ClassicSword
+- ClassicSword (ImageLabel) @ 0x29220c90c80
+  - UIAspectRatioConstraint (UIAspectRatioConstraint) @ 0x2921d1f1d00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Templates/Spinner/BloodBath
+- BloodBath (ImageLabel) @ 0x29220c9a880
+  - UIAspectRatioConstraint (UIAspectRatioConstraint) @ 0x2921d1fe100
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/ClassicSword
+- ClassicSword (Tool) @ 0x2921b7d6680
+  - SwordPlacementWeld (Weld) @ 0x293aaef9000
+  - Handle (Part) @ 0x29222268740
+    - SwordSlash (Sound) @ 0x29214b76700
+    - SwordLunge (Sound) @ 0x29214b74680
+    - Unsheath (Sound) @ 0x29214b7f800
+    - Mesh (SpecialMesh) @ 0x292352a4d00
+    - TouchInterest (TouchTransmitter) @ 0x2923e2129a0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Tools/BloodBath
+- BloodBath (Tool) @ 0x2921adf0080
+  - SwordPlacementWeld (Weld) @ 0x293acc336c0
+  - Handle (Part) @ 0x292226fadc0
+    - Unsheath (Sound) @ 0x29219f6cb00
+    - SwordSlash (Sound) @ 0x29219f67380
+    - SwordLunge (Sound) @ 0x29219f6af80
+    - Mesh (SpecialMesh) @ 0x2939e547a00
+    - TouchInterest (TouchTransmitter) @ 0x2923e213a40
+  - default (MeshPart) @ 0x292227d5100
+    - WeldConstraint (WeldConstraint) @ 0x2922f599900
+  - default (MeshPart) @ 0x292227d5480
+    - WeldConstraint (WeldConstraint) @ 0x2922f593a00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/VFX/General/Death/AdminHammerEffect/RedBall
+- RedBall (Part) @ 0x29222c7cb80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/VFX/General/Death/AcidBladeEffect
+- AcidBladeEffect (Part) @ 0x29222ab7400
+  - Cloud1 (ParticleEmitter) @ 0x292176a6680
+  - Cloud1 (ParticleEmitter) @ 0x292176a0980
+  - irregularcloud1 (ParticleEmitter) @ 0x292176a3080
+  - irregularcloud1 (ParticleEmitter) @ 0x292176ac980
+  - Line Spec 8 (ParticleEmitter) @ 0x292176a2a80
+  - Water8 (ParticleEmitter) @ 0x292176ae780
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/PlayerEffect1/LongHairHeadBandBrown
+- LongHairHeadBandBrown (Accessory) @ 0x293b2961740
+  - Handle (MeshPart) @ 0x29223045100
+    - HairAttachment (Attachment) @ 0x29212d2c800
+      - OriginalPosition (Vector3Value) [ValueObject] @ 0x2923d609ee0
+    - OriginalSize (Vector3Value) [ValueObject] @ 0x2923d6059c0
+    - AccessoryWeld (Weld) @ 0x293b2966600
+    - TouchInterest (TouchTransmitter) @ 0x2923d609460
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/abilityRemotes/abilityDoubleJump
+- abilityDoubleJump (RemoteEvent) @ 0x29383a97b00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/M14/barrel
+- barrel (Part) @ 0x292232f0240
+  - Weld (Weld) @ 0x29383a92540
+  - SmokeParticle (ParticleEmitter) @ 0x2922eb98180
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/M14XXL/barrel
+- barrel (Part) @ 0x292232f0400
+  - SmokeParticle (ParticleEmitter) @ 0x2922eb94e80
+  - WeldConstraint (WeldConstraint) @ 0x29231b4d8c0
+
+Found matching config root at path: Workspace/Workspace/kvara7950/ClassicSword
+- ClassicSword (Tool) @ 0x29239a63080
+  - SwordPlacementWeld (Weld) @ 0x292364eb4c0
+  - Handle (Part) @ 0x292364e9700
+    - SwordSlash (Sound) @ 0x29384436e80
+    - SwordLunge (Sound) @ 0x2923b0d3780
+    - Unsheath (Sound) @ 0x2923b0d9400
+    - Mesh (SpecialMesh) @ 0x29239fa2d80
+    - TouchInterest (TouchTransmitter) @ 0x29212dba6c0
+
+Found matching config root at path: Workspace/Workspace/IIIIIllIlIllllIIIIl/ClassicSword
+- ClassicSword (Tool) @ 0x29216aa9680
+  - SwordPlacementWeld (Weld) @ 0x2923ac1e400
+  - Handle (Part) @ 0x2923ac14a00
+    - SwordSlash (Sound) @ 0x292319f0a80
+    - SwordLunge (Sound) @ 0x292319f2880
+    - Unsheath (Sound) @ 0x292319f5800
+    - Mesh (SpecialMesh) @ 0x29398cbc800
+    - TouchInterest (TouchTransmitter) @ 0x2922c06b840
+

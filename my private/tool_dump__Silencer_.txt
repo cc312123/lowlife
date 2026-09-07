@@ -1,0 +1,21 @@
+Tool Name: [Silencer]
+Tool Class: Tool
+
+Descendants:
+  - Name: GunScript | Class: Script @ 0x243d40a2600
+  - Name: GunClient | Class: LocalScript @ 0x243d40a5000
+  - Name: Ammo | Class: IntValue | Value: 0 @ 0x243d5834700
+  - Name: MaxAmmo | Class: IntValue | Value: 12 @ 0x243d5834800
+  - Name: Damage | Class: NumberValue | Value: 32.000000 @ 0x243d5834600
+  - Name: Range | Class: NumberValue | Value: 200.000000 @ 0x243d5834d00
+  - Name: ShootingCooldown | Class: NumberValue | Value: 0.440000 @ 0x243d5834900
+  - Name: Handle | Class: Part @ 0x243d40a6600
+    - Name: NoAmmo | Class: Sound @ 0x243e9d7fa80
+    - Name: ShootSound | Class: Sound @ 0x243e9d7d500
+    - Name: ShootBBGUI | Class: BillboardGui @ 0x243eb456e80
+      - Name: Shoot | Class: ImageLabel @ 0x243dc5e6080
+    - Name: WeldConstraint | Class: WeldConstraint @ 0x243ec15b000
+    - Name: WeldConstraint | Class: WeldConstraint @ 0x243ec15b180
+  - Name: Default | Class: MeshPart @ 0x243e0755800
+  - Name: Part | Class: Part @ 0x243d40ade00
+  - Name: RemoteEvent | Class: RemoteEvent @ 0x243d5f4eb00

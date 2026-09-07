@@ -1,0 +1,57 @@
+=== Weapon Config Search for Tool: Bomb ===
+
+Found matching config root at path: Workspace/Workspace/ReachNotice/GuiPart/SurfaceGui/Main/BeforeImage/BombLabel
+- BombLabel (TextLabel) @ 0x24cca513080
+  - UIStroke (UIStroke) @ 0x24ccaa08dc0
+  - UIPadding (UIPadding) @ 0x24d0a986a00
+
+Found matching config root at path: Workspace/Workspace/ReachNotice/GuiPart/SurfaceGui/Main/AfterImages/BombLabel
+- BombLabel (TextLabel) @ 0x24cca514080
+  - UIStroke (UIStroke) @ 0x24ccaa09180
+  - UIPadding (UIPadding) @ 0x24d0a985000
+
+Found matching config root at path: Workspace/Workspace/Characters/kinelij/Bomb
+- Bomb (Tool) @ 0x24ce295b480
+  - Data (Configuration) @ 0x24ccb78b9c0
+  - BombHandle (Part) @ 0x24ce1259e00
+    - Click (Sound) @ 0x24d2ae6df00
+    - Explode (Sound) @ 0x24d2ae61480
+    - Mesh (SpecialMesh) @ 0x24ce301ed80
+    - UIAttachment (Attachment) @ 0x24d2b1ea400
+      - UI (BillboardGui) @ 0x24d04889680
+        - TimeLeft (TextLabel) @ 0x24ccd725080
+    - FireAttachment (Attachment) @ 0x24d2b1ef200
+      - Fire (Fire) @ 0x24d11b99a40
+    - TouchInterest (TouchTransmitter) @ 0x24ce0b56280
+    - Grip (Weld) @ 0x24ce0434300
+
+Found matching config root at path: Workspace/Workspace/Characters/IIIIIllIlIllllIIIIl/Bomb
+- Bomb (Tool) @ 0x24cd08eea80
+  - Data (Configuration) @ 0x24d0d9c05c0
+  - BombHandle (Part) @ 0x24ccc404680
+    - Click (Sound) @ 0x24ccc684680
+    - Explode (Sound) @ 0x24ccc684400
+    - Mesh (SpecialMesh) @ 0x24cd7d03c80
+    - UIAttachment (Attachment) @ 0x24cd7546380
+      - UI (BillboardGui) @ 0x24cc257b480
+        - TimeLeft (TextLabel) @ 0x24cda0d1080
+    - FireAttachment (Attachment) @ 0x24cd754f080
+      - Fire (Fire) @ 0x24cda895800
+    - Grip (Weld) @ 0x24ccc40c9c0
+    - TouchInterest (TouchTransmitter) @ 0x24ce2125560
+
+Found matching config root at path: Workspace/Workspace/Characters/Despacitovo778/Bomb
+- Bomb (Tool) @ 0x24cc2d0ea80
+  - Data (Configuration) @ 0x24cce6a7f40
+  - BombHandle (Part) @ 0x24ce0430b00
+    - Click (Sound) @ 0x24cc7077100
+    - Explode (Sound) @ 0x24cc707f300
+    - Mesh (SpecialMesh) @ 0x24d23359b00
+    - UIAttachment (Attachment) @ 0x24d04cd4100
+      - UI (BillboardGui) @ 0x24cdb64b480
+        - TimeLeft (TextLabel) @ 0x24cda90a080
+    - FireAttachment (Attachment) @ 0x24d04cdd280
+      - Fire (Fire) @ 0x24cc688b980
+    - Grip (Weld) @ 0x24ce0430940
+    - TouchInterest (TouchTransmitter) @ 0x24cdeaccaa0
+

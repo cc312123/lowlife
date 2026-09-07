@@ -1,0 +1,6 @@
+Tool Name: [Mask]
+Tool Class: Tool
+
+Descendants:
+  - Name: Script | Class: Script @ 0x22a5180c200
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x2380537796736 @ 0x22a4ed998c0

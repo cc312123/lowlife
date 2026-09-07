@@ -1,0 +1,15 @@
+Tool Name: db
+Tool Class: Tool
+
+Descendants:
+  - Name: Multi Bullets | Class: Script @ 0x19a9eab6a00
+  - Name: AMMO | Class: NumberValue | Value: 0.000000 @ 0x19abd0c0780
+  - Name: rl | Class: RemoteEvent @ 0x19ab8bd6280
+  - Name: Handle | Class: MeshPart @ 0x19a9ee42e00
+    - Name: Shoot | Class: Sound @ 0x19aa8811e80
+    - Name: ANMO OUT | Class: Sound @ 0x19aa8818280
+    - Name: Flare | Class: Attachment @ 0x19ac974ae80
+      - Name: ParticleEmitter | Class: ParticleEmitter @ 0x19c212c3c80
+    - Name: BloodParticle | Class: ParticleEmitter @ 0x19c212c4880
+    - Name: Shoot | Class: Sound @ 0x19a9e815300
+    - Name: Shoot | Class: Sound @ 0x19a9e81e400

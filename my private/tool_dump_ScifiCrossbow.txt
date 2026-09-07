@@ -1,0 +1,21 @@
+Tool Name: ScifiCrossbow
+Tool Class: Tool
+
+Descendants:
+  - Name: ThumbnailPose | Class: Keyframe @ 0x19aae3c5020
+    - Name: UpperTorso | Class: Pose @ 0x19abf9c2240
+      - Name: RightUpperArm | Class: Pose @ 0x19abf9c1ac0
+        - Name: RightLowerArm | Class: Pose @ 0x19abf9c0800
+          - Name: RightHand | Class: Pose @ 0x19abf9c1e80
+  - Name: MouseIcon | Class: LocalScript @ 0x19c15999e00
+  - Name: Handle | Class: MeshPart @ 0x19a9ecf7400
+    - Name: RightGripAttachment | Class: Attachment @ 0x19a9e75b000
+    - Name: Hit | Class: Sound @ 0x19aa60eaf80
+    - Name: PewPew | Class: Sound @ 0x19aa60e6700
+    - Name: ProjectileSparks | Class: ParticleEmitter @ 0x19c00d9ba80
+  - Name: RayGun | Class: Script @ 0x19c15992000
+    - Name: ProjectileScript | Class: Script @ 0x19c1599f800
+  - Name: LocalScript | Class: LocalScript @ 0x19c15992c00
+  - Name: Remotes | Class: Folder @ 0x19aae3c2e00
+    - Name: ClientControl | Class: RemoteFunction @ 0x19c15998600
+    - Name: ServerControl | Class: RemoteFunction @ 0x19c15998000

@@ -1,0 +1,11 @@
+Tool Name: ClassicSword
+Tool Class: Tool
+
+Descendants:
+  - Name: SwordPlacementWeld | Class: Weld @ 0x2923ac1e400
+  - Name: Handle | Class: Part @ 0x2923ac14a00
+    - Name: SwordSlash | Class: Sound @ 0x292319f0a80
+    - Name: SwordLunge | Class: Sound @ 0x292319f2880
+    - Name: Unsheath | Class: Sound @ 0x292319f5800
+    - Name: Mesh | Class: SpecialMesh @ 0x29398cbc800
+    - Name: TouchInterest | Class: TouchTransmitter @ 0x2922c06b840

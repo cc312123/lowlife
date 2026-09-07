@@ -1,0 +1,9 @@
+Tool Name: Fist
+Tool Class: Tool
+
+Descendants:
+  - Name: _Extra | Class: Script @ 0x2133ff40800
+  - Name: LS | Class: LocalScript @ 0x2133ff40600
+  - Name: Boxing | Class: BoolValue | Value: false @ 0x21496806ec0
+  - Name: Idle | Class: Animation @ 0x2132e73fc00
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x2281154271360 @ 0x21496808120

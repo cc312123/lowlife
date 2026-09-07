@@ -1560,7 +1560,8 @@ void render_t::start_render()
 
     if (!roblox_window || !IsWindow(roblox_window))
     {
-        roblox_window = FindWindowA(nullptr, "Roblox");
+        game::wnd = game::get_roblox_window_handle();
+        roblox_window = game::wnd;
     }
 
     bool roblox_is_focused = false;
@@ -1579,7 +1580,7 @@ void render_t::start_render()
     }
 
     
-    bool should_be_visible = running || roblox_is_focused || overlay_is_focused;
+    bool should_be_visible = running || roblox_is_focused || overlay_is_focused || globals::roblox_valid;
 
     
     if (should_be_visible != last_visibility_state && detail->window)

@@ -1,0 +1,21 @@
+Tool Name: Revolver
+Tool Class: Tool
+
+Descendants:
+  - Name: RevolverServer | Class: Script @ 0x25786107a00
+    - Name: RevolverClient | Class: LocalScript @ 0x25786107200
+      - Name: DefaultFireEffect | Class: ModuleScript @ 0x2574d1a28c0
+      - Name: Particles | Class: Configuration @ 0x2578d2c9080
+        - Name: Collision | Class: ParticleEmitter @ 0x257901c6080
+        - Name: Debris | Class: ParticleEmitter @ 0x257901c6c80
+        - Name: Smoke | Class: Smoke @ 0x2578b887f00
+        - Name: Sparks | Class: ParticleEmitter @ 0x257901cb480
+        - Name: Spark | Class: ParticleEmitter @ 0x257901c4e80
+    - Name: DefaultWeaponLogic | Class: ModuleScript @ 0x2574d1a1ac0
+    - Name: OverrideSettings | Class: ModuleScript @ 0x2574d1a4f40
+    - Name: DefaultWeaponLogic_Murder | Class: ModuleScript @ 0x2574d1a4bc0
+  - Name: ClientEvent | Class: RemoteEvent @ 0x2574d1a0400
+  - Name: ServerEvent | Class: BindableEvent @ 0x2578bdf12e0
+  - Name: ToolType | Class: StringValue | Value: "Unknown" @ 0x2575a195a00
+  - Name: CheckAmmoState | Class: BindableFunction @ 0x25784be8dc0
+  - Name: RAnimDoneEquip | Class: BindableEvent @ 0x2578b892c40

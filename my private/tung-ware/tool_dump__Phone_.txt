@@ -1,0 +1,20 @@
+Tool Name: [Phone]
+Tool Class: Tool
+
+Descendants:
+  - Name: Phone | Class: Script @ 0x25b1fa37000
+  - Name: Handle | Class: UnionOperation @ 0x25b1f9c7800
+    - Name: PickUp | Class: Sound @ 0x25b1fa48780
+    - Name: EndCalls | Class: Sound @ 0x25b1fa48a00
+  - Name: [iPhone] | Class: MeshPart @ 0x25b1f9c7c00
+    - Name: Weld | Class: Weld @ 0x25b10140780
+  - Name: [Orange Phone] | Class: MeshPart @ 0x25b1f9c8000
+    - Name: Weld | Class: Weld @ 0x25b10140940
+  - Name: [PinkPhone] | Class: MeshPart @ 0x25b1f9c8400
+    - Name: Weld | Class: Weld @ 0x25b10140b00
+  - Name: [Old Phone] | Class: MeshPart @ 0x25b1f9c8800
+    - Name: Weld | Class: Weld @ 0x25b10140cc0
+  - Name: [Regular] | Class: MeshPart @ 0x25b1f9c8c00
+    - Name: Weld | Class: Weld @ 0x25b10140e80
+  - Name: [Tele] | Class: MeshPart @ 0x25b1f9c9000
+    - Name: Weld | Class: Weld @ 0x25b10141040

@@ -1,0 +1,3469 @@
+=== Weapon Config Search for Tool: [DoubleBarrel] ===
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/LoadoutGuns/[DoubleBarrel]
+- [DoubleBarrel] (Model) @ 0x29220a02e00
+  - Handle (MeshPart) @ 0x2922e209e00
+    - Shoot (Sound) @ 0x2922e3cb480
+    - NoAmmo (Sound) @ 0x2922e3c1200
+    - RightGrip (Weld) @ 0x2939e8d1900
+    - ShootBBGUI (BillboardGui) @ 0x29220c23280
+      - Shoot (ImageLabel) @ 0x292334c5480
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/LoadoutGuns/[Shotgun]
+- [Shotgun] (Model) @ 0x29220a01c80
+  - Handle (MeshPart) @ 0x2922e20a880
+    - Shoot (Sound) @ 0x2922e3c5580
+    - NoAmmo (Sound) @ 0x2922e3ccd80
+    - ShootBBGUI (BillboardGui) @ 0x29220c25080
+      - Shoot (ImageLabel) @ 0x292334c3c80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/LoadoutGuns/[TacticalShotgun]
+- [TacticalShotgun] (Model) @ 0x29220a0af80
+  - Handle (MeshPart) @ 0x2922e20af80
+    - NoAmmo (Sound) @ 0x2922e3ce900
+    - Shoot (Sound) @ 0x2922e3cdc80
+    - ShootBBGUI (BillboardGui) @ 0x29220c26480
+      - Shoot (ImageLabel) @ 0x292334c2480
+    - SurfaceLight (SurfaceLight) @ 0x293997d3900
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Charms/Beta/Part/CardBase
+- CardBase (MeshPart) @ 0x2922e20b680
+  - CardDetail (Weld) @ 0x2939e8dd600
+  - Attachment (Attachment) @ 0x29220c01d00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/Unboxing/CapsuleDisplay/Misc/Coin/CoinBase/CardBase
+- CardBase (Weld) @ 0x2939e8d9c40
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/Unboxing/CapsuleDisplay/Misc/Coin/CardBase
+- CardBase (MeshPart) @ 0x2922ae81900
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/MAIN_SCREEN_GUI/KilledByFrame
+- KilledByFrame (Frame) @ 0x29222a43280
+  - ImageLabel (ImageLabel) @ 0x292066e7880
+    - UICorner (UICorner) @ 0x2921cb99f00
+  - UICorner (UICorner) @ 0x2921cb97600
+  - AvatarIcon (ImageLabel) @ 0x292066e2480
+    - 2 (UICorner) @ 0x2921cb91100
+    - 3 (UIStroke) @ 0x29203ae1840
+    - UIAspectRatioConstraint (UIAspectRatioConstraint) @ 0x2921cb98f00
+    - Level (Frame) @ 0x29222a43c80
+      - 1 (UIStroke) @ 0x29203ae2100
+      - 2 (UICorner) @ 0x2921cb9e300
+      - Level (TextLabel) @ 0x29222a3c080
+      - UIAspectRatioConstraint (UIAspectRatioConstraint) @ 0x2921cb9a300
+  - KillText (TextLabel) @ 0x29222a3d080
+  - StreakText (TextLabel) @ 0x29222a3e080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/MAIN_SCREEN_GUI/EventSkinPackShop/EventSkinPackShop/DoubleBarrel
+- DoubleBarrel (Frame) @ 0x29222e45a80
+  - Frame (Frame) @ 0x29222e46480
+    - RarityName (TextLabel) @ 0x29222e5e080
+      - Special (UIGradient) @ 0x29220c0ba80
+    - ItemCount (TextLabel) @ 0x29222d20080
+    - SPECIAL (ImageButton) @ 0x29222d21080
+      - Year (TextLabel) @ 0x29222d22080
+      - UIAspectRatioConstraint (UIAspectRatioConstraint) @ 0x2921d1fa100
+    - EnchantName (TextLabel) @ 0x29222d23080
+      - Gradient (UIGradient) @ 0x29220c0bc00
+    - Preview (Frame) @ 0x29222e46e80
+      - Frame (Frame) @ 0x29222e47880
+        - EQUIPPED (ImageLabel) @ 0x2938be6d880
+        - ViewportFrame (ViewportFrame) @ 0x2938be6c080
+          - Hallows (Model) @ 0x29220a09700
+            - Handle (MeshPart) @ 0x2922ae82380
+              - Shoot (Sound) @ 0x2922e3c5f80
+              - NoAmmo (Sound) @ 0x2922e3c4400
+              - ShootBBGUI (BillboardGui) @ 0x29222e48280
+                - Shoot (ImageLabel) @ 0x2938be60080
+              - pump.004 (MeshPart) @ 0x2922ae83180
+                - Handle (Weld) @ 0x2939e8d3880
+                - Cube.006 (Weld) @ 0x2939e8de080
+                - Cylinder.004 (Weld) @ 0x2939e8d5640
+              - Cube.006 (MeshPart) @ 0x2922ae83500
+              - Cylinder.004 (MeshPart) @ 0x2922ae83880
+    - Button (TextButton) @ 0x29222d77880
+    - COUNT (NumberValue) | Value: 1.000000 @ 0x293941adfa0
+    - ItemName (TextLabel) @ 0x29222d24080
+    - UIStroke (UIStroke) @ 0x29203d77740
+      - Special (UIGradient) @ 0x29220c0bd80
+    - UICorner (UICorner) @ 0x2921d1f5900
+  - Shadow (ImageLabel) @ 0x2938be62480
+    - Special (UIGradient) @ 0x29220c0bf00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/MAIN_SCREEN_GUI/EventSkinPackShop/EventSkinPackShop/Shotgun
+- Shotgun (Frame) @ 0x29222d42880
+  - Frame (Frame) @ 0x29222d43280
+    - RarityName (TextLabel) @ 0x29222d38080
+      - Special (UIGradient) @ 0x29220c0d280
+    - ItemCount (TextLabel) @ 0x29222d39080
+    - SPECIAL (ImageButton) @ 0x29222d3a080
+      - Year (TextLabel) @ 0x29222d3b080
+      - UIAspectRatioConstraint (UIAspectRatioConstraint) @ 0x2921d1f7c00
+    - EnchantName (TextLabel) @ 0x29222d3c080
+      - Gradient (UIGradient) @ 0x29220c0d400
+    - Preview (Frame) @ 0x29222d43c80
+      - Frame (Frame) @ 0x29222d44680
+        - EQUIPPED (ImageLabel) @ 0x2938c94b480
+        - ViewportFrame (ViewportFrame) @ 0x2938c949080
+          - Hallows (Model) @ 0x29220a09a80
+            - Handle (MeshPart) @ 0x2922ae86600
+              - NoAmmo (Sound) @ 0x2922e3cbc00
+              - Shoot (Sound) @ 0x2922e3ca300
+              - ShootBBGUI (BillboardGui) @ 0x29222d45080
+                - Shoot (ImageLabel) @ 0x2938c94f080
+              - pump (MeshPart) @ 0x2922ae86980
+              - pump.003 (MeshPart) @ 0x2922ae86d00
+                - Cylinder.012 (Weld) @ 0x292225c1200
+                - Handle (Weld) @ 0x292225c0400
+                - pump (Weld) @ 0x292225c0cc0
+              - Cylinder.012 (MeshPart) @ 0x2922ae87080
+    - Button (TextButton) @ 0x29222d7c880
+    - COUNT (NumberValue) | Value: 1.000000 @ 0x293941abae0
+    - ItemName (TextLabel) @ 0x29222d3d080
+    - UIStroke (UIStroke) @ 0x29203d797c0
+      - Special (UIGradient) @ 0x29220c0d580
+    - UICorner (UICorner) @ 0x2921d1fb400
+  - Shadow (ImageLabel) @ 0x2938c94e480
+    - Special (UIGradient) @ 0x29220c0d700
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/MAIN_SCREEN_GUI/EventSkinPackShop/EventSkinPackShop/DoubleBarrel
+- DoubleBarrel (Frame) @ 0x29222d45a80
+  - Frame (Frame) @ 0x29222d46480
+    - RarityName (TextLabel) @ 0x29222d3e080
+      - Special (UIGradient) @ 0x29220c0d880
+    - ItemCount (TextLabel) @ 0x29222e80080
+    - SPECIAL (ImageButton) @ 0x29222e81080
+      - Year (TextLabel) @ 0x29222e82080
+      - UIAspectRatioConstraint (UIAspectRatioConstraint) @ 0x2921d1f5400
+    - EnchantName (TextLabel) @ 0x29222e83080
+      - Gradient (UIGradient) @ 0x29220c0da00
+    - Preview (Frame) @ 0x29222d46e80
+      - Frame (Frame) @ 0x29222d47880
+        - EQUIPPED (ImageLabel) @ 0x2938c94d880
+        - ViewportFrame (ViewportFrame) @ 0x2938c947880
+          - Hallows (Model) @ 0x29220a09e00
+            - Handle (MeshPart) @ 0x2922ae87400
+              - Shoot (Sound) @ 0x2922e3c8a00
+              - NoAmmo (Sound) @ 0x2922e3c0d00
+              - ShootBBGUI (BillboardGui) @ 0x29222d48280
+                - Shoot (ImageLabel) @ 0x2938c949c80
+              - pump.001 (MeshPart) @ 0x2922ae87780
+                - tac (Weld) @ 0x292225c0080
+                - Handle (Weld) @ 0x292225c2e00
+                - Cylinder.001 (Weld) @ 0x292225cb680
+              - tac (MeshPart) @ 0x2922ae87b00
+              - Cylinder.001 (MeshPart) @ 0x2922ae87e80
+    - Button (TextButton) @ 0x29222d7dc80
+    - COUNT (NumberValue) | Value: 1.000000 @ 0x293941a9540
+    - ItemName (TextLabel) @ 0x29222e84080
+    - UIStroke (UIStroke) @ 0x29203d75e40
+      - Special (UIGradient) @ 0x29220c0db80
+    - UICorner (UICorner) @ 0x2921d1fc500
+  - Shadow (ImageLabel) @ 0x2938cc03c80
+    - Special (UIGradient) @ 0x29220c0dd00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/MAIN_SCREEN_GUI/Trading/Trading/TradeTokenFrame/AddButton
+- AddButton (Frame) @ 0x2921fd62880
+  - Shadow (ImageLabel) @ 0x2939edf9c80
+  - Button (ImageButton) @ 0x29224023080
+    - TextLabel (TextLabel) @ 0x29224024080
+      - UITextSizeConstraint (UITextSizeConstraint) @ 0x2922f05c720
+    - Corner (UICorner) @ 0x2922cc11100
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Wraps/[DoubleBarrel]
+- [DoubleBarrel] (Folder) @ 0x29387873500
+  - Void Dragon (Model) @ 0x29225dd0780
+    - Handle (MeshPart) @ 0x2922ea54680
+      - Shoot (Sound) @ 0x2922e3c7600
+      - NoAmmo (Sound) @ 0x2922e3c2380
+      - RightGrip (Weld) @ 0x29225df36c0
+      - ShootBBGUI (BillboardGui) @ 0x292251d2880
+        - Shoot (ImageLabel) @ 0x292251c3c80
+      - Part (Part) @ 0x2922ea82000
+      - Part (Part) @ 0x2922ea821c0
+      - Part (Part) @ 0x2922ea82380
+      - Part (Part) @ 0x2922ea82540
+      - Part (Part) @ 0x2922ea82700
+      - Wedge (WedgePart) @ 0x2922ea828c0
+      - Wedge (WedgePart) @ 0x2922ea82a80
+      - MeshPart (MeshPart) @ 0x2922ea54a00
+        - MeshPart (Weld) @ 0x29225df1e40
+        - MeshPart (Weld) @ 0x29225df21c0
+        - MeshPart (Weld) @ 0x29384e64140
+        - Middle (Weld) @ 0x29384e6af80
+        - Middle (Weld) @ 0x29384e68200
+        - Union (Weld) @ 0x29384e63c00
+        - Union (Weld) @ 0x293a2b71e40
+        - Union (Weld) @ 0x293a2b7d600
+        - Union (Weld) @ 0x292328a9c40
+        - Union (Weld) @ 0x292328aaa40
+        - Union (Weld) @ 0x292328af040
+        - Union (Weld) @ 0x292328a44c0
+        - Union (Weld) @ 0x292328a0780
+        - Union (Weld) @ 0x292328a6600
+        - Union (Weld) @ 0x292328ad440
+        - Union (Weld) @ 0x292328ac9c0
+        - Union (Weld) @ 0x292328a8c80
+        - Union (Weld) @ 0x292328a5d40
+        - Union (Weld) @ 0x292328af200
+        - Union (Weld) @ 0x292328ae400
+        - Union (Weld) @ 0x292328a3c00
+        - Union (Weld) @ 0x292328a36c0
+        - Union (Weld) @ 0x292328a8580
+        - Union (Weld) @ 0x292328af3c0
+        - Part (Weld) @ 0x292328afac0
+        - Part (Weld) @ 0x292328aecc0
+        - Part (Weld) @ 0x292328ad980
+        - Part (Weld) @ 0x292328ad600
+        - Part (Weld) @ 0x292328acf00
+        - Wedge (Weld) @ 0x292328a1200
+        - Wedge (Weld) @ 0x292328abbc0
+        - FlashPart (Weld) @ 0x292328a5800
+        - Handle (Weld) @ 0x292328abf40
+      - MeshPart (MeshPart) @ 0x2922ea54d80
+      - MeshPart (MeshPart) @ 0x2922ea55100
+      - MeshPart (MeshPart) @ 0x2922ea55480
+        - MeshPart (Weld) @ 0x292328a5f00
+        - MeshPart (Weld) @ 0x292328ac2c0
+        - MeshPart (Weld) @ 0x292328a67c0
+        - Middle (Weld) @ 0x292328ab140
+        - Middle (Weld) @ 0x292328a6ec0
+        - Union (Weld) @ 0x292328ac480
+        - Union (Weld) @ 0x292328a4140
+        - Union (Weld) @ 0x292328a4bc0
+        - Union (Weld) @ 0x292328a2380
+        - Union (Weld) @ 0x292328a60c0
+        - Union (Weld) @ 0x292328a4300
+        - Union (Weld) @ 0x292328a7cc0
+        - Union (Weld) @ 0x292328a83c0
+        - Union (Weld) @ 0x292328ae780
+        - Union (Weld) @ 0x292328afc80
+        - Union (Weld) @ 0x292328aee80
+        - Union (Weld) @ 0x292328ae240
+        - Union (Weld) @ 0x292328ac800
+        - Union (Weld) @ 0x292328a5640
+        - Union (Weld) @ 0x292328a98c0
+        - Union (Weld) @ 0x292328a6980
+        - Union (Weld) @ 0x292328af900
+        - Union (Weld) @ 0x292328a4680
+        - Union (Weld) @ 0x292328ae5c0
+        - Part (Weld) @ 0x292328a4840
+        - Part (Weld) @ 0x292328a1c80
+        - Part (Weld) @ 0x292328a3180
+        - Part (Weld) @ 0x292328a2fc0
+        - Part (Weld) @ 0x292328a3880
+        - Wedge (Weld) @ 0x292328a8740
+        - Wedge (Weld) @ 0x292328a3dc0
+        - Handle (Weld) @ 0x292328ae940
+        - FlashPart (Weld) @ 0x292328a1040
+        - MeshPart (Weld) @ 0x292328aa6c0
+        - MeshPart (Weld) @ 0x292328aa880
+        - MeshPart (Weld) @ 0x292328a0240
+        - Middle (Weld) @ 0x292328a21c0
+        - Middle (Weld) @ 0x292328a28c0
+        - Union (Weld) @ 0x292328a2700
+        - Union (Weld) @ 0x292328abd80
+        - Union (Weld) @ 0x292328a7940
+        - Union (Weld) @ 0x292328a7780
+        - Union (Weld) @ 0x292328a3a40
+        - Union (Weld) @ 0x292328a8900
+        - Union (Weld) @ 0x292328a8040
+        - Union (Weld) @ 0x292328aa500
+        - Union (Weld) @ 0x292328adec0
+        - Union (Weld) @ 0x292328ae080
+        - Union (Weld) @ 0x292328a05c0
+        - Union (Weld) @ 0x292328ad7c0
+        - Union (Weld) @ 0x292328a59c0
+        - Union (Weld) @ 0x292328af740
+        - Union (Weld) @ 0x292328aa180
+        - Union (Weld) @ 0x292328a7b00
+        - Union (Weld) @ 0x292328a6440
+        - Union (Weld) @ 0x292328a5b80
+        - Union (Weld) @ 0x292328a3f80
+        - FlashPart (Weld) @ 0x292328a2000
+        - Part (Weld) @ 0x292328aa340
+        - Part (Weld) @ 0x292328a91c0
+        - Part (Weld) @ 0x292328a7240
+        - Part (Weld) @ 0x292328a7080
+        - Part (Weld) @ 0x292328a1ac0
+        - Wedge (Weld) @ 0x292328aeb00
+        - Wedge (Weld) @ 0x292328af580
+        - Handle (Weld) @ 0x292328a75c0
+      - Union (UnionOperation) @ 0x2922e9d4400
+      - Union (UnionOperation) @ 0x2922e9d4800
+      - Union (UnionOperation) @ 0x2922e9d4c00
+      - Union (UnionOperation) @ 0x2922e9d5000
+      - Union (UnionOperation) @ 0x2922e9d5400
+      - Union (UnionOperation) @ 0x2922e9d5800
+      - Union (UnionOperation) @ 0x2922e9d5c00
+      - Union (UnionOperation) @ 0x2922e9d6000
+      - Union (UnionOperation) @ 0x2922e9d6400
+      - Union (UnionOperation) @ 0x2922e9d6800
+      - Union (UnionOperation) @ 0x2922e9d6c00
+      - Union (UnionOperation) @ 0x2922e9d7000
+      - Union (UnionOperation) @ 0x2922e9d7400
+      - Union (UnionOperation) @ 0x2922e9d7800
+      - Union (UnionOperation) @ 0x2922e9d7c00
+      - Union (UnionOperation) @ 0x2922e9d8000
+      - Union (UnionOperation) @ 0x2922e9d8400
+      - Union (UnionOperation) @ 0x2922e9d8800
+      - Union (UnionOperation) @ 0x2922e9d8c00
+      - Middle (UnionOperation) @ 0x2922e9d9000
+      - Middle (UnionOperation) @ 0x2922e9d9400
+  - Adurite (Model) @ 0x29225dd0b00
+    - Handle (MeshPart) @ 0x2922ea55b80
+      - NoAmmo (Sound) @ 0x2922e3ce680
+      - Shoot (Sound) @ 0x2922e3cfa80
+      - RightGrip (Weld) @ 0x292328a7400
+      - ShootBBGUI (BillboardGui) @ 0x292251d3280
+        - Shoot (ImageLabel) @ 0x292251c4880
+      - Part (Part) @ 0x2922ea82c40
+        - Sparkles (ParticleEmitter) @ 0x2938865a280
+        - Sparkles_Beam (ParticleEmitter) @ 0x29388650080
+      - MeshPart (MeshPart) @ 0x2922ea55f00
+      - Vine (MeshPart) @ 0x2922ea56280
+      - Vine (MeshPart) @ 0x2922ea56600
+      - A (MeshPart) @ 0x2922ea56980
+        - A (Weld) @ 0x292328a5480
+        - MeshPart (Weld) @ 0x292328a6280
+        - Vine (Weld) @ 0x292328a6d00
+        - Vine (Weld) @ 0x292328a9fc0
+        - Vine (Weld) @ 0x292328a4a00
+        - Vine (Weld) @ 0x292328a9540
+        - Vine (Weld) @ 0x292328a8200
+        - Part (Weld) @ 0x292328a1740
+        - Handle (Weld) @ 0x292328a1900
+      - Vine (MeshPart) @ 0x2922ea56d00
+      - Vine (MeshPart) @ 0x2922ea57080
+      - A (MeshPart) @ 0x2922ea57400
+      - Vine (MeshPart) @ 0x2922ea57780
+  - Ascension (Model) @ 0x29225dd0e80
+    - Handle (MeshPart) @ 0x2922ea57b00
+      - Shoot (Sound) @ 0x2922e3c6480
+      - NoAmmo (Sound) @ 0x2922e3c4900
+      - ShootBBGUI (BillboardGui) @ 0x292251d3c80
+        - Shoot (ImageLabel) @ 0x292251c5480
+      - ANIMATE_HUMANOID (Humanoid) @ 0x29225de1c80
+      - HALO_WELD (Weld) @ 0x292328a9000
+      - Handle (Weld) @ 0x292328a8e40
+      - Handle (Part) @ 0x2922ea85d40
+        - ANIMTE (Script) @ 0x293a1fa5600
+        - LeftUpperWing1 (Motor6D) @ 0x293a5650c00
+        - RightUpperWing1 (Motor6D) @ 0x293a5650200
+        - Animation (Animation) @ 0x2922e828000
+      - LeftUpperWing2 (MeshPart) @ 0x2922ea57e80
+      - LeftUpperWing1 (MeshPart) @ 0x2922ea58200
+        - LeftUpperWing2 (Motor6D) @ 0x293a5657400
+      - RightUpperWing2 (MeshPart) @ 0x2922ea58580
+      - RightUpperWing1 (MeshPart) @ 0x2922ea58900
+        - RightUpperWing2 (Motor6D) @ 0x293a5659c00
+      - HALO (MeshPart) @ 0x2922ea58c80
+  - None (Model) @ 0x29225dd1200
+    - Handle (MeshPart) @ 0x2922ea59000
+      - Shoot (Sound) @ 0x2922e3c8f00
+      - NoAmmo (Sound) @ 0x2922e3c2100
+      - RightGrip (Weld) @ 0x292328a4f40
+      - ShootBBGUI (BillboardGui) @ 0x292251d4680
+        - Shoot (ImageLabel) @ 0x292251c6080
+  - Hello Kitty (Model) @ 0x29225dd1580
+    - Handle (MeshPart) @ 0x2922ea59380
+      - Shoot (Sound) @ 0x2922e3c2b00
+      - NoAmmo (Sound) @ 0x2922e3c3000
+      - RightGrip (Weld) @ 0x292328acd40
+      - ShootBBGUI (BillboardGui) @ 0x292251d5080
+        - Shoot (ImageLabel) @ 0x292251c6c80
+  - Volcanic Ashes (Model) @ 0x29225dd1900
+    - Handle (MeshPart) @ 0x2922ea59700
+      - Shoot (Sound) @ 0x2922e3ccb00
+      - NoAmmo (Sound) @ 0x2922e3c2880
+      - RightGrip (Weld) @ 0x292328a9700
+      - ShootBBGUI (BillboardGui) @ 0x292251d5a80
+        - Shoot (ImageLabel) @ 0x292251c7880
+      - Part (Part) @ 0x2922d660940
+      - Part (Part) @ 0x2922d660b00
+      - Part (Part) @ 0x2922d660cc0
+      - Part (Part) @ 0x2922d660e80
+      - Part (Part) @ 0x2922d661040
+      - Wedge (WedgePart) @ 0x2922d661200
+      - Wedge (WedgePart) @ 0x2922d6613c0
+      - Part (Part) @ 0x2922d661580
+      - Union (UnionOperation) @ 0x2922e9da000
+      - H (MeshPart) @ 0x2922ea59a80
+        - MeshPart (Weld) @ 0x292328a52c0
+        - MeshPart (Weld) @ 0x292328a5100
+        - MeshPart (Weld) @ 0x292328a13c0
+        - MeshPart (Weld) @ 0x292328ab300
+        - MeshPart (Weld) @ 0x292328a0e80
+        - MeshPart (Weld) @ 0x292328aaf80
+        - Union (Weld) @ 0x292328ab4c0
+        - Union (Weld) @ 0x292328ab840
+        - Union (Weld) @ 0x292328ac100
+        - Union (Weld) @ 0x292328a8ac0
+        - Union (Weld) @ 0x292328ad0c0
+        - Union (Weld) @ 0x292328acb80
+        - Union (Weld) @ 0x292328aadc0
+        - Union (Weld) @ 0x292328a7e80
+        - Union (Weld) @ 0x292328a2540
+        - Union (Weld) @ 0x292328a2e00
+        - Union (Weld) @ 0x292328a2c40
+        - Union (Weld) @ 0x292328a2a80
+        - FlashPart (Weld) @ 0x292328a4d80
+        - Part (Weld) @ 0x292328adb40
+        - Part (Weld) @ 0x292328a9a80
+        - Part (Weld) @ 0x292328a0400
+        - Part (Weld) @ 0x292328a1580
+        - Part (Weld) @ 0x292328add00
+        - Part (Weld) @ 0x292328afe40
+        - Wedge (Weld) @ 0x292328a9380
+        - Wedge (Weld) @ 0x292328a6b40
+        - Handle (Weld) @ 0x292328ac640
+      - MeshPart (MeshPart) @ 0x2922ea5a180
+      - MeshPart (MeshPart) @ 0x2922ea5a500
+      - MeshPart (MeshPart) @ 0x2922ea5a880
+      - MeshPart (MeshPart) @ 0x2922ea5ac00
+      - MeshPart (MeshPart) @ 0x2922ea5af80
+      - MeshPart (MeshPart) @ 0x2922ea5b300
+      - Union (UnionOperation) @ 0x2922e9da400
+      - Union (UnionOperation) @ 0x2922e9da800
+      - Union (UnionOperation) @ 0x2922e9dac00
+      - Union (UnionOperation) @ 0x2922e9db000
+      - Union (UnionOperation) @ 0x2922e9db400
+      - Union (UnionOperation) @ 0x2922e9db800
+      - Union (UnionOperation) @ 0x2922e9dbc00
+      - Union (UnionOperation) @ 0x29222a89800
+      - Union (UnionOperation) @ 0x29222a81000
+      - Union (UnionOperation) @ 0x29222a8d800
+      - Union (UnionOperation) @ 0x29222a8cc00
+  - Deathbringer (Model) @ 0x29225dd1c80
+    - Handle (MeshPart) @ 0x2922e5d7080
+      - NoAmmo (Sound) @ 0x2922e3c2d80
+      - Shoot (Sound) @ 0x2922e3c0800
+      - ShootBBGUI (BillboardGui) @ 0x292251d6480
+        - Shoot (ImageLabel) @ 0x292251c8480
+      - Cube.003 (MeshPart) @ 0x2922e5d7400
+        - Cube.007 (Weld) @ 0x292328aac00
+        - Cube.011 (Weld) @ 0x292328a0b00
+        - Handle (Weld) @ 0x292328a3500
+      - Cube.007 (MeshPart) @ 0x2922e5d7780
+      - Cube.011 (MeshPart) @ 0x2922e5d7b00
+  - Amethyst (Model) @ 0x29225dd2000
+    - Handle (MeshPart) @ 0x2922e5d6980
+      - NoAmmo (Sound) @ 0x2922e3cc380
+      - Shoot (Sound) @ 0x2922e3cdf00
+      - ShootBBGUI (BillboardGui) @ 0x292251d6e80
+        - Shoot (ImageLabel) @ 0x292251c9080
+      - shh.002 (MeshPart) @ 0x2922e5d7e80
+      - Group44266.001 (MeshPart) @ 0x2922e5d8200
+        - shh.002 (Weld) @ 0x292328a1e40
+        - Handle (Weld) @ 0x292328ad280
+  - Arsenic (Model) @ 0x29225dd2380
+    - Handle (MeshPart) @ 0x2922e5d8580
+      - Shoot (Sound) @ 0x2922e3c9180
+      - NoAmmo (Sound) @ 0x2922ea28280
+      - b (ParticleEmitter) @ 0x29388656980
+      - ShootBBGUI (BillboardGui) @ 0x292251d7880
+        - Shoot (ImageLabel) @ 0x292251c9c80
+      - Part (Weld) @ 0x292328a3340
+      - Part (Weld) @ 0x292328a0cc0
+      - Part (Weld) @ 0x292328aba00
+      - Part (Weld) @ 0x292328a0940
+      - Part (Weld) @ 0x292328a9e00
+      - Wedge (Weld) @ 0x29388072fc0
+      - Wedge (Weld) @ 0x2938807b4c0
+      - Part (Part) @ 0x2922cc5f580
+      - Part (Part) @ 0x2922cc56d00
+      - Part (Part) @ 0x2922cc5bd80
+      - Part (Part) @ 0x2922cc59a80
+      - Part (Part) @ 0x2922cc57e80
+      - Wedge (WedgePart) @ 0x2922cc5e780
+      - Wedge (WedgePart) @ 0x2922cc58c80
+  - Lightbringer (Model) @ 0x29225dd2700
+    - Handle (MeshPart) @ 0x2922e5d8900
+      - Shoot (Sound) @ 0x2922ea29e00
+      - NoAmmo (Sound) @ 0x2922ea2b200
+      - ShootBBGUI (BillboardGui) @ 0x292251d8280
+        - Shoot (ImageLabel) @ 0x292251ca880
+      - Part (Part) @ 0x2922cc5c800
+      - Part (Part) @ 0x2922cc5d980
+      - Part (Part) @ 0x2922ddacd40
+      - Part (Part) @ 0x2922ddacf00
+      - Part (Part) @ 0x2922ddad0c0
+      - Wedge (WedgePart) @ 0x2922ddad280
+      - Wedge (WedgePart) @ 0x2922ddad440
+      - Meshes/Bones1 (MeshPart) @ 0x2922e5d8c80
+      - MeshPart (MeshPart) @ 0x2922e5d9000
+      - MeshPart (MeshPart) @ 0x2922e5d9700
+      - MeshPart (MeshPart) @ 0x2922e5d9e00
+        - MeshPart (Weld) @ 0x29388077940
+        - MeshPart (Weld) @ 0x29388072a80
+        - MeshPart (Weld) @ 0x29388073dc0
+        - MeshPart (Weld) @ 0x29388070400
+        - Meshes/Bones1 (Weld) @ 0x29388071580
+        - Meshes/Bones1 (Weld) @ 0x293880775c0
+        - Meshes/Bones1 (Weld) @ 0x2938807bbc0
+        - Meshes/Bones1 (Weld) @ 0x29388075b80
+        - Meshes/Bones1 (Weld) @ 0x29388072700
+        - Meshes/Bones1 (Weld) @ 0x29388071c80
+        - Meshes/Bones1 (Weld) @ 0x29388071ac0
+        - RenderMesh (1) (Weld) @ 0x293880728c0
+        - RenderMesh (1) (Weld) @ 0x293880767c0
+        - RenderMesh (1) (Weld) @ 0x29388070080
+        - RenderMesh (1) (Weld) @ 0x2938807f900
+        - RenderMesh (1) (Weld) @ 0x2938807dec0
+        - RenderMesh (1) (Weld) @ 0x29388076ec0
+        - Part (Weld) @ 0x29388073c00
+        - Part (Weld) @ 0x29388074bc0
+        - Part (Weld) @ 0x2938807dd00
+        - Part (Weld) @ 0x29388074a00
+        - Part (Weld) @ 0x2938807a880
+        - Part (Weld) @ 0x29388072c40
+        - Part (Weld) @ 0x2938807db40
+        - Part (Weld) @ 0x2938807eb00
+        - Part (Weld) @ 0x29388076440
+        - Part (Weld) @ 0x29388077cc0
+        - Part (Weld) @ 0x2938807e080
+        - Part (Weld) @ 0x29388077080
+        - Part (Weld) @ 0x29388074680
+        - Part (Weld) @ 0x29388074840
+        - Part (Weld) @ 0x29388078ac0
+        - Part (Weld) @ 0x2938807fe40
+        - Part (Weld) @ 0x29388077e80
+        - Part (Weld) @ 0x293880705c0
+        - Part (Weld) @ 0x29388073f80
+        - Part (Weld) @ 0x29388071200
+        - Part (Weld) @ 0x29388079a80
+        - Wedge (Weld) @ 0x2938807e5c0
+        - Wedge (Weld) @ 0x29388070780
+        - Handle (Weld) @ 0x29388070940
+      - MeshPart (MeshPart) @ 0x2922e5da180
+      - MeshPart (MeshPart) @ 0x2922e5da500
+      - Part (Part) @ 0x2922ddad600
+      - Part (Part) @ 0x2922ddad7c0
+      - Meshes/Bones1 (MeshPart) @ 0x2922e5da880
+      - Part (Part) @ 0x2922ddad980
+      - Meshes/Bones1 (MeshPart) @ 0x2922e5dac00
+      - Part (Part) @ 0x2922ddadb40
+      - Meshes/Bones1 (MeshPart) @ 0x2922e5daf80
+      - RenderMesh (1) (MeshPart) @ 0x2922e5db300
+      - RenderMesh (1) (MeshPart) @ 0x2922e5dba00
+      - RenderMesh (1) (MeshPart) @ 0x2922e5dbd80
+      - RenderMesh (1) (MeshPart) @ 0x2922e5dc100
+      - RenderMesh (1) (MeshPart) @ 0x2922e5dc480
+      - RenderMesh (1) (MeshPart) @ 0x2922e5dc800
+      - Part (Part) @ 0x2922ddadd00
+      - Part (Part) @ 0x2922ddadec0
+      - Part (Part) @ 0x2922ddae080
+      - Part (Part) @ 0x2922ddae240
+      - Part (Part) @ 0x2922ddae400
+      - Part (Part) @ 0x2922ddae5c0
+      - Part (Part) @ 0x2922ddae780
+      - Part (Part) @ 0x2922ddae940
+      - Part (Part) @ 0x2922ddaeb00
+      - Part (Part) @ 0x2922ddaecc0
+      - Part (Part) @ 0x2922ddaee80
+      - Part (Part) @ 0x2922ddaf040
+      - Meshes/Bones1 (MeshPart) @ 0x2922e5dcb80
+      - Meshes/Bones1 (MeshPart) @ 0x2922e5dcf00
+      - Meshes/Bones1 (MeshPart) @ 0x2922e5dd280
+  - Strawberry Shortcake (Model) @ 0x29225dd2a80
+    - Handle (MeshPart) @ 0x2922e5dd600
+      - NoAmmo (Sound) @ 0x2922ea26700
+      - Shoot (Sound) @ 0x2922ea20580
+      - ShootBBGUI (BillboardGui) @ 0x292251d8c80
+        - Shoot (ImageLabel) @ 0x292251cb480
+  - Hell Hound (Model) @ 0x29225dd2e00
+    - Handle (MeshPart) @ 0x2922e5dd980
+      - Shoot (Sound) @ 0x2922ea20d00
+      - NoAmmo (Sound) @ 0x2922ea25580
+      - ShootBBGUI (BillboardGui) @ 0x292251d9680
+        - Shoot (ImageLabel) @ 0x292251cc080
+      - Wedge (WedgePart) @ 0x2922ddaf200
+      - Wedge (WedgePart) @ 0x2922ddaf3c0
+      - Part (Part) @ 0x2922ddaf580
+      - Part (Part) @ 0x2922ddaf740
+      - leak (Part) @ 0x2922ddaf900
+        - Mesh (SpecialMesh) @ 0x29234c4ae80
+      - FakeTorso (Part) @ 0x2922ddafac0
+        - Mesh (SpecialMesh) @ 0x293a683bc00
+      - Part (Part) @ 0x2922ddafc80
+        - Attachment (Attachment) @ 0x2922f5a3b00
+          - flare (ParticleEmitter) @ 0x29388653380
+          - fire (ParticleEmitter) @ 0x29388650f80
+        - Attachment (Attachment) @ 0x2922f5a9080
+          - Beam (Beam) @ 0x293a565a400
+      - Part (Part) @ 0x2922ddafe40
+        - Attachment (Attachment) @ 0x2922f5af680
+          - flare (ParticleEmitter) @ 0x29388659080
+          - fire (ParticleEmitter) @ 0x29388654b80
+        - Attachment (Attachment) @ 0x2922f5a3380
+          - Beam (Beam) @ 0x293a5657c00
+      - FakeHead2 (Part) @ 0x292385d9c40
+        - Mesh (SpecialMesh) @ 0x2922e245a80
+      - Tail (Part) @ 0x292385d2fc0
+        - Mesh (SpecialMesh) @ 0x292301a2c00
+      - Meshes/Bones1 (MeshPart) @ 0x2922e5ddd00
+        - Meshes/Bones1 (Weld) @ 0x29388071e40
+        - FakeHead2 (Weld) @ 0x29388074d80
+        - FakeTorso (Weld) @ 0x29388074f40
+        - Part (Weld) @ 0x29388072e00
+        - Part (Weld) @ 0x29388074140
+        - Part (Weld) @ 0x29388070240
+        - Part (Weld) @ 0x29388074300
+        - Tail (Weld) @ 0x293880744c0
+        - leak (Weld) @ 0x29388077240
+        - Wedge (Weld) @ 0x2938807fac0
+        - Wedge (Weld) @ 0x2938807c800
+        - Handle (Weld) @ 0x293880713c0
+      - Meshes/Bones1 (MeshPart) @ 0x2922e5de080
+  - Floral (Model) @ 0x29225dd3180
+    - Handle (MeshPart) @ 0x2922e5de400
+      - Shoot (Sound) @ 0x2922ea25800
+      - NoAmmo (Sound) @ 0x2922ea2f300
+      - ShootBBGUI (BillboardGui) @ 0x292251da080
+        - Shoot (ImageLabel) @ 0x292251ccc80
+      - Texture (Texture) @ 0x2923c497880
+      - Texture (Texture) @ 0x2923c491c00
+      - Texture (Texture) @ 0x2923c497b00
+      - Texture (Texture) @ 0x2923c490580
+      - Texture (Texture) @ 0x2923c491700
+      - Texture (Texture) @ 0x2923c490f80
+      - Part (Part) @ 0x292385dba00
+        - Part (Weld) @ 0x2938807b140
+        - Part (Weld) @ 0x2938807af80
+        - Part (Weld) @ 0x2938807adc0
+        - Part (Weld) @ 0x29388079e00
+        - Part (Weld) @ 0x29388079700
+        - Wedge (Weld) @ 0x29388077780
+        - Wedge (Weld) @ 0x29388079380
+        - Handle (Weld) @ 0x293880791c0
+      - Part (Part) @ 0x292385de780
+      - Part (Part) @ 0x292385d7940
+      - Part (Part) @ 0x293a2b7a6c0
+      - Part (Part) @ 0x293a2b7c2c0
+      - Wedge (WedgePart) @ 0x293a2b77240
+      - Wedge (WedgePart) @ 0x293a2b76b40
+      - Part (Part) @ 0x29384e6bf40
+      - Rose (MeshPart) @ 0x2922e5de780
+        - Rose (Weld) @ 0x29388079000
+        - Rose (Weld) @ 0x29388078740
+        - Rose (Weld) @ 0x29388076b40
+        - Part (Weld) @ 0x29388077b00
+        - Part (Weld) @ 0x2938807cb80
+        - Part (Weld) @ 0x2938807cf00
+        - Part (Weld) @ 0x293880783c0
+        - Part (Weld) @ 0x2938807e240
+        - Part (Weld) @ 0x2938807ac00
+        - Red Rose (Weld) @ 0x29388079540
+        - Red Rose (Weld) @ 0x2938807c640
+        - Wedge (Weld) @ 0x29388077400
+        - Wedge (Weld) @ 0x2938807e780
+        - Handle (Weld) @ 0x29388078c80
+      - Rose (MeshPart) @ 0x2922e5deb00
+      - Rose (MeshPart) @ 0x2922e5dee80
+      - Rose (MeshPart) @ 0x2922e5df200
+      - Red Rose (Part) @ 0x292247bee80
+        - Mesh (SpecialMesh) @ 0x29230a3b780
+      - Red Rose (Part) @ 0x292247becc0
+        - Mesh (SpecialMesh) @ 0x2939e427580
+  - Shiryus Breath (Model) @ 0x29225dd3500
+    - Handle (MeshPart) @ 0x2922e5df580
+      - Shoot (Sound) @ 0x2922ea2b980
+      - NoAmmo (Sound) @ 0x2922ea2a080
+      - ShootBBGUI (BillboardGui) @ 0x292251daa80
+        - Shoot (ImageLabel) @ 0x292251cd880
+      - Part (Part) @ 0x292247bdd00
+      - Part (Part) @ 0x292247be080
+      - Part (Part) @ 0x292247beb00
+      - Part (Part) @ 0x292247be940
+      - Part (Part) @ 0x292247be780
+      - Wedge (WedgePart) @ 0x292247be5c0
+      - Wedge (WedgePart) @ 0x292247be400
+      - Part (Part) @ 0x292247be240
+      - Meshes/PolygonDungeon_Environments_03_SM_Env_Bone_Skull_02 (MeshPart) @ 0x2922e5df900
+        - Meshes/PolygonDungeon_Environments_03_SM_Env_Bone_Skull_Jaw_01 (Weld) @ 0x29388070b00
+        - Steel (Weld) @ 0x29388075480
+        - Steel (Weld) @ 0x2938807f3c0
+        - Steel (Weld) @ 0x2938807f580
+        - back bone (Weld) @ 0x29388078200
+        - backbone (Weld) @ 0x29388075640
+        - backbone (Weld) @ 0x2938807f040
+        - Part (Weld) @ 0x2938807a6c0
+        - Part (Weld) @ 0x29388079fc0
+        - Part (Weld) @ 0x2938807b840
+        - Part (Weld) @ 0x2938807b680
+        - Part (Weld) @ 0x2938807c2c0
+        - Part (Weld) @ 0x2938807cd40
+        - Part (Weld) @ 0x2938807d7c0
+        - Wedge (Weld) @ 0x2938807a500
+        - Wedge (Weld) @ 0x29388075f00
+        - Handle (Weld) @ 0x29388078e40
+      - Meshes/PolygonDungeon_Environments_03_SM_Env_Bone_Skull_Jaw_01 (MeshPart) @ 0x2922e5dfc80
+      - Steel (MeshPart) @ 0x2922da4a500
+      - Steel (MeshPart) @ 0x2922da42a80
+      - Steel (MeshPart) @ 0x2922da46600
+      - back bone (MeshPart) @ 0x2922da42000
+      - backbone (MeshPart) @ 0x2922da45b80
+      - backbone (MeshPart) @ 0x293a24fa500
+      - Part (Part) @ 0x292247b9540
+        - Lightning1 (ParticleEmitter) @ 0x29388656f80
+          - Emit (Script) @ 0x293a1fa4000
+  - Snow Dragon (Model) @ 0x29225dd3880
+    - Handle (MeshPart) @ 0x2923b7d4d80
+      - Shoot (Sound) @ 0x2922ea2f080
+      - NoAmmo (Sound) @ 0x2922ea2af80
+      - ShootBBGUI (BillboardGui) @ 0x292251db480
+        - Shoot (ImageLabel) @ 0x292251ce480
+      - Part (Part) @ 0x292247b9380
+      - Part (Part) @ 0x292247b91c0
+      - Part (Part) @ 0x292247b9000
+      - Part (Part) @ 0x292247b8e40
+      - Part (Part) @ 0x292247b8c80
+      - Wedge (WedgePart) @ 0x292247b8ac0
+      - Wedge (WedgePart) @ 0x292247b8900
+      - Part (Part) @ 0x292247b8740
+      - Head (UnionOperation) @ 0x29222a81400
+        - Attachment (Attachment) @ 0x2922f5a0980
+          - Beam (Beam) @ 0x293a565d800
+        - Attachment (Attachment) @ 0x2922f5a4580
+          - flare (ParticleEmitter) @ 0x29388652d80
+          - fire (ParticleEmitter) @ 0x29388651e80
+        - Attachment (Attachment) @ 0x2922f5ab000
+          - Beam (Beam) @ 0x293a5656800
+        - Attachment (Attachment) @ 0x2922f5aec00
+          - flare (ParticleEmitter) @ 0x29388657b80
+          - fire (ParticleEmitter) @ 0x29388653080
+        - Inner Eye (Weld) @ 0x29388075d40
+        - Jaws (Weld) @ 0x2938807d980
+        - Steel (Weld) @ 0x293880752c0
+        - Steel (Weld) @ 0x29388078580
+        - Steel (Weld) @ 0x2938807d0c0
+        - Steel (Weld) @ 0x2938807a340
+        - Union (Weld) @ 0x293880759c0
+        - Union (Weld) @ 0x2938807e400
+        - Union (Weld) @ 0x29388071040
+        - Union (Weld) @ 0x29388079c40
+        - Union (Weld) @ 0x29388075800
+        - Union (Weld) @ 0x29388075100
+        - Union (Weld) @ 0x2938807f740
+        - Union (Weld) @ 0x2938807d440
+        - Union (Weld) @ 0x2938807bf40
+        - Union (Weld) @ 0x2938807a180
+        - Union (Weld) @ 0x2938807ecc0
+        - Union (Weld) @ 0x293880798c0
+        - Union (Weld) @ 0x2938807bd80
+        - Union (Weld) @ 0x2938807c9c0
+        - Union (Weld) @ 0x2938807d600
+        - Union (Weld) @ 0x2938807c480
+        - Union (Weld) @ 0x2938807c100
+        - Union (Weld) @ 0x2938807b300
+        - Union (Weld) @ 0x2938807fc80
+        - Union (Weld) @ 0x29388078900
+        - Union (Weld) @ 0x2938807f200
+        - Union (Weld) @ 0x29388076d00
+        - Union (Weld) @ 0x29388076280
+        - chain (Weld) @ 0x29388076980
+        - chain (Weld) @ 0x293880760c0
+        - chain (Weld) @ 0x29388076600
+        - Part (Weld) @ 0x2938807d280
+        - Part (Weld) @ 0x2938807ee80
+        - Part (Weld) @ 0x2938807e940
+        - Part (Weld) @ 0x29388078040
+        - Part (Weld) @ 0x29388071900
+        - Part (Weld) @ 0x293a2b7b840
+        - Part (Weld) @ 0x293a2b7b300
+        - Wedge (Weld) @ 0x293a43a5640
+        - Wedge (Weld) @ 0x293a43a7400
+        - Handle (Weld) @ 0x293a43a52c0
+      - Inner Eye (UnionOperation) @ 0x29222a83400
+      - Jaws (UnionOperation) @ 0x29222a85800
+      - Steel (MeshPart) @ 0x2923b7db680
+      - Steel (MeshPart) @ 0x2923b7db300
+      - Steel (MeshPart) @ 0x2923b7d5100
+      - Steel (MeshPart) @ 0x2923b7d8900
+      - Union (UnionOperation) @ 0x29222a87c00
+      - Union (UnionOperation) @ 0x29222a82000
+      - Union (UnionOperation) @ 0x29222a8f400
+      - Union (UnionOperation) @ 0x29222a8b400
+      - Union (UnionOperation) @ 0x29222a89400
+      - Union (UnionOperation) @ 0x29222a81c00
+      - Union (UnionOperation) @ 0x29222a80400
+      - Union (UnionOperation) @ 0x29222a85400
+      - Union (UnionOperation) @ 0x29222a84800
+      - Union (UnionOperation) @ 0x29222a85c00
+      - Union (UnionOperation) @ 0x29222a8c400
+      - Union (UnionOperation) @ 0x29222a8ec00
+      - Union (UnionOperation) @ 0x29222a87400
+      - Union (UnionOperation) @ 0x29222a8c000
+      - Union (UnionOperation) @ 0x29222a8fc00
+      - Union (UnionOperation) @ 0x29222a8b000
+      - Union (UnionOperation) @ 0x29222a8dc00
+      - Union (UnionOperation) @ 0x29222a8b800
+      - Union (UnionOperation) @ 0x29222a8d000
+      - Union (UnionOperation) @ 0x29222a88c00
+      - Union (UnionOperation) @ 0x29222a8e000
+      - Union (UnionOperation) @ 0x29222a8e800
+      - Union (UnionOperation) @ 0x29222a86000
+      - chain (MeshPart) @ 0x2923b7df580
+      - chain (MeshPart) @ 0x2923b7dba00
+      - chain (MeshPart) @ 0x2923b7d8580
+      - Part (Part) @ 0x292247b6280
+        - Flame (ParticleEmitter) @ 0x2938865f080
+  - Lovestruck (Model) @ 0x29225dd3c00
+    - Handle (MeshPart) @ 0x2923b7da500
+      - Shoot (Sound) @ 0x2922ea20080
+      - NoAmmo (Sound) @ 0x2922ea29400
+      - ShootBBGUI (BillboardGui) @ 0x292251dbe80
+        - Shoot (ImageLabel) @ 0x292251cf080
+      - Attachment (Attachment) @ 0x2922f5aa880
+        - Specks (ParticleEmitter) @ 0x2938865e180
+      - Part (Part) @ 0x292247b60c0
+      - Part (Part) @ 0x292247b5640
+      - Part (Part) @ 0x292247b5100
+      - Part (Part) @ 0x292247b5b80
+      - Part (Part) @ 0x292247b5d40
+      - Part (Part) @ 0x292247b59c0
+      - Part (Part) @ 0x292247b5800
+      - Part (Part) @ 0x292247b5480
+      - Part (Part) @ 0x292247b52c0
+      - Part (Part) @ 0x292247b4f40
+      - Part (Part) @ 0x292247b3f80
+      - Part (Part) @ 0x292247b4840
+      - Part (Part) @ 0x292247b4d80
+        - Sparkles (ParticleEmitter) @ 0x29388656080
+        - Sparkles_Beam (ParticleEmitter) @ 0x29388655780
+      - MeshPart (MeshPart) @ 0x293950abd80
+        - MeshPart (Weld) @ 0x293a43a59c0
+        - Meshes/Heart (1) (Weld) @ 0x293a43af3c0
+        - Meshes/Heart (1) (Weld) @ 0x293a43aa180
+        - Meshes/Heart (1) (Weld) @ 0x293a43a9fc0
+        - Meshes/Heart (1) (Weld) @ 0x293a43a4f40
+        - Meshes/Heart (1) (Weld) @ 0x293a43a3340
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x293a43a4140
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x293a43a67c0
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x293a43a3500
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x293a43a0080
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x293a43ab680
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x293a43aba00
+        - Meshes/french flag bow (Weld) @ 0x293a43afe40
+        - Part (Weld) @ 0x293a43a5d40
+        - Part (Weld) @ 0x293a43abbc0
+        - Part (Weld) @ 0x293a43adec0
+        - Part (Weld) @ 0x293a43a8200
+        - Part (Weld) @ 0x293a43a1c80
+        - Part (Weld) @ 0x293a43a1740
+        - Part (Weld) @ 0x293a43ad980
+        - Part (Weld) @ 0x293a43abd80
+        - Part (Weld) @ 0x293a43a1e40
+        - Part (Weld) @ 0x293a43abf40
+        - Part (Weld) @ 0x293a43aecc0
+        - Part (Weld) @ 0x293a43a05c0
+        - Part (Weld) @ 0x293a43a91c0
+        - Handle (Weld) @ 0x293a43a5b80
+      - MeshPart (MeshPart) @ 0x293950ad280
+      - Meshes/Heart (1) (MeshPart) @ 0x293950a8c80
+        - Specks (ParticleEmitter) @ 0x2938865ea80
+      - Meshes/Heart (1) (MeshPart) @ 0x2922a260080
+        - Specks (ParticleEmitter) @ 0x29388651280
+      - Meshes/Heart (1) (MeshPart) @ 0x2922a260400
+        - Specks (ParticleEmitter) @ 0x2938865e480
+      - Meshes/Heart (1) (MeshPart) @ 0x2922a260780
+        - Specks (ParticleEmitter) @ 0x2938865c380
+      - Meshes/Heart (1) (MeshPart) @ 0x2922a260b00
+        - Specks (ParticleEmitter) @ 0x293b102db80
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x2922a260e80
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x2922a261200
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x2922a261580
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x2922a261900
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x2922a261c80
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x2922a262000
+      - Meshes/french flag bow (MeshPart) @ 0x2922a262380
+  - Binary (Model) @ 0x29225dd3f80
+    - Handle (MeshPart) @ 0x2922a262700
+      - Shoot (Sound) @ 0x2922ea29680
+      - NoAmmo (Sound) @ 0x2922ea2b700
+      - ShootBBGUI (BillboardGui) @ 0x292251dc880
+        - Shoot (ImageLabel) @ 0x29225e00080
+      - ParticleEmitter (ParticleEmitter) @ 0x293b1027280
+      - Part (Part) @ 0x2922a270b00
+      - 0 (MeshPart) @ 0x2922a262a80
+        - 0 (Weld) @ 0x293a43aeb00
+        - 0 (Weld) @ 0x293a43ae240
+        - 1 (Weld) @ 0x293a43aac00
+        - 1 (Weld) @ 0x293a43a2700
+        - 1 (Weld) @ 0x293a43a0240
+        - 1 (Weld) @ 0x293a43ae940
+        - 1 (Weld) @ 0x293a43a3880
+        - 1 (Weld) @ 0x293a43ac9c0
+        - Part (Weld) @ 0x293a43a1900
+        - Part (Weld) @ 0x293a43a4a00
+        - Part (Weld) @ 0x293a43a5480
+        - Part (Weld) @ 0x293a43a1040
+        - Part (Weld) @ 0x293a43a13c0
+        - Part (Weld) @ 0x293a43a0780
+        - Handle (Weld) @ 0x293a43ad440
+      - 0 (MeshPart) @ 0x2922a262e00
+      - 0 (MeshPart) @ 0x2922a263180
+      - 1 (MeshPart) @ 0x2922a263500
+      - 1 (MeshPart) @ 0x2922a263880
+      - 1 (MeshPart) @ 0x2922a263c00
+      - 1 (MeshPart) @ 0x2922a263f80
+      - 1 (MeshPart) @ 0x2922a264300
+      - 1 (MeshPart) @ 0x2922a264680
+      - Part (Part) @ 0x2922a270cc0
+      - Part (Part) @ 0x2922a270e80
+      - Part (Part) @ 0x2922a271040
+      - Part (Part) @ 0x2922a271200
+      - Part (Part) @ 0x2922a2713c0
+  - Hexagram (Model) @ 0x29225dd4300
+    - Handle (MeshPart) @ 0x2922a264a00
+      - Shoot (Sound) @ 0x2922ea27b00
+      - NoAmmo (Sound) @ 0x2922ea27d80
+      - RightGrip (Weld) @ 0x293a43af580
+      - ShootBBGUI (BillboardGui) @ 0x292251dd280
+        - Shoot (ImageLabel) @ 0x29225e00c80
+      - Texture (Texture) @ 0x2923c495d00
+      - Texture (Texture) @ 0x2923c49b480
+      - Texture (Texture) @ 0x2923c49ee00
+      - Texture (Texture) @ 0x2923c49f080
+      - Texture (Texture) @ 0x2923c499400
+      - Texture (Texture) @ 0x2923c491980
+  - Radiation (Model) @ 0x29225dd4680
+    - Handle (MeshPart) @ 0x2922a264d80
+      - NoAmmo (Sound) @ 0x2922ea21980
+      - Shoot (Sound) @ 0x2922ea21c00
+      - ShootBBGUI (BillboardGui) @ 0x292251ddc80
+        - Shoot (ImageLabel) @ 0x29225e01880
+  - Black Ice (Model) @ 0x29225dd4a00
+    - Handle (MeshPart) @ 0x2922a265100
+      - Shoot (Sound) @ 0x2922ea27600
+      - NoAmmo (Sound) @ 0x2922ea24900
+      - ShootBBGUI (BillboardGui) @ 0x292251de680
+        - Shoot (ImageLabel) @ 0x29225e02480
+      - Decal (Decal) @ 0x2923009d280
+      - Decal (Decal) @ 0x2923009d000
+      - Decal (Decal) @ 0x2923009cd80
+      - Decal (Decal) @ 0x2922d8bdf00
+      - Decal (Decal) @ 0x2922d8bdc80
+  - Void (Model) @ 0x29225dd4d80
+    - Handle (MeshPart) @ 0x2922a265480
+      - Shoot (Sound) @ 0x2922ea24b80
+      - NoAmmo (Sound) @ 0x2922ea25300
+      - RightGrip (Weld) @ 0x293a43aaf80
+      - ShootBBGUI (BillboardGui) @ 0x292251df080
+        - Shoot (ImageLabel) @ 0x29225e03080
+  - Hell Dragon (Model) @ 0x29225dd5100
+    - Handle (MeshPart) @ 0x2922a265800
+      - Shoot (Sound) @ 0x2922ea2e900
+      - NoAmmo (Sound) @ 0x2922ea23f00
+      - RightGrip (Weld) @ 0x293a43a7780
+      - ShootBBGUI (BillboardGui) @ 0x29225e10080
+        - Shoot (ImageLabel) @ 0x29225e03c80
+      - Plane.003 (MeshPart) @ 0x2922a265b80
+        - MeshPart (Weld) @ 0x293a43a3180
+        - Cube.004 (Weld) @ 0x293a43af200
+        - Handle (Weld) @ 0x293a43a7b00
+      - Cube.004 (MeshPart) @ 0x2922a265f00
+      - MeshPart (MeshPart) @ 0x2922a266280
+  - Voxel (Model) @ 0x29225dd5480
+    - Handle (MeshPart) @ 0x2922a267080
+      - NoAmmo (Sound) @ 0x2922ea26980
+      - Shoot (Sound) @ 0x2922ea21480
+      - ShootBBGUI (BillboardGui) @ 0x29225e10a80
+        - Shoot (ImageLabel) @ 0x29225e04880
+      - Cube (MeshPart) @ 0x2922a267400
+        - Handle (Weld) @ 0x293a43a8040
+  - Poseidon (Model) @ 0x29225dd5800
+    - Handle (MeshPart) @ 0x2922a267780
+      - NoAmmo (Sound) @ 0x2922ea21700
+      - Shoot (Sound) @ 0x2922ea26200
+      - ShootBBGUI (BillboardGui) @ 0x29225e11480
+        - Shoot (ImageLabel) @ 0x29225e05480
+      - Plane.021 (MeshPart) @ 0x2922a267b00
+        - Plane.008 (Weld) @ 0x293a43a4300
+        - Plane.005 (Weld) @ 0x293a43a1580
+        - Plane.003 (Weld) @ 0x293a43afc80
+        - Cylinder.007 (Weld) @ 0x293a43a75c0
+        - Handle (Weld) @ 0x293a43ae5c0
+      - Plane.008 (MeshPart) @ 0x2922a267e80
+      - Plane.005 (MeshPart) @ 0x2922a268200
+      - Plane.003 (MeshPart) @ 0x2922a268580
+      - Cylinder.007 (MeshPart) @ 0x2922a268900
+  - Crimson Fangs (Model) @ 0x29225dd5b80
+    - Handle (MeshPart) @ 0x2922a268c80
+      - NoAmmo (Sound) @ 0x2922ea26480
+      - Shoot (Sound) @ 0x2922ea2df00
+      - ShootBBGUI (BillboardGui) @ 0x29225e11e80
+        - Shoot (ImageLabel) @ 0x29225e06080
+      - Cube.006 (MeshPart) @ 0x2922a269000
+        - Handle (Weld) @ 0x293a43aadc0
+  - Hallows (Model) @ 0x29225dd5f00
+    - Handle (MeshPart) @ 0x2922a269380
+      - NoAmmo (Sound) @ 0x2922ea25a80
+      - Shoot (Sound) @ 0x2922ea25d00
+      - ShootBBGUI (BillboardGui) @ 0x29225e12880
+        - Shoot (ImageLabel) @ 0x29225e06c80
+      - pump.004 (MeshPart) @ 0x2922a269700
+        - Cylinder.004 (Weld) @ 0x293a43ad7c0
+        - Cube.006 (Weld) @ 0x293a43ac640
+        - Handle (Weld) @ 0x293a43ab140
+      - Cylinder.004 (MeshPart) @ 0x2922a269a80
+      - Cube.006 (MeshPart) @ 0x2922a269e00
+  - Candy Cane (Model) @ 0x29225dd6280
+    - Handle (MeshPart) @ 0x2922a26a180
+      - NoAmmo (Sound) @ 0x2922ea25f80
+      - Shoot (Sound) @ 0x2922ea23780
+      - LIGHTS (Script) @ 0x293a1fa0a00
+      - ShootBBGUI (BillboardGui) @ 0x29225e13280
+        - Shoot (ImageLabel) @ 0x29225e07880
+      - Cylinder.003 (MeshPart) @ 0x2922a26a500
+        - Cylinder.002 (Weld) @ 0x293a43afac0
+        - Cylinder.001 (Weld) @ 0x293a43a5f00
+        - Cube.006 (Weld) @ 0x293a43a2e00
+        - Circle.013 (Weld) @ 0x293a43af740
+        - Neon (Weld) @ 0x293a43a8ac0
+        - Normal (Weld) @ 0x293a43ad280
+        - Normal (Weld) @ 0x293a43a3f80
+        - Neon (Weld) @ 0x293a43ab840
+        - Normal (Weld) @ 0x293a43a8c80
+        - MeshPart (Weld) @ 0x293a43ae080
+        - Normal (Weld) @ 0x293a43a5100
+        - Neon (Weld) @ 0x293a43aa6c0
+        - Normal (Weld) @ 0x293a43ae780
+        - Neon (Weld) @ 0x293a43a6ec0
+        - Neon_FRONT (Weld) @ 0x293a43af040
+        - Neon_FRONT (Weld) @ 0x293a43a2540
+        - Neon_FRONT (Weld) @ 0x293a43a36c0
+        - Handle (Weld) @ 0x293a43a9000
+      - Cylinder.002 (MeshPart) @ 0x2922a26a880
+      - Cylinder.001 (MeshPart) @ 0x2922a26ac00
+      - Cube.006 (MeshPart) @ 0x2922a26af80
+      - Circle.013 (MeshPart) @ 0x2922a26b300
+      - Neon (MeshPart) @ 0x2922a26b680
+      - Normal (MeshPart) @ 0x2922a26ba00
+      - Normal (MeshPart) @ 0x2922a26bd80
+      - Neon (MeshPart) @ 0x2922a26c100
+      - Normal (MeshPart) @ 0x2922a26c480
+      - MeshPart (MeshPart) @ 0x2922a26c800
+      - Normal (MeshPart) @ 0x2922a26cb80
+      - Neon (MeshPart) @ 0x2922a26cf00
+      - Normal (MeshPart) @ 0x2922a26d280
+      - Neon (MeshPart) @ 0x2922a26d600
+      - Neon_FRONT (MeshPart) @ 0x2922a26d980
+      - Neon_FRONT (MeshPart) @ 0x2922a26dd00
+      - Neon_FRONT (MeshPart) @ 0x2922a26e080
+  - Heartbringer (Model) @ 0x29225dd6600
+    - Handle (MeshPart) @ 0x2922a26e400
+      - Shoot (Sound) @ 0x2922ea23a00
+      - NoAmmo (Sound) @ 0x2922ea23c80
+      - ShootBBGUI (BillboardGui) @ 0x29225e13c80
+        - Shoot (ImageLabel) @ 0x29225e08480
+      - Union (UnionOperation) @ 0x2920612a400
+        - Union (Weld) @ 0x293a43ac100
+        - Union (Weld) @ 0x293a43acf00
+        - Union (Weld) @ 0x293a43ad0c0
+        - Union (Weld) @ 0x293a43a8740
+        - Union (Weld) @ 0x293a43a3dc0
+        - half circle (Weld) @ 0x293a43aee80
+        - half circle (Weld) @ 0x293a43adb40
+        - half circle (Weld) @ 0x293a43a4d80
+        - half circle (Weld) @ 0x293a43a0cc0
+        - o (Weld) @ 0x293a43a8900
+        - o (Weld) @ 0x293a43a2000
+        - x (Weld) @ 0x293a43a6440
+        - x (Weld) @ 0x293a43ae400
+        - x (Weld) @ 0x293a43ab4c0
+        - x (Weld) @ 0x293a43a2380
+        - Handle (Weld) @ 0x293a43a6b40
+        - Handle (Weld) @ 0x293a43a98c0
+        - Handle (Weld) @ 0x293a43a1ac0
+      - x (UnionOperation) @ 0x2920612a800
+      - half circle (MeshPart) @ 0x2922a26e780
+      - Handle (Part) @ 0x2922a2736c0
+        - SpecialMesh (SpecialMesh) @ 0x2939e427400
+      - o (UnionOperation) @ 0x2920612b800
+      - o (UnionOperation) @ 0x2920612bc00
+      - x (UnionOperation) @ 0x2920612c000
+      - x (UnionOperation) @ 0x2920612c400
+      - x (UnionOperation) @ 0x2920612c800
+      - Union (UnionOperation) @ 0x2920612cc00
+      - Handle (Part) @ 0x2922a274300
+        - SpecialMesh (SpecialMesh) @ 0x2939e427100
+      - Union (UnionOperation) @ 0x2920612d400
+      - Union (UnionOperation) @ 0x29206128c00
+      - Union (UnionOperation) @ 0x2920612fc00
+      - Union (UnionOperation) @ 0x2920612f800
+      - half circle (MeshPart) @ 0x2922a26f200
+      - half circle (MeshPart) @ 0x2922a26f580
+      - half circle (MeshPart) @ 0x2922a26f900
+  - Ember (Model) @ 0x29225dd6980
+    - Handle (MeshPart) @ 0x2922a26fc80
+      - NoAmmo (Sound) @ 0x2922ea2fa80
+      - Shoot (Sound) @ 0x2922ea2bc00
+      - ShootBBGUI (BillboardGui) @ 0x29225e14680
+        - Shoot (ImageLabel) @ 0x29225e09080
+  - Green Tint (Model) @ 0x29225dd6d00
+    - Handle (MeshPart) @ 0x2922e7d0080
+      - NoAmmo (Sound) @ 0x2922ea2be80
+      - Shoot (Sound) @ 0x2922ea22880
+      - ShootBBGUI (BillboardGui) @ 0x29225e15080
+        - Shoot (ImageLabel) @ 0x29225e09c80
+  - Kirumi (Model) @ 0x29225dd7080
+    - Handle (MeshPart) @ 0x2922e7d0400
+      - NoAmmo (Sound) @ 0x2922ea22b00
+      - Shoot (Sound) @ 0x2922ea22d80
+      - ShootBBGUI (BillboardGui) @ 0x29225e15a80
+        - Shoot (ImageLabel) @ 0x29225e0a880
+      - Plane.001 (MeshPart) @ 0x2922e7d0780
+        - Cube.006 (Weld) @ 0x293a43ac480
+        - Cube.001 (Weld) @ 0x293a43a6d00
+        - Handle (Weld) @ 0x293a43acb80
+      - Cube.006 (MeshPart) @ 0x2922e7d0b00
+      - Cube.001 (MeshPart) @ 0x2922e7d0e80
+  - Kitty (Model) @ 0x29225dd7400
+    - Handle (MeshPart) @ 0x2922e7d1200
+      - NoAmmo (Sound) @ 0x2922ea20800
+      - Shoot (Sound) @ 0x2922ea20a80
+      - ShootBBGUI (BillboardGui) @ 0x29225e16480
+        - Shoot (ImageLabel) @ 0x29225e0b480
+      - SHOOT_BBGUI_PARTICLE (Attachment) @ 0x2922f5aef00
+      - Meshes/all2_all.037 (1) (MeshPart) @ 0x2922e7d1580
+      - Meshes/all2_all.045 (1) (MeshPart) @ 0x2922e7d1900
+      - Meshes/all2_all.002 (1) (MeshPart) @ 0x2922e7d1c80
+        - Meshes/all2_all.037 (1) (Weld) @ 0x293a43a4680
+        - Meshes/all2_all.038 (Weld) @ 0x293a43ac2c0
+        - Meshes/all2_all.039 (1) (Weld) @ 0x293a43a2a80
+        - Meshes/all2_all.040 (Weld) @ 0x293a43a44c0
+        - Meshes/all2_all.041 (1) (Weld) @ 0x293a43a5800
+        - Meshes/all2_all.042 (1) (Weld) @ 0x293a43a0e80
+        - Meshes/all2_all.043 (1) (Weld) @ 0x293a43a4840
+        - Meshes/all2_all.044 (1) (Weld) @ 0x293a43a9c40
+        - Meshes/all2_all.045 (1) (Weld) @ 0x293a43a7940
+        - Meshes/db_Circle.002 (2) (Weld) @ 0x293a43af900
+        - Meshes/db_Sphere.006 (2) (Weld) @ 0x293a43aa880
+        - Meshes/db_Sphere.012 (1) (Weld) @ 0x293a43a9380
+        - Meshes/db_Sphere.014 (1) (Weld) @ 0x293a43a2fc0
+        - Part (Weld) @ 0x293a43a6600
+        - Handle (Weld) @ 0x293a43a9e00
+      - PARTICLE_PART (Part) @ 0x2922a2760c0
+      - Meshes/all2_all.044 (1) (MeshPart) @ 0x2922e7d2000
+      - Meshes/all2_all.039 (1) (MeshPart) @ 0x2922e7d4680
+      - Meshes/all2_all.042 (1) (MeshPart) @ 0x2922e7d4d80
+        - Attachment (Attachment) @ 0x2922f5a9680
+          - ParticleEmitter (ParticleEmitter) @ 0x293b102e480
+        - Attachment (Attachment) @ 0x2922f5afb00
+          - ParticleEmitter (ParticleEmitter) @ 0x293b102fc80
+        - Attachment (Attachment) @ 0x2922f5a0e00
+          - ParticleEmitter (ParticleEmitter) @ 0x293b1028180
+        - Attachment (Attachment) @ 0x2922f5a0f80
+          - ParticleEmitter (ParticleEmitter) @ 0x293b1023080
+        - Attachment (Attachment) @ 0x2922f5a8a80
+          - ParticleEmitter (ParticleEmitter) @ 0x293b102ea80
+      - Meshes/all2_all.038 (MeshPart) @ 0x2922e7d5100
+      - Meshes/all2_all.043 (1) (MeshPart) @ 0x2922e7d6d00
+      - Meshes/db_Circle.002 (2) (MeshPart) @ 0x2922e7d7080
+      - Meshes/all2_all.041 (1) (MeshPart) @ 0x2922e7d7780
+      - Meshes/all2_all.040 (MeshPart) @ 0x2922e7d7b00
+      - Meshes/db_Sphere.014 (1) (MeshPart) @ 0x2922e7d8200
+      - Meshes/db_Sphere.006 (2) (MeshPart) @ 0x2922e7d8580
+      - Meshes/db_Sphere.012 (1) (MeshPart) @ 0x2922e7d9380
+  - Arctic (Model) @ 0x29225dd7780
+    - Handle (MeshPart) @ 0x2922e7d9700
+      - Shoot (Sound) @ 0x2922ea29180
+      - NoAmmo (Sound) @ 0x2922ea26c00
+      - RightGrip (Weld) @ 0x293a43aa500
+      - ShootBBGUI (BillboardGui) @ 0x29225e16e80
+        - Shoot (ImageLabel) @ 0x29225e0c080
+      - ParticleEmitter (ParticleEmitter) @ 0x293b102ba80
+      - Snowfall (ParticleEmitter) @ 0x293b102bd80
+      - Meshes/dbnew (MeshPart) @ 0x2922e7d9a80
+        - SurfaceAppearance (SurfaceAppearance) @ 0x293b102f080
+        - Handle (Weld) @ 0x293a43a7080
+  - Cupid (Model) @ 0x29225dd7b00
+    - Handle (MeshPart) @ 0x2922e7dc100
+      - Shoot (Sound) @ 0x2922ea26e80
+      - NoAmmo (Sound) @ 0x2922ea27100
+      - RightGrip (Weld) @ 0x293a43a7e80
+      - ShootBBGUI (BillboardGui) @ 0x29225e17880
+        - Shoot (ImageLabel) @ 0x29225e0cc80
+      - Meshes/untitled_ribbon_翅_Plane.006 (Weld) @ 0x293a43a3a40
+      - Meshes/untitled_Plane.065 (Weld) @ 0x293a43aa340
+      - Meshes/untitled_Plane.056 (Weld) @ 0x293a43a0940
+      - Meshes/untitled_Plane.054 (Weld) @ 0x293a43a28c0
+      - Meshes/untitled_Plane.001 (Weld) @ 0x293a43a9700
+      - Meshes/extra (1) (Weld) @ 0x293a43a21c0
+      - ParticleEmitter (ParticleEmitter) @ 0x293b102ed80
+      - ParticleEmitter (ParticleEmitter) @ 0x293b1028480
+      - ParticleEmitter (ParticleEmitter) @ 0x293b102d880
+      - Meshes/untitled_ribbon_翅_Plane.006 (MeshPart) @ 0x2922e7dc480
+      - Meshes/untitled_Plane.065 (MeshPart) @ 0x2922e7dcb80
+      - Meshes/untitled_Plane.056 (MeshPart) @ 0x2922e7de400
+      - Meshes/untitled_Plane.054 (MeshPart) @ 0x2922e7df200
+      - Meshes/untitled_Plane.001 (MeshPart) @ 0x2922e7df900
+      - Meshes/extra (1) (MeshPart) @ 0x2922e7dfc80
+  - Blacksteel Dragon (Model) @ 0x29225dd7e80
+    - Handle (MeshPart) @ 0x2923b7d5800
+      - Shoot (Sound) @ 0x2922ea2d500
+      - NoAmmo (Sound) @ 0x2922ea2a300
+      - RightGrip (Weld) @ 0x293a43a6280
+      - ShootBBGUI (BillboardGui) @ 0x29225e18280
+        - Shoot (ImageLabel) @ 0x29225e0d880
+      - flare (ParticleEmitter) @ 0x293b102f980
+      - ParticleEmitter (ParticleEmitter) @ 0x293b1023980
+      - Meshes/db2_Plane.005 (MeshPart) @ 0x2922ee90080
+      - Meshes/db2_Plane.008 (MeshPart) @ 0x2922ee90400
+      - Meshes/db2_Plane.014 (MeshPart) @ 0x2922ee90780
+      - Meshes/db2_Sphere.001 (MeshPart) @ 0x2922ee90b00
+        - Meshes/db2_Plane.014 (Weld) @ 0x293a43ab300
+        - Meshes/db2_Plane.008 (Weld) @ 0x293a43a60c0
+        - Meshes/db2_Plane.005 (Weld) @ 0x293a43a2c40
+        - Handle (Weld) @ 0x293a43add00
+  - Phoenix (Model) @ 0x29225dd8200
+    - Handle (MeshPart) @ 0x2922ee90e80
+      - Shoot (Sound) @ 0x2922ea23000
+      - NoAmmo (Sound) @ 0x2922ea27380
+      - RightGrip (Weld) @ 0x293a43a3c00
+      - ShootBBGUI (BillboardGui) @ 0x29225e18c80
+        - Shoot (ImageLabel) @ 0x29225e0e480
+      - SHOOT_BBGUI_PARTICLE (Attachment) @ 0x2922f5a7700
+      - Neon (MeshPart) @ 0x2922ee91200
+        - Main (Weld) @ 0x293a43a6980
+        - Detail (Weld) @ 0x293a43aaa40
+        - Handle (Weld) @ 0x293a43a8e40
+      - Main (MeshPart) @ 0x2922ee91580
+        - glow (ParticleEmitter) @ 0x293b102d580
+      - Detail (MeshPart) @ 0x2922ee92e00
+        - Main (Attachment) @ 0x2922f5afe00
+          - Fire1 (ParticleEmitter) @ 0x293b102e180
+          - Specks1 (ParticleEmitter) @ 0x293b1029080
+  - Black Cat (Model) @ 0x29225dd8580
+    - Handle (MeshPart) @ 0x2922ee93180
+      - Shoot (Sound) @ 0x2922ea2b480
+      - NoAmmo (Sound) @ 0x2922ea21e80
+      - ShootBBGUI (BillboardGui) @ 0x29225e19680
+        - Shoot (ImageLabel) @ 0x29225e0f080
+      - AnimationController (AnimationController) @ 0x29225e6fe40
+        - Animator (Animator) @ 0x29225de2a80
+      - RootPart (Part) @ 0x2922f061c80
+        - Bone (Bone) @ 0x293a5656600
+          - Bone.001 (Bone) @ 0x293a5657000
+          - Bone.002 (Bone) @ 0x293a5653400
+        - Bone.003 (Bone) @ 0x293a5652600
+          - Bone.004 (Bone) @ 0x293a5650a00
+          - Bone.005 (Bone) @ 0x293a5651600
+        - Bone.006 (Bone) @ 0x293a565fe00
+          - Bone.007 (Bone) @ 0x293a565ba00
+            - Bone.008 (Bone) @ 0x293a565c200
+              - Bone.009 (Bone) @ 0x293a5657800
+                - Bone.010 (Bone) @ 0x293a565fc00
+        - Handle (Weld) @ 0x293a43a9a80
+      - Sphere.002 (MeshPart) @ 0x2922ee93500
+        - Sphere.002Motor6D (Motor6D) @ 0x293a5655e00
+      - Cylinder.022 (MeshPart) @ 0x2922ee93880
+        - Cylinder.022Motor6D (Motor6D) @ 0x293a565ae00
+        - SurfaceAppearance (SurfaceAppearance) @ 0x293b1029380
+      - Cylinder.012 (MeshPart) @ 0x2922ee93c00
+        - Cylinder.012Motor6D (Motor6D) @ 0x293a5654200
+        - SurfaceAppearance (SurfaceAppearance) @ 0x293b1026680
+        - Attachment (Attachment) @ 0x2922f5a4400
+          - ParticleEmitter (ParticleEmitter) @ 0x293b102c080
+          - ParticleEmitter (ParticleEmitter) @ 0x293b1020f80
+      - Cube.029 (MeshPart) @ 0x2922ee95100
+        - Cube.029Motor6D (Motor6D) @ 0x293a565ac00
+        - SurfaceAppearance (SurfaceAppearance) @ 0x293b102e780
+      - Cube.016 (MeshPart) @ 0x2922ee96280
+        - Cube.016Motor6D (Motor6D) @ 0x293a5655400
+        - SurfaceAppearance (SurfaceAppearance) @ 0x293b1025180
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Wraps/[Shotgun]
+- [Shotgun] (Folder) @ 0x2922aaac2c0
+  - None (Model) @ 0x292248e8c80
+    - Handle (MeshPart) @ 0x2922face780
+      - Shoot (Sound) @ 0x2922f507b00
+      - NoAmmo (Sound) @ 0x2922f501700
+      - ShootBBGUI (BillboardGui) @ 0x2922a56a080
+        - Shoot (ImageLabel) @ 0x2922a579080
+  - Void Dragon (Model) @ 0x292248e9000
+    - Handle (MeshPart) @ 0x2922faceb00
+      - Shoot (Sound) @ 0x2922f50b200
+      - NoAmmo (Sound) @ 0x2922f501980
+      - ShootBBGUI (BillboardGui) @ 0x2922a56aa80
+        - Shoot (ImageLabel) @ 0x2922a579c80
+      - Part (Part) @ 0x292352513c0
+      - Part (Part) @ 0x29235251580
+      - Part (Part) @ 0x29235251740
+      - Part (Part) @ 0x29235251900
+      - MeshPart (MeshPart) @ 0x2922facee80
+        - Middle (Weld) @ 0x2922a44e780
+        - Middle (Weld) @ 0x2922a44e940
+        - Union (Weld) @ 0x2922a44eb00
+        - Union (Weld) @ 0x2922a44ecc0
+        - Union (Weld) @ 0x2922a44ee80
+        - Union (Weld) @ 0x2922a44f040
+        - Union (Weld) @ 0x2922a44f200
+        - Union (Weld) @ 0x2922a44f3c0
+        - Union (Weld) @ 0x2922a44f580
+        - Union (Weld) @ 0x2922a44f740
+        - Union (Weld) @ 0x2922a44f900
+        - Union (Weld) @ 0x2922a44fac0
+        - Union (Weld) @ 0x2922a44fc80
+        - Union (Weld) @ 0x2922a44fe40
+        - Union (Weld) @ 0x2922a450080
+        - Union (Weld) @ 0x2922a450240
+        - Union (Weld) @ 0x2922a450400
+        - Union (Weld) @ 0x2922a4505c0
+        - Union (Weld) @ 0x2922a450780
+        - Union (Weld) @ 0x2922a450940
+        - Union (Weld) @ 0x2922a450b00
+        - Union (Weld) @ 0x2922a450cc0
+        - Union (Weld) @ 0x2922a450e80
+        - Union (Weld) @ 0x2922a451040
+        - Union (Weld) @ 0x2922a451200
+        - Part (Weld) @ 0x2922a4513c0
+        - Part (Weld) @ 0x2922a451580
+        - Part (Weld) @ 0x2922a451740
+        - Part (Weld) @ 0x2922a451900
+        - Part (Weld) @ 0x2922a451ac0
+        - Handle (Weld) @ 0x2922a451c80
+      - Middle (UnionOperation) @ 0x2922efa1800
+      - Middle (UnionOperation) @ 0x2922efa1c00
+      - Union (UnionOperation) @ 0x2922efa2000
+      - Union (UnionOperation) @ 0x2922efa2400
+      - Union (UnionOperation) @ 0x2922efa2800
+      - Union (UnionOperation) @ 0x2922efa2c00
+      - Union (UnionOperation) @ 0x2922efa3000
+      - Union (UnionOperation) @ 0x2922efa3400
+      - Union (UnionOperation) @ 0x2922efa3800
+      - Union (UnionOperation) @ 0x2922efa3c00
+      - Union (UnionOperation) @ 0x2922efa4000
+      - Union (UnionOperation) @ 0x2922efa4400
+      - Union (UnionOperation) @ 0x2922efa4800
+      - Union (UnionOperation) @ 0x2922efa4c00
+      - Union (UnionOperation) @ 0x2922efa5000
+      - Union (UnionOperation) @ 0x2922efa5400
+      - Union (UnionOperation) @ 0x2922efa5800
+      - Union (UnionOperation) @ 0x2922efa5c00
+      - Union (UnionOperation) @ 0x2922efa6000
+      - Union (UnionOperation) @ 0x2922efa6400
+      - Union (UnionOperation) @ 0x2922efa6800
+      - Union (UnionOperation) @ 0x2922efa6c00
+      - Union (UnionOperation) @ 0x2922efa7000
+      - Union (UnionOperation) @ 0x2922efa7400
+      - Union (UnionOperation) @ 0x2922efa7800
+      - Part (Part) @ 0x29235251ac0
+  - Adurite (Model) @ 0x292248e9380
+    - Handle (MeshPart) @ 0x2922facf200
+      - Shoot (Sound) @ 0x2922f504e00
+      - NoAmmo (Sound) @ 0x2922f504b80
+      - ShootBBGUI (BillboardGui) @ 0x2922a56b480
+        - Shoot (ImageLabel) @ 0x2922a57a880
+      - Part (Part) @ 0x29235251c80
+        - Sparkles (ParticleEmitter) @ 0x293a6c08780
+        - Sparkles_Beam (ParticleEmitter) @ 0x293a6c07b80
+      - MeshPart (MeshPart) @ 0x2922facf580
+      - Vine (MeshPart) @ 0x2922facf900
+      - Vine (MeshPart) @ 0x2922facfc80
+      - Vine (MeshPart) @ 0x29235330080
+      - Vine (MeshPart) @ 0x29235330400
+      - Vine (MeshPart) @ 0x29235330780
+      - A (MeshPart) @ 0x29235330b00
+        - A (Weld) @ 0x2922a451e40
+        - MeshPart (Weld) @ 0x2922a452000
+        - Vine (Weld) @ 0x2922a4521c0
+        - Vine (Weld) @ 0x2922a452380
+        - Vine (Weld) @ 0x2922a452540
+        - Vine (Weld) @ 0x2922a452700
+        - Vine (Weld) @ 0x2922a4528c0
+        - Vine (Weld) @ 0x2922a452a80
+        - Part (Weld) @ 0x2922a452c40
+        - Handle (Weld) @ 0x2922a452e00
+      - Vine (MeshPart) @ 0x29235330e80
+      - A (MeshPart) @ 0x29235331200
+  - Hello Kitty (Model) @ 0x292248e9700
+    - Handle (MeshPart) @ 0x29235331580
+      - Shoot (Sound) @ 0x2922f508780
+      - NoAmmo (Sound) @ 0x2922f501200
+      - ShootBBGUI (BillboardGui) @ 0x2922a56be80
+        - Shoot (ImageLabel) @ 0x2922a57b480
+  - Arsenic (Model) @ 0x292248e9a80
+    - Handle (MeshPart) @ 0x29235331900
+      - Shoot (Sound) @ 0x2922f50dc80
+      - NoAmmo (Sound) @ 0x2922f500300
+      - ShootBBGUI (BillboardGui) @ 0x2922a56c880
+        - Shoot (ImageLabel) @ 0x2922a57c080
+      - b (ParticleEmitter) @ 0x293a6c02480
+      - Part (Part) @ 0x29235251e40
+      - Part (Part) @ 0x29235252000
+      - Part (Part) @ 0x292352521c0
+        - Part (Weld) @ 0x2922a452fc0
+        - Part (Weld) @ 0x2922a453180
+        - Part (Weld) @ 0x2922a453340
+        - Part (Weld) @ 0x2922a453500
+        - Handle (Weld) @ 0x2922a4536c0
+      - Part (Part) @ 0x29235252380
+      - Part (Part) @ 0x29235252540
+  - Amethyst (Model) @ 0x292248e9e00
+    - Handle (MeshPart) @ 0x29235331c80
+      - Shoot (Sound) @ 0x2922f50e680
+      - NoAmmo (Sound) @ 0x2922f503c80
+      - ShootBBGUI (BillboardGui) @ 0x2922a56d280
+        - Shoot (ImageLabel) @ 0x2922a57cc80
+      - pumpp (Weld) @ 0x2922a453880
+      - Group44266.001 (Weld) @ 0x2922a453a40
+      - Group44266.001 (MeshPart) @ 0x29235332000
+      - pumpp (MeshPart) @ 0x29235332380
+  - Radiation (Model) @ 0x292248ea180
+    - Handle (MeshPart) @ 0x29235332700
+      - NoAmmo (Sound) @ 0x2922f508c80
+      - Shoot (Sound) @ 0x2922f500080
+      - ShootBBGUI (BillboardGui) @ 0x2922a56dc80
+        - Shoot (ImageLabel) @ 0x2922a57d880
+  - Volcanic Ashes (Model) @ 0x292248ea500
+    - Handle (MeshPart) @ 0x29235332a80
+      - Shoot (Sound) @ 0x2922f50b700
+      - NoAmmo (Sound) @ 0x2922f509b80
+      - ShootBBGUI (BillboardGui) @ 0x2922a56e680
+        - Shoot (ImageLabel) @ 0x2922a57e480
+      - Part (Part) @ 0x29235252700
+      - Part (Part) @ 0x292352528c0
+      - Part (Part) @ 0x29235252a80
+      - Part (Part) @ 0x29235252c40
+      - MeshPart (MeshPart) @ 0x29235332e00
+      - MeshPart (MeshPart) @ 0x29235333180
+      - MeshPart (MeshPart) @ 0x29235333500
+      - MeshPart (MeshPart) @ 0x29235333880
+      - Union (UnionOperation) @ 0x2922efa7c00
+      - Union (UnionOperation) @ 0x2922efa8000
+      - MeshPart (MeshPart) @ 0x29235333c00
+      - MeshPart (MeshPart) @ 0x29235333f80
+        - MeshPart (Weld) @ 0x2922a453c00
+        - MeshPart (Weld) @ 0x2922a453dc0
+        - MeshPart (Weld) @ 0x2922a453f80
+        - MeshPart (Weld) @ 0x2922a454140
+        - MeshPart (Weld) @ 0x2922a454300
+        - Union (Weld) @ 0x2922a4544c0
+        - Union (Weld) @ 0x2922a454680
+        - Union (Weld) @ 0x2922a454840
+        - Union (Weld) @ 0x2922a454a00
+        - Part (Weld) @ 0x2922a454bc0
+        - Part (Weld) @ 0x2922a454d80
+        - Part (Weld) @ 0x2922a454f40
+        - Part (Weld) @ 0x2922a455100
+        - Handle (Weld) @ 0x2922a4552c0
+      - Union (UnionOperation) @ 0x2922efa8400
+      - Union (UnionOperation) @ 0x2922efa8800
+  - Lightbringer (Model) @ 0x292248ea880
+    - Handle (MeshPart) @ 0x29235334300
+      - Shoot (Sound) @ 0x2922f502b00
+      - NoAmmo (Sound) @ 0x2922f502d80
+      - ShootBBGUI (BillboardGui) @ 0x2922a56f080
+        - Shoot (ImageLabel) @ 0x2922a57f080
+      - Part (Part) @ 0x29235252e00
+      - Part (Part) @ 0x29235252fc0
+      - Part (Part) @ 0x29235253180
+      - Part (Part) @ 0x29235253340
+      - Meshes/Bones1 (MeshPart) @ 0x29235334680
+      - Meshes/Bones1 (MeshPart) @ 0x29235334a00
+      - Meshes/Bones1 (MeshPart) @ 0x29235334d80
+      - MeshPart (MeshPart) @ 0x29235335100
+      - MeshPart (MeshPart) @ 0x29235335480
+      - MeshPart (MeshPart) @ 0x29235335800
+      - MeshPart (MeshPart) @ 0x29235335b80
+        - MeshPart (Weld) @ 0x2922a455480
+        - MeshPart (Weld) @ 0x2922a455640
+        - MeshPart (Weld) @ 0x2922a455800
+        - MeshPart (Weld) @ 0x2922a4559c0
+        - Meshes/Bones1 (Weld) @ 0x2922a455b80
+        - Meshes/Bones1 (Weld) @ 0x2922a455d40
+        - Meshes/Bones1 (Weld) @ 0x2922a455f00
+        - Meshes/Bones1 (Weld) @ 0x2922a4560c0
+        - Meshes/Bones1 (Weld) @ 0x2922a456280
+        - RenderMesh (1) (Weld) @ 0x2922a456440
+        - RenderMesh (1) (Weld) @ 0x2922a456600
+        - RenderMesh (1) (Weld) @ 0x2922a4567c0
+        - RenderMesh (1) (Weld) @ 0x2922a456980
+        - RenderMesh (1) (Weld) @ 0x2922a456b40
+        - RenderMesh (1) (Weld) @ 0x2922a456d00
+        - RenderMesh (1) (Weld) @ 0x2922a456ec0
+        - RenderMesh (1) (Weld) @ 0x2922a457080
+        - Part (Weld) @ 0x2922a457240
+        - Part (Weld) @ 0x2922a457400
+        - Part (Weld) @ 0x2922a4575c0
+        - Part (Weld) @ 0x2922a457780
+        - Part (Weld) @ 0x2922a457940
+        - Part (Weld) @ 0x2922a457b00
+        - Part (Weld) @ 0x2922a457cc0
+        - Part (Weld) @ 0x2922a457e80
+        - Part (Weld) @ 0x2922a458040
+        - Handle (Weld) @ 0x2922a458200
+      - MeshPart (MeshPart) @ 0x29235335f00
+      - RenderMesh (1) (MeshPart) @ 0x29235336280
+      - RenderMesh (1) (MeshPart) @ 0x29235336600
+      - RenderMesh (1) (MeshPart) @ 0x29235336980
+      - RenderMesh (1) (MeshPart) @ 0x29235336d00
+      - RenderMesh (1) (MeshPart) @ 0x29235337080
+      - RenderMesh (1) (MeshPart) @ 0x29235337400
+      - RenderMesh (1) (MeshPart) @ 0x29235337780
+      - RenderMesh (1) (MeshPart) @ 0x29235337b00
+      - Part (Part) @ 0x29235253500
+      - Part (Part) @ 0x292352536c0
+      - Part (Part) @ 0x29235253880
+      - Part (Part) @ 0x29235253a40
+      - Meshes/Bones1 (MeshPart) @ 0x29235337e80
+      - Meshes/Bones1 (MeshPart) @ 0x29235338200
+      - Part (Part) @ 0x29235253c00
+  - Strawberry Shortcake (Model) @ 0x292248eac00
+    - Handle (MeshPart) @ 0x29235338580
+      - Shoot (Sound) @ 0x2922f508280
+      - NoAmmo (Sound) @ 0x2922f506c00
+      - ShootBBGUI (BillboardGui) @ 0x2922a460080
+        - Shoot (ImageLabel) @ 0x2922aac0080
+  - Hell Hound (Model) @ 0x292248eaf80
+    - Handle (MeshPart) @ 0x29235338900
+      - Shoot (Sound) @ 0x2922f503a00
+      - NoAmmo (Sound) @ 0x2922f506e80
+      - ShootBBGUI (BillboardGui) @ 0x2922a460a80
+        - Shoot (ImageLabel) @ 0x2922aac0c80
+      - Part (Part) @ 0x29235253dc0
+      - Part (Part) @ 0x29235253f80
+      - Part (Part) @ 0x29235254140
+      - Part (Part) @ 0x29235254300
+      - FakeHead2 (Part) @ 0x292352544c0
+        - Mesh (SpecialMesh) @ 0x2922e9b4b80
+        - FakeTorso (Weld) @ 0x2922a4583c0
+        - Part (Weld) @ 0x2922a458580
+        - Part (Weld) @ 0x2922a458740
+        - Part (Weld) @ 0x2922a458900
+        - Part (Weld) @ 0x2922a458ac0
+        - Part (Weld) @ 0x2922a458c80
+        - Part (Weld) @ 0x2922a458e40
+        - Tail (Weld) @ 0x2922a459000
+        - leak (Weld) @ 0x2922a4591c0
+        - Handle (Weld) @ 0x2922a459380
+      - Part (Part) @ 0x29235254680
+        - Attachment (Attachment) @ 0x2939ee19380
+          - flare (ParticleEmitter) @ 0x293a6c02180
+          - fire (ParticleEmitter) @ 0x293a6c06f80
+        - Attachment (Attachment) @ 0x2939ee19e00
+          - Beam (Beam) @ 0x293a5659000
+      - Part (Part) @ 0x29235254840
+        - Attachment (Attachment) @ 0x2939ee19500
+          - flare (ParticleEmitter) @ 0x293a6c07880
+          - fire (ParticleEmitter) @ 0x293a6c08480
+        - Attachment (Attachment) @ 0x2939ee1c680
+          - Beam (Beam) @ 0x293a565d200
+      - FakeTorso (Part) @ 0x29235254a00
+        - Mesh (SpecialMesh) @ 0x2922ec19800
+      - leak (Part) @ 0x29235254bc0
+        - Mesh (SpecialMesh) @ 0x2922f5af800
+      - Tail (Part) @ 0x29235254d80
+        - Mesh (SpecialMesh) @ 0x2922e9b4d00
+  - Hell Dragon (Model) @ 0x292248eb300
+    - Handle (MeshPart) @ 0x29235338c80
+      - Shoot (Sound) @ 0x2922f509680
+      - NoAmmo (Sound) @ 0x2922f509900
+      - ShootBBGUI (BillboardGui) @ 0x2922a461480
+        - Shoot (ImageLabel) @ 0x2922aac1880
+      - Shotgun (MeshPart) @ 0x29235339000
+        - Plane.002 (Weld) @ 0x2922a459540
+        - Cube.052 (Weld) @ 0x2922a459700
+        - Cube.001 (Weld) @ 0x2922a4598c0
+        - Handle (Weld) @ 0x2922a459a80
+      - Plane.002 (MeshPart) @ 0x29235339380
+      - Cube.052 (MeshPart) @ 0x29235339700
+      - Cube.001 (MeshPart) @ 0x29235339a80
+  - Floral (Model) @ 0x292248eb680
+    - Handle (MeshPart) @ 0x29235339e00
+      - Shoot (Sound) @ 0x2922f507880
+      - NoAmmo (Sound) @ 0x2922f500d00
+      - ShootBBGUI (BillboardGui) @ 0x2922a461e80
+        - Shoot (ImageLabel) @ 0x2922aac2480
+      - Texture (Texture) @ 0x29215eed500
+      - Texture (Texture) @ 0x29215eedc80
+      - Texture (Texture) @ 0x29215eed780
+      - Texture (Texture) @ 0x29215ee8500
+      - Texture (Texture) @ 0x29215ee6c00
+      - Texture (Texture) @ 0x29215ee3c80
+      - Part (Part) @ 0x29235255800
+      - Part (Part) @ 0x292352559c0
+      - Part (Part) @ 0x29235255b80
+      - Rose (MeshPart) @ 0x2923533a180
+        - Rose (Weld) @ 0x2922a459c40
+        - Rose (Weld) @ 0x2922a459e00
+        - Rose (Weld) @ 0x2922a459fc0
+        - Part (Weld) @ 0x2922a45a180
+        - Part (Weld) @ 0x2922a45a340
+        - Part (Weld) @ 0x2922a45a500
+        - Red Rose (Weld) @ 0x2922a45a6c0
+        - Handle (Weld) @ 0x2922a45a880
+      - Rose (MeshPart) @ 0x2923533a500
+      - Rose (MeshPart) @ 0x2923533a880
+      - Rose (MeshPart) @ 0x2923533ac00
+      - Red Rose (Part) @ 0x29235255d40
+        - Mesh (SpecialMesh) @ 0x2922ef63980
+  - Shiryus Breath (Model) @ 0x292248eba00
+    - Handle (MeshPart) @ 0x2923533af80
+      - Shoot (Sound) @ 0x2922f507600
+      - NoAmmo (Sound) @ 0x2922f506700
+      - ShootBBGUI (BillboardGui) @ 0x2922a462880
+        - Shoot (ImageLabel) @ 0x2922aac3080
+      - Part (Part) @ 0x29235255f00
+      - Part (Part) @ 0x292352560c0
+      - Part (Part) @ 0x29235256280
+      - Part (Part) @ 0x29235256440
+      - Meshes/PolygonDungeon_Environments_03_SM_Env_Bone_Spike_02 (MeshPart) @ 0x2923533b300
+        - Meshes/PolygonDungeon_Environments_03_SM_Env_Bone_Spike_02 (Weld) @ 0x2922a45aa40
+        - Meshes/PolygonDungeon_Environments_03_SM_Env_Bone_Spike_02 (Weld) @ 0x2922a45ac00
+        - Steel (Weld) @ 0x2922a45adc0
+        - Steel (Weld) @ 0x2922a45af80
+        - Steel (Weld) @ 0x2922a45b140
+        - Steel (Weld) @ 0x2922a45b300
+        - Steel (Weld) @ 0x2922a45b4c0
+        - dragon head (Weld) @ 0x2922a45b680
+        - dragon head (Weld) @ 0x2922a45b840
+        - Part (Weld) @ 0x2922a45ba00
+        - Part (Weld) @ 0x2922a45bbc0
+        - Part (Weld) @ 0x2922a45bd80
+        - Part (Weld) @ 0x2922a45bf40
+        - Part (Weld) @ 0x2922a45c100
+        - Handle (Weld) @ 0x2922a45c2c0
+      - Meshes/PolygonDungeon_Environments_03_SM_Env_Bone_Spike_02 (MeshPart) @ 0x2923533b680
+      - Meshes/PolygonDungeon_Environments_03_SM_Env_Bone_Spike_02 (MeshPart) @ 0x2923533ba00
+      - Steel (MeshPart) @ 0x2923533bd80
+      - Steel (MeshPart) @ 0x2923533c100
+      - Steel (MeshPart) @ 0x2923533c480
+      - Steel (MeshPart) @ 0x2923533c800
+      - Steel (MeshPart) @ 0x2923533cb80
+      - dragon head (MeshPart) @ 0x2923533cf00
+      - dragon head (MeshPart) @ 0x2923533d280
+      - Part (Part) @ 0x29235256600
+        - Lightning1 (ParticleEmitter) @ 0x293a6c04e80
+          - Emit (Script) @ 0x293a1face00
+  - Snow Dragon (Model) @ 0x292248ebd80
+    - Handle (MeshPart) @ 0x2923533d600
+      - Shoot (Sound) @ 0x2922f50b980
+      - NoAmmo (Sound) @ 0x2922f50c880
+      - ShootBBGUI (BillboardGui) @ 0x2922a463280
+        - Shoot (ImageLabel) @ 0x2922aac3c80
+      - Part (Part) @ 0x292352567c0
+      - Part (Part) @ 0x29235256980
+      - Part (Part) @ 0x29235256b40
+      - Part (Part) @ 0x29235256d00
+      - Head (UnionOperation) @ 0x2922efa8c00
+        - Attachment (Attachment) @ 0x2939ee1ed80
+          - Beam (Beam) @ 0x293a5655800
+        - Attachment (Attachment) @ 0x2939ee1b300
+          - flare (ParticleEmitter) @ 0x293a6c0b780
+          - fire (ParticleEmitter) @ 0x293a6c06680
+        - Attachment (Attachment) @ 0x2939ee1ba80
+          - Beam (Beam) @ 0x293a5652400
+        - Attachment (Attachment) @ 0x2939ee13080
+          - flare (ParticleEmitter) @ 0x293a6c0f080
+          - fire (ParticleEmitter) @ 0x293a6c08180
+        - Inner Eye (Weld) @ 0x2922a45c480
+        - Jaws (Weld) @ 0x2922a45c640
+        - Steel (Weld) @ 0x2922a45c800
+        - Steel (Weld) @ 0x2922a45c9c0
+        - Steel (Weld) @ 0x2922a45cb80
+        - Steel (Weld) @ 0x2922a45cd40
+        - Steel (Weld) @ 0x2922a45cf00
+        - Steel (Weld) @ 0x2922a45d0c0
+        - Steel (Weld) @ 0x2922a45d280
+        - Steel (Weld) @ 0x2922a45d440
+        - Steel (Weld) @ 0x2922a45d600
+        - Steel (Weld) @ 0x2922a45d7c0
+        - Union (Weld) @ 0x2922a45d980
+        - Union (Weld) @ 0x2922a45db40
+        - Union (Weld) @ 0x2922a45dd00
+        - Union (Weld) @ 0x2922a45dec0
+        - Union (Weld) @ 0x2922a45e080
+        - Union (Weld) @ 0x2922a45e240
+        - Union (Weld) @ 0x2922a45e400
+        - Union (Weld) @ 0x2922a45e5c0
+        - Union (Weld) @ 0x2922a45e780
+        - Union (Weld) @ 0x2922a45e940
+        - Union (Weld) @ 0x2922a45eb00
+        - Union (Weld) @ 0x2922a45ecc0
+        - Union (Weld) @ 0x2922a45ee80
+        - Union (Weld) @ 0x2922a45f040
+        - Union (Weld) @ 0x2922a45f200
+        - Union (Weld) @ 0x2922a45f3c0
+        - Union (Weld) @ 0x2922a45f580
+        - Union (Weld) @ 0x2922a45f740
+        - Union (Weld) @ 0x2922a45f900
+        - Union (Weld) @ 0x2922a45fac0
+        - Union (Weld) @ 0x2922a45fc80
+        - Union (Weld) @ 0x2922a45fe40
+        - Union (Weld) @ 0x29222680080
+        - Union (Weld) @ 0x29222680240
+        - Union (Weld) @ 0x29222680400
+        - Union (Weld) @ 0x292226805c0
+        - Union (Weld) @ 0x29222680780
+        - Union (Weld) @ 0x29222680940
+        - Union (Weld) @ 0x29222680b00
+        - Union (Weld) @ 0x29222680cc0
+        - Union (Weld) @ 0x29222680e80
+        - Union (Weld) @ 0x29222681040
+        - Union (Weld) @ 0x29222681200
+        - Union (Weld) @ 0x292226813c0
+        - Union (Weld) @ 0x29222681580
+        - Union (Weld) @ 0x29222681740
+        - chain (Weld) @ 0x29222681900
+        - chain (Weld) @ 0x29222681ac0
+        - chain (Weld) @ 0x29222681c80
+        - chain (Weld) @ 0x29222681e40
+        - Part (Weld) @ 0x29222682000
+        - Part (Weld) @ 0x292226821c0
+        - Part (Weld) @ 0x29222682380
+        - Part (Weld) @ 0x29222682540
+        - Part (Weld) @ 0x29222682700
+        - Handle (Weld) @ 0x292226828c0
+      - Inner Eye (UnionOperation) @ 0x2922efa9000
+      - Jaws (UnionOperation) @ 0x2922efa9400
+      - Steel (MeshPart) @ 0x2923533d980
+      - Steel (MeshPart) @ 0x2923533dd00
+      - Steel (MeshPart) @ 0x2923533e080
+      - Steel (MeshPart) @ 0x2923533e400
+      - Steel (MeshPart) @ 0x2923533e780
+      - Steel (MeshPart) @ 0x2923533eb00
+      - Steel (MeshPart) @ 0x2923533ee80
+      - Steel (MeshPart) @ 0x2923533f200
+      - Steel (MeshPart) @ 0x2923533f580
+      - Steel (MeshPart) @ 0x2923533f900
+      - Union (UnionOperation) @ 0x2922efa9800
+      - Union (UnionOperation) @ 0x2922efa9c00
+      - Union (UnionOperation) @ 0x2922efaa000
+      - Union (UnionOperation) @ 0x2922efaa400
+      - Union (UnionOperation) @ 0x2922efaa800
+      - Union (UnionOperation) @ 0x2922efaac00
+      - Union (UnionOperation) @ 0x2922efab000
+      - Union (UnionOperation) @ 0x2922efab400
+      - Union (UnionOperation) @ 0x2922efab800
+      - Union (UnionOperation) @ 0x2922efabc00
+      - Union (UnionOperation) @ 0x2922efac000
+      - Union (UnionOperation) @ 0x2922efac400
+      - Union (UnionOperation) @ 0x2922efac800
+      - Union (UnionOperation) @ 0x2922efacc00
+      - Union (UnionOperation) @ 0x2922efad000
+      - Union (UnionOperation) @ 0x2922efad400
+      - Union (UnionOperation) @ 0x2922efad800
+      - Union (UnionOperation) @ 0x2922efadc00
+      - Union (UnionOperation) @ 0x2922efae000
+      - Union (UnionOperation) @ 0x2922efae400
+      - Union (UnionOperation) @ 0x2922efae800
+      - Union (UnionOperation) @ 0x2922efaec00
+      - Union (UnionOperation) @ 0x2922efaf000
+      - Union (UnionOperation) @ 0x2922efaf400
+      - Union (UnionOperation) @ 0x2922efaf800
+      - Union (UnionOperation) @ 0x2922efafc00
+      - Union (UnionOperation) @ 0x29234c90400
+      - Union (UnionOperation) @ 0x29234c90800
+      - Union (UnionOperation) @ 0x29234c90c00
+      - Union (UnionOperation) @ 0x29234c91000
+      - Union (UnionOperation) @ 0x29234c91400
+      - Union (UnionOperation) @ 0x29234c91800
+      - Union (UnionOperation) @ 0x29234c91c00
+      - Union (UnionOperation) @ 0x29234c92000
+      - Union (UnionOperation) @ 0x29234c92400
+      - Union (UnionOperation) @ 0x29234c92800
+      - chain (MeshPart) @ 0x2923533fc80
+      - chain (MeshPart) @ 0x29235730080
+      - chain (MeshPart) @ 0x29235730400
+      - chain (MeshPart) @ 0x29235730780
+      - Part (Part) @ 0x29235256ec0
+        - Flame (ParticleEmitter) @ 0x293a6c02a80
+  - Lovestruck (Model) @ 0x292248ec100
+    - Handle (MeshPart) @ 0x29235730b00
+      - Shoot (Sound) @ 0x2922f505300
+      - NoAmmo (Sound) @ 0x2922f506980
+      - ShootBBGUI (BillboardGui) @ 0x2922a463c80
+        - Shoot (ImageLabel) @ 0x2922aac4880
+      - Attachment (Attachment) @ 0x2939ee11d00
+        - Specks (ParticleEmitter) @ 0x293a6c06980
+      - Attachment (Attachment) @ 0x2939ee11e80
+        - Specks (ParticleEmitter) @ 0x293a6c09c80
+      - Attachment (Attachment) @ 0x2939ee1bc00
+        - Specks (ParticleEmitter) @ 0x293a6c06c80
+      - Part (Part) @ 0x29235257080
+      - Part (Part) @ 0x29235257240
+      - Part (Part) @ 0x29235257400
+      - Part (Part) @ 0x292352575c0
+      - Part (Part) @ 0x29235257780
+        - Sparkles (ParticleEmitter) @ 0x293a6c0cf80
+        - Sparkles_Beam (ParticleEmitter) @ 0x293a6c0d880
+      - MeshPart (MeshPart) @ 0x29235730e80
+        - MeshPart (Weld) @ 0x29222682a80
+        - Meshes/Heart (1) (Weld) @ 0x29222682c40
+        - Meshes/Heart (1) (Weld) @ 0x29222682e00
+        - Meshes/Heart (1) (Weld) @ 0x29222682fc0
+        - Meshes/Heart (1) (Weld) @ 0x29222683180
+        - Meshes/Heart (1) (Weld) @ 0x29222683340
+        - Meshes/Heart (1) (Weld) @ 0x29222683500
+        - Meshes/Heart (1) (Weld) @ 0x292226836c0
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x29222683880
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x29222683a40
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x29222683c00
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x29222683dc0
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x29222683f80
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x29222684140
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x29222684300
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x292226844c0
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x29222684680
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x29222684840
+        - Meshes/french flag bow (Weld) @ 0x29222684a00
+        - Part (Weld) @ 0x29222684bc0
+        - Part (Weld) @ 0x29222684d80
+        - Part (Weld) @ 0x29222684f40
+        - Part (Weld) @ 0x29222685100
+        - Part (Weld) @ 0x292226852c0
+        - Handle (Weld) @ 0x29222685480
+      - MeshPart (MeshPart) @ 0x29235731200
+      - Meshes/Heart (1) (MeshPart) @ 0x29235731580
+        - Specks (ParticleEmitter) @ 0x293a6c02d80
+      - Meshes/Heart (1) (MeshPart) @ 0x29235731900
+        - Specks (ParticleEmitter) @ 0x293a6c0a580
+      - Meshes/Heart (1) (MeshPart) @ 0x29235731c80
+        - Specks (ParticleEmitter) @ 0x293a6c00c80
+      - Meshes/Heart (1) (MeshPart) @ 0x29235732000
+        - Specks (ParticleEmitter) @ 0x293a6c0d580
+      - Meshes/Heart (1) (MeshPart) @ 0x29235732380
+        - Specks (ParticleEmitter) @ 0x293a6c01580
+      - Meshes/Heart (1) (MeshPart) @ 0x29235732700
+        - Specks (ParticleEmitter) @ 0x293a6c09f80
+      - Meshes/Heart (1) (MeshPart) @ 0x29235732a80
+        - Specks (ParticleEmitter) @ 0x293a6c05780
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x29235732e00
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x29235733180
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x29235733500
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x29235733880
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x29235733c00
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x29235733f80
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x29235734300
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x29235734680
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x29235734a00
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x29235734d80
+      - Meshes/french flag bow (MeshPart) @ 0x29235735100
+  - Binary (Model) @ 0x292248ec480
+    - Handle (MeshPart) @ 0x29235735480
+      - Shoot (Sound) @ 0x2922f50d280
+      - NoAmmo (Sound) @ 0x2922f507380
+      - ShootBBGUI (BillboardGui) @ 0x2922a464680
+        - Shoot (ImageLabel) @ 0x2922aac5480
+      - ParticleEmitter (ParticleEmitter) @ 0x293a6c0bd80
+      - Part (Part) @ 0x29235257940
+      - Part (Part) @ 0x29235257b00
+      - Part (Part) @ 0x29235257cc0
+      - Part (Part) @ 0x29235257e80
+      - Part (Part) @ 0x29235258040
+      - Part (Part) @ 0x29235258200
+      - Part (Part) @ 0x292352583c0
+      - 0 (MeshPart) @ 0x29235735800
+        - 0 (Weld) @ 0x29222685640
+        - 0 (Weld) @ 0x29222685800
+        - 0 (Weld) @ 0x292226859c0
+        - 0 (Weld) @ 0x29222685b80
+        - 0 (Weld) @ 0x29222685d40
+        - 1 (Weld) @ 0x29222685f00
+        - 1 (Weld) @ 0x292226860c0
+        - 1 (Weld) @ 0x29222686280
+        - 1 (Weld) @ 0x29222686440
+        - Part (Weld) @ 0x29222686600
+        - Part (Weld) @ 0x292226867c0
+        - Part (Weld) @ 0x29222686980
+        - Part (Weld) @ 0x29222686b40
+        - Part (Weld) @ 0x29222686d00
+        - Part (Weld) @ 0x29222686ec0
+        - Part (Weld) @ 0x29222687080
+        - Handle (Weld) @ 0x29222687240
+      - 0 (MeshPart) @ 0x29235735b80
+      - 0 (MeshPart) @ 0x29235735f00
+      - 0 (MeshPart) @ 0x29235736280
+      - 0 (MeshPart) @ 0x29235736600
+      - 0 (MeshPart) @ 0x29235736980
+      - 1 (MeshPart) @ 0x29235736d00
+      - 1 (MeshPart) @ 0x29235737080
+      - 1 (MeshPart) @ 0x29235737400
+      - 1 (MeshPart) @ 0x29235737780
+  - Hexagram (Model) @ 0x292248ec800
+    - Handle (MeshPart) @ 0x29235737b00
+      - Shoot (Sound) @ 0x2922f50f300
+      - NoAmmo (Sound) @ 0x2922f50f580
+      - ShootBBGUI (BillboardGui) @ 0x2922a465080
+        - Shoot (ImageLabel) @ 0x2922aac6080
+      - Texture (Texture) @ 0x29215ee8c80
+      - Texture (Texture) @ 0x29215eeda00
+      - Texture (Texture) @ 0x29215ee7100
+      - Texture (Texture) @ 0x29215ee0800
+      - Texture (Texture) @ 0x29215ee6480
+      - Texture (Texture) @ 0x29215ee2600
+  - Ascension (Model) @ 0x292248ecb80
+    - Handle (MeshPart) @ 0x29235737e80
+      - Shoot (Sound) @ 0x2922f508000
+      - NoAmmo (Sound) @ 0x2922f50d500
+      - ShootBBGUI (BillboardGui) @ 0x2922a465a80
+        - Shoot (ImageLabel) @ 0x2922aac6c80
+      - ANIMATE_HUMANOID (Humanoid) @ 0x29225de7080
+      - HALO_WELD (Weld) @ 0x29222687400
+      - Handle (Weld) @ 0x292226875c0
+      - HALO (MeshPart) @ 0x29235738200
+      - LeftUpperWing1 (MeshPart) @ 0x29235738580
+        - LeftUpperWing2 (Motor6D) @ 0x293a565e800
+      - LeftUpperWing2 (MeshPart) @ 0x29235738900
+      - RightUpperWing1 (MeshPart) @ 0x29235738c80
+        - RightUpperWing2 (Motor6D) @ 0x293a5652000
+      - RightUpperWing2 (MeshPart) @ 0x29235739000
+      - Handle (Part) @ 0x29235258580
+        - ANIMTE (Script) @ 0x293a1fad400
+        - Animation (Animation) @ 0x2939282cb00
+        - LeftUpperWing1 (Motor6D) @ 0x293a5653a00
+        - RightUpperWing1 (Motor6D) @ 0x292187aac00
+  - Black Ice (Model) @ 0x292248ecf00
+    - Handle (MeshPart) @ 0x29235739380
+      - Shoot (Sound) @ 0x2922f50fa80
+      - NoAmmo (Sound) @ 0x2922f503000
+      - ShootBBGUI (BillboardGui) @ 0x2922a466480
+        - Shoot (ImageLabel) @ 0x2922aac7880
+      - Decal (Decal) @ 0x2922d8ba800
+      - Decal (Decal) @ 0x293b0593280
+      - Decal (Decal) @ 0x29230a72d80
+      - Decal (Decal) @ 0x29230a71e80
+      - Decal (Decal) @ 0x29230a72b00
+  - Void (Model) @ 0x292248ed280
+    - Handle (MeshPart) @ 0x29235739700
+      - Shoot (Sound) @ 0x2922f503280
+      - NoAmmo (Sound) @ 0x2922f50fd00
+      - ShootBBGUI (BillboardGui) @ 0x2922a466e80
+        - Shoot (ImageLabel) @ 0x2922aac8480
+  - Deathbringer (Model) @ 0x292248ed600
+    - Handle (MeshPart) @ 0x29235739a80
+      - Shoot (Sound) @ 0x2922f500800
+      - NoAmmo (Sound) @ 0x2922f507100
+      - ShootBBGUI (BillboardGui) @ 0x2922a467880
+        - Shoot (ImageLabel) @ 0x2922aac9080
+      - Cube.001 (MeshPart) @ 0x29235739e00
+        - Cube.002 (Weld) @ 0x29222687780
+        - Cube.003 (Weld) @ 0x29222687940
+        - Handle (Weld) @ 0x29222687b00
+      - Cube.002 (MeshPart) @ 0x2923573a180
+      - Cube.003 (MeshPart) @ 0x2923573a500
+  - Voxel (Model) @ 0x292248ed980
+    - Handle (MeshPart) @ 0x2923573a880
+      - Shoot (Sound) @ 0x2922f50a580
+      - NoAmmo (Sound) @ 0x2922f50a300
+      - ShootBBGUI (BillboardGui) @ 0x2922a468280
+        - Shoot (ImageLabel) @ 0x2922aac9c80
+      - Cube (MeshPart) @ 0x2923573ac00
+        - Handle (Weld) @ 0x29222687cc0
+  - Poseidon (Model) @ 0x292248edd00
+    - Handle (MeshPart) @ 0x2923573af80
+      - Shoot (Sound) @ 0x2922f50c100
+      - NoAmmo (Sound) @ 0x2922f50c380
+      - ShootBBGUI (BillboardGui) @ 0x2922a468c80
+        - Shoot (ImageLabel) @ 0x2922aaca880
+      - Meshes/f pump1_Plane.006 (MeshPart) @ 0x2923573b300
+        - Meshes/f pump1_Plane.004 (Weld) @ 0x29222687e80
+        - Meshes/f pump1_Plane.003 (Weld) @ 0x29222688040
+        - Meshes/f pump1_Plane.002 (Weld) @ 0x29222688200
+        - Meshes/f pump1_Cylinder.001 (Weld) @ 0x292226883c0
+        - Handle (Weld) @ 0x29222688580
+      - Meshes/f pump1_Plane.004 (MeshPart) @ 0x2923573b680
+      - Meshes/f pump1_Plane.003 (MeshPart) @ 0x2923573ba00
+      - Meshes/f pump1_Plane.002 (MeshPart) @ 0x2923573bd80
+      - Meshes/f pump1_Cylinder.001 (MeshPart) @ 0x2923573d280
+  - Crimson Fangs (Model) @ 0x292248ee080
+    - Handle (MeshPart) @ 0x2923573dd00
+      - Shoot (Sound) @ 0x2922f50eb80
+      - NoAmmo (Sound) @ 0x2922f50ee00
+      - ShootBBGUI (BillboardGui) @ 0x2922a469680
+        - Shoot (ImageLabel) @ 0x2922aacb480
+      - pump (MeshPart) @ 0x2923573e080
+        - Handle (Weld) @ 0x29222688740
+  - Hallows (Model) @ 0x292248ee400
+    - Handle (MeshPart) @ 0x2923573e400
+      - Shoot (Sound) @ 0x2922f503f00
+      - NoAmmo (Sound) @ 0x2922f500f80
+      - ShootBBGUI (BillboardGui) @ 0x2922a46a080
+        - Shoot (ImageLabel) @ 0x2922aacc080
+      - pump.003 (MeshPart) @ 0x2923573e780
+        - pump (Weld) @ 0x29222688900
+        - Cylinder.012 (Weld) @ 0x29222688ac0
+        - Handle (Weld) @ 0x29222688c80
+      - pump (MeshPart) @ 0x2923573eb00
+      - Cylinder.012 (MeshPart) @ 0x2923573ee80
+  - Candy Cane (Model) @ 0x292248ee780
+    - Handle (MeshPart) @ 0x2923573f200
+      - Shoot (Sound) @ 0x2922f502880
+      - NoAmmo (Sound) @ 0x2922f503500
+      - LIGHTS (Script) @ 0x293a1fafe00
+      - ShootBBGUI (BillboardGui) @ 0x2922a46aa80
+        - Shoot (ImageLabel) @ 0x2922aaccc80
+      - Neon_FRONT (MeshPart) @ 0x2923573f580
+        - Cylinder.003 (Weld) @ 0x29222688e40
+        - Neon_FRONT (Weld) @ 0x29222689000
+        - Cylinder.002 (Weld) @ 0x292226891c0
+        - Cylinder.001 (Weld) @ 0x29222689380
+        - Normal (Weld) @ 0x29222689540
+        - Normal (Weld) @ 0x29222689700
+        - Normal (Weld) @ 0x292226898c0
+        - Normal (Weld) @ 0x29222689a80
+        - Neon_FRONT (Weld) @ 0x29222689c40
+        - Circle.002 (Weld) @ 0x29222689e00
+        - Circle.001 (Weld) @ 0x29222689fc0
+        - pump (Weld) @ 0x2922268a180
+        - Neon (Weld) @ 0x2922268a340
+        - Neon (Weld) @ 0x2922268a500
+        - Neon (Weld) @ 0x2922268a6c0
+        - Neon (Weld) @ 0x2922268a880
+      - Cylinder.003 (MeshPart) @ 0x2923573f900
+      - Neon_FRONT (MeshPart) @ 0x2923573fc80
+      - Cylinder.002 (MeshPart) @ 0x29235770080
+      - Cylinder.001 (MeshPart) @ 0x29235770400
+      - Normal (MeshPart) @ 0x29235770780
+      - Normal (MeshPart) @ 0x29235770b00
+      - Normal (MeshPart) @ 0x29235770e80
+      - Normal (MeshPart) @ 0x29235771900
+      - Neon_FRONT (MeshPart) @ 0x29235771c80
+      - Circle.002 (MeshPart) @ 0x29235772000
+      - Circle.001 (MeshPart) @ 0x29235772380
+      - pump (MeshPart) @ 0x29235772a80
+      - Neon (MeshPart) @ 0x29235772e00
+      - Neon (MeshPart) @ 0x29235773180
+      - Neon (MeshPart) @ 0x29235773500
+      - Neon (MeshPart) @ 0x29235772700
+  - Heartbringer (Model) @ 0x292248eeb00
+    - Handle (MeshPart) @ 0x29235773880
+      - NoAmmo (Sound) @ 0x2922f501c00
+      - Shoot (Sound) @ 0x2922f50cd80
+      - ShootBBGUI (BillboardGui) @ 0x2922a46b480
+        - Shoot (ImageLabel) @ 0x2922aacd880
+      - Handle (Part) @ 0x2923525ac00
+        - SpecialMesh (SpecialMesh) @ 0x2922f5af980
+        - AvatarPartScaleType (StringValue) | Value: "Unknown" @ 0x293864af400
+      - Handle (Part) @ 0x2923525adc0
+        - SpecialMesh (SpecialMesh) @ 0x2922bd7a880
+        - AvatarPartScaleType (StringValue) | Value: "Unknown" @ 0x29231edb000
+      - Union (UnionOperation) @ 0x29234c94800
+      - Bolt (UnionOperation) @ 0x29234c94c00
+      - Union (UnionOperation) @ 0x29234c95000
+      - o (UnionOperation) @ 0x29234c95800
+      - x (UnionOperation) @ 0x29234c95c00
+      - Union (UnionOperation) @ 0x29234c96000
+      - Union (UnionOperation) @ 0x29234c95400
+      - Part (Part) @ 0x2923525b680
+      - x (UnionOperation) @ 0x29234c96400
+      - o (UnionOperation) @ 0x29234c96800
+      - Union (UnionOperation) @ 0x29234c96c00
+      - Union (UnionOperation) @ 0x29234c97800
+  - Kirumi (Model) @ 0x292248eee80
+    - Handle (MeshPart) @ 0x29235774a00
+      - Shoot (Sound) @ 0x2922f509180
+      - NoAmmo (Sound) @ 0x2922f509400
+      - ShootBBGUI (BillboardGui) @ 0x2922a46be80
+        - Shoot (ImageLabel) @ 0x2922aace480
+      - pump.002 (MeshPart) @ 0x29235774d80
+        - pump (Weld) @ 0x2922268aa40
+        - Plane.001 (Weld) @ 0x2922268ac00
+        - Handle (Weld) @ 0x2922268adc0
+      - pump (MeshPart) @ 0x29235775100
+      - Plane.001 (MeshPart) @ 0x29235774680
+  - Ember (Model) @ 0x292248ef200
+    - Handle (MeshPart) @ 0x29235775480
+      - NoAmmo (Sound) @ 0x2922f505080
+      - Shoot (Sound) @ 0x2922f508f00
+      - ShootBBGUI (BillboardGui) @ 0x2922a46c880
+        - Shoot (ImageLabel) @ 0x2922aacf080
+  - Green Tint (Model) @ 0x292248ef580
+    - Handle (MeshPart) @ 0x29235775800
+      - NoAmmo (Sound) @ 0x2922f501480
+      - Shoot (Sound) @ 0x2922f50c600
+      - ShootBBGUI (BillboardGui) @ 0x2922a46d280
+        - Shoot (ImageLabel) @ 0x292248f0080
+  - Kitty (Model) @ 0x292248ef900
+    - Handle (MeshPart) @ 0x29235775b80
+      - NoAmmo (Sound) @ 0x2922f50af80
+      - Shoot (Sound) @ 0x2922f66e180
+      - ShootBBGUI (BillboardGui) @ 0x2922a46dc80
+        - Shoot (ImageLabel) @ 0x292248f0c80
+      - SHOOT_BBGUI_PARTICLE (Attachment) @ 0x2939ee1ea80
+      - PARTICLE_PART (Part) @ 0x2923525c100
+      - Meshes/all2_all.057 (1) (MeshPart) @ 0x29235775f00
+      - Meshes/all2_all.053 (1) (MeshPart) @ 0x29235776280
+      - Meshes/sg_Sphere.016 (2) (MeshPart) @ 0x29235777080
+      - Meshes/all2_all.051 (MeshPart) @ 0x29235777400
+      - Meshes/all2_all.049 (1) (MeshPart) @ 0x29235779700
+      - Meshes/all2_all.047 (1) (MeshPart) @ 0x2923577a180
+      - Meshes/sg_Sphere.010 (2) (MeshPart) @ 0x2923577c800
+      - Meshes/all2_all.046 (1) (MeshPart) @ 0x2923577cb80
+      - Meshes/all2_all.050 (1) (MeshPart) @ 0x2923577e080
+      - Meshes/sg_Circle.004 (2) (MeshPart) @ 0x2923577e400
+      - Meshes/sg_Sphere.015 (2) (MeshPart) @ 0x2923577eb00
+      - Meshes/all2_all.048 (1) (MeshPart) @ 0x2923577ee80
+        - Attachment (Attachment) @ 0x2939ee10680
+          - ParticleEmitter (ParticleEmitter) @ 0x293a6c03380
+        - Attachment (Attachment) @ 0x2939ee14580
+          - ParticleEmitter (ParticleEmitter) @ 0x293a6c0d280
+        - Attachment (Attachment) @ 0x2939ee11700
+          - ParticleEmitter (ParticleEmitter) @ 0x293a6c0e180
+        - Attachment (Attachment) @ 0x2939ee13f80
+          - ParticleEmitter (ParticleEmitter) @ 0x293a6c09680
+        - Attachment (Attachment) @ 0x2939ee1b900
+          - ParticleEmitter (ParticleEmitter) @ 0x293a6c0db80
+      - Meshes/all2_all.056 (1) (MeshPart) @ 0x2923577f900
+      - Meshes/all2_all.003 (1) (MeshPart) @ 0x2923577fc80
+        - Meshes/all2_all.046 (1) (Weld) @ 0x2922268af80
+        - Meshes/all2_all.047 (1) (Weld) @ 0x2922268b140
+        - Meshes/all2_all.048 (1) (Weld) @ 0x2922268b300
+        - Meshes/all2_all.049 (1) (Weld) @ 0x2922268b4c0
+        - Meshes/all2_all.050 (1) (Weld) @ 0x2922268b680
+        - Meshes/all2_all.051 (Weld) @ 0x2922268b840
+        - Meshes/all2_all.052 (1) (Weld) @ 0x2922268ba00
+        - Meshes/all2_all.053 (1) (Weld) @ 0x2922268bbc0
+        - Meshes/all2_all.054 (1) (Weld) @ 0x2922268bd80
+        - Meshes/all2_all.055 (1) (Weld) @ 0x2922268bf40
+        - Meshes/all2_all.056 (1) (Weld) @ 0x2922268c100
+        - Meshes/all2_all.057 (1) (Weld) @ 0x2922268c2c0
+        - Meshes/sg_Circle.004 (2) (Weld) @ 0x2922268c480
+        - Meshes/sg_Sphere.010 (2) (Weld) @ 0x2922268c640
+        - Meshes/sg_Sphere.015 (2) (Weld) @ 0x2922268c800
+        - Meshes/sg_Sphere.016 (2) (Weld) @ 0x2922268c9c0
+        - Part (Weld) @ 0x2922268cb80
+        - Handle (Weld) @ 0x2922268cd40
+      - Meshes/all2_all.054 (1) (MeshPart) @ 0x293950a5b80
+      - Meshes/all2_all.052 (1) (MeshPart) @ 0x293950af900
+      - Meshes/all2_all.055 (1) (MeshPart) @ 0x293950a9000
+  - Arctic (Model) @ 0x292248efc80
+    - Handle (MeshPart) @ 0x293950aeb00
+      - Shoot (Sound) @ 0x2922f66f300
+      - NoAmmo (Sound) @ 0x2922f66c600
+      - ShootBBGUI (BillboardGui) @ 0x2922a46e680
+        - Shoot (ImageLabel) @ 0x292248f1880
+      - ParticleEmitter (ParticleEmitter) @ 0x293a6c03980
+      - Snowfall (ParticleEmitter) @ 0x293a6c03c80
+      - Meshes/newpump (MeshPart) @ 0x293950a9e00
+        - Handle (Weld) @ 0x2922268cf00
+  - Cupid (Model) @ 0x2923af3ac00
+    - Handle (MeshPart) @ 0x2922fae0780
+      - Shoot (Sound) @ 0x2922f666980
+      - NoAmmo (Sound) @ 0x2922f66b700
+      - ShootBBGUI (BillboardGui) @ 0x2922a46f080
+        - Shoot (ImageLabel) @ 0x292248f2480
+      - ParticleEmitter (ParticleEmitter) @ 0x293a6c00080
+      - ParticleEmitter (ParticleEmitter) @ 0x293a6c0c380
+      - ParticleEmitter (ParticleEmitter) @ 0x293a6c0c080
+      - Meshes/valentine_ribbon_翅_Plane.003 (MeshPart) @ 0x2922fae0b00
+      - Meshes/valentine_Plane.037 (MeshPart) @ 0x2922fae2380
+      - Meshes/valentine_Plane.028 (MeshPart) @ 0x2922fae2700
+      - Meshes/valentine_Cylinder.013 (MeshPart) @ 0x2922fae3180
+        - Meshes/valentine_Plane.037 (Weld) @ 0x2922268d0c0
+        - Meshes/valentine_ribbon_翅_Plane.003 (Weld) @ 0x2922268d280
+        - Meshes/valentine_Plane.028 (Weld) @ 0x2922268d440
+        - Handle (Weld) @ 0x2922268d600
+  - Blacksteel Dragon (Model) @ 0x2923af32a80
+    - Handle (MeshPart) @ 0x2922fae3c00
+      - Shoot (Sound) @ 0x2922f664e00
+      - NoAmmo (Sound) @ 0x2922f66ad00
+      - ShootBBGUI (BillboardGui) @ 0x2922a610080
+        - Shoot (ImageLabel) @ 0x292248f3080
+      - flare (ParticleEmitter) @ 0x293a6c0a880
+      - ParticleEmitter (ParticleEmitter) @ 0x293a6c05480
+      - Meshes/pump_NurbsPath (MeshPart) @ 0x2922fae3f80
+      - Meshes/pump_Plane.003 (MeshPart) @ 0x2922fae4300
+      - Meshes/pump_Plane.008 (MeshPart) @ 0x2922fae4680
+      - Meshes/pump_Plane.012 (MeshPart) @ 0x2922fae4a00
+        - Meshes/pump_Plane.008 (Weld) @ 0x2922268d7c0
+        - Meshes/pump_Plane.003 (Weld) @ 0x2922268d980
+        - Meshes/pump_NurbsPath (Weld) @ 0x2922268db40
+        - Handle (Weld) @ 0x2922268dd00
+  - Phoenix (Model) @ 0x2922a620080
+    - Handle (MeshPart) @ 0x2922fae4d80
+      - Shoot (Sound) @ 0x2922f667d80
+      - NoAmmo (Sound) @ 0x2922f66d500
+      - ShootBBGUI (BillboardGui) @ 0x2922a610a80
+        - Shoot (ImageLabel) @ 0x292248f3c80
+      - SHOOT_BBGUI_PARTICLE (Attachment) @ 0x2939ee16500
+      - Neon (MeshPart) @ 0x2922fae5100
+        - Front (Weld) @ 0x2922268dec0
+        - Back (Weld) @ 0x2922268e080
+        - Handle (Weld) @ 0x2922268e240
+      - Front (MeshPart) @ 0x2922fae5480
+        - glow (ParticleEmitter) @ 0x293b0794580
+      - Back (MeshPart) @ 0x2922fae5800
+        - Main (Attachment) @ 0x2939ee13c80
+          - Fire1 (ParticleEmitter) @ 0x293b0795480
+          - Specks1 (ParticleEmitter) @ 0x293b079f980
+  - Black Cat (Model) @ 0x2922a620400
+    - Handle (MeshPart) @ 0x2922fae6980
+      - Shoot (Sound) @ 0x2922f668780
+      - NoAmmo (Sound) @ 0x2922f661980
+      - ShootBBGUI (BillboardGui) @ 0x2922a611480
+        - Shoot (ImageLabel) @ 0x292248f4880
+      - AnimationController (AnimationController) @ 0x29230014140
+        - Animator (Animator) @ 0x29225de7e80
+      - RootPart (Part) @ 0x2922fb75800
+        - Bone (Bone) @ 0x292187ae200
+          - Bone.001 (Bone) @ 0x2922f3fae00
+          - Bone.002 (Bone) @ 0x2922f3fcc00
+        - Bone.003 (Bone) @ 0x2922f3fb200
+          - Bone.004 (Bone) @ 0x2922f3ff200
+          - Bone.005 (Bone) @ 0x2922f3fca00
+        - Bone.013 (Bone) @ 0x2922f3f0200
+          - Bone.014 (Bone) @ 0x2922f3f8800
+            - Bone.015 (Bone) @ 0x2922f3f7200
+              - Bone.016 (Bone) @ 0x2922f3faa00
+                - Bone.017 (Bone) @ 0x2922f3fd800
+        - Handle (Weld) @ 0x2922268e400
+      - Sphere.006 (MeshPart) @ 0x2922fae6d00
+        - Sphere.006Motor6D (Motor6D) @ 0x2922f3f2400
+      - Cylinder.007 (MeshPart) @ 0x2922fae7080
+        - Cylinder.007Motor6D (Motor6D) @ 0x2922f3f5800
+        - Attachment (Attachment) @ 0x2939ee18780
+          - ParticleEmitter (ParticleEmitter) @ 0x293b079c080
+          - ParticleEmitter (ParticleEmitter) @ 0x293b0799980
+        - SurfaceAppearance (SurfaceAppearance) @ 0x293b079ea80
+      - Cube.071 (MeshPart) @ 0x2922fae8200
+        - Cube.071Motor6D (Motor6D) @ 0x2922f3f5a00
+        - SurfaceAppearance (SurfaceAppearance) @ 0x293b0790380
+      - Cube.003 (MeshPart) @ 0x2922fae8580
+        - Cube.003Motor6D (Motor6D) @ 0x2922f3f7000
+        - SurfaceAppearance (SurfaceAppearance) @ 0x293b079f380
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Wraps/[TacticalShotgun]
+- [TacticalShotgun] (Folder) @ 0x2922b7e92a0
+  - Shiryus Breath (Model) @ 0x2922a625480
+    - Handle (MeshPart) @ 0x29230e7f580
+      - NoAmmo (Sound) @ 0x29230092380
+      - Shoot (Sound) @ 0x29230098000
+      - ShootBBGUI (BillboardGui) @ 0x2922ace2880
+        - Shoot (ImageLabel) @ 0x2922af0b480
+      - SurfaceLight (SurfaceLight) @ 0x2920174b100
+      - Part (Part) @ 0x29230a4db40
+      - Part (Part) @ 0x29230a4dd00
+      - Part (Part) @ 0x29230a4dec0
+      - Part (Part) @ 0x29230a4e080
+      - Part (Part) @ 0x29230a4e240
+      - Meshes/PolygonDungeon_Environments_03_SM_Env_Bone_Spine_02 (MeshPart) @ 0x29230e7f900
+        - Meshes/PolygonDungeon_Environments_03_SM_Env_Bone_Spine_02 (Weld) @ 0x2922b7f2000
+        - Meshes/PolygonDungeon_Environments_03_SM_Env_Bone_Spine_02 (Weld) @ 0x2922b7f21c0
+        - Meshes/PolygonDungeon_Environments_03_SM_Env_Bone_Spine_02 (Weld) @ 0x2922b7f2380
+        - Handle (Weld) @ 0x2922a535480
+        - Part (Weld) @ 0x2922a535640
+        - Part (Weld) @ 0x2922a535800
+        - Part (Weld) @ 0x2922a5359c0
+        - Part (Weld) @ 0x2922a535b80
+        - Part (Weld) @ 0x2922a535d40
+        - Part (Weld) @ 0x2922a534f40
+        - spine (Weld) @ 0x2922a5352c0
+        - dragon head (Weld) @ 0x2922a535f00
+        - Steel (Weld) @ 0x2922a5360c0
+        - Steel (Weld) @ 0x2922a536280
+        - Steel (Weld) @ 0x2922a536440
+      - Meshes/PolygonDungeon_Environments_03_SM_Env_Bone_Spine_02 (MeshPart) @ 0x29230e7fc80
+      - Meshes/PolygonDungeon_Environments_03_SM_Env_Bone_Spine_02 (MeshPart) @ 0x292305b0080
+      - Meshes/PolygonDungeon_Environments_03_SM_Env_Bone_Spine_02 (MeshPart) @ 0x292305b0400
+      - Steel (MeshPart) @ 0x292305b0780
+      - Steel (MeshPart) @ 0x292305b0b00
+      - Steel (MeshPart) @ 0x292305b0e80
+      - dragon head (MeshPart) @ 0x292305b1200
+        - dragon head (MeshPart) @ 0x292305b1580
+      - spine (MeshPart) @ 0x292305b1900
+      - Part (Part) @ 0x29230a4e400
+        - Lightning1 (ParticleEmitter) @ 0x29217bc7280
+          - Emit (Script) @ 0x293a1fa3800
+  - Adurite (Model) @ 0x2922a625800
+    - Handle (MeshPart) @ 0x29230e72700
+      - NoAmmo (Sound) @ 0x2922f668f00
+      - Shoot (Sound) @ 0x2922f66d280
+      - SurfaceLight (SurfaceLight) @ 0x29392822600
+      - ShootBBGUI (BillboardGui) @ 0x2922ace3280
+        - Shoot (ImageLabel) @ 0x2922aad5480
+      - Part (Part) @ 0x29230a436c0
+        - Sparkles (ParticleEmitter) @ 0x293b079d880
+        - Sparkles_Beam (ParticleEmitter) @ 0x292310e2480
+      - A (MeshPart) @ 0x29230e72a80
+      - A (MeshPart) @ 0x29230e72e00
+      - MeshPart (MeshPart) @ 0x29230e73180
+      - Vine (MeshPart) @ 0x29230e73500
+      - Vine (MeshPart) @ 0x29230e73880
+      - Vine (MeshPart) @ 0x29230e73c00
+      - Vine (MeshPart) @ 0x29230e73f80
+      - Vine (MeshPart) @ 0x29230e74300
+      - Vine (MeshPart) @ 0x29230e74680
+  - Blacksteel Dragon (Model) @ 0x2922a626980
+    - Handle (MeshPart) @ 0x292324c8580
+      - Shoot (Sound) @ 0x29230095d00
+      - NoAmmo (Sound) @ 0x2923009cb00
+      - ShootBBGUI (BillboardGui) @ 0x2922aed8280
+        - Shoot (ImageLabel) @ 0x2922af41880
+      - ParticleEmitter (ParticleEmitter) @ 0x292310e7e80
+      - flare (ParticleEmitter) @ 0x292310e4880
+      - Meshes/tac1_Cylinder.001 (MeshPart) @ 0x292324c8900
+      - Meshes/tac1_Plane.003 (MeshPart) @ 0x292324c8c80
+      - Meshes/tac1_Plane.016 (MeshPart) @ 0x2922a8f1200
+        - Meshes/tac1_Cylinder.001 (Weld) @ 0x2922acabf40
+        - Meshes/tac1_Plane.003 (Weld) @ 0x2922acac100
+        - Meshes/tac1_Plane.011 (Weld) @ 0x2922acac2c0
+        - Handle (Weld) @ 0x29225395800
+      - Meshes/tac1_Plane.011 (MeshPart) @ 0x293a5a31580
+  - Volcanic Ashes (Model) @ 0x2922a627080
+    - Handle (MeshPart) @ 0x29230e76600
+      - NoAmmo (Sound) @ 0x29230092880
+      - Shoot (Sound) @ 0x29230092b00
+      - SurfaceLight (SurfaceLight) @ 0x2920174d300
+      - ShootBBGUI (BillboardGui) @ 0x2922b200a80
+        - Shoot (ImageLabel) @ 0x2922519a880
+      - Part (Part) @ 0x29230a49540
+      - Part (Part) @ 0x29230a49700
+      - Part (Part) @ 0x29230a498c0
+      - Part (Part) @ 0x29230a49a80
+      - Part (Part) @ 0x29230a49c40
+      - MeshPart (MeshPart) @ 0x29230e76980
+      - MeshPart (MeshPart) @ 0x29230e76d00
+      - MeshPart (MeshPart) @ 0x29230e77080
+      - MeshPart (MeshPart) @ 0x29230e77400
+        - Handle (Weld) @ 0x2922af2f3c0
+        - Union (Weld) @ 0x2922b7f2540
+        - Union (Weld) @ 0x2922b7f2700
+        - Union (Weld) @ 0x2922b7f28c0
+        - MeshPart (Weld) @ 0x2922b7f5d40
+        - MeshPart (Weld) @ 0x2922b7f52c0
+        - MeshPart (Weld) @ 0x2922b7f5640
+        - Union (Weld) @ 0x2922a531040
+        - Union (Weld) @ 0x2922a5313c0
+        - Union (Weld) @ 0x2922a532000
+        - Union (Weld) @ 0x2922a5321c0
+        - Part (Weld) @ 0x2922a532380
+        - Part (Weld) @ 0x2922a532540
+        - Part (Weld) @ 0x2922a532700
+        - Part (Weld) @ 0x2922a5328c0
+        - Part (Weld) @ 0x2922a532a80
+        - Union (Weld) @ 0x2922d8a4f40
+        - Union (Weld) @ 0x2922d8a5100
+        - Union (Weld) @ 0x2922d8a52c0
+        - Union (Weld) @ 0x2922d8a5480
+        - Union (Weld) @ 0x2922d8a5640
+        - Union (Weld) @ 0x2922d8a5800
+        - Union (Weld) @ 0x2922d8a59c0
+      - Union (UnionOperation) @ 0x292309f9800
+      - Union (UnionOperation) @ 0x292309f9c00
+      - Union (UnionOperation) @ 0x292309fa000
+      - Union (UnionOperation) @ 0x292309fa400
+      - Union (UnionOperation) @ 0x292309fa800
+      - Union (UnionOperation) @ 0x292309fac00
+      - Union (UnionOperation) @ 0x292309fb000
+      - Union (UnionOperation) @ 0x292309fb400
+      - Union (UnionOperation) @ 0x292309fb800
+      - Union (UnionOperation) @ 0x292309fbc00
+      - Union (UnionOperation) @ 0x292309fc000
+      - Union (UnionOperation) @ 0x292309fc400
+      - Union (UnionOperation) @ 0x292309fc800
+      - Union (UnionOperation) @ 0x292309fcc00
+  - Void (Model) @ 0x2922a627b00
+    - Handle (MeshPart) @ 0x29230e74a00
+      - NoAmmo (Sound) @ 0x2922f66c100
+      - Shoot (Sound) @ 0x2922f66c880
+      - ShootBBGUI (BillboardGui) @ 0x2922aedbe80
+        - Shoot (ImageLabel) @ 0x29222696c80
+      - Texture (Texture) @ 0x29215ee4180
+      - Texture (Texture) @ 0x29215ee3f00
+      - Texture (Texture) @ 0x29215eecd80
+      - Texture (Texture) @ 0x29215ee3a00
+      - Texture (Texture) @ 0x29215ee5580
+      - SurfaceLight (SurfaceLight) @ 0x2939f26e500
+      - Texture (Texture) @ 0x29215eeb480
+      - MeshPart (MeshPart) @ 0x29230e74d80
+        - NoAmmo (Sound) @ 0x2922f669b80
+        - Shoot (Sound) @ 0x2922f664900
+        - Handle (Weld) @ 0x2922af22fc0
+        - MeshPart (Weld) @ 0x2922af24840
+      - MeshPart (MeshPart) @ 0x29230e75100
+        - NoAmmo (Sound) @ 0x2922f662d80
+        - Shoot (Sound) @ 0x2922f668000
+        - Handle (Weld) @ 0x2922af22c40
+        - MeshPart (Weld) @ 0x2922af22e00
+  - Ascension (Model) @ 0x2922a628900
+    - Handle (MeshPart) @ 0x292305bcb80
+      - Shoot (Sound) @ 0x2923009f580
+      - NoAmmo (Sound) @ 0x2923009af80
+      - ShootBBGUI (BillboardGui) @ 0x2922aedc880
+        - Shoot (ImageLabel) @ 0x2922af43080
+      - ANIMATE_HUMANOID (Humanoid) @ 0x292232a0e80
+      - Handle (Weld) @ 0x2922af24a00
+      - HALO_WELD (Weld) @ 0x2922af24bc0
+      - RightUpperWing2 (MeshPart) @ 0x292305bcf00
+      - RightUpperWing1 (MeshPart) @ 0x292305bd280
+        - RightUpperWing2 (Motor6D) @ 0x2922f3fdc00
+      - LeftUpperWing2 (MeshPart) @ 0x292305bd600
+      - LeftUpperWing1 (MeshPart) @ 0x292305bd980
+        - LeftUpperWing2 (Motor6D) @ 0x2922f3ffc00
+      - Handle (Part) @ 0x292310d0240
+        - ANIMTE (Script) @ 0x293a1faf000
+        - Animation (Animation) @ 0x29232a5bb00
+        - RightUpperWing1 (Motor6D) @ 0x2922ec3f600
+        - LeftUpperWing1 (Motor6D) @ 0x2922ec3f400
+      - HALO (MeshPart) @ 0x292305bdd00
+  - Kitty (Model) @ 0x2922a629380
+    - Handle (MeshPart) @ 0x292324cbd80
+      - NoAmmo (Sound) @ 0x2923009a080
+      - Shoot (Sound) @ 0x2923009b700
+      - SHOOT_BBGUI_PARTICLE (Attachment) @ 0x2939e1e4280
+      - ShootBBGUI (BillboardGui) @ 0x2922d641480
+        - Shoot (ImageLabel) @ 0x2922d8c0080
+      - PARTICLE_PART (Part) @ 0x29231c54140
+      - Meshes/all2_all.014 (1) (MeshPart) @ 0x293a24f6d00
+      - Meshes/all2_all.018 (1) (MeshPart) @ 0x2923226e400
+      - Meshes/all2_all.005 (1) (MeshPart) @ 0x292324c4680
+      - Meshes/all2_all.012 (1) (MeshPart) @ 0x292324c9000
+      - Meshes/all2_all.010 (1) (MeshPart) @ 0x292324c9380
+      - Meshes/all2_all.013 (1) (MeshPart) @ 0x292324c9700
+      - Meshes/all2_all.016 (1) (MeshPart) @ 0x292324c9a80
+      - Meshes/all2_all.015 (1) (MeshPart) @ 0x292324ca500
+      - Meshes/all2_all.017 (1) (MeshPart) @ 0x292324cc480
+      - Meshes/all2_all.006 (1) (MeshPart) @ 0x292324cf200
+      - Meshes/all2_all (1) (MeshPart) @ 0x293a5a3f200
+        - PARTICLE_PART (Weld) @ 0x2922aca7400
+        - Meshes/all2_all.011 (1) (Weld) @ 0x2922acac480
+        - Meshes/all2_all.010 (1) (Weld) @ 0x2922acac640
+        - Meshes/all2_all.009 (Weld) @ 0x29223a975c0
+        - Meshes/all2_all.015 (1) (Weld) @ 0x29223a9fac0
+        - Meshes/all2_all.014 (1) (Weld) @ 0x29223a9fc80
+        - Meshes/all2_all.013 (1) (Weld) @ 0x29223a9fe40
+        - Meshes/all2_all.012 (1) (Weld) @ 0x2922b7f0080
+        - Meshes/all2_all.018 (1) (Weld) @ 0x2922a531e40
+        - Meshes/all2_all.005 (1) (Weld) @ 0x2922d8a1ac0
+        - Meshes/all2_all.006 (1) (Weld) @ 0x2922d8a1c80
+        - Meshes/all2_all.007 (1) (Weld) @ 0x2922d8a1e40
+        - Meshes/all2_all.008 (Weld) @ 0x2922d8a2000
+        - Meshes/all2_all.016 (1) (Weld) @ 0x2922d8a5d40
+        - Meshes/all2_all.017 (1) (Weld) @ 0x2922d8a5f00
+        - Handle (Weld) @ 0x2922d8a60c0
+      - Meshes/all2_all.008 (MeshPart) @ 0x293a5a35800
+      - Meshes/all2_all.009 (MeshPart) @ 0x293a5a34680
+        - Attachment (Attachment) @ 0x2939e1e5780
+          - ParticleEmitter (ParticleEmitter) @ 0x292310e6980
+        - Attachment (Attachment) @ 0x293a73eed80
+          - ParticleEmitter (ParticleEmitter) @ 0x292310e7b80
+        - Attachment (Attachment) @ 0x293a73e3080
+          - ParticleEmitter (ParticleEmitter) @ 0x292310e0380
+        - Attachment (Attachment) @ 0x2922d1f3980
+          - ParticleEmitter (ParticleEmitter) @ 0x292310e6380
+        - Attachment (Attachment) @ 0x2922d1f4b80
+          - ParticleEmitter (ParticleEmitter) @ 0x2922328ea80
+      - Meshes/all2_all.007 (1) (MeshPart) @ 0x2921af79000
+      - Meshes/all2_all.011 (1) (MeshPart) @ 0x2921af7a880
+  - Kirumi (Model) @ 0x2922a629700
+    - Handle (MeshPart) @ 0x292324ce780
+      - Shoot (Sound) @ 0x29230092600
+      - NoAmmo (Sound) @ 0x2923009fa80
+      - ShootBBGUI (BillboardGui) @ 0x292232c1e80
+        - Shoot (ImageLabel) @ 0x2922af46c80
+      - Mesh (MeshPart) @ 0x2923226fc80
+        - Handle (Weld) @ 0x2922acad280
+        - Plane.001 (Weld) @ 0x2922acad440
+        - Mesh.001 (Weld) @ 0x2922acad600
+      - Plane.001 (MeshPart) @ 0x2921af71580
+      - Mesh.001 (MeshPart) @ 0x2921af70b00
+  - Ember (Model) @ 0x2922a628200
+    - Handle (MeshPart) @ 0x292326c0080
+      - NoAmmo (Sound) @ 0x2923009e900
+      - Shoot (Sound) @ 0x29230094e00
+      - ShootBBGUI (BillboardGui) @ 0x292232cf080
+        - Shoot (ImageLabel) @ 0x2922af4f080
+  - Arsenic (Model) @ 0x2922a627e80
+    - Handle (MeshPart) @ 0x29230e75480
+      - NoAmmo (Sound) @ 0x2922f669e00
+      - Shoot (Sound) @ 0x2923009ee00
+      - ShootBBGUI (BillboardGui) @ 0x2922b101480
+        - Shoot (ImageLabel) @ 0x2922af4d880
+      - b (ParticleEmitter) @ 0x292310e4b80
+      - SurfaceLight (SurfaceLight) @ 0x2922e822400
+      - Part (Part) @ 0x29230a48c80
+        - Handle (Weld) @ 0x29223a95800
+        - Part (Weld) @ 0x29223a959c0
+        - Part (Weld) @ 0x29223a95b80
+        - Part (Weld) @ 0x29223a95d40
+        - Part (Weld) @ 0x29223a95f00
+      - Part (Part) @ 0x29230a48e40
+      - Part (Part) @ 0x29230a49000
+      - Part (Part) @ 0x29230a491c0
+      - Part (Part) @ 0x29230a49380
+  - Green Tint (Model) @ 0x2922a627400
+    - Handle (MeshPart) @ 0x292324ce400
+      - NoAmmo (Sound) @ 0x2923009b200
+      - Shoot (Sound) @ 0x2923009ad00
+      - ShootBBGUI (BillboardGui) @ 0x2922b103280
+        - Shoot (ImageLabel) @ 0x2922af47880
+  - Binary (Model) @ 0x2922a627780
+    - Handle (MeshPart) @ 0x292305b8580
+      - NoAmmo (Sound) @ 0x29230095a80
+      - Shoot (Sound) @ 0x29230099b80
+      - ShootBBGUI (BillboardGui) @ 0x2922b106480
+        - Shoot (ImageLabel) @ 0x29222690080
+      - SurfaceLight (SurfaceLight) @ 0x29232a53f00
+      - ParticleEmitter (ParticleEmitter) @ 0x2922c781580
+      - Texture (Texture) @ 0x2922eda4680
+      - Texture (Texture) @ 0x2922edad000
+      - Part (Part) @ 0x29230a4f740
+      - Part (Part) @ 0x29230a4f900
+      - Part (Part) @ 0x29230a4fac0
+      - Part (Part) @ 0x29230a4f3c0
+      - Part (Part) @ 0x29230a4fc80
+      - Part (Part) @ 0x29230a4fe40
+      - 0 (MeshPart) @ 0x292305b8900
+      - 0 (MeshPart) @ 0x292305b8c80
+        - 0 (Weld) @ 0x2922af26280
+        - 1 (Weld) @ 0x2922af26440
+        - 0 (Weld) @ 0x29223a9c640
+        - 0 (Weld) @ 0x29223a9c800
+        - 0 (Weld) @ 0x29223a9c9c0
+        - 0 (Weld) @ 0x29223a9cb80
+        - 0 (Weld) @ 0x29223a9bf40
+        - 0 (Weld) @ 0x29223a9cd40
+        - 1 (Weld) @ 0x29223a9e5c0
+        - 1 (Weld) @ 0x29223a9e780
+        - 1 (Weld) @ 0x29223a9e940
+        - 1 (Weld) @ 0x29223a9eb00
+        - 1 (Weld) @ 0x29223a9ecc0
+        - Handle (Weld) @ 0x2922a531900
+        - Part (Weld) @ 0x2922a531ac0
+        - Part (Weld) @ 0x2922a531c80
+        - 1 (Weld) @ 0x29225390400
+        - 1 (Weld) @ 0x2922d8a36c0
+        - 1 (Weld) @ 0x2922d8a3880
+        - 1 (Weld) @ 0x2922d8a3a40
+        - Part (Weld) @ 0x2922d8a3c00
+        - Part (Weld) @ 0x2922d8a3dc0
+        - Part (Weld) @ 0x2922d8a3340
+        - Part (Weld) @ 0x2922d8a3f80
+      - 0 (MeshPart) @ 0x292305b9000
+      - 0 (MeshPart) @ 0x292305b9380
+      - 0 (MeshPart) @ 0x292305b9700
+      - 0 (MeshPart) @ 0x292305b9a80
+      - 0 (MeshPart) @ 0x292305b9e00
+      - 0 (MeshPart) @ 0x292305ba180
+      - 1 (MeshPart) @ 0x292305ba500
+      - 1 (MeshPart) @ 0x292305ba880
+      - 1 (MeshPart) @ 0x292305bac00
+      - 1 (MeshPart) @ 0x292305baf80
+      - 1 (MeshPart) @ 0x292305bb300
+      - 1 (MeshPart) @ 0x292305bb680
+      - 1 (MeshPart) @ 0x292305bba00
+      - 1 (MeshPart) @ 0x292305bbd80
+      - 1 (MeshPart) @ 0x292305bc100
+      - 1 (MeshPart) @ 0x292305bc480
+  - Hallows (Model) @ 0x2922a62bd80
+    - Handle (MeshPart) @ 0x29231101200
+      - Shoot (Sound) @ 0x29230099400
+      - NoAmmo (Sound) @ 0x29230099180
+      - ShootBBGUI (BillboardGui) @ 0x2922b108280
+        - Shoot (ImageLabel) @ 0x29222690c80
+      - Cylinder.001 (MeshPart) @ 0x29231cff900
+        - Handle (Weld) @ 0x2922af23a40
+        - pump.001 (Weld) @ 0x2922af23c00
+        - Mesh.001 (Weld) @ 0x2922af23dc0
+      - pump.001 (MeshPart) @ 0x292326c2700
+      - Mesh.001 (MeshPart) @ 0x293a5a3dd00
+  - Crimson Fangs (Model) @ 0x2922a62c100
+    - Handle (MeshPart) @ 0x2921af7c480
+      - NoAmmo (Sound) @ 0x29230096980
+      - Shoot (Sound) @ 0x29230096c00
+      - ShootBBGUI (BillboardGui) @ 0x2922b108c80
+        - Shoot (ImageLabel) @ 0x29222691880
+  - Black Ice (Model) @ 0x2922a62c800
+    - Handle (MeshPart) @ 0x292305be080
+      - NoAmmo (Sound) @ 0x29230098c80
+      - Shoot (Sound) @ 0x29230097100
+      - ShootBBGUI (BillboardGui) @ 0x2922b10a080
+        - Shoot (ImageLabel) @ 0x29222692480
+      - SurfaceLight (SurfaceLight) @ 0x29232a5a600
+      - Decal (Decal) @ 0x29215eea080
+      - Decal (Decal) @ 0x29215ee5a80
+      - Decal (Decal) @ 0x29215ee6700
+      - Decal (Decal) @ 0x29215ee5f80
+      - Decal (Decal) @ 0x2922eda0d00
+  - Radiation (Model) @ 0x2922a62d600
+    - Handle (MeshPart) @ 0x29230e76280
+      - NoAmmo (Sound) @ 0x2923009a800
+      - Shoot (Sound) @ 0x2923009aa80
+      - ShootBBGUI (BillboardGui) @ 0x2922b10f080
+        - Shoot (ImageLabel) @ 0x2922af03c80
+  - Arctic (Model) @ 0x2922a62d980
+    - Handle (MeshPart) @ 0x29231cf0080
+      - Shoot (Sound) @ 0x29230094180
+      - NoAmmo (Sound) @ 0x29230094400
+      - Snowfall (ParticleEmitter) @ 0x293b079fc80
+      - ShootBBGUI (BillboardGui) @ 0x2922bad8280
+        - Shoot (ImageLabel) @ 0x29225198480
+      - ParticleEmitter (ParticleEmitter) @ 0x2922c780080
+      - Meshes/tacarctic (MeshPart) @ 0x293a5a33180
+        - Handle (Weld) @ 0x2922d8a21c0
+  - Lightbringer (Model) @ 0x2922a62eb00
+    - Handle (MeshPart) @ 0x29230e77780
+      - Shoot (Sound) @ 0x29230099e00
+      - NoAmmo (Sound) @ 0x29230090a80
+      - ShootBBGUI (BillboardGui) @ 0x2922b178280
+        - Shoot (ImageLabel) @ 0x2922b269080
+      - MeshPart (MeshPart) @ 0x29230e77b00
+        - Meshes/Bones1 (Weld) @ 0x2922af26ec0
+        - Meshes/Bones1 (Weld) @ 0x2922af27080
+        - Meshes/Bones1 (Weld) @ 0x2922af27240
+        - RenderMesh (1) (Weld) @ 0x2922af27400
+        - RenderMesh (1) (Weld) @ 0x2922af275c0
+        - Meshes/Bones1 (Weld) @ 0x2922af2eb00
+        - MeshPart (Weld) @ 0x2922af2ecc0
+        - MeshPart (Weld) @ 0x2922af2ee80
+        - MeshPart (Weld) @ 0x2922af2f040
+        - MeshPart (Weld) @ 0x2922af2f200
+        - Union (Weld) @ 0x2922b7f13c0
+        - Handle (Weld) @ 0x2922b7f1580
+        - Meshes/Bones1 (Weld) @ 0x2922a5336c0
+      - MeshPart (MeshPart) @ 0x29230e77e80
+      - MeshPart (MeshPart) @ 0x29230e78200
+        - MeshPart (Weld) @ 0x2922b7f1740
+        - MeshPart (Weld) @ 0x2922b7f1900
+        - MeshPart (Weld) @ 0x2922b7f1ac0
+        - MeshPart (Weld) @ 0x2922b7f6440
+      - MeshPart (MeshPart) @ 0x29230e78580
+      - MeshPart (MeshPart) @ 0x29230e78900
+      - Meshes/Bones1 (MeshPart) @ 0x29230e78c80
+      - Meshes/Bones1 (MeshPart) @ 0x29230e79000
+      - Meshes/Bones1 (MeshPart) @ 0x29230e79380
+      - Meshes/Bones1 (MeshPart) @ 0x29230e79700
+      - Meshes/Bones1 (MeshPart) @ 0x29230e79a80
+      - RenderMesh (1) (MeshPart) @ 0x29230e79e00
+      - RenderMesh (1) (MeshPart) @ 0x29230e7a180
+      - Union (UnionOperation) @ 0x292309fd000
+  - Hello Kitty (Model) @ 0x2922a62f580
+    - Handle (MeshPart) @ 0x292305be400
+      - NoAmmo (Sound) @ 0x2923009a580
+      - Shoot (Sound) @ 0x2923009b480
+      - SurfaceLight (SurfaceLight) @ 0x2939f264100
+      - Texture (Texture) @ 0x29215ee5300
+      - Texture (Texture) @ 0x29215eea580
+      - Texture (Texture) @ 0x29215ee4680
+      - Texture (Texture) @ 0x29215ee3500
+      - Texture (Texture) @ 0x29215eea800
+      - Texture (Texture) @ 0x29215ee7600
+      - ShootBBGUI (BillboardGui) @ 0x2922b6a6480
+        - Shoot (ImageLabel) @ 0x2922b26b480
+      - MeshPart (MeshPart) @ 0x292305be780
+        - NoAmmo (Sound) @ 0x2923009a300
+        - Shoot (Sound) @ 0x2923009dc80
+      - MeshPart (MeshPart) @ 0x292305beb00
+        - NoAmmo (Sound) @ 0x29230093280
+        - Shoot (Sound) @ 0x2923009da00
+        - MeshPart (Weld) @ 0x2922af25100
+        - Handle (Weld) @ 0x2922b7f8900
+  - Poseidon (Model) @ 0x292227a0b00
+    - Handle (MeshPart) @ 0x292305bfc80
+      - Shoot (Sound) @ 0x2923009e400
+      - NoAmmo (Sound) @ 0x29230098f00
+      - ShootBBGUI (BillboardGui) @ 0x2922b773c80
+        - Shoot (ImageLabel) @ 0x292227c9c80
+      - Meshes/f tac1_Cylinder.003 (MeshPart) @ 0x29231100080
+        - Handle (Weld) @ 0x2922af23f80
+        - Meshes/f tac1_Plane.006 (Weld) @ 0x2922af24140
+        - Meshes/f tac1_Plane.003 (Weld) @ 0x2922af24300
+        - Meshes/f tac1_Plane.002 (Weld) @ 0x2922af244c0
+        - Meshes/f tac1_Plane.001 (Weld) @ 0x2922af24680
+      - Meshes/f tac1_Plane.001 (MeshPart) @ 0x29231100780
+      - Meshes/f tac1_Plane.002 (MeshPart) @ 0x29231100b00
+      - Meshes/f tac1_Plane.006 (MeshPart) @ 0x29231cfd280
+      - Meshes/f tac1_Plane.003 (MeshPart) @ 0x292324caf80
+  - Voxel (Model) @ 0x292227a0080
+    - Handle (MeshPart) @ 0x292305bf200
+      - Shoot (Sound) @ 0x29230096e80
+      - NoAmmo (Sound) @ 0x2923009e680
+      - ShootBBGUI (BillboardGui) @ 0x2922b774680
+        - Shoot (ImageLabel) @ 0x292227ca880
+      - Mesh (MeshPart) @ 0x292305bf580
+        - Handle (Weld) @ 0x29223a96d00
+        - Cube (Weld) @ 0x29223a97080
+      - Cube (MeshPart) @ 0x292305bf900
+  - Lovestruck (Model) @ 0x292227a1900
+    - Handle (MeshPart) @ 0x292305b3c00
+      - Shoot (Sound) @ 0x29230093780
+      - NoAmmo (Sound) @ 0x29230094900
+      - ShootBBGUI (BillboardGui) @ 0x2922d643280
+        - Shoot (ImageLabel) @ 0x2922a32a880
+      - Meshes/Heart (1) (MeshPart) @ 0x292305b3f80
+        - Handle (Weld) @ 0x2922b7f4bc0
+        - Meshes/french flag bow (Weld) @ 0x2922b7f5f00
+        - Union (Weld) @ 0x2922b7f60c0
+        - Part (Weld) @ 0x2922b7f6280
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x2922b7f7240
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x2922b7f7400
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x2922b7f9c40
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x2922b7f9e00
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x2922b7f9fc0
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x2922b7fa180
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x2922b7fa340
+        - Specks (ParticleEmitter) @ 0x29217bce780
+        - Meshes/Heart (1) (Weld) @ 0x2922a533880
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x2922a533a40
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x2922a533c00
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x2922a533dc0
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x2922d8a2380
+        - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x2922d8a2540
+        - Meshes/Heart (1) (Weld) @ 0x2922d8a4300
+        - Meshes/Heart (1) (Weld) @ 0x2922d8a44c0
+        - Meshes/Heart (1) (Weld) @ 0x2922d8a4680
+        - Meshes/Heart (1) (Weld) @ 0x2922d8a4840
+      - Meshes/Heart (1) (MeshPart) @ 0x292305b4300
+        - Specks (ParticleEmitter) @ 0x29215c83980
+      - Meshes/Heart (1) (MeshPart) @ 0x292305b4680
+        - Specks (ParticleEmitter) @ 0x292310e9c80
+      - Meshes/Heart (1) (MeshPart) @ 0x292305b4a00
+        - Specks (ParticleEmitter) @ 0x292310ecf80
+      - Meshes/Heart (1) (MeshPart) @ 0x292305b4d80
+        - Specks (ParticleEmitter) @ 0x292310eb480
+      - Meshes/Heart (1) (MeshPart) @ 0x292305b5100
+        - Specks (ParticleEmitter) @ 0x292310e9f80
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x292305b5480
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x292305b5800
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x292305b5b80
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x292305b5f00
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x292305b6280
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x292305b6600
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x292305b6980
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x292305b6d00
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x292305b7080
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x292305b7400
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x292305b7780
+      - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x292305b7b00
+      - Meshes/french flag bow (MeshPart) @ 0x292305b7e80
+      - Union (UnionOperation) @ 0x29230ff4400
+      - Part (Part) @ 0x29230a4f580
+        - Sparkles (ParticleEmitter) @ 0x292310ef980
+        - Sparkles_Beam (ParticleEmitter) @ 0x292310e4e80
+  - Strawberry Shortcake (Model) @ 0x292227a3180
+    - Handle (MeshPart) @ 0x29231cfcf00
+      - NoAmmo (Sound) @ 0x29230097600
+      - Shoot (Sound) @ 0x29230097880
+      - ShootBBGUI (BillboardGui) @ 0x2922b7b7880
+        - Shoot (ImageLabel) @ 0x2922af07880
+  - Heartbringer (Model) @ 0x292227a3500
+    - Handle (MeshPart) @ 0x29231cfbd80
+      - NoAmmo (Sound) @ 0x29230094b80
+      - Shoot (Sound) @ 0x2923009eb80
+      - ShootBBGUI (BillboardGui) @ 0x2922b6ab480
+        - Shoot (ImageLabel) @ 0x2922b26f080
+      - Chamber (Part) @ 0x29231c51900
+        - Mesh (BlockMesh) @ 0x2923dda5100
+      - x (UnionOperation) @ 0x29230ff9800
+      - Heart (UnionOperation) @ 0x29230ffa000
+      - Heart (UnionOperation) @ 0x29230ff8400
+      - Union (UnionOperation) @ 0x29230ffb000
+      - Union (UnionOperation) @ 0x29230ffb400
+      - Union (UnionOperation) @ 0x29230ffc000
+      - Mag (UnionOperation) @ 0x29230ffcc00
+      - o (UnionOperation) @ 0x29230fff000
+      - x (UnionOperation) @ 0x29230fff400
+      - Heart (UnionOperation) @ 0x29231c25000
+      - Heart (UnionOperation) @ 0x29231c24c00
+      - Bolt (MeshPart) @ 0x292326c1580
+      - BasePart (MeshPart) @ 0x292326c1c80
+        - Union (Weld) @ 0x2922acabd80
+        - o (Weld) @ 0x2922acacd40
+        - o (Weld) @ 0x2922acacf00
+        - x (Weld) @ 0x2922acad0c0
+        - x (Weld) @ 0x29223a96280
+        - Chamber (Weld) @ 0x29223a96440
+        - Handle (Weld) @ 0x29223a96600
+        - Handle (Weld) @ 0x29223a967c0
+        - Handle (Weld) @ 0x29223a96980
+        - Heart (Weld) @ 0x29223a97780
+        - Heart (Weld) @ 0x29223a97940
+        - Heart (Weld) @ 0x29223a97b00
+        - Bolt (Weld) @ 0x29223a97cc0
+        - Union (Weld) @ 0x2922b7f1c80
+        - Union (Weld) @ 0x2922b7f1e40
+        - Mag (Weld) @ 0x2922b7f0e80
+        - Heart (Weld) @ 0x2922b7f1200
+        - Union (Weld) @ 0x2922b7f75c0
+      - Handle (Part) @ 0x2923239fc80
+        - SpecialMesh (SpecialMesh) @ 0x293859f8000
+      - Handle (Part) @ 0x29223c6b300
+        - SpecialMesh (SpecialMesh) @ 0x293a43eb480
+      - Union (UnionOperation) @ 0x2939396e400
+      - o (UnionOperation) @ 0x29393969000
+  - Hell Hound (Model) @ 0x292227a7400
+    - Handle (MeshPart) @ 0x29230e7ba00
+      - Shoot (Sound) @ 0x2923009fd00
+      - NoAmmo (Sound) @ 0x29230093000
+      - ShootBBGUI (BillboardGui) @ 0x29223065a80
+        - Shoot (ImageLabel) @ 0x2922b815480
+      - FakeHead2 (Part) @ 0x29230a49e00
+        - Mesh (SpecialMesh) @ 0x29201c58a80
+        - FakeTorso (Weld) @ 0x2922a534300
+        - Part (Weld) @ 0x2922a5344c0
+        - Part (Weld) @ 0x2922a534680
+        - Tail (Weld) @ 0x2922a534840
+        - leak (Weld) @ 0x2922a534a00
+        - Handle (Weld) @ 0x2922a534bc0
+      - FakeTorso (Part) @ 0x29230a49fc0
+        - Mesh (SpecialMesh) @ 0x2922e240080
+      - Part (Part) @ 0x29230a4a180
+        - Attachment (Attachment) @ 0x2922b219380
+          - flare (ParticleEmitter) @ 0x29217bca280
+          - fire (ParticleEmitter) @ 0x29217bcea80
+        - Attachment (Attachment) @ 0x2922b219500
+          - Beam (Beam) @ 0x2922ec30e00
+      - Part (Part) @ 0x29230a4a340
+        - Attachment (Attachment) @ 0x2922b213f80
+          - flare (ParticleEmitter) @ 0x29217bcd580
+          - fire (ParticleEmitter) @ 0x29217bcae80
+        - Attachment (Attachment) @ 0x2922b214100
+          - Beam (Beam) @ 0x2922ec3de00
+      - Tail (Part) @ 0x29230a4a500
+        - Mesh (SpecialMesh) @ 0x2922f23ed80
+      - leak (Part) @ 0x29230a4a6c0
+        - Mesh (SpecialMesh) @ 0x2922f23ec00
+  - Candy Cane (Model) @ 0x292227a7780
+    - Handle (MeshPart) @ 0x2922f01d280
+      - Shoot (Sound) @ 0x2922f66cb00
+      - NoAmmo (Sound) @ 0x2922f665800
+      - LIGHTS (Script) @ 0x293a1fa8400
+      - ShootBBGUI (BillboardGui) @ 0x29223068c80
+        - Shoot (ImageLabel) @ 0x2922b817880
+      - Circle.004 (MeshPart) @ 0x2922f01d600
+        - Handle (Weld) @ 0x2922af22700
+        - Normal (Weld) @ 0x29223a9d0c0
+        - Normal (Weld) @ 0x29223a9d440
+        - Normal (Weld) @ 0x29223a9dd00
+        - Normal (Weld) @ 0x29223a9dec0
+        - Neon_FRONT (Weld) @ 0x29223a9e080
+        - Neon_FRONT (Weld) @ 0x29223a9e240
+        - Neon_FRONT (Weld) @ 0x29223a9e400
+        - Mesh.001 (Weld) @ 0x2922b7f3f80
+        - Neon (Weld) @ 0x2922b7f4140
+        - Neon (Weld) @ 0x2922b7f4300
+        - Neon (Weld) @ 0x2922b7f44c0
+        - Cylinder.003 (Weld) @ 0x2922b7f4680
+        - Cylinder.002 (Weld) @ 0x2922b7f4a00
+        - Cylinder.001 (Weld) @ 0x2922b7f4f40
+        - Circle.009 (Weld) @ 0x2922b7f5100
+        - Neon (Weld) @ 0x29225390080
+      - Circle.009 (MeshPart) @ 0x2922f01d980
+      - Neon_FRONT (MeshPart) @ 0x2922f01dd00
+      - Cylinder.001 (MeshPart) @ 0x2922f01e080
+      - Neon_FRONT (MeshPart) @ 0x2922f01e400
+      - Cylinder.002 (MeshPart) @ 0x2922f01e780
+      - Neon_FRONT (MeshPart) @ 0x2922f01eb00
+      - Cylinder.003 (MeshPart) @ 0x2922f01ee80
+      - Mesh.001 (MeshPart) @ 0x2922f01f200
+      - Neon (MeshPart) @ 0x2922f01f580
+      - Neon (MeshPart) @ 0x2922f01f900
+      - Neon (MeshPart) @ 0x2922f01fc80
+      - Neon (MeshPart) @ 0x29230e70080
+      - Normal (MeshPart) @ 0x29230e70400
+      - Normal (MeshPart) @ 0x29230e70780
+      - Normal (MeshPart) @ 0x29230e70b00
+      - Normal (MeshPart) @ 0x29230e70e80
+  - Deathbringer (Model) @ 0x292227a7b00
+    - Handle (MeshPart) @ 0x29230e7ac00
+      - Shoot (Sound) @ 0x29230090d00
+      - NoAmmo (Sound) @ 0x2923009df00
+      - ShootBBGUI (BillboardGui) @ 0x2922306dc80
+        - Shoot (ImageLabel) @ 0x2922b818480
+      - Cube.001 (MeshPart) @ 0x29230e7af80
+        - Cube.002 (Weld) @ 0x2922b7f3180
+        - Cube.003 (Weld) @ 0x2922b7f3340
+        - IDKDKDKD (Weld) @ 0x2922b7f3500
+      - Cube.002 (MeshPart) @ 0x29230e7b300
+      - Cube.003 (MeshPart) @ 0x29230e7b680
+  - Phoenix (Model) @ 0x292227a8200
+    - Handle (MeshPart) @ 0x2923226bd80
+      - Shoot (Sound) @ 0x2923009b980
+      - NoAmmo (Sound) @ 0x29230095f80
+      - ShootBBGUI (BillboardGui) @ 0x2922b866480
+        - Shoot (ImageLabel) @ 0x2922b81cc80
+      - SHOOT_BBGUI_PARTICLE (Attachment) @ 0x2922d1f4e80
+      - Neon (MeshPart) @ 0x2923226c100
+        - Back (Weld) @ 0x2922b7f8580
+        - Front (Weld) @ 0x2922b7f8740
+        - Handle (Weld) @ 0x2922d8a6d00
+      - Front (MeshPart) @ 0x2923226c800
+        - Main (Attachment) @ 0x2922d1f4d00
+          - Fire1 (ParticleEmitter) @ 0x2922c783980
+          - Specks1 (ParticleEmitter) @ 0x2922c789380
+        - glow (ParticleEmitter) @ 0x2922c780f80
+      - Back (MeshPart) @ 0x292324cc800
+  - None (Model) @ 0x292227a8580
+    - Handle (MeshPart) @ 0x292305bee80
+      - Shoot (Sound) @ 0x2923009e180
+      - NoAmmo (Sound) @ 0x2923009f080
+      - ShootBBGUI (BillboardGui) @ 0x2922b868c80
+        - Shoot (ImageLabel) @ 0x292227cb480
+  - Hell Dragon (Model) @ 0x292227aa880
+    - Handle (MeshPart) @ 0x29230e7bd80
+      - NoAmmo (Sound) @ 0x29230095080
+      - Shoot (Sound) @ 0x29230095300
+      - ShootBBGUI (BillboardGui) @ 0x2922b20be80
+        - Shoot (ImageLabel) @ 0x2922a327880
+      - SurfaceLight (SurfaceLight) @ 0x2939eecbe00
+      - Cube.004 (MeshPart) @ 0x29230e7c100
+      - Cube.003 (MeshPart) @ 0x29230e7c480
+      - Plane.002 (MeshPart) @ 0x29230e7c800
+      - Tac (MeshPart) @ 0x29230e7cb80
+        - Cube.003 (Weld) @ 0x2922af25b80
+        - Plane.002 (Weld) @ 0x2922a531580
+        - Cube.004 (Weld) @ 0x2922a531740
+        - Handle (Weld) @ 0x2922a534d80
+  - Hexagram (Model) @ 0x292227aac00
+    - Handle (MeshPart) @ 0x292305bc800
+      - NoAmmo (Sound) @ 0x2923009f300
+      - Shoot (Sound) @ 0x29230095580
+      - Texture (Texture) @ 0x29215ee9b80
+      - Texture (Texture) @ 0x29215eed000
+      - Texture (Texture) @ 0x2922eda7100
+      - Texture (Texture) @ 0x2922eda4900
+      - Texture (Texture) @ 0x2922eda5580
+      - Texture (Texture) @ 0x2922eda5800
+      - SurfaceLight (SurfaceLight) @ 0x2939eec5d00
+      - ShootBBGUI (BillboardGui) @ 0x2922b20c880
+        - Shoot (ImageLabel) @ 0x2922a328480
+      - Part (Part) @ 0x292310d0080
+        - Texture (Texture) @ 0x29215eebc00
+        - Handle (Weld) @ 0x2922acac800
+        - Texture (Texture) @ 0x29215eeb980
+        - Texture (Texture) @ 0x29215eec600
+        - Texture (Texture) @ 0x29215eefd00
+        - Texture (Texture) @ 0x29215eeee00
+        - Texture (Texture) @ 0x29215ee7880
+        - Mesh (SpecialMesh) @ 0x2922e853b00
+  - Cupid (Model) @ 0x292227ad280
+    - Handle (MeshPart) @ 0x2921af75480
+      - Shoot (Sound) @ 0x29230098780
+      - NoAmmo (Sound) @ 0x29230095800
+      - ParticleEmitter (ParticleEmitter) @ 0x293b0792180
+      - ParticleEmitter (ParticleEmitter) @ 0x29215c81e80
+      - ParticleEmitter (ParticleEmitter) @ 0x29215c8db80
+      - ShootBBGUI (BillboardGui) @ 0x292247e3280
+        - Shoot (ImageLabel) @ 0x2922a32d880
+      - Meshes/valentine2_NurbsPath.010 (1) (MeshPart) @ 0x2923226d980
+      - Meshes/valentine2_NurbsPath.011 (1) (MeshPart) @ 0x293a5a38900
+      - Meshes/valentine2_Plane.013 (MeshPart) @ 0x293a5a39000
+      - Meshes/valentine2_Plane.043 (1) (MeshPart) @ 0x293a5a3d280
+      - Meshes/valentine2_ribbon_翅_Plane.005 (1) (MeshPart) @ 0x2921af71c80
+        - Meshes/valentine2_Plane.043 (1) (Weld) @ 0x29223a9d980
+        - Meshes/valentine2_Plane.013 (Weld) @ 0x29225395480
+        - Meshes/valentine2_NurbsPath.011 (1) (Weld) @ 0x2922d8a4a00
+        - Meshes/valentine2_NurbsPath.010 (1) (Weld) @ 0x2922d8a4bc0
+        - Handle (Weld) @ 0x2922d8a4d80
+  - Floral (Model) @ 0x292227ad600
+    - Handle (MeshPart) @ 0x29230e7cf00
+      - NoAmmo (Sound) @ 0x29230097d80
+      - Shoot (Sound) @ 0x2923009d780
+      - Texture (Texture) @ 0x2922eda1700
+      - SurfaceLight (SurfaceLight) @ 0x29203e13500
+      - Texture (Texture) @ 0x2922eda3280
+      - ShootBBGUI (BillboardGui) @ 0x292247e3c80
+        - Shoot (ImageLabel) @ 0x2922a32e480
+      - Texture (Texture) @ 0x2922eda8c80
+      - Texture (Texture) @ 0x2922edae900
+      - Texture (Texture) @ 0x2922edaa300
+      - Texture (Texture) @ 0x2922eda9400
+      - Part (Part) @ 0x29230a4cf00
+      - Part (Part) @ 0x29230a4d0c0
+      - Part (Part) @ 0x29230a4d280
+      - Part (Part) @ 0x29230a4d440
+      - Part (Part) @ 0x29230a4d600
+      - Red Rose (Part) @ 0x29230a4d7c0
+        - Mesh (SpecialMesh) @ 0x2922fbe9200
+      - Rose (MeshPart) @ 0x29230e7d280
+        - Part (Weld) @ 0x2922af252c0
+        - Part (Weld) @ 0x2922af25480
+        - Red Rose (Weld) @ 0x2922af25640
+        - Red Rose (Weld) @ 0x2922af25800
+        - Handle (Weld) @ 0x2922af259c0
+        - Rose (Weld) @ 0x2922b7f4d80
+        - Part (Weld) @ 0x2922ba87080
+        - Part (Weld) @ 0x2922ba87240
+        - Part (Weld) @ 0x2922ba87400
+        - Rose (Weld) @ 0x2922ba875c0
+        - Rose (Weld) @ 0x2922ba87780
+        - Rose (Weld) @ 0x2922ba87940
+        - Rose (Weld) @ 0x2922ba87b00
+        - Rose (Weld) @ 0x2922ba87cc0
+        - Rose (Weld) @ 0x2922ba87e80
+        - Rose (Weld) @ 0x2922ba88040
+        - Rose (Weld) @ 0x2922ba88200
+      - Rose (MeshPart) @ 0x29230e7d600
+      - Rose (MeshPart) @ 0x29230e7d980
+      - Rose (MeshPart) @ 0x29230e7dd00
+      - Rose (MeshPart) @ 0x29230e7e080
+      - Rose (MeshPart) @ 0x29230e7e400
+      - Rose (MeshPart) @ 0x29230e7e780
+      - Rose (MeshPart) @ 0x29230e7eb00
+      - Rose (MeshPart) @ 0x29230e7ee80
+      - Rose (MeshPart) @ 0x29230e7f200
+      - Red Rose (Part) @ 0x29230a4d980
+        - Mesh (SpecialMesh) @ 0x2923cb1d400
+  - Void Dragon (Model) @ 0x292227ae080
+    - Handle (MeshPart) @ 0x29230e71200
+      - Shoot (Sound) @ 0x2922f665a80
+      - NoAmmo (Sound) @ 0x2922f662600
+      - ShootBBGUI (BillboardGui) @ 0x292247e5080
+        - Shoot (ImageLabel) @ 0x2922aad7880
+      - Middle (UnionOperation) @ 0x292309f7c00
+        - Handle (Weld) @ 0x2922aca7080
+        - Union (Weld) @ 0x2922aca7240
+        - Union (Weld) @ 0x2922aca75c0
+        - Middle (Weld) @ 0x2922aca7780
+      - Middle (UnionOperation) @ 0x292309f8000
+      - Union (UnionOperation) @ 0x292309f8400
+      - Union (UnionOperation) @ 0x292309f8800
+  - Snow Dragon (Model) @ 0x292227aee80
+    - Handle (MeshPart) @ 0x292305b1c80
+      - NoAmmo (Sound) @ 0x29230098280
+      - Shoot (Sound) @ 0x29230098a00
+      - SurfaceLight (SurfaceLight) @ 0x29203e17300
+      - ShootBBGUI (BillboardGui) @ 0x2922b863c80
+        - Shoot (ImageLabel) @ 0x2922b81c080
+      - Part (Part) @ 0x29230a4e5c0
+      - Part (Part) @ 0x29230a4e780
+      - Part (Part) @ 0x29230a4e940
+      - Part (Part) @ 0x29230a4eb00
+      - Part (Part) @ 0x29230a4ecc0
+      - Head (UnionOperation) @ 0x292309fe000
+        - Union (Weld) @ 0x2922af2e940
+        - Union (Weld) @ 0x2922af2f580
+        - Union (Weld) @ 0x2922af2f740
+        - Union (Weld) @ 0x2922af2f900
+        - Union (Weld) @ 0x2922af2fac0
+        - Steel (Weld) @ 0x2922af2fc80
+        - Steel (Weld) @ 0x2922af2fe40
+        - Steel (Weld) @ 0x29223a90080
+        - Steel (Weld) @ 0x29223a90240
+        - Jaws (Weld) @ 0x29223a90400
+        - Union (Weld) @ 0x29223a905c0
+        - Handle (Weld) @ 0x29223a90780
+        - Part (Weld) @ 0x29223a90940
+        - Part (Weld) @ 0x29223a90b00
+        - Part (Weld) @ 0x29223a90cc0
+        - Part (Weld) @ 0x29223a90e80
+        - Part (Weld) @ 0x29223a91040
+        - Part (Weld) @ 0x29223a91200
+        - Union (Weld) @ 0x29223a9d7c0
+        - Union (Weld) @ 0x29223a9ee80
+        - Union (Weld) @ 0x29223a9f040
+        - Union (Weld) @ 0x29223a9f200
+        - Union (Weld) @ 0x29223a9f3c0
+        - Union (Weld) @ 0x29223a9f580
+        - Union (Weld) @ 0x29223a9f740
+        - Union (Weld) @ 0x29223a9f900
+        - Union (Weld) @ 0x2922b7f36c0
+        - Union (Weld) @ 0x2922b7f3880
+        - Union (Weld) @ 0x2922b7f3a40
+        - Union (Weld) @ 0x2922b7f3c00
+        - Attachment (Attachment) @ 0x29225127e80
+          - flare (ParticleEmitter) @ 0x2922328f080
+          - fire (ParticleEmitter) @ 0x29223280680
+        - Attachment (Attachment) @ 0x29225128000
+          - Beam (Beam) @ 0x2922ecbe200
+        - Attachment (Attachment) @ 0x2922b21c200
+          - flare (ParticleEmitter) @ 0x29217bcc080
+          - fire (ParticleEmitter) @ 0x29217bced80
+        - chain (Weld) @ 0x29225394f40
+        - Union (Weld) @ 0x29225395100
+        - Union (Weld) @ 0x292253952c0
+        - chain (Weld) @ 0x29225df0b00
+        - chain (Weld) @ 0x29225df44c0
+        - chain (Weld) @ 0x29225df6980
+        - Attachment (Attachment) @ 0x2922d1f3b00
+          - Beam (Beam) @ 0x292312cfa00
+        - Union (Weld) @ 0x2922d8a4140
+        - Inner Eye (Weld) @ 0x2922d8a7400
+      - Inner Eye (UnionOperation) @ 0x292309fe400
+      - Jaws (UnionOperation) @ 0x292309fe800
+      - Steel (MeshPart) @ 0x292305b2000
+      - Steel (MeshPart) @ 0x292305b2380
+      - Steel (MeshPart) @ 0x292305b2700
+      - Steel (MeshPart) @ 0x292305b2a80
+      - Union (UnionOperation) @ 0x292309fec00
+      - Union (UnionOperation) @ 0x292309ff000
+      - Union (UnionOperation) @ 0x292309ff400
+      - Union (UnionOperation) @ 0x292309ff800
+      - Union (UnionOperation) @ 0x292309ffc00
+      - Union (UnionOperation) @ 0x29230ff0400
+      - Union (UnionOperation) @ 0x29230ff0800
+      - Union (UnionOperation) @ 0x29230ff0c00
+      - Union (UnionOperation) @ 0x29230ff1000
+      - Union (UnionOperation) @ 0x29230ff1400
+      - Union (UnionOperation) @ 0x29230ff1800
+      - Union (UnionOperation) @ 0x29230ff1c00
+      - Union (UnionOperation) @ 0x29230ff2000
+      - Union (UnionOperation) @ 0x29230ff2400
+      - Union (UnionOperation) @ 0x29230ff2800
+      - Union (UnionOperation) @ 0x29230ff2c00
+      - Union (UnionOperation) @ 0x29230ff3000
+      - Union (UnionOperation) @ 0x29230ff3400
+      - Union (UnionOperation) @ 0x29230ff3800
+      - Union (UnionOperation) @ 0x29230ff3c00
+      - Union (UnionOperation) @ 0x29230ff4000
+      - chain (MeshPart) @ 0x292305b2e00
+      - chain (MeshPart) @ 0x292305b3180
+      - chain (MeshPart) @ 0x292305b3500
+      - chain (MeshPart) @ 0x292305b3880
+      - Part (Part) @ 0x29230a4ee80
+        - Flame (ParticleEmitter) @ 0x292310e5d80
+  - Amethyst (Model) @ 0x292227afc80
+    - Handle (MeshPart) @ 0x29230e75800
+      - NoAmmo (Sound) @ 0x29230093a00
+      - Shoot (Sound) @ 0x29230097380
+      - ShootBBGUI (BillboardGui) @ 0x2922bb56e80
+        - Shoot (ImageLabel) @ 0x29222695480
+      - Group44266.002 (MeshPart) @ 0x29230e75b80
+        - Handle (Weld) @ 0x2922af25f00
+        - Mesh (Weld) @ 0x2922af260c0
+      - Mesh (MeshPart) @ 0x29230e75f00
+  - Black Cat (Model) @ 0x2922cc44680
+    - Handle (MeshPart) @ 0x29231b6b300
+      - Shoot (Sound) @ 0x29230096200
+      - NoAmmo (Sound) @ 0x29230090f80
+      - ShootBBGUI (BillboardGui) @ 0x2922cea0a80
+        - Shoot (ImageLabel) @ 0x2922d8c3c80
+      - AnimationController (AnimationController) @ 0x2922d0cbe60
+        - Animator (Animator) @ 0x2922b79ee80
+      - RootPart (Part) @ 0x292314eeb00
+        - Bone (Bone) @ 0x2922f3ffa00
+          - Bone.002 (Bone) @ 0x2922f3f4c00
+          - Bone.001 (Bone) @ 0x2922f3f2e00
+        - Bone.006 (Bone) @ 0x2922f3f5000
+          - Bone.007 (Bone) @ 0x2922ecb1e00
+            - Bone.008 (Bone) @ 0x2922ecb1c00
+              - Bone.009 (Bone) @ 0x2922ecb1a00
+                - Bone.010 (Bone) @ 0x2922ecb7200
+        - Bone.003 (Bone) @ 0x2922f3f1c00
+          - Bone.005 (Bone) @ 0x2922f3f7e00
+          - Bone.004 (Bone) @ 0x2922f3f3400
+        - Handle (Weld) @ 0x29225df7080
+      - Cube.060 (MeshPart) @ 0x29231cf7b00
+        - Cube.060Motor6D (Motor6D) @ 0x2922f3f1400
+        - SurfaceAppearance (SurfaceAppearance) @ 0x29215c8ed80
+      - Cube.062 (MeshPart) @ 0x29231cf8200
+        - Attachment (Attachment) @ 0x29225128300
+          - ParticleEmitter (ParticleEmitter) @ 0x292310e3680
+          - ParticleEmitter (ParticleEmitter) @ 0x29215c83680
+        - SurfaceAppearance (SurfaceAppearance) @ 0x29215c87880
+        - Cube.062Motor6D (Motor6D) @ 0x292312ca400
+      - Sphere.004 (MeshPart) @ 0x293a5a39e00
+        - Sphere.004Motor6D (Motor6D) @ 0x292312cae00
+      - Cube.058 (MeshPart) @ 0x293a5a35b80
+        - SurfaceAppearance (SurfaceAppearance) @ 0x29215c8f380
+        - Cube.058Motor6D (Motor6D) @ 0x2922ecb2000
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/CURRENT_TRYOUT_CACHE/Available/hollywoodboy05
+- hollywoodboy05 (StringValue) | Value: "Unknown" @ 0x293a74a1600
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/CURRENT_TRYOUT_CACHE/Available/switzerlandbackupacc
+- switzerlandbackupacc (StringValue) | Value: "Unknown" @ 0x29232a53d00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/CURRENT_TRYOUT_CACHE/Available/agoodbon
+- agoodbon (StringValue) | Value: "Unknown" @ 0x2920388c800
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/CURRENT_TRYOUT_CACHE/Available/RuinedByTrxppa
+- RuinedByTrxppa (StringValue) | Value: "Unknown" @ 0x29203e12700
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/CURRENT_TRYOUT_CACHE/Available/jawadbeng
+- jawadbeng (StringValue) | Value: "Unknown" @ 0x2939eeccb00
+
+Found matching config root at path: Workspace/Workspace/Players/InBox/IIIIIllIlIllllIIIIl/[DoubleBarrel]
+- [DoubleBarrel] (Tool) @ 0x29383e73c80
+  - Script (Script) @ 0x29383dae600
+    - Ammo (IntValue) | Value: 2 @ 0x2922d9ae4e0
+      - CLIENT (NumberValue) | Value: 2.000000 @ 0x2922d9a0a20
+    - MaxAmmo (IntValue) | Value: 2 @ 0x2922d9a5800
+    - CanHitPlayer (ObjectValue) | Value: infectedmz (Player) @ 0x2826525106304 @ 0x2922d9a8f20
+    - CanHitPlayer2 (ObjectValue) | Value: nil @ 0x2922d9a8c80
+  - GunData (ModuleScript) @ 0x293843acd40
+  - Handle (MeshPart) @ 0x2921af72700
+    - Shoot (Sound) @ 0x29384e5fa80
+    - NoAmmo (Sound) @ 0x29384e54400
+    - RightGrip (Weld) @ 0x29201e3d280
+    - ShootBBGUI (BillboardGui) @ 0x29215926e80
+      - Shoot (ImageLabel) @ 0x29236e21880
+
+Found matching config root at path: Workspace/Workspace/Players/Characters/fairywshes/DB_HANDLE
+- DB_HANDLE (Model) @ 0x2922a625100
+  - Weld (Weld) @ 0x2922aca6980
+  - Handle (MeshPart) @ 0x2923126b300
+    - NoAmmo (Sound) @ 0x29230090300
+    - Shoot (Sound) @ 0x29230096480
+    - RightGrip (Weld) @ 0x2922aca67c0
+    - ShootBBGUI (BillboardGui) @ 0x2922ace0080
+      - Shoot (ImageLabel) @ 0x2922aad3c80
+
+Found matching config root at path: Workspace/Workspace/Players/Characters/superman57845629157/DB_HANDLE
+- DB_HANDLE (Model) @ 0x2922a625b80
+  - Weld (Weld) @ 0x2922acaa880
+  - Handle (MeshPart) @ 0x29231b60e80
+    - NoAmmo (Sound) @ 0x29231283c80
+    - Shoot (Sound) @ 0x29231285f80
+    - RightGrip (Weld) @ 0x2922acaa6c0
+    - ShootBBGUI (BillboardGui) @ 0x2922ace8280
+      - Shoot (ImageLabel) @ 0x2922aad8480
+
+Found matching config root at path: Workspace/Workspace/Players/Characters/kflxxa/Accessory (double cross pins 2)
+- Accessory (double cross pins 2) (Accessory) @ 0x2922a53b140
+  - Handle (MeshPart) @ 0x29231090780
+    - AvatarPartScaleType (StringValue) | Value: "Unknown" @ 0x2939f918e00
+    - HatAttachment (Attachment) @ 0x2922ad9b480
+      - OriginalPosition (Vector3Value) [ValueObject] @ 0x2922bd38d60
+    - OriginalSize (Vector3Value) [ValueObject] @ 0x2922bd38040
+    - AccessoryWeld (Weld) @ 0x2922a53c2c0
+
+Found matching config root at path: Workspace/Workspace/Players/Characters/kflxxa/DB_HANDLE
+- DB_HANDLE (Model) @ 0x2922a62a180
+  - Weld (Weld) @ 0x29225393f80
+  - Handle (MeshPart) @ 0x292319b3c00
+    - NoAmmo (Sound) @ 0x29230093c80
+    - Shoot (Sound) @ 0x29230093f00
+    - RightGrip (Weld) @ 0x29225393340
+    - ShootBBGUI (BillboardGui) @ 0x2922bb5be80
+      - Shoot (ImageLabel) @ 0x2922bf40c80
+    - Meshes/untitled_ribbon_翅_Plane.006 (Weld) @ 0x29225393500
+    - Meshes/untitled_Plane.065 (Weld) @ 0x292253936c0
+    - Meshes/untitled_Plane.056 (Weld) @ 0x29225393880
+    - Meshes/untitled_Plane.054 (Weld) @ 0x29225393a40
+    - Meshes/untitled_Plane.001 (Weld) @ 0x29225393c00
+    - Meshes/extra (1) (Weld) @ 0x29225393dc0
+    - ParticleEmitter (ParticleEmitter) @ 0x2921eea8d80
+    - ParticleEmitter (ParticleEmitter) @ 0x2921eea9980
+    - ParticleEmitter (ParticleEmitter) @ 0x2921eea9380
+    - Meshes/untitled_ribbon_翅_Plane.006 (MeshPart) @ 0x292319b3f80
+    - Meshes/untitled_Plane.065 (MeshPart) @ 0x292319b4300
+    - Meshes/untitled_Plane.056 (MeshPart) @ 0x292319b4680
+    - Meshes/untitled_Plane.054 (MeshPart) @ 0x292319b4a00
+    - Meshes/untitled_Plane.001 (MeshPart) @ 0x292319b4d80
+    - Meshes/extra (1) (MeshPart) @ 0x292319b5100
+
+Found matching config root at path: Workspace/Workspace/Players/Characters/SummaNoob/DB_HANDLE
+- DB_HANDLE (Model) @ 0x292227a5800
+  - Weld (Weld) @ 0x2922ba83880
+  - Handle (MeshPart) @ 0x292319b0080
+    - Shoot (Sound) @ 0x29231283500
+    - NoAmmo (Sound) @ 0x29231288c80
+    - RightGrip (Weld) @ 0x2922ba836c0
+    - ShootBBGUI (BillboardGui) @ 0x2922bad3c80
+      - Shoot (ImageLabel) @ 0x29225194880
+
+Found matching config root at path: Workspace/Workspace/Players/Characters/louboutinshoes/DB_HANDLE
+- DB_HANDLE (Model) @ 0x29238fd6280
+  - Handle (MeshPart) @ 0x29238fd6600
+    - Shoot (Sound) @ 0x2922dfdf800
+    - NoAmmo (Sound) @ 0x2922dfdfa80
+    - RightGrip (Weld) @ 0x2923e862540
+    - ShootBBGUI (BillboardGui) @ 0x2923b283c80
+      - Shoot (ImageLabel) @ 0x29236f30c80
+  - Weld (Weld) @ 0x2923e862700
+
+Found matching config root at path: Workspace/Workspace/Players/Characters/boibruh_9212/DB_HANDLE
+- DB_HANDLE (Model) @ 0x2920b5b2e00
+  - Handle (MeshPart) @ 0x2920b5b7080
+    - Shoot (Sound) @ 0x2922a5e3780
+    - NoAmmo (Sound) @ 0x2922a5eb700
+    - RightGrip (Weld) @ 0x292364eb840
+    - ShootBBGUI (BillboardGui) @ 0x2923ba36e80
+      - Shoot (ImageLabel) @ 0x29235293c80
+  - Weld (Weld) @ 0x292364ec100
+
+Found matching config root at path: Workspace/Workspace/Players/Characters/zycsx1/DB_HANDLE
+- DB_HANDLE (Model) @ 0x29231b33f80
+  - Handle (MeshPart) @ 0x29231b30400
+    - Shoot (Sound) @ 0x292310b9180
+    - NoAmmo (Sound) @ 0x292310b8780
+    - RightGrip (Weld) @ 0x292364ec480
+    - ShootBBGUI (BillboardGui) @ 0x29238d38c80
+      - Shoot (ImageLabel) @ 0x2923cf9a880
+  - Weld (Weld) @ 0x292364ea880
+
+Found matching config root at path: Workspace/Workspace/Players/Characters/12_13xb/DB_HANDLE
+- DB_HANDLE (Model) @ 0x29234e66280
+  - Handle (MeshPart) @ 0x29234e67400
+    - Shoot (Sound) @ 0x292310baa80
+    - NoAmmo (Sound) @ 0x292310b4900
+    - RightGrip (Weld) @ 0x2922af298c0
+    - ShootBBGUI (BillboardGui) @ 0x29238d36480
+      - Shoot (ImageLabel) @ 0x29234a26c80
+  - Weld (Weld) @ 0x2922af2ac00
+
+Found matching config root at path: Workspace/Workspace/Players/Characters/Usecode_calixo2/DB_HANDLE
+- DB_HANDLE (Model) @ 0x2923fa20400
+  - Handle (MeshPart) @ 0x2923fa20780
+    - Shoot (Sound) @ 0x292319f7880
+    - NoAmmo (Sound) @ 0x292319f2380
+    - RightGrip (Weld) @ 0x29223a998c0
+    - ShootBBGUI (BillboardGui) @ 0x2923862f080
+      - Shoot (ImageLabel) @ 0x293841c6080
+  - Weld (Weld) @ 0x29223a99700
+
+Found matching config root at path: Workspace/Workspace/Players/Characters/x4mukios/DB_HANDLE
+- DB_HANDLE (Model) @ 0x2922c6c9e00
+  - Handle (MeshPart) @ 0x2922c6ca180
+    - Shoot (Sound) @ 0x2923e8f2380
+    - NoAmmo (Sound) @ 0x2923e8f6980
+    - RightGrip (Weld) @ 0x29397ea2a80
+    - ShootBBGUI (BillboardGui) @ 0x2923f058280
+      - Shoot (ImageLabel) @ 0x29238426c80
+  - Weld (Weld) @ 0x29397ea3a40
+
+Found matching config root at path: Workspace/Workspace/Players/Characters/BoyssCrime/DB_HANDLE
+- DB_HANDLE (Model) @ 0x29383ce3880
+  - Handle (MeshPart) @ 0x29383ce7400
+    - Shoot (Sound) @ 0x292162e4680
+    - NoAmmo (Sound) @ 0x292162e3a00
+    - RightGrip (Weld) @ 0x2923e86eb00
+    - ShootBBGUI (BillboardGui) @ 0x2921da1e680
+      - Shoot (ImageLabel) @ 0x2923d644880
+  - Weld (Weld) @ 0x2923e869540
+
+Found matching config root at path: Workspace/Workspace/Players/Characters/fbdnnjhk/DB_HANDLE
+- DB_HANDLE (Model) @ 0x29383ce9000
+  - Handle (MeshPart) @ 0x29383ce7b00
+    - Shoot (Sound) @ 0x2922a5e9400
+    - NoAmmo (Sound) @ 0x2922a5ebe80
+    - RightGrip (Weld) @ 0x29397ead0c0
+    - ShootBBGUI (BillboardGui) @ 0x2923cdb2880
+      - Shoot (ImageLabel) @ 0x29238d84880
+    - Meshes/untitled_ribbon_翅_Plane.006 (Weld) @ 0x29397ea9700
+    - Meshes/untitled_Plane.065 (Weld) @ 0x29397ea5f00
+    - Meshes/untitled_Plane.056 (Weld) @ 0x29397ea3880
+    - Meshes/untitled_Plane.054 (Weld) @ 0x29397ea4d80
+    - Meshes/untitled_Plane.001 (Weld) @ 0x29397ea4680
+    - Meshes/extra (1) (Weld) @ 0x29397eaf580
+    - ParticleEmitter (ParticleEmitter) @ 0x292340a4280
+    - ParticleEmitter (ParticleEmitter) @ 0x2939ea94e80
+    - ParticleEmitter (ParticleEmitter) @ 0x2939ea98480
+    - Meshes/untitled_ribbon_翅_Plane.006 (MeshPart) @ 0x29383cecb80
+    - Meshes/untitled_Plane.065 (MeshPart) @ 0x29383ce3180
+    - Meshes/untitled_Plane.056 (MeshPart) @ 0x29383ce6280
+    - Meshes/untitled_Plane.054 (MeshPart) @ 0x29383cee080
+    - Meshes/untitled_Plane.001 (MeshPart) @ 0x29383cec800
+    - Meshes/extra (1) (MeshPart) @ 0x29383ce0400
+  - Weld (Weld) @ 0x293843a1580
+
+Found matching config root at path: Workspace/Workspace/Players/Characters/DJGHOUST1/DB_HANDLE
+- DB_HANDLE (Model) @ 0x2923fa2fc80
+  - Handle (MeshPart) @ 0x2920b5b9a80
+    - Shoot (Sound) @ 0x29231d5f580
+    - NoAmmo (Sound) @ 0x29231d5df00
+    - RightGrip (Weld) @ 0x2921a5321c0
+    - ShootBBGUI (BillboardGui) @ 0x29218e09680
+      - Shoot (ImageLabel) @ 0x29238689080
+  - Weld (Weld) @ 0x2921a532380
+
+Found matching config root at path: Workspace/Workspace/Players/Characters/Thylove_envy/DB_HANDLE
+- DB_HANDLE (Model) @ 0x2939e8a4a00
+  - Handle (MeshPart) @ 0x2939e8a3f80
+    - Shoot (Sound) @ 0x2923739fd00
+    - NoAmmo (Sound) @ 0x29237391200
+    - RightGrip (Weld) @ 0x2921a536980
+    - ShootBBGUI (BillboardGui) @ 0x293a1d2e680
+      - Shoot (ImageLabel) @ 0x2923fd76c80
+  - Weld (Weld) @ 0x2921a536b40
+
+Found matching config root at path: Workspace/Workspace/Players/Characters/Football123792/DB_HANDLE
+- DB_HANDLE (Model) @ 0x293950acf00
+  - Handle (MeshPart) @ 0x293950a4d80
+    - Shoot (Sound) @ 0x2923dcbc600
+    - NoAmmo (Sound) @ 0x2923dcb6200
+    - RightGrip (Weld) @ 0x2923d2b4a00
+    - ShootBBGUI (BillboardGui) @ 0x2923844e680
+      - Shoot (ImageLabel) @ 0x29239b03c80
+  - Weld (Weld) @ 0x2923d2b6280
+
+Found matching config root at path: Workspace/Workspace/Players/Characters/tailpulling/DB_HANDLE
+- DB_HANDLE (Model) @ 0x293a24f8900
+  - Handle (MeshPart) @ 0x293a24fba00
+    - Shoot (Sound) @ 0x292312bc380
+    - NoAmmo (Sound) @ 0x292312bbe80
+    - ShootBBGUI (BillboardGui) @ 0x29238876480
+      - Shoot (ImageLabel) @ 0x293b0c39080
+    - Attachment (Attachment) @ 0x2922fbef380
+      - Specks (ParticleEmitter) @ 0x2939dae6c80
+    - Part (Part) @ 0x2939e2d3180
+    - Part (Part) @ 0x2939e2d52c0
+    - Part (Part) @ 0x2939e2d3a40
+    - Part (Part) @ 0x2939e2d7b00
+    - Part (Part) @ 0x2939e2d8740
+    - Part (Part) @ 0x2939e2d7080
+    - Part (Part) @ 0x2939e2d28c0
+    - Part (Part) @ 0x292373d52c0
+    - Part (Part) @ 0x292373d6280
+    - Part (Part) @ 0x292373d2700
+    - Part (Part) @ 0x292373d5800
+    - Part (Part) @ 0x292373d7080
+    - Part (Part) @ 0x292373d7240
+      - Sparkles (ParticleEmitter) @ 0x2939dae7280
+      - Sparkles_Beam (ParticleEmitter) @ 0x2939dae0980
+    - MeshPart (MeshPart) @ 0x293a24f9a80
+      - MeshPart (Weld) @ 0x292373df200
+      - Meshes/Heart (1) (Weld) @ 0x292373d9e00
+      - Meshes/Heart (1) (Weld) @ 0x292373d9700
+      - Meshes/Heart (1) (Weld) @ 0x292373d44c0
+      - Meshes/Heart (1) (Weld) @ 0x292373dd980
+      - Meshes/Heart (1) (Weld) @ 0x292373d2540
+      - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x292373dadc0
+      - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x292373d2e00
+      - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x292373d9540
+      - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x292373d5d40
+      - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x292373d5480
+      - Meshes/bulk import fairy set_Simple_Petals.001 (Weld) @ 0x292373d3f80
+      - Meshes/french flag bow (Weld) @ 0x292373d83c0
+      - Part (Weld) @ 0x292373df740
+      - Part (Weld) @ 0x292373d3c00
+      - Part (Weld) @ 0x292373d9c40
+      - Part (Weld) @ 0x292373df3c0
+      - Part (Weld) @ 0x292373db4c0
+      - Part (Weld) @ 0x292373daf80
+      - Part (Weld) @ 0x292373dac00
+      - Part (Weld) @ 0x292373d7b00
+      - Part (Weld) @ 0x292373d7e80
+      - Part (Weld) @ 0x292373da880
+      - Part (Weld) @ 0x292373dba00
+      - Part (Weld) @ 0x292373d6ec0
+      - Part (Weld) @ 0x292373dcf00
+      - Handle (Weld) @ 0x292373dc100
+    - MeshPart (MeshPart) @ 0x293a24f2a80
+    - Meshes/Heart (1) (MeshPart) @ 0x293a24fac00
+      - Specks (ParticleEmitter) @ 0x2939dae2180
+    - Meshes/Heart (1) (MeshPart) @ 0x293a24feb00
+      - Specks (ParticleEmitter) @ 0x2939fa5c680
+    - Meshes/Heart (1) (MeshPart) @ 0x2922cc44a00
+      - Specks (ParticleEmitter) @ 0x2939fa5f080
+    - Meshes/Heart (1) (MeshPart) @ 0x2922cc44d80
+      - Specks (ParticleEmitter) @ 0x2939fa52480
+    - Meshes/Heart (1) (MeshPart) @ 0x2922cc45100
+      - Specks (ParticleEmitter) @ 0x2939fa58180
+    - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x2922cc41900
+    - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x2922cc41c80
+    - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x2922cc40780
+    - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x2922cc40b00
+    - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x2922cc42000
+    - Meshes/bulk import fairy set_Simple_Petals.001 (MeshPart) @ 0x2922cc43180
+    - Meshes/french flag bow (MeshPart) @ 0x2922cc42700
+  - Weld (Weld) @ 0x2921a537cc0
+
+Found matching config root at path: Workspace/Workspace/Map/Barrel
+- Barrel (Model) @ 0x29220840b00
+  - Union (UnionOperation) @ 0x2922c00b400
+  - Union (UnionOperation) @ 0x2922c007000
+
+Found matching config root at path: Workspace/Workspace/Map/Barrel
+- Barrel (Model) @ 0x29220840e80
+  - Union (UnionOperation) @ 0x2922c006800
+  - Union (UnionOperation) @ 0x2922c001400
+
+Found matching config root at path: Workspace/Workspace/Map/Barrel
+- Barrel (Model) @ 0x29220841200
+  - Union (UnionOperation) @ 0x2922c00ec00
+  - Union (UnionOperation) @ 0x2922c001000
+
+Found matching config root at path: Workspace/Workspace/Ignored/TOP_STREAKERS/SurfaceGui/Frame/Contents/Items/VoidBladeOrbit
+- VoidBladeOrbit (Frame) @ 0x2939399d280
+  - Values (Frame) @ 0x29394706480
+    - Number (TextLabel) @ 0x2923fae8080
+    - Username (TextLabel) @ 0x2923fae9080
+    - Value (TextLabel) @ 0x2923faea080
+  - UICorner (UICorner) @ 0x2939f919600
+

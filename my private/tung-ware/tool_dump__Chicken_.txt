@@ -1,0 +1,8 @@
+Tool Name: [Chicken]
+Tool Class: Tool
+
+Descendants:
+  - Name: Eat | Class: Script @ 0x1511f3d9a00
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x1447592663168 @ 0x1511def6280
+  - Name: Handle | Class: MeshPart @ 0x1511db68200
+    - Name: Eat | Class: StringValue | Value: "Unknown" @ 0x15120f24300

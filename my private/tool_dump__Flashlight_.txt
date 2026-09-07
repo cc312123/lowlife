@@ -1,0 +1,10 @@
+Tool Name: [Flashlight]
+Tool Class: Tool
+
+Descendants:
+  - Name: FlashLightScript | Class: Script @ 0x29de6c65200
+  - Name: Handle | Class: Part @ 0x29de6c6de00
+    - Name: Sound | Class: Sound @ 0x29dd459d780
+    - Name: SpotLight | Class: SpotLight @ 0x29dd45733c0
+    - Name: WeldConstraint | Class: WeldConstraint @ 0x29dcd68aa00
+    - Name: Part | Class: MeshPart @ 0x29ddbefb800

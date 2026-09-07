@@ -1,0 +1,24 @@
+Tool Name: EpicGoldSwordAndShield
+Tool Class: Tool
+
+Descendants:
+  - Name: Script | Class: Script @ 0x19aa388f000
+    - Name: ProjectileScript | Class: Script @ 0x19aa3887600
+    - Name: EpicFire | Class: ParticleEmitter @ 0x19ac0448d80
+    - Name: Functions | Class: ModuleScript @ 0x19abf96b4c0
+  - Name: Dash | Class: Animation @ 0x19c1e183b00
+  - Name: HoldShield | Class: Animation @ 0x19c1e183000
+  - Name: Remotes | Class: Folder @ 0x19abf98e080
+    - Name: ClientControl | Class: RemoteFunction @ 0x19ac353ca00
+    - Name: ServerControl | Class: RemoteFunction @ 0x19ac353c200
+  - Name: RightSlash | Class: Animation @ 0x19c1e183300
+  - Name: LeftSlash | Class: Animation @ 0x19c1e18e000
+  - Name: MouseIcon | Class: LocalScript @ 0x19ac353ba00
+  - Name: LocalScript | Class: LocalScript @ 0x19ac353ea00
+  - Name: Handle | Class: Part @ 0x19aa5e7f040
+    - Name: Spin | Class: Sound @ 0x19aab0fdf00
+    - Name: Unsheath | Class: Sound @ 0x19aab0fcb00
+    - Name: Slash | Class: Sound @ 0x19aab0fe680
+    - Name: Lunge | Class: Sound @ 0x19aab0fcd80
+    - Name: Mesh | Class: SpecialMesh @ 0x19a9caa3080
+    - Name: TouchInterest | Class: TouchTransmitter @ 0x19abfcbd6e0

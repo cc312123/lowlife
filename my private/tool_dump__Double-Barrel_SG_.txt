@@ -1,0 +1,20 @@
+Tool Name: [Double-Barrel SG]
+Tool Class: Tool
+
+Descendants:
+  - Name: GunScript | Class: Script @ 0x2041b2bd000
+  - Name: GunClientShotgun | Class: LocalScript @ 0x2041b2bc400
+  - Name: Ammo | Class: IntValue | Value: 2 @ 0x2041478c020
+  - Name: MaxAmmo | Class: IntValue | Value: 2 @ 0x20414786c20
+  - Name: Damage | Class: NumberValue | Value: 28.600000 @ 0x204147874e0
+  - Name: Range | Class: NumberValue | Value: 95.000000 @ 0x2041478c9c0
+  - Name: ShootingCooldown | Class: NumberValue | Value: 0.177000 @ 0x204147867c0
+  - Name: Handle | Class: Part @ 0x2041b204140
+    - Name: ShootSound | Class: Sound @ 0x2041489d780
+    - Name: NoAmmo | Class: Sound @ 0x20414890f80
+    - Name: ShootBBGUI | Class: BillboardGui @ 0x2041b5a6e80
+      - Name: Shoot | Class: ImageLabel @ 0x20290ef7880
+    - Name: WeldConstraint | Class: WeldConstraint @ 0x2041b595bc0
+    - Name: Muzzle | Class: Attachment @ 0x2041b4a7a00
+  - Name: Default | Class: MeshPart @ 0x2041b40d280
+  - Name: OwnerTag | Class: ObjectValue | Value: displayyit (Player) @ 0x2209952444544 @ 0x204147884a0

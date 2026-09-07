@@ -1,0 +1,17 @@
+Tool Name: Sniper
+Tool Class: Tool
+
+Descendants:
+  - Name: Sniper | Class: Script @ 0x2922af6c400
+  - Name: L_Sniper | Class: LocalScript @ 0x2922af68e00
+  - Name: MeshDark | Class: MeshPart @ 0x2922a8f2a80
+  - Name: MeshColored | Class: MeshPart @ 0x2922a8faf80
+  - Name: Handle | Class: Part @ 0x292225c3880
+    - Name: Reload | Class: Sound @ 0x2922d995f80
+    - Name: Shot | Class: Sound @ 0x2922d996200
+    - Name: Muzzle | Class: Attachment @ 0x2922baac080
+    - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d64e680
+    - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d649cc0
+    - Name: HitMarker | Class: ImageLabel @ 0x29230e87880
+  - Name: Sniper2 | Class: Script @ 0x2922af64000
+  - Name: L_Sniper2 | Class: LocalScript @ 0x2922af62400

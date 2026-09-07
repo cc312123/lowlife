@@ -1,0 +1,372 @@
+=== Weapon Config Search for Tool: Rocket ===
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Misc/CosmeticAdSamples/RocketSkin
+- RocketSkin (Model) @ 0x29216cfe780
+  - Model (Model) @ 0x29216cfee80
+    - Mesh (MeshPart) @ 0x2921af7ba00
+  - Part (Part) @ 0x29220ccc800
+  - Trigger (Part) @ 0x29220ccc9c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Misc/CosmeticAdSamples/Custom/RocketSkinBlack
+- RocketSkinBlack (Model) @ 0x29216d64d80
+  - Model (Model) @ 0x292179caf80
+    - Mesh (MeshPart) @ 0x2921af7f580
+    - Glow (Part) @ 0x2921b96c640
+      - SurfaceGui (SurfaceGui) @ 0x29216de6480
+        - Glow (ImageLabel) @ 0x2923fd2f080
+  - Part (Part) @ 0x29220ccf580
+  - Trigger (Part) @ 0x2921b96c480
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Misc/CosmeticAdSamples/Custom/RocketEffectRainbow
+- RocketEffectRainbow (Model) @ 0x29216d6f580
+  - Model (Model) @ 0x29216cf1900
+    - Showcase (Part) @ 0x2921b96cb80
+      - SurfaceGui (SurfaceGui) @ 0x2921627c880
+        - ImageLabel (ImageLabel) @ 0x2923ec7cc80
+        - Glow (ImageLabel) @ 0x293846ea880
+          - UIGradient (UIGradient) @ 0x2923cb1b000
+  - Part (Part) @ 0x2921b96c800
+  - Trigger (Part) @ 0x2921b96c9c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Misc/CosmeticAdSamples/Custom/RocketEffectBlack
+- RocketEffectBlack (Model) @ 0x2921a311c80
+  - Model (Model) @ 0x2921a312000
+    - Showcase (Part) @ 0x29222063c00
+      - SurfaceGui (SurfaceGui) @ 0x29217bf8280
+        - ImageLabel (ImageLabel) @ 0x293846e0080
+        - Glow (ImageLabel) @ 0x293846fb480
+  - Part (Part) @ 0x293a43a75c0
+  - Trigger (Part) @ 0x293a43a1580
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Misc/CosmeticAdSamples/RocketEffect
+- RocketEffect (Model) @ 0x2921a315f00
+  - Model (Model) @ 0x292179ff900
+    - Showcase (Part) @ 0x29220ccc640
+      - SurfaceGui (SurfaceGui) @ 0x29217bf0080
+        - ImageLabel (ImageLabel) @ 0x293846e6c80
+        - Glow (ImageLabel) @ 0x2923fd29080
+  - Part (Part) @ 0x29220ccc2c0
+  - Trigger (Part) @ 0x29220ccc480
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Misc/RocketInfo
+- RocketInfo (Frame) @ 0x29216deb480
+  - Title (TextLabel) @ 0x2921a551080
+    - UIStroke (UIStroke) @ 0x29233741340
+    - UIGradient (UIGradient) @ 0x2923cb10500
+  - Background (Frame) @ 0x29216debe80
+    - UIStroke (UIStroke) @ 0x29233760d00
+    - UICorner (UICorner) @ 0x293864a5100
+    - ImageLabel (ImageLabel) @ 0x29383e99080
+  - Buy (TextButton) @ 0x29215a4c880
+    - Hover (Frame) @ 0x29217bf1480
+      - UICorner (UICorner) @ 0x293864ad900
+    - CustomButton (StringValue) | Value: "Unknown" @ 0x293864a0200
+    - ClassicSkinText (TextLabel) @ 0x29216d10080
+      - UIStroke (UIStroke) @ 0x29233761480
+    - UIGradient (UIGradient) @ 0x2923cb14700
+    - Price (TextLabel) @ 0x29217b87080
+      - RobuxIcon (ImageLabel) @ 0x293846e5480
+      - UIStroke (UIStroke) @ 0x29236a1bd40
+    - UICorner (UICorner) @ 0x293864a3a00
+    - UIStroke (UIStroke) @ 0x2923376bfc0
+  - Claim (TextButton) @ 0x29215a4b480
+    - ReachText (TextLabel) @ 0x29217f25080
+      - ImageLabel (ImageLabel) @ 0x293846e6080
+      - UIStroke (UIStroke) @ 0x29233761340
+    - Hover (Frame) @ 0x29217bf7880
+      - UICorner (UICorner) @ 0x293864a5700
+    - ClaimText (TextLabel) @ 0x2921af51080
+      - UIStroke (UIStroke) @ 0x29236a160c0
+    - CustomButton (StringValue) | Value: "Unknown" @ 0x293864a4f00
+    - UIGradientActive (UIGradient) @ 0x2923cb14580
+    - UIGradientGray (UIGradient) @ 0x2923cb1d580
+    - GoalText (TextLabel) @ 0x29217c8e080
+      - UIStroke (UIStroke) @ 0x29233765d00
+    - UICorner (UICorner) @ 0x293864a6d00
+    - UIStroke (UIStroke) @ 0x29233764680
+  - TextLabel (TextLabel) @ 0x29217f2a080
+    - UIStroke (UIStroke) @ 0x29236a101c0
+  - Arrow (Frame) @ 0x29217bf5080
+    - UIStroke (UIStroke) @ 0x2923376d780
+  - Shadow (ImageLabel) @ 0x293846f7880
+  - Demo (Frame) @ 0x29216de6e80
+    - TextLabel (TextLabel) @ 0x2921af52080
+      - UIStroke (UIStroke) @ 0x29233764a40
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Misc/RocketInfo2
+- RocketInfo2 (Frame) @ 0x2921af01480
+  - Claim (TextButton) @ 0x29215a4a080
+    - Hover (Frame) @ 0x29216279680
+      - UICorner (UICorner) @ 0x293864ab500
+    - Star (ImageLabel) @ 0x2923ec72480
+    - Goal (TextLabel) @ 0x29217f20080
+      - UIStroke (UIStroke) @ 0x29236a10f80
+    - Slash (TextLabel) @ 0x2921a55a080
+      - UIStroke (UIStroke) @ 0x29233765e40
+    - CounterSmall (TextLabel) @ 0x29216aad080
+      - UIStroke (UIStroke) @ 0x29236a18280
+    - CounterBig (TextLabel) @ 0x2921a559080
+      - UIStroke (UIStroke) @ 0x29233761d40
+    - DarkEffect (Frame) @ 0x29217bf1e80
+      - UICorner (UICorner) @ 0x293864a4c00
+    - Shine (Frame) @ 0x29217bfe680
+      - UICorner (UICorner) @ 0x293864a3100
+      - UIGradient (UIGradient) @ 0x2923cb1e480
+    - Added (TextLabel) @ 0x29216d14080
+      - UIStroke (UIStroke) @ 0x29233764040
+      - UIGradient (UIGradient) @ 0x2923cb10980
+    - UICorner (UICorner) @ 0x293864a6f00
+    - UIStroke (UIStroke) @ 0x29233762740
+    - CustomButton (StringValue) | Value: "Unknown" @ 0x293864a6e00
+    - UIGradient (UIGradient) @ 0x2923cb17280
+  - Triangle (Frame) @ 0x29217bf9680
+    - UIGradient (UIGradient) @ 0x2923cb1c680
+  - Glow (ImageLabel) @ 0x2923fd26080
+  - Description (TextLabel) @ 0x29217173080
+    - UIStroke (UIStroke) @ 0x29233764400
+    - UIGradient (UIGradient) @ 0x2923cb10800
+  - Buy (TextButton) @ 0x29215a48c80
+    - CustomButton (StringValue) | Value: "Unknown" @ 0x293864a8f00
+    - Hover (Frame) @ 0x29216def080
+      - UICorner (UICorner) @ 0x293864ac200
+    - Shine (Frame) @ 0x29217bf2880
+      - UIGradient (UIGradient) @ 0x2923cb10b00
+      - UICorner (UICorner) @ 0x293864a9900
+    - UIShadow (UIShadow) @ 0x29233768280
+    - RobuxIcon (ImageLabel) @ 0x293846e2480
+    - UICorner (UICorner) @ 0x293864a6b00
+    - UIGradient (UIGradient) @ 0x2923cb16200
+    - UIStroke (UIStroke) @ 0x29236a1fe40
+  - UIScale (UIScale) @ 0x2922f4c6c20
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Misc/RocketSample
+- RocketSample (Part) @ 0x292220628c0
+  - AngularVelocity (AngularVelocity) @ 0x2939100c480
+  - VectorForce (VectorForce) @ 0x2939100f3c0
+  - AlignOrientation (AlignOrientation) @ 0x2922e7f4400
+  - FireParticles (ParticleEmitter) @ 0x2923cdd9080
+  - Attachment (Attachment) @ 0x2923cb10380
+  - LinearVelocity (LinearVelocity) @ 0x2923cddab80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Cosmetics/RocketEffect
+- RocketEffect (Folder) @ 0x2922eecff20
+  - Black (Color3Value) [ValueObject] @ 0x2922ee56440
+    - FireParticles (ParticleEmitter) @ 0x2923cddb480
+  - Yellow (Color3Value) [ValueObject] @ 0x2922ee56c20
+    - FireParticles (ParticleEmitter) @ 0x29384349980
+  - White (Color3Value) [ValueObject] @ 0x2922eecbbc0
+    - FireParticles (ParticleEmitter) @ 0x2923cddf680
+  - Green (Color3Value) [ValueObject] @ 0x2922eec4300
+    - FireParticles (ParticleEmitter) @ 0x2923cddc380
+  - Rainbow (Color3Value) [ValueObject] @ 0x2922f05f9e0
+    - FireParticles (ParticleEmitter) @ 0x2923cddbd80
+  - Red (Color3Value) [ValueObject] @ 0x2922f4cd360
+    - FireParticles (ParticleEmitter) @ 0x2923cddc080
+  - Pink (Color3Value) [ValueObject] @ 0x2922f4c66e0
+    - FireParticles (ParticleEmitter) @ 0x2923cdd2d80
+  - LightBlue (Color3Value) [ValueObject] @ 0x2922f4c92a0
+    - FireParticles (ParticleEmitter) @ 0x2923cdd7580
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Cosmetics/RocketSkin
+- RocketSkin (Folder) @ 0x2922f4c9460
+  - Pink (Color3Value) [ValueObject] @ 0x2922eec06a0
+  - Yellow (Color3Value) [ValueObject] @ 0x2922eec0860
+  - Black (Color3Value) [ValueObject] @ 0x2922eec0b00
+  - Classic (ObjectValue) | Value: Model (Model) @ 0x2826484789632 @ 0x2922eec1580
+    - Model (Model) @ 0x292179f3180
+      - ClassicRocket (MeshPart) @ 0x2921af77b00
+        - Sparkles (ParticleEmitter) @ 0x2923cdda280
+  - Red (Color3Value) [ValueObject] @ 0x2922f05eda0
+  - White (Color3Value) [ValueObject] @ 0x2922f05f4a0
+  - LightBlue (Color3Value) [ValueObject] @ 0x2922f05b140
+  - Festive (ObjectValue) | Value: RocketGarland3 (Model) @ 0x2826471155456 @ 0x2922f05ee80
+    - RocketGarland3 (Model) @ 0x29216cf2700
+      - WL_ToolGarland (Script) @ 0x2921eefca00
+      - Color1 (MeshPart) @ 0x2921af7af80
+      - Wire (MeshPart) @ 0x2921af7cb80
+      - Mesh (MeshPart) @ 0x2921af7ee80
+        - WeldConstraint (WeldConstraint) @ 0x29233764f40
+        - WeldConstraint (WeldConstraint) @ 0x29233764e00
+        - WeldConstraint (WeldConstraint) @ 0x29236a16c00
+      - Color2 (MeshPart) @ 0x2921af7f200
+  - Green (Color3Value) [ValueObject] @ 0x2922f4c98c0
+  - Rainbow (ObjectValue) | Value: Model (Model) @ 0x2826471661696 @ 0x2922f4c9540
+    - Model (Model) @ 0x29216d6e080
+      - Rocket (MeshPart) @ 0x2921af79a80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Events/Remote/ClaimRocket
+- ClaimRocket (RemoteEvent) @ 0x2939100b300
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Events/Remote/RocketHit
+- RocketHit (RemoteEvent) @ 0x29391009380
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Sounds/AdButtonPressed
+- AdButtonPressed (Sound) @ 0x292225e8f00
+
+Found matching config root at path: Workspace/Workspace/LeaderboardBlue
+- LeaderboardBlue (Model) @ 0x29238dbaf80
+  - Background (Model) @ 0x29238dba880
+    - Background (Part) @ 0x292215f9a80
+    - Corner (Part) @ 0x2921b962e00
+    - Background (Part) @ 0x2921b963500
+    - Corner (Part) @ 0x2921b9636c0
+    - Corner (Part) @ 0x29222014680
+    - Corner (Part) @ 0x29222014840
+  - BackgroundTitle (Model) @ 0x29238db7080
+    - Background (Part) @ 0x2921b962c40
+    - Corner (Part) @ 0x2921b969a80
+    - Part (Part) @ 0x29222068740
+    - Part (Part) @ 0x29222068900
+    - Background (Part) @ 0x29222068ac0
+    - Corner (Part) @ 0x29222068c80
+    - Corner (Part) @ 0x29222068e40
+    - Corner (Part) @ 0x29222069000
+  - Title (Part) @ 0x2921b963340
+    - SurfaceGui (SurfaceGui) @ 0x29216095a80
+      - TextLabel (TextLabel) @ 0x29216114080
+        - UIStroke (UIStroke) @ 0x292335c7d80
+  - Screen (Part) @ 0x292220144c0
+  - LeaderboardPowerButton (Part) @ 0x29222068580
+
+Found matching config root at path: Workspace/Workspace/Ads/Rocket
+- Rocket (Model) @ 0x2938cdd9a80
+  - Background (Model) @ 0x2938cdd9700
+    - Corner (Part) @ 0x2923bdc9e00
+    - Corner (Part) @ 0x2923bdc9fc0
+    - Background (Part) @ 0x2923bdca180
+    - Corner (Part) @ 0x2921b96db40
+    - Corner (Part) @ 0x2921b96dd00
+    - Background (Part) @ 0x29221770940
+  - Screen (Part) @ 0x2922130bd80
+    - SurfaceGui (SurfaceGui) @ 0x29216271e80
+      - Scanlines (ImageLabel) @ 0x2923e9f7880
+      - Frame (Frame) @ 0x29216272880
+        - UICorner (UICorner) @ 0x29231edfd00
+        - UIGradient (UIGradient) @ 0x293a24a8f00
+        - UIStroke (UIStroke) @ 0x292335c6fc0
+        - Shine (ImageLabel) @ 0x2922ef29c80
+        - Shine (ImageLabel) @ 0x2923e9fa880
+        - Product (TextLabel) @ 0x29216118080
+        - ScrollingAd (Frame) @ 0x29216273280
+          - RocketIcon (ImageLabel) @ 0x2923e9fb480
+          - SkinIcon (ImageLabel) @ 0x2923e9f6c80
+          - SkinText1 (TextLabel) @ 0x29216119080
+            - UIStroke (UIStroke) @ 0x292335c6700
+          - SkinText2 (TextLabel) @ 0x2921611a080
+            - UIStroke (UIStroke) @ 0x292335c6480
+        - Price (TextLabel) @ 0x2921611b080
+          - UIStroke (UIStroke) @ 0x292335c6840
+          - RobuxIcon (ImageLabel) @ 0x2923e9f4880
+  - Trigger (Part) @ 0x2922201d0c0
+    - TouchInterest (TouchTransmitter) @ 0x292379827e0
+
+Found matching config root at path: Workspace/Workspace/Ads/Rocket
+- Rocket (Model) @ 0x2938cdd4d80
+  - Background (Model) @ 0x2938cdd7e80
+    - Background (Part) @ 0x293a43afe40
+    - Corner (Part) @ 0x2922201d440
+    - Corner (Part) @ 0x2922201d600
+    - Background (Part) @ 0x2922201d7c0
+    - Corner (Part) @ 0x2922201d980
+    - Corner (Part) @ 0x2922201db40
+  - Trigger (Part) @ 0x293a43aba00
+    - TouchInterest (TouchTransmitter) @ 0x29237982e00
+  - Screen (Part) @ 0x2922201d280
+    - SurfaceGui (SurfaceGui) @ 0x29216273c80
+      - Scanlines (ImageLabel) @ 0x2923e9f0080
+      - Frame (Frame) @ 0x29216274680
+        - UICorner (UICorner) @ 0x29231ed2400
+        - UIGradient (UIGradient) @ 0x293a24aad00
+        - UIStroke (UIStroke) @ 0x292335c0a80
+        - Shine (ImageLabel) @ 0x2923e9f2480
+        - Shine (ImageLabel) @ 0x2923e9f9080
+        - Product (TextLabel) @ 0x2921611c080
+        - ScrollingAd (Frame) @ 0x29216275080
+          - RocketIcon (ImageLabel) @ 0x2923e9f6080
+          - SkinIcon (ImageLabel) @ 0x2923e9f5480
+          - SkinText1 (TextLabel) @ 0x2921611d080
+            - UIStroke (UIStroke) @ 0x292335c0300
+          - SkinText2 (TextLabel) @ 0x2921611e080
+            - UIStroke (UIStroke) @ 0x292335c06c0
+        - Price (TextLabel) @ 0x29216aa0080
+          - UIStroke (UIStroke) @ 0x292335c2240
+          - RobuxIcon (ImageLabel) @ 0x2923e9f8480
+
+Found matching config root at path: Workspace/Workspace/Ads/Rocket
+- Rocket (Model) @ 0x2938cdd4300
+  - Background (Model) @ 0x2938cdd0780
+    - Corner (Part) @ 0x293a43a0080
+    - Corner (Part) @ 0x293a43a3500
+    - Background (Part) @ 0x293a43a67c0
+    - Corner (Part) @ 0x293a43a4140
+    - Corner (Part) @ 0x293a43a3340
+    - Background (Part) @ 0x293a43a4f40
+  - Screen (Part) @ 0x293a43ab680
+    - SurfaceGui (SurfaceGui) @ 0x29216275a80
+      - Scanlines (ImageLabel) @ 0x2923e9fc080
+      - Frame (Frame) @ 0x29216276480
+        - UICorner (UICorner) @ 0x29231ed6200
+        - UIGradient (UIGradient) @ 0x293a24a1e80
+        - UIStroke (UIStroke) @ 0x292335c1d40
+        - Shine (ImageLabel) @ 0x2923e9fe480
+        - Shine (ImageLabel) @ 0x2923e9ff080
+        - Product (TextLabel) @ 0x29216aa1080
+        - ScrollingAd (Frame) @ 0x29216276e80
+          - RocketIcon (ImageLabel) @ 0x2923e9fd880
+          - SkinIcon (ImageLabel) @ 0x2923e9f9c80
+          - SkinText1 (TextLabel) @ 0x29216aa2080
+            - UIStroke (UIStroke) @ 0x292335c2c40
+          - SkinText2 (TextLabel) @ 0x29216aa3080
+            - UIStroke (UIStroke) @ 0x292335c1700
+        - Price (TextLabel) @ 0x29216aa4080
+          - UIStroke (UIStroke) @ 0x292335c3280
+          - RobuxIcon (ImageLabel) @ 0x2923e9f3c80
+  - Trigger (Part) @ 0x293a43a9fc0
+    - TouchInterest (TouchTransmitter) @ 0x2923798ecc0
+
+Found matching config root at path: Workspace/Workspace/Ads/Rocket
+- Rocket (Model) @ 0x2938cddcf00
+  - Background (Model) @ 0x292179cb300
+    - Corner (Part) @ 0x293a43af3c0
+    - Corner (Part) @ 0x293a43a59c0
+    - Background (Part) @ 0x293a43a52c0
+    - Corner (Part) @ 0x293a43a7400
+    - Corner (Part) @ 0x293a441f740
+    - Background (Part) @ 0x29222061e40
+  - Screen (Part) @ 0x293a43aa180
+    - SurfaceGui (SurfaceGui) @ 0x29216277880
+      - Scanlines (ImageLabel) @ 0x2923ec7d880
+      - Frame (Frame) @ 0x29216278280
+        - UICorner (UICorner) @ 0x29231ed6100
+        - UIGradient (UIGradient) @ 0x293a24ab600
+        - UIStroke (UIStroke) @ 0x292335c29c0
+        - Shine (ImageLabel) @ 0x2923ec76080
+        - Shine (ImageLabel) @ 0x2923ec7a880
+        - Product (TextLabel) @ 0x29216aa5080
+        - ScrollingAd (Frame) @ 0x29216278c80
+          - RocketIcon (ImageLabel) @ 0x2923ec79c80
+          - SkinIcon (ImageLabel) @ 0x2923ec75480
+          - SkinText1 (TextLabel) @ 0x29216aa6080
+            - UIStroke (UIStroke) @ 0x2923374eb80
+          - SkinText2 (TextLabel) @ 0x29216aa7080
+            - UIStroke (UIStroke) @ 0x2923374ef40
+        - Price (TextLabel) @ 0x29216aa8080
+          - UIStroke (UIStroke) @ 0x29236a16d40
+          - RobuxIcon (ImageLabel) @ 0x293846fc080
+  - Trigger (Part) @ 0x29222062000
+    - TouchInterest (TouchTransmitter) @ 0x2923798fc80
+
+Found matching config root at path: Workspace/Workspace/Ads/Cosmetics/GeneratedCatalog/4/Model/Model/Rocket
+- Rocket (MeshPart) @ 0x2922a8fe400
+
+Found matching config root at path: Workspace/Workspace/RocketsFolder
+- RocketsFolder (Folder) @ 0x2922ec651e0
+
+Found matching config root at path: Workspace/Workspace/IIIIIllIlIllllIIIIl/Rocket
+- Rocket (Tool) @ 0x2922f25d880
+  - Handle (Part) @ 0x29384e68900
+    - Muzzle (Attachment) @ 0x2939e1e2c00
+      - JammedParticles (ParticleEmitter) @ 0x29388653c80
+  - Mesh (MeshPart) @ 0x2923af34300
+    - WeldConstraint (WeldConstraint) @ 0x292247938c0
+

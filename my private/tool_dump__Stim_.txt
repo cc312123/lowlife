@@ -1,0 +1,24 @@
+Tool Name: [Stim]
+Tool Class: Tool
+
+Descendants:
+  - Name: Parts | Class: Model @ 0x202a5438900
+    - Name: Stim Button | Class: MeshPart @ 0x202a5439000
+    - Name: Stim Cap | Class: MeshPart @ 0x202a543a500
+      - Name: Stim Liquid | Class: Motor6D @ 0x204208d3400
+      - Name: Stim Spring | Class: Motor6D @ 0x204208d6c00
+    - Name: Stim Chamber | Class: MeshPart @ 0x202a5437780
+    - Name: Stim Glass | Class: MeshPart @ 0x202a5437e80
+    - Name: Stim Holder | Class: MeshPart @ 0x202a543a180
+    - Name: Stim Liquid | Class: MeshPart @ 0x202a5438200
+    - Name: Stim Spring | Class: MeshPart @ 0x202a5439a80
+  - Name: Handle | Class: MeshPart @ 0x202a5438c80
+    - Name: Stim Liquid | Class: Weld @ 0x204097b2a80
+    - Name: Stim Chamber | Class: Weld @ 0x204097bb300
+    - Name: Stim Button | Class: Weld @ 0x204097baa40
+    - Name: Stim Glass | Class: Weld @ 0x204097bdec0
+    - Name: Stim Cap | Class: Weld @ 0x204097bd440
+    - Name: Stim Holder | Class: Weld @ 0x204097be240
+    - Name: Stim Spring | Class: Weld @ 0x204097b8900
+  - Name: Drink | Class: Script @ 0x2028d5f1e00
+  - Name: OwnerTag | Class: ObjectValue | Value: displayyit (Player) @ 0x2209952444544 @ 0x2040890b220

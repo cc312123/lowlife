@@ -1,0 +1,14 @@
+Tool Name: Darkheart
+Tool Class: Tool
+
+Descendants:
+  - Name: SwordScript | Class: Script @ 0x19c0d898c00
+    - Name: DarkEffect | Class: Script @ 0x19c0d898200
+  - Name: MouseIcon | Class: LocalScript @ 0x19c0d899200
+  - Name: Handle | Class: Part @ 0x19c126444c0
+    - Name: Unsheath | Class: Sound @ 0x19a9f031e80
+    - Name: Lunge | Class: Sound @ 0x19a9f031c00
+    - Name: Slash | Class: Sound @ 0x19a9f030300
+    - Name: Mesh | Class: SpecialMesh @ 0x19c1ad1cc80
+    - Name: TouchInterest | Class: TouchTransmitter @ 0x19abf7e0f60
+  - Name: toolanim | Class: StringValue | Value: "Unknown" @ 0x19abff9d400

@@ -1,0 +1,15 @@
+Tool Name: [Bat]
+Tool Class: Tool
+
+Descendants:
+  - Name: BatScript | Class: Script @ 0x29d7852a200
+  - Name: Handle | Class: MeshPart @ 0x29dd9cebc00
+    - Name: TrailEffects | Class: Trail @ 0x29dde1ec380
+    - Name: Attachment | Class: Attachment @ 0x29ddde22fc0
+    - Name: Attachment | Class: Attachment @ 0x29ddde2c100
+    - Name: WeldConstraint | Class: WeldConstraint @ 0x29ddc47d880
+  - Name: Default | Class: MeshPart @ 0x29dd9ce5400
+    - Name: TrailEffects | Class: Trail @ 0x29dde1e7600
+    - Name: Attachment | Class: Attachment @ 0x29ddde28200
+    - Name: Attachment | Class: Attachment @ 0x29ddde2b680
+  - Name: OwnerTag | Class: ObjectValue | Value: displayyit (Model) @ 0x2875231178368 @ 0x29dd4952e00

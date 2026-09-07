@@ -1,0 +1,8 @@
+Tool Name: [HotDog]
+Tool Class: Tool
+
+Descendants:
+  - Name: Eat | Class: Script @ 0x15129516200
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x1447592663168 @ 0x15122e4ff20
+  - Name: Handle | Class: MeshPart @ 0x1511db6bd80
+    - Name: Eat | Class: StringValue | Value: "Unknown" @ 0x15122e11900

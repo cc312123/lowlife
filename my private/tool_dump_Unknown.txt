@@ -1,0 +1,110 @@
+Tool Name: Unknown
+Tool Class: Tool
+
+Descendants:
+  - Name: Unknown | Class: Script @ 0x1e98c5a7c00
+  - Name: Unknown | Class: ObjectValue | Value: Unknown (Player) @ 0x2096339056768 @ 0x1e83b015720
+  - Name: Unknown | Class: MeshPart @ 0x1e83b022400
+    - Name: Unknown | Class: Attachment @ 0x1e83aff5d40
+    - Name: Unknown | Class: Attachment @ 0x1e83aff5f00
+    - Name: Unknown | Class: Trail @ 0x1e98ee27380
+    - Name: Unknown | Class: Sound @ 0x1e98ef68c80
+    - Name: Unknown | Class: Sound @ 0x1e98ef60800
+    - Name: Unknown | Class: Part @ 0x1e98c5a9800
+      - Name: Unknown | Class: Sound @ 0x1e98ef6a300
+        - Name: Unknown | Class: PitchShiftSoundEffect @ 0x1e83afd5a80
+      - Name: Unknown | Class: Model @ 0x1e82ec6fc80
+        - Name: Unknown | Class: Folder @ 0x1e83b01c560
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1dc00
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1dd00
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1de00
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1df00
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1e000
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1e100
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1e200
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1e300
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1e400
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1e500
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1e600
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1e700
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1e800
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1e900
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1ea00
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1eb00
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1ec00
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1ed00
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1ee00
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1ef00
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1f000
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1f100
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1f200
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1f300
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1f400
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1f500
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1f600
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1f700
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1f800
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1f900
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1fa00
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1fb00
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1fc00
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1fd00
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1fe00
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98de1ff00
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98e4f0100
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98e4f0200
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98e4f0300
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98e4f0400
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98e4f0500
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98e4f0600
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98e4f0700
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98e4f0800
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98e4f0900
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98e4f0a00
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98e4f0b00
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98e4f0c00
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98e4f0d00
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98e4f0e00
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98e4f0f00
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98e4f1000
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98e4f1100
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98e4f1200
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98e4f1300
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98e4f1400
+          - Name: Unknown | Class: CFrameValue [ValueObject] @ 0x1e98e4f1500
+        - Name: Unknown | Class: AnimationController @ 0x1e83b01fba0
+          - Name: Unknown | Class: Animator @ 0x1e8373d7080
+        - Name: Unknown | Class: MeshPart @ 0x1e83b024400
+          - Name: Unknown | Class: Sound @ 0x1e98ef6cb00
+            - Name: Unknown | Class: PitchShiftSoundEffect @ 0x1e83afd5bc0
+          - Name: Unknown | Class: Sound @ 0x1e98ef68500
+            - Name: Unknown | Class: PitchShiftSoundEffect @ 0x1e83afd5d00
+          - Name: Unknown | Class: Motor6D @ 0x1e98c5a9a00
+          - Name: Unknown | Class: PointLight @ 0x1e98e4f1600
+          - Name: Unknown | Class: ParticleEmitter @ 0x1e83b037e80
+          - Name: Unknown | Class: ParticleEmitter @ 0x1e83b038180
+          - Name: Unknown | Class: ParticleEmitter @ 0x1e83b038480
+          - Name: Unknown | Class: Attachment @ 0x1e83aff9000
+          - Name: Unknown | Class: Attachment @ 0x1e83aff91c0
+          - Name: Unknown | Class: Trail @ 0x1e98ef69b80
+          - Name: Unknown | Class: MeshPart @ 0x1e83b024800
+            - Name: Unknown | Class: Motor6D @ 0x1e98c5a9c00
+          - Name: Unknown | Class: MeshPart @ 0x1e83b024c00
+            - Name: Unknown | Class: Motor6D @ 0x1e98c5a9e00
+          - Name: Unknown | Class: MeshPart @ 0x1e83b025000
+            - Name: Unknown | Class: Motor6D @ 0x1e98c5aa000
+        - Name: Unknown | Class: Part @ 0x1e98c5aa200
+          - Name: Unknown | Class: Bone @ 0x1e98c5aa400
+            - Name: Unknown | Class: Bone @ 0x1e98c5aa600
+          - Name: Unknown | Class: Bone @ 0x1e98c5aa800
+          - Name: Unknown | Class: Bone @ 0x1e98c5aaa00
+            - Name: Unknown | Class: Bone @ 0x1e98c5aac00
+          - Name: Unknown | Class: Bone @ 0x1e98c5aae00
+      - Name: Unknown | Class: WeldConstraint @ 0x1e83afd5e40
+      - Name: Unknown | Class: WeldConstraint @ 0x1e83afd5f80
+      - Name: Unknown | Class: WeldConstraint @ 0x1e83afd60c0
+      - Name: Unknown | Class: WeldConstraint @ 0x1e83afd6200
+      - Name: Unknown | Class: WeldConstraint @ 0x1e83afd6340
+      - Name: Unknown | Class: Trail @ 0x1e98ef6ad00
+      - Name: Unknown | Class: Script @ 0x1e98c5ab000
+      - Name: Unknown | Class: Weld @ 0x1e83aff9380

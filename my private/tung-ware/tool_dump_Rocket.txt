@@ -1,0 +1,9 @@
+Tool Name: Rocket
+Tool Class: Tool
+
+Descendants:
+  - Name: Handle | Class: Part @ 0x29384e68900
+    - Name: Muzzle | Class: Attachment @ 0x2939e1e2c00
+      - Name: JammedParticles | Class: ParticleEmitter @ 0x29388653c80
+  - Name: Mesh | Class: MeshPart @ 0x2923af34300
+    - Name: WeldConstraint | Class: WeldConstraint @ 0x292247938c0

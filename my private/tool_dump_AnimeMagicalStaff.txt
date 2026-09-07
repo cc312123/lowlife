@@ -1,0 +1,27 @@
+Tool Name: AnimeMagicalStaff
+Tool Class: Tool
+
+Descendants:
+  - Name: Animations | Class: Folder @ 0x19abdfc7da0
+    - Name: R15 | Class: Folder @ 0x19abdfc6360
+      - Name: Spin | Class: Animation @ 0x19abf8e2f00
+      - Name: Slash | Class: Animation @ 0x19abfcd0d00
+      - Name: Chop | Class: Animation @ 0x19abfcd4500
+    - Name: R6 | Class: Folder @ 0x19abdfc7080
+      - Name: Spin | Class: Animation @ 0x19c0d7dac00
+      - Name: Slash | Class: Animation @ 0x19c0a963000
+      - Name: Chop | Class: Animation @ 0x19ac4385400
+  - Name: Remotes | Class: Folder @ 0x19abdfc60c0
+    - Name: ClientControl | Class: RemoteFunction @ 0x19ab8a88400
+    - Name: ServerControl | Class: RemoteFunction @ 0x19ab8a88200
+  - Name: Script | Class: Script @ 0x19ab8a88a00
+    - Name: ReadyParticle | Class: ParticleEmitter @ 0x19ab4d6cc80
+    - Name: HitScript | Class: Script @ 0x19ab8a8c800
+      - Name: Functions | Class: ModuleScript @ 0x19aab0e5640
+  - Name: LocalScript | Class: LocalScript @ 0x19ab8a85400
+  - Name: MouseIcon | Class: LocalScript @ 0x19ab8a8c400
+  - Name: FlightControl | Class: LocalScript @ 0x19ab8a82600
+  - Name: Handle | Class: Part @ 0x19aab0e3dc0
+    - Name: Fire | Class: Sound @ 0x19ac3fb3500
+    - Name: Strike | Class: Sound @ 0x19ac3fbad00
+    - Name: Mesh | Class: SpecialMesh @ 0x19a9caa5180

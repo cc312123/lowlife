@@ -1,0 +1,19 @@
+Tool Name: [TacticalShotgun]
+Tool Class: Tool
+
+Descendants:
+  - Name: Ammo | Class: IntValue | Value: 3 @ 0x2961bfdebe0
+  - Name: Handle | Class: MeshPart @ 0x294acdc1c80
+    - Name: NoAmmo | Class: Sound @ 0x2962c673280
+    - Name: ShootSound | Class: Sound @ 0x2962c673000
+    - Name: Flash | Class: BillboardGui @ 0x2961c0d1e80
+      - Name: Shoot | Class: ImageLabel @ 0x2961cf50c80
+    - Name: Light | Class: PointLight @ 0x2961ea93700
+    - Name: SurfaceLight | Class: SurfaceLight @ 0x2961ea93200
+    - Name: MG | Class: Sound @ 0x294ba914b80
+    - Name: MG | Class: Sound @ 0x294b4769b80
+    - Name: MG | Class: Sound @ 0x294ba742380
+    - Name: MG | Class: Sound @ 0x294ae1ad500
+  - Name: LocalScript | Class: LocalScript @ 0x2961bd10600
+  - Name: MaxAmmo | Class: NumberValue | Value: 6.000000 @ 0x2961bfde320
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x2837146775680 @ 0x2961bfde080

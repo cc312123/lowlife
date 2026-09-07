@@ -1,0 +1,16 @@
+Tool Name: [Minigun]
+Tool Class: Tool
+
+Descendants:
+  - Name: Ammo | Class: IntValue | Value: 100 @ 0x20fa0985fe0
+  - Name: Handle | Class: MeshPart @ 0x20faef79000
+    - Name: NoAmmo | Class: Sound @ 0x20fafdd0580
+    - Name: ShootSound | Class: Sound @ 0x20fafdde680
+    - Name: Flash | Class: BillboardGui @ 0x20fac60e680
+      - Name: Shoot | Class: ImageLabel @ 0x20f9fb44880
+    - Name: effect | Class: Attachment @ 0x20fa93f3c80
+      - Name: bullets | Class: ParticleEmitter @ 0x20f9ef8b180
+    - Name: Light | Class: PointLight @ 0x20fb0a3cc00
+  - Name: LocalScript | Class: LocalScript @ 0x20fb13cb800
+  - Name: MaxAmmo | Class: NumberValue | Value: 100.000000 @ 0x20fa0988ac0
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x2259726852224 @ 0x20fa098e780

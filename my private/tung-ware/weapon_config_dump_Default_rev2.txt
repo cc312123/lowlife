@@ -1,0 +1,1940 @@
+=== Weapon Config Search for Tool: Default_rev2 ===
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/UI/InGameUI/KilledBy
+- KilledBy (Frame) @ 0x25754248280
+  - Holder (Frame) @ 0x25754247880
+    - TheirInfo (Frame) @ 0x25754246e80
+      - PlayerIcon (ImageLabel) @ 0x25782f40080
+        - Device (TextLabel) @ 0x25750e22080
+          - UIStroke (UIStroke) @ 0x2576645b980
+        - UIGradient (UIGradient) @ 0x25791e23380
+      - DisplayName (TextLabel) @ 0x25750e21080
+      - Username (TextLabel) @ 0x25750e20080
+      - KilledBy (TextLabel) @ 0x257541ae080
+      - UIPadding (UIPadding) @ 0x257868cfe00
+    - TheirItems (Frame) @ 0x25754246480
+      - EquippedSniper (TextButton) @ 0x25765302880
+        - ButtonShadow (Frame) @ 0x25754245a80
+          - UIGradient (UIGradient) @ 0x25791e23680
+        - Icon (ImageLabel) @ 0x25782f48480
+        - IconBG (ImageLabel) @ 0x25782f4d880
+        - FTStroke (UIStroke) @ 0x25792d9fbc0
+        - Info (Frame) @ 0x25754245080
+          - Wear (Frame) @ 0x25754244680
+            - mText (TextLabel) @ 0x257541ad080
+            - mTextBG (TextLabel) @ 0x257541ac080
+          - FT (Frame) @ 0x25754243c80
+            - mText (TextLabel) @ 0x257541ab080
+            - mTextBG (TextLabel) @ 0x257541aa080
+          - Effect (Frame) @ 0x25754243280
+            - mText (TextLabel) @ 0x257541a9080
+              - UIGradient (UIGradient) @ 0x25791e23800
+            - mTextBG (TextLabel) @ 0x257541a8080
+          - Festive (Frame) @ 0x25754242880
+            - Text (TextLabel) @ 0x257541a7080
+              - UIGradient (UIGradient) @ 0x25791e23980
+            - TextBG (TextLabel) @ 0x257541a6080
+          - UIListLayout (UIListLayout) @ 0x257685b1200
+        - UICorner (UICorner) @ 0x257868cc600
+        - UIGradient (UIGradient) @ 0x25791e23500
+      - EquippedKnife (TextButton) @ 0x25765307880
+        - Icon (ImageLabel) @ 0x25782f4cc80
+        - Delete (ImageLabel) @ 0x25782f4c080
+          - UIGradient (UIGradient) @ 0x25791e23b00
+        - ButtonShadow (Frame) @ 0x25754241e80
+          - UIGradient (UIGradient) @ 0x25791e23c80
+        - IconBG (ImageLabel) @ 0x25782f4b480
+        - EffectStroke (UIStroke) @ 0x25792d992c0
+          - UIGradient (UIGradient) @ 0x25791e24280
+        - FTStroke (UIStroke) @ 0x25792d93b40
+        - Info (Frame) @ 0x25754241480
+          - Wear (Frame) @ 0x25754240a80
+            - mText (TextLabel) @ 0x257541a5080
+            - mTextBG (TextLabel) @ 0x257541a4080
+          - FT (Frame) @ 0x25754240080
+            - mText (TextLabel) @ 0x257541a3080
+            - mTextBG (TextLabel) @ 0x257541a2080
+          - Effect (Frame) @ 0x2575416f080
+            - mText (TextLabel) @ 0x257541a1080
+              - UIGradient (UIGradient) @ 0x25791e23f80
+            - mTextBG (TextLabel) @ 0x257541a0080
+          - Festive (Frame) @ 0x2575416e680
+            - Text (TextLabel) @ 0x2575419e080
+              - UIGradient (UIGradient) @ 0x25791e24100
+            - TextBG (TextLabel) @ 0x2575419d080
+          - UIListLayout (UIListLayout) @ 0x257685b2e00
+        - UIGradient (UIGradient) @ 0x25791e23e00
+        - UICorner (UICorner) @ 0x257868c5a00
+      - UIListLayout (UIListLayout) @ 0x257685b4e00
+    - LevelAndStreaksHolder (Frame) @ 0x2575416dc80
+      - Level (Frame) @ 0x2575416d280
+        - LevelHolder (Frame) @ 0x2575416c880
+          - UIAspectRatioConstraint (UIAspectRatioConstraint) @ 0x257868c6700
+          - UICorner (UICorner) @ 0x257868cc300
+          - UIPadding (UIPadding) @ 0x257868cd600
+          - Value (TextLabel) @ 0x2575419c080
+            - UIStroke (UIStroke) @ 0x25792d9be80
+        - Label (TextLabel) @ 0x2575419b080
+      - Streak (Frame) @ 0x2575416be80
+        - StreakHolder (ImageLabel) @ 0x25782f42480
+          - UIGradient (UIGradient) @ 0x25791e24580
+          - Value (TextLabel) @ 0x2575419a080
+            - UIStroke (UIStroke) @ 0x25792d901c0
+              - UIGradient (UIGradient) @ 0x25791e24400
+          - UIPadding (UIPadding) @ 0x257868cba00
+          - UICorner (UICorner) @ 0x257868c7a00
+          - UIAspectRatioConstraint (UIAspectRatioConstraint) @ 0x257868c3b00
+        - UIAspectRatioConstraint (UIAspectRatioConstraint) @ 0x257868c3000
+        - Label (TextLabel) @ 0x25754199080
+      - UIListLayout (UIListLayout) @ 0x257685b7800
+    - UIStroke (UIStroke) @ 0x2576645db40
+    - UICorner (UICorner) @ 0x257868c2f00
+    - IDC LALALALA (UIScale) @ 0x2575ff02a80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/UI/Menu/TopInfo/Level/DoubleXP
+- DoubleXP (Frame) @ 0x2575466a080
+  - Timer (Frame) @ 0x25754669680
+    - mTextBG (TextLabel) @ 0x2575495a080
+    - mText (TextLabel) @ 0x25754959080
+      - UIGradient (UIGradient) @ 0x2578ffb5600
+  - UIListLayout (UIListLayout) @ 0x257685bf400
+  - EnabledText (Frame) @ 0x25754668c80
+    - mTextBG (TextLabel) @ 0x25754958080
+    - mText (TextLabel) @ 0x25754957080
+      - UIGradient (UIGradient) @ 0x2578ffbe180
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/UI/Lobby/TopInfo/Level/DoubleXP
+- DoubleXP (Frame) @ 0x25757b56e80
+  - Timer (Frame) @ 0x25757b56480
+    - mTextBG (TextLabel) @ 0x25757040080
+    - mText (TextLabel) @ 0x25757b7e080
+      - UIGradient (UIGradient) @ 0x2575ba0bd80
+  - EnabledText (Frame) @ 0x25757b55a80
+    - mTextBG (TextLabel) @ 0x25757b7d080
+    - mText (TextLabel) @ 0x25757b7c080
+      - UIGradient (UIGradient) @ 0x2575ba00200
+  - FrozenText (Frame) @ 0x25757b55080
+    - mTextBG (TextLabel) @ 0x25757b7b080
+    - mText (TextLabel) @ 0x25757b7a080
+      - UIGradient (UIGradient) @ 0x2575ba0e180
+  - UIListLayout (UIListLayout) @ 0x25784f59600
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinPreviewModels/Firearm/Default_rev2
+- Default_rev2 (Model) @ 0x25750597400
+  - Gun (Model) @ 0x25750593880
+    - Object (Model) @ 0x25750594300
+      - FirstPerson (Model) @ 0x25750592e00
+        - Magazine (Model) @ 0x25750593c00
+          - Bullet_1 (Model) @ 0x25750591900
+            - Casing (MeshPart) @ 0x2575c45e780
+              - SurfaceAppearance (SurfaceAppearance) @ 0x257684e8480
+            - Bullet (MeshPart) @ 0x257605d7080
+              - SurfaceAppearance (SurfaceAppearance) @ 0x257684e5a80
+          - Bullet_2 (Model) @ 0x25750594a00
+            - Bullet (MeshPart) @ 0x257605d6980
+              - SurfaceAppearance (SurfaceAppearance) @ 0x257684e9980
+            - Casing (MeshPart) @ 0x257605d6d00
+              - SurfaceAppearance (SurfaceAppearance) @ 0x257684e5180
+          - Follower (MeshPart) @ 0x2575c45e080
+            - SurfaceAppearance (SurfaceAppearance) @ 0x257684ebd80
+          - Magazine (MeshPart) @ 0x2575c45e400
+            - SurfaceAppearance (SurfaceAppearance) @ 0x257684eed80
+        - Bullet_Chamber (Model) @ 0x25750592a80
+          - Bullet (MeshPart) @ 0x257605d6280
+            - SurfaceAppearance (SurfaceAppearance) @ 0x257684ef980
+          - Casing (MeshPart) @ 0x257605d6600
+            - SurfaceAppearance (SurfaceAppearance) @ 0x257684ee780
+        - BoltFiringPin (MeshPart) @ 0x2575c45d980
+          - SurfaceAppearance (SurfaceAppearance) @ 0x257684ef380
+        - Bolt (MeshPart) @ 0x2575c45dd00
+          - SurfaceAppearance (SurfaceAppearance) @ 0x257684eea80
+        - Base (MeshPart) @ 0x257605d0e80
+          - SurfaceAppearance (SurfaceAppearance) @ 0x257684e7280
+        - Scope (MeshPart) @ 0x257605d1200
+          - SurfaceAppearance (SurfaceAppearance) @ 0x257684e6380
+        - BoltEnd (MeshPart) @ 0x257605d1580
+          - SurfaceAppearance (SurfaceAppearance) @ 0x257684ecf80
+      - ThirdPerson (Model) @ 0x25750593500
+    - RigObjects (Model) @ 0x25750593180
+      - r_BulletChamber (Part) @ 0x25760ca7240
+        - Bullet (Weld) @ 0x25783bf0400
+        - Casing (Weld) @ 0x25783bf1200
+      - r_BoltEnd (Part) @ 0x25761301e40
+        - BoltEnd (Weld) @ 0x25783bfac00
+      - r_Magazine5 (Part) @ 0x25761302000
+        - Casing (Weld) @ 0x2579038c800
+        - Bullet (Weld) @ 0x2579038d280
+        - Casing (Weld) @ 0x2579038f040
+        - Bullet (Weld) @ 0x25790380400
+        - Magazine (Weld) @ 0x25790383880
+        - Follower (Weld) @ 0x257903805c0
+      - r_Bolt (Part) @ 0x257613021c0
+        - Bolt (Weld) @ 0x2579038c9c0
+      - r_FiringPin (Part) @ 0x25761302380
+        - BoltFiringPin (Weld) @ 0x2579038cb80
+  - ToolHandle (Part) @ 0x25760ca3a40
+    - Base (Weld) @ 0x2579038bbc0
+    - r_Magazine5 (Motor6D) @ 0x2575aa70400
+    - r_BulletChamber (Motor6D) @ 0x2575aa7b000
+    - r_FiringPin (Motor6D) @ 0x2575aa73800
+    - r_BoltEnd (Motor6D) @ 0x2575aa75e00
+    - r_Bolt (Motor6D) @ 0x2575aa77800
+    - LightBase (Weld) @ 0x2579038bd80
+    - Wire (Weld) @ 0x2579038bf40
+    - Tape (Weld) @ 0x2579038c2c0
+    - CharmPosition (Attachment) @ 0x2578da02600
+    - TrakrWeld (WeldConstraint) @ 0x2575a50f6c0
+    - ShellOutPos (Attachment) @ 0x2578da04700
+    - Light (Weld) @ 0x2579038d0c0
+    - FirePos (Attachment) @ 0x2578da00080
+    - SoundPointWeld (WeldConstraint) @ 0x2575a50f800
+    - GlintPos (Attachment) @ 0x2578da0fb00
+    - Muzzle (Attachment) @ 0x2578da05780
+      - FireSmokeAnim (ParticleEmitter) @ 0x257684eb180
+      - FireLight (PointLight) @ 0x25744e9e100
+      - FireSmokeAnim2 (ParticleEmitter) @ 0x257684e5d80
+      - MuzzleFlash1 (ParticleEmitter) @ 0x257684ea880
+      - FireSmokeAnim3 (ParticleEmitter) @ 0x257684ef080
+      - MuzzleSmoke (Attachment) @ 0x2578da04880
+        - Trail2 (Attachment) @ 0x2578da09e00
+        - Trail1 (Attachment) @ 0x2578da02f00
+          - Trail (Trail) @ 0x25790143280
+        - MuzzleSmoke1 (ParticleEmitter) @ 0x257684eab80
+        - MuzzleSmoke2 (ParticleEmitter) @ 0x257684ef680
+        - MuzzleSmoke3 (ParticleEmitter) @ 0x257684ec380
+    - HullWeld (WeldConstraint) @ 0x2575a50f940
+    - AimPartWeld (WeldConstraint) @ 0x2575a50fa80
+    - Optic (Weld) @ 0x2579038cf00
+    - SoundPoint (Part) @ 0x25760ca3880
+  - FragTrakr (Part) @ 0x25760ca3c00
+    - SurfaceGui (SurfaceGui) @ 0x2575a658c80
+      - Holder (Frame) @ 0x2575a658280
+        - Count (TextLabel) @ 0x2575a64a080
+        - UIListLayout (UIListLayout) @ 0x2575aa7ba00
+        - Icon (ImageLabel) @ 0x2575aaa7880
+      - Overlay (ImageLabel) @ 0x2575aaa6c80
+  - BarrelPart (Part) @ 0x25760cad600
+    - WeldConstraint (WeldConstraint) @ 0x25753940300
+  - AimPart (Part) @ 0x25760cad7c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinPreviewModels/Firearm/AWP_rev2/BarrelPart
+- BarrelPart (Part) @ 0x25760ca7080
+  - WeldConstraint (WeldConstraint) @ 0x25753940f80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinPreviewModels/Firearm/TheFix/BarrelPart
+- BarrelPart (Part) @ 0x25760cac9c0
+  - WeldConstraint (WeldConstraint) @ 0x25753941c00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinPreviewModels/Firearm/MiniFix/BarrelPart
+- BarrelPart (Part) @ 0x25761304f40
+  - WeldConstraint (WeldConstraint) @ 0x25753942880
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinPreviewModels/Firearm/VKS/Gun/Object/FirstPerson/Barrel
+- Barrel (MeshPart) @ 0x257605d3180
+  - SurfaceAppearance (SurfaceAppearance) @ 0x2577f816980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinPreviewModels/Firearm/VKS/ToolHandle/Barrel
+- Barrel (Weld) @ 0x25783bf0080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinPreviewModels/Firearm/VKS/BarrelPart
+- BarrelPart (Part) @ 0x25760cae080
+  - WeldConstraint (WeldConstraint) @ 0x25753943500
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinPreviewModels/Firearm/RailgunXM1/BarrelPart
+- BarrelPart (Part) @ 0x25760ca0b00
+  - WeldConstraint (WeldConstraint) @ 0x25753944180
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinPreviewModels/Firearm/Deagle/Gun/Object/FirstPerson/LongBarrel
+- LongBarrel (MeshPart) @ 0x2575c45fc80
+  - SurfaceAppearance (SurfaceAppearance) @ 0x257854c9380
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinPreviewModels/Firearm/Deagle/ToolHandle/LongBarrel
+- LongBarrel (Weld) @ 0x25783bffac0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinPreviewModels/Firearm/RetroSlop/Gun/Object/FirstPerson/Barrel
+- Barrel (Part) @ 0x2576086f580
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinPreviewModels/Firearm/RetroSlop/BarrelPart
+- BarrelPart (Part) @ 0x25760caac00
+  - WeldConstraint (WeldConstraint) @ 0x25753945940
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinPreviewModels/Firearm/RetroSlop/ToolHandle/Barrel
+- Barrel (Weld) @ 0x25783bf67c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinPreviewModels/Firearm/Shotgun
+- Shotgun (Model) @ 0x2575a721c80
+  - Gun (Model) @ 0x2575a721900
+    - Object (Model) @ 0x2575a721200
+      - FirstPerson (Model) @ 0x2575a720b00
+        - Magazine (Model) @ 0x2575a720780
+          - Bullet_2 (Model) @ 0x2575a720080
+            - Shell (MeshPart) @ 0x2575c456280
+              - SurfaceAppearance (SurfaceAppearance) @ 0x257854c4880
+          - Bullet_1 (Model) @ 0x2575a720400
+            - Shell (MeshPart) @ 0x2575c455f00
+              - SurfaceAppearance (SurfaceAppearance) @ 0x257854c4580
+          - Magazine (MeshPart) @ 0x2575c456600
+            - SurfaceAppearance (SurfaceAppearance) @ 0x257854c5480
+        - Pump (MeshPart) @ 0x2575c456980
+          - SurfaceAppearance (SurfaceAppearance) @ 0x257854c5780
+        - Base (MeshPart) @ 0x2575c456d00
+          - SurfaceAppearance (SurfaceAppearance) @ 0x257854c6380
+        - Scope (MeshPart) @ 0x2575c457080
+          - SurfaceAppearance (SurfaceAppearance) @ 0x257854c4e80
+      - ThirdPerson (Model) @ 0x2575a720e80
+    - RigObjects (Model) @ 0x2575a721580
+      - r_Pump (Part) @ 0x25760cadd00
+        - Pump (Weld) @ 0x25783bf2700
+      - r_Magazine5 (Part) @ 0x25761303880
+        - Shell (Weld) @ 0x25783bf9380
+        - Shell (Weld) @ 0x25783bf9540
+        - Magazine (Weld) @ 0x25783bf83c0
+  - AimPart (Part) @ 0x25760ca6d00
+  - ToolHandle (Part) @ 0x2576130e240
+    - r_Pump (Motor6D) @ 0x2575aa72200
+    - r_Magazine5 (Motor6D) @ 0x2575aa72e00
+    - Base (Weld) @ 0x25783bfc9c0
+    - Scope (Weld) @ 0x25783bf28c0
+    - CharmPosition (Attachment) @ 0x2578da0b180
+    - TrakrWeld (WeldConstraint) @ 0x25753945a80
+    - ShellOutPos (Attachment) @ 0x2578da00500
+    - FirePos (Attachment) @ 0x2578da0e600
+    - SoundPointWeld (WeldConstraint) @ 0x25753945bc0
+    - GlintPos (Attachment) @ 0x2578da0c680
+    - Muzzle (Attachment) @ 0x2578da0a100
+      - FireSmokeAnim (ParticleEmitter) @ 0x257854c9680
+      - FireLight (PointLight) @ 0x25744e95300
+      - FireSmokeAnim2 (ParticleEmitter) @ 0x257854c9c80
+      - MuzzleFlash1 (ParticleEmitter) @ 0x257854ce780
+      - FireSmokeAnim3 (ParticleEmitter) @ 0x257854c7580
+      - MuzzleSmoke (Attachment) @ 0x2578da03c80
+        - Trail2 (Attachment) @ 0x2578da0e180
+        - Trail1 (Attachment) @ 0x2578da0e300
+          - Trail (Trail) @ 0x25790146980
+        - MuzzleSmoke1 (ParticleEmitter) @ 0x257854cb180
+        - MuzzleSmoke2 (ParticleEmitter) @ 0x257854cc380
+        - MuzzleSmoke3 (ParticleEmitter) @ 0x257854cae80
+    - AimPartWeld (WeldConstraint) @ 0x25753945d00
+    - SoundPoint (Part) @ 0x25760ca05c0
+  - FragTrakr (Part) @ 0x2576130e400
+    - SurfaceGui (SurfaceGui) @ 0x2575a703280
+      - Holder (Frame) @ 0x2575a702880
+        - Count (TextLabel) @ 0x2575a663080
+        - UIListLayout (UIListLayout) @ 0x2575aa75400
+        - Icon (ImageLabel) @ 0x2575a713c80
+      - Overlay (ImageLabel) @ 0x2575a713080
+  - BarrelPart (Part) @ 0x2576130e5c0
+    - WeldConstraint (WeldConstraint) @ 0x25753946480
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinPreviewModels/Firearm/Intervention/Gun/Object/FirstPerson/Barrel
+- Barrel (MeshPart) @ 0x257605d7780
+  - SurfaceAppearance (SurfaceAppearance) @ 0x257854c1580
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinPreviewModels/Firearm/Intervention/ToolHandle/Barrel
+- Barrel (Weld) @ 0x25783bf8580
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinPreviewModels/Firearm/Intervention/BarrelPart
+- BarrelPart (Part) @ 0x2576130c100
+  - WeldConstraint (WeldConstraint) @ 0x25753947100
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinPreviewModels/Firearm/Default/BarrelPart
+- BarrelPart (Part) @ 0x25760cab300
+  - WeldConstraint (WeldConstraint) @ 0x25753947d80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinPreviewModels/Firearm/AWP/BarrelPart
+- BarrelPart (Part) @ 0x2575f69a880
+  - WeldConstraint (WeldConstraint) @ 0x25753948a00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case3/GrimOmen/MintCondition/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x2578fbda580
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case3/ValiantAngel/MintCondition/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x2578fbdcf80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case3/Tenshi_Kaiwai/WellWorn/Barrel,Bolt,ChargingHandle,Magazine/Magazine,Receiver,Suppressor,SuppressorShort
+- Barrel,Bolt,ChargingHandle,Magazine/Magazine,Receiver,Suppressor,SuppressorShort (SurfaceAppearance) @ 0x2578ce36380
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case3/Tenshi_Kaiwai/StandardIssue/Barrel,Bolt,ChargingHandle,Magazine/Magazine,Receiver,Suppressor,SuppressorShort
+- Barrel,Bolt,ChargingHandle,Magazine/Magazine,Receiver,Suppressor,SuppressorShort (SurfaceAppearance) @ 0x2578ce39980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case3/Tenshi_Kaiwai/MintCondition/Barrel,Bolt,ChargingHandle,Magazine/Magazine,Receiver,Suppressor,SuppressorShort
+- Barrel,Bolt,ChargingHandle,Magazine/Magazine,Receiver,Suppressor,SuppressorShort (SurfaceAppearance) @ 0x2578ce30980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case3/Jirai_Kei/WellWorn/Barrel,Bolt,ChargingHandle,Magazine/Magazine,Receiver,Suppressor,SuppressorShort
+- Barrel,Bolt,ChargingHandle,Magazine/Magazine,Receiver,Suppressor,SuppressorShort (SurfaceAppearance) @ 0x2578ce35180
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case3/Jirai_Kei/StandardIssue/Barrel,Bolt,ChargingHandle,Magazine/Magazine,Receiver,Suppressor,SuppressorShort
+- Barrel,Bolt,ChargingHandle,Magazine/Magazine,Receiver,Suppressor,SuppressorShort (SurfaceAppearance) @ 0x2578ce34e80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case3/Jirai_Kei/MintCondition/Barrel,Bolt,ChargingHandle,Magazine/Magazine,Receiver,Suppressor,SuppressorShort
+- Barrel,Bolt,ChargingHandle,Magazine/Magazine,Receiver,Suppressor,SuppressorShort (SurfaceAppearance) @ 0x2578ce34880
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case3/Deagle_FrutigerAero/WellWorn/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x2578ce37880
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case3/Deagle_FrutigerAero/StandardIssue/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x2578ce34580
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case3/Deagle_FrutigerAero/MintCondition/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x2578ce3ab80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Etc/Test/MintCondition/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x2578e793080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Etc/TewisGun/MintCondition/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x2578e791880
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/ClassicCase/Valkyrie/StandardIssue/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x2578e3b2180
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/ClassicCase/Valkyrie/MintCondition/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x2578e3b1880
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/ClassicCase/BlackValk/StandardIssue/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x2578e3b0f80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/ClassicCase/BlackValk/MintCondition/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x2578e3b0680
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case2/VKS_Disco/StandardIssue/Barrel,Bolt,ChargingHandle,Magazine/Magazine,Receiver,Suppressor,SuppressorShort
+- Barrel,Bolt,ChargingHandle,Magazine/Magazine,Receiver,Suppressor,SuppressorShort (SurfaceAppearance) @ 0x257542f7280
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case2/VKS_Disco/WellWorn/Barrel,Bolt,ChargingHandle,Magazine/Magazine,Receiver,Suppressor,SuppressorShort
+- Barrel,Bolt,ChargingHandle,Magazine/Magazine,Receiver,Suppressor,SuppressorShort (SurfaceAppearance) @ 0x257542f4580
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case2/VKS_Disco/MintCondition/Barrel,Bolt,ChargingHandle,Magazine/Magazine,Receiver,Suppressor,SuppressorShort
+- Barrel,Bolt,ChargingHandle,Magazine/Magazine,Receiver,Suppressor,SuppressorShort (SurfaceAppearance) @ 0x257542f9980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case2/RED ZONE/WellWorn/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x257542fdb80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case2/RED ZONE/StandardIssue/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x257542f0980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case2/RED ZONE/MintCondition/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x257542f0c80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case2/Intervention_Viper/WellWorn/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x257827bf380
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case2/Intervention_Viper/StandardIssue/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x257827b4880
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case2/Intervention_Viper/MintCondition/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x257827bb780
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case2/Codec/WellWorn/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x257827b6980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case2/Codec/StandardIssue/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x257827b5a80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case2/Codec/MintCondition/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x257827ba880
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Collectables/July2026/Arcane/MintCondition/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x257862be480
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Collectables/May2026/FrutigerAero/MintCondition/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x257862b7880
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Collectables/May2026/FrutigerMetro/MintCondition/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x257862b5780
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Collectables/BloxyWitchesBrew2026/WitchesBrew/MintCondition/Barrel,Bolt,ChargingHandle,Magazine/Magazine,Receiver,Suppressor,SuppressorShort
+- Barrel,Bolt,ChargingHandle,Magazine/Magazine,Receiver,Suppressor,SuppressorShort (SurfaceAppearance) @ 0x257862b1b80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Collectables/BloxyWitchesBrew2026/BloxyCola/MintCondition/Barrel,Bolt,ChargingHandle,Magazine/Magazine,Receiver,Suppressor,SuppressorShort
+- Barrel,Bolt,ChargingHandle,Magazine/Magazine,Receiver,Suppressor,SuppressorShort (SurfaceAppearance) @ 0x257862b9380
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Collectables/March2026/Deagle_Celtic/MintCondition/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x257862b7280
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Collectables/Jan2026/TigerStripe/WellWorn/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x257862b7580
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Collectables/Jan2026/TigerStripe/MintCondition/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x257862b9980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Collectables/Jan2026/Vaporwave/Style2/MintCondition/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x257862b9f80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Collectables/Jan2026/Vaporwave/Style1/MintCondition/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x257862bdb80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Collectables/NewYears2026/Intervention_NewYears2026/MintCondition/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x257862b3680
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Collectables/Christmas2025/Intervention_Peppermint/MintCondition/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x257862b3980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Collectables/NovDec2025/Frostbite/MintCondition/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x257862b3f80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Collectables/NovDec2025/AsciiWhite/MintCondition/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x257862b2780
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case1/DeagleCaseHardened/MintCondition/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x257862bc980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case1/Angelic/MintCondition/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x2573f982780
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case1/Blossom/StandardIssue/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x2573f982180
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Case1/Blossom/MintCondition/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x2573f98ab80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/FFARelease2026/Blossom/MintCondition/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x25782c4de80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/FFARelease2026/GoldenKnight/MintCondition/Barrel,Bolt,ChargingHandle,Magazine/Magazine,Receiver,Suppressor,SuppressorShort
+- Barrel,Bolt,ChargingHandle,Magazine/Magazine,Receiver,Suppressor,SuppressorShort (SurfaceAppearance) @ 0x25782c44880
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/FFARelease2026/Xepa/MintCondition/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x25782c40380
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/FFARelease2026/DesertStorm/MintCondition/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x25782c41e80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Fools2026/Shotgun_of_Destiny
+- Shotgun_of_Destiny (Folder) @ 0x257843e1c80
+  - WellWorn (Folder) @ 0x257843ef820
+    - Base,Pump (SurfaceAppearance) @ 0x25782c4fc80
+    - Scope,Magazine/Magazine (SurfaceAppearance) @ 0x25782c4f980
+  - StandardIssue (Folder) @ 0x257843ed7c0
+    - Base,Pump (SurfaceAppearance) @ 0x25782c4b780
+    - Scope,Magazine/Magazine (SurfaceAppearance) @ 0x25782c45180
+  - MintCondition (Folder) @ 0x257843ec560
+    - Base,Pump (SurfaceAppearance) @ 0x25782c46f80
+    - Scope,Magazine/Magazine (SurfaceAppearance) @ 0x25782c4db80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Fools2026/ShotgunMLG
+- ShotgunMLG (Folder) @ 0x257843e0f60
+  - FX (Attachment) @ 0x257851c2d80
+    - Doritos2 (Attachment) @ 0x257851c5f00
+      - Clovers (ParticleEmitter) @ 0x25782c46680
+    - Doritos1 (Attachment) @ 0x257851c4a00
+      - Clovers (ParticleEmitter) @ 0x25782c4d280
+    - Doritos (Attachment) @ 0x257851cde80
+      - Clovers (ParticleEmitter) @ 0x25765ee8180
+    - Attachment14 (Attachment) @ 0x257851cf500
+      - ParticleEmitter (ParticleEmitter) @ 0x25765ee8a80
+    - Attachment13 (Attachment) @ 0x257851c3800
+      - ParticleEmitter (ParticleEmitter) @ 0x25765ee2780
+    - Attachment12 (Attachment) @ 0x257851cf680
+      - ParticleEmitter (ParticleEmitter) @ 0x25765ee6f80
+    - Attachment11 (Attachment) @ 0x257851c7a00
+      - ParticleEmitter (ParticleEmitter) @ 0x25765eef080
+    - Attachment10 (Attachment) @ 0x257851ca400
+      - ParticleEmitter (ParticleEmitter) @ 0x25765ee4280
+    - Attachment9 (Attachment) @ 0x257851c9f80
+      - ParticleEmitter (ParticleEmitter) @ 0x25765ee8d80
+    - Attachment8 (Attachment) @ 0x257851c5780
+      - ParticleEmitter (ParticleEmitter) @ 0x25765eea280
+    - Attachment7 (Attachment) @ 0x257851cc380
+      - ParticleEmitter (ParticleEmitter) @ 0x25765ee1580
+    - Attachment6 (Attachment) @ 0x257851c8780
+      - ParticleEmitter (ParticleEmitter) @ 0x25765eeb180
+    - Attachment5 (Attachment) @ 0x257851cf080
+      - ParticleEmitter (ParticleEmitter) @ 0x25765ee2480
+    - Attachment4 (Attachment) @ 0x257851c4100
+      - ParticleEmitter (ParticleEmitter) @ 0x25765ee4e80
+    - Attachment3 (Attachment) @ 0x257851c6380
+      - ParticleEmitter (ParticleEmitter) @ 0x25765ee3080
+    - Attachment2 (Attachment) @ 0x257851c7580
+      - ParticleEmitter (ParticleEmitter) @ 0x25765eef380
+    - Attachment1 (Attachment) @ 0x257851c3b00
+      - ParticleEmitter (ParticleEmitter) @ 0x25765ee1880
+    - Attachment (Attachment) @ 0x257851c8900
+      - ParticleEmitter (ParticleEmitter) @ 0x25765ee0980
+  - MintCondition (Folder) @ 0x257843e8ac0
+    - Base,Pump (SurfaceAppearance) @ 0x25765ee0c80
+    - Scope,Magazine/Magazine (SurfaceAppearance) @ 0x25765eea880
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Valentines2026/LovesCrest/MintCondition/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x2578e7f9c80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Valentines2026/Heartbreak/WellWorn/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x2578e7f3c80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Valentines2026/Heartbreak/StandardIssue/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x2578e7f3080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Valentines2026/Heartbreak/MintCondition/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x2578e7f2180
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Valentines2026/Cupid/WellWorn/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x2578e7f1880
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Valentines2026/Cupid/StandardIssue/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x2578e7f1280
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Valentines2026/Cupid/MintCondition/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x2578e7f0980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Christmas2025/EvergreenWinter/WellWorn/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x2578cb52a80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Christmas2025/EvergreenWinter/StandardIssue/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x2578cb51b80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Christmas2025/EvergreenWinter/MintCondition/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x2578cb5d580
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Christmas2025/Gingerbread/WellWorn/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x2578cb51580
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Christmas2025/Gingerbread/StandardIssue/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x2578cb55780
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Christmas2025/Gingerbread/MintCondition/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x2578cb51880
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Christmas2025/LonelyStar/MintCondition/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x2578cb54580
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Christmas2025/NorthStar/MintCondition/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x2578cb5de80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Christmas2025/Snowflake/WellWorn/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x2578cb53f80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Christmas2025/Snowflake/StandardIssue/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x2577f9d1580
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Christmas2025/Snowflake/MintCondition/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x2577f9d4880
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Halloween2025/BlackKnight/WellWorn/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x25783eed280
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Halloween2025/BlackKnight/StandardIssue/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x25783ee4b80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Halloween2025/BlackKnight/MintCondition/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x25783ee3c80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Halloween2025/Reaper/WellWorn/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x25783eee780
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Halloween2025/Reaper/StandardIssue/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x25783ee0980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Halloween2025/Reaper/MintCondition/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x25783eeae80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Halloween2025/HallowsPunisher/Style2/MintCondition/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x25783eea580
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/Event/Halloween2025/HallowsPunisher/Style1/MintCondition/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x25783ee5480
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/ReleaseCase/VanillaIntervention/MintCondition/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x2578c2eba80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/ReleaseCase/Apex/WellWorn/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x2578c2e6080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/ReleaseCase/Apex/StandardIssue/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x2578c2e6380
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Assets/SkinAssets/ReleaseCase/Apex/MintCondition/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x2578c2e4e80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Modules/Configs/WeaponConfigs/Gun/Shotgun
+- Shotgun (ModuleScript) @ 0x25760d90400
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Modules/Configs/WeaponConfigs/Gun/Default_rev2
+- Default_rev2 (ModuleScript) @ 0x25760d9a6c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Remotes/Match/KilledBy
+- KilledBy (RemoteEvent) @ 0x25782dfc480
+
+Found matching config root at path: Workspace/Workspace/Lobby/Parts/_Lobby/MatchmakingPads/1v1_Queue/Scriptables/PadBravo
+- PadBravo (Model) @ 0x2575acbf200
+  - BeamPart (Part) @ 0x2578e3713c0
+    - Attachment7 (Attachment) @ 0x257684d9680
+    - Attachment8 (Attachment) @ 0x257684d5480
+    - Beam4 (Beam) @ 0x2578db60600
+    - Attachment2 (Attachment) @ 0x257684da280
+    - Attachment1 (Attachment) @ 0x257684d2000
+    - Attachment6 (Attachment) @ 0x257684da580
+    - Beam1 (Beam) @ 0x2578db6e400
+    - Beam2 (Beam) @ 0x2578db63600
+    - Attachment5 (Attachment) @ 0x257684d1580
+    - Attachment3 (Attachment) @ 0x257684d9f80
+    - Attachment4 (Attachment) @ 0x257684d3380
+    - Beam3 (Beam) @ 0x2578db64a00
+  - Part (Part) @ 0x25760ca1ac0
+    - TouchInterest (TouchTransmitter) @ 0x2575b28eb00
+
+Found matching config root at path: Workspace/Workspace/Lobby/Parts/_Lobby/MatchmakingPads/4v4_Queue/Scriptables/PadBravo
+- PadBravo (Model) @ 0x2575acbfc80
+  - BeamPart (Part) @ 0x2578e37c800
+    - Attachment8 (Attachment) @ 0x257684d5600
+    - Beam1 (Beam) @ 0x2578db6e000
+    - Attachment2 (Attachment) @ 0x257684df080
+    - Attachment7 (Attachment) @ 0x257684d2900
+    - Beam4 (Beam) @ 0x2578db69a00
+    - Attachment1 (Attachment) @ 0x257684d5d80
+    - Attachment6 (Attachment) @ 0x257684ddd00
+    - Beam3 (Beam) @ 0x2578db66e00
+    - Attachment5 (Attachment) @ 0x257684dc800
+    - Beam2 (Beam) @ 0x2578db6d800
+    - Attachment4 (Attachment) @ 0x257684df380
+    - Attachment3 (Attachment) @ 0x257684d0080
+  - Part (Part) @ 0x25760ca1e40
+    - TouchInterest (TouchTransmitter) @ 0x2575b85c9c0
+
+Found matching config root at path: Workspace/Workspace/Lobby/Parts/_Lobby/MatchmakingPads/2v2_Queue/Scriptables/PadBravo
+- PadBravo (Model) @ 0x2575acd5800
+  - BeamPart (Part) @ 0x2578d37ba00
+    - Attachment6 (Attachment) @ 0x257684da880
+    - Attachment1 (Attachment) @ 0x257684d4b80
+    - Beam1 (Beam) @ 0x2578db6de00
+    - Attachment2 (Attachment) @ 0x257684d2180
+    - Attachment7 (Attachment) @ 0x257684d4e80
+    - Attachment8 (Attachment) @ 0x257684d3980
+    - Beam2 (Beam) @ 0x2578db63200
+    - Attachment3 (Attachment) @ 0x257684d0800
+    - Attachment4 (Attachment) @ 0x257684d7100
+    - Beam4 (Beam) @ 0x2578db62000
+    - Beam3 (Beam) @ 0x2578db68000
+    - Attachment5 (Attachment) @ 0x257684d0980
+  - Part (Part) @ 0x25760ca21c0
+    - TouchInterest (TouchTransmitter) @ 0x2574efe3960
+
+Found matching config root at path: Workspace/Workspace/Lobby/Parts/_Lobby/MatchmakingPads/3v3_Queue/Scriptables/PadBravo
+- PadBravo (Model) @ 0x2574f00a880
+  - BeamPart (Part) @ 0x2578d259a80
+    - Attachment4 (Attachment) @ 0x2573823f380
+    - Attachment2 (Attachment) @ 0x2573823da00
+    - Attachment1 (Attachment) @ 0x2573823f800
+    - Attachment8 (Attachment) @ 0x2578ce20f80
+    - Attachment3 (Attachment) @ 0x2578ce2da00
+    - Beam3 (Beam) @ 0x25783269c00
+    - Attachment5 (Attachment) @ 0x2578ce28000
+    - Beam4 (Beam) @ 0x2575b990c00
+    - Beam1 (Beam) @ 0x2575b99ce00
+    - Attachment6 (Attachment) @ 0x25784c5a880
+    - Beam2 (Beam) @ 0x2575b99fe00
+    - Attachment7 (Attachment) @ 0x25784c5b900
+  - Part (Part) @ 0x25761302a80
+    - TouchInterest (TouchTransmitter) @ 0x2575b1ea960
+
+Found matching config root at path: Workspace/Workspace/Lobby/Parts/_Lobby/MatchmakingPads/3v3_Queue/Scriptables/PadBravo
+- PadBravo (Model) @ 0x2575af5e400
+  - BeamPart (Part) @ 0x25767518200
+    - Attachment6 (Attachment) @ 0x257661cb300
+    - Beam3 (Beam) @ 0x25782be8800
+    - Attachment1 (Attachment) @ 0x2578ce2c980
+    - Beam1 (Beam) @ 0x2575b4e1e00
+    - Attachment8 (Attachment) @ 0x2578ce26c80
+    - Attachment2 (Attachment) @ 0x2578ce25f00
+    - Beam4 (Beam) @ 0x2575b4e2600
+    - Attachment7 (Attachment) @ 0x25784c59c80
+    - Beam2 (Beam) @ 0x2575b99f800
+    - Attachment4 (Attachment) @ 0x25784c51b80
+    - Attachment3 (Attachment) @ 0x25784c53680
+    - Attachment5 (Attachment) @ 0x25784c58780
+  - Part (Part) @ 0x25760ca6b40
+    - TouchInterest (TouchTransmitter) @ 0x2575b4ccaa0
+
+Found matching config root at path: Workspace/Workspace/Lobby/Parts/_Lobby/MatchmakingPads/2v2_Queue/Scriptables/PadBravo
+- PadBravo (Model) @ 0x2575aedfc80
+  - BeamPart (Part) @ 0x2578bf1cb80
+    - Beam1 (Beam) @ 0x2578db61c00
+    - Attachment4 (Attachment) @ 0x257684d0200
+    - Attachment6 (Attachment) @ 0x257684d8000
+    - Beam4 (Beam) @ 0x2578db6dc00
+    - Attachment5 (Attachment) @ 0x257684dbf00
+    - Attachment7 (Attachment) @ 0x257684df980
+    - Attachment2 (Attachment) @ 0x257684d0f80
+    - Beam3 (Beam) @ 0x2578db64000
+    - Attachment1 (Attachment) @ 0x257684dce00
+    - Attachment3 (Attachment) @ 0x257684d6800
+    - Beam2 (Beam) @ 0x2578db6f800
+    - Attachment8 (Attachment) @ 0x257684db000
+  - Part (Part) @ 0x25760ca2700
+    - TouchInterest (TouchTransmitter) @ 0x2575b285800
+
+Found matching config root at path: Workspace/Workspace/Lobby/Parts/_Lobby/MatchmakingPads/4v4_Queue/Scriptables/PadBravo
+- PadBravo (Model) @ 0x2575af20b00
+  - BeamPart (Part) @ 0x2578bb53880
+    - Attachment2 (Attachment) @ 0x257661cce00
+    - Attachment7 (Attachment) @ 0x257661cb780
+    - Beam3 (Beam) @ 0x25782be5a00
+    - Beam4 (Beam) @ 0x25782beaa00
+    - Attachment6 (Attachment) @ 0x2578c8a4100
+    - Attachment4 (Attachment) @ 0x2578c8a4e80
+    - Attachment1 (Attachment) @ 0x2578c8ad880
+    - Beam1 (Beam) @ 0x25783267c00
+    - Attachment3 (Attachment) @ 0x25783dd9f80
+    - Attachment5 (Attachment) @ 0x25784c5c680
+    - Beam2 (Beam) @ 0x2575b99f400
+    - Attachment8 (Attachment) @ 0x25784c56680
+  - Part (Part) @ 0x2576130bbc0
+    - TouchInterest (TouchTransmitter) @ 0x2575b285560
+
+Found matching config root at path: Workspace/Workspace/Lobby/Parts/_Lobby/MatchmakingPads/1v1_Queue/Scriptables/PadBravo
+- PadBravo (Model) @ 0x2575bb29a80
+  - BeamPart (Part) @ 0x2578cdf4f40
+    - Beam4 (Beam) @ 0x257811ae200
+    - Attachment6 (Attachment) @ 0x2578c8a2f00
+    - Attachment4 (Attachment) @ 0x2578c8ae480
+    - Beam2 (Beam) @ 0x25783269200
+    - Attachment7 (Attachment) @ 0x25783ddf800
+    - Attachment5 (Attachment) @ 0x25783dd3080
+    - Beam3 (Beam) @ 0x2575b990200
+    - Attachment3 (Attachment) @ 0x25783dd5c00
+    - Attachment1 (Attachment) @ 0x25783ddc200
+    - Beam1 (Beam) @ 0x2575b99f000
+    - Attachment8 (Attachment) @ 0x25784c58c00
+    - Attachment2 (Attachment) @ 0x25784c50500
+  - Part (Part) @ 0x25761302700
+    - TouchInterest (TouchTransmitter) @ 0x2575afad520
+
+Found matching config root at path: Workspace/Workspace/Lobby/Interactable/ExclusiveItemStands/July2026Arcane_Style1/ItemPickup/ToolHandle/LongBarrel
+- LongBarrel (Weld) @ 0x2578f819000
+
+Found matching config root at path: Workspace/Workspace/Lobby/Interactable/SpectateBoard/List/{953739dc-d596-4802-9b49-fdb561a4332d}
+- {953739dc-d596-4802-9b49-fdb561a4332d} (Configuration) @ 0x2578d2c1880
+  - A (IntValue) | Value: 4762299292 @ 0x2575bcd7400
+  - B (IntValue) | Value: 10592635110 @ 0x2575bcd9d20
+
+Found matching config root at path: Workspace/Workspace/Characters/000kornelija/__FirearmHolster/BarrelPart
+- BarrelPart (Part) @ 0x257615e2c40
+  - WeldConstraint (WeldConstraint) @ 0x25799eee7c0
+
+Found matching config root at path: Workspace/Workspace/Characters/cdog2845/__FirearmHolster/BarrelPart
+- BarrelPart (Part) @ 0x25741038740
+  - WeldConstraint (WeldConstraint) @ 0x2574563d8c0
+
+Found matching config root at path: Workspace/Workspace/Characters/Shawzy2008/__FirearmHolster/Gun/Object/FirstPerson/LongBarrel
+- LongBarrel (MeshPart) @ 0x25764ec9e00
+  - Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x2578dee4880
+
+Found matching config root at path: Workspace/Workspace/Characters/Shawzy2008/__FirearmHolster/Gun/Object/FirstPerson/Compensator/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x2578dee5a80
+
+Found matching config root at path: Workspace/Workspace/Characters/Shawzy2008/__FirearmHolster/ToolHandle/LongBarrel
+- LongBarrel (Weld) @ 0x257851d7b00
+
+Found matching config root at path: Workspace/Workspace/Characters/Shawzy2008/__FirearmHolster/BarrelPart
+- BarrelPart (Part) @ 0x257851db840
+  - WeldConstraint (WeldConstraint) @ 0x25763851ac0
+
+Found matching config root at path: Workspace/Workspace/Characters/Jadelillollil3/__FirearmHolster/BarrelPart
+- BarrelPart (Part) @ 0x2575a8f6280
+  - WeldConstraint (WeldConstraint) @ 0x25762f79540
+
+Found matching config root at path: Workspace/Workspace/Characters/Metinukas10/__FirearmHolster/BarrelPart
+- BarrelPart (Part) @ 0x2575bb05100
+  - WeldConstraint (WeldConstraint) @ 0x2575ca67880
+
+Found matching config root at path: Workspace/Workspace/Characters/{e9ed7d59-a86f-49cc-994a-9ec6231957d6}/A/rhiana6218/Deagle/ToolHandle/LongBarrel
+- LongBarrel (Weld) @ 0x25761bcecc0
+
+Found matching config root at path: Workspace/Workspace/Characters/{e9ed7d59-a86f-49cc-994a-9ec6231957d6}/A/rhiana6218/Deagle/BarrelPart
+- BarrelPart (Part) @ 0x2577fbb9c40
+  - WeldConstraint (WeldConstraint) @ 0x25745639180
+
+Found matching config root at path: Workspace/Workspace/Characters/{e9ed7d59-a86f-49cc-994a-9ec6231957d6}/B/C14S24/Default_rev2
+- Default_rev2 (Tool) @ 0x2575dd01880
+  - Gun (Model) @ 0x2574f007400
+    - RigObjects (Model) @ 0x2574f000b00
+      - r_BulletChamber (Part) @ 0x257521bee80
+        - Casing (Weld) @ 0x257521b3500
+        - Bullet (Weld) @ 0x257521bc640
+      - r_BoltEnd (Part) @ 0x257521b4d80
+        - BoltEnd (Weld) @ 0x257521b9540
+      - r_Magazine5 (Part) @ 0x25767b43180
+        - Follower (Weld) @ 0x25752236600
+        - Magazine (Weld) @ 0x25752230780
+        - Bullet (Weld) @ 0x25752235b80
+        - Casing (Weld) @ 0x25752233500
+        - Bullet (Weld) @ 0x25752237400
+        - Casing (Weld) @ 0x25752238ac0
+      - r_Bolt (Part) @ 0x2575223cb80
+        - Bolt (Weld) @ 0x25752238200
+      - r_FiringPin (Part) @ 0x25752231580
+        - BoltFiringPin (Weld) @ 0x25752238740
+    - Object (Model) @ 0x2574f006600
+      - ThirdPerson (Model) @ 0x2574f005f00
+      - FirstPerson (Model) @ 0x2574f006d00
+        - Bullet_Chamber (Model) @ 0x2574f002e00
+          - Bullet (MeshPart) @ 0x2574f000e80
+            - SurfaceAppearance (SurfaceAppearance) @ 0x25754f9e480
+          - Casing (MeshPart) @ 0x2574f000080
+            - SurfaceAppearance (SurfaceAppearance) @ 0x25754f90c80
+        - Magazine (Model) @ 0x2574f003500
+          - Bullet_2 (Model) @ 0x2574f003f80
+            - Bullet (MeshPart) @ 0x25752833f80
+              - SurfaceAppearance (SurfaceAppearance) @ 0x2574bf1f680
+            - Casing (MeshPart) @ 0x25752838580
+              - SurfaceAppearance (SurfaceAppearance) @ 0x2574bf1c980
+          - Bullet_1 (Model) @ 0x25752839700
+            - Bullet (MeshPart) @ 0x2575283f900
+              - SurfaceAppearance (SurfaceAppearance) @ 0x2574bf1a880
+            - Casing (MeshPart) @ 0x2575283f200
+              - SurfaceAppearance (SurfaceAppearance) @ 0x2574bf18180
+          - Magazine (MeshPart) @ 0x25752837b00
+            - SurfaceAppearance (SurfaceAppearance) @ 0x2574bf10680
+          - Follower (MeshPart) @ 0x2575283a180
+            - SurfaceAppearance (SurfaceAppearance) @ 0x2574bf19680
+        - Bolt (MeshPart) @ 0x25752833500
+          - SurfaceAppearance (SurfaceAppearance) @ 0x2574bf13380
+        - BoltFiringPin (MeshPart) @ 0x2575283fc80
+          - SurfaceAppearance (SurfaceAppearance) @ 0x2574bf1c080
+        - BoltEnd (MeshPart) @ 0x2575283eb00
+          - SurfaceAppearance (SurfaceAppearance) @ 0x2574bf17280
+        - Scope (MeshPart) @ 0x2575283f580
+          - SurfaceAppearance (SurfaceAppearance) @ 0x2574bf1f080
+        - Base (MeshPart) @ 0x25752832e00
+          - SurfaceAppearance (SurfaceAppearance) @ 0x2574bf10080
+  - Animations (Folder) @ 0x25765a36280
+    - Aim (Animation) @ 0x25760101f00
+    - FireAimed (Animation) @ 0x25760104700
+    - Fire (Animation) @ 0x25760100300
+    - Sprinting (Animation) @ 0x2576010ed00
+    - Reload (Animation) @ 0x25760100d00
+    - Inspect (Animation) @ 0x25760103b00
+    - Idle (Animation) @ 0x25760101500
+    - Equip (Animation) @ 0x2576010af00
+    - InitialEquip (Animation) @ 0x25760101c00
+    - EmptyInspect (Animation) @ 0x25760102700
+    - SprintIn (Animation) @ 0x2576010dd00
+    - SprintOut (Animation) @ 0x2576010d200
+    - SimpleInspect (Animation) @ 0x25760106000
+  - AimPart (Part) @ 0x25752237cc0
+  - ToolHandle (Part) @ 0x25752236440
+    - Optic (Weld) @ 0x2575223e080
+    - AimPartWeld (WeldConstraint) @ 0x257a14f6200
+    - HullWeld (WeldConstraint) @ 0x257a14f4680
+    - Muzzle (Attachment) @ 0x2579dafd100
+      - MuzzleSmoke (Attachment) @ 0x2579dafa100
+        - MuzzleSmoke3 (ParticleEmitter) @ 0x2574bf19380
+        - MuzzleSmoke2 (ParticleEmitter) @ 0x2575b1f8480
+        - MuzzleSmoke1 (ParticleEmitter) @ 0x25786d1d280
+        - Trail1 (Attachment) @ 0x257612d4880
+          - Trail (Trail) @ 0x2575412c100
+        - Trail2 (Attachment) @ 0x257612dcf80
+      - FireSmokeAnim3 (ParticleEmitter) @ 0x25786d12a80
+      - MuzzleFlash1 (ParticleEmitter) @ 0x25786d10f80
+      - FireSmokeAnim2 (ParticleEmitter) @ 0x25786d17580
+      - FireLight (PointLight) @ 0x25784500100
+      - FireSmokeAnim (ParticleEmitter) @ 0x25786d1b480
+    - GlintPos (Attachment) @ 0x257612d3500
+    - SoundPointWeld (WeldConstraint) @ 0x2574563db40
+    - FirePos (Attachment) @ 0x257612d3680
+    - Light (Weld) @ 0x2577fbbb840
+    - ShellOutPos (Attachment) @ 0x257612d3800
+    - TrakrWeld (WeldConstraint) @ 0x25745637d80
+    - CharmPosition (Attachment) @ 0x257612d3980
+    - Tape (Weld) @ 0x2577fbbd600
+    - Wire (Weld) @ 0x2577fbb36c0
+    - LightBase (Weld) @ 0x2577fbb91c0
+    - r_Bolt (Motor6D) @ 0x25760629800
+    - r_BoltEnd (Motor6D) @ 0x2576062f200
+    - r_FiringPin (Motor6D) @ 0x25760628c00
+    - r_BulletChamber (Motor6D) @ 0x2576062d200
+    - r_Magazine5 (Motor6D) @ 0x25760624c00
+    - Base (Weld) @ 0x2577fbb1200
+    - SoundPoint (Part) @ 0x2577fbba340
+      - FireInterior001 (Sound) @ 0x25754125a80
+      - FireInterior002 (Sound) @ 0x2575412eb80
+      - FireInterior003 (Sound) @ 0x25754125300
+      - Fire001 (Sound) @ 0x25754121e80
+      - Fire002 (Sound) @ 0x25785e8a580
+      - Fire003 (Sound) @ 0x25785e8a800
+      - Fire004 (Sound) @ 0x25785e83000
+      - ShellEject001 (Sound) @ 0x25785e8fd00
+      - ShellEject002 (Sound) @ 0x25785e8c600
+      - ShellEject003 (Sound) @ 0x25785e8d000
+      - ShellEject004 (Sound) @ 0x25785e80580
+      - FireExterior001 (Sound) @ 0x25785e82b00
+      - FireExterior002 (Sound) @ 0x257449b2b00
+      - FireExterior003 (Sound) @ 0x257449b6200
+      - inspect_mag_out (Sound) @ 0x257449bfd00
+      - inspect_bullet_catch (Sound) @ 0x257449ba080
+      - inspect_bullet_insert (Sound) @ 0x257449bbe80
+      - inspect_bolt_forward (Sound) @ 0x257449bb200
+      - inspect_empty_bolt_out (Sound) @ 0x257449b5d00
+      - inspect_bullet_catch_2 (Sound) @ 0x257449ba580
+      - mag_drop (Sound) @ 0x257449b1480
+      - inspect_bullet_throw (Sound) @ 0x257449b3a00
+      - inspect_bolt_out (Sound) @ 0x257449b0d00
+      - reload_mag_out (Sound) @ 0x257449b6e80
+      - reload_bolt_out (Sound) @ 0x257449b6c00
+      - fire_bolt_out (Sound) @ 0x257449bad00
+      - inspect_mag_in (Sound) @ 0x257449bc880
+  - BarrelPart (Part) @ 0x2577fbbdb40
+    - WeldConstraint (WeldConstraint) @ 0x25766a3c4c0
+  - FragTrakr (Part) @ 0x2577fbb8ac0
+    - SurfaceGui (SurfaceGui) @ 0x25763f56e80
+      - Holder (Frame) @ 0x25763f57880
+        - Count (TextLabel) @ 0x2579f9d9080
+        - Icon (ImageLabel) @ 0x2575b8bb480
+        - UIListLayout (UIListLayout) @ 0x25760623600
+      - Overlay (ImageLabel) @ 0x2576297e480
+  - a (RemoteEvent) @ 0x2577fbb9540
+  - g (RemoteFunction) @ 0x2576062bc00
+  - ToolWeld (Motor6D) @ 0x25760622200
+
+Found matching config root at path: Workspace/Workspace/Characters/MiniLuffyss/__FirearmHolster/BarrelPart
+- BarrelPart (Part) @ 0x2578bfab140
+  - WeldConstraint (WeldConstraint) @ 0x25784a6b700
+
+Found matching config root at path: Workspace/Workspace/Characters/{953739dc-d596-4802-9b49-fdb561a4332d}
+- {953739dc-d596-4802-9b49-fdb561a4332d} (Folder) @ 0x2578db31900
+  - A (Model) @ 0x2578f2e3c00
+    - foundinthevaley (Model) @ 0x2575ef82a80
+      - Head (Part) @ 0x257521b1580
+        - face (Decal) @ 0x25784a36480
+        - HairAttachment (Attachment) @ 0x257910b3380
+        - HatAttachment (Attachment) @ 0x257910b8000
+        - FaceFrontAttachment (Attachment) @ 0x257910b5780
+        - FaceCenterAttachment (Attachment) @ 0x257910b6800
+        - Mesh (SpecialMesh) @ 0x25764d62000
+          - FaceFrontAttachment (Vector3Value) [ValueObject] @ 0x25784d1f200
+          - HatAttachment (Vector3Value) [ValueObject] @ 0x2575bf6aea0
+          - HairAttachment (Vector3Value) [ValueObject] @ 0x2575bf6b3e0
+          - FaceCenterAttachment (Vector3Value) [ValueObject] @ 0x25784d19e00
+          - NeckRigAttachment (Vector3Value) [ValueObject] @ 0x25782d359c0
+      - Torso (Part) @ 0x257521b6600
+        - roblox (Decal) @ 0x2579b831200
+        - NeckAttachment (Attachment) @ 0x257910b6b00
+        - BodyFrontAttachment (Attachment) @ 0x257910bc200
+        - BodyBackAttachment (Attachment) @ 0x257910b9b00
+        - LeftCollarAttachment (Attachment) @ 0x257910b5d80
+        - RightCollarAttachment (Attachment) @ 0x257910b6200
+        - WaistFrontAttachment (Attachment) @ 0x25782717b80
+        - WaistCenterAttachment (Attachment) @ 0x25782715d80
+        - WaistBackAttachment (Attachment) @ 0x2578271d400
+        - Right Shoulder (Motor6D) @ 0x257811a9800
+        - Left Shoulder (Motor6D) @ 0x257811abc00
+        - Right Hip (Motor6D) @ 0x257811a5600
+        - Left Hip (Motor6D) @ 0x25765d6aa00
+        - Neck (Motor6D) @ 0x2575b335400
+        - FakeNeck (Motor6D) @ 0x257603f3600
+      - Left Arm (Part) @ 0x257521b4140
+        - LeftShoulderAttachment (Attachment) @ 0x25782717e80
+        - LeftGripAttachment (Attachment) @ 0x25782716c80
+      - Right Arm (Part) @ 0x257521b7b00
+        - RightShoulderAttachment (Attachment) @ 0x2578271c680
+        - RightGripAttachment (Attachment) @ 0x25782711100
+      - Left Leg (Part) @ 0x257521b21c0
+        - LeftFootAttachment (Attachment) @ 0x25782717d00
+      - Right Leg (Part) @ 0x257521b4f40
+        - RightFootAttachment (Attachment) @ 0x2578271a700
+      - Humanoid (Humanoid) @ 0x25760899a80
+        - Status (Status) @ 0x2575ef8e780
+        - Animator (Animator) @ 0x25760890080
+        - HumanoidDescription (HumanoidDescription) @ 0x257521bb300
+          - BodyPartDescription (BodyPartDescription) @ 0x2579f119500
+          - BodyPartDescription (BodyPartDescription) @ 0x2579f116d00
+          - BodyPartDescription (BodyPartDescription) @ 0x2579f110800
+          - BodyPartDescription (BodyPartDescription) @ 0x2579f111c00
+          - BodyPartDescription (BodyPartDescription) @ 0x2579f111b00
+          - BodyPartDescription (BodyPartDescription) @ 0x2579f119900
+          - AccessoryDescription (AccessoryDescription) @ 0x2579c0fd280
+          - AccessoryDescription (AccessoryDescription) @ 0x2579c0fcec0
+          - AccessoryDescription (AccessoryDescription) @ 0x2579c0fd3c0
+          - AccessoryDescription (AccessoryDescription) @ 0x2579c0f2d80
+          - AccessoryDescription (AccessoryDescription) @ 0x2579c0f65c0
+          - AccessoryDescription (AccessoryDescription) @ 0x2579c0fd780
+          - AccessoryDescription (AccessoryDescription) @ 0x2579c0fdb40
+      - HumanoidRootPart (Part) @ 0x257521bcb80
+        - RootAttachment (Attachment) @ 0x25782716680
+        - RootJoint (Motor6D) @ 0x25765d6ac00
+        - _landed_sound (UnreliableRemoteEvent) @ 0x25793af2fc0
+        - _jumped (UnreliableRemoteEvent) @ 0x25793afe780
+        - _cl_landed_sound (BindableEvent) @ 0x2578041caa0
+      - Animate (LocalScript) @ 0x25764fbba00
+        - Animations (Folder) @ 0x2575bcde4e0
+          - Idle (Animation) @ 0x25782800300
+          - Walk (Animation) @ 0x25782808900
+          - Sprint (Animation) @ 0x25784f33d00
+          - Crouch (Animation) @ 0x25784f30800
+          - CrouchWalk (Animation) @ 0x25784f3fe00
+          - Jump (Animation) @ 0x25784f31f00
+          - Fall (Animation) @ 0x25784f3bd00
+          - Slide (Animation) @ 0x25784f33700
+          - WalkDirectional (Folder) @ 0x2575b4c1900
+            - Back (Animation) @ 0x25784f3d200
+            - Forward (Animation) @ 0x25784f3d600
+            - Left (Animation) @ 0x2579ddc7900
+            - Right (Animation) @ 0x2579ddcfb00
+          - RunDirectional (Folder) @ 0x2575b4c0b00
+            - Back (Animation) @ 0x2579ddc3b00
+            - Forward (Animation) @ 0x2579ddc5500
+            - Left (Animation) @ 0x2579ddc5400
+            - Right (Animation) @ 0x2579ddcac00
+        - ScaleDampeningPercent (NumberValue) | Value: 1.000000 @ 0x2578db37e80
+      - Health (Script) @ 0x25782994000
+      - FakeHead (Part) @ 0x25793afcf00
+      - Body Colors (BodyColors) @ 0x2579c0f5f80
+      - Shirt (Shirt) @ 0x257603a83c0
+      - Accessory (Retopo_CubeAccessory) (Accessory) @ 0x257521bfe40
+        - Handle (Part) @ 0x257521be240
+          - SpecialMesh (SpecialMesh) @ 0x25780484a00
+          - AvatarPartScaleType (StringValue) | Value: "Unknown" @ 0x25790d3d700
+          - HatAttachment (Attachment) @ 0x25782710380
+            - OriginalPosition (Vector3Value) [ValueObject] @ 0x257675f7080
+          - OriginalSize (Vector3Value) [ValueObject] @ 0x25782d361a0
+          - AccessoryWeld (Weld) @ 0x257521b8580
+      - dog nose (Accessory) @ 0x257521bb840
+        - Handle (Part) @ 0x257521b67c0
+          - Mesh (SpecialMesh) @ 0x25780487700
+          - AvatarPartScaleType (StringValue) | Value: "Unknown" @ 0x257609ee500
+          - FaceFrontAttachment (Attachment) @ 0x25782710b00
+            - OriginalPosition (Vector3Value) [ValueObject] @ 0x2575bf67320
+          - OriginalSize (Vector3Value) [ValueObject] @ 0x2575b84dc20
+          - AccessoryWeld (Weld) @ 0x257521b5100
+      - Shirt Graphic (ShirtGraphic) @ 0x257603a8500
+      - Accessory (MeshPartAccessory) (Accessory) @ 0x257521bf040
+        - Handle (Part) @ 0x257521b6b40
+          - SpecialMesh (SpecialMesh) @ 0x25780483c80
+          - AvatarPartScaleType (StringValue) | Value: "Unknown" @ 0x25783743000
+          - FaceFrontAttachment (Attachment) @ 0x25782713980
+            - OriginalPosition (Vector3Value) [ValueObject] @ 0x2575bf68200
+          - OriginalSize (Vector3Value) [ValueObject] @ 0x2575bf674e0
+          - AccessoryWeld (Weld) @ 0x257521bc100
+      - Accessory (MeshPartAccessory) (Accessory) @ 0x257521bbbc0
+        - Handle (Part) @ 0x257521b0940
+          - SpecialMesh (SpecialMesh) @ 0x2578e569f80
+          - AvatarPartScaleType (StringValue) | Value: "Unknown" @ 0x257515f3600
+          - NeckAttachment (Attachment) @ 0x2578271a400
+            - OriginalPosition (Vector3Value) [ValueObject] @ 0x2575468ecc0
+          - OriginalSize (Vector3Value) [ValueObject] @ 0x257546859c0
+          - AccessoryWeld (Weld) @ 0x257521b5b80
+      - Accessory (MeshPart) (Accessory) @ 0x257521b7240
+        - Handle (Part) @ 0x257521bcf00
+          - SpecialMesh (SpecialMesh) @ 0x25785116680
+          - HairAttachment (Attachment) @ 0x25782713380
+            - OriginalPosition (Vector3Value) [ValueObject] @ 0x2575468a880
+          - AvatarPartScaleType (StringValue) | Value: "Unknown" @ 0x25741378000
+          - OriginalSize (Vector3Value) [ValueObject] @ 0x2575468d980
+          - AccessoryWeld (Weld) @ 0x257521b6ec0
+      - Accessory (MeshPartAccessory) (Accessory) @ 0x257521baa40
+        - Handle (Part) @ 0x257521b7e80
+          - SpecialMesh (SpecialMesh) @ 0x2578e866500
+          - AvatarPartScaleType (StringValue) | Value: "Unknown" @ 0x25783744f00
+          - HatAttachment (Attachment) @ 0x25782716e00
+            - OriginalPosition (Vector3Value) [ValueObject] @ 0x25754687080
+          - OriginalSize (Vector3Value) [ValueObject] @ 0x2575468f3c0
+          - AccessoryWeld (Weld) @ 0x257521bc480
+      - Pants (Pants) @ 0x2575ecb0580
+      - Accessory (heyyy) (Accessory) @ 0x2578f753180
+        - Handle (Part) @ 0x2578bfab680
+          - SpecialMesh (SpecialMesh) @ 0x2578fd2b600
+          - HairAttachment (Attachment) @ 0x25782710200
+            - OriginalPosition (Vector3Value) [ValueObject] @ 0x25765a49c40
+          - AvatarPartScaleType (StringValue) | Value: "Unknown" @ 0x25790799d00
+          - OriginalSize (Vector3Value) [ValueObject] @ 0x25765a49d20
+          - AccessoryWeld (Weld) @ 0x2578bfa5d40
+      - Deagle (Tool) @ 0x25752ff9680
+        - Gun (Model) @ 0x2575be14680
+          - Object (Model) @ 0x2575be16980
+            - FirstPerson (Model) @ 0x2575be10b00
+              - Magazine (Model) @ 0x2575be10780
+                - Bullet_3 (Model) @ 0x2575be10080
+                - Bullet_2 (Model) @ 0x2575be17b00
+                - Bullet_1 (Model) @ 0x2575be17e80
+                - Magazine (MeshPart) @ 0x2575be16600
+                - ExtMagazine (MeshPart) @ 0x2575be10e80
+              - Scope (MeshPart) @ 0x25763ca9380
+                - Scope (SurfaceAppearance) @ 0x257600e5780
+              - LongBarrel (MeshPart) @ 0x257a155f580
+                - Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x257392f8480
+              - Hammer (MeshPart) @ 0x257a155fc80
+                - Base,Hammer,Slide (SurfaceAppearance) @ 0x257392f9680
+              - Slide (MeshPart) @ 0x2579f74e080
+                - Base,Hammer,Slide (SurfaceAppearance) @ 0x257392f7b80
+              - Compensator (MeshPart) @ 0x2579f748200
+                - Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x257392fb180
+              - Base (MeshPart) @ 0x2579f744680
+                - Base,Hammer,Slide (SurfaceAppearance) @ 0x257392fa580
+                - Essence (Folder) @ 0x2575bf69b60
+            - ThirdPerson (Model) @ 0x2579f743500
+          - RigObjects (Model) @ 0x2579f74e780
+            - r_Slide (Part) @ 0x25767b44bc0
+              - Slide (Weld) @ 0x25767b45100
+            - r_Magazine (Part) @ 0x25767b44a00
+              - Magazine (Weld) @ 0x25767b40780
+              - Shell (Weld) @ 0x25767b48e40
+              - ExtMagazine (Weld) @ 0x25767b45d40
+              - Bullet (Weld) @ 0x25767b498c0
+              - Shell (Weld) @ 0x25767b4c9c0
+              - Bullet (Weld) @ 0x25767b41580
+              - Bullet (Weld) @ 0x257521b5640
+              - Shell (Weld) @ 0x257521b2e00
+            - r_Hammer (Part) @ 0x257521b2380
+              - Hammer (Weld) @ 0x257521bf900
+        - Animations (Folder) @ 0x2578d3dbf40
+          - Aim (Animation) @ 0x257911ef800
+          - FireAimed (Animation) @ 0x257911ee300
+          - Fire (Animation) @ 0x257911e0300
+          - Sprinting (Animation) @ 0x257911eaa00
+          - Reload (Animation) @ 0x257911ef100
+          - Inspect (Animation) @ 0x257911e7200
+          - Idle (Animation) @ 0x257911eae00
+          - Equip (Animation) @ 0x257a0336c00
+          - InitialEquip (Animation) @ 0x257a0332100
+          - EmptyInspect (Animation) @ 0x257a033e800
+          - SprintIn (Animation) @ 0x257a0330400
+          - SprintOut (Animation) @ 0x257a033b400
+          - SimpleInspect (Animation) @ 0x257a0330500
+        - ToolHandle (Part) @ 0x2578381fc80
+          - FirePos (Attachment) @ 0x2578045a100
+          - Muzzle (Attachment) @ 0x25780459e00
+            - FireLight (PointLight) @ 0x2578266a700
+            - MuzzleFlash2 (ParticleEmitter) @ 0x2575ed79c80
+            - Ring (ParticleEmitter) @ 0x2575ed7bd80
+            - FireSmokeAnim (ParticleEmitter) @ 0x2575ed76980
+            - FireSmokeAnim2 (ParticleEmitter) @ 0x2575ed70380
+            - FireSmokeAnim3 (ParticleEmitter) @ 0x2575ed70c80
+            - MuzzleSmoke (Attachment) @ 0x25780459c80
+              - Trail2 (Attachment) @ 0x25780459980
+              - Trail1 (Attachment) @ 0x25780459800
+                - Trail (Trail) @ 0x2579c890300
+              - MuzzleSmoke1 (ParticleEmitter) @ 0x2575ed79f80
+              - MuzzleSmoke2 (ParticleEmitter) @ 0x2575ed78780
+              - MuzzleSmoke3 (ParticleEmitter) @ 0x2575ed70f80
+          - SoundPointWeld (WeldConstraint) @ 0x2575b9c4900
+          - AimPartWeld (WeldConstraint) @ 0x2575b9cad00
+          - AimPoint (Attachment) @ 0x25780458d80
+          - HullWeld (WeldConstraint) @ 0x2575b9c7d80
+          - GlintPos (Attachment) @ 0x25780458900
+          - TrakrWeld (WeldConstraint) @ 0x2575b9ca440
+          - Scope (Weld) @ 0x2578381f200
+          - LongBarrel (Weld) @ 0x25783811200
+          - Compensator (Weld) @ 0x2572ce37b00
+          - Base (Weld) @ 0x2572ce39fc0
+          - r_Slide (Motor6D) @ 0x257466b4800
+          - r_Magazine (Motor6D) @ 0x257466bde00
+          - r_Hammer (Motor6D) @ 0x25790fdc400
+          - ShellOutPos (Attachment) @ 0x25780454d00
+          - CharmPosition (Attachment) @ 0x25780455900
+          - Wire (Weld) @ 0x2572ce3ac00
+          - Tape (Weld) @ 0x2572ce3dd00
+          - LightBase (Weld) @ 0x2572ce391c0
+          - Light (Weld) @ 0x2572ce37080
+          - SoundPoint (Part) @ 0x2572ce3e080
+            - FireInterior001 (Sound) @ 0x2579c892880
+            - FireInterior002 (Sound) @ 0x2579c894e00
+            - FireInterior003 (Sound) @ 0x2579c892380
+            - Fire001 (Sound) @ 0x2579c894180
+            - Fire002 (Sound) @ 0x2579c895d00
+            - Fire003 (Sound) @ 0x2579c895300
+            - ShellEject001 (Sound) @ 0x2579c897880
+            - ShellEject002 (Sound) @ 0x2579c896700
+            - ShellEject003 (Sound) @ 0x2579c892b00
+            - ShellEject004 (Sound) @ 0x2579c893500
+            - FireExterior001 (Sound) @ 0x2579c892100
+            - FireExterior002 (Sound) @ 0x2579c895f80
+            - FireExterior003 (Sound) @ 0x2579c893780
+            - initial_equip (Sound) @ 0x2579c891980
+            - mag_drop (Sound) @ 0x2579c890580
+            - reload (Sound) @ 0x2579c895080
+            - bolt (Sound) @ 0x2579c893000
+        - Hull (UnionOperation) @ 0x2578529d800
+        - AimPart (Part) @ 0x257521b28c0
+        - BarrelPart (Part) @ 0x257521b5800
+          - WeldConstraint (WeldConstraint) @ 0x257a14f8dc0
+        - FragTrakr (Part) @ 0x257521b4680
+          - SurfaceGui (SurfaceGui) @ 0x257a124dc80
+            - Holder (Frame) @ 0x2576295f080
+              - Count (TextLabel) @ 0x2575ac4c080
+              - Icon (ImageLabel) @ 0x257573d1880
+              - UIListLayout (UIListLayout) @ 0x2579c8a3600
+            - Overlay (ImageLabel) @ 0x2575bd20080
+        - a (RemoteEvent) @ 0x257521ba880
+        - g (RemoteFunction) @ 0x2579c8a1a00
+        - ToolWeld (Motor6D) @ 0x257466b8800
+  - B (Model) @ 0x2578f2e6d00
+    - vaIorantpup (Model) @ 0x2579f74dd00
+      - Head (Part) @ 0x2573e94c640
+        - face (Decal) @ 0x2575de77380
+        - HairAttachment (Attachment) @ 0x2578339b600
+        - HatAttachment (Attachment) @ 0x2578339f380
+        - FaceFrontAttachment (Attachment) @ 0x2579f970080
+        - FaceCenterAttachment (Attachment) @ 0x2579f978a80
+        - Mesh (SpecialMesh) @ 0x2576515cc80
+          - FaceCenterAttachment (Vector3Value) [ValueObject] @ 0x257619e12e0
+          - FaceFrontAttachment (Vector3Value) [ValueObject] @ 0x257619eb4c0
+          - HairAttachment (Vector3Value) [ValueObject] @ 0x2575b84b5a0
+          - HatAttachment (Vector3Value) [ValueObject] @ 0x2575b84cd40
+          - NeckRigAttachment (Vector3Value) [ValueObject] @ 0x25791b8be60
+      - Torso (Part) @ 0x2575f984840
+        - roblox (Decal) @ 0x2575de78f00
+        - NeckAttachment (Attachment) @ 0x2579f975000
+        - BodyFrontAttachment (Attachment) @ 0x2579f979f80
+        - BodyBackAttachment (Attachment) @ 0x2579f979080
+        - LeftCollarAttachment (Attachment) @ 0x2579f973200
+        - RightCollarAttachment (Attachment) @ 0x2579f97c080
+        - WaistFrontAttachment (Attachment) @ 0x2579f97f200
+        - WaistCenterAttachment (Attachment) @ 0x2579f97f800
+        - WaistBackAttachment (Attachment) @ 0x2579f97f680
+        - Right Shoulder (Motor6D) @ 0x257466bfe00
+        - Left Shoulder (Motor6D) @ 0x2575cf55800
+        - Right Hip (Motor6D) @ 0x2575cf50200
+        - Left Hip (Motor6D) @ 0x2579c874200
+        - Neck (Motor6D) @ 0x257603f3200
+        - FakeNeck (Motor6D) @ 0x257466b2400
+      - Left Arm (Part) @ 0x2575f98d7c0
+        - LeftShoulderAttachment (Attachment) @ 0x2579f97bf00
+        - LeftGripAttachment (Attachment) @ 0x2579f977580
+      - Right Arm (Part) @ 0x2575f98e940
+        - RightShoulderAttachment (Attachment) @ 0x2579f973680
+        - RightGripAttachment (Attachment) @ 0x2579f970500
+      - Left Leg (Part) @ 0x2575f98f040
+        - LeftFootAttachment (Attachment) @ 0x2579f972180
+      - Right Leg (Part) @ 0x2575f98cd40
+        - RightFootAttachment (Attachment) @ 0x2579f977100
+      - Humanoid (Humanoid) @ 0x2578c07b680
+        - Status (Status) @ 0x2575fc06280
+        - Animator (Animator) @ 0x2578c078c80
+        - HumanoidDescription (HumanoidDescription) @ 0x257521b1200
+          - BodyPartDescription (BodyPartDescription) @ 0x2579f118e00
+          - BodyPartDescription (BodyPartDescription) @ 0x2579f119300
+          - BodyPartDescription (BodyPartDescription) @ 0x2579f11ad00
+          - BodyPartDescription (BodyPartDescription) @ 0x2579f113b00
+          - BodyPartDescription (BodyPartDescription) @ 0x2579f111600
+          - BodyPartDescription (BodyPartDescription) @ 0x2579f119c00
+          - AccessoryDescription (AccessoryDescription) @ 0x2579c0fe680
+          - AccessoryDescription (AccessoryDescription) @ 0x2579c0fd8c0
+          - AccessoryDescription (AccessoryDescription) @ 0x257603a7240
+          - AccessoryDescription (AccessoryDescription) @ 0x257603a8140
+          - AccessoryDescription (AccessoryDescription) @ 0x257603a7880
+      - HumanoidRootPart (Part) @ 0x25793afd0c0
+        - RootAttachment (Attachment) @ 0x2579f974700
+        - RootJoint (Motor6D) @ 0x257603f3400
+        - _landed_sound (UnreliableRemoteEvent) @ 0x257521b5480
+        - _jumped (UnreliableRemoteEvent) @ 0x25793af4680
+        - _cl_landed_sound (BindableEvent) @ 0x2578041c3a0
+      - Animate (LocalScript) @ 0x2575b2e9e00
+        - Animations (Folder) @ 0x2575a8e8c80
+          - Idle (Animation) @ 0x2579ddcfd00
+          - Walk (Animation) @ 0x2579ddc7300
+          - Sprint (Animation) @ 0x2579ddc4e00
+          - Crouch (Animation) @ 0x2579ddca000
+          - CrouchWalk (Animation) @ 0x2579ddc2f00
+          - Jump (Animation) @ 0x2579ddca400
+          - Fall (Animation) @ 0x2579ddcd000
+          - Slide (Animation) @ 0x2579ddc1700
+          - WalkDirectional (Folder) @ 0x2575a8ee080
+            - Back (Animation) @ 0x2579ddcb300
+            - Forward (Animation) @ 0x2579ddcdf00
+            - Left (Animation) @ 0x2579ddcf700
+            - Right (Animation) @ 0x2579ddc0c00
+          - RunDirectional (Folder) @ 0x2575a8eecc0
+            - Back (Animation) @ 0x2579ddcbf00
+            - Forward (Animation) @ 0x2579ddcfc00
+            - Left (Animation) @ 0x2579ddcf500
+            - Right (Animation) @ 0x2579ddcc100
+        - ScaleDampeningPercent (NumberValue) | Value: 1.000000 @ 0x2575b0f4e60
+      - Health (Script) @ 0x2575b2e3200
+      - FakeHead (Part) @ 0x25793af5100
+      - Body Colors (BodyColors) @ 0x2579c0fa080
+      - Accessory (f) (Accessory) @ 0x257521b1ac0
+        - Handle (Part) @ 0x257521bb4c0
+          - SpecialMesh (SpecialMesh) @ 0x2578048b000
+          - AvatarPartScaleType (StringValue) | Value: "Unknown" @ 0x25783611d00
+          - WaistBackAttachment (Attachment) @ 0x2578271b300
+            - OriginalPosition (Vector3Value) [ValueObject] @ 0x2575bf684a0
+          - OriginalSize (Vector3Value) [ValueObject] @ 0x2575bf613c0
+          - AccessoryWeld (Weld) @ 0x257521bdec0
+      - Pants (Pants) @ 0x257603a6d40
+      - CharacterMesh (CharacterMesh) @ 0x25782719f80
+      - Shirt (Shirt) @ 0x2575ecb0440
+      - CharacterMesh (CharacterMesh) @ 0x2578271d100
+      - CharacterMesh (CharacterMesh) @ 0x2578271c800
+      - Accessory (defaultAccessory) (Accessory) @ 0x257521ba500
+        - Handle (Part) @ 0x257521b0240
+          - SpecialMesh (SpecialMesh) @ 0x2579dafba80
+          - AvatarPartScaleType (StringValue) | Value: "Unknown" @ 0x2579079ca00
+          - FaceFrontAttachment (Attachment) @ 0x2578271b780
+            - OriginalPosition (Vector3Value) [ValueObject] @ 0x25765a48200
+          - OriginalSize (Vector3Value) [ValueObject] @ 0x2575468c1e0
+          - AccessoryWeld (Weld) @ 0x257521bf740
+      - Kawaii Pigtail Extensions in Black (Accessory) @ 0x257521be5c0
+        - Handle (Part) @ 0x257521bba00
+          - SpecialMesh (SpecialMesh) @ 0x2578fd2ae80
+          - AvatarPartScaleType (StringValue) | Value: "Unknown" @ 0x2579079e600
+          - HatAttachment (Attachment) @ 0x25782712a80
+            - OriginalPosition (Vector3Value) [ValueObject] @ 0x25765a43ea0
+          - OriginalSize (Vector3Value) [ValueObject] @ 0x25765a44e60
+          - AccessoryWeld (Weld) @ 0x257521bd600
+      - Accessory (defaultAccessory) (Accessory) @ 0x25793aff740
+        - Handle (Part) @ 0x25793af36c0
+          - SpecialMesh (SpecialMesh) @ 0x2578d7d9800
+          - AvatarPartScaleType (StringValue) | Value: "Unknown" @ 0x25786cb5b00
+          - HatAttachment (Attachment) @ 0x2579f97ea80
+            - OriginalPosition (Vector3Value) [ValueObject] @ 0x257554dda60
+          - OriginalSize (Vector3Value) [ValueObject] @ 0x25791b84220
+          - AccessoryWeld (Weld) @ 0x25793afdd00
+      - CharacterMesh (CharacterMesh) @ 0x2579f970800
+      - CharacterMesh (CharacterMesh) @ 0x2579f975780
+      - Dark cute hair (Accessory) @ 0x25793afd440
+        - Handle (Part) @ 0x2575fc3c9c0
+          - SpecialMesh (SpecialMesh) @ 0x25764d6c980
+          - AvatarPartScaleType (StringValue) | Value: "Unknown" @ 0x257609efe00
+          - HairAttachment (Attachment) @ 0x2579f976b00
+            - OriginalPosition (Vector3Value) [ValueObject] @ 0x257859dfe40
+          - OriginalSize (Vector3Value) [ValueObject] @ 0x257554dd980
+          - AccessoryWeld (Weld) @ 0x2575fc32700
+      - MiniFix (Tool) @ 0x2574cc8c680
+        - Gun (Model) @ 0x2579f74eb00
+          - RigObjects (Model) @ 0x2579f74f580
+            - r_BoltEnd (Part) @ 0x257521bcd40
+              - BoltEnd (Weld) @ 0x257521b9000
+            - r_Magazine (Part) @ 0x257521bac00
+              - Magazine (Weld) @ 0x257521bf3c0
+              - Casing (Weld) @ 0x257521b1e40
+              - Bullet (Weld) @ 0x257521bc2c0
+              - Casing (Weld) @ 0x257521b4300
+              - Bullet (Weld) @ 0x257521b5d40
+            - r_Bolt (Part) @ 0x257521badc0
+              - Bolt (Weld) @ 0x257521b8900
+          - Object (Model) @ 0x2579f745480
+            - ThirdPerson (Model) @ 0x2579f742700
+            - FirstPerson (Model) @ 0x2579f744300
+              - Magazine (Model) @ 0x2579f74c480
+                - Bullet_2 (Model) @ 0x2579f74c100
+                - Bullet_1 (Model) @ 0x2579f748580
+                - Magazine (MeshPart) @ 0x2579ddb9700
+              - Scope (MeshPart) @ 0x2575ef85b80
+                - SurfaceAppearance (SurfaceAppearance) @ 0x2575fd10380
+              - Base (MeshPart) @ 0x2575ef80780
+                - SurfaceAppearance (SurfaceAppearance) @ 0x2575fd1b780
+              - BoltEnd (MeshPart) @ 0x2575ef8c100
+                - SurfaceAppearance (SurfaceAppearance) @ 0x2575fd18480
+              - Bolt (MeshPart) @ 0x2575ef8c480
+                - SurfaceAppearance (SurfaceAppearance) @ 0x2575fd1c980
+        - Animations (Folder) @ 0x2578f3104e0
+          - Aim (Animation) @ 0x2579a263000
+          - FireAimed (Animation) @ 0x2579a264900
+          - Fire (Animation) @ 0x2579a268200
+          - Sprinting (Animation) @ 0x2579a269f00
+          - Reload (Animation) @ 0x2579a264600
+          - Inspect (Animation) @ 0x2579a269800
+          - Idle (Animation) @ 0x2579a261c00
+          - Equip (Animation) @ 0x25759023d00
+          - InitialEquip (Animation) @ 0x25759026d00
+          - EmptyInspect (Animation) @ 0x25759026f00
+          - SprintIn (Animation) @ 0x2575902b700
+          - SprintOut (Animation) @ 0x25759025100
+          - SimpleInspect (Animation) @ 0x2575902ef00
+        - AimPart (Part) @ 0x257608660c0
+        - ToolHandle (Part) @ 0x257608667c0
+          - AimPartWeld (WeldConstraint) @ 0x2579a064540
+          - HullWeld (WeldConstraint) @ 0x2579a064b80
+          - Muzzle (Attachment) @ 0x2575d24aa00
+            - MuzzleSmoke (Attachment) @ 0x2575d24a280
+              - MuzzleSmoke3 (ParticleEmitter) @ 0x2575fd1ae80
+              - MuzzleSmoke2 (ParticleEmitter) @ 0x2575fd10c80
+              - MuzzleSmoke1 (ParticleEmitter) @ 0x2575fd16380
+              - Trail1 (Attachment) @ 0x2575d24da00
+                - Trail (Trail) @ 0x257856fd280
+              - Trail2 (Attachment) @ 0x257661c1a00
+            - FireSmokeAnim3 (ParticleEmitter) @ 0x257600e6380
+            - FireSmokeAnim2 (ParticleEmitter) @ 0x257600e8480
+            - FireSmokeAnim (ParticleEmitter) @ 0x257600eae80
+          - GlintPos (Attachment) @ 0x257661cd280
+          - SoundPointWeld (WeldConstraint) @ 0x2579c6579c0
+          - FirePos (Attachment) @ 0x257661c0b00
+          - ShellOutPos (Attachment) @ 0x257661c9200
+          - TrakrWeld (WeldConstraint) @ 0x2579c65d140
+          - Scope (Weld) @ 0x2575f982380
+          - Base (Weld) @ 0x2575f983c00
+          - r_Magazine (Motor6D) @ 0x25764fbfc00
+          - r_BoltEnd (Motor6D) @ 0x2575e470800
+          - r_Bolt (Motor6D) @ 0x2575e470a00
+          - SoundPoint (Part) @ 0x2575f983180
+            - FireInterior001 (Sound) @ 0x25766f20300
+            - FireInterior002 (Sound) @ 0x25766f2b200
+            - FireInterior003 (Sound) @ 0x25766f25300
+            - Fire001 (Sound) @ 0x25766f2a800
+            - Fire002 (Sound) @ 0x25766f2cb00
+            - Fire003 (Sound) @ 0x25766f2f800
+            - ShellEject001 (Sound) @ 0x25766f23f00
+            - ShellEject002 (Sound) @ 0x25766f2fd00
+            - ShellEject003 (Sound) @ 0x25766f2e400
+            - ShellEject004 (Sound) @ 0x25766f2f580
+            - FireExterior001 (Sound) @ 0x25766f2cd80
+            - FireExterior002 (Sound) @ 0x25766f20580
+            - FireExterior003 (Sound) @ 0x25766f2c600
+            - initial_equip (Sound) @ 0x25766f23c80
+            - mag_drop (Sound) @ 0x25766f23780
+            - reload (Sound) @ 0x25766f2b700
+            - bolt (Sound) @ 0x25766f20800
+        - BarrelPart (Part) @ 0x25758aaaa40
+          - WeldConstraint (WeldConstraint) @ 0x2579c659540
+        - FragTrakr (Part) @ 0x25758aa7b00
+          - SurfaceGui (SurfaceGui) @ 0x2575ac77880
+            - Holder (Frame) @ 0x2574cc76480
+              - Count (TextLabel) @ 0x257573eb080
+              - Icon (ImageLabel) @ 0x2575ad19c80
+              - UIListLayout (UIListLayout) @ 0x2575b332400
+            - Overlay (ImageLabel) @ 0x25740f7c080
+        - a (RemoteEvent) @ 0x25758aa2fc0
+        - g (RemoteFunction) @ 0x2575b332200
+        - ToolWeld (Motor6D) @ 0x2575e470c00
+
+Found matching config root at path: Workspace/Workspace/Characters/Sarah_DaBestGirl/__FirearmHolster/BarrelPart
+- BarrelPart (Part) @ 0x2575f9867c0
+  - WeldConstraint (WeldConstraint) @ 0x25762f7b480
+
+Found matching config root at path: Workspace/Workspace/Characters/lionPolandfest/__FirearmHolster/BarrelPart
+- BarrelPart (Part) @ 0x2579dd8a880
+  - WeldConstraint (WeldConstraint) @ 0x2574ed28b40
+
+Found matching config root at path: Workspace/Workspace/Characters/jzbacon42/__FirearmHolster/Gun/Object/FirstPerson/Barrel
+- Barrel (MeshPart) @ 0x25794187080
+  - Barrel,Bolt,Ring (SurfaceAppearance) @ 0x257936fae80
+
+Found matching config root at path: Workspace/Workspace/Characters/jzbacon42/__FirearmHolster/Gun/Object/FirstPerson/Bolt/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x257936fc080
+
+Found matching config root at path: Workspace/Workspace/Characters/jzbacon42/__FirearmHolster/Gun/Object/FirstPerson/Ring/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x25766017580
+
+Found matching config root at path: Workspace/Workspace/Characters/jzbacon42/__FirearmHolster/BarrelPart
+- BarrelPart (Part) @ 0x2575fd3e940
+  - WeldConstraint (WeldConstraint) @ 0x25799ee8500
+
+Found matching config root at path: Workspace/Workspace/Characters/jzbacon42/__FirearmHolster/ToolHandle/Barrel
+- Barrel (Weld) @ 0x2578ba04bc0
+
+Found matching config root at path: Workspace/Workspace/Characters/21ruzz21/__FirearmHolster/Gun/Object/FirstPerson/LongBarrel
+- LongBarrel (MeshPart) @ 0x2579441e080
+  - Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x2575c852180
+
+Found matching config root at path: Workspace/Workspace/Characters/21ruzz21/__FirearmHolster/Gun/Object/FirstPerson/Compensator/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x2575c85e480
+
+Found matching config root at path: Workspace/Workspace/Characters/21ruzz21/__FirearmHolster/ToolHandle/LongBarrel
+- LongBarrel (Weld) @ 0x2577fbbbf40
+
+Found matching config root at path: Workspace/Workspace/Characters/21ruzz21/__FirearmHolster/BarrelPart
+- BarrelPart (Part) @ 0x2577fbba880
+  - WeldConstraint (WeldConstraint) @ 0x2575b9ce540
+
+Found matching config root at path: Workspace/Workspace/Characters/Krispy2509/__FirearmHolster/Gun/Object/FirstPerson/LongBarrel
+- LongBarrel (MeshPart) @ 0x2579ea66600
+  - SurfaceAppearance (SurfaceAppearance) @ 0x25782e50f80
+
+Found matching config root at path: Workspace/Workspace/Characters/Krispy2509/__FirearmHolster/ToolHandle/LongBarrel
+- LongBarrel (Weld) @ 0x2574103c100
+
+Found matching config root at path: Workspace/Workspace/Characters/Krispy2509/__FirearmHolster/BarrelPart
+- BarrelPart (Part) @ 0x2574103d280
+  - WeldConstraint (WeldConstraint) @ 0x257610ad3c0
+
+Found matching config root at path: Workspace/Workspace/Characters/Speed690543/__FirearmHolster/BarrelPart
+- BarrelPart (Part) @ 0x25767b41ac0
+  - WeldConstraint (WeldConstraint) @ 0x2575dcf0080
+
+Found matching config root at path: Workspace/Workspace/Characters/{54dec098-3739-4b3d-8132-d27d180d53ae}/A/argentinamessi203/Default_rev2
+- Default_rev2 (Tool) @ 0x25752ffd280
+  - Gun (Model) @ 0x25799fb1900
+    - RigObjects (Model) @ 0x25799fbf900
+      - r_BulletChamber (Part) @ 0x2574b625b80
+        - Casing (Weld) @ 0x2574b62fc80
+        - Bullet (Weld) @ 0x2574b62af80
+      - r_BoltEnd (Part) @ 0x2574b62c2c0
+        - BoltEnd (Weld) @ 0x2574b622000
+      - r_Magazine5 (Part) @ 0x2574b624300
+        - Follower (Weld) @ 0x2574b62ba00
+        - Magazine (Weld) @ 0x2574b620780
+        - Bullet (Weld) @ 0x2574b62d7c0
+        - Casing (Weld) @ 0x2574b62ecc0
+        - Bullet (Weld) @ 0x2574b624a00
+        - Casing (Weld) @ 0x2574b624f40
+      - r_Bolt (Part) @ 0x2574b626280
+        - Bolt (Weld) @ 0x2574b6267c0
+      - r_FiringPin (Part) @ 0x2574b620cc0
+        - BoltFiringPin (Weld) @ 0x2574b62b300
+    - Object (Model) @ 0x25799fbeb00
+      - ThirdPerson (Model) @ 0x25799fb9000
+      - FirstPerson (Model) @ 0x25799fb0080
+        - Bullet_Chamber (Model) @ 0x25799fb0b00
+          - Bullet (MeshPart) @ 0x25799fb7780
+            - SurfaceAppearance (SurfaceAppearance) @ 0x2578328d880
+          - Casing (MeshPart) @ 0x25799fbb680
+            - SurfaceAppearance (SurfaceAppearance) @ 0x25783280680
+        - Magazine (Model) @ 0x25799fba180
+          - Bullet_2 (Model) @ 0x25799fb5b80
+            - Bullet (MeshPart) @ 0x25799fbc480
+              - SurfaceAppearance (SurfaceAppearance) @ 0x25783280c80
+            - Casing (MeshPart) @ 0x25799fb0780
+              - SurfaceAppearance (SurfaceAppearance) @ 0x2578328c080
+          - Bullet_1 (Model) @ 0x25799fb3500
+            - Bullet (MeshPart) @ 0x25799fbe780
+              - SurfaceAppearance (SurfaceAppearance) @ 0x2578328a580
+            - Casing (MeshPart) @ 0x25799fb5100
+              - SurfaceAppearance (SurfaceAppearance) @ 0x2574ed49080
+          - Magazine (MeshPart) @ 0x25799fb8580
+            - SurfaceAppearance (SurfaceAppearance) @ 0x2574ed47280
+          - Follower (MeshPart) @ 0x25799fb7080
+            - SurfaceAppearance (SurfaceAppearance) @ 0x2574ed4ba80
+        - Bolt (MeshPart) @ 0x25799fb8200
+          - SurfaceAppearance (SurfaceAppearance) @ 0x2574ed4db80
+        - BoltFiringPin (MeshPart) @ 0x25799fba500
+          - SurfaceAppearance (SurfaceAppearance) @ 0x2578e536080
+        - BoltEnd (MeshPart) @ 0x25799fb1200
+          - SurfaceAppearance (SurfaceAppearance) @ 0x2578e537b80
+        - Scope (MeshPart) @ 0x25799fba880
+          - SurfaceAppearance (SurfaceAppearance) @ 0x2578e538180
+        - Base (MeshPart) @ 0x25799fbcb80
+          - SurfaceAppearance (SurfaceAppearance) @ 0x2578e534b80
+  - Animations (Folder) @ 0x2577fd1c100
+    - Aim (Animation) @ 0x2578f2b5700
+    - FireAimed (Animation) @ 0x2578f2b2c00
+    - Fire (Animation) @ 0x2578f2b9900
+    - Sprinting (Animation) @ 0x25753c7de00
+    - Reload (Animation) @ 0x25753c74100
+    - Inspect (Animation) @ 0x25753c7f800
+    - Idle (Animation) @ 0x25753c71e00
+    - Equip (Animation) @ 0x25753c7aa00
+    - InitialEquip (Animation) @ 0x2578cf14300
+    - EmptyInspect (Animation) @ 0x25785d3bf00
+    - SprintIn (Animation) @ 0x25785d3f600
+    - SprintOut (Animation) @ 0x25765adb300
+    - SimpleInspect (Animation) @ 0x25765adb400
+  - AimPart (Part) @ 0x2574b6252c0
+  - ToolHandle (Part) @ 0x2574b62fac0
+    - Optic (Weld) @ 0x2574b6244c0
+    - AimPartWeld (WeldConstraint) @ 0x25766a3bfc0
+    - HullWeld (WeldConstraint) @ 0x25766a32380
+    - Muzzle (Attachment) @ 0x25783395300
+      - MuzzleSmoke (Attachment) @ 0x2578339e000
+        - MuzzleSmoke3 (ParticleEmitter) @ 0x2578e53b780
+        - MuzzleSmoke2 (ParticleEmitter) @ 0x2578e53e180
+        - MuzzleSmoke1 (ParticleEmitter) @ 0x2578e53d880
+        - Trail1 (Attachment) @ 0x25783391100
+          - Trail (Trail) @ 0x257444a3f00
+        - Trail2 (Attachment) @ 0x25783391d00
+      - FireSmokeAnim3 (ParticleEmitter) @ 0x2578e53db80
+      - MuzzleFlash1 (ParticleEmitter) @ 0x2578e534580
+      - FireSmokeAnim2 (ParticleEmitter) @ 0x2578e532a80
+      - FireLight (PointLight) @ 0x25765c2cf00
+      - FireSmokeAnim (ParticleEmitter) @ 0x2578e533980
+    - GlintPos (Attachment) @ 0x25783391a00
+    - SoundPointWeld (WeldConstraint) @ 0x25766a3a1c0
+    - FirePos (Attachment) @ 0x2578339a280
+    - Light (Weld) @ 0x2574b6228c0
+    - ShellOutPos (Attachment) @ 0x25783392a80
+    - TrakrWeld (WeldConstraint) @ 0x25766a36980
+    - CharmPosition (Attachment) @ 0x2578339ae80
+    - Tape (Weld) @ 0x2574b62cb80
+    - Wire (Weld) @ 0x2574b6205c0
+    - LightBase (Weld) @ 0x2574b62cf00
+    - r_Bolt (Motor6D) @ 0x2575b2e8c00
+    - r_BoltEnd (Motor6D) @ 0x25764268800
+    - r_FiringPin (Motor6D) @ 0x2576426b400
+    - r_BulletChamber (Motor6D) @ 0x2579e3d0800
+    - r_Magazine5 (Motor6D) @ 0x2579e3d7800
+    - Base (Weld) @ 0x2574b6259c0
+    - SoundPoint (Part) @ 0x2574b621e40
+      - FireInterior001 (Sound) @ 0x257444a8500
+      - FireInterior002 (Sound) @ 0x257444a2880
+      - FireInterior003 (Sound) @ 0x257444a5f80
+      - Fire001 (Sound) @ 0x257444a1700
+      - Fire002 (Sound) @ 0x257444a8780
+      - Fire003 (Sound) @ 0x257444ad280
+      - Fire004 (Sound) @ 0x25786776980
+      - ShellEject001 (Sound) @ 0x2578677d280
+      - ShellEject002 (Sound) @ 0x25786770a80
+      - ShellEject003 (Sound) @ 0x2578677c100
+      - ShellEject004 (Sound) @ 0x25786777600
+      - FireExterior001 (Sound) @ 0x2578677e400
+      - FireExterior002 (Sound) @ 0x25786775a80
+      - FireExterior003 (Sound) @ 0x2578677b700
+      - inspect_mag_out (Sound) @ 0x25786774900
+      - inspect_bullet_catch (Sound) @ 0x25786775f80
+      - inspect_bullet_insert (Sound) @ 0x25786775300
+      - inspect_bolt_forward (Sound) @ 0x2575e169180
+      - inspect_empty_bolt_out (Sound) @ 0x2575e16eb80
+      - inspect_bullet_catch_2 (Sound) @ 0x2575e16cb00
+      - mag_drop (Sound) @ 0x2575e16e400
+      - inspect_bullet_throw (Sound) @ 0x2575e16cd80
+      - inspect_bolt_out (Sound) @ 0x2575e163a00
+      - reload_mag_out (Sound) @ 0x2575e161480
+      - reload_bolt_out (Sound) @ 0x2575e166980
+      - fire_bolt_out (Sound) @ 0x2575e16fa80
+      - inspect_mag_in (Sound) @ 0x2575e16d000
+  - BarrelPart (Part) @ 0x2574b62f900
+    - WeldConstraint (WeldConstraint) @ 0x25766a383c0
+  - FragTrakr (Part) @ 0x2574b62a880
+    - SurfaceGui (SurfaceGui) @ 0x2574fb2b480
+      - Holder (Frame) @ 0x2575fdfaa80
+        - Count (TextLabel) @ 0x2575f4f4080
+        - Icon (ImageLabel) @ 0x2575df59c80
+        - UIListLayout (UIListLayout) @ 0x25766757200
+      - Overlay (ImageLabel) @ 0x25786312480
+  - a (RemoteEvent) @ 0x2574b621c80
+  - g (RemoteFunction) @ 0x25766756600
+  - ToolWeld (Motor6D) @ 0x25764fb1400
+
+Found matching config root at path: Workspace/Workspace/Characters/{54dec098-3739-4b3d-8132-d27d180d53ae}/A/Aidenspeelt1234/Default/BarrelPart
+- BarrelPart (Part) @ 0x2573e944140
+  - WeldConstraint (WeldConstraint) @ 0x25766a34680
+
+Found matching config root at path: Workspace/Workspace/Characters/{54dec098-3739-4b3d-8132-d27d180d53ae}/B/MS6lu/Intervention/BarrelPart
+- BarrelPart (Part) @ 0x2573e948900
+  - WeldConstraint (WeldConstraint) @ 0x25766a38780
+
+Found matching config root at path: Workspace/Workspace/Characters/{54dec098-3739-4b3d-8132-d27d180d53ae}/B/MS6lu/Intervention/ToolHandle/Barrel
+- Barrel (Weld) @ 0x2573e9428c0
+
+Found matching config root at path: Workspace/Workspace/Characters/{54dec098-3739-4b3d-8132-d27d180d53ae}/B/killerboy0456/Default/BarrelPart
+- BarrelPart (Part) @ 0x257615e7400
+  - WeldConstraint (WeldConstraint) @ 0x25799eebfc0
+
+Found matching config root at path: Workspace/Workspace/Characters/Sileax209847/__FirearmHolster/BarrelPart
+- BarrelPart (Part) @ 0x2575af9adc0
+  - WeldConstraint (WeldConstraint) @ 0x2575d8a3f00
+
+Found matching config root at path: Workspace/Workspace/Characters/twisttwiperkiller2/__FirearmHolster/Gun/Object/FirstPerson/LongBarrel
+- LongBarrel (MeshPart) @ 0x2575fc02000
+  - Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x2578efdf680
+
+Found matching config root at path: Workspace/Workspace/Characters/twisttwiperkiller2/__FirearmHolster/Gun/Object/FirstPerson/Compensator/Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel
+- Magazine/Magazine,Magazine/ExtMagazine,Compensator,LongBarrel (SurfaceAppearance) @ 0x2578efdab80
+
+Found matching config root at path: Workspace/Workspace/Characters/twisttwiperkiller2/__FirearmHolster/ToolHandle/LongBarrel
+- LongBarrel (Weld) @ 0x25793afe240
+
+Found matching config root at path: Workspace/Workspace/Characters/twisttwiperkiller2/__FirearmHolster/BarrelPart
+- BarrelPart (Part) @ 0x25782553180
+  - WeldConstraint (WeldConstraint) @ 0x2575ca62240
+
+Found matching config root at path: Workspace/Workspace/Characters/Loffredino11/__FirearmHolster/Gun/Object/FirstPerson/Barrel
+- Barrel (MeshPart) @ 0x2575fa81c80
+  - Barrel,Bolt,Ring (SurfaceAppearance) @ 0x25767773080
+
+Found matching config root at path: Workspace/Workspace/Characters/Loffredino11/__FirearmHolster/Gun/Object/FirstPerson/Bolt/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x25767777880
+
+Found matching config root at path: Workspace/Workspace/Characters/Loffredino11/__FirearmHolster/Gun/Object/FirstPerson/Ring/Barrel,Bolt,Ring
+- Barrel,Bolt,Ring (SurfaceAppearance) @ 0x25767772480
+
+Found matching config root at path: Workspace/Workspace/Characters/Loffredino11/__FirearmHolster/BarrelPart
+- BarrelPart (Part) @ 0x2575fc31c80
+  - WeldConstraint (WeldConstraint) @ 0x2574ed9af80
+
+Found matching config root at path: Workspace/Workspace/Characters/Loffredino11/__FirearmHolster/ToolHandle/Barrel
+- Barrel (Weld) @ 0x257811d28c0
+
+Found matching config root at path: Workspace/Workspace/Characters/Amarilin_Rose/__FirearmHolster/BarrelPart
+- BarrelPart (Part) @ 0x2575a4de940
+  - WeldConstraint (WeldConstraint) @ 0x257687f7240
+
+Found matching config root at path: Workspace/Workspace/Characters/{c5d915d9-c283-49d6-9135-b3298c1f7e46}/A/sasaouma13/Default/BarrelPart
+- BarrelPart (Part) @ 0x25761bc9700
+  - WeldConstraint (WeldConstraint) @ 0x25762f706c0
+
+Found matching config root at path: Workspace/Workspace/Characters/{c5d915d9-c283-49d6-9135-b3298c1f7e46}/B/kenbrio2/Default/BarrelPart
+- BarrelPart (Part) @ 0x2579257c800
+  - WeldConstraint (WeldConstraint) @ 0x2579a060bc0
+
+Found matching config root at path: Workspace/Workspace/Characters/Konstantinoslala123/__FirearmHolster/Gun/Object/FirstPerson/Barrel
+- Barrel (MeshPart) @ 0x2579441d280
+  - SurfaceAppearance (SurfaceAppearance) @ 0x257873a5480
+
+Found matching config root at path: Workspace/Workspace/Characters/Konstantinoslala123/__FirearmHolster/BarrelPart
+- BarrelPart (Part) @ 0x25765e10400
+  - WeldConstraint (WeldConstraint) @ 0x25744f1b0c0
+
+Found matching config root at path: Workspace/Workspace/Characters/Konstantinoslala123/__FirearmHolster/ToolHandle/Barrel
+- Barrel (Weld) @ 0x25765e1dd00
+
+Found matching config root at path: Workspace/Workspace/Characters/Leoul4367/__FirearmHolster/BarrelPart
+- BarrelPart (Part) @ 0x257851d8c80
+  - WeldConstraint (WeldConstraint) @ 0x25763850300
+
+Found matching config root at path: Workspace/Workspace/Characters/djo23333/__FirearmHolster/BarrelPart
+- BarrelPart (Part) @ 0x2575af9c800
+  - WeldConstraint (WeldConstraint) @ 0x25755472880
+
+Found matching config root at path: Workspace/Workspace/Characters/{fd42ed19-d7df-42f1-ae73-54130faa7266}/A/Minitonnn2/AWP/BarrelPart
+- BarrelPart (Part) @ 0x2578255cf00
+  - WeldConstraint (WeldConstraint) @ 0x2575d732ec0
+
+Found matching config root at path: Workspace/Workspace/Characters/{fd42ed19-d7df-42f1-ae73-54130faa7266}/B/WKWKAALDW1/TheFix/BarrelPart
+- BarrelPart (Part) @ 0x2578255b680
+  - WeldConstraint (WeldConstraint) @ 0x2575d733780
+
+Found matching config root at path: Workspace/Workspace/Characters/{fd42ed19-d7df-42f1-ae73-54130faa7266}/B/ThisMan878/MiniFix/BarrelPart
+- BarrelPart (Part) @ 0x257811df740
+  - WeldConstraint (WeldConstraint) @ 0x25766a301c0
+
+Found matching config root at path: Workspace/Workspace/Characters/Valaki5555555/__FirearmHolster/BarrelPart
+- BarrelPart (Part) @ 0x25745b75480
+  - WeldConstraint (WeldConstraint) @ 0x2579a065800
+
+Found matching config root at path: Workspace/Workspace/Characters/{577eb848-f69c-4141-8683-ee99005d444a}/A/oskarposkar11/Default/BarrelPart
+- BarrelPart (Part) @ 0x2575223c2c0
+  - WeldConstraint (WeldConstraint) @ 0x2575e459680
+
+Found matching config root at path: Workspace/Workspace/Characters/{577eb848-f69c-4141-8683-ee99005d444a}/B/IIIIIllIlIllllIIIIl/Default_rev2
+- Default_rev2 (Tool) @ 0x2577f9f9080
+  - Gun (Model) @ 0x2575efa4d80
+    - RigObjects (Model) @ 0x2575efa7e80
+      - r_BulletChamber (Part) @ 0x2573e948580
+        - Casing (Weld) @ 0x2573e941ac0
+        - Bullet (Weld) @ 0x2573e949c40
+      - r_BoltEnd (Part) @ 0x2573e948c80
+        - BoltEnd (Weld) @ 0x2573e94eb00
+      - r_Magazine5 (Part) @ 0x2573e946440
+        - Follower (Weld) @ 0x2573e94a6c0
+        - Magazine (Weld) @ 0x2573e94bd80
+        - Bullet (Weld) @ 0x2573e94bbc0
+        - Casing (Weld) @ 0x2573e94a180
+        - Bullet (Weld) @ 0x2573e94ba00
+        - Casing (Weld) @ 0x2573e949700
+      - r_Bolt (Part) @ 0x2573e94b4c0
+        - Bolt (Weld) @ 0x2573e94fc80
+      - r_FiringPin (Part) @ 0x2573e941580
+        - BoltFiringPin (Weld) @ 0x2573e94d980
+    - Object (Model) @ 0x2575efacf00
+      - ThirdPerson (Model) @ 0x2575efaa500
+      - FirstPerson (Model) @ 0x2575efa5480
+        - Bullet_Chamber (Model) @ 0x2575efaf200
+          - Bullet (MeshPart) @ 0x2575efa9e00
+            - SurfaceAppearance (SurfaceAppearance) @ 0x2578e53b480
+          - Casing (MeshPart) @ 0x2575efaee80
+            - SurfaceAppearance (SurfaceAppearance) @ 0x2578e53c080
+        - Magazine (Model) @ 0x2575efa0e80
+          - Bullet_2 (Model) @ 0x2575efaf900
+            - Bullet (MeshPart) @ 0x2575efa0780
+              - SurfaceAppearance (SurfaceAppearance) @ 0x2578328ed80
+            - Casing (MeshPart) @ 0x2575efa9700
+              - SurfaceAppearance (SurfaceAppearance) @ 0x25767b53680
+          - Bullet_1 (Model) @ 0x2575ef8d600
+            - Bullet (MeshPart) @ 0x257645b3180
+              - SurfaceAppearance (SurfaceAppearance) @ 0x25767b5ae80
+            - Casing (MeshPart) @ 0x25764ecf580
+              - SurfaceAppearance (SurfaceAppearance) @ 0x25767b5ba80
+          - Magazine (MeshPart) @ 0x2578b96b300
+            - SurfaceAppearance (SurfaceAppearance) @ 0x25767b56380
+          - Follower (MeshPart) @ 0x2578b968200
+            - SurfaceAppearance (SurfaceAppearance) @ 0x25767b51580
+        - Bolt (MeshPart) @ 0x2578b967400
+          - SurfaceAppearance (SurfaceAppearance) @ 0x25767b55a80
+        - BoltFiringPin (MeshPart) @ 0x2578b966280
+          - SurfaceAppearance (SurfaceAppearance) @ 0x25767b50680
+        - BoltEnd (MeshPart) @ 0x2578b96d280
+          - SurfaceAppearance (SurfaceAppearance) @ 0x25767b5c380
+        - Scope (MeshPart) @ 0x2578b966980
+          - SurfaceAppearance (SurfaceAppearance) @ 0x25767b5f380
+        - Base (MeshPart) @ 0x2578b964300
+          - SurfaceAppearance (SurfaceAppearance) @ 0x25767b54580
+  - Animations (Folder) @ 0x2578cf3a500
+    - Aim (Animation) @ 0x257670e5600
+    - FireAimed (Animation) @ 0x257670e0400
+    - Fire (Animation) @ 0x2579c4d0f00
+    - Sprinting (Animation) @ 0x2579c4d4d00
+    - Reload (Animation) @ 0x2579c4df400
+    - Inspect (Animation) @ 0x2579c4d4b00
+    - Idle (Animation) @ 0x2579c4dcd00
+    - Equip (Animation) @ 0x2579c4d8d00
+    - InitialEquip (Animation) @ 0x2579c4d4800
+    - EmptyInspect (Animation) @ 0x2579c4d2b00
+    - SprintIn (Animation) @ 0x2579c4d3100
+    - SprintOut (Animation) @ 0x2579c4d5000
+    - SimpleInspect (Animation) @ 0x2579c4d0b00
+  - AimPart (Part) @ 0x257615ebbc0
+  - ToolHandle (Part) @ 0x257615ec9c0
+    - Optic (Weld) @ 0x257615ecd40
+    - AimPartWeld (WeldConstraint) @ 0x25799eed500
+    - HullWeld (WeldConstraint) @ 0x25799ee4040
+    - Muzzle (Attachment) @ 0x257596aba80
+      - MuzzleSmoke (Attachment) @ 0x257596a6080
+        - MuzzleSmoke3 (ParticleEmitter) @ 0x25767b58a80
+        - MuzzleSmoke2 (ParticleEmitter) @ 0x25767b5a580
+        - MuzzleSmoke1 (ParticleEmitter) @ 0x25767b55180
+        - Trail1 (Attachment) @ 0x257596ab780
+          - Trail (Trail) @ 0x2575edaaa80
+        - Trail2 (Attachment) @ 0x257596ab480
+      - FireSmokeAnim3 (ParticleEmitter) @ 0x25767b5db80
+      - MuzzleFlash1 (ParticleEmitter) @ 0x25767b5a280
+      - FireSmokeAnim2 (ParticleEmitter) @ 0x25767b5c980
+      - FireLight (PointLight) @ 0x2579c4d0200
+      - FireSmokeAnim (ParticleEmitter) @ 0x25767b54e80
+    - GlintPos (Attachment) @ 0x257596a7a00
+    - SoundPointWeld (WeldConstraint) @ 0x25799ee5800
+    - FirePos (Attachment) @ 0x257596a5600
+    - Light (Weld) @ 0x257615e9540
+    - ShellOutPos (Attachment) @ 0x257596aa580
+    - TrakrWeld (WeldConstraint) @ 0x25799ee6c00
+    - CharmPosition (Attachment) @ 0x257596ae480
+    - Tape (Weld) @ 0x257615e8ac0
+    - Wire (Weld) @ 0x257615e7940
+    - LightBase (Weld) @ 0x257615e1200
+    - r_Bolt (Motor6D) @ 0x257466bc400
+    - r_BoltEnd (Motor6D) @ 0x257466ba400
+    - r_FiringPin (Motor6D) @ 0x257466b8e00
+    - r_BulletChamber (Motor6D) @ 0x257466b0800
+    - r_Magazine5 (Motor6D) @ 0x257801b3800
+    - Base (Weld) @ 0x257615e0400
+    - SoundPoint (Part) @ 0x257615e0b00
+      - FireInterior001 (Sound) @ 0x2575eda1480
+      - FireInterior002 (Sound) @ 0x2575eda6200
+      - FireInterior003 (Sound) @ 0x2575eda8000
+      - Fire001 (Sound) @ 0x2575eda8a00
+      - Fire002 (Sound) @ 0x2575edacb00
+      - Fire003 (Sound) @ 0x2575edac600
+      - Fire004 (Sound) @ 0x2575e98f080
+      - ShellEject001 (Sound) @ 0x2575e98b700
+      - ShellEject002 (Sound) @ 0x2575e984b80
+      - ShellEject003 (Sound) @ 0x2575e989b80
+      - ShellEject004 (Sound) @ 0x2575e98c100
+      - FireExterior001 (Sound) @ 0x2575e981200
+      - FireExterior002 (Sound) @ 0x2575e988000
+      - FireExterior003 (Sound) @ 0x2575e987380
+      - inspect_mag_out (Sound) @ 0x2575e981c00
+      - inspect_bullet_catch (Sound) @ 0x2575e988c80
+      - inspect_bullet_insert (Sound) @ 0x2575e986480
+      - inspect_bolt_forward (Sound) @ 0x2575e98ad00
+        - og_sg (ObjectValue) | Value: Foley (SoundGroup) @ 0x2573986200064 @ 0x25785b4b220
+      - inspect_empty_bolt_out (Sound) @ 0x2575e98fa80
+      - inspect_bullet_catch_2 (Sound) @ 0x2575e98b200
+      - mag_drop (Sound) @ 0x2575e982880
+      - inspect_bullet_throw (Sound) @ 0x2575e985a80
+      - inspect_bolt_out (Sound) @ 0x2575e98eb80
+      - reload_mag_out (Sound) @ 0x2575e98dc80
+      - reload_bolt_out (Sound) @ 0x2575e989900
+        - og_sg (ObjectValue) | Value: Foley (SoundGroup) @ 0x2573986200064 @ 0x25755c10da0
+      - fire_bolt_out (Sound) @ 0x2575e989180
+      - inspect_mag_in (Sound) @ 0x257867a4180
+  - BarrelPart (Part) @ 0x2578ba0c640
+    - WeldConstraint (WeldConstraint) @ 0x2575d9a74c0
+  - FragTrakr (Part) @ 0x2578ba0e780
+    - SurfaceGui (SurfaceGui) @ 0x2578f095a80
+      - Holder (Frame) @ 0x2578c890a80
+        - Count (TextLabel) @ 0x2574efdb080
+        - Icon (ImageLabel) @ 0x25752146080
+        - UIListLayout (UIListLayout) @ 0x2575fcfc600
+      - Overlay (ImageLabel) @ 0x25752146c80
+  - a (RemoteEvent) @ 0x2578ba0f740
+  - g (RemoteFunction) @ 0x2575fcf6c00
+  - ToolWeld (Motor6D) @ 0x257801b8600
+  - PreventSelfTeamHighlight (Highlight) @ 0x25745637380
+
+Found matching config root at path: Workspace/Workspace/Characters/NeXotz99/__FirearmHolster/BarrelPart
+- BarrelPart (Part) @ 0x25783372380
+  - WeldConstraint (WeldConstraint) @ 0x25766319b80
+
+Found matching config root at path: Workspace/Workspace/Characters/Maxouu55000/__FirearmHolster/BarrelPart
+- BarrelPart (Part) @ 0x2579257aa40
+  - WeldConstraint (WeldConstraint) @ 0x25763f0fbc0
+
+Found matching config root at path: Workspace/Workspace/Characters/kirilucha3/__FirearmHolster/BarrelPart
+- BarrelPart (Part) @ 0x2578ed12380
+  - WeldConstraint (WeldConstraint) @ 0x2574436d780
+

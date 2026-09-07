@@ -1,0 +1,10 @@
+Tool Name: [Hamburger]
+Tool Class: Tool
+
+Descendants:
+  - Name: Script | Class: Script @ 0x15138d60400
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x1447592663168 @ 0x15138dec800
+  - Name: Animation | Class: Animation @ 0x1528d5f2900
+  - Name: Handle | Class: MeshPart @ 0x15136082e00
+    - Name: Eat | Class: StringValue | Value: "Unknown" @ 0x1528d5fc600
+    - Name: Eat | Class: Sound @ 0x1512b9e5300

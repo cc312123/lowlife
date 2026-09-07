@@ -1,0 +1,9 @@
+Tool Name: [Donut]
+Tool Class: Tool
+
+Descendants:
+  - Name: Eat | Class: Script @ 0x1512839fe00
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x1447592663168 @ 0x15280460f60
+  - Name: Handle | Class: Part @ 0x1511d6b2fc0
+    - Name: Mesh | Class: SpecialMesh @ 0x1528d489800
+    - Name: Eat | Class: StringValue | Value: "Unknown" @ 0x1528d468100

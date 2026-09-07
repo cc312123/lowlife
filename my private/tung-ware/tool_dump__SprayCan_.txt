@@ -1,0 +1,10 @@
+Tool Name: [SprayCan]
+Tool Class: Tool
+
+Descendants:
+  - Name: SprayCanScript | Class: Script @ 0x225a2829600
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x2359420256384 @ 0x22568a88740
+  - Name: Handle | Class: Part @ 0x225acaca880
+    - Name: Mesh | Class: SpecialMesh @ 0x2254e51ea80
+    - Name: Smoke | Class: ParticleEmitter @ 0x225a8808780
+    - Name: Spray | Class: StringValue | Value: "Unknown" @ 0x225ac765e00

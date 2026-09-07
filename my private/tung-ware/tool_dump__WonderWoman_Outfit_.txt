@@ -1,0 +1,6 @@
+Tool Name: [WonderWoman Outfit]
+Tool Class: Tool
+
+Descendants:
+  - Name: Shine | Class: Script @ 0x20f97fd8e00
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x2259726852224 @ 0x20f935d6280

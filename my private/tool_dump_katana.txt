@@ -1,0 +1,17 @@
+Tool Name: katana
+Tool Class: Tool
+
+Descendants:
+  - Name: Katana | Class: Script @ 0x19a9eabdc00
+  - Name: Skinnable | Class: BoolValue | Value: false @ 0x19ac9eece20
+  - Name: Handle | Class: MeshPart @ 0x19a9ee48c80
+    - Name: SlashSound | Class: Sound @ 0x19aa881e180
+    - Name: DmgPoint | Class: Attachment @ 0x19ac974b000
+    - Name: DmgPoint | Class: Attachment @ 0x19ac974c380
+    - Name: DmgPoint | Class: Attachment @ 0x19ac9747d00
+    - Name: DmgPoint | Class: Attachment @ 0x19ac9749b00
+    - Name: DmgPoint | Class: Attachment @ 0x19ac9740c80
+    - Name: DmgPoint | Class: Attachment @ 0x19ac9741580
+    - Name: T0 | Class: Attachment @ 0x19ac974d580
+      - Name: Trail | Class: Trail @ 0x19aa8816980
+    - Name: T1 | Class: Attachment @ 0x19ac974ea80

@@ -1,0 +1,16 @@
+Tool Name: [Double Barrel SG]
+Tool Class: Tool
+
+Descendants:
+  - Name: Ammo | Class: IntValue | Value: 0 @ 0x2961bfd4f40
+  - Name: Handle | Class: Part @ 0x294ae8baf80
+    - Name: ShootSound | Class: Sound @ 0x2962c673c80
+    - Name: NoAmmo | Class: Sound @ 0x2962c673a00
+    - Name: WeldConstraint | Class: WeldConstraint @ 0x2961e4e7600
+    - Name: Muzzle | Class: Attachment @ 0x2961e432600
+    - Name: Flash | Class: BillboardGui @ 0x2961c0d0a80
+      - Name: Shoot | Class: ImageLabel @ 0x2961cf50080
+  - Name: Default | Class: MeshPart @ 0x294acdc2e00
+  - Name: LocalScript | Class: LocalScript @ 0x2961bd11200
+  - Name: MaxAmmo | Class: NumberValue | Value: 2.000000 @ 0x2961bfdf3c0
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x2837146775680 @ 0x2961bfdf200

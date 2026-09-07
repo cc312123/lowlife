@@ -1,0 +1,8 @@
+Tool Name: Streak-Tag
+Tool Class: Tool
+
+Descendants:
+  - Name: _Extra | Class: Script @ 0x20e32c8fe00
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x2259726852224 @ 0x20f99a1ce20
+  - Name: Handle | Class: Part @ 0x20e3dd4eb00
+    - Name: Particle | Class: ParticleEmitter @ 0x20f8f405780

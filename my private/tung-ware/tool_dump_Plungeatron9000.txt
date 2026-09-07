@@ -1,0 +1,18 @@
+Tool Name: Plungeatron9000
+Tool Class: Tool
+
+Descendants:
+  - Name: Script | Class: Script @ 0x19c0d892800
+    - Name: ProjectileScript | Class: Script @ 0x19c0d890800
+      - Name: Hit | Class: Sound @ 0x19a9f03cd80
+    - Name: Bubbles | Class: ParticleEmitter @ 0x19c0e068780
+  - Name: LocalScript | Class: LocalScript @ 0x19c0d897c00
+  - Name: MouseIcon | Class: LocalScript @ 0x19c0d89ca00
+  - Name: Handle | Class: Part @ 0x19c12646ec0
+    - Name: Fire | Class: Sound @ 0x19a9f03c880
+    - Name: Mesh | Class: SpecialMesh @ 0x19c0f2c1880
+  - Name: ServerControl | Class: RemoteFunction @ 0x19c0b31ec00
+  - Name: ClientControl | Class: RemoteFunction @ 0x19c0b31ba00
+  - Name: DisplayPart | Class: Part @ 0x19abf968740
+    - Name: Mesh | Class: SpecialMesh @ 0x19a9e756680
+    - Name: Weld | Class: Weld @ 0x19abf9683c0

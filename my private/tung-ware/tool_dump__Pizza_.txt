@@ -1,0 +1,9 @@
+Tool Name: [Pizza]
+Tool Class: Tool
+
+Descendants:
+  - Name: Eat | Class: Script @ 0x15136187600
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x1447592663168 @ 0x15280467da0
+  - Name: Animation | Class: Animation @ 0x151206db400
+  - Name: Handle | Class: MeshPart @ 0x1511d13d600
+    - Name: Eat | Class: StringValue | Value: "Unknown" @ 0x151206d5300

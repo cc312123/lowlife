@@ -1,0 +1,35 @@
+Tool Name: [LMinigun]
+Tool Class: Tool
+
+Descendants:
+  - Name: Ammo | Class: IntValue | Value: 92 @ 0x20faae4dc20
+  - Name: Handle | Class: UnionOperation @ 0x20f8c9bbc00
+    - Name: NoAmmo | Class: Sound @ 0x20fa39b0d00
+    - Name: ShootSound | Class: Sound @ 0x20fa39b4b80
+    - Name: effect | Class: Attachment @ 0x20e347b8a80
+      - Name: bullets | Class: ParticleEmitter @ 0x20fab0c7b80
+    - Name: Light | Class: PointLight @ 0x20f9f321300
+    - Name: Flash | Class: BillboardGui @ 0x20f9b0d5080
+      - Name: Shoot | Class: ImageLabel @ 0x20f9b1e6c80
+    - Name: Attachment | Class: Attachment @ 0x20e347b7700
+    - Name: Skin | Class: Folder @ 0x20faae453a0
+    - Name: Detail | Class: UnionOperation @ 0x20f8c9b6800
+      - Name: ManualWeld | Class: ManualWeld @ 0x20e3dd4c2c0
+    - Name: MG | Class: Sound @ 0x20fa7881e80
+    - Name: Light | Class: PointLight @ 0x20f97632f00
+    - Name: MG | Class: Sound @ 0x20fa2b6b480
+    - Name: MG | Class: Sound @ 0x20faaff2380
+    - Name: MG | Class: Sound @ 0x20f844dbe80
+    - Name: Light | Class: PointLight @ 0x20f88628f00
+    - Name: MG | Class: Sound @ 0x20fae3a8f00
+    - Name: MG | Class: Sound @ 0x20faecab980
+    - Name: Light | Class: PointLight @ 0x20f8f38f400
+    - Name: MG | Class: Sound @ 0x20fb09c8500
+    - Name: Light | Class: PointLight @ 0x20f88623c00
+    - Name: MG | Class: Sound @ 0x20fb09c2b00
+    - Name: MG | Class: Sound @ 0x20fb09c7d80
+    - Name: MG | Class: Sound @ 0x20faeca9e00
+    - Name: Light | Class: PointLight @ 0x20f8f38aa00
+  - Name: LocalScript | Class: LocalScript @ 0x20fa034ce00
+  - Name: MaxAmmo | Class: NumberValue | Value: 100.000000 @ 0x20faae468a0
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x2259726852224 @ 0x20faae46360

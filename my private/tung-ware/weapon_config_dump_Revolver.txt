@@ -1,0 +1,4096 @@
+=== Weapon Config Search for Tool: Revolver ===
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/RevolverContent
+- RevolverContent (Model) @ 0x2575346cf00
+  - RevolverClasses (Model) @ 0x2575346d280
+    - NoData_RevolverClasses (Folder) @ 0x2578208af80
+      - ItemMenuData (ModuleScript) @ 0x2574d453500
+      - ClassData (ModuleScript) @ 0x2574d451580
+      - KillEffect (ModuleScript) @ 0x2574d453180
+      - ClassData_Murder (ModuleScript) @ 0x2574d450940
+  - RevolverSkins (Model) @ 0x2575346d600
+    - NoData (Model) @ 0x2575346d980
+      - NoData_RevolverSkins (Folder) @ 0x2578208b760
+        - ItemMenuData (ModuleScript) @ 0x2574d4559c0
+        - KillEffect (ModuleScript) @ 0x2574d454bc0
+          - shirtsAndPants (Folder) @ 0x2578208bae0
+            - Shirt (Shirt) @ 0x25764c6be80
+            - Pants (Pants) @ 0x25764c6bfc0
+        - RevolverData (ModuleScript) @ 0x2574d450400
+        - generic (Model) @ 0x2575346dd00
+          - RevolverData (ModuleScript) @ 0x2574d452000
+          - WeaponModel (Model) @ 0x2575346e080
+            - ColtPython (MeshPart) @ 0x2575b1d2e00
+            - Frame (MeshPart) @ 0x2575b9cc100
+        - WeaponModel (Model) @ 0x2575346e400
+          - Slide (MeshPart) @ 0x2575b1d2000
+          - Mag (MeshPart) @ 0x2575b1d2380
+          - Receiver (MeshPart) @ 0x2575b1d2700
+          - Muzzle (Part) @ 0x2575b0f21c0
+            - Smoke (ParticleEmitter) @ 0x2575fb4b480
+            - Spray (ParticleEmitter) @ 0x2575fb4b780
+            - Star (ParticleEmitter) @ 0x2575fb4ba80
+            - Bang (ParticleEmitter) @ 0x2575fb43f80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverClasses - nodataclass
+- RevolverClasses - nodataclass (Folder) @ 0x25756e00940
+  - KillEffect (ModuleScript) @ 0x2575c7fecc0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverClasses - 90INTERNAL
+- RevolverClasses - 90INTERNAL (Folder) @ 0x25756e004e0
+  - KillEffect (ModuleScript) @ 0x2575c960080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 392
+- RevolverSkins - 392 (Folder) @ 0x25756e01120
+  - WeaponModel (Model) @ 0x2575c867400
+    - Muzzle (Part) @ 0x2575c960240
+      - Smoke (ParticleEmitter) @ 0x2575c954580
+        - Hkey (IntValue) | Value: 1 @ 0x2574e7c90e0
+      - Spray (ParticleEmitter) @ 0x2575c954880
+        - Hkey (IntValue) | Value: 2 @ 0x2574e7cdb40
+      - Star (ParticleEmitter) @ 0x2575c954b80
+        - Hkey (IntValue) | Value: 3 @ 0x2574e7cef60
+      - Bang (ParticleEmitter) @ 0x2575c954e80
+        - Hkey (IntValue) | Value: 4 @ 0x2574e7ccfe0
+      - Hkey (IntValue) | Value: 0 @ 0x2574e7ce160
+    - Drum (MeshPart) @ 0x2575c867780
+      - Hkey (IntValue) | Value: 5 @ 0x2574e7cf580
+    - Frame (MeshPart) @ 0x2575c867b00
+      - Hkey (IntValue) | Value: 6 @ 0x2574e7c7cc0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverClasses - 223INTERNAL
+- RevolverClasses - 223INTERNAL (Folder) @ 0x25756e01ba0
+  - WeaponLogic (ModuleScript) @ 0x2575c961740
+  - Particles (Configuration) @ 0x257610b86c0
+    - Sparks (ParticleEmitter) @ 0x2575c957580
+    - Smoke (Smoke) @ 0x257515fe000
+    - Debris (ParticleEmitter) @ 0x2575c957880
+    - Collision (ParticleEmitter) @ 0x2575c957b80
+  - FireEffect (ModuleScript) @ 0x2575c961ac0
+  - KillEffect (ModuleScript) @ 0x2575c961c80
+  - WeaponLogic_Murder (ModuleScript) @ 0x2575c961900
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 405
+- RevolverSkins - 405 (Folder) @ 0x25756e01d60
+  - WeaponModel (Model) @ 0x2575c868c80
+    - Scope (Part) @ 0x2575c961e40
+      - Mesh (SpecialMesh) @ 0x2574ef42d80
+        - Hkey (IntValue) | Value: 1 @ 0x2574e7c12e0
+      - Hkey (IntValue) | Value: 0 @ 0x2574e7c6a60
+    - Lenses (MeshPart) @ 0x2575c869000
+      - Hkey (IntValue) | Value: 2 @ 0x2574e7c19e0
+    - Muzzle (Part) @ 0x2575c962000
+      - Star (ParticleEmitter) @ 0x2575c958780
+        - Hkey (IntValue) | Value: 4 @ 0x2574e7c6280
+      - Spray (ParticleEmitter) @ 0x2575c958a80
+        - Hkey (IntValue) | Value: 5 @ 0x2574e7c4d80
+      - Smoke (ParticleEmitter) @ 0x2575c958d80
+        - Hkey (IntValue) | Value: 6 @ 0x2574e7c7940
+      - Bang (ParticleEmitter) @ 0x2575c959080
+        - Hkey (IntValue) | Value: 7 @ 0x2574e7c5020
+      - Hkey (IntValue) | Value: 3 @ 0x2574e7cdc20
+    - Drum (MeshPart) @ 0x2575c869380
+      - Hkey (IntValue) | Value: 8 @ 0x2574e7cd520
+    - Frame (MeshPart) @ 0x2575c869700
+      - Hkey (IntValue) | Value: 9 @ 0x2574e7cfba0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 210
+- RevolverSkins - 210 (Folder) @ 0x25756e07160
+  - WeaponModel (Model) @ 0x2575c869e00
+    - Muzzle (Part) @ 0x2575c963340
+      - Smoke (ParticleEmitter) @ 0x2575c95b780
+        - Hkey (IntValue) | Value: 1 @ 0x2574e7c7400
+      - Spray (ParticleEmitter) @ 0x2575c95ba80
+        - Hkey (IntValue) | Value: 2 @ 0x2574e7cbe60
+      - Star (ParticleEmitter) @ 0x2575c95bd80
+        - Hkey (IntValue) | Value: 3 @ 0x2574e7c3c00
+      - Bang (ParticleEmitter) @ 0x2575c95c080
+        - Hkey (IntValue) | Value: 4 @ 0x2574e7cbae0
+      - Hkey (IntValue) | Value: 0 @ 0x2574e7c1580
+    - Drum (MeshPart) @ 0x2575c86a180
+      - Hkey (IntValue) | Value: 5 @ 0x2574e7c4840
+    - Frame (MeshPart) @ 0x2575c86a500
+      - Hkey (IntValue) | Value: 6 @ 0x2574e7c5f00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 305
+- RevolverSkins - 305 (Folder) @ 0x25756e076a0
+  - WeaponModel (Model) @ 0x2575c86ac00
+    - EffectHolder (Part) @ 0x2575c963c00
+      - Hkey (IntValue) | Value: 0 @ 0x2574e7ce400
+    - Muzzle (Part) @ 0x2575c963dc0
+      - Hkey (IntValue) | Value: 1 @ 0x2574e7c0860
+    - Drum (MeshPart) @ 0x2575c86af80
+      - Hkey (IntValue) | Value: 2 @ 0x2574e7ca960
+    - Frame (MeshPart) @ 0x2575c86b300
+      - Hkey (IntValue) | Value: 3 @ 0x2574e7c0be0
+  - RevolverParticles (Configuration) @ 0x257610b2840
+    - DarkParticle (ParticleEmitter) @ 0x2575c95e780
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/FollowersContent - 48/ShopModel/BoundBox
+- BoundBox (Part) @ 0x25784d96980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 187
+- RevolverSkins - 187 (Folder) @ 0x25756e074e0
+  - WeaponModel (Model) @ 0x2575c86d980
+    - Muzzle (Part) @ 0x2575c968200
+      - Smoke (ParticleEmitter) @ 0x2575c992180
+        - Hkey (IntValue) | Value: 1 @ 0x2575ff09380
+      - Spray (ParticleEmitter) @ 0x2575c992480
+        - Hkey (IntValue) | Value: 2 @ 0x2575ff08120
+      - Star (ParticleEmitter) @ 0x2575c992780
+        - Hkey (IntValue) | Value: 3 @ 0x2575ff0e5c0
+      - Bang (ParticleEmitter) @ 0x2575c992a80
+        - Hkey (IntValue) | Value: 4 @ 0x2575ff08f20
+      - Hkey (IntValue) | Value: 0 @ 0x2575ff019e0
+    - Drum (MeshPart) @ 0x2575c86dd00
+      - Hkey (IntValue) | Value: 5 @ 0x2575ff02e00
+    - Frame (MeshPart) @ 0x2575c86e080
+      - Hkey (IntValue) | Value: 6 @ 0x2575ff066e0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverClasses - 251INTERNAL
+- RevolverClasses - 251INTERNAL (Folder) @ 0x25756e0f3c0
+  - KillEffect (ModuleScript) @ 0x2575c969540
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 89
+- RevolverSkins - 89 (Folder) @ 0x25756e08ac0
+  - WeaponModel (Model) @ 0x2575c86ee80
+    - Muzzle (Part) @ 0x2575c969700
+      - Smoke (ParticleEmitter) @ 0x2575c994b80
+        - Hkey (IntValue) | Value: 1 @ 0x2575ff07780
+      - Spray (ParticleEmitter) @ 0x2575c994e80
+        - Hkey (IntValue) | Value: 2 @ 0x2575ff068a0
+      - Star (ParticleEmitter) @ 0x2575c995180
+        - Hkey (IntValue) | Value: 3 @ 0x2575ff00080
+      - Bang (ParticleEmitter) @ 0x2575c995480
+        - Hkey (IntValue) | Value: 4 @ 0x2575ff06360
+      - Hkey (IntValue) | Value: 0 @ 0x2575ff06600
+    - Receiver (MeshPart) @ 0x2575c86f200
+      - Hkey (IntValue) | Value: 5 @ 0x2575ff013c0
+    - Mag (MeshPart) @ 0x2575c86f580
+      - Hkey (IntValue) | Value: 6 @ 0x2575ff03180
+    - Slide (MeshPart) @ 0x2575c86f900
+      - Hkey (IntValue) | Value: 7 @ 0x2575ff04300
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 32
+- RevolverSkins - 32 (Folder) @ 0x25756e0cf00
+  - WeaponModel (Model) @ 0x2575c70fc80
+    - Muzzle (Part) @ 0x2575c969e00
+      - Smoke (ParticleEmitter) @ 0x2575c996980
+        - Hkey (IntValue) | Value: 1 @ 0x2575ff05800
+      - Spray (ParticleEmitter) @ 0x2575c996c80
+        - Hkey (IntValue) | Value: 2 @ 0x2575ff02380
+      - Star (ParticleEmitter) @ 0x2575c996f80
+        - Hkey (IntValue) | Value: 3 @ 0x2575ff01ba0
+      - Bang (ParticleEmitter) @ 0x2575c997280
+        - Hkey (IntValue) | Value: 4 @ 0x2575ff052c0
+      - Hkey (IntValue) | Value: 0 @ 0x2575ff00780
+    - Drum (MeshPart) @ 0x2575ca10080
+      - Hkey (IntValue) | Value: 5 @ 0x2575ff08ac0
+    - Frame (MeshPart) @ 0x2575ca10400
+      - Hkey (IntValue) | Value: 6 @ 0x2575ff028c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverClasses - 42INTERNAL
+- RevolverClasses - 42INTERNAL (Folder) @ 0x2575e8f12e0
+  - Particles (Configuration) @ 0x257610b2d80
+    - Sparks (ParticleEmitter) @ 0x2574d5b0680
+    - Smoke (Smoke) @ 0x257670e7800
+    - Debris (ParticleEmitter) @ 0x2574d5b0980
+    - Collision (ParticleEmitter) @ 0x2574d5b0c80
+  - KillEffect (ModuleScript) @ 0x25764fd9e00
+  - FireEffect (ModuleScript) @ 0x25764fd4a00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 153
+- RevolverSkins - 153 (Folder) @ 0x2575e8f6d00
+  - WeaponModel (Model) @ 0x2575ca18900
+    - Frame (Part) @ 0x25764fd05c0
+      - Hkey (IntValue) | Value: 0 @ 0x2574d581f20
+    - Muzzle (Part) @ 0x25764fd7780
+      - Smoke (ParticleEmitter) @ 0x2574d5b1580
+        - Hkey (IntValue) | Value: 2 @ 0x2574d5822a0
+      - Spray (ParticleEmitter) @ 0x2574d5b1880
+        - Hkey (IntValue) | Value: 3 @ 0x2574d582540
+      - Star (ParticleEmitter) @ 0x2574d5b1b80
+        - Hkey (IntValue) | Value: 4 @ 0x2574d5827e0
+      - Bang (ParticleEmitter) @ 0x2574d5b1e80
+        - Hkey (IntValue) | Value: 5 @ 0x2574d582a80
+      - Hkey (IntValue) | Value: 1 @ 0x2574d582c40
+    - Shotgun (Part) @ 0x25764fd91c0
+      - Mesh (SpecialMesh) @ 0x257590d6b00
+        - Hkey (IntValue) | Value: 7 @ 0x2574d582fc0
+      - Hkey (IntValue) | Value: 6 @ 0x2574d583180
+    - VisualFrame (Part) @ 0x25764fdac00
+      - Mesh (SpecialMesh) @ 0x2575c304e80
+        - Hkey (IntValue) | Value: 9 @ 0x2574d583500
+      - Hkey (IntValue) | Value: 8 @ 0x2574d5836c0
+    - Drum (Part) @ 0x25764fd0e80
+      - Mesh (SpecialMesh) @ 0x2575c307580
+        - Hkey (IntValue) | Value: 11 @ 0x2574d583a40
+      - Hkey (IntValue) | Value: 10 @ 0x2574d583c00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/KnifeSkins - 335/WeaponModel/BoundBox
+- BoundBox (Part) @ 0x2575ddbfac0
+  - Hkey (IntValue) | Value: 1 @ 0x25782a8ba00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/KnifeSkins - 335/ShopModel/BoundBox
+- BoundBox (Part) @ 0x25785143f80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/FollowersContent - 176/ShopModel/BoundBox
+- BoundBox (Part) @ 0x25784d9c2c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/KnifeSkins - 340/WeaponModel/BoundBox
+- BoundBox (Part) @ 0x2575a8daf80
+  - Hkey (IntValue) | Value: 0 @ 0x2575d122a80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/KnifeSkins - 340/ShopModel/BoundBox
+- BoundBox (Part) @ 0x25785145b80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 319
+- RevolverSkins - 319 (Folder) @ 0x2574ffe7f60
+  - WeaponModel (Model) @ 0x257828be080
+    - Muzzle (Part) @ 0x2575a51b680
+      - Smoke (ParticleEmitter) @ 0x257828dd880
+        - Hkey (IntValue) | Value: 1 @ 0x2578284dc20
+      - Spray (ParticleEmitter) @ 0x257828ddb80
+        - Hkey (IntValue) | Value: 2 @ 0x2578284dfa0
+      - Star (ParticleEmitter) @ 0x257828dde80
+        - Hkey (IntValue) | Value: 3 @ 0x2578284e320
+      - Bang (ParticleEmitter) @ 0x257828de180
+        - Hkey (IntValue) | Value: 4 @ 0x2578284e780
+      - Hkey (IntValue) | Value: 0 @ 0x2578284ea20
+    - Drum (MeshPart) @ 0x257828be400
+      - Hkey (IntValue) | Value: 5 @ 0x2578284ef60
+    - Frame (MeshPart) @ 0x257828be780
+      - Hkey (IntValue) | Value: 6 @ 0x2578284f200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/KnifeSkins - 387/WeaponModel/BoundBox
+- BoundBox (Part) @ 0x25767e1bf40
+  - Hkey (IntValue) | Value: 6 @ 0x25783027cc0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverClasses - 93INTERNAL
+- RevolverClasses - 93INTERNAL (Folder) @ 0x2575d1237a0
+  - WeaponLogic (ModuleScript) @ 0x25745c3d0c0
+  - KillEffect (ModuleScript) @ 0x2575632c2c0
+  - WeaponLogic_Murder (ModuleScript) @ 0x25745c39a80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 224
+- RevolverSkins - 224 (Folder) @ 0x2575d129460
+  - RevolverParticles (Configuration) @ 0x25751644340
+    - LightParticle (ParticleEmitter) @ 0x25768471b80
+    - DarkParticle (ParticleEmitter) @ 0x25768471280
+  - RightWeaponModel (Model) @ 0x257829a0e80
+    - EffectHolder (Part) @ 0x2575632bd80
+      - Hkey (IntValue) | Value: 0 @ 0x25781f9e4e0
+    - Muzzle (Part) @ 0x2575632fe40
+      - Hkey (IntValue) | Value: 1 @ 0x25781f9e940
+    - Drum (MeshPart) @ 0x257829a3c00
+      - Hkey (IntValue) | Value: 2 @ 0x25781f961a0
+    - Frame (MeshPart) @ 0x257829a4300
+      - Hkey (IntValue) | Value: 3 @ 0x25782af5720
+  - LeftWeaponModel (Model) @ 0x257829aaf80
+    - EffectHolder (Part) @ 0x2575632dd00
+      - Hkey (IntValue) | Value: 0 @ 0x25781f93ea0
+    - Muzzle (Part) @ 0x2575632d440
+      - Hkey (IntValue) | Value: 1 @ 0x25781f99540
+    - Drum (MeshPart) @ 0x257829a2700
+      - Hkey (IntValue) | Value: 2 @ 0x25781f91040
+    - Frame (MeshPart) @ 0x257829aba00
+      - Hkey (IntValue) | Value: 3 @ 0x25781f99380
+  - KillEffect (ModuleScript) @ 0x2575632f200
+    - Particles (ParticleEmitter) @ 0x25768471880
+  - ShopModel (Model) @ 0x257869d4d80
+    - Model (Model) @ 0x257869d5100
+      - Drum (MeshPart) @ 0x25783815f00
+      - Frame (MeshPart) @ 0x2578381a880
+      - EndPoint (Part) @ 0x2578392dd00
+    - Model (Model) @ 0x25783819700
+      - Drum (MeshPart) @ 0x25783815480
+      - Frame (MeshPart) @ 0x2578381fc80
+      - EndPoint (Part) @ 0x2578392db40
+    - Centre (Part) @ 0x2578392d980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverClasses - 294INTERNAL
+- RevolverClasses - 294INTERNAL (Folder) @ 0x25783c49c40
+  - WeaponLogic (ModuleScript) @ 0x2576861f740
+  - Particles (Configuration) @ 0x257668e8300
+    - Debris (ParticleEmitter) @ 0x25768642d80
+  - FireEffect (ModuleScript) @ 0x2576861fac0
+  - KillEffect (ModuleScript) @ 0x2576861fc80
+  - WeaponLogic_Murder (ModuleScript) @ 0x2576861f900
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 391
+- RevolverSkins - 391 (Folder) @ 0x25783c4bca0
+  - WeaponModel (Model) @ 0x25781a42a80
+    - BoundBox (Part) @ 0x2576861fe40
+      - Hkey (IntValue) | Value: 0 @ 0x25783b24300
+    - Muzzle (Part) @ 0x25768650080
+      - Smoke (ParticleEmitter) @ 0x25768643680
+        - Hkey (IntValue) | Value: 2 @ 0x25783b23880
+      - Spray (ParticleEmitter) @ 0x25768643980
+        - Hkey (IntValue) | Value: 3 @ 0x25783b23c00
+      - Hkey (IntValue) | Value: 1 @ 0x25783b23960
+    - Silencer (Part) @ 0x25768650240
+      - Mesh (SpecialMesh) @ 0x2575afb3800
+        - Hkey (IntValue) | Value: 5 @ 0x25783b23340
+      - Hkey (IntValue) | Value: 4 @ 0x25783b23180
+    - Receiver (Part) @ 0x25768650400
+      - CasingAttachment (Attachment) @ 0x2575afbaa00
+        - CasingEmitter (ParticleEmitter) @ 0x25768644280
+          - Hkey (IntValue) | Value: 8 @ 0x25783b22a80
+        - Hkey (IntValue) | Value: 7 @ 0x25783b228c0
+      - Mesh (SpecialMesh) @ 0x2575afb6200
+        - Hkey (IntValue) | Value: 9 @ 0x25783b22460
+      - Hkey (IntValue) | Value: 6 @ 0x25783b221c0
+    - Slide (Part) @ 0x257686505c0
+      - Mesh (SpecialMesh) @ 0x2575afb2d80
+        - Hkey (IntValue) | Value: 11 @ 0x25783b21e40
+      - Hkey (IntValue) | Value: 10 @ 0x25783b21ba0
+    - Magazine (Part) @ 0x25768650780
+      - Mesh (SpecialMesh) @ 0x25783309b00
+        - Hkey (IntValue) | Value: 13 @ 0x25783b21660
+      - Hkey (IntValue) | Value: 12 @ 0x25783b212e0
+  - KillEffect (ModuleScript) @ 0x25768650940
+    - Particles (ParticleEmitter) @ 0x25768644b80
+  - ShopModel (Model) @ 0x257869d8200
+    - BoundBox (Part) @ 0x257854328c0
+    - Muzzle (Part) @ 0x25785433c00
+      - Smoke (ParticleEmitter) @ 0x25786b6fc80
+      - Spray (ParticleEmitter) @ 0x25786b6d880
+    - Silencer (Part) @ 0x25785437080
+      - Mesh (SpecialMesh) @ 0x257820d3980
+    - Receiver (Part) @ 0x25785432000
+      - CasingAttachment (Attachment) @ 0x257820ddd00
+        - CasingEmitter (ParticleEmitter) @ 0x25786b6ea80
+      - Mesh (SpecialMesh) @ 0x257820dea80
+    - Slide (Part) @ 0x25785430080
+      - Mesh (SpecialMesh) @ 0x257820d2780
+    - Magazine (Part) @ 0x25785430940
+      - Mesh (SpecialMesh) @ 0x257820d9e00
+    - Centre (Part) @ 0x2578543e080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverClasses - 361INTERNAL
+- RevolverClasses - 361INTERNAL (Folder) @ 0x257827f6280
+  - WeaponLogic (ModuleScript) @ 0x25783d0c640
+  - Particles (Configuration) @ 0x25759a220c0
+    - Sparks (ParticleEmitter) @ 0x2575d404580
+    - Smoke (Smoke) @ 0x2575f90a100
+    - Debris (ParticleEmitter) @ 0x2575d407280
+    - Collision (ParticleEmitter) @ 0x2575d406f80
+  - FireEffect (ModuleScript) @ 0x25783d0d7c0
+  - KillEffect (ModuleScript) @ 0x25783d0ee80
+  - WeaponLogic_Murder (ModuleScript) @ 0x25783d01c80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 23
+- RevolverSkins - 23 (Folder) @ 0x257827fce20
+  - WeaponModel (Model) @ 0x2575b370400
+    - Lenses (MeshPart) @ 0x2575b372700
+      - Hkey (IntValue) | Value: 0 @ 0x25782a02460
+    - Handle (Part) @ 0x25783d02e00
+      - Mesh (SpecialMesh) @ 0x257818a1280
+        - Hkey (IntValue) | Value: 2 @ 0x25782a0d6e0
+      - Hkey (IntValue) | Value: 1 @ 0x25782a02d20
+    - Magazine (Part) @ 0x25783d01740
+      - Mesh (SpecialMesh) @ 0x25783179980
+        - Hkey (IntValue) | Value: 4 @ 0x25782a014a0
+      - Hkey (IntValue) | Value: 3 @ 0x25782a0b3e0
+    - Bolt (Part) @ 0x25783d00e80
+      - Mesh (SpecialMesh) @ 0x25768506500
+        - Hkey (IntValue) | Value: 6 @ 0x25782a0f9e0
+      - Hkey (IntValue) | Value: 5 @ 0x25782a097e0
+    - BoltHandle (Part) @ 0x25783d07940
+      - Mesh (SpecialMesh) @ 0x25783ff9b00
+        - Hkey (IntValue) | Value: 8 @ 0x25782a04060
+      - Hkey (IntValue) | Value: 7 @ 0x25782a068a0
+    - Muzzle (Part) @ 0x25783d01900
+      - Bang (ParticleEmitter) @ 0x25782c7d580
+        - Hkey (IntValue) | Value: 10 @ 0x25782a08660
+      - Smoke (ParticleEmitter) @ 0x25782c7ba80
+        - Hkey (IntValue) | Value: 11 @ 0x25782a07400
+      - Spray (ParticleEmitter) @ 0x25782c7ed80
+        - Hkey (IntValue) | Value: 12 @ 0x25782a013c0
+      - Hkey (IntValue) | Value: 9 @ 0x25782a067c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 390
+- RevolverSkins - 390 (Folder) @ 0x25782a36de0
+  - KillEffect (ModuleScript) @ 0x257684fbbc0
+  - WeaponModel (Model) @ 0x2575c12f900
+    - Muzzle (Part) @ 0x257684fac00
+      - Smoke (ParticleEmitter) @ 0x2578308d580
+        - Hkey (IntValue) | Value: 1 @ 0x25782a38c80
+      - Spray (ParticleEmitter) @ 0x2578308f380
+        - Hkey (IntValue) | Value: 2 @ 0x25782a3c100
+      - Star (ParticleEmitter) @ 0x2578308ab80
+        - Hkey (IntValue) | Value: 3 @ 0x25782a3ce20
+      - Bang (ParticleEmitter) @ 0x25783089f80
+        - Hkey (IntValue) | Value: 4 @ 0x25782a31040
+      - Hkey (IntValue) | Value: 0 @ 0x25782a37240
+    - Receiver (MeshPart) @ 0x2575c12d980
+      - Hkey (IntValue) | Value: 5 @ 0x25782a330a0
+    - Mag (MeshPart) @ 0x2575c123880
+      - Hkey (IntValue) | Value: 6 @ 0x25782a320e0
+    - Slide (MeshPart) @ 0x2575c12cb80
+      - Hkey (IntValue) | Value: 7 @ 0x25782a33dc0
+  - Particles (Configuration) @ 0x2574d848780
+    - Blood (ParticleEmitter) @ 0x2578308ea80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverClasses - 59INTERNAL
+- RevolverClasses - 59INTERNAL (Folder) @ 0x25783fc6b40
+  - KillEffect (ModuleScript) @ 0x25781fcdec0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 281
+- RevolverSkins - 281 (Folder) @ 0x25783fca0a0
+  - WeaponModel (Model) @ 0x25781e8f200
+    - BoundBox (Part) @ 0x25781fc3c00
+      - Hkey (IntValue) | Value: 0 @ 0x257844cc100
+    - Muzzle (Part) @ 0x25781fc6600
+      - Hkey (IntValue) | Value: 1 @ 0x257844cc3a0
+    - Mag (Part) @ 0x25781fcf900
+      - Mesh (SpecialMesh) @ 0x257687b5900
+        - Hkey (IntValue) | Value: 3 @ 0x257844cc720
+      - Hkey (IntValue) | Value: 2 @ 0x257844cc8e0
+    - Slider (Part) @ 0x25781fc6440
+      - Mesh (SpecialMesh) @ 0x257687ba580
+        - Hkey (IntValue) | Value: 5 @ 0x257844ccc60
+      - Hkey (IntValue) | Value: 4 @ 0x257844cce20
+    - Joint (Part) @ 0x25781fca180
+      - Mesh (SpecialMesh) @ 0x257687bbc00
+        - Hkey (IntValue) | Value: 7 @ 0x257844cd1a0
+      - Hkey (IntValue) | Value: 6 @ 0x257844cd440
+    - Bolt (Part) @ 0x25781fc0240
+      - Mesh (SpecialMesh) @ 0x257687b2600
+        - Hkey (IntValue) | Value: 9 @ 0x257844cd7c0
+      - Hkey (IntValue) | Value: 8 @ 0x257844cd980
+    - Handle (Part) @ 0x25781fc9a80
+      - Mesh (SpecialMesh) @ 0x257687b8600
+        - Hkey (IntValue) | Value: 11 @ 0x257844cdd00
+      - Hkey (IntValue) | Value: 10 @ 0x257844cdec0
+  - ShopModel (Model) @ 0x25784d06280
+    - Mag (Part) @ 0x2578392d280
+      - Mesh (SpecialMesh) @ 0x25785b59380
+    - Joint (Part) @ 0x2578392d0c0
+      - Mesh (SpecialMesh) @ 0x25785b51b80
+    - core (Part) @ 0x2578392cf00
+    - Slider (Part) @ 0x2578392cd40
+      - Mesh (SpecialMesh) @ 0x25785b52a80
+    - Bolt (Part) @ 0x2578392cb80
+      - Mesh (SpecialMesh) @ 0x25785b5fe00
+    - Handle (Part) @ 0x2578392c9c0
+      - Mesh (SpecialMesh) @ 0x25785b5c980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverClasses - 111INTERNAL
+- RevolverClasses - 111INTERNAL (Folder) @ 0x2574e880cc0
+  - KillEffect (ModuleScript) @ 0x257831044c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 328
+- RevolverSkins - 328 (Folder) @ 0x2574e885aa0
+  - WeaponModel (Model) @ 0x25783096600
+    - BoundBox (Part) @ 0x25783107080
+      - Hkey (IntValue) | Value: 0 @ 0x25759fb3dc0
+    - Muzzle (Part) @ 0x25783101ac0
+      - Star (ParticleEmitter) @ 0x25752f40980
+        - Hkey (IntValue) | Value: 2 @ 0x25756e051e0
+      - Spray (ParticleEmitter) @ 0x25784e0a280
+        - Hkey (IntValue) | Value: 3 @ 0x25756e08c80
+      - Smoke (ParticleEmitter) @ 0x257854c0080
+        - Hkey (IntValue) | Value: 4 @ 0x25756e04f40
+      - Bang (ParticleEmitter) @ 0x257854c0380
+        - Hkey (IntValue) | Value: 5 @ 0x25756e04760
+      - Hkey (IntValue) | Value: 1 @ 0x257635927e0
+    - Barrel (Part) @ 0x25784ca13c0
+      - Mesh (SpecialMesh) @ 0x25757198c00
+        - Hkey (IntValue) | Value: 7 @ 0x25763591f20
+      - Hkey (IntValue) | Value: 6 @ 0x25763595640
+    - Grip (Part) @ 0x25784ca0780
+      - Mesh (SpecialMesh) @ 0x25757194e80
+        - Hkey (IntValue) | Value: 9 @ 0x25763594220
+      - Hkey (IntValue) | Value: 8 @ 0x25768c24300
+    - Bullets (Part) @ 0x25784cae5c0
+      - Mesh (SpecialMesh) @ 0x2575719ad00
+        - Hkey (IntValue) | Value: 11 @ 0x25768c27940
+      - Hkey (IntValue) | Value: 10 @ 0x25783fcdde0
+  - KillEffect (ModuleScript) @ 0x25784caf040
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/KnifeSkins - 225/WeaponModel/BoundBox
+- BoundBox (Part) @ 0x257831ec2c0
+  - Hkey (IntValue) | Value: 4 @ 0x25785fa6520
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/KnifeSkins - 324/WeaponModel/BoundBox
+- BoundBox (Part) @ 0x257831edb40
+  - Hkey (IntValue) | Value: 6 @ 0x25785fa2a80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/KnifeSkins - 70/WeaponModel/BoundBox
+- BoundBox (Part) @ 0x257836498c0
+  - Hkey (IntValue) | Value: 2 @ 0x25785fa7080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 288
+- RevolverSkins - 288 (Folder) @ 0x257869ae160
+  - WeaponModel (Model) @ 0x257820c2380
+    - Muzzle (Part) @ 0x25785b721c0
+      - Smoke (ParticleEmitter) @ 0x257869c9380
+        - Hkey (IntValue) | Value: 1 @ 0x25785b420e0
+      - Spray (ParticleEmitter) @ 0x257869c8d80
+        - Hkey (IntValue) | Value: 2 @ 0x25785b41900
+      - Star (ParticleEmitter) @ 0x257869c1b80
+        - Hkey (IntValue) | Value: 3 @ 0x25785b414a0
+      - Bang (ParticleEmitter) @ 0x257869cf080
+        - Hkey (IntValue) | Value: 4 @ 0x25785b40e80
+      - Hkey (IntValue) | Value: 0 @ 0x25785b40b00
+    - Drum (MeshPart) @ 0x257820c6d00
+      - Hkey (IntValue) | Value: 5 @ 0x25785b40be0
+    - Frame (MeshPart) @ 0x257820ce400
+      - Hkey (IntValue) | Value: 6 @ 0x25785b476a0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 297
+- RevolverSkins - 297 (Folder) @ 0x257869a7400
+  - WeaponModel (Model) @ 0x257820cee80
+    - Slide (MeshPart) @ 0x257820c6600
+      - Hkey (IntValue) | Value: 0 @ 0x25785b44e60
+    - Mag (MeshPart) @ 0x257869de080
+      - Hkey (IntValue) | Value: 1 @ 0x25785b44920
+    - Receiver (MeshPart) @ 0x257869d1580
+      - Hkey (IntValue) | Value: 2 @ 0x25785b44140
+    - Muzzle (Part) @ 0x25785b760c0
+      - Bang (ParticleEmitter) @ 0x25785448480
+        - Hkey (IntValue) | Value: 4 @ 0x25785b435e0
+      - Star (ParticleEmitter) @ 0x2578544ed80
+        - Hkey (IntValue) | Value: 5 @ 0x25785b43420
+      - Spray (ParticleEmitter) @ 0x2578544d880
+        - Hkey (IntValue) | Value: 6 @ 0x25784a576a0
+      - Smoke (ParticleEmitter) @ 0x2578544f380
+        - Hkey (IntValue) | Value: 7 @ 0x25784a57b00
+      - Hkey (IntValue) | Value: 3 @ 0x25784a50da0
+  - Particles (Configuration) @ 0x257610bbcc0
+    - Blood (ParticleEmitter) @ 0x2578dc36380
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 207
+- RevolverSkins - 207 (Folder) @ 0x257869aff20
+  - WeaponModel (Model) @ 0x257869d2a80
+    - Muzzle (Part) @ 0x2578543d600
+      - Smoke (ParticleEmitter) @ 0x25786b69f80
+        - Hkey (IntValue) | Value: 1 @ 0x25767dacaa0
+      - Spray (ParticleEmitter) @ 0x25786b6c380
+        - Hkey (IntValue) | Value: 2 @ 0x25767da4680
+      - Star (ParticleEmitter) @ 0x25786b66080
+        - Hkey (IntValue) | Value: 3 @ 0x25767daf2e0
+      - Bang (ParticleEmitter) @ 0x25786b6a880
+        - Hkey (IntValue) | Value: 4 @ 0x25767da4920
+      - Hkey (IntValue) | Value: 0 @ 0x25767dae080
+    - Receiver (MeshPart) @ 0x257869d3880
+      - Hkey (IntValue) | Value: 5 @ 0x25767dae160
+    - Mag (MeshPart) @ 0x257869d2e00
+      - Hkey (IntValue) | Value: 6 @ 0x25767da8e40
+    - Slide (MeshPart) @ 0x257869d2700
+      - Hkey (IntValue) | Value: 7 @ 0x25767da7860
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 279
+- RevolverSkins - 279 (Folder) @ 0x257869a5fe0
+  - WeaponModel (Model) @ 0x257869d5800
+    - Muzzle (Part) @ 0x2578543cf00
+      - Smoke (ParticleEmitter) @ 0x25786b6f680
+        - Hkey (IntValue) | Value: 1 @ 0x25767dab680
+      - Spray (ParticleEmitter) @ 0x25786b69680
+        - Hkey (IntValue) | Value: 2 @ 0x25767dad600
+      - Star (ParticleEmitter) @ 0x25786b69380
+        - Hkey (IntValue) | Value: 3 @ 0x25767dae860
+      - Bang (ParticleEmitter) @ 0x25786b6b780
+        - Hkey (IntValue) | Value: 4 @ 0x25767da0160
+      - Hkey (IntValue) | Value: 0 @ 0x25767da6520
+    - Drum (MeshPart) @ 0x257869df580
+      - Hkey (IntValue) | Value: 5 @ 0x25767da1e40
+    - Frame (MeshPart) @ 0x257869dee80
+      - Hkey (IntValue) | Value: 6 @ 0x25785f82b60
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 123
+- RevolverSkins - 123 (Folder) @ 0x257869a6fa0
+  - WeaponModel (Model) @ 0x257869da180
+    - Muzzle (Part) @ 0x2578392e5c0
+      - Smoke (ParticleEmitter) @ 0x25752f9cc80
+        - Hkey (IntValue) | Value: 1 @ 0x25765f2dd00
+      - Spray (ParticleEmitter) @ 0x25752f98780
+        - Hkey (IntValue) | Value: 2 @ 0x25765f2fe40
+      - Star (ParticleEmitter) @ 0x25752f94280
+        - Hkey (IntValue) | Value: 3 @ 0x25765f29700
+      - Bang (ParticleEmitter) @ 0x25752f96380
+        - Hkey (IntValue) | Value: 4 @ 0x25765f27e80
+      - Hkey (IntValue) | Value: 0 @ 0x25765f2a260
+    - Drum (MeshPart) @ 0x257869d9a80
+      - Hkey (IntValue) | Value: 5 @ 0x25765f2cc60
+    - Frame (MeshPart) @ 0x257869daf80
+      - Hkey (IntValue) | Value: 6 @ 0x25765f21f20
+  - ShopModel (Model) @ 0x257869d3180
+    - Stuff (Model) @ 0x257869d6280
+      - In8 (Part) @ 0x25785430400
+        - Mesh (SpecialMesh) @ 0x257820da280
+      - In7 (Part) @ 0x25785434d80
+        - Mesh (SpecialMesh) @ 0x257820d1580
+      - In6 (Part) @ 0x2578543d0c0
+        - Mesh (SpecialMesh) @ 0x257820d6c80
+      - In5 (Part) @ 0x25785433180
+        - Mesh (SpecialMesh) @ 0x257820d3e00
+      - In4 (Part) @ 0x257854367c0
+        - Mesh (SpecialMesh) @ 0x257820d2d80
+      - In3 (Part) @ 0x25783922000
+        - Mesh (SpecialMesh) @ 0x257820d4a00
+      - In2 (Part) @ 0x2578392b840
+        - Mesh (SpecialMesh) @ 0x257820d5c00
+      - In10 (Part) @ 0x25783922e00
+        - Mesh (SpecialMesh) @ 0x257820d0500
+      - In1 (Part) @ 0x25783922fc0
+        - Mesh (SpecialMesh) @ 0x257820d9f80
+      - In9 (Part) @ 0x25783922c40
+        - Mesh (SpecialMesh) @ 0x257820d5900
+      - Eject3 (Part) @ 0x257839228c0
+        - Mesh (SpecialMesh) @ 0x257820d1100
+      - Eject2 (Part) @ 0x25783922a80
+        - Mesh (SpecialMesh) @ 0x257820dba80
+      - Eject1 (Part) @ 0x25783922700
+        - Mesh (SpecialMesh) @ 0x257820d7880
+      - Bullet9 (Part) @ 0x25783922380
+        - Mesh (SpecialMesh) @ 0x257820dcf80
+      - Bullet8 (Part) @ 0x25783922540
+        - Mesh (SpecialMesh) @ 0x257820d1b80
+      - Bullet7 (Part) @ 0x257839221c0
+        - Mesh (SpecialMesh) @ 0x257820d0980
+      - Bullet6 (Part) @ 0x25783921c80
+        - Mesh (SpecialMesh) @ 0x257820d0380
+      - Bullet5 (Part) @ 0x25783921ac0
+        - Mesh (SpecialMesh) @ 0x257820d3080
+      - Bullet4 (Part) @ 0x25783921900
+        - Mesh (SpecialMesh) @ 0x257820d5780
+      - Bullet3 (Part) @ 0x25783921740
+        - Mesh (SpecialMesh) @ 0x257820d8a80
+      - Bullet2 (Part) @ 0x25783921580
+        - Mesh (SpecialMesh) @ 0x257820d6800
+      - Bullet10 (Part) @ 0x2578392ecc0
+        - Mesh (SpecialMesh) @ 0x25785b59b00
+      - Bullet1 (Part) @ 0x2578392eb00
+        - Mesh (SpecialMesh) @ 0x25785b58480
+    - Gun (Part) @ 0x2578392e940
+      - Mesh (SpecialMesh) @ 0x25785b58d80
+    - Centre (Part) @ 0x2578392e780
+      - Mesh (SpecialMesh) @ 0x25785b5a280
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 394
+- RevolverSkins - 394 (Folder) @ 0x257869a20e0
+  - WeaponModel (Model) @ 0x257869da880
+    - Muzzle (Part) @ 0x2578392e240
+      - Smoke (ParticleEmitter) @ 0x25785640080
+        - Hkey (IntValue) | Value: 1 @ 0x25765f289e0
+      - Spray (ParticleEmitter) @ 0x2578564e180
+        - Hkey (IntValue) | Value: 2 @ 0x25784d1ef60
+      - Star (ParticleEmitter) @ 0x2578564b480
+        - Hkey (IntValue) | Value: 3 @ 0x25784d1c100
+      - Bang (ParticleEmitter) @ 0x25785643080
+        - Hkey (IntValue) | Value: 4 @ 0x25784d1b060
+      - Hkey (IntValue) | Value: 0 @ 0x25784d1a5e0
+    - Receiver (MeshPart) @ 0x257869dac00
+      - Hkey (IntValue) | Value: 5 @ 0x25784d19ee0
+    - Mag (MeshPart) @ 0x257869da500
+      - Hkey (IntValue) | Value: 6 @ 0x25784d197e0
+    - Slide (MeshPart) @ 0x257869d8c80
+      - Hkey (IntValue) | Value: 7 @ 0x25784d19000
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 34
+- RevolverSkins - 34 (Folder) @ 0x257869a4920
+  - WeaponModel (Model) @ 0x257869d9700
+    - Muzzle (Part) @ 0x2578392dec0
+      - Smoke (ParticleEmitter) @ 0x25768590380
+        - Hkey (IntValue) | Value: 1 @ 0x25784d14300
+      - Spray (ParticleEmitter) @ 0x25768590680
+        - Hkey (IntValue) | Value: 2 @ 0x25784d11ac0
+      - Star (ParticleEmitter) @ 0x25768590980
+        - Hkey (IntValue) | Value: 3 @ 0x25784d1f200
+      - Bang (ParticleEmitter) @ 0x25768590c80
+        - Hkey (IntValue) | Value: 4 @ 0x25784d1f740
+      - Hkey (IntValue) | Value: 0 @ 0x25784d1ebe0
+    - Drum (MeshPart) @ 0x257869d9380
+      - Hkey (IntValue) | Value: 5 @ 0x25784d18200
+    - Frame (MeshPart) @ 0x257869d6600
+      - Hkey (IntValue) | Value: 6 @ 0x25784d1aea0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 74
+- RevolverSkins - 74 (Folder) @ 0x257869af660
+  - WeaponModel (Model) @ 0x25783816280
+    - Muzzle (Part) @ 0x2578392d7c0
+      - Star (ParticleEmitter) @ 0x25768592d80
+        - Hkey (IntValue) | Value: 1 @ 0x25784d18820
+      - Spray (ParticleEmitter) @ 0x25768593080
+        - Hkey (IntValue) | Value: 2 @ 0x25784d1c2c0
+      - Smoke (ParticleEmitter) @ 0x25768593380
+        - Hkey (IntValue) | Value: 3 @ 0x25784d14840
+      - Bang (ParticleEmitter) @ 0x25768593680
+        - Hkey (IntValue) | Value: 4 @ 0x25784d1ce20
+      - Hkey (IntValue) | Value: 0 @ 0x25784d1d980
+    - Drum (MeshPart) @ 0x25783813180
+      - Hkey (IntValue) | Value: 5 @ 0x25784d1e400
+    - Frame (MeshPart) @ 0x25783819e00
+      - Hkey (IntValue) | Value: 6 @ 0x25784d1dec0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 4
+- RevolverSkins - 4 (Folder) @ 0x257869ac560
+  - WeaponModel (Model) @ 0x2578381f200
+    - Muzzle (Part) @ 0x2578392d440
+      - Smoke (ParticleEmitter) @ 0x25768595780
+        - Hkey (IntValue) | Value: 1 @ 0x2574d182000
+      - Hkey (IntValue) | Value: 0 @ 0x2574d183f80
+    - Drum (MeshPart) @ 0x25783816600
+      - Hkey (IntValue) | Value: 2 @ 0x2574d1891c0
+    - Frame (MeshPart) @ 0x25784d0b680
+      - Hkey (IntValue) | Value: 3 @ 0x2574d1805c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 169
+- RevolverSkins - 169 (Folder) @ 0x257869a61a0
+  - WeaponModel (Model) @ 0x25784d08900
+    - Muzzle (Part) @ 0x2578392fe40
+      - Smoke (ParticleEmitter) @ 0x25768598a80
+        - Hkey (IntValue) | Value: 1 @ 0x2576879adc0
+      - Spray (ParticleEmitter) @ 0x25768598d80
+        - Hkey (IntValue) | Value: 2 @ 0x25768798d60
+      - Star (ParticleEmitter) @ 0x25768599080
+        - Hkey (IntValue) | Value: 3 @ 0x2576879e6a0
+      - Bang (ParticleEmitter) @ 0x25768599380
+        - Hkey (IntValue) | Value: 4 @ 0x25768791d60
+      - Hkey (IntValue) | Value: 0 @ 0x25768796a60
+    - Drum (MeshPart) @ 0x25784d0a180
+      - Hkey (IntValue) | Value: 5 @ 0x25768799700
+    - Frame (MeshPart) @ 0x25784d03c00
+      - Hkey (IntValue) | Value: 6 @ 0x25758b12380
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/FollowersContent - 338/ShopModel/BoundBox
+- BoundBox (Part) @ 0x25784d95f00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/FollowersContent - 239/ShopModel/BoundBox
+- BoundBox (Part) @ 0x25784d960c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 339
+- RevolverSkins - 339 (Folder) @ 0x25782ac5560
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 230
+- RevolverSkins - 230 (Folder) @ 0x25782ac9380
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 77
+- RevolverSkins - 77 (Folder) @ 0x25785fa13c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 226
+- RevolverSkins - 226 (Folder) @ 0x25785fa90e0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 163
+- RevolverSkins - 163 (Folder) @ 0x25785fad8a0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 399
+- RevolverSkins - 399 (Folder) @ 0x25785fa21c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 172
+- RevolverSkins - 172 (Folder) @ 0x25785facaa0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 257
+- RevolverSkins - 257 (Folder) @ 0x25785fa9700
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 393
+- RevolverSkins - 393 (Folder) @ 0x25785fa61a0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 310
+- RevolverSkins - 310 (Folder) @ 0x25785fa1ba0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 116
+- RevolverSkins - 116 (Folder) @ 0x25785faa7a0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 373
+- RevolverSkins - 373 (Folder) @ 0x25785fa28c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2575f813c00
+  - net (IntValue) | Value: 4 @ 0x25761619700
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25784d25f00
+  - Frame (MeshPart) @ 0x2575f76af80
+    - Weld (Weld) @ 0x25751650b00
+    - Hkey (IntValue) | Value: 6 @ 0x25761619d20
+  - Drum (MeshPart) @ 0x2575f762a80
+    - WeaponJoint (Weld) @ 0x25751650cc0
+    - Hkey (IntValue) | Value: 5 @ 0x25761618200
+  - Muzzle (Part) @ 0x2575c695640
+    - WeaponJoint (Weld) @ 0x25751650e80
+    - Hkey (IntValue) | Value: 0 @ 0x25761617f60
+    - Bang (ParticleEmitter) @ 0x2574e7d8d80
+      - Hkey (IntValue) | Value: 4 @ 0x25761619540
+    - Star (ParticleEmitter) @ 0x2574e7dc080
+      - Hkey (IntValue) | Value: 3 @ 0x25761618c80
+    - Spray (ParticleEmitter) @ 0x2574e7d9f80
+      - Hkey (IntValue) | Value: 2 @ 0x25761618740
+    - Smoke (ParticleEmitter) @ 0x2574e7dd880
+      - Hkey (IntValue) | Value: 1 @ 0x257616191c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2575f813f80
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2574024e300
+  - net (IntValue) | Value: 4 @ 0x257616184a0
+  - Muzzle (Part) @ 0x2575c13ac00
+    - Smoke (ParticleEmitter) @ 0x2574e7d8a80
+      - Hkey (IntValue) | Value: 1 @ 0x2576161d280
+    - Spray (ParticleEmitter) @ 0x2574e7dd580
+      - Hkey (IntValue) | Value: 2 @ 0x2576161dde0
+    - Star (ParticleEmitter) @ 0x2574e7d5780
+      - Hkey (IntValue) | Value: 3 @ 0x2576161e240
+    - Bang (ParticleEmitter) @ 0x2574e7d1b80
+      - Hkey (IntValue) | Value: 4 @ 0x2576161e4e0
+    - Hkey (IntValue) | Value: 0 @ 0x2576161e6a0
+    - WeaponJoint (Weld) @ 0x25751652540
+  - Drum (MeshPart) @ 0x2575bfb8c80
+    - Hkey (IntValue) | Value: 5 @ 0x2576161af80
+    - WeaponJoint (Weld) @ 0x25751652700
+  - Frame (MeshPart) @ 0x2575bfb9000
+    - Hkey (IntValue) | Value: 6 @ 0x2576161a5e0
+    - Weld (Weld) @ 0x257516528c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2575f814a00
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2574f770f00
+  - net (IntValue) | Value: 4 @ 0x25762da2d20
+  - Muzzle (Part) @ 0x2575c137400
+    - Smoke (ParticleEmitter) @ 0x2574e7d8180
+      - Hkey (IntValue) | Value: 1 @ 0x25762da1740
+    - Spray (ParticleEmitter) @ 0x2574e7d4580
+      - Hkey (IntValue) | Value: 2 @ 0x25762da2380
+    - Star (ParticleEmitter) @ 0x2574e7d6380
+      - Hkey (IntValue) | Value: 3 @ 0x25762da2620
+    - Bang (ParticleEmitter) @ 0x2574e7d2d80
+      - Hkey (IntValue) | Value: 4 @ 0x25762da2e00
+    - Hkey (IntValue) | Value: 0 @ 0x25762da2ee0
+    - WeaponJoint (Weld) @ 0x25751654840
+  - Drum (MeshPart) @ 0x2575bfb8200
+    - Hkey (IntValue) | Value: 5 @ 0x25762da2700
+    - WeaponJoint (Weld) @ 0x25751654a00
+  - Frame (MeshPart) @ 0x2575bfb8580
+    - Hkey (IntValue) | Value: 6 @ 0x25762da2460
+    - Weld (Weld) @ 0x25751654bc0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2575f814d80
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2578441fc00
+  - net (IntValue) | Value: 4 @ 0x25762da8f20
+  - Muzzle (Part) @ 0x2575c0e1c80
+    - Smoke (ParticleEmitter) @ 0x2574e7df080
+      - Hkey (IntValue) | Value: 1 @ 0x25762da9620
+    - Spray (ParticleEmitter) @ 0x2574e7d3980
+      - Hkey (IntValue) | Value: 2 @ 0x25762da9460
+    - Star (ParticleEmitter) @ 0x2574e7d3080
+      - Hkey (IntValue) | Value: 3 @ 0x25762da9000
+    - Bang (ParticleEmitter) @ 0x2574e7dea80
+      - Hkey (IntValue) | Value: 4 @ 0x25762da9380
+    - Hkey (IntValue) | Value: 0 @ 0x25762da92a0
+    - WeaponJoint (Weld) @ 0x25751657b00
+  - Frame (MeshPart) @ 0x2575f760780
+    - Hkey (IntValue) | Value: 6 @ 0x25762da8040
+    - Weld (Weld) @ 0x25751657e80
+  - Drum (MeshPart) @ 0x2575f760e80
+    - Hkey (IntValue) | Value: 5 @ 0x25762da8e40
+    - WeaponJoint (Weld) @ 0x25751657cc0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753484d80
+  - net (IntValue) | Value: 4 @ 0x25766e56440
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2575d6b0900
+  - Muzzle (Part) @ 0x2575c1a8900
+    - WeaponJoint (Weld) @ 0x25753967cc0
+    - Hkey (IntValue) | Value: 0 @ 0x25766e56c20
+    - Bang (ParticleEmitter) @ 0x2575e04ed80
+      - Hkey (IntValue) | Value: 4 @ 0x25766e56d00
+    - Star (ParticleEmitter) @ 0x2575e04fc80
+      - Hkey (IntValue) | Value: 3 @ 0x25766e56de0
+    - Spray (ParticleEmitter) @ 0x2575e04f980
+      - Hkey (IntValue) | Value: 2 @ 0x25766e56ec0
+    - Smoke (ParticleEmitter) @ 0x2575e04ea80
+      - Hkey (IntValue) | Value: 1 @ 0x25766e56fa0
+  - Drum (MeshPart) @ 0x2575bfba180
+    - WeaponJoint (Weld) @ 0x25753967b00
+    - Hkey (IntValue) | Value: 5 @ 0x25766e56980
+  - Frame (MeshPart) @ 0x2575bfba500
+    - Weld (Weld) @ 0x25753967940
+    - Hkey (IntValue) | Value: 6 @ 0x25766e566e0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753480e80
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25784419000
+  - net (IntValue) | Value: 4 @ 0x257657145a0
+  - Muzzle (Part) @ 0x2575c5eaf80
+    - Smoke (ParticleEmitter) @ 0x2574e7d9380
+      - Hkey (IntValue) | Value: 1 @ 0x25765710cc0
+    - Spray (ParticleEmitter) @ 0x2574e7db780
+      - Hkey (IntValue) | Value: 2 @ 0x25765710860
+    - Star (ParticleEmitter) @ 0x2574e7d9080
+      - Hkey (IntValue) | Value: 3 @ 0x257657105c0
+    - Bang (ParticleEmitter) @ 0x2574e7d7880
+      - Hkey (IntValue) | Value: 4 @ 0x25765710320
+    - Hkey (IntValue) | Value: 0 @ 0x25765715e20
+    - WeaponJoint (Weld) @ 0x2575165a180
+  - Drum (MeshPart) @ 0x25750593180
+    - Hkey (IntValue) | Value: 5 @ 0x2576571a880
+    - WeaponJoint (Weld) @ 0x2575165a340
+  - Frame (MeshPart) @ 0x25750594300
+    - Hkey (IntValue) | Value: 6 @ 0x257657192a0
+    - Weld (Weld) @ 0x2575165a500
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753482000
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25783ea2900
+  - net (IntValue) | Value: 4 @ 0x25762da0080
+  - Frame (MeshPart) @ 0x2575bfb7e80
+    - Hkey (IntValue) | Value: 6 @ 0x25762da05c0
+    - Weld (Weld) @ 0x2575165c800
+  - Drum (MeshPart) @ 0x2575f76f200
+    - Hkey (IntValue) | Value: 5 @ 0x2576571a7a0
+    - WeaponJoint (Weld) @ 0x2575165c640
+  - Muzzle (Part) @ 0x2575c3db300
+    - Smoke (ParticleEmitter) @ 0x2574e7da280
+      - Hkey (IntValue) | Value: 1 @ 0x257657121c0
+    - Spray (ParticleEmitter) @ 0x2574e7dba80
+      - Hkey (IntValue) | Value: 2 @ 0x25765713340
+    - Star (ParticleEmitter) @ 0x2574e7dcc80
+      - Hkey (IntValue) | Value: 3 @ 0x257657130a0
+    - Bang (ParticleEmitter) @ 0x2574e7de480
+      - Hkey (IntValue) | Value: 4 @ 0x2576571b220
+    - Hkey (IntValue) | Value: 0 @ 0x25765712fc0
+    - WeaponJoint (Weld) @ 0x2575165c480
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753482a80
+  - net (IntValue) | Value: 4 @ 0x25762daf4a0
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25783ea1100
+  - Drum (MeshPart) @ 0x2575bfbe080
+    - WeaponJoint (Weld) @ 0x25753963500
+    - Hkey (IntValue) | Value: 5 @ 0x25762daee80
+  - Muzzle (Part) @ 0x2575af57400
+    - WeaponJoint (Weld) @ 0x257539636c0
+    - Hkey (IntValue) | Value: 0 @ 0x25762da1ac0
+    - Bang (ParticleEmitter) @ 0x2574e7d9c80
+      - Hkey (IntValue) | Value: 4 @ 0x25762da1900
+    - Star (ParticleEmitter) @ 0x2574e7d2a80
+      - Hkey (IntValue) | Value: 3 @ 0x25762da1820
+    - Spray (ParticleEmitter) @ 0x2575e044e80
+      - Hkey (IntValue) | Value: 2 @ 0x25762da3880
+    - Smoke (ParticleEmitter) @ 0x2575e046080
+      - Hkey (IntValue) | Value: 1 @ 0x25762da1660
+  - Frame (MeshPart) @ 0x2575f766280
+    - Weld (Weld) @ 0x25753963340
+    - Hkey (IntValue) | Value: 6 @ 0x25762da83c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753484300
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25783ea1900
+  - net (IntValue) | Value: 4 @ 0x25761617b00
+  - Muzzle (Part) @ 0x2575c2c7b00
+    - Smoke (ParticleEmitter) @ 0x2575e045d80
+      - Hkey (IntValue) | Value: 1 @ 0x257616175c0
+    - Spray (ParticleEmitter) @ 0x2575e041280
+      - Hkey (IntValue) | Value: 2 @ 0x25761612b60
+    - Star (ParticleEmitter) @ 0x2575e041e80
+      - Hkey (IntValue) | Value: 3 @ 0x25761618120
+    - Bang (ParticleEmitter) @ 0x2575e041b80
+      - Hkey (IntValue) | Value: 4 @ 0x257616189e0
+    - Hkey (IntValue) | Value: 0 @ 0x25761616de0
+    - WeaponJoint (Weld) @ 0x25753964d80
+  - Frame (MeshPart) @ 0x25750593880
+    - Hkey (IntValue) | Value: 6 @ 0x257616183c0
+    - Weld (Weld) @ 0x25753965100
+  - Drum (MeshPart) @ 0x25750597400
+    - Hkey (IntValue) | Value: 5 @ 0x257616190e0
+    - WeaponJoint (Weld) @ 0x25753964f40
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2575f815b80
+  - net (IntValue) | Value: 4 @ 0x2576161e080
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2575dee5000
+  - Frame (MeshPart) @ 0x2575f76cb80
+    - Weld (Weld) @ 0x2574f57e940
+    - Hkey (IntValue) | Value: 6 @ 0x2576161caa0
+  - Muzzle (Part) @ 0x25740143f80
+    - WeaponJoint (Weld) @ 0x2574f57dd00
+    - Hkey (IntValue) | Value: 0 @ 0x2576161f3c0
+    - Bang (ParticleEmitter) @ 0x2574e7d9980
+      - Hkey (IntValue) | Value: 4 @ 0x2576161f200
+    - Star (ParticleEmitter) @ 0x2574e7d9680
+      - Hkey (IntValue) | Value: 3 @ 0x2576161ecc0
+    - Spray (ParticleEmitter) @ 0x2574e7d6f80
+      - Hkey (IntValue) | Value: 2 @ 0x2576161d6e0
+    - Smoke (ParticleEmitter) @ 0x2574e7de780
+      - Hkey (IntValue) | Value: 1 @ 0x2576161b4c0
+  - Drum (MeshPart) @ 0x2575f765b80
+    - WeaponJoint (Weld) @ 0x2574f57eb00
+    - Hkey (IntValue) | Value: 5 @ 0x2576161c020
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753486980
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2575d6b8400
+  - net (IntValue) | Value: 4 @ 0x25766e545a0
+  - Frame (MeshPart) @ 0x2575bfb7780
+    - Hkey (IntValue) | Value: 6 @ 0x25766e55020
+    - Weld (Weld) @ 0x2575396aa40
+  - Drum (MeshPart) @ 0x2575bfb7b00
+    - Hkey (IntValue) | Value: 5 @ 0x25766e55800
+    - WeaponJoint (Weld) @ 0x2575396a880
+  - Muzzle (Part) @ 0x2575c130940
+    - Smoke (ParticleEmitter) @ 0x2575e04e180
+      - Hkey (IntValue) | Value: 1 @ 0x25766e57320
+    - Spray (ParticleEmitter) @ 0x2575e04de80
+      - Hkey (IntValue) | Value: 2 @ 0x25766e57160
+    - Star (ParticleEmitter) @ 0x2575e04d880
+      - Hkey (IntValue) | Value: 3 @ 0x25766e56b40
+    - Bang (ParticleEmitter) @ 0x2575e04d580
+      - Hkey (IntValue) | Value: 4 @ 0x25766e568a0
+    - Hkey (IntValue) | Value: 0 @ 0x25766e56600
+    - WeaponJoint (Weld) @ 0x2575396a6c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753487400
+  - net (IntValue) | Value: 4 @ 0x25766e50f60
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2575d6bdd00
+  - Frame (MeshPart) @ 0x2575bfbd600
+    - Weld (Weld) @ 0x2575396d0c0
+    - Hkey (IntValue) | Value: 6 @ 0x25766e50e80
+  - Drum (MeshPart) @ 0x2575bfbd980
+    - WeaponJoint (Weld) @ 0x2575396d280
+    - Hkey (IntValue) | Value: 5 @ 0x25766e50080
+  - Muzzle (Part) @ 0x2575c1d5640
+    - WeaponJoint (Weld) @ 0x2575396d440
+    - Hkey (IntValue) | Value: 0 @ 0x25766e50be0
+    - Bang (ParticleEmitter) @ 0x2575e04c080
+      - Hkey (IntValue) | Value: 4 @ 0x25766e50b00
+    - Star (ParticleEmitter) @ 0x2575e04bd80
+      - Hkey (IntValue) | Value: 3 @ 0x25766e50240
+    - Spray (ParticleEmitter) @ 0x2575e04ba80
+      - Hkey (IntValue) | Value: 2 @ 0x25766e50860
+    - Smoke (ParticleEmitter) @ 0x2575e04b780
+      - Hkey (IntValue) | Value: 1 @ 0x257677d5f00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753466980
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2574da43100
+  - net (IntValue) | Value: 4 @ 0x25782c02000
+  - Muzzle (Part) @ 0x2575bd8c9c0
+    - Smoke (ParticleEmitter) @ 0x2575fb44e80
+      - Hkey (IntValue) | Value: 1 @ 0x25782c08580
+    - Spray (ParticleEmitter) @ 0x2575fb47580
+      - Hkey (IntValue) | Value: 2 @ 0x25782c044c0
+    - Star (ParticleEmitter) @ 0x2575fb47280
+      - Hkey (IntValue) | Value: 3 @ 0x25782c04680
+    - Bang (ParticleEmitter) @ 0x2575fb46680
+      - Hkey (IntValue) | Value: 4 @ 0x25782c037a0
+    - Hkey (IntValue) | Value: 0 @ 0x25782c067c0
+    - WeaponJoint (Weld) @ 0x2575347e780
+  - Drum (MeshPart) @ 0x2575bfb5f00
+    - Hkey (IntValue) | Value: 5 @ 0x25782c0a7a0
+    - WeaponJoint (Weld) @ 0x2575347e940
+  - Frame (MeshPart) @ 0x2575bfb6280
+    - Hkey (IntValue) | Value: 6 @ 0x25782c0a960
+    - Weld (Weld) @ 0x2575347eb00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753488580
+  - net (IntValue) | Value: 4 @ 0x257677d8d60
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2575d6b6b00
+  - Frame (MeshPart) @ 0x25783f2b300
+    - Weld (Weld) @ 0x2575396e5c0
+    - Hkey (IntValue) | Value: 6 @ 0x257677d84a0
+  - Drum (MeshPart) @ 0x25783f2d600
+    - WeaponJoint (Weld) @ 0x2575396e780
+    - Hkey (IntValue) | Value: 5 @ 0x257677d8040
+  - Muzzle (Part) @ 0x2575c442000
+    - WeaponJoint (Weld) @ 0x2575396e940
+    - Hkey (IntValue) | Value: 0 @ 0x257677d90e0
+    - Bang (ParticleEmitter) @ 0x2575e04a880
+      - Hkey (IntValue) | Value: 4 @ 0x257677d91c0
+    - Star (ParticleEmitter) @ 0x2575e04b180
+      - Hkey (IntValue) | Value: 3 @ 0x257677d92a0
+    - Spray (ParticleEmitter) @ 0x2575e04ae80
+      - Hkey (IntValue) | Value: 2 @ 0x257677d9380
+    - Smoke (ParticleEmitter) @ 0x2575e04ab80
+      - Hkey (IntValue) | Value: 1 @ 0x257677d98c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2575348a500
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2575d6b1400
+  - net (IntValue) | Value: 4 @ 0x257677dc9c0
+  - Frame (MeshPart) @ 0x2575bfbaf80
+    - Hkey (IntValue) | Value: 6 @ 0x257677dcc60
+    - Weld (Weld) @ 0x25751ea1ac0
+  - Drum (MeshPart) @ 0x2575bfbb300
+    - Hkey (IntValue) | Value: 5 @ 0x257677dcf00
+    - WeaponJoint (Weld) @ 0x25751ea1900
+  - Muzzle (Part) @ 0x2575c1acb80
+    - Smoke (ParticleEmitter) @ 0x2575e049980
+      - Hkey (IntValue) | Value: 1 @ 0x257677dd520
+    - Spray (ParticleEmitter) @ 0x2575e049f80
+      - Hkey (IntValue) | Value: 2 @ 0x257677dd440
+    - Star (ParticleEmitter) @ 0x2575e048d80
+      - Hkey (IntValue) | Value: 3 @ 0x257677dd360
+    - Bang (ParticleEmitter) @ 0x2575e049080
+      - Hkey (IntValue) | Value: 4 @ 0x257677dd280
+    - Hkey (IntValue) | Value: 0 @ 0x257677dd1a0
+    - WeaponJoint (Weld) @ 0x25751ea1740
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2575348af80
+  - net (IntValue) | Value: 4 @ 0x257677df900
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2575d6bfd00
+  - Drum (MeshPart) @ 0x2575f76d280
+    - WeaponJoint (Weld) @ 0x25751ea3dc0
+    - Hkey (IntValue) | Value: 5 @ 0x257677df3c0
+  - Frame (MeshPart) @ 0x2575f76cf00
+    - Weld (Weld) @ 0x25751ea3c00
+    - Hkey (IntValue) | Value: 6 @ 0x257677df660
+  - Muzzle (Part) @ 0x2575c4c0b00
+    - WeaponJoint (Weld) @ 0x25751ea3f80
+    - Hkey (IntValue) | Value: 0 @ 0x257677df120
+    - Bang (ParticleEmitter) @ 0x2575e047280
+      - Hkey (IntValue) | Value: 4 @ 0x257677df040
+    - Star (ParticleEmitter) @ 0x2575e047580
+      - Hkey (IntValue) | Value: 3 @ 0x257677def60
+    - Spray (ParticleEmitter) @ 0x2575e046380
+      - Hkey (IntValue) | Value: 2 @ 0x257677dee80
+    - Smoke (ParticleEmitter) @ 0x2575e046f80
+      - Hkey (IntValue) | Value: 1 @ 0x257677deda0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2575348c100
+  - net (IntValue) | Value: 4 @ 0x25781d197e0
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2575d6bf100
+  - Frame (MeshPart) @ 0x2575bfba880
+    - Weld (Weld) @ 0x25751ea5f00
+    - Hkey (IntValue) | Value: 6 @ 0x25781d12e00
+  - Drum (MeshPart) @ 0x2575bfbac00
+    - WeaponJoint (Weld) @ 0x25751ea60c0
+    - Hkey (IntValue) | Value: 5 @ 0x25781d12700
+  - Muzzle (Part) @ 0x2575c1ab300
+    - WeaponJoint (Weld) @ 0x25751ea6280
+    - Hkey (IntValue) | Value: 0 @ 0x25781d11040
+    - Bang (ParticleEmitter) @ 0x2575e044b80
+      - Hkey (IntValue) | Value: 4 @ 0x25781d18c80
+    - Star (ParticleEmitter) @ 0x2575e049380
+      - Hkey (IntValue) | Value: 3 @ 0x25781d18660
+    - Spray (ParticleEmitter) @ 0x2575e048a80
+      - Hkey (IntValue) | Value: 2 @ 0x25781d182e0
+    - Smoke (ParticleEmitter) @ 0x2575e048780
+      - Hkey (IntValue) | Value: 1 @ 0x25781d18040
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2575348d280
+  - net (IntValue) | Value: 4 @ 0x25781d18ba0
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2575d6b2200
+  - Muzzle (Part) @ 0x2572ce36280
+    - WeaponJoint (Weld) @ 0x25751ea8580
+    - Hkey (IntValue) | Value: 0 @ 0x25781d17f60
+    - Bang (ParticleEmitter) @ 0x2575e040680
+      - Hkey (IntValue) | Value: 4 @ 0x25781d191c0
+    - Star (ParticleEmitter) @ 0x2575e043980
+      - Hkey (IntValue) | Value: 3 @ 0x25781d1bd80
+    - Spray (ParticleEmitter) @ 0x2575e045a80
+      - Hkey (IntValue) | Value: 2 @ 0x25781d11c80
+    - Smoke (ParticleEmitter) @ 0x2575e040380
+      - Hkey (IntValue) | Value: 1 @ 0x25781d198c0
+  - Drum (MeshPart) @ 0x25750597080
+    - WeaponJoint (Weld) @ 0x25751ea83c0
+    - Hkey (IntValue) | Value: 5 @ 0x25781d11ac0
+  - Frame (MeshPart) @ 0x25750595800
+    - Weld (Weld) @ 0x25751ea8200
+    - Hkey (IntValue) | Value: 6 @ 0x25781d1d440
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753461c80
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2574da47300
+  - net (IntValue) | Value: 4 @ 0x25781faa960
+  - Muzzle (Part) @ 0x2575c1af900
+    - Smoke (ParticleEmitter) @ 0x2575e044880
+      - Hkey (IntValue) | Value: 1 @ 0x25781fa8740
+    - Spray (ParticleEmitter) @ 0x2575e043080
+      - Hkey (IntValue) | Value: 2 @ 0x25781fa98c0
+    - Star (ParticleEmitter) @ 0x2575e04b480
+      - Hkey (IntValue) | Value: 3 @ 0x25781fafc80
+    - Bang (ParticleEmitter) @ 0x25784cb2480
+      - Hkey (IntValue) | Value: 4 @ 0x25781fa4d80
+    - Hkey (IntValue) | Value: 0 @ 0x25781fad7c0
+    - WeaponJoint (Weld) @ 0x25753478040
+  - Drum (MeshPart) @ 0x2575bfbba00
+    - Hkey (IntValue) | Value: 5 @ 0x25781fa8900
+    - WeaponJoint (Weld) @ 0x25753478200
+  - Frame (MeshPart) @ 0x2575bfbbd80
+    - Hkey (IntValue) | Value: 6 @ 0x25781fa22a0
+    - Weld (Weld) @ 0x257534783c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753464d80
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2574da43800
+  - net (IntValue) | Value: 4 @ 0x25782089fc0
+  - Muzzle (Part) @ 0x2575c1ae400
+    - Smoke (ParticleEmitter) @ 0x25784cb7880
+      - Hkey (IntValue) | Value: 1 @ 0x25781fa5640
+    - Spray (ParticleEmitter) @ 0x25784cb7580
+      - Hkey (IntValue) | Value: 2 @ 0x25781fadfa0
+    - Star (ParticleEmitter) @ 0x25784cb7280
+      - Hkey (IntValue) | Value: 3 @ 0x25781fa1900
+    - Bang (ParticleEmitter) @ 0x25784cb7e80
+      - Hkey (IntValue) | Value: 4 @ 0x25781fa3500
+    - Hkey (IntValue) | Value: 0 @ 0x25781faf4a0
+    - WeaponJoint (Weld) @ 0x2575347a340
+  - Drum (MeshPart) @ 0x2575f761c80
+    - Hkey (IntValue) | Value: 5 @ 0x25781fadde0
+    - WeaponJoint (Weld) @ 0x2575347a500
+  - Frame (MeshPart) @ 0x2575f769700
+    - Hkey (IntValue) | Value: 6 @ 0x2578208b300
+    - Weld (Weld) @ 0x2575347a6c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753465f00
+  - net (IntValue) | Value: 4 @ 0x25766e59a80
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2574da48b00
+  - Muzzle (Part) @ 0x2575c444f40
+    - Smoke (ParticleEmitter) @ 0x2575fb44b80
+      - Hkey (IntValue) | Value: 1 @ 0x2578208c800
+    - Spray (ParticleEmitter) @ 0x2575fb46980
+      - Hkey (IntValue) | Value: 2 @ 0x2578208cfe0
+    - Star (ParticleEmitter) @ 0x2575fb40980
+      - Hkey (IntValue) | Value: 3 @ 0x2578208d360
+    - Bang (ParticleEmitter) @ 0x2575fb44880
+      - Hkey (IntValue) | Value: 4 @ 0x2578208dde0
+    - Hkey (IntValue) | Value: 0 @ 0x2578208e5c0
+    - WeaponJoint (Weld) @ 0x2575347c640
+  - Drum (MeshPart) @ 0x25783f2fc80
+    - Hkey (IntValue) | Value: 5 @ 0x2578208ef60
+    - WeaponJoint (Weld) @ 0x2575347c800
+  - Frame (MeshPart) @ 0x25783f2cb80
+    - Hkey (IntValue) | Value: 6 @ 0x2578208f740
+    - Weld (Weld) @ 0x2575347c9c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753467400
+  - net (IntValue) | Value: 4 @ 0x25782c06980
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2574da43a00
+  - Frame (MeshPart) @ 0x25750595480
+    - Weld (Weld) @ 0x25752e913c0
+    - Hkey (IntValue) | Value: 6 @ 0x25782c084a0
+  - Drum (MeshPart) @ 0x25750596d00
+    - WeaponJoint (Weld) @ 0x25752e91580
+    - Hkey (IntValue) | Value: 5 @ 0x25782c08d60
+  - Muzzle (Part) @ 0x2572ce3b840
+    - WeaponJoint (Weld) @ 0x25752e91740
+    - Hkey (IntValue) | Value: 0 @ 0x25782c03880
+    - Bang (ParticleEmitter) @ 0x2575fb45480
+      - Hkey (IntValue) | Value: 4 @ 0x25782c00b00
+    - Star (ParticleEmitter) @ 0x2575fb48d80
+      - Hkey (IntValue) | Value: 3 @ 0x25782c0f4a0
+    - Spray (ParticleEmitter) @ 0x2575fb49380
+      - Hkey (IntValue) | Value: 2 @ 0x25782c0f2e0
+    - Smoke (ParticleEmitter) @ 0x2575fb49080
+      - Hkey (IntValue) | Value: 1 @ 0x25782c0bca0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753468c80
+  - net (IntValue) | Value: 4 @ 0x2575397e5c0
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2574ca05000
+  - Muzzle (Part) @ 0x2575bd8dec0
+    - Smoke (ParticleEmitter) @ 0x2575fb45d80
+      - Hkey (IntValue) | Value: 1 @ 0x25781faa340
+    - Spray (ParticleEmitter) @ 0x2575fb48780
+      - Hkey (IntValue) | Value: 2 @ 0x25753f5ac00
+    - Star (ParticleEmitter) @ 0x2576761e480
+      - Hkey (IntValue) | Value: 3 @ 0x25753f5ace0
+    - Bang (ParticleEmitter) @ 0x2576761e180
+      - Hkey (IntValue) | Value: 4 @ 0x25753975720
+    - Hkey (IntValue) | Value: 0 @ 0x25753975640
+    - WeaponJoint (Weld) @ 0x25754623f80
+  - Drum (MeshPart) @ 0x2575bfb6600
+    - Hkey (IntValue) | Value: 5 @ 0x257539753a0
+    - WeaponJoint (Weld) @ 0x25754624140
+  - Frame (MeshPart) @ 0x2575bfb6980
+    - Weld (Weld) @ 0x257539821c0
+    - Hkey (IntValue) | Value: 6 @ 0x25753975100
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2575348e780
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25763178500
+  - net (IntValue) | Value: 4 @ 0x257566e3960
+  - Drum (MeshPart) @ 0x2575f764680
+    - Hkey (IntValue) | Value: 5 @ 0x257566e3420
+    - WeaponJoint (Weld) @ 0x257566d0b00
+  - Frame (MeshPart) @ 0x2575f760b00
+    - Hkey (IntValue) | Value: 6 @ 0x257566e36c0
+    - Weld (Weld) @ 0x257566d0cc0
+  - Muzzle (Part) @ 0x2575c692380
+    - Smoke (ParticleEmitter) @ 0x2575fb4f680
+      - Hkey (IntValue) | Value: 1 @ 0x25782c0c2c0
+    - Spray (ParticleEmitter) @ 0x2575fb4d280
+      - Hkey (IntValue) | Value: 2 @ 0x25782c0bf40
+    - Star (ParticleEmitter) @ 0x2575fb41280
+      - Hkey (IntValue) | Value: 3 @ 0x25782c0c020
+    - Bang (ParticleEmitter) @ 0x2575fb41b80
+      - Hkey (IntValue) | Value: 4 @ 0x257566e30a0
+    - Hkey (IntValue) | Value: 0 @ 0x257566e3180
+    - WeaponJoint (Weld) @ 0x257566d0940
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25755271580
+  - net (IntValue) | Value: 4 @ 0x257552692a0
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25761984600
+  - Frame (MeshPart) @ 0x2575bfbc800
+    - Weld (Weld) @ 0x25755287cc0
+    - Hkey (IntValue) | Value: 6 @ 0x25755269000
+  - Drum (MeshPart) @ 0x2575bfbcb80
+    - WeaponJoint (Weld) @ 0x25755287e80
+    - Hkey (IntValue) | Value: 5 @ 0x25755268d60
+  - Muzzle (Part) @ 0x2574da6aa40
+    - WeaponJoint (Weld) @ 0x25755288040
+    - Hkey (IntValue) | Value: 0 @ 0x25755268ac0
+    - Bang (ParticleEmitter) @ 0x25754eacf80
+      - Hkey (IntValue) | Value: 4 @ 0x257552689e0
+    - Star (ParticleEmitter) @ 0x25754ead280
+      - Hkey (IntValue) | Value: 3 @ 0x25755268900
+    - Spray (ParticleEmitter) @ 0x25754ead580
+      - Hkey (IntValue) | Value: 2 @ 0x2575526dd00
+    - Smoke (ParticleEmitter) @ 0x25754ead880
+      - Hkey (IntValue) | Value: 1 @ 0x2575526dde0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2575348e080
+  - net (IntValue) | Value: 4 @ 0x2575526d280
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25761e99e00
+  - Frame (MeshPart) @ 0x2575bfb6d00
+    - Weld (Weld) @ 0x257555013c0
+    - Hkey (IntValue) | Value: 6 @ 0x25755518040
+  - Drum (MeshPart) @ 0x2575f765480
+    - WeaponJoint (Weld) @ 0x25755501580
+    - Hkey (IntValue) | Value: 5 @ 0x257555182e0
+  - Muzzle (Part) @ 0x2575c4460c0
+    - Smoke (ParticleEmitter) @ 0x2575fb42480
+      - Hkey (IntValue) | Value: 1 @ 0x25782c0f040
+    - WeaponJoint (Weld) @ 0x25755501740
+    - Hkey (IntValue) | Value: 0 @ 0x25755518580
+    - Bang (ParticleEmitter) @ 0x257554e3080
+      - Hkey (IntValue) | Value: 4 @ 0x25755518660
+    - Star (ParticleEmitter) @ 0x257554e3380
+      - Hkey (IntValue) | Value: 3 @ 0x25755518740
+    - Spray (ParticleEmitter) @ 0x257554e3680
+      - Hkey (IntValue) | Value: 2 @ 0x25755518820
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753280400
+  - net (IntValue) | Value: 4 @ 0x2577fe2c2c0
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25740245600
+  - Drum (MeshPart) @ 0x25783f28c80
+    - WeaponJoint (Weld) @ 0x25752e9cb80
+    - Hkey (IntValue) | Value: 5 @ 0x2577fe2bf40
+  - Frame (MeshPart) @ 0x25783f22700
+    - Weld (Weld) @ 0x25752e9c9c0
+    - Hkey (IntValue) | Value: 6 @ 0x2577fe2ba00
+  - Muzzle (Part) @ 0x2572ce39e00
+    - WeaponJoint (Weld) @ 0x25752e9cd40
+    - Hkey (IntValue) | Value: 0 @ 0x2577fe27160
+    - Bang (ParticleEmitter) @ 0x2575fb4cc80
+      - Hkey (IntValue) | Value: 4 @ 0x2577fe27cc0
+    - Star (ParticleEmitter) @ 0x2575fb42d80
+      - Hkey (IntValue) | Value: 3 @ 0x2577fe29460
+    - Spray (ParticleEmitter) @ 0x2575fb4c980
+      - Hkey (IntValue) | Value: 2 @ 0x2577fe297e0
+    - Smoke (ParticleEmitter) @ 0x2575fb44580
+      - Hkey (IntValue) | Value: 1 @ 0x2577fe299a0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753282700
+  - net (IntValue) | Value: 4 @ 0x25782c0fd60
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25740241500
+  - Frame (MeshPart) @ 0x25783f27080
+    - Weld (Weld) @ 0x25752e99c40
+    - Hkey (IntValue) | Value: 6 @ 0x25782c0dd00
+  - Drum (MeshPart) @ 0x25783f29380
+    - WeaponJoint (Weld) @ 0x25752e99e00
+    - Hkey (IntValue) | Value: 5 @ 0x25782c0e400
+  - Muzzle (Part) @ 0x2574da6e080
+    - WeaponJoint (Weld) @ 0x25752e99fc0
+    - Hkey (IntValue) | Value: 0 @ 0x25782c0e860
+    - Smoke (ParticleEmitter) @ 0x2575fb4c680
+      - Hkey (IntValue) | Value: 1 @ 0x257805ac9c0
+    - Spray (ParticleEmitter) @ 0x2575fb41e80
+      - Hkey (IntValue) | Value: 2 @ 0x257805ac100
+    - Star (ParticleEmitter) @ 0x2575fb4ea80
+      - Hkey (IntValue) | Value: 3 @ 0x257805aa500
+    - Bang (ParticleEmitter) @ 0x2575fb4e480
+      - Hkey (IntValue) | Value: 4 @ 0x25782c0e940
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x257562d5f00
+  - net (IntValue) | Value: 4 @ 0x257549b5c60
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2575f36c700
+  - Drum (MeshPart) @ 0x2575bfbdd00
+    - WeaponJoint (Weld) @ 0x25754961580
+    - Hkey (IntValue) | Value: 5 @ 0x257549b5720
+  - Frame (MeshPart) @ 0x2575bfbe400
+    - Weld (Weld) @ 0x257549613c0
+    - Hkey (IntValue) | Value: 6 @ 0x257549b59c0
+  - Muzzle (Part) @ 0x2575c4c0cc0
+    - WeaponJoint (Weld) @ 0x25754961740
+    - Hkey (IntValue) | Value: 0 @ 0x257549b5480
+    - Bang (ParticleEmitter) @ 0x25754c05a80
+      - Hkey (IntValue) | Value: 4 @ 0x257549b53a0
+    - Smoke (ParticleEmitter) @ 0x25755813980
+      - Hkey (IntValue) | Value: 1 @ 0x257562ef740
+    - Spray (ParticleEmitter) @ 0x25755813c80
+      - Hkey (IntValue) | Value: 2 @ 0x257562ef820
+    - Star (ParticleEmitter) @ 0x25755813f80
+      - Hkey (IntValue) | Value: 3 @ 0x257562ef900
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25754bd9380
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x257506ec500
+  - net (IntValue) | Value: 4 @ 0x257805a7e80
+  - Drum (MeshPart) @ 0x2575bfbf900
+    - Hkey (IntValue) | Value: 5 @ 0x25753f5d980
+    - WeaponJoint (Weld) @ 0x257546213c0
+  - Frame (MeshPart) @ 0x2575bfbf200
+    - Hkey (IntValue) | Value: 6 @ 0x257805a4e60
+    - Weld (Weld) @ 0x25754621580
+  - Muzzle (Part) @ 0x2575c3d9a80
+    - Spray (ParticleEmitter) @ 0x2576761f380
+      - Hkey (IntValue) | Value: 2 @ 0x25753f5dec0
+    - Star (ParticleEmitter) @ 0x2576761f680
+      - Hkey (IntValue) | Value: 3 @ 0x25753f5dde0
+    - Bang (ParticleEmitter) @ 0x2576761f980
+      - Hkey (IntValue) | Value: 4 @ 0x25753f5dd00
+    - Hkey (IntValue) | Value: 0 @ 0x25753f5dc20
+    - WeaponJoint (Weld) @ 0x25754621200
+    - Smoke (ParticleEmitter) @ 0x25754c06380
+      - Hkey (IntValue) | Value: 1 @ 0x257549b4300
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753284300
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25740247b00
+  - net (IntValue) | Value: 4 @ 0x25784dbe6a0
+  - Drum (MeshPart) @ 0x2575bfb9700
+    - Hkey (IntValue) | Value: 5 @ 0x25784dbe320
+    - WeaponJoint (Weld) @ 0x257539b5800
+  - Frame (MeshPart) @ 0x2575bfb9a80
+    - Hkey (IntValue) | Value: 6 @ 0x25784db53a0
+    - Weld (Weld) @ 0x257539b59c0
+  - Muzzle (Part) @ 0x2575c53e240
+    - Smoke (ParticleEmitter) @ 0x2575fb4bd80
+      - Hkey (IntValue) | Value: 1 @ 0x25784db7be0
+    - Spray (ParticleEmitter) @ 0x2575fb4c080
+      - Hkey (IntValue) | Value: 2 @ 0x25784dbac00
+    - Star (ParticleEmitter) @ 0x2575fb4a280
+      - Hkey (IntValue) | Value: 3 @ 0x25784db3960
+    - Bang (ParticleEmitter) @ 0x2576646f980
+      - Hkey (IntValue) | Value: 4 @ 0x25784db4840
+    - Hkey (IntValue) | Value: 0 @ 0x25784dbc2c0
+    - WeaponJoint (Weld) @ 0x257539b5640
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753285480
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25744942900
+  - net (IntValue) | Value: 4 @ 0x25766e5f580
+  - Frame (MeshPart) @ 0x2575f765800
+    - Hkey (IntValue) | Value: 6 @ 0x25766e5f820
+    - Weld (Weld) @ 0x257539b7cc0
+  - Drum (MeshPart) @ 0x2575f763c00
+    - Hkey (IntValue) | Value: 5 @ 0x25766e5fac0
+    - WeaponJoint (Weld) @ 0x257539b7b00
+  - Muzzle (Part) @ 0x2575c691740
+    - Smoke (ParticleEmitter) @ 0x2576646db80
+      - Hkey (IntValue) | Value: 1 @ 0x25766e58e40
+    - Spray (ParticleEmitter) @ 0x2576646fc80
+      - Hkey (IntValue) | Value: 2 @ 0x25766e597e0
+    - Star (ParticleEmitter) @ 0x2576646ea80
+      - Hkey (IntValue) | Value: 3 @ 0x25766e5ff20
+    - Bang (ParticleEmitter) @ 0x2576646d880
+      - Hkey (IntValue) | Value: 4 @ 0x25766e5fe40
+    - Hkey (IntValue) | Value: 0 @ 0x25766e5fd60
+    - WeaponJoint (Weld) @ 0x257539b7940
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753285f00
+  - net (IntValue) | Value: 4 @ 0x25766e5cfe0
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25744941f00
+  - Frame (MeshPart) @ 0x2575f762380
+    - Weld (Weld) @ 0x257539b9540
+    - Hkey (IntValue) | Value: 6 @ 0x25766e5cd40
+  - Drum (MeshPart) @ 0x2575f76ba00
+    - WeaponJoint (Weld) @ 0x257539b9700
+    - Hkey (IntValue) | Value: 5 @ 0x25766e5caa0
+  - Muzzle (Part) @ 0x2575c490b00
+    - WeaponJoint (Weld) @ 0x257539b98c0
+    - Hkey (IntValue) | Value: 0 @ 0x25766e5c800
+    - Bang (ParticleEmitter) @ 0x2576646f380
+      - Hkey (IntValue) | Value: 4 @ 0x25766e5c720
+    - Star (ParticleEmitter) @ 0x2576646f680
+      - Hkey (IntValue) | Value: 3 @ 0x25766e5c640
+    - Spray (ParticleEmitter) @ 0x25767617280
+      - Hkey (IntValue) | Value: 2 @ 0x25766e5c560
+    - Smoke (ParticleEmitter) @ 0x25767612a80
+      - Hkey (IntValue) | Value: 1 @ 0x25766e5c480
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753287080
+  - net (IntValue) | Value: 4 @ 0x25784dbfc80
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2574ca0b900
+  - Muzzle (Part) @ 0x2575c69cb80
+    - WeaponJoint (Weld) @ 0x257539bbbc0
+    - Hkey (IntValue) | Value: 0 @ 0x25766e5ba00
+    - Bang (ParticleEmitter) @ 0x25767619f80
+      - Hkey (IntValue) | Value: 4 @ 0x25766e5bbc0
+    - Star (ParticleEmitter) @ 0x25767615180
+      - Hkey (IntValue) | Value: 3 @ 0x25766e5bd80
+    - Spray (ParticleEmitter) @ 0x25767617580
+      - Hkey (IntValue) | Value: 2 @ 0x25766e5bf40
+    - Smoke (ParticleEmitter) @ 0x25767619680
+      - Hkey (IntValue) | Value: 1 @ 0x25766e5c100
+  - Drum (MeshPart) @ 0x25783f21580
+    - WeaponJoint (Weld) @ 0x257539bba00
+    - Hkey (IntValue) | Value: 5 @ 0x25766e5b140
+  - Frame (MeshPart) @ 0x25783f24680
+    - Weld (Weld) @ 0x257539bb840
+    - Hkey (IntValue) | Value: 6 @ 0x25766e5aea0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753288200
+  - net (IntValue) | Value: 4 @ 0x2577fe20cc0
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2574ca05100
+  - Frame (MeshPart) @ 0x2575bfbb680
+    - Weld (Weld) @ 0x257539bdb40
+    - Hkey (IntValue) | Value: 6 @ 0x2577fe2b4c0
+  - Drum (MeshPart) @ 0x2575bfbee80
+    - WeaponJoint (Weld) @ 0x257539bdd00
+    - Hkey (IntValue) | Value: 5 @ 0x2577fe2bd80
+  - Muzzle (Part) @ 0x2575c2cf740
+    - WeaponJoint (Weld) @ 0x257539bdec0
+    - Hkey (IntValue) | Value: 0 @ 0x25782c07f60
+    - Bang (ParticleEmitter) @ 0x25767618d80
+      - Hkey (IntValue) | Value: 4 @ 0x25782c06a60
+    - Star (ParticleEmitter) @ 0x25767613f80
+      - Hkey (IntValue) | Value: 3 @ 0x25782c05720
+    - Spray (ParticleEmitter) @ 0x25767614280
+      - Hkey (IntValue) | Value: 2 @ 0x25782c083c0
+    - Smoke (ParticleEmitter) @ 0x25767613c80
+      - Hkey (IntValue) | Value: 1 @ 0x25782c07860
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753289380
+  - net (IntValue) | Value: 4 @ 0x25753973340
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2574ca0e200
+  - Drum (MeshPart) @ 0x2575f76a180
+    - WeaponJoint (Weld) @ 0x25753980080
+    - Hkey (IntValue) | Value: 5 @ 0x25753973880
+  - Frame (MeshPart) @ 0x2575f76e400
+    - Weld (Weld) @ 0x257539bfe40
+    - Hkey (IntValue) | Value: 6 @ 0x257539735e0
+  - Muzzle (Part) @ 0x2575c4cc100
+    - WeaponJoint (Weld) @ 0x25753980240
+    - Hkey (IntValue) | Value: 0 @ 0x25753973b20
+    - Bang (ParticleEmitter) @ 0x25767616080
+      - Hkey (IntValue) | Value: 4 @ 0x25753973c00
+    - Star (ParticleEmitter) @ 0x25767613980
+      - Hkey (IntValue) | Value: 3 @ 0x25753973ce0
+    - Spray (ParticleEmitter) @ 0x25767618a80
+      - Hkey (IntValue) | Value: 2 @ 0x25753973dc0
+    - Smoke (ParticleEmitter) @ 0x25767618180
+      - Hkey (IntValue) | Value: 1 @ 0x25753973ea0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2575328a880
+  - net (IntValue) | Value: 4 @ 0x2575397f9e0
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2574ca0b400
+  - Muzzle (Part) @ 0x2575c1d05c0
+    - WeaponJoint (Weld) @ 0x25753983180
+    - Hkey (IntValue) | Value: 0 @ 0x25782c0db40
+    - Bang (ParticleEmitter) @ 0x25767612d80
+      - Hkey (IntValue) | Value: 4 @ 0x2577fe20160
+    - Star (ParticleEmitter) @ 0x25767614880
+      - Hkey (IntValue) | Value: 3 @ 0x2577fe20e80
+    - Spray (ParticleEmitter) @ 0x25767610080
+      - Hkey (IntValue) | Value: 2 @ 0x2577fe2f820
+    - Smoke (ParticleEmitter) @ 0x25767615780
+      - Hkey (IntValue) | Value: 1 @ 0x2577fe2ebe0
+  - Drum (MeshPart) @ 0x2575bfbc100
+    - WeaponJoint (Weld) @ 0x25753982fc0
+    - Hkey (IntValue) | Value: 5 @ 0x2575397ff20
+  - Frame (MeshPart) @ 0x2575bfbc480
+    - Weld (Weld) @ 0x25753982e00
+    - Hkey (IntValue) | Value: 6 @ 0x2575397fc80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2575328c100
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x257572f2900
+  - net (IntValue) | Value: 4 @ 0x257575ebd80
+  - Muzzle (Part) @ 0x2575c44e080
+    - Hkey (IntValue) | Value: 0 @ 0x25753f5af80
+    - Bang (ParticleEmitter) @ 0x2576761de80
+      - Hkey (IntValue) | Value: 4 @ 0x25753f5b140
+    - Star (ParticleEmitter) @ 0x2576761ea80
+      - Hkey (IntValue) | Value: 3 @ 0x25753f58f20
+    - Spray (ParticleEmitter) @ 0x2576761ed80
+      - Hkey (IntValue) | Value: 2 @ 0x25753f59e00
+    - Smoke (ParticleEmitter) @ 0x2576761e780
+      - Hkey (IntValue) | Value: 1 @ 0x25753f5a5e0
+    - WeaponJoint (Weld) @ 0x25754624300
+  - Drum (MeshPart) @ 0x25783f29e00
+    - Hkey (IntValue) | Value: 5 @ 0x25753974e60
+    - WeaponJoint (Weld) @ 0x257546244c0
+  - Frame (MeshPart) @ 0x25783f20b00
+    - Hkey (IntValue) | Value: 6 @ 0x257575ebae0
+    - Weld (Weld) @ 0x257572e5b80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2575328c800
+  - net (IntValue) | Value: 4 @ 0x25781d17240
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2574ca09c00
+  - Muzzle (Part) @ 0x2575c13c640
+    - WeaponJoint (Weld) @ 0x25753985f00
+    - Hkey (IntValue) | Value: 0 @ 0x25781d167c0
+    - Bang (ParticleEmitter) @ 0x25767616380
+      - Hkey (IntValue) | Value: 4 @ 0x25781d16600
+    - Star (ParticleEmitter) @ 0x2576761a580
+      - Hkey (IntValue) | Value: 3 @ 0x25781d16440
+    - Spray (ParticleEmitter) @ 0x2576761a880
+      - Hkey (IntValue) | Value: 2 @ 0x25781d1f2e0
+    - Smoke (ParticleEmitter) @ 0x2576761ab80
+      - Hkey (IntValue) | Value: 1 @ 0x25781d1ff20
+  - Drum (MeshPart) @ 0x2575bfb9380
+    - WeaponJoint (Weld) @ 0x25753985d40
+    - Hkey (IntValue) | Value: 5 @ 0x25781d16c20
+  - Frame (MeshPart) @ 0x25783f28200
+    - Weld (Weld) @ 0x25753985b80
+    - Hkey (IntValue) | Value: 6 @ 0x25781d17da0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2575328d980
+  - net (IntValue) | Value: 4 @ 0x25753f536c0
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2574ca0b000
+  - Drum (MeshPart) @ 0x25750593c00
+    - WeaponJoint (Weld) @ 0x25753987b00
+    - Hkey (IntValue) | Value: 5 @ 0x25753f53c00
+  - Frame (MeshPart) @ 0x25750594a00
+    - Weld (Weld) @ 0x25753987940
+    - Hkey (IntValue) | Value: 6 @ 0x25753f53960
+  - Muzzle (Part) @ 0x2572ce3fc80
+    - WeaponJoint (Weld) @ 0x25753987cc0
+    - Hkey (IntValue) | Value: 0 @ 0x25753f53ea0
+    - Bang (ParticleEmitter) @ 0x2576761ae80
+      - Hkey (IntValue) | Value: 4 @ 0x25753f53f80
+    - Star (ParticleEmitter) @ 0x2576761b180
+      - Hkey (IntValue) | Value: 3 @ 0x25753f54060
+    - Spray (ParticleEmitter) @ 0x2576761b480
+      - Hkey (IntValue) | Value: 2 @ 0x25753f54140
+    - Smoke (ParticleEmitter) @ 0x2576761b780
+      - Hkey (IntValue) | Value: 1 @ 0x25753f54220
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x257554c4300
+  - net (IntValue) | Value: 4 @ 0x25753977240
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25757150b00
+  - Frame (MeshPart) @ 0x2575f763f80
+    - Weld (Weld) @ 0x25754623a40
+    - Hkey (IntValue) | Value: 6 @ 0x25753976fa0
+  - Drum (MeshPart) @ 0x2575f763880
+    - WeaponJoint (Weld) @ 0x25754623c00
+    - Hkey (IntValue) | Value: 5 @ 0x25753976c20
+  - Muzzle (Part) @ 0x2575c697240
+    - WeaponJoint (Weld) @ 0x25754623dc0
+    - Hkey (IntValue) | Value: 0 @ 0x25753976980
+    - Bang (ParticleEmitter) @ 0x25767612780
+      - Hkey (IntValue) | Value: 4 @ 0x25753976600
+    - Star (ParticleEmitter) @ 0x25767616f80
+      - Hkey (IntValue) | Value: 3 @ 0x25753976520
+    - Smoke (ParticleEmitter) @ 0x257554bed80
+      - Hkey (IntValue) | Value: 1 @ 0x257556a19e0
+    - Spray (ParticleEmitter) @ 0x257554bf080
+      - Hkey (IntValue) | Value: 2 @ 0x257556a1ac0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/awsomeleomessi2017/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753c50b00
+  - net (IntValue) | Value: 5 @ 0x25754119620
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25757156a00
+  - Slide (MeshPart) @ 0x2575bfbfc80
+    - WeaponJoint (Weld) @ 0x2575462c100
+    - Hkey (IntValue) | Value: 7 @ 0x2575411c720
+  - Mag (MeshPart) @ 0x2575c260080
+    - WeaponJoint (Weld) @ 0x2575462c2c0
+    - Hkey (IntValue) | Value: 6 @ 0x2575411c9c0
+  - Receiver (MeshPart) @ 0x2575c260400
+    - Weld (Weld) @ 0x2575462c480
+    - Hkey (IntValue) | Value: 5 @ 0x2575411cc60
+  - Muzzle (Part) @ 0x2575c0e5640
+    - WeaponJoint (Weld) @ 0x2575462c640
+    - Hkey (IntValue) | Value: 0 @ 0x25754115100
+    - Bang (ParticleEmitter) @ 0x25754103c80
+      - Hkey (IntValue) | Value: 4 @ 0x257541153a0
+    - Star (ParticleEmitter) @ 0x25754103f80
+      - Hkey (IntValue) | Value: 3 @ 0x25754115560
+    - Spray (ParticleEmitter) @ 0x25754104280
+      - Hkey (IntValue) | Value: 2 @ 0x25754115800
+    - Smoke (ParticleEmitter) @ 0x25754104580
+      - Hkey (IntValue) | Value: 1 @ 0x25754115aa0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/avengerSuperdaniel/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753c5a880
+  - net (IntValue) | Value: 4 @ 0x2575411c480
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25757154d00
+  - Muzzle (Part) @ 0x2575af59000
+    - WeaponJoint (Weld) @ 0x2575462f580
+    - Hkey (IntValue) | Value: 0 @ 0x2575411bca0
+    - Bang (ParticleEmitter) @ 0x25754107280
+      - Hkey (IntValue) | Value: 4 @ 0x2575411bbc0
+    - Star (ParticleEmitter) @ 0x25754107580
+      - Hkey (IntValue) | Value: 3 @ 0x2575411bae0
+    - Spray (ParticleEmitter) @ 0x25754107880
+      - Hkey (IntValue) | Value: 2 @ 0x2575411ba00
+    - Smoke (ParticleEmitter) @ 0x25754107b80
+      - Hkey (IntValue) | Value: 1 @ 0x2575411b920
+  - Frame (MeshPart) @ 0x2575f76fc80
+    - Weld (Weld) @ 0x2575462f200
+    - Hkey (IntValue) | Value: 6 @ 0x2575411c1e0
+  - Drum (MeshPart) @ 0x2575f76c100
+    - WeaponJoint (Weld) @ 0x2575462f3c0
+    - Hkey (IntValue) | Value: 5 @ 0x2575411bf40
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/awsomeleomessi2017/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753c5ba00
+  - net (IntValue) | Value: 5 @ 0x257547c3c00
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25757153200
+  - Muzzle (Part) @ 0x2575c5e6280
+    - WeaponJoint (Weld) @ 0x25754971040
+    - Hkey (IntValue) | Value: 0 @ 0x257547cac00
+    - Bang (ParticleEmitter) @ 0x25754108d80
+      - Hkey (IntValue) | Value: 4 @ 0x257547cace0
+    - Star (ParticleEmitter) @ 0x25754109080
+      - Hkey (IntValue) | Value: 3 @ 0x257547c4060
+    - Spray (ParticleEmitter) @ 0x25754109380
+      - Hkey (IntValue) | Value: 2 @ 0x257547c3dc0
+    - Smoke (ParticleEmitter) @ 0x25754109680
+      - Hkey (IntValue) | Value: 1 @ 0x257547c35e0
+  - Receiver (MeshPart) @ 0x25783f25480
+    - Weld (Weld) @ 0x25754970e80
+    - Hkey (IntValue) | Value: 5 @ 0x257547ca960
+  - Mag (MeshPart) @ 0x25783f25f00
+    - WeaponJoint (Weld) @ 0x25754970cc0
+    - Hkey (IntValue) | Value: 6 @ 0x257547c4140
+  - Slide (MeshPart) @ 0x25783f20080
+    - WeaponJoint (Weld) @ 0x25754970b00
+    - Hkey (IntValue) | Value: 7 @ 0x257547c3ea0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/awsomeleomessi2017/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2575760bd80
+  - net (IntValue) | Value: 5 @ 0x25754113ea0
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25757159d00
+  - Slide (MeshPart) @ 0x25750592a80
+    - WeaponJoint (Weld) @ 0x2575462ac00
+    - Hkey (IntValue) | Value: 7 @ 0x25754114840
+  - Mag (MeshPart) @ 0x25750592e00
+    - WeaponJoint (Weld) @ 0x2575462adc0
+    - Hkey (IntValue) | Value: 6 @ 0x25754116a60
+  - Receiver (MeshPart) @ 0x25750593500
+    - Weld (Weld) @ 0x2575462af80
+    - Hkey (IntValue) | Value: 5 @ 0x25754116600
+  - Muzzle (Part) @ 0x2574da605c0
+    - Star (ParticleEmitter) @ 0x25754100080
+      - Hkey (IntValue) | Value: 3 @ 0x25781d14bc0
+    - Bang (ParticleEmitter) @ 0x25754100680
+      - Hkey (IntValue) | Value: 4 @ 0x25754116280
+    - WeaponJoint (Weld) @ 0x2575462b140
+    - Hkey (IntValue) | Value: 0 @ 0x25754116360
+    - Smoke (ParticleEmitter) @ 0x2575762e780
+      - Hkey (IntValue) | Value: 1 @ 0x257575ff660
+    - Spray (ParticleEmitter) @ 0x2575762ea80
+      - Hkey (IntValue) | Value: 2 @ 0x25781d16d00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753462a80
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2574da4cd00
+  - net (IntValue) | Value: 4 @ 0x25781fac8e0
+  - Frame (MeshPart) @ 0x2575bfb7400
+    - Hkey (IntValue) | Value: 6 @ 0x25781fa1c80
+    - Weld (Weld) @ 0x257534760c0
+  - Muzzle (Part) @ 0x2575c3dc640
+    - Smoke (ParticleEmitter) @ 0x2575e045480
+      - Hkey (IntValue) | Value: 1 @ 0x25781fa60c0
+    - Spray (ParticleEmitter) @ 0x2575e042a80
+      - Hkey (IntValue) | Value: 2 @ 0x25781fa5f00
+    - Star (ParticleEmitter) @ 0x2575e040f80
+      - Hkey (IntValue) | Value: 3 @ 0x25781fa3880
+    - Bang (ParticleEmitter) @ 0x2575e041580
+      - Hkey (IntValue) | Value: 4 @ 0x25781fa3340
+    - Hkey (IntValue) | Value: 0 @ 0x25781fa30a0
+    - WeaponJoint (Weld) @ 0x25753475d40
+  - Drum (MeshPart) @ 0x2575f76eb00
+    - Hkey (IntValue) | Value: 5 @ 0x25781fa2b60
+    - WeaponJoint (Weld) @ 0x25753475f00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/awsomeleomessi2017/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25754bd3500
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2575f36a400
+  - net (IntValue) | Value: 5 @ 0x257549be400
+  - Muzzle (Part) @ 0x2575c4c9fc0
+    - Smoke (ParticleEmitter) @ 0x2575410d880
+      - Hkey (IntValue) | Value: 1 @ 0x257549bd600
+    - Spray (ParticleEmitter) @ 0x2575410db80
+      - Hkey (IntValue) | Value: 2 @ 0x257549bd6e0
+    - Star (ParticleEmitter) @ 0x2575410de80
+      - Hkey (IntValue) | Value: 3 @ 0x257549bd7c0
+    - Bang (ParticleEmitter) @ 0x2575410e180
+      - Hkey (IntValue) | Value: 4 @ 0x257549bd8a0
+    - Hkey (IntValue) | Value: 0 @ 0x257549bd980
+    - WeaponJoint (Weld) @ 0x25754978040
+  - Receiver (MeshPart) @ 0x2575f761200
+    - Hkey (IntValue) | Value: 5 @ 0x257549bdc20
+    - Weld (Weld) @ 0x25754978200
+  - Mag (MeshPart) @ 0x25783f2a180
+    - Hkey (IntValue) | Value: 6 @ 0x257549bdec0
+    - WeaponJoint (Weld) @ 0x257549783c0
+  - Slide (MeshPart) @ 0x25783f27780
+    - Hkey (IntValue) | Value: 7 @ 0x257549be160
+    - WeaponJoint (Weld) @ 0x25754978580
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/avengerSuperdaniel/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25754bd4300
+  - net (IntValue) | Value: 4 @ 0x257547caea0
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2575f36e100
+  - Muzzle (Part) @ 0x2575c5eee80
+    - WeaponJoint (Weld) @ 0x25754979c40
+    - Hkey (IntValue) | Value: 0 @ 0x257547c1c80
+    - Bang (ParticleEmitter) @ 0x2575410fc80
+      - Hkey (IntValue) | Value: 4 @ 0x257547c1e40
+    - Star (ParticleEmitter) @ 0x25754c00080
+      - Hkey (IntValue) | Value: 3 @ 0x257547c2000
+    - Spray (ParticleEmitter) @ 0x25754c00380
+      - Hkey (IntValue) | Value: 2 @ 0x257547c21c0
+    - Smoke (ParticleEmitter) @ 0x25754c00680
+      - Hkey (IntValue) | Value: 1 @ 0x257547c2540
+  - Drum (MeshPart) @ 0x25783f2c100
+    - WeaponJoint (Weld) @ 0x25754979a80
+    - Hkey (IntValue) | Value: 5 @ 0x257547c13c0
+  - Frame (MeshPart) @ 0x25783f26980
+    - Weld (Weld) @ 0x257549798c0
+    - Hkey (IntValue) | Value: 6 @ 0x257547c1120
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/awsomeleomessi2017/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25754bd5800
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2575f360600
+  - net (IntValue) | Value: 5 @ 0x25754c39b60
+  - Muzzle (Part) @ 0x2575c5e2380
+    - Smoke (ParticleEmitter) @ 0x25754c00980
+      - Hkey (IntValue) | Value: 1 @ 0x257547c7cc0
+    - Spray (ParticleEmitter) @ 0x25754c00c80
+      - Hkey (IntValue) | Value: 2 @ 0x257547c7be0
+    - Star (ParticleEmitter) @ 0x25754c00f80
+      - Hkey (IntValue) | Value: 3 @ 0x257547c7b00
+    - Bang (ParticleEmitter) @ 0x25754c01280
+      - Hkey (IntValue) | Value: 4 @ 0x257547c7a20
+    - Hkey (IntValue) | Value: 0 @ 0x257547c7940
+    - WeaponJoint (Weld) @ 0x2575497b300
+  - Receiver (MeshPart) @ 0x25783f26d00
+    - Hkey (IntValue) | Value: 5 @ 0x257547c76a0
+    - Weld (Weld) @ 0x2575497b4c0
+  - Mag (MeshPart) @ 0x25783f26280
+    - Hkey (IntValue) | Value: 6 @ 0x257547c7400
+    - WeaponJoint (Weld) @ 0x2575497b680
+  - Slide (MeshPart) @ 0x25783f25800
+    - Hkey (IntValue) | Value: 7 @ 0x257547c7160
+    - WeaponJoint (Weld) @ 0x2575497b840
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/avengerSuperdaniel/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25754bd6980
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2575f36c600
+  - net (IntValue) | Value: 4 @ 0x257547ce4e0
+  - Muzzle (Part) @ 0x2575c699380
+    - Smoke (ParticleEmitter) @ 0x25754c02480
+      - Hkey (IntValue) | Value: 1 @ 0x257547cf040
+    - Spray (ParticleEmitter) @ 0x25754c02780
+      - Hkey (IntValue) | Value: 2 @ 0x257547cef60
+    - Star (ParticleEmitter) @ 0x25754c02a80
+      - Hkey (IntValue) | Value: 3 @ 0x257547cee80
+    - Bang (ParticleEmitter) @ 0x25754c02d80
+      - Hkey (IntValue) | Value: 4 @ 0x257547ceda0
+    - Hkey (IntValue) | Value: 0 @ 0x257547cecc0
+    - WeaponJoint (Weld) @ 0x2575497cd40
+  - Drum (MeshPart) @ 0x25783f29700
+    - Hkey (IntValue) | Value: 5 @ 0x257547cea20
+    - WeaponJoint (Weld) @ 0x2575497cf00
+  - Frame (MeshPart) @ 0x25783f29a80
+    - Hkey (IntValue) | Value: 6 @ 0x257547ce780
+    - Weld (Weld) @ 0x2575497d0c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/spearminct/Revolver
+- Revolver (Tool) @ 0x25745892480
+  - RevolverServer (Script) @ 0x25766ecf800
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x25784717240
+    - OverrideSettings (ModuleScript) @ 0x2578471b680
+    - DefaultWeaponLogic (ModuleScript) @ 0x2578471b140
+    - RevolverClient (LocalScript) @ 0x25766ecf600
+      - DefaultFireEffect (ModuleScript) @ 0x25784713c00
+      - Particles (Configuration) @ 0x257502a7340
+        - Collision (ParticleEmitter) @ 0x25754eaba80
+        - Debris (ParticleEmitter) @ 0x25754eabd80
+        - Smoke (Smoke) @ 0x2576198fe00
+        - Sparks (ParticleEmitter) @ 0x25754eac080
+        - Spark (ParticleEmitter) @ 0x25754eac380
+  - ClientEvent (RemoteEvent) @ 0x25755286280
+  - ServerEvent (BindableEvent) @ 0x25755265fe0
+  - ToolType (StringValue) | Value: "Unknown" @ 0x2576198fd00
+  - CheckAmmoState (BindableFunction) @ 0x25767572740
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/spearminct/Revolver
+- Revolver (Tool) @ 0x25751ebf080
+  - RevolverServer (Script) @ 0x25766ecde00
+    - RevolverClient (LocalScript) @ 0x25766ece000
+      - DefaultFireEffect (ModuleScript) @ 0x2578471cf00
+      - Particles (Configuration) @ 0x257502a6c80
+        - Spark (ParticleEmitter) @ 0x25755093c80
+        - Sparks (ParticleEmitter) @ 0x25755093f80
+        - Smoke (Smoke) @ 0x25761980f00
+        - Debris (ParticleEmitter) @ 0x25755094280
+        - Collision (ParticleEmitter) @ 0x25755094580
+    - DefaultWeaponLogic (ModuleScript) @ 0x2578471c9c0
+    - OverrideSettings (ModuleScript) @ 0x2578471c480
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x2578471ac00
+  - CheckAmmoState (BindableFunction) @ 0x2576757e2c0
+  - ToolType (StringValue) | Value: "Unknown" @ 0x25761982400
+  - ServerEvent (BindableEvent) @ 0x25754d57cc0
+  - ClientEvent (RemoteEvent) @ 0x25754969000
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/spearminct/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x257554caf80
+  - net (IntValue) | Value: 7 @ 0x2575551c1e0
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25761e97300
+  - BoundBox (Part) @ 0x2575c4c6b40
+    - Hkey (IntValue) | Value: 0 @ 0x257556ab220
+    - WeaponJoint (Weld) @ 0x257556f13c0
+  - Muzzle (Part) @ 0x2575c4c6d00
+    - Smoke (ParticleEmitter) @ 0x257556c4580
+      - Hkey (IntValue) | Value: 2 @ 0x257556a9620
+    - Spray (ParticleEmitter) @ 0x257556c4880
+      - Hkey (IntValue) | Value: 3 @ 0x257556aab20
+    - Hkey (IntValue) | Value: 1 @ 0x257556aa7a0
+    - WeaponJoint (Weld) @ 0x257556f1580
+  - Silencer (Part) @ 0x2575c4c6ec0
+    - Mesh (SpecialMesh) @ 0x25755679500
+      - Hkey (IntValue) | Value: 5 @ 0x257556aa420
+    - Hkey (IntValue) | Value: 4 @ 0x257556aa340
+    - WeaponJoint (Weld) @ 0x257556f1740
+  - Receiver (Part) @ 0x2575c4c7080
+    - Weld (Weld) @ 0x25755503a40
+    - Hkey (IntValue) | Value: 6 @ 0x2575551cb80
+    - CasingAttachment (Attachment) @ 0x25755679680
+      - CasingEmitter (ParticleEmitter) @ 0x257556c4b80
+        - Hkey (IntValue) | Value: 8 @ 0x257556aa0a0
+      - Hkey (IntValue) | Value: 7 @ 0x257556a9fc0
+    - Mesh (SpecialMesh) @ 0x25755679800
+      - Hkey (IntValue) | Value: 9 @ 0x257556a9ee0
+  - Slide (Part) @ 0x2575c4c7240
+    - WeaponJoint (Weld) @ 0x25755503880
+    - Hkey (IntValue) | Value: 10 @ 0x2575551c800
+    - Mesh (SpecialMesh) @ 0x25755642d80
+      - Hkey (IntValue) | Value: 11 @ 0x2575551c8e0
+  - Magazine (Part) @ 0x2575c4c7400
+    - WeaponJoint (Weld) @ 0x257555036c0
+    - Hkey (IntValue) | Value: 12 @ 0x2575551c480
+    - Mesh (SpecialMesh) @ 0x25755642c00
+      - Hkey (IntValue) | Value: 13 @ 0x2575551c560
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/avengerSuperdaniel/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753c55100
+  - net (IntValue) | Value: 4 @ 0x25754112b60
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2575715fc00
+  - Muzzle (Part) @ 0x2575c5e44c0
+    - WeaponJoint (Weld) @ 0x25754629380
+    - Hkey (IntValue) | Value: 0 @ 0x25754112380
+    - Bang (ParticleEmitter) @ 0x25754101880
+      - Hkey (IntValue) | Value: 4 @ 0x257541122a0
+    - Star (ParticleEmitter) @ 0x25754101b80
+      - Hkey (IntValue) | Value: 3 @ 0x257541121c0
+    - Spray (ParticleEmitter) @ 0x25754101e80
+      - Hkey (IntValue) | Value: 2 @ 0x257541120e0
+    - Smoke (ParticleEmitter) @ 0x25754102180
+      - Hkey (IntValue) | Value: 1 @ 0x25754113f80
+  - Drum (MeshPart) @ 0x25783f25b80
+    - WeaponJoint (Weld) @ 0x257546291c0
+    - Hkey (IntValue) | Value: 5 @ 0x25754112620
+  - Frame (MeshPart) @ 0x25783f24300
+    - Weld (Weld) @ 0x25754629000
+    - Hkey (IntValue) | Value: 6 @ 0x257541128c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/spearminct/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753c55f00
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25763175300
+  - net (IntValue) | Value: 7 @ 0x25755834220
+  - Lenses (MeshPart) @ 0x25783f2dd00
+    - WeaponJoint (Weld) @ 0x257546275c0
+    - Hkey (IntValue) | Value: 0 @ 0x25754110da0
+  - Handle (Part) @ 0x2575c5ec2c0
+    - Weld (Weld) @ 0x25754627400
+    - Hkey (IntValue) | Value: 1 @ 0x25754110a20
+    - Mesh (SpecialMesh) @ 0x25754077700
+      - Hkey (IntValue) | Value: 2 @ 0x25754110b00
+  - Magazine (Part) @ 0x2575c5ec480
+    - WeaponJoint (Weld) @ 0x25754627240
+    - Hkey (IntValue) | Value: 3 @ 0x25754110080
+    - Mesh (SpecialMesh) @ 0x25754077580
+      - Hkey (IntValue) | Value: 4 @ 0x25754110160
+  - Bolt (Part) @ 0x2575c5ec640
+    - WeaponJoint (Weld) @ 0x25754627080
+    - Hkey (IntValue) | Value: 5 @ 0x2575397d520
+    - Mesh (SpecialMesh) @ 0x25754077400
+      - Hkey (IntValue) | Value: 6 @ 0x25766e5f200
+  - BoltHandle (Part) @ 0x2575c5ec800
+    - Hkey (IntValue) | Value: 7 @ 0x25753976280
+    - Mesh (SpecialMesh) @ 0x25754077280
+      - Hkey (IntValue) | Value: 8 @ 0x25753975fe0
+    - WeaponJoint (Weld) @ 0x257556ff580
+  - Muzzle (Part) @ 0x2575c5ec9c0
+    - Spray (ParticleEmitter) @ 0x257556c7b80
+      - Hkey (IntValue) | Value: 12 @ 0x257558345a0
+    - Hkey (IntValue) | Value: 9 @ 0x257558344c0
+    - WeaponJoint (Weld) @ 0x257556f7240
+    - Bang (ParticleEmitter) @ 0x25755814880
+      - Hkey (IntValue) | Value: 10 @ 0x257562e92a0
+    - Smoke (ParticleEmitter) @ 0x25755814b80
+      - Hkey (IntValue) | Value: 11 @ 0x257562e91c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/spearminct/Revolver
+- Revolver (Tool) @ 0x25745899680
+  - RevolverServer (Script) @ 0x25766ecc000
+    - RevolverClient (LocalScript) @ 0x25766ecc200
+      - DefaultFireEffect (ModuleScript) @ 0x25784718040
+      - Particles (Configuration) @ 0x257502a7100
+        - Spark (ParticleEmitter) @ 0x25754eaae80
+        - Sparks (ParticleEmitter) @ 0x25754eab180
+        - Smoke (Smoke) @ 0x2576198df00
+        - Debris (ParticleEmitter) @ 0x25754eab480
+        - Collision (ParticleEmitter) @ 0x25754eab780
+    - DefaultWeaponLogic (ModuleScript) @ 0x25784712540
+    - OverrideSettings (ModuleScript) @ 0x25784711040
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x2578471b300
+  - CheckAmmoState (BindableFunction) @ 0x25767572ec0
+  - ToolType (StringValue) | Value: "Unknown" @ 0x2576198de00
+  - ServerEvent (BindableEvent) @ 0x25755264a00
+  - ClientEvent (RemoteEvent) @ 0x25755283180
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/awsomeleomessi2017/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753c59e00
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2575f368700
+  - net (IntValue) | Value: 5 @ 0x257549ba6c0
+  - Muzzle (Part) @ 0x2574da6cb80
+    - Spray (ParticleEmitter) @ 0x25754102480
+      - Hkey (IntValue) | Value: 2 @ 0x257541161a0
+    - Star (ParticleEmitter) @ 0x25754102780
+      - Hkey (IntValue) | Value: 3 @ 0x257541160c0
+    - Bang (ParticleEmitter) @ 0x25754102a80
+      - Hkey (IntValue) | Value: 4 @ 0x25754115fe0
+    - Hkey (IntValue) | Value: 0 @ 0x25754115f00
+    - WeaponJoint (Weld) @ 0x2575462b300
+    - Smoke (ParticleEmitter) @ 0x25754105780
+      - Hkey (IntValue) | Value: 1 @ 0x2575411dd00
+  - Receiver (MeshPart) @ 0x25750592000
+    - Hkey (IntValue) | Value: 5 @ 0x25754115c60
+    - Weld (Weld) @ 0x2575462b4c0
+  - Mag (MeshPart) @ 0x25750592380
+    - Hkey (IntValue) | Value: 6 @ 0x257541159c0
+    - WeaponJoint (Weld) @ 0x2575462b680
+  - Slide (MeshPart) @ 0x25750592700
+    - Hkey (IntValue) | Value: 7 @ 0x257549ba420
+    - WeaponJoint (Weld) @ 0x25754976b40
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753c59700
+  - net (IntValue) | Value: 4 @ 0x2575397c020
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x257506ed900
+  - Frame (MeshPart) @ 0x2575f764a00
+    - Weld (Weld) @ 0x257546221c0
+    - Hkey (IntValue) | Value: 6 @ 0x2575397a500
+  - Muzzle (Part) @ 0x2575c449a80
+    - WeaponJoint (Weld) @ 0x25754622540
+    - Hkey (IntValue) | Value: 0 @ 0x25753979fc0
+    - Bang (ParticleEmitter) @ 0x25767616680
+      - Hkey (IntValue) | Value: 4 @ 0x25753979ee0
+    - Star (ParticleEmitter) @ 0x25767613080
+      - Hkey (IntValue) | Value: 3 @ 0x25753979e00
+    - Spray (ParticleEmitter) @ 0x25767617880
+      - Hkey (IntValue) | Value: 2 @ 0x25753979d20
+    - Smoke (ParticleEmitter) @ 0x25767617e80
+      - Hkey (IntValue) | Value: 1 @ 0x25753979c40
+  - Drum (MeshPart) @ 0x25783f2bd80
+    - WeaponJoint (Weld) @ 0x25754622380
+    - Hkey (IntValue) | Value: 5 @ 0x2575397a260
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x257554c1200
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25763176800
+  - net (IntValue) | Value: 4 @ 0x257562e9ee0
+  - Muzzle (Part) @ 0x2575c3dd7c0
+    - Smoke (ParticleEmitter) @ 0x257554ba280
+      - Hkey (IntValue) | Value: 1 @ 0x25755512e00
+    - Spray (ParticleEmitter) @ 0x257554ba580
+      - Hkey (IntValue) | Value: 2 @ 0x25755512d20
+    - Star (ParticleEmitter) @ 0x257554ba880
+      - Hkey (IntValue) | Value: 3 @ 0x25755512c40
+    - Bang (ParticleEmitter) @ 0x257554bab80
+      - Hkey (IntValue) | Value: 4 @ 0x25755512b60
+    - Hkey (IntValue) | Value: 0 @ 0x25755512a80
+    - WeaponJoint (Weld) @ 0x2575550a6c0
+  - Drum (MeshPart) @ 0x2575f768900
+    - Hkey (IntValue) | Value: 5 @ 0x257555127e0
+    - WeaponJoint (Weld) @ 0x2575550a880
+  - Frame (MeshPart) @ 0x2575f767400
+    - Hkey (IntValue) | Value: 6 @ 0x25755512540
+    - Weld (Weld) @ 0x2575550aa40
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/awsomeleomessi2017/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25755272e00
+  - net (IntValue) | Value: 5 @ 0x25755165020
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25761e92100
+  - Muzzle (Part) @ 0x2575c1d52c0
+    - WeaponJoint (Weld) @ 0x2575528cd40
+    - Hkey (IntValue) | Value: 0 @ 0x25755165aa0
+    - Bang (ParticleEmitter) @ 0x257554e0f80
+      - Hkey (IntValue) | Value: 4 @ 0x25755165b80
+    - Star (ParticleEmitter) @ 0x257554e1280
+      - Hkey (IntValue) | Value: 3 @ 0x25755165c60
+    - Spray (ParticleEmitter) @ 0x257554e1580
+      - Hkey (IntValue) | Value: 2 @ 0x25755165d40
+    - Smoke (ParticleEmitter) @ 0x257554e1880
+      - Hkey (IntValue) | Value: 1 @ 0x25755165e20
+  - Receiver (MeshPart) @ 0x2575bfbcf00
+    - Weld (Weld) @ 0x2575528cb80
+    - Hkey (IntValue) | Value: 5 @ 0x25755165800
+  - Mag (MeshPart) @ 0x2575bfbd280
+    - WeaponJoint (Weld) @ 0x2575528c9c0
+    - Hkey (IntValue) | Value: 6 @ 0x25755165560
+  - Slide (MeshPart) @ 0x2575c260780
+    - WeaponJoint (Weld) @ 0x2575528c800
+    - Hkey (IntValue) | Value: 7 @ 0x257551652c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/spearminct/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2575760c480
+  - net (IntValue) | Value: 7 @ 0x257575ff2e0
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x257572f5200
+  - Lenses (MeshPart) @ 0x2575bfbeb00
+    - WeaponJoint (Weld) @ 0x257572ea880
+    - Hkey (IntValue) | Value: 0 @ 0x257575ff120
+  - Handle (Part) @ 0x2575c2cbd80
+    - Weld (Weld) @ 0x257572ea6c0
+    - Hkey (IntValue) | Value: 1 @ 0x257575ee860
+    - Mesh (SpecialMesh) @ 0x257573f7280
+      - Hkey (IntValue) | Value: 2 @ 0x257575ee780
+  - Magazine (Part) @ 0x2575c2cbf40
+    - WeaponJoint (Weld) @ 0x257572ea500
+    - Hkey (IntValue) | Value: 3 @ 0x257575eebe0
+    - Mesh (SpecialMesh) @ 0x257573f7100
+      - Hkey (IntValue) | Value: 4 @ 0x257575eeb00
+  - Bolt (Part) @ 0x2575c2cc100
+    - WeaponJoint (Weld) @ 0x257572ea340
+    - Hkey (IntValue) | Value: 5 @ 0x257575eef60
+    - Mesh (SpecialMesh) @ 0x257573f6f80
+      - Hkey (IntValue) | Value: 6 @ 0x257575eee80
+  - BoltHandle (Part) @ 0x2575c2cc2c0
+    - WeaponJoint (Weld) @ 0x257572ea180
+    - Hkey (IntValue) | Value: 7 @ 0x257575efc80
+    - Mesh (SpecialMesh) @ 0x257573f6e00
+      - Hkey (IntValue) | Value: 8 @ 0x257575efba0
+  - Muzzle (Part) @ 0x2575c2cc480
+    - WeaponJoint (Weld) @ 0x257572e9fc0
+    - Hkey (IntValue) | Value: 9 @ 0x257575ed440
+    - Spray (ParticleEmitter) @ 0x25757420380
+      - Hkey (IntValue) | Value: 12 @ 0x257575ed7c0
+    - Smoke (ParticleEmitter) @ 0x25757420680
+      - Hkey (IntValue) | Value: 11 @ 0x257575edb40
+    - Bang (ParticleEmitter) @ 0x25757420980
+      - Hkey (IntValue) | Value: 10 @ 0x257575edd00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/spearminct/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x257562d5100
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2576317c900
+  - net (IntValue) | Value: 7 @ 0x257562eb300
+  - Muzzle (Part) @ 0x2575c4c7e80
+    - Bang (ParticleEmitter) @ 0x25755812a80
+      - Hkey (IntValue) | Value: 10 @ 0x257562eadc0
+    - Smoke (ParticleEmitter) @ 0x25755812d80
+      - Hkey (IntValue) | Value: 11 @ 0x257562eaea0
+    - Spray (ParticleEmitter) @ 0x25755813080
+      - Hkey (IntValue) | Value: 12 @ 0x257562eaf80
+    - Hkey (IntValue) | Value: 9 @ 0x257562eb060
+    - WeaponJoint (Weld) @ 0x257556fd980
+  - BoltHandle (Part) @ 0x2575c4c8040
+    - Mesh (SpecialMesh) @ 0x257560f9c80
+      - Hkey (IntValue) | Value: 8 @ 0x257562e6600
+    - Hkey (IntValue) | Value: 7 @ 0x257562e6520
+    - WeaponJoint (Weld) @ 0x257556fd7c0
+  - Bolt (Part) @ 0x2575c4c8200
+    - Mesh (SpecialMesh) @ 0x257560f9b00
+      - Hkey (IntValue) | Value: 6 @ 0x257562e6980
+    - Hkey (IntValue) | Value: 5 @ 0x257562e68a0
+    - WeaponJoint (Weld) @ 0x257556fd600
+  - Magazine (Part) @ 0x2575c4c83c0
+    - Mesh (SpecialMesh) @ 0x257560f9980
+      - Hkey (IntValue) | Value: 4 @ 0x257562e6d00
+    - Hkey (IntValue) | Value: 3 @ 0x257562e6c20
+    - WeaponJoint (Weld) @ 0x257556fd440
+  - Handle (Part) @ 0x2575c4c8580
+    - Mesh (SpecialMesh) @ 0x257560f9800
+      - Hkey (IntValue) | Value: 2 @ 0x257562e7080
+    - Hkey (IntValue) | Value: 1 @ 0x257562e6fa0
+    - Weld (Weld) @ 0x257556fd280
+  - Lenses (MeshPart) @ 0x2575f76f900
+    - Hkey (IntValue) | Value: 0 @ 0x257562e7320
+    - WeaponJoint (Weld) @ 0x257556fd0c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25755275480
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25761e99500
+  - net (IntValue) | Value: 4 @ 0x2575526c560
+  - Frame (MeshPart) @ 0x2575bfb7080
+    - Hkey (IntValue) | Value: 6 @ 0x2575526bae0
+    - Weld (Weld) @ 0x257555005c0
+  - Drum (MeshPart) @ 0x25783f2e400
+    - Hkey (IntValue) | Value: 5 @ 0x2575516ff20
+    - WeaponJoint (Weld) @ 0x25755500400
+  - Muzzle (Part) @ 0x2575c690b00
+    - Smoke (ParticleEmitter) @ 0x257554e2480
+      - Hkey (IntValue) | Value: 1 @ 0x2575516f900
+    - Spray (ParticleEmitter) @ 0x257554e2780
+      - Hkey (IntValue) | Value: 2 @ 0x2575516f9e0
+    - Star (ParticleEmitter) @ 0x257554e2a80
+      - Hkey (IntValue) | Value: 3 @ 0x2575516fac0
+    - Bang (ParticleEmitter) @ 0x257554e2d80
+      - Hkey (IntValue) | Value: 4 @ 0x2575516fba0
+    - Hkey (IntValue) | Value: 0 @ 0x2575516fc80
+    - WeaponJoint (Weld) @ 0x25755500240
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/spearminct/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25755273f80
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2575715a800
+  - net (IntValue) | Value: 7 @ 0x2575397d8a0
+  - Muzzle (Part) @ 0x2575c138ac0
+    - Bang (ParticleEmitter) @ 0x25767610f80
+      - Hkey (IntValue) | Value: 10 @ 0x25753977080
+    - Smoke (ParticleEmitter) @ 0x25767613380
+      - Hkey (IntValue) | Value: 11 @ 0x25753977320
+    - Spray (ParticleEmitter) @ 0x25767612180
+      - Hkey (IntValue) | Value: 12 @ 0x2575397c2c0
+    - Hkey (IntValue) | Value: 9 @ 0x2575397c560
+    - WeaponJoint (Weld) @ 0x25754624bc0
+  - BoltHandle (Part) @ 0x2575c138c80
+    - Mesh (SpecialMesh) @ 0x25754073f80
+      - Hkey (IntValue) | Value: 8 @ 0x257539768a0
+    - Hkey (IntValue) | Value: 7 @ 0x25753976a60
+    - WeaponJoint (Weld) @ 0x25754624a00
+  - Bolt (Part) @ 0x2575c138e40
+    - Mesh (SpecialMesh) @ 0x25754073e00
+      - Hkey (IntValue) | Value: 6 @ 0x25753976360
+    - Hkey (IntValue) | Value: 5 @ 0x25753976440
+    - WeaponJoint (Weld) @ 0x25754624840
+  - Magazine (Part) @ 0x2575c139000
+    - Hkey (IntValue) | Value: 3 @ 0x25753974bc0
+    - WeaponJoint (Weld) @ 0x25754624680
+    - Mesh (SpecialMesh) @ 0x2575515b780
+      - Hkey (IntValue) | Value: 4 @ 0x2575516cc60
+  - Handle (Part) @ 0x2575c1391c0
+    - Weld (Weld) @ 0x2575528f200
+    - Hkey (IntValue) | Value: 1 @ 0x2575516cf00
+    - Mesh (SpecialMesh) @ 0x2575515b900
+      - Hkey (IntValue) | Value: 2 @ 0x2575516cfe0
+  - Lenses (MeshPart) @ 0x2575bfb8900
+    - WeaponJoint (Weld) @ 0x2575528f3c0
+    - Hkey (IntValue) | Value: 0 @ 0x2575516d280
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/spearminct/Revolver
+- Revolver (Tool) @ 0x25745897880
+  - RevolverServer (Script) @ 0x25766ecd400
+    - RevolverClient (LocalScript) @ 0x25766ecd600
+      - DefaultFireEffect (ModuleScript) @ 0x25784712700
+      - Particles (Configuration) @ 0x257502a8780
+        - Spark (ParticleEmitter) @ 0x2575410c380
+        - Sparks (ParticleEmitter) @ 0x2575410c680
+        - Collision (ParticleEmitter) @ 0x257554e3980
+        - Debris (ParticleEmitter) @ 0x257554e3c80
+        - Smoke (Smoke) @ 0x25761e99d00
+    - DefaultWeaponLogic (ModuleScript) @ 0x2578471f580
+    - OverrideSettings (ModuleScript) @ 0x2578471c2c0
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x25784712c40
+  - CheckAmmoState (BindableFunction) @ 0x2576645da00
+  - ToolType (StringValue) | Value: "Unknown" @ 0x2575f367200
+  - ServerEvent (BindableEvent) @ 0x257549ba340
+  - ClientEvent (RemoteEvent) @ 0x25754976980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/spearminct/Revolver
+- Revolver (Tool) @ 0x25751ebf680
+  - RevolverServer (Script) @ 0x257677e1a00
+    - RevolverClient (LocalScript) @ 0x257677e2800
+      - DefaultFireEffect (ModuleScript) @ 0x2574f334300
+      - Particles (Configuration) @ 0x257502a6a40
+        - Collision (ParticleEmitter) @ 0x25754c04e80
+        - Debris (ParticleEmitter) @ 0x25754c05180
+        - Smoke (Smoke) @ 0x2575f364f00
+        - Sparks (ParticleEmitter) @ 0x25754c05480
+        - Spark (ParticleEmitter) @ 0x25754c05780
+    - DefaultWeaponLogic (ModuleScript) @ 0x2574f3344c0
+    - OverrideSettings (ModuleScript) @ 0x2574f334680
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x2574f334840
+  - ClientEvent (RemoteEvent) @ 0x25754960e80
+  - ServerEvent (BindableEvent) @ 0x257549b7400
+  - ToolType (StringValue) | Value: "Unknown" @ 0x2575f367b00
+  - CheckAmmoState (BindableFunction) @ 0x2576645ad00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/spearminct/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753c5d280
+  - net (IntValue) | Value: 7 @ 0x257562eff20
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25763179600
+  - Lenses (MeshPart) @ 0x2575bfb9e00
+    - Hkey (IntValue) | Value: 0 @ 0x2575411fd60
+    - WeaponJoint (Weld) @ 0x25754972fc0
+  - Handle (Part) @ 0x2575c13dec0
+    - Mesh (SpecialMesh) @ 0x25754668600
+      - Hkey (IntValue) | Value: 2 @ 0x2575411fac0
+    - Hkey (IntValue) | Value: 1 @ 0x2575411f9e0
+    - Weld (Weld) @ 0x25754973180
+  - Magazine (Part) @ 0x2575c1a9fc0
+    - Mesh (SpecialMesh) @ 0x25754668780
+      - Hkey (IntValue) | Value: 4 @ 0x2575411f740
+    - Hkey (IntValue) | Value: 3 @ 0x2575411f660
+    - WeaponJoint (Weld) @ 0x25754973340
+  - Bolt (Part) @ 0x2575c1aa180
+    - Mesh (SpecialMesh) @ 0x25754668900
+      - Hkey (IntValue) | Value: 6 @ 0x2575411f3c0
+    - Hkey (IntValue) | Value: 5 @ 0x2575411f2e0
+    - WeaponJoint (Weld) @ 0x25754973880
+  - BoltHandle (Part) @ 0x2575c1aa340
+    - Mesh (SpecialMesh) @ 0x25754669380
+      - Hkey (IntValue) | Value: 8 @ 0x2575411eda0
+    - Hkey (IntValue) | Value: 7 @ 0x2575411ecc0
+    - WeaponJoint (Weld) @ 0x25754973a40
+  - Muzzle (Part) @ 0x2575c1aa500
+    - Bang (ParticleEmitter) @ 0x2575410a280
+      - Hkey (IntValue) | Value: 10 @ 0x2575411ea20
+    - Smoke (ParticleEmitter) @ 0x2575410a580
+      - Hkey (IntValue) | Value: 11 @ 0x257551627e0
+    - WeaponJoint (Weld) @ 0x257556ffac0
+    - Hkey (IntValue) | Value: 9 @ 0x25756132620
+    - Spray (ParticleEmitter) @ 0x25755814e80
+      - Hkey (IntValue) | Value: 12 @ 0x257561322a0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x257562d7e80
+  - net (IntValue) | Value: 4 @ 0x25753f57be0
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x257506e8700
+  - Frame (MeshPart) @ 0x25783f28580
+    - Weld (Weld) @ 0x25753989c40
+    - Hkey (IntValue) | Value: 6 @ 0x25753f57e80
+  - Drum (MeshPart) @ 0x25783f28900
+    - WeaponJoint (Weld) @ 0x25753989e00
+    - Hkey (IntValue) | Value: 5 @ 0x25753f58120
+  - Muzzle (Part) @ 0x2575c5e8e40
+    - WeaponJoint (Weld) @ 0x25753989fc0
+    - Hkey (IntValue) | Value: 0 @ 0x25753f583c0
+    - Bang (ParticleEmitter) @ 0x2576761c680
+      - Hkey (IntValue) | Value: 4 @ 0x25753f584a0
+    - Star (ParticleEmitter) @ 0x2576761c980
+      - Hkey (IntValue) | Value: 3 @ 0x25753f58580
+    - Spray (ParticleEmitter) @ 0x2576761cc80
+      - Hkey (IntValue) | Value: 2 @ 0x25753f58660
+    - Smoke (ParticleEmitter) @ 0x2576761cf80
+      - Hkey (IntValue) | Value: 1 @ 0x25753f58740
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2575328ee80
+  - net (IntValue) | Value: 4 @ 0x25753f59620
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x257506ee600
+  - Muzzle (Part) @ 0x2574da60940
+    - WeaponJoint (Weld) @ 0x2575398aa40
+    - Hkey (IntValue) | Value: 0 @ 0x25753f591c0
+    - Bang (ParticleEmitter) @ 0x2576761d280
+      - Hkey (IntValue) | Value: 4 @ 0x25753f5a180
+    - Star (ParticleEmitter) @ 0x2576761d580
+      - Hkey (IntValue) | Value: 3 @ 0x25753f5a260
+    - Spray (ParticleEmitter) @ 0x2576761d880
+      - Hkey (IntValue) | Value: 2 @ 0x25753f5a340
+    - Smoke (ParticleEmitter) @ 0x2576761db80
+      - Hkey (IntValue) | Value: 1 @ 0x25753f5a420
+  - Drum (MeshPart) @ 0x25750591900
+    - WeaponJoint (Weld) @ 0x2575398a880
+    - Hkey (IntValue) | Value: 5 @ 0x25753f59b60
+  - Frame (MeshPart) @ 0x25750591c80
+    - Weld (Weld) @ 0x2575398a6c0
+    - Hkey (IntValue) | Value: 6 @ 0x25753f598c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753c5e080
+  - net (IntValue) | Value: 4 @ 0x25755835d40
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2576317ac00
+  - Muzzle (Part) @ 0x2575c694140
+    - Smoke (ParticleEmitter) @ 0x2575410a880
+      - Hkey (IntValue) | Value: 1 @ 0x257547cbf40
+    - Spray (ParticleEmitter) @ 0x2575410ab80
+      - Hkey (IntValue) | Value: 2 @ 0x257547cc020
+    - WeaponJoint (Weld) @ 0x257556f5100
+    - Hkey (IntValue) | Value: 0 @ 0x25755836520
+    - Bang (ParticleEmitter) @ 0x257556c5780
+      - Hkey (IntValue) | Value: 4 @ 0x25755836600
+    - Star (ParticleEmitter) @ 0x25755813380
+      - Hkey (IntValue) | Value: 3 @ 0x257562ec640
+  - Drum (MeshPart) @ 0x25783f2ac00
+    - WeaponJoint (Weld) @ 0x257556f4f40
+    - Hkey (IntValue) | Value: 5 @ 0x25755836280
+  - Frame (MeshPart) @ 0x25783f2f200
+    - Weld (Weld) @ 0x257556f4d80
+    - Hkey (IntValue) | Value: 6 @ 0x25755835fe0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753283180
+  - net (IntValue) | Value: 4 @ 0x25753979700
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x257506e6800
+  - Frame (MeshPart) @ 0x2575bfbe780
+    - Weld (Weld) @ 0x257546228c0
+    - Hkey (IntValue) | Value: 6 @ 0x25753979460
+  - Muzzle (Part) @ 0x2575c690080
+    - Smoke (ParticleEmitter) @ 0x2575fb4b180
+      - Hkey (IntValue) | Value: 1 @ 0x257805ad280
+    - Spray (ParticleEmitter) @ 0x2575fb42180
+      - Hkey (IntValue) | Value: 2 @ 0x257805a9e00
+    - Star (ParticleEmitter) @ 0x2575fb4ed80
+      - Hkey (IntValue) | Value: 3 @ 0x257805aa6c0
+    - WeaponJoint (Weld) @ 0x25754622c40
+    - Hkey (IntValue) | Value: 0 @ 0x25753978f20
+    - Bang (ParticleEmitter) @ 0x25754eaea80
+      - Hkey (IntValue) | Value: 4 @ 0x25753978e40
+  - Drum (MeshPart) @ 0x25783f2e080
+    - WeaponJoint (Weld) @ 0x25754622a80
+    - Hkey (IntValue) | Value: 5 @ 0x257539791c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/awsomeleomessi2017/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25755d32000
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25763172700
+  - net (IntValue) | Value: 5 @ 0x2575583e240
+  - Slide (MeshPart) @ 0x25783f23c00
+    - Hkey (IntValue) | Value: 7 @ 0x2575583dfa0
+    - WeaponJoint (Weld) @ 0x257556f8740
+  - Mag (MeshPart) @ 0x25783f23f80
+    - Hkey (IntValue) | Value: 6 @ 0x2575583dd00
+    - WeaponJoint (Weld) @ 0x257556f8580
+  - Receiver (MeshPart) @ 0x25783f2f900
+    - Hkey (IntValue) | Value: 5 @ 0x2575583da60
+    - Weld (Weld) @ 0x257556f83c0
+  - Muzzle (Part) @ 0x2575c69a340
+    - Smoke (ParticleEmitter) @ 0x257556c7e80
+      - Hkey (IntValue) | Value: 1 @ 0x2575583d440
+    - Spray (ParticleEmitter) @ 0x257556c8180
+      - Hkey (IntValue) | Value: 2 @ 0x2575583d520
+    - Star (ParticleEmitter) @ 0x257556c8480
+      - Hkey (IntValue) | Value: 3 @ 0x2575583d600
+    - Bang (ParticleEmitter) @ 0x257556c8780
+      - Hkey (IntValue) | Value: 4 @ 0x2575583d6e0
+    - Hkey (IntValue) | Value: 0 @ 0x2575583d7c0
+    - WeaponJoint (Weld) @ 0x257556f8200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x257562d6280
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25761e91600
+  - net (IntValue) | Value: 4 @ 0x2575526b760
+  - Muzzle (Part) @ 0x257401428c0
+    - Star (ParticleEmitter) @ 0x25754eaf680
+      - Hkey (IntValue) | Value: 3 @ 0x2575526c100
+    - Bang (ParticleEmitter) @ 0x25754eaf980
+      - Hkey (IntValue) | Value: 4 @ 0x2575526c020
+    - Hkey (IntValue) | Value: 0 @ 0x2575526bf40
+    - WeaponJoint (Weld) @ 0x2575528ba00
+    - Spray (ParticleEmitter) @ 0x25755814280
+      - Hkey (IntValue) | Value: 2 @ 0x257562ef9e0
+    - Smoke (ParticleEmitter) @ 0x25755814580
+      - Hkey (IntValue) | Value: 1 @ 0x257562efac0
+  - Drum (MeshPart) @ 0x2575f765100
+    - Hkey (IntValue) | Value: 5 @ 0x2575526bca0
+    - WeaponJoint (Weld) @ 0x2575528bbc0
+  - Frame (MeshPart) @ 0x25783f2af80
+    - Hkey (IntValue) | Value: 6 @ 0x2575526ba00
+    - Weld (Weld) @ 0x2575528bd80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753c52e00
+  - net (IntValue) | Value: 4 @ 0x257562ec560
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25763171300
+  - Muzzle (Part) @ 0x2575c3d5b80
+    - Smoke (ParticleEmitter) @ 0x25767617b80
+      - Hkey (IntValue) | Value: 1 @ 0x257539776a0
+    - Spray (ParticleEmitter) @ 0x25767615d80
+      - Hkey (IntValue) | Value: 2 @ 0x257539775c0
+    - Star (ParticleEmitter) @ 0x25767614b80
+      - Hkey (IntValue) | Value: 3 @ 0x257539774e0
+    - Bang (ParticleEmitter) @ 0x25767618480
+      - Hkey (IntValue) | Value: 4 @ 0x25753977400
+    - Hkey (IntValue) | Value: 0 @ 0x2575673caa0
+    - WeaponJoint (Weld) @ 0x257566d83c0
+  - Drum (MeshPart) @ 0x2575f765f00
+    - Hkey (IntValue) | Value: 5 @ 0x2575673cd40
+    - WeaponJoint (Weld) @ 0x257566d8580
+  - Frame (MeshPart) @ 0x2575f76a500
+    - Hkey (IntValue) | Value: 6 @ 0x2575673cfe0
+    - Weld (Weld) @ 0x257566d8740
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/awsomeleomessi2017/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25755275f00
+  - net (IntValue) | Value: 5 @ 0x257541135e0
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25757155500
+  - Slide (MeshPart) @ 0x25783f20780
+    - WeaponJoint (Weld) @ 0x2575462e780
+    - Hkey (IntValue) | Value: 7 @ 0x25754113340
+  - Mag (MeshPart) @ 0x25783f27400
+    - WeaponJoint (Weld) @ 0x2575462e940
+    - Hkey (IntValue) | Value: 6 @ 0x257541130a0
+  - Receiver (MeshPart) @ 0x25783f27e80
+    - Weld (Weld) @ 0x25755501ac0
+    - Hkey (IntValue) | Value: 5 @ 0x25755519e00
+  - Muzzle (Part) @ 0x2575c5e6d00
+    - WeaponJoint (Weld) @ 0x25755501c80
+    - Hkey (IntValue) | Value: 0 @ 0x2575551a0a0
+    - Bang (ParticleEmitter) @ 0x257554e3f80
+      - Hkey (IntValue) | Value: 4 @ 0x2575551a180
+    - Star (ParticleEmitter) @ 0x257554e4280
+      - Hkey (IntValue) | Value: 3 @ 0x2575551a260
+    - Spray (ParticleEmitter) @ 0x257554e4580
+      - Hkey (IntValue) | Value: 2 @ 0x2575551a340
+    - Smoke (ParticleEmitter) @ 0x257554e4880
+      - Hkey (IntValue) | Value: 1 @ 0x2575551a420
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/T0D3Y/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25753281900
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2575d6b6a00
+  - net (IntValue) | Value: 4 @ 0x257677d89e0
+  - Muzzle (Part) @ 0x2575c44ac00
+    - Bang (ParticleEmitter) @ 0x2575e04a580
+      - Hkey (IntValue) | Value: 4 @ 0x257677da500
+    - Hkey (IntValue) | Value: 0 @ 0x257677dadc0
+    - WeaponJoint (Weld) @ 0x2575396f3c0
+    - Smoke (ParticleEmitter) @ 0x2575fb4d580
+      - Hkey (IntValue) | Value: 1 @ 0x257805aaf80
+    - Spray (ParticleEmitter) @ 0x2575fb40680
+      - Hkey (IntValue) | Value: 2 @ 0x257805abca0
+    - Star (ParticleEmitter) @ 0x2575fb4f380
+      - Hkey (IntValue) | Value: 3 @ 0x257677da5e0
+  - Drum (MeshPart) @ 0x25783f25100
+    - Hkey (IntValue) | Value: 5 @ 0x257677dace0
+    - WeaponJoint (Weld) @ 0x2575396f580
+  - Frame (MeshPart) @ 0x25783f2b680
+    - Hkey (IntValue) | Value: 6 @ 0x257677d8e40
+    - Weld (Weld) @ 0x2575396f740
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/spearminct/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2575704e400
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25761e96b00
+  - net (IntValue) | Value: 7 @ 0x2575551f820
+  - Lenses (MeshPart) @ 0x2575f760080
+    - WeaponJoint (Weld) @ 0x257572e6600
+    - Hkey (IntValue) | Value: 0 @ 0x257575ed520
+  - Handle (Part) @ 0x2575c53c2c0
+    - Weld (Weld) @ 0x257572e6440
+    - Hkey (IntValue) | Value: 1 @ 0x257575ed1a0
+    - Mesh (SpecialMesh) @ 0x2575732db80
+      - Hkey (IntValue) | Value: 2 @ 0x257575ed280
+  - Magazine (Part) @ 0x2575c53c480
+    - WeaponJoint (Weld) @ 0x257572e6280
+    - Hkey (IntValue) | Value: 3 @ 0x257575ece20
+    - Mesh (SpecialMesh) @ 0x2575732da00
+      - Hkey (IntValue) | Value: 4 @ 0x257575ecf00
+  - Bolt (Part) @ 0x2575c53c640
+    - WeaponJoint (Weld) @ 0x257572e60c0
+    - Hkey (IntValue) | Value: 5 @ 0x257575ecaa0
+    - Mesh (SpecialMesh) @ 0x2575732d880
+      - Hkey (IntValue) | Value: 6 @ 0x257575ecb80
+  - BoltHandle (Part) @ 0x2575c53c800
+    - WeaponJoint (Weld) @ 0x257572e5f00
+    - Hkey (IntValue) | Value: 7 @ 0x257575ec720
+    - Mesh (SpecialMesh) @ 0x2575732d700
+      - Hkey (IntValue) | Value: 8 @ 0x257575ec800
+  - Muzzle (Part) @ 0x2575c53c9c0
+    - WeaponJoint (Weld) @ 0x257572e5d40
+    - Hkey (IntValue) | Value: 9 @ 0x257575ec1e0
+    - Spray (ParticleEmitter) @ 0x257573dd880
+      - Hkey (IntValue) | Value: 12 @ 0x257575ec2c0
+    - Smoke (ParticleEmitter) @ 0x257573ddb80
+      - Hkey (IntValue) | Value: 11 @ 0x257575ec3a0
+    - Bang (ParticleEmitter) @ 0x257573dde80
+      - Hkey (IntValue) | Value: 10 @ 0x257575ec480
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/spearminct/Revolver
+- Revolver (Tool) @ 0x25751ebea80
+  - RevolverServer (Script) @ 0x25766ecf200
+    - RevolverClient (LocalScript) @ 0x25766ecf400
+      - DefaultFireEffect (ModuleScript) @ 0x2574f3328c0
+      - Particles (Configuration) @ 0x257502a68c0
+        - Collision (ParticleEmitter) @ 0x25754c03980
+        - Debris (ParticleEmitter) @ 0x25754c03c80
+        - Smoke (Smoke) @ 0x2575f36d200
+        - Sparks (ParticleEmitter) @ 0x25754c03f80
+        - Spark (ParticleEmitter) @ 0x25754c04280
+    - DefaultWeaponLogic (ModuleScript) @ 0x2574f332a80
+    - OverrideSettings (ModuleScript) @ 0x2574f332c40
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x2574f332e00
+  - ClientEvent (RemoteEvent) @ 0x2575497ee80
+  - ServerEvent (BindableEvent) @ 0x25754c3c8e0
+  - ToolType (StringValue) | Value: "Unknown" @ 0x2575f36e300
+  - CheckAmmoState (BindableFunction) @ 0x2576645b5c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2575b373180
+  - Frame (Part) @ 0x2575d9f7cc0
+    - Hkey (IntValue) | Value: 0 @ 0x25756e0e6a0
+    - Weld (Weld) @ 0x2575d9f0080
+  - Muzzle (Part) @ 0x2575d9f2a80
+    - Smoke (ParticleEmitter) @ 0x2575a6df680
+      - Hkey (IntValue) | Value: 2 @ 0x25756e0b840
+    - Spray (ParticleEmitter) @ 0x25759037280
+      - Hkey (IntValue) | Value: 3 @ 0x25756e08740
+    - Star (ParticleEmitter) @ 0x2575903ab80
+      - Hkey (IntValue) | Value: 4 @ 0x25756e03a40
+    - Bang (ParticleEmitter) @ 0x2575903db80
+      - Hkey (IntValue) | Value: 5 @ 0x25756e05100
+    - Hkey (IntValue) | Value: 1 @ 0x25756e05e20
+    - WeaponJoint (Weld) @ 0x2575d9fcf00
+  - Shotgun (Part) @ 0x2575d9f28c0
+    - Mesh (SpecialMesh) @ 0x25757198600
+      - Hkey (IntValue) | Value: 7 @ 0x25756e00240
+    - Hkey (IntValue) | Value: 6 @ 0x25756e05c60
+    - WeaponJoint (Weld) @ 0x2575d9f1200
+  - VisualFrame (Part) @ 0x2575d9ffc80
+    - Mesh (SpecialMesh) @ 0x25757198d80
+      - Hkey (IntValue) | Value: 9 @ 0x25756e05560
+    - Hkey (IntValue) | Value: 8 @ 0x25756e04060
+    - WeaponJoint (Weld) @ 0x2575d9f05c0
+  - Drum (Part) @ 0x2575d9f3f80
+    - Mesh (SpecialMesh) @ 0x25757192480
+      - Hkey (IntValue) | Value: 11 @ 0x25756e0e860
+    - Hkey (IntValue) | Value: 10 @ 0x25756e0ea20
+    - WeaponJoint (Weld) @ 0x2575d9fc2c0
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x257515f6400
+  - net (IntValue) | Value: 6 @ 0x2575ccc1e40
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/Shotgun
+- Shotgun (Part) @ 0x257593c4d80
+  - Mesh (SpecialMesh) @ 0x2575a93b900
+    - Hkey (IntValue) | Value: 7 @ 0x25781f991c0
+  - Hkey (IntValue) | Value: 6 @ 0x25781f98f20
+  - WeaponJoint (Motor6D) @ 0x25757263200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/Revolver
+- Revolver (Tool) @ 0x25744f1f680
+  - RevolverServer (Script) @ 0x257678c5200
+    - RevolverClient (LocalScript) @ 0x257678caa00
+      - DefaultFireEffect (ModuleScript) @ 0x25759d29000
+      - Particles (Configuration) @ 0x25759a2e000
+        - Collision (ParticleEmitter) @ 0x25745519c80
+        - Debris (ParticleEmitter) @ 0x2574551e780
+        - Smoke (Smoke) @ 0x25760765800
+        - Sparks (ParticleEmitter) @ 0x25745517280
+        - Spark (ParticleEmitter) @ 0x25745513380
+    - DefaultWeaponLogic (ModuleScript) @ 0x25759d25100
+    - OverrideSettings (ModuleScript) @ 0x25759d23500
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x2578255f3c0
+  - ClientEvent (RemoteEvent) @ 0x25782553340
+  - ServerEvent (BindableEvent) @ 0x25781d0a420
+  - ToolType (StringValue) | Value: "Unknown" @ 0x25744efbf00
+  - CheckAmmoState (BindableFunction) @ 0x2575c814cc0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2575b37bd80
+  - Frame (Part) @ 0x2575a516980
+    - Hkey (IntValue) | Value: 0 @ 0x2575a374060
+    - Weld (Weld) @ 0x2575a510080
+  - Muzzle (Part) @ 0x257599fb4c0
+    - Smoke (ParticleEmitter) @ 0x2575edb4880
+      - Hkey (IntValue) | Value: 2 @ 0x2575a3704e0
+    - Spray (ParticleEmitter) @ 0x2575edbfc80
+      - Hkey (IntValue) | Value: 3 @ 0x2575a379540
+    - Star (ParticleEmitter) @ 0x2575edb2d80
+      - Hkey (IntValue) | Value: 4 @ 0x2575a37c020
+    - Bang (ParticleEmitter) @ 0x2575edbcc80
+      - Hkey (IntValue) | Value: 5 @ 0x2575a376520
+    - Hkey (IntValue) | Value: 1 @ 0x2575a37f200
+    - WeaponJoint (Weld) @ 0x25782553f80
+  - Shotgun (Part) @ 0x257825505c0
+    - Mesh (SpecialMesh) @ 0x257596ab600
+      - Hkey (IntValue) | Value: 7 @ 0x2575a37b840
+    - Hkey (IntValue) | Value: 6 @ 0x2575a377240
+    - WeaponJoint (Weld) @ 0x25782558200
+  - VisualFrame (Part) @ 0x25782559a80
+    - Mesh (SpecialMesh) @ 0x257596a4d00
+      - Hkey (IntValue) | Value: 9 @ 0x2575a37f3c0
+    - Hkey (IntValue) | Value: 8 @ 0x2576392bca0
+    - WeaponJoint (Weld) @ 0x25759d2c800
+  - Drum (Part) @ 0x25759d213c0
+    - Mesh (SpecialMesh) @ 0x257596aaa00
+      - Hkey (IntValue) | Value: 11 @ 0x257639244c0
+    - Hkey (IntValue) | Value: 10 @ 0x25763923a40
+    - WeaponJoint (Weld) @ 0x25759d23a40
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2575a193000
+  - net (IntValue) | Value: 6 @ 0x25763924140
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/Shotgun
+- Shotgun (Part) @ 0x2575afa98c0
+  - Mesh (SpecialMesh) @ 0x25759cdf680
+    - Hkey (IntValue) | Value: 7 @ 0x25782b9f120
+  - Hkey (IntValue) | Value: 6 @ 0x25782b92000
+  - WeaponJoint (Motor6D) @ 0x25758481600
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/Revolver
+- Revolver (Tool) @ 0x25744894880
+  - RevolverServer (Script) @ 0x2575aa7a600
+    - RevolverClient (LocalScript) @ 0x2575aa73400
+      - DefaultFireEffect (ModuleScript) @ 0x2575afa8ac0
+      - Particles (Configuration) @ 0x25755d17880
+        - Collision (ParticleEmitter) @ 0x2575d3b0980
+        - Debris (ParticleEmitter) @ 0x2575d3b0c80
+        - Smoke (Smoke) @ 0x2577fb4a900
+        - Sparks (ParticleEmitter) @ 0x2575d3b0f80
+        - Spark (ParticleEmitter) @ 0x2575d3b1280
+    - DefaultWeaponLogic (ModuleScript) @ 0x2575afa8c80
+    - OverrideSettings (ModuleScript) @ 0x2575afa8e40
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x2575afa9000
+  - ClientEvent (RemoteEvent) @ 0x2575afa91c0
+  - ServerEvent (BindableEvent) @ 0x25782b91f20
+  - ToolType (StringValue) | Value: "Unknown" @ 0x25759a90100
+  - CheckAmmoState (BindableFunction) @ 0x25781d6ad00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x257824c0780
+  - Frame (Part) @ 0x2578261d980
+    - Hkey (IntValue) | Value: 0 @ 0x25781f94ae0
+    - Weld (Weld) @ 0x2578261db40
+  - Muzzle (Part) @ 0x2578261dd00
+    - Smoke (ParticleEmitter) @ 0x257824f0980
+      - Hkey (IntValue) | Value: 2 @ 0x25781f914a0
+    - Spray (ParticleEmitter) @ 0x257824f0680
+      - Hkey (IntValue) | Value: 3 @ 0x25781f9c9c0
+    - Star (ParticleEmitter) @ 0x257824f8a80
+      - Hkey (IntValue) | Value: 4 @ 0x25781f9aa40
+    - Bang (ParticleEmitter) @ 0x257824f0380
+      - Hkey (IntValue) | Value: 5 @ 0x25781f9db40
+    - Hkey (IntValue) | Value: 1 @ 0x25781f94f40
+    - WeaponJoint (Weld) @ 0x2578261dec0
+  - Shotgun (Part) @ 0x2578261e080
+    - Mesh (SpecialMesh) @ 0x2575ec78a80
+      - Hkey (IntValue) | Value: 7 @ 0x25781f95020
+    - Hkey (IntValue) | Value: 6 @ 0x25781f95640
+    - WeaponJoint (Weld) @ 0x2578261e240
+  - VisualFrame (Part) @ 0x2578261e400
+    - Mesh (SpecialMesh) @ 0x25767928d80
+      - Hkey (IntValue) | Value: 9 @ 0x25781f94300
+    - Hkey (IntValue) | Value: 8 @ 0x25781f9fc80
+    - WeaponJoint (Weld) @ 0x2578261e5c0
+  - Drum (Part) @ 0x2578261e780
+    - Mesh (SpecialMesh) @ 0x257660d6680
+      - Hkey (IntValue) | Value: 11 @ 0x25781f96360
+    - Hkey (IntValue) | Value: 10 @ 0x25781f958e0
+    - WeaponJoint (Weld) @ 0x2578261e940
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2575a196700
+  - net (IntValue) | Value: 6 @ 0x25781f99460
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/Shotgun
+- Shotgun (Part) @ 0x25781857cc0
+  - Mesh (SpecialMesh) @ 0x257572a5000
+    - Hkey (IntValue) | Value: 7 @ 0x2575d41bca0
+  - Hkey (IntValue) | Value: 6 @ 0x2575d41be60
+  - WeaponJoint (Motor6D) @ 0x2575aa7e200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/Revolver
+- Revolver (Tool) @ 0x25740460080
+  - RevolverServer (Script) @ 0x2575aa73c00
+    - RevolverClient (LocalScript) @ 0x2575aa7de00
+      - DefaultFireEffect (ModuleScript) @ 0x25781856ec0
+      - Particles (Configuration) @ 0x25744ead400
+        - Collision (ParticleEmitter) @ 0x2575d40ea80
+        - Debris (ParticleEmitter) @ 0x2575d40ed80
+        - Smoke (Smoke) @ 0x2577fb40200
+        - Sparks (ParticleEmitter) @ 0x2575d40f080
+        - Spark (ParticleEmitter) @ 0x2575d40f380
+    - DefaultWeaponLogic (ModuleScript) @ 0x25781857080
+    - OverrideSettings (ModuleScript) @ 0x25781857240
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x25781857400
+  - ClientEvent (RemoteEvent) @ 0x257818575c0
+  - ServerEvent (BindableEvent) @ 0x2575d41a340
+  - ToolType (StringValue) | Value: "Unknown" @ 0x2577fb46800
+  - CheckAmmoState (BindableFunction) @ 0x25766db4cc0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/Shotgun
+- Shotgun (Part) @ 0x2575a65c9c0
+  - Mesh (SpecialMesh) @ 0x257661c4d00
+    - Hkey (IntValue) | Value: 7 @ 0x2575cf4b680
+  - Hkey (IntValue) | Value: 6 @ 0x2575cf4b060
+  - WeaponJoint (Motor6D) @ 0x25759aed600
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/Revolver
+- Revolver (Tool) @ 0x25744567e80
+  - RevolverServer (Script) @ 0x25759ae8c00
+    - RevolverClient (LocalScript) @ 0x25759aefc00
+      - DefaultFireEffect (ModuleScript) @ 0x2575a657940
+      - Particles (Configuration) @ 0x2575009a940
+        - Collision (ParticleEmitter) @ 0x2578264a280
+        - Debris (ParticleEmitter) @ 0x25782647b80
+        - Smoke (Smoke) @ 0x2577fb43900
+        - Sparks (ParticleEmitter) @ 0x2578264a580
+        - Spark (ParticleEmitter) @ 0x25782649680
+    - DefaultWeaponLogic (ModuleScript) @ 0x2575a657080
+    - OverrideSettings (ModuleScript) @ 0x2575a658740
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x2575a658c80
+  - ClientEvent (RemoteEvent) @ 0x2575a658e40
+  - ServerEvent (BindableEvent) @ 0x25759a30da0
+  - ToolType (StringValue) | Value: "Unknown" @ 0x2575a199b00
+  - CheckAmmoState (BindableFunction) @ 0x257818e7880
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x257415b0e80
+  - Frame (Part) @ 0x2575ec9cd40
+    - Hkey (IntValue) | Value: 0 @ 0x257584a5b80
+    - Weld (Weld) @ 0x2575ec90940
+  - Muzzle (Part) @ 0x2575ec9fac0
+    - Smoke (ParticleEmitter) @ 0x2575d42f980
+      - Hkey (IntValue) | Value: 2 @ 0x257584a53a0
+    - Spray (ParticleEmitter) @ 0x2575d422d80
+      - Hkey (IntValue) | Value: 3 @ 0x257584ac800
+    - Star (ParticleEmitter) @ 0x2575d428180
+      - Hkey (IntValue) | Value: 4 @ 0x257584a19e0
+    - Bang (ParticleEmitter) @ 0x2575d426680
+      - Hkey (IntValue) | Value: 5 @ 0x2575d12aea0
+    - Hkey (IntValue) | Value: 1 @ 0x2575d124680
+    - WeaponJoint (Weld) @ 0x2575ec98ac0
+  - Shotgun (Part) @ 0x2575ec9e780
+    - Mesh (SpecialMesh) @ 0x25756dfa100
+      - Hkey (IntValue) | Value: 7 @ 0x2575d126b40
+    - Hkey (IntValue) | Value: 6 @ 0x2575d12a500
+    - WeaponJoint (Weld) @ 0x2575ec99a80
+  - VisualFrame (Part) @ 0x2575ec99c40
+    - Mesh (SpecialMesh) @ 0x257676cc080
+      - Hkey (IntValue) | Value: 9 @ 0x2575d1274e0
+    - Hkey (IntValue) | Value: 8 @ 0x2575d120160
+    - WeaponJoint (Weld) @ 0x2575ec9a6c0
+  - Drum (Part) @ 0x2575ec96d00
+    - Mesh (SpecialMesh) @ 0x257676c8c00
+      - Hkey (IntValue) | Value: 11 @ 0x25782a82700
+    - Hkey (IntValue) | Value: 10 @ 0x25782a8b760
+    - WeaponJoint (Weld) @ 0x2575ec95d40
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2575dee7600
+  - net (IntValue) | Value: 6 @ 0x2575cf4e240
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25781a4f900
+  - Frame (Part) @ 0x25781a7a340
+    - Hkey (IntValue) | Value: 0 @ 0x257393bd0c0
+    - Weld (Weld) @ 0x25781a7a6c0
+  - Muzzle (Part) @ 0x25781a7a500
+    - Smoke (ParticleEmitter) @ 0x25781a05780
+      - Hkey (IntValue) | Value: 2 @ 0x257393b6fa0
+    - Spray (ParticleEmitter) @ 0x25781a06080
+      - Hkey (IntValue) | Value: 3 @ 0x257393ba340
+    - Star (ParticleEmitter) @ 0x25781a00c80
+      - Hkey (IntValue) | Value: 4 @ 0x257393bb3e0
+    - Bang (ParticleEmitter) @ 0x25781a03f80
+      - Hkey (IntValue) | Value: 5 @ 0x257393b0da0
+    - Hkey (IntValue) | Value: 1 @ 0x257393b0f60
+    - WeaponJoint (Weld) @ 0x25781a79c40
+  - Shotgun (Part) @ 0x25781a79e00
+    - Mesh (SpecialMesh) @ 0x257590dcf80
+      - Hkey (IntValue) | Value: 7 @ 0x257393bdec0
+    - Hkey (IntValue) | Value: 6 @ 0x257393bcc60
+    - WeaponJoint (Weld) @ 0x2575a51dd00
+  - VisualFrame (Part) @ 0x2575a519a80
+    - Mesh (SpecialMesh) @ 0x257819e1700
+      - Hkey (IntValue) | Value: 9 @ 0x257393bc720
+    - Hkey (IntValue) | Value: 8 @ 0x257393b4760
+    - WeaponJoint (Weld) @ 0x2575a5144c0
+  - Drum (Part) @ 0x2575a51eb00
+    - Mesh (SpecialMesh) @ 0x257676ccc80
+      - Hkey (IntValue) | Value: 11 @ 0x257393bce20
+    - Hkey (IntValue) | Value: 10 @ 0x257393baea0
+    - WeaponJoint (Weld) @ 0x2575a51f3c0
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25784c18a00
+  - net (IntValue) | Value: 6 @ 0x257393b7860
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/Shotgun
+- Shotgun (Part) @ 0x2575ff291c0
+  - Mesh (SpecialMesh) @ 0x2575bbf5f00
+    - Hkey (IntValue) | Value: 7 @ 0x25782a86de0
+  - Hkey (IntValue) | Value: 6 @ 0x25782a84060
+  - WeaponJoint (Motor6D) @ 0x25759aee200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/Revolver
+- Revolver (Tool) @ 0x25744530c80
+  - RevolverServer (Script) @ 0x25782bec400
+    - RevolverClient (LocalScript) @ 0x25782be2e00
+      - DefaultFireEffect (ModuleScript) @ 0x2575d9f6280
+      - Particles (Configuration) @ 0x25744ebfbc0
+        - Collision (ParticleEmitter) @ 0x2575b2d4e80
+        - Debris (ParticleEmitter) @ 0x2575b2d1880
+        - Smoke (Smoke) @ 0x2575dad8b00
+        - Sparks (ParticleEmitter) @ 0x2575b2dba80
+        - Spark (ParticleEmitter) @ 0x2575b2db780
+    - DefaultWeaponLogic (ModuleScript) @ 0x2575d9f5d40
+    - OverrideSettings (ModuleScript) @ 0x2575d9fadc0
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x2575ff283c0
+  - ClientEvent (RemoteEvent) @ 0x2575ff22fc0
+  - ServerEvent (BindableEvent) @ 0x2575d293a40
+  - ToolType (StringValue) | Value: "Unknown" @ 0x2575dadde00
+  - CheckAmmoState (BindableFunction) @ 0x257822dc240
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/Shotgun
+- Shotgun (Part) @ 0x2575c7f4bc0
+  - Mesh (SpecialMesh) @ 0x257660d5a80
+    - Hkey (IntValue) | Value: 7 @ 0x257393beb00
+  - Hkey (IntValue) | Value: 6 @ 0x257393b3ea0
+  - WeaponJoint (Motor6D) @ 0x257678cda00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/Revolver
+- Revolver (Tool) @ 0x2573f963680
+  - RevolverServer (Script) @ 0x2573fb52200
+    - RevolverClient (LocalScript) @ 0x2573fb58a00
+      - DefaultFireEffect (ModuleScript) @ 0x2575f779fc0
+      - Particles (Configuration) @ 0x2575571eb40
+        - Collision (ParticleEmitter) @ 0x25783a08a80
+        - Debris (ParticleEmitter) @ 0x25783a0b480
+        - Smoke (Smoke) @ 0x2575cc62100
+        - Sparks (ParticleEmitter) @ 0x25783a08d80
+        - Spark (ParticleEmitter) @ 0x25783a07b80
+    - DefaultWeaponLogic (ModuleScript) @ 0x2575f773500
+    - OverrideSettings (ModuleScript) @ 0x2575f77db40
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x2575f77bd80
+  - ClientEvent (RemoteEvent) @ 0x2575f772700
+  - ServerEvent (BindableEvent) @ 0x2576359c640
+  - ToolType (StringValue) | Value: "Unknown" @ 0x25759a9d600
+  - CheckAmmoState (BindableFunction) @ 0x257821d9a40
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x257824c0e80
+  - Frame (Part) @ 0x2575b329e00
+    - Hkey (IntValue) | Value: 0 @ 0x25782840160
+    - Weld (Weld) @ 0x2575b3244c0
+  - Muzzle (Part) @ 0x2575b324a00
+    - Smoke (ParticleEmitter) @ 0x2575b1ff680
+      - Hkey (IntValue) | Value: 2 @ 0x2578284fac0
+    - Spray (ParticleEmitter) @ 0x2575b1f3c80
+      - Hkey (IntValue) | Value: 3 @ 0x2578284ecc0
+    - Star (ParticleEmitter) @ 0x2575b1fe480
+      - Hkey (IntValue) | Value: 4 @ 0x2578284e240
+    - Bang (ParticleEmitter) @ 0x2575b1f0c80
+      - Hkey (IntValue) | Value: 5 @ 0x2578284db40
+    - Hkey (IntValue) | Value: 1 @ 0x2578284d8a0
+    - WeaponJoint (Weld) @ 0x2575b323a40
+  - Shotgun (Part) @ 0x2575b324840
+    - Mesh (SpecialMesh) @ 0x2575afb6380
+      - Hkey (IntValue) | Value: 7 @ 0x2578284ce20
+    - Hkey (IntValue) | Value: 6 @ 0x2578284b920
+    - WeaponJoint (Weld) @ 0x2575b32bd80
+  - VisualFrame (Part) @ 0x2575b328040
+    - Mesh (SpecialMesh) @ 0x25767927100
+      - Hkey (IntValue) | Value: 9 @ 0x257828499a0
+    - Hkey (IntValue) | Value: 8 @ 0x25782848f20
+    - WeaponJoint (Weld) @ 0x2575b32d0c0
+  - Drum (Part) @ 0x2575b326980
+    - Mesh (SpecialMesh) @ 0x2575afbe780
+      - Hkey (IntValue) | Value: 11 @ 0x25782847e80
+    - Hkey (IntValue) | Value: 10 @ 0x25782841120
+    - WeaponJoint (Weld) @ 0x2575b323880
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2575a197b00
+  - net (IntValue) | Value: 6 @ 0x257828466e0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/Shotgun
+- Shotgun (Part) @ 0x25782df2000
+  - Mesh (SpecialMesh) @ 0x25781a58600
+    - Hkey (IntValue) | Value: 7 @ 0x25782bb44c0
+  - Hkey (IntValue) | Value: 6 @ 0x25782bb4ae0
+  - WeaponJoint (Motor6D) @ 0x2575848b600
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/Revolver
+- Revolver (Tool) @ 0x2572c7dd880
+  - RevolverServer (Script) @ 0x2576846aa00
+    - RevolverClient (LocalScript) @ 0x25768463200
+      - DefaultFireEffect (ModuleScript) @ 0x25761d99c40
+      - Particles (Configuration) @ 0x2575bd34b80
+        - Collision (ParticleEmitter) @ 0x25783e36680
+        - Debris (ParticleEmitter) @ 0x25783e34b80
+        - Smoke (Smoke) @ 0x2575a195300
+        - Sparks (ParticleEmitter) @ 0x25783e33680
+        - Spark (ParticleEmitter) @ 0x25783e36080
+    - DefaultWeaponLogic (ModuleScript) @ 0x25761d93dc0
+    - OverrideSettings (ModuleScript) @ 0x25761d9d280
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x25761d92e00
+  - ClientEvent (RemoteEvent) @ 0x25761d9cb80
+  - ServerEvent (BindableEvent) @ 0x2574ffe2d20
+  - ToolType (StringValue) | Value: "Unknown" @ 0x25759a94700
+  - CheckAmmoState (BindableFunction) @ 0x2576445e400
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25782ddcf00
+  - Frame (Part) @ 0x25782970e80
+    - Hkey (IntValue) | Value: 0 @ 0x25782b274e0
+    - Weld (Weld) @ 0x25782970400
+  - Muzzle (Part) @ 0x25782970240
+    - Smoke (ParticleEmitter) @ 0x25782e11880
+      - Hkey (IntValue) | Value: 2 @ 0x25782b26de0
+    - Spray (ParticleEmitter) @ 0x25782e16380
+      - Hkey (IntValue) | Value: 3 @ 0x25782b28c80
+    - Star (ParticleEmitter) @ 0x25782e16980
+      - Hkey (IntValue) | Value: 4 @ 0x25782b290e0
+    - Bang (ParticleEmitter) @ 0x25782e13f80
+      - Hkey (IntValue) | Value: 5 @ 0x25782b28d60
+    - Hkey (IntValue) | Value: 1 @ 0x25782b2aea0
+    - WeaponJoint (Weld) @ 0x25782970780
+  - Shotgun (Part) @ 0x25782978c80
+    - Mesh (SpecialMesh) @ 0x257825efb00
+      - Hkey (IntValue) | Value: 7 @ 0x25782b2cfe0
+    - Hkey (IntValue) | Value: 6 @ 0x25782b26a60
+    - WeaponJoint (Weld) @ 0x257829791c0
+  - VisualFrame (Part) @ 0x25782979000
+    - Mesh (SpecialMesh) @ 0x25756df2c00
+      - Hkey (IntValue) | Value: 9 @ 0x25782b20e80
+    - Hkey (IntValue) | Value: 8 @ 0x25782b2e860
+    - WeaponJoint (Weld) @ 0x25782978e40
+  - Drum (Part) @ 0x25782978740
+    - Mesh (SpecialMesh) @ 0x257818acb00
+      - Hkey (IntValue) | Value: 11 @ 0x25782a3fe40
+    - Hkey (IntValue) | Value: 10 @ 0x25782a3fba0
+    - WeaponJoint (Weld) @ 0x257829783c0
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25757b9db00
+  - net (IntValue) | Value: 6 @ 0x25782a3f580
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/Shotgun
+- Shotgun (Part) @ 0x2575f778900
+  - Mesh (SpecialMesh) @ 0x25764d25a80
+    - Hkey (IntValue) | Value: 7 @ 0x2574e8cc3a0
+  - Hkey (IntValue) | Value: 6 @ 0x2574e8c1040
+  - WeaponJoint (Motor6D) @ 0x25759aefe00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/Revolver
+- Revolver (Tool) @ 0x257586e0c80
+  - RevolverServer (Script) @ 0x25758660e00
+    - RevolverClient (LocalScript) @ 0x25758662800
+      - DefaultFireEffect (ModuleScript) @ 0x2575a1beb00
+      - Particles (Configuration) @ 0x257600cf980
+        - Collision (ParticleEmitter) @ 0x257825ac080
+        - Debris (ParticleEmitter) @ 0x257825ae780
+        - Smoke (Smoke) @ 0x2575dee2500
+        - Sparks (ParticleEmitter) @ 0x257825a2d80
+        - Spark (ParticleEmitter) @ 0x257825a8a80
+    - DefaultWeaponLogic (ModuleScript) @ 0x2575a1bc100
+    - OverrideSettings (ModuleScript) @ 0x2575a1bcd40
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x2575a1bb840
+  - ClientEvent (RemoteEvent) @ 0x2575a1b5800
+  - ServerEvent (BindableEvent) @ 0x25765cc5640
+  - ToolType (StringValue) | Value: "Unknown" @ 0x2578280a700
+  - CheckAmmoState (BindableFunction) @ 0x2574d01d280
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/Shotgun
+- Shotgun (Part) @ 0x25782dffc80
+  - Mesh (SpecialMesh) @ 0x2575af35180
+    - Hkey (IntValue) | Value: 7 @ 0x25781f9f040
+  - Hkey (IntValue) | Value: 6 @ 0x25781f98e40
+  - WeaponJoint (Motor6D) @ 0x257678cd600
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/Revolver
+- Revolver (Tool) @ 0x2574489de80
+  - RevolverServer (Script) @ 0x25782730200
+    - RevolverClient (LocalScript) @ 0x25782732600
+      - DefaultFireEffect (ModuleScript) @ 0x25761d9d440
+      - Particles (Configuration) @ 0x25755d1f680
+        - Collision (ParticleEmitter) @ 0x25783a75180
+        - Debris (ParticleEmitter) @ 0x25783a73c80
+        - Smoke (Smoke) @ 0x2577fb46700
+        - Sparks (ParticleEmitter) @ 0x25783a78d80
+        - Spark (ParticleEmitter) @ 0x25783a77280
+    - DefaultWeaponLogic (ModuleScript) @ 0x25761d944c0
+    - OverrideSettings (ModuleScript) @ 0x25761d928c0
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x25761d9fe40
+  - ClientEvent (RemoteEvent) @ 0x25761d99000
+  - ServerEvent (BindableEvent) @ 0x25781f98ac0
+  - ToolType (StringValue) | Value: "Unknown" @ 0x25744ef5800
+  - CheckAmmoState (BindableFunction) @ 0x25781d6e400
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/Shotgun
+- Shotgun (Part) @ 0x2575b32c9c0
+  - Mesh (SpecialMesh) @ 0x25781a51580
+    - Hkey (IntValue) | Value: 7 @ 0x25782a3b840
+  - Hkey (IntValue) | Value: 6 @ 0x25782a39700
+  - WeaponJoint (Motor6D) @ 0x25759ae9200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/Revolver
+- Revolver (Tool) @ 0x2574489f080
+  - RevolverServer (Script) @ 0x25782733a00
+    - RevolverClient (LocalScript) @ 0x2578273fa00
+      - DefaultFireEffect (ModuleScript) @ 0x2575b32d600
+      - Particles (Configuration) @ 0x25744eaec00
+        - Collision (ParticleEmitter) @ 0x2578303e780
+        - Debris (ParticleEmitter) @ 0x2578303e480
+        - Smoke (Smoke) @ 0x2578280e700
+        - Sparks (ParticleEmitter) @ 0x2578303d580
+        - Spark (ParticleEmitter) @ 0x2578303e180
+    - DefaultWeaponLogic (ModuleScript) @ 0x2575b32bbc0
+    - OverrideSettings (ModuleScript) @ 0x2575b32a340
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x2575b32a500
+  - ClientEvent (RemoteEvent) @ 0x2575b32e080
+  - ServerEvent (BindableEvent) @ 0x25782a32700
+  - ToolType (StringValue) | Value: "Unknown" @ 0x25766ddf800
+  - CheckAmmoState (BindableFunction) @ 0x25781d69040
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/BoundBox
+- BoundBox (Part) @ 0x257684f3180
+  - Hkey (IntValue) | Value: 0 @ 0x25782bbf3c0
+  - WeaponJoint (Motor6D) @ 0x2575b4fd000
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/Revolver
+- Revolver (Tool) @ 0x2574cc80c80
+  - RevolverServer (Script) @ 0x2578326fc00
+    - RevolverClient (LocalScript) @ 0x2578326ec00
+      - DefaultFireEffect (ModuleScript) @ 0x257684f2540
+      - Particles (Configuration) @ 0x25768789800
+        - Collision (ParticleEmitter) @ 0x257684e1e80
+        - Debris (ParticleEmitter) @ 0x257684e3c80
+        - Smoke (Smoke) @ 0x2578361e900
+        - Sparks (ParticleEmitter) @ 0x257684e3080
+        - Spark (ParticleEmitter) @ 0x257684e3380
+    - DefaultWeaponLogic (ModuleScript) @ 0x257684f1580
+    - OverrideSettings (ModuleScript) @ 0x257684f28c0
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x257684f1900
+  - ClientEvent (RemoteEvent) @ 0x257684f2000
+  - ServerEvent (BindableEvent) @ 0x257827a2fc0
+  - ToolType (StringValue) | Value: "Unknown" @ 0x2577fb40b00
+  - CheckAmmoState (BindableFunction) @ 0x257621b4680
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/BoundBox
+- BoundBox (Part) @ 0x257599f2000
+  - Hkey (IntValue) | Value: 0 @ 0x25783b2d1a0
+  - WeaponJoint (Motor6D) @ 0x257677e4000
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/Revolver
+- Revolver (Tool) @ 0x2574cc8f080
+  - RevolverServer (Script) @ 0x25782735e00
+    - RevolverClient (LocalScript) @ 0x25782733e00
+      - DefaultFireEffect (ModuleScript) @ 0x257593ce780
+      - Particles (Configuration) @ 0x25768784880
+        - Collision (ParticleEmitter) @ 0x2578332bd80
+        - Debris (ParticleEmitter) @ 0x25783321e80
+        - Smoke (Smoke) @ 0x2575e311f00
+        - Sparks (ParticleEmitter) @ 0x25783328480
+        - Spark (ParticleEmitter) @ 0x2578332ab80
+    - DefaultWeaponLogic (ModuleScript) @ 0x257593c7b00
+    - OverrideSettings (ModuleScript) @ 0x257599f1740
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x257599f0cc0
+  - ClientEvent (RemoteEvent) @ 0x257599f2540
+  - ServerEvent (BindableEvent) @ 0x25783b2b3e0
+  - ToolType (StringValue) | Value: "Unknown" @ 0x2574d888000
+  - CheckAmmoState (BindableFunction) @ 0x25766dbb200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/BoundBox
+- BoundBox (Part) @ 0x257832f2c40
+  - Hkey (IntValue) | Value: 0 @ 0x25782acebe0
+  - WeaponJoint (Motor6D) @ 0x25766ec4400
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/Revolver
+- Revolver (Tool) @ 0x2574cc8d280
+  - RevolverServer (Script) @ 0x25782739000
+    - RevolverClient (LocalScript) @ 0x2578273a200
+      - DefaultFireEffect (ModuleScript) @ 0x257832f4d80
+      - Particles (Configuration) @ 0x257687868c0
+        - Collision (ParticleEmitter) @ 0x2578308d280
+        - Debris (ParticleEmitter) @ 0x25783080380
+        - Smoke (Smoke) @ 0x2575e319800
+        - Sparks (ParticleEmitter) @ 0x257684e0380
+        - Spark (ParticleEmitter) @ 0x257684e2180
+    - DefaultWeaponLogic (ModuleScript) @ 0x257832f2a80
+    - OverrideSettings (ModuleScript) @ 0x257832f36c0
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x257832f6440
+  - ClientEvent (RemoteEvent) @ 0x257832f0780
+  - ServerEvent (BindableEvent) @ 0x25782acace0
+  - ToolType (StringValue) | Value: "Unknown" @ 0x25759a97c00
+  - CheckAmmoState (BindableFunction) @ 0x25766dbee00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2576853c100
+  - BoundBox (Part) @ 0x25783243340
+    - Hkey (IntValue) | Value: 0 @ 0x2575afe4760
+    - WeaponJoint (Weld) @ 0x25783248ac0
+  - Muzzle (Part) @ 0x2578324f200
+    - Smoke (ParticleEmitter) @ 0x2576218f080
+      - Hkey (IntValue) | Value: 2 @ 0x2575afe5100
+    - Spray (ParticleEmitter) @ 0x25762189c80
+      - Hkey (IntValue) | Value: 3 @ 0x2575afeb680
+    - Hkey (IntValue) | Value: 1 @ 0x2575afe6440
+    - WeaponJoint (Weld) @ 0x25783245f00
+  - Silencer (Part) @ 0x257832475c0
+    - Mesh (SpecialMesh) @ 0x25756df2300
+      - Hkey (IntValue) | Value: 5 @ 0x2575afe8660
+    - Hkey (IntValue) | Value: 4 @ 0x2575afe8820
+    - WeaponJoint (Weld) @ 0x25783245b80
+  - Receiver (Part) @ 0x2578324bf40
+    - CasingAttachment (Attachment) @ 0x25762194700
+      - CasingEmitter (ParticleEmitter) @ 0x25762189680
+        - Hkey (IntValue) | Value: 8 @ 0x2575afea0a0
+      - Hkey (IntValue) | Value: 7 @ 0x257827a21c0
+    - Mesh (SpecialMesh) @ 0x2574fae2180
+      - Hkey (IntValue) | Value: 9 @ 0x257827ae080
+    - Hkey (IntValue) | Value: 6 @ 0x257827a9d20
+    - Weld (Weld) @ 0x257832413c0
+  - Slide (Part) @ 0x257832459c0
+    - Mesh (SpecialMesh) @ 0x2574fae6980
+      - Hkey (IntValue) | Value: 11 @ 0x257827ab920
+    - Hkey (IntValue) | Value: 10 @ 0x257827aa420
+    - WeaponJoint (Weld) @ 0x25783241580
+  - Magazine (Part) @ 0x2578324b300
+    - Mesh (SpecialMesh) @ 0x257819eb780
+      - Hkey (IntValue) | Value: 13 @ 0x257827a28c0
+    - Hkey (IntValue) | Value: 12 @ 0x257827a5f00
+    - WeaponJoint (Weld) @ 0x2578324f3c0
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2575e318300
+  - net (IntValue) | Value: 7 @ 0x257827a4ca0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25762104a00
+  - Lenses (MeshPart) @ 0x25762105800
+    - Hkey (IntValue) | Value: 0 @ 0x25767a1f820
+    - WeaponJoint (Weld) @ 0x2578364c640
+  - Handle (Part) @ 0x2578364c800
+    - Mesh (SpecialMesh) @ 0x25783dd0200
+      - Hkey (IntValue) | Value: 2 @ 0x25767a1fd60
+    - Hkey (IntValue) | Value: 1 @ 0x25767a1ff20
+    - Weld (Weld) @ 0x2578364c9c0
+  - Magazine (Part) @ 0x2578364cb80
+    - Mesh (SpecialMesh) @ 0x2575a936200
+      - Hkey (IntValue) | Value: 4 @ 0x2575ff0b3e0
+    - Hkey (IntValue) | Value: 3 @ 0x2575ff0b760
+    - WeaponJoint (Weld) @ 0x2578364cd40
+  - Bolt (Part) @ 0x2578364cf00
+    - Mesh (SpecialMesh) @ 0x257831b5900
+      - Hkey (IntValue) | Value: 6 @ 0x2575ff09e00
+    - Hkey (IntValue) | Value: 5 @ 0x2575ff01f20
+    - WeaponJoint (Weld) @ 0x2578364d0c0
+  - BoltHandle (Part) @ 0x2578364d280
+    - Mesh (SpecialMesh) @ 0x25756df3b00
+      - Hkey (IntValue) | Value: 8 @ 0x2576866dfa0
+    - Hkey (IntValue) | Value: 7 @ 0x2576866ba00
+    - WeaponJoint (Weld) @ 0x2578364d440
+  - Muzzle (Part) @ 0x2578364d600
+    - Bang (ParticleEmitter) @ 0x25765eef080
+      - Hkey (IntValue) | Value: 10 @ 0x25768663340
+    - Smoke (ParticleEmitter) @ 0x25760b7f680
+      - Hkey (IntValue) | Value: 11 @ 0x257686606a0
+    - Spray (ParticleEmitter) @ 0x25760b74580
+      - Hkey (IntValue) | Value: 12 @ 0x257686659c0
+    - Hkey (IntValue) | Value: 9 @ 0x25768660be0
+    - WeaponJoint (Weld) @ 0x2578364d7c0
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2578280de00
+  - net (IntValue) | Value: 7 @ 0x25768664ca0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2575c125100
+  - Lenses (MeshPart) @ 0x2575c123c00
+    - Hkey (IntValue) | Value: 0 @ 0x2574d18bca0
+    - WeaponJoint (Weld) @ 0x2575afae240
+  - Handle (Part) @ 0x2575afab840
+    - Mesh (SpecialMesh) @ 0x257661ce900
+      - Hkey (IntValue) | Value: 2 @ 0x2574d18c1e0
+    - Hkey (IntValue) | Value: 1 @ 0x2574d18c3a0
+    - Weld (Weld) @ 0x2575afa5b80
+  - Magazine (Part) @ 0x2575afa3a40
+    - Mesh (SpecialMesh) @ 0x25768503980
+      - Hkey (IntValue) | Value: 4 @ 0x2574d18c8e0
+    - Hkey (IntValue) | Value: 3 @ 0x2574d18caa0
+    - WeaponJoint (Weld) @ 0x2575afad280
+  - Bolt (Part) @ 0x2575afa75c0
+    - Mesh (SpecialMesh) @ 0x25783253800
+      - Hkey (IntValue) | Value: 6 @ 0x2574d18cfe0
+    - Hkey (IntValue) | Value: 5 @ 0x2574d18d1a0
+    - WeaponJoint (Weld) @ 0x257684fa880
+  - BoltHandle (Part) @ 0x257684f7240
+    - Mesh (SpecialMesh) @ 0x25783254700
+      - Hkey (IntValue) | Value: 8 @ 0x2574d18d6e0
+    - Hkey (IntValue) | Value: 7 @ 0x2574d18d8a0
+    - WeaponJoint (Weld) @ 0x257684f1200
+  - Muzzle (Part) @ 0x257684f0780
+    - Bang (ParticleEmitter) @ 0x257684e9380
+      - Hkey (IntValue) | Value: 10 @ 0x2574d18dde0
+    - Smoke (ParticleEmitter) @ 0x257684e1b80
+      - Hkey (IntValue) | Value: 11 @ 0x2574d18e080
+    - Spray (ParticleEmitter) @ 0x257684e4b80
+      - Hkey (IntValue) | Value: 12 @ 0x2574d18e320
+    - Hkey (IntValue) | Value: 9 @ 0x2574d18e4e0
+    - WeaponJoint (Weld) @ 0x257684f3a40
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2574d87e800
+  - net (IntValue) | Value: 7 @ 0x2574d18e940
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25782911200
+  - Lenses (MeshPart) @ 0x25782994680
+    - Hkey (IntValue) | Value: 0 @ 0x2578444f660
+    - WeaponJoint (Weld) @ 0x2578368ac00
+  - Handle (Part) @ 0x2575a65f580
+    - Mesh (SpecialMesh) @ 0x25783171580
+      - Hkey (IntValue) | Value: 2 @ 0x2578444e780
+    - Hkey (IntValue) | Value: 1 @ 0x25784443ce0
+    - Weld (Weld) @ 0x2575a656b40
+  - Magazine (Part) @ 0x2575a65d7c0
+    - Mesh (SpecialMesh) @ 0x257599dc980
+      - Hkey (IntValue) | Value: 4 @ 0x257844460c0
+    - Hkey (IntValue) | Value: 3 @ 0x25784444760
+    - WeaponJoint (Weld) @ 0x2575a659a80
+  - Bolt (Part) @ 0x2575a65b4c0
+    - Mesh (SpecialMesh) @ 0x257599dcc80
+      - Hkey (IntValue) | Value: 6 @ 0x25784445800
+    - Hkey (IntValue) | Value: 5 @ 0x2578444ebe0
+    - WeaponJoint (Weld) @ 0x2575a65a340
+  - BoltHandle (Part) @ 0x2575a65cd40
+    - Mesh (SpecialMesh) @ 0x257599de300
+      - Hkey (IntValue) | Value: 8 @ 0x2578444c640
+    - Hkey (IntValue) | Value: 7 @ 0x2578444b220
+    - WeaponJoint (Weld) @ 0x2575a650940
+  - Muzzle (Part) @ 0x2575a65c640
+    - Bang (ParticleEmitter) @ 0x25783793f80
+      - Hkey (IntValue) | Value: 10 @ 0x25784446d00
+    - Smoke (ParticleEmitter) @ 0x25783794280
+      - Hkey (IntValue) | Value: 11 @ 0x257827fd980
+    - Spray (ParticleEmitter) @ 0x25783799c80
+      - Hkey (IntValue) | Value: 12 @ 0x257827f0400
+    - Hkey (IntValue) | Value: 9 @ 0x257827f1900
+    - WeaponJoint (Weld) @ 0x2575a65fc80
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2575a199100
+  - net (IntValue) | Value: 7 @ 0x2572cab9a80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/Revolver
+- Revolver (Tool) @ 0x25744517880
+  - RevolverServer (Script) @ 0x257678c9000
+    - RevolverClient (LocalScript) @ 0x257678c0800
+      - DefaultFireEffect (ModuleScript) @ 0x25783d091c0
+      - Particles (Configuration) @ 0x25737504700
+        - Collision (ParticleEmitter) @ 0x25783e38a80
+        - Debris (ParticleEmitter) @ 0x25783e3f980
+        - Smoke (Smoke) @ 0x2575a193800
+        - Sparks (ParticleEmitter) @ 0x25783e3ba80
+        - Spark (ParticleEmitter) @ 0x25783e3fc80
+    - DefaultWeaponLogic (ModuleScript) @ 0x25783d09a80
+    - OverrideSettings (ModuleScript) @ 0x25783d07b00
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x25783d0d0c0
+  - ClientEvent (RemoteEvent) @ 0x25783d05640
+  - ServerEvent (BindableEvent) @ 0x25767a1c020
+  - ToolType (StringValue) | Value: "Unknown" @ 0x2575fbe5c00
+  - CheckAmmoState (BindableFunction) @ 0x25785675300
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25782753f80
+  - Lenses (MeshPart) @ 0x257830b7b00
+    - Hkey (IntValue) | Value: 0 @ 0x25783021d60
+    - WeaponJoint (Weld) @ 0x257832fc800
+  - Handle (Part) @ 0x257832f6d00
+    - Mesh (SpecialMesh) @ 0x25783306500
+      - Hkey (IntValue) | Value: 2 @ 0x2578302af80
+    - Hkey (IntValue) | Value: 1 @ 0x25783020080
+    - Weld (Weld) @ 0x257832f1200
+  - Magazine (Part) @ 0x257832fb840
+    - Mesh (SpecialMesh) @ 0x2573f886c80
+      - Hkey (IntValue) | Value: 4 @ 0x2578302bf40
+    - Hkey (IntValue) | Value: 3 @ 0x2578302f040
+    - WeaponJoint (Weld) @ 0x257832fc480
+  - Bolt (Part) @ 0x257832f1e40
+    - Mesh (SpecialMesh) @ 0x2573f880c80
+      - Hkey (IntValue) | Value: 6 @ 0x2575d3caa40
+    - Hkey (IntValue) | Value: 5 @ 0x2575d3c97e0
+    - WeaponJoint (Weld) @ 0x257832faa40
+  - BoltHandle (Part) @ 0x257832f8e40
+    - Mesh (SpecialMesh) @ 0x257661cc200
+      - Hkey (IntValue) | Value: 8 @ 0x2575d3c5c60
+    - Hkey (IntValue) | Value: 7 @ 0x2575d3cbbc0
+    - WeaponJoint (Weld) @ 0x257832f1c80
+  - Muzzle (Part) @ 0x257832f4f40
+    - Bang (ParticleEmitter) @ 0x2576218d880
+      - Hkey (IntValue) | Value: 10 @ 0x2575d3ce320
+    - Smoke (ParticleEmitter) @ 0x25762187280
+      - Hkey (IntValue) | Value: 11 @ 0x2575d3ccaa0
+    - Spray (ParticleEmitter) @ 0x25762188480
+      - Hkey (IntValue) | Value: 12 @ 0x2575d3ca880
+    - Hkey (IntValue) | Value: 9 @ 0x2575d3c30a0
+    - WeaponJoint (Weld) @ 0x257832f2e00
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2578361f800
+  - net (IntValue) | Value: 7 @ 0x2575d3c9620
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25752fa3880
+  - Lenses (MeshPart) @ 0x2575d397e80
+    - Hkey (IntValue) | Value: 0 @ 0x2578382c560
+    - WeaponJoint (Weld) @ 0x25752f6cb80
+  - Handle (Part) @ 0x25752f6c9c0
+    - Mesh (SpecialMesh) @ 0x2578330cf80
+      - Hkey (IntValue) | Value: 2 @ 0x257838221c0
+    - Hkey (IntValue) | Value: 1 @ 0x257838289e0
+    - Weld (Weld) @ 0x25752f6c800
+  - Magazine (Part) @ 0x25752f6c2c0
+    - Mesh (SpecialMesh) @ 0x257819eae80
+      - Hkey (IntValue) | Value: 4 @ 0x257838227e0
+    - Hkey (IntValue) | Value: 3 @ 0x25783829460
+    - WeaponJoint (Weld) @ 0x25752f6c480
+  - Bolt (Part) @ 0x25752f6c640
+    - Mesh (SpecialMesh) @ 0x257818a0680
+      - Hkey (IntValue) | Value: 6 @ 0x25783823c00
+    - Hkey (IntValue) | Value: 5 @ 0x25783822c40
+    - WeaponJoint (Weld) @ 0x257832fcd40
+  - BoltHandle (Part) @ 0x2576865d0c0
+    - Mesh (SpecialMesh) @ 0x257596a8f00
+      - Hkey (IntValue) | Value: 8 @ 0x25781a1d280
+    - Hkey (IntValue) | Value: 7 @ 0x25781a10cc0
+    - WeaponJoint (Weld) @ 0x2576865eb00
+  - Muzzle (Part) @ 0x25768655100
+    - Bang (ParticleEmitter) @ 0x257837db180
+      - Hkey (IntValue) | Value: 10 @ 0x25781a1fc80
+    - Smoke (ParticleEmitter) @ 0x257837dea80
+      - Hkey (IntValue) | Value: 11 @ 0x25781a1bd80
+    - Spray (ParticleEmitter) @ 0x257837dd880
+      - Hkey (IntValue) | Value: 12 @ 0x25781a130a0
+    - Hkey (IntValue) | Value: 9 @ 0x25781a112e0
+    - WeaponJoint (Weld) @ 0x25768653180
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25766ddda00
+  - net (IntValue) | Value: 7 @ 0x25781a1eda0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x257836ecf00
+  - Lenses (MeshPart) @ 0x2578381f900
+    - Hkey (IntValue) | Value: 0 @ 0x257687951e0
+    - WeaponJoint (Weld) @ 0x2575d2f0cc0
+  - Handle (Part) @ 0x2575d2f0e80
+    - Mesh (SpecialMesh) @ 0x25781c5f500
+      - Hkey (IntValue) | Value: 2 @ 0x25768797400
+    - Hkey (IntValue) | Value: 1 @ 0x25768796fa0
+    - Weld (Weld) @ 0x2575d2f1040
+  - Magazine (Part) @ 0x2575d2f1200
+    - Mesh (SpecialMesh) @ 0x2578254ed80
+      - Hkey (IntValue) | Value: 4 @ 0x25768799460
+    - Hkey (IntValue) | Value: 3 @ 0x25768797940
+    - WeaponJoint (Weld) @ 0x2575d2f13c0
+  - Bolt (Part) @ 0x2575d2f1580
+    - Mesh (SpecialMesh) @ 0x25758b2c800
+      - Hkey (IntValue) | Value: 6 @ 0x2576879f9e0
+    - Hkey (IntValue) | Value: 5 @ 0x257687920e0
+    - WeaponJoint (Weld) @ 0x2575d2f1740
+  - BoltHandle (Part) @ 0x2575d2f1900
+    - Mesh (SpecialMesh) @ 0x2575afb9680
+      - Hkey (IntValue) | Value: 8 @ 0x2576879f040
+    - Hkey (IntValue) | Value: 7 @ 0x2575d29adc0
+    - WeaponJoint (Weld) @ 0x2575d2f1ac0
+  - Muzzle (Part) @ 0x2575d2f1c80
+    - Bang (ParticleEmitter) @ 0x257827b8780
+      - Hkey (IntValue) | Value: 10 @ 0x2575d29f040
+    - Smoke (ParticleEmitter) @ 0x257827b4880
+      - Hkey (IntValue) | Value: 11 @ 0x2575d29da60
+    - Spray (ParticleEmitter) @ 0x257827bb480
+      - Hkey (IntValue) | Value: 12 @ 0x2576866fd60
+    - Hkey (IntValue) | Value: 9 @ 0x2576866ecc0
+    - WeaponJoint (Weld) @ 0x2575d2f1e40
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2575cc60d00
+  - net (IntValue) | Value: 7 @ 0x2576866a180
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2576869eb00
+  - Frame (Part) @ 0x2578470a500
+    - Hkey (IntValue) | Value: 0 @ 0x2574e884e60
+    - Weld (Weld) @ 0x25784708c80
+  - Muzzle (Part) @ 0x2578470b300
+    - Smoke (ParticleEmitter) @ 0x25783e39f80
+      - Hkey (IntValue) | Value: 2 @ 0x2574e88ff20
+    - Spray (ParticleEmitter) @ 0x25783e37e80
+      - Hkey (IntValue) | Value: 3 @ 0x2574e88a180
+    - Star (ParticleEmitter) @ 0x25783e39080
+      - Hkey (IntValue) | Value: 4 @ 0x2574e88a5e0
+    - Bang (ParticleEmitter) @ 0x25783e32a80
+      - Hkey (IntValue) | Value: 5 @ 0x2574e883500
+    - Hkey (IntValue) | Value: 1 @ 0x2574e88aa40
+    - WeaponJoint (Weld) @ 0x257847098c0
+  - Shotgun (Part) @ 0x257847028c0
+    - Mesh (SpecialMesh) @ 0x25783ffcf80
+      - Hkey (IntValue) | Value: 7 @ 0x2574e8859c0
+    - Hkey (IntValue) | Value: 6 @ 0x2574e88fd60
+    - WeaponJoint (Weld) @ 0x25784702700
+  - VisualFrame (Part) @ 0x25784702380
+    - Mesh (SpecialMesh) @ 0x2575afb8300
+      - Hkey (IntValue) | Value: 9 @ 0x2575afeb300
+    - Hkey (IntValue) | Value: 8 @ 0x2575afe0b00
+    - WeaponJoint (Weld) @ 0x25784702540
+  - Drum (Part) @ 0x25784702000
+    - Mesh (SpecialMesh) @ 0x25764d2cf80
+      - Hkey (IntValue) | Value: 11 @ 0x2574e88b760
+    - Hkey (IntValue) | Value: 10 @ 0x2574e886a60
+    - WeaponJoint (Weld) @ 0x257847021c0
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2577fb4ad00
+  - net (IntValue) | Value: 6 @ 0x2574e88d440
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/Shotgun
+- Shotgun (Part) @ 0x25782887240
+  - Mesh (SpecialMesh) @ 0x257831bce00
+    - Hkey (IntValue) | Value: 7 @ 0x25784a567c0
+  - Hkey (IntValue) | Value: 6 @ 0x25784a512e0
+  - WeaponJoint (Motor6D) @ 0x25757a0a800
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/Revolver
+- Revolver (Tool) @ 0x2574453c080
+  - RevolverServer (Script) @ 0x257846dbc00
+    - RevolverClient (LocalScript) @ 0x257846d3600
+      - DefaultFireEffect (ModuleScript) @ 0x2575aaa8740
+      - Particles (Configuration) @ 0x2575164d940
+        - Collision (ParticleEmitter) @ 0x25784c6b780
+        - Debris (ParticleEmitter) @ 0x25784c6a880
+        - Smoke (Smoke) @ 0x2578361ea00
+        - Sparks (ParticleEmitter) @ 0x25784c66080
+        - Spark (ParticleEmitter) @ 0x25784c66980
+    - DefaultWeaponLogic (ModuleScript) @ 0x2575aaa2a80
+    - OverrideSettings (ModuleScript) @ 0x2575aaa9fc0
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x2575aaac800
+  - ClientEvent (RemoteEvent) @ 0x2575aaabf40
+  - ServerEvent (BindableEvent) @ 0x25784a5f9e0
+  - ToolType (StringValue) | Value: "Unknown" @ 0x25766ddfc00
+  - CheckAmmoState (BindableFunction) @ 0x257621b7d80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/Shotgun
+- Shotgun (Part) @ 0x25783102000
+  - Mesh (SpecialMesh) @ 0x2574ef44580
+    - Hkey (IntValue) | Value: 7 @ 0x25783826d00
+  - Hkey (IntValue) | Value: 6 @ 0x257838284a0
+  - WeaponJoint (Motor6D) @ 0x257678c1600
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/Revolver
+- Revolver (Tool) @ 0x25759a18a80
+  - RevolverServer (Script) @ 0x2573fb5ee00
+    - RevolverClient (LocalScript) @ 0x2573fb58600
+      - DefaultFireEffect (ModuleScript) @ 0x25783103a40
+      - Particles (Configuration) @ 0x2575bc147c0
+        - Collision (ParticleEmitter) @ 0x25783036980
+        - Debris (ParticleEmitter) @ 0x2578303a880
+        - Smoke (Smoke) @ 0x2574f77ee00
+        - Sparks (ParticleEmitter) @ 0x25783039f80
+        - Spark (ParticleEmitter) @ 0x2578303ea80
+    - DefaultWeaponLogic (ModuleScript) @ 0x25783109540
+    - OverrideSettings (ModuleScript) @ 0x25783109700
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x25783101200
+  - ClientEvent (RemoteEvent) @ 0x257831067c0
+  - ServerEvent (BindableEvent) @ 0x2578382e240
+  - ToolType (StringValue) | Value: "Unknown" @ 0x2577fb4cc00
+  - CheckAmmoState (BindableFunction) @ 0x25759ab92c0
+
+Found matching config root at path: Workspace/Workspace/Ragdolls/Blizx_OnYT/Revolver
+- Revolver (Tool) @ 0x2578da3cc80
+  - RevolverServer (Script) @ 0x25786101e00
+    - RevolverClient (LocalScript) @ 0x25786109600
+      - DefaultFireEffect (ModuleScript) @ 0x2578f0e44c0
+      - Particles (Configuration) @ 0x2578cb7ae80
+        - Smoke (Smoke) @ 0x2578b888e00
+    - DefaultWeaponLogic (ModuleScript) @ 0x2578f0e0780
+    - OverrideSettings (ModuleScript) @ 0x2578f0ed0c0
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x2578f0e8900
+  - ClientEvent (RemoteEvent) @ 0x2578f0edd00
+  - ServerEvent (BindableEvent) @ 0x2578c5df120
+  - ToolType (StringValue) | Value: "Unknown" @ 0x2574d889400
+  - CheckAmmoState (BindableFunction) @ 0x25784be7c40
+
+Found matching config root at path: Workspace/Workspace/WorldIgnore/Ignore/WeaponPickup/isRevolver
+- isRevolver (BoolValue) | Value: false @ 0x25786df6b40
+
+Found matching config root at path: Workspace/Workspace/WorldIgnore/Ignore/WeaponPickup/isRevolver
+- isRevolver (BoolValue) | Value: false @ 0x2578be0ce20
+
+Found matching config root at path: Workspace/Workspace/Lobby/MapParts/LobbyParts/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575adbe080
+
+Found matching config root at path: Workspace/Workspace/Lobby/MapParts/LobbyParts/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575b1dcf00
+
+Found matching config root at path: Workspace/Workspace/Lobby/MapParts/LobbyParts/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575b9cc800
+
+Found matching config root at path: Workspace/Workspace/Lobby/MapParts/LobbyParts/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575a470e80
+
+Found matching config root at path: Workspace/Workspace/Lobby/MapParts/LobbyParts/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575a472380
+
+Found matching config root at path: Workspace/Workspace/Lobby/MapParts/LobbyParts/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575059ee80
+
+Found matching config root at path: Workspace/Workspace/Lobby/MapParts/LobbyParts/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x25764597780
+
+Found matching config root at path: Workspace/Workspace/Lobby/MapParts/LobbyParts/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2576459cb80
+
+Found matching config root at path: Workspace/Workspace/MapMain/MapParts/Models/Misc/SpawnRoom/Barrel
+- Barrel (Model) @ 0x2578e3ac800
+  - Roundies (Part) @ 0x25790f2cd40
+  - Roundies (Part) @ 0x25790f2cf00
+  - Roundies (Part) @ 0x25790f2d0c0
+  - Part (Part) @ 0x25790f2d280
+  - Roundies (Part) @ 0x25790f2d440
+
+Found matching config root at path: Workspace/Workspace/MapMain/MapParts/Models/Misc/SpawnRoom/Barrel
+- Barrel (Model) @ 0x2578e3ad280
+  - Roundies (Part) @ 0x25790f4b680
+  - Roundies (Part) @ 0x25790f4b840
+  - Roundies (Part) @ 0x25790f4ba00
+  - Part (Part) @ 0x25790f4bbc0
+  - Roundies (Part) @ 0x25790f4bd80
+
+Found matching config root at path: Workspace/Workspace/MapMain/MapParts/Models/Barrels
+- Barrels (Folder) @ 0x25790eecb80
+  - Barrel (Model) @ 0x25786165800
+    - Barrel (MeshPart) @ 0x25786165f00
+    - Outside (MeshPart) @ 0x25786165100
+    - Part (Part) @ 0x25790f0a500
+      - Mesh (CylinderMesh) @ 0x2578e7da200
+  - Barrel (Model) @ 0x25786164a00
+    - Barrel (MeshPart) @ 0x25786165480
+    - Outside (MeshPart) @ 0x25786167080
+  - Barrel (Model) @ 0x25787454300
+    - Barrel (MeshPart) @ 0x25787453880
+    - Outside (MeshPart) @ 0x25787453c00
+    - Part (Part) @ 0x25790f0a6c0
+      - Mesh (CylinderMesh) @ 0x2578e7d5d00
+  - Barrel (Model) @ 0x25787457780
+    - Barrel (MeshPart) @ 0x25787456d00
+    - Outside (MeshPart) @ 0x25787457080
+    - Part (Part) @ 0x25790f0a880
+      - Mesh (CylinderMesh) @ 0x2578e7d5e00
+  - Barrel (Model) @ 0x25787450b00
+    - Barrel (MeshPart) @ 0x25787459000
+    - Outside (MeshPart) @ 0x25787456600
+    - Part (Part) @ 0x25790f0aa40
+      - Mesh (CylinderMesh) @ 0x2578e7d5f00
+  - Barrel (Model) @ 0x25787456980
+    - Barrel (MeshPart) @ 0x2578745ee80
+    - Outside (MeshPart) @ 0x2578745ba00
+    - Part (Part) @ 0x25790f0ac00
+      - Mesh (CylinderMesh) @ 0x2578e7d5900
+  - Barrel (Model) @ 0x2578745c800
+    - Barrel (MeshPart) @ 0x2578745cf00
+    - Outside (MeshPart) @ 0x2578745b300
+    - Part (Part) @ 0x25790f0adc0
+      - Mesh (CylinderMesh) @ 0x2578e7d0300
+  - Barrel (Model) @ 0x25787457b00
+    - Barrel (MeshPart) @ 0x25790fb0080
+    - Outside (MeshPart) @ 0x25790fb0400
+    - Part (Part) @ 0x25790f0af80
+      - Mesh (CylinderMesh) @ 0x2578e7d3d00
+  - Barrel (Model) @ 0x25790fb0780
+    - Barrel (MeshPart) @ 0x25790fb0b00
+    - Outside (MeshPart) @ 0x25790fb0e80
+    - Part (Part) @ 0x25790f0b140
+      - Mesh (CylinderMesh) @ 0x2578e7d5800
+  - Barrel (Model) @ 0x25790fb1200
+    - Barrel (MeshPart) @ 0x25790fb1580
+    - Outside (MeshPart) @ 0x25790fb1900
+    - Part (Part) @ 0x25790f0b300
+      - Mesh (CylinderMesh) @ 0x2578e7d1500
+  - Barrel (Model) @ 0x25790fb1c80
+    - Barrel (MeshPart) @ 0x25790fb2000
+    - Outside (MeshPart) @ 0x25790fb2380
+    - Part (Part) @ 0x25790f0b4c0
+      - Mesh (CylinderMesh) @ 0x2578e7d6000
+  - Barrel (Model) @ 0x25790fb2700
+    - Barrel (MeshPart) @ 0x25790fb2a80
+    - Outside (MeshPart) @ 0x25790fb2e00
+    - Part (Part) @ 0x25790f0b680
+      - Mesh (CylinderMesh) @ 0x2578e7d7600
+  - Barrel (Model) @ 0x25790fb3180
+    - Barrel (MeshPart) @ 0x25790fb3500
+    - Outside (MeshPart) @ 0x25790fb3880
+    - Part (Part) @ 0x25790f0b840
+      - Mesh (CylinderMesh) @ 0x2578e7d8400
+  - Barrel (Model) @ 0x25790fb3c00
+    - Barrel (MeshPart) @ 0x25790fb3f80
+    - Outside (MeshPart) @ 0x25790fb4300
+    - Part (Part) @ 0x25790f0ba00
+      - Mesh (CylinderMesh) @ 0x2578e7db100
+  - Barrel (Model) @ 0x25790fb4680
+    - Barrel (MeshPart) @ 0x25790fb4a00
+    - Outside (MeshPart) @ 0x25790fb4d80
+    - Part (Part) @ 0x25790f0bbc0
+      - Mesh (CylinderMesh) @ 0x25784b2de00
+    - Barrel (MeshPart) @ 0x25790fb5100
+  - Barrel (Model) @ 0x25790fb5480
+    - Barrel (MeshPart) @ 0x25790fb5800
+    - Outside (MeshPart) @ 0x25790fb5b80
+    - Part (Part) @ 0x25790f0bd80
+      - Mesh (CylinderMesh) @ 0x25784b21800
+  - Barrel (Model) @ 0x25790fb5f00
+    - Barrel (MeshPart) @ 0x25790fb6280
+    - Outside (MeshPart) @ 0x25790fb6600
+    - Part (Part) @ 0x25790f0bf40
+      - Mesh (CylinderMesh) @ 0x25784b2d000
+  - Barrel (Model) @ 0x25790fb6980
+    - Barrel (MeshPart) @ 0x25790fb6d00
+    - Outside (MeshPart) @ 0x25790fb7080
+    - Part (Part) @ 0x25790f0c100
+      - Mesh (CylinderMesh) @ 0x25784b25100
+  - Barrel (Model) @ 0x25790fb7400
+    - Barrel (MeshPart) @ 0x25790fb7780
+    - Outside (MeshPart) @ 0x25790fb7b00
+    - Part (Part) @ 0x25790f0c2c0
+      - Mesh (CylinderMesh) @ 0x25784b28b00
+  - Barrel (Model) @ 0x25790fb7e80
+    - Barrel (MeshPart) @ 0x25790fb8200
+    - Outside (MeshPart) @ 0x25790fb8580
+    - Part (Part) @ 0x25790f0c480
+      - Mesh (CylinderMesh) @ 0x25784b21700
+  - Barrel (Model) @ 0x25790fb8900
+    - Barrel (MeshPart) @ 0x25790fb8c80
+    - Outside (MeshPart) @ 0x25790fb9000
+  - Barrel (Model) @ 0x25790fb9380
+    - Barrel (MeshPart) @ 0x25790fb9700
+    - Outside (MeshPart) @ 0x25790fb9a80
+    - Part (Part) @ 0x25790f0c640
+      - Mesh (CylinderMesh) @ 0x25784b2c900
+  - Barrel (Model) @ 0x25790fb9e00
+    - Barrel (MeshPart) @ 0x25790fba180
+    - Outside (MeshPart) @ 0x25790fba500
+    - Part (Part) @ 0x25790f0c800
+      - Mesh (CylinderMesh) @ 0x25784b2e000
+  - Barrel (Model) @ 0x25790fba880
+    - Barrel (MeshPart) @ 0x25790fbac00
+    - Outside (MeshPart) @ 0x25790fbaf80
+    - Part (Part) @ 0x25790f0c9c0
+      - Mesh (CylinderMesh) @ 0x25784b2eb00
+  - Barrel (Model) @ 0x25790fbb300
+    - Barrel (MeshPart) @ 0x25790fbb680
+    - Outside (MeshPart) @ 0x25790fbba00
+    - Part (Part) @ 0x25790f0cb80
+      - Mesh (CylinderMesh) @ 0x25784b25500
+  - Barrel (Model) @ 0x25790fbbd80
+    - Roundies (Part) @ 0x25790f0cd40
+    - Roundies (Part) @ 0x25790f0cf00
+    - Roundies (Part) @ 0x25790f0d0c0
+    - Part (Part) @ 0x25790f0d280
+    - Roundies (Part) @ 0x25790f0d440
+  - Barrel (Model) @ 0x25790fbc100
+    - Roundies (Part) @ 0x25790f0d600
+    - Roundies (Part) @ 0x25790f0d7c0
+    - Roundies (Part) @ 0x25790f0d980
+    - Part (Part) @ 0x25790f0db40
+    - Roundies (Part) @ 0x25790f0dd00
+  - Barrel (Model) @ 0x25790fbc480
+    - Roundies (Part) @ 0x25790f0dec0
+    - Roundies (Part) @ 0x25790f0e080
+    - Roundies (Part) @ 0x25790f0e240
+    - Part (Part) @ 0x25790f0e400
+    - Roundies (Part) @ 0x25790f0e5c0
+  - Barrel (Model) @ 0x25790fbc800
+    - Roundies (Part) @ 0x25790f0e780
+    - Roundies (Part) @ 0x25790f0e940
+    - Roundies (Part) @ 0x25790f0eb00
+    - Part (Part) @ 0x25790f0ecc0
+    - Roundies (Part) @ 0x25790f0ee80
+  - Barrel (Model) @ 0x25790fbcb80
+    - Roundies (Part) @ 0x25790f0f040
+    - Roundies (Part) @ 0x25790f0f200
+    - Roundies (Part) @ 0x25790f0f3c0
+    - Part (Part) @ 0x25790f0f580
+    - Roundies (Part) @ 0x25790f0f740
+  - Barrel (Model) @ 0x25790fbcf00
+    - Roundies (Part) @ 0x25790f0f900
+    - Roundies (Part) @ 0x25790f0fac0
+    - Roundies (Part) @ 0x25790f0fc80
+    - Part (Part) @ 0x25790f0fe40
+    - Roundies (Part) @ 0x25790fe0080
+  - Barrel (Model) @ 0x25790fbd280
+    - Roundies (Part) @ 0x25790fe0240
+    - Roundies (Part) @ 0x25790fe0400
+    - Roundies (Part) @ 0x25790fe05c0
+    - Part (Part) @ 0x25790fe0780
+    - Roundies (Part) @ 0x25790fe0940
+  - Barrel (Model) @ 0x25790fbd600
+    - Roundies (Part) @ 0x25790fe0b00
+    - Roundies (Part) @ 0x25790fe0cc0
+    - Roundies (Part) @ 0x25790fe0e80
+    - Part (Part) @ 0x25790fe1040
+    - Roundies (Part) @ 0x25790fe1200
+  - Barrel (Model) @ 0x25790fbd980
+    - Roundies (Part) @ 0x25790fe13c0
+    - Roundies (Part) @ 0x25790fe1580
+    - Roundies (Part) @ 0x25790fe1740
+    - Part (Part) @ 0x25790fe1900
+    - Roundies (Part) @ 0x25790fe1ac0
+  - Barrel (Model) @ 0x25790fbdd00
+    - Roundies (Part) @ 0x25790fe1c80
+    - Roundies (Part) @ 0x25790fe1e40
+    - Roundies (Part) @ 0x25790fe2000
+    - Part (Part) @ 0x25790fe21c0
+    - Roundies (Part) @ 0x25790fe2380
+  - Barrel (Model) @ 0x25790fbe080
+    - Roundies (Part) @ 0x25790fe2540
+    - Roundies (Part) @ 0x25790fe2700
+    - Roundies (Part) @ 0x25790fe28c0
+    - Part (Part) @ 0x25790fe2a80
+    - Roundies (Part) @ 0x25790fe2c40
+  - Barrel (Model) @ 0x25790fbe400
+    - Roundies (Part) @ 0x25790fe2e00
+    - Roundies (Part) @ 0x25790fe2fc0
+    - Roundies (Part) @ 0x25790fe3180
+    - Part (Part) @ 0x25790fe3340
+    - Roundies (Part) @ 0x25790fe3500
+  - Barrel (Model) @ 0x25790fbe780
+    - Roundies (Part) @ 0x25790fe36c0
+    - Roundies (Part) @ 0x25790fe3880
+    - Roundies (Part) @ 0x25790fe3a40
+    - Part (Part) @ 0x25790fe3c00
+    - Roundies (Part) @ 0x25790fe3dc0
+  - Barrel (Model) @ 0x25790fbeb00
+    - Barrel (MeshPart) @ 0x25790fbee80
+    - Outside (MeshPart) @ 0x25790fbf200
+    - Part (Part) @ 0x25790fe3f80
+      - Mesh (CylinderMesh) @ 0x25784b23300
+  - Barrel (Model) @ 0x25790fbf580
+    - Barrel (MeshPart) @ 0x25790fbf900
+    - Outside (MeshPart) @ 0x25790fbfc80
+    - Part (Part) @ 0x25790fe4140
+      - Mesh (CylinderMesh) @ 0x25784b21100
+    - Barrel (MeshPart) @ 0x25790540080
+  - Barrel (Model) @ 0x25790540400
+    - Barrel (MeshPart) @ 0x25790540780
+    - Outside (MeshPart) @ 0x25790540b00
+    - Part (Part) @ 0x25790fe4300
+      - Mesh (CylinderMesh) @ 0x25784b20e00
+  - Barrel (Model) @ 0x25790540e80
+    - Barrel (MeshPart) @ 0x25790541200
+    - Outside (MeshPart) @ 0x25790541580
+    - Part (Part) @ 0x25790fe44c0
+      - Mesh (CylinderMesh) @ 0x25784b25800
+  - Barrel (Model) @ 0x25790541900
+    - Barrel (MeshPart) @ 0x25790541c80
+    - Outside (MeshPart) @ 0x25790542000
+    - Part (Part) @ 0x25790fe4680
+      - Mesh (CylinderMesh) @ 0x25784b20400
+  - Barrel (Model) @ 0x25790542380
+    - Barrel (MeshPart) @ 0x25790542700
+    - Outside (MeshPart) @ 0x25790542a80
+    - Part (Part) @ 0x25790fe4840
+      - Mesh (CylinderMesh) @ 0x25784b2a600
+
+Found matching config root at path: Workspace/Workspace/MapMain/MapParts/Models/Buildings/Building/Barrel
+- Barrel (Model) @ 0x25791859a80
+  - Barrel (MeshPart) @ 0x25791859e00
+  - Outside (MeshPart) @ 0x2579185a180
+  - Part (Part) @ 0x2579197af80
+    - Mesh (CylinderMesh) @ 0x257868c7700
+
+Found matching config root at path: Workspace/Workspace/Timofofo12/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2578bed8580
+  - Muzzle (Part) @ 0x25786b15480
+    - Smoke (ParticleEmitter) @ 0x25782229680
+      - Hkey (IntValue) | Value: 1 @ 0x25781d0bbc0
+    - Spray (ParticleEmitter) @ 0x2578222db80
+      - Hkey (IntValue) | Value: 2 @ 0x25791245720
+    - Star (ParticleEmitter) @ 0x2578222ed80
+      - Hkey (IntValue) | Value: 3 @ 0x25791243960
+    - Bang (ParticleEmitter) @ 0x2578222e180
+      - Hkey (IntValue) | Value: 4 @ 0x2579124c560
+    - Hkey (IntValue) | Value: 0 @ 0x25791241120
+    - WeaponJoint (Weld) @ 0x25786b1d980
+  - Receiver (MeshPart) @ 0x2578bed8200
+    - Hkey (IntValue) | Value: 5 @ 0x25791243340
+    - Weld (Weld) @ 0x25786b1a340
+  - Mag (MeshPart) @ 0x2578bed6d00
+    - Hkey (IntValue) | Value: 6 @ 0x2579124f820
+    - WeaponJoint (Weld) @ 0x25786b14f40
+  - Slide (MeshPart) @ 0x2578bedf580
+    - Hkey (IntValue) | Value: 7 @ 0x2579124c8e0
+    - WeaponJoint (Weld) @ 0x25786b1b840
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25744ef9a00
+  - net (IntValue) | Value: 5 @ 0x2579124b300
+  - Loaded (BoolValue) | Value: true @ 0x25786ac9a80
+
+Found matching config root at path: Workspace/Workspace/H40TH/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2578bcfd600
+  - Muzzle (Part) @ 0x2578b981740
+    - Smoke (ParticleEmitter) @ 0x2578c871e80
+      - Hkey (IntValue) | Value: 1 @ 0x2578d3df660
+    - Spray (ParticleEmitter) @ 0x2578c87ab80
+      - Hkey (IntValue) | Value: 2 @ 0x2578d3d9460
+    - Star (ParticleEmitter) @ 0x2578c874b80
+      - Hkey (IntValue) | Value: 3 @ 0x2578d3d3ce0
+    - Bang (ParticleEmitter) @ 0x2578c878180
+      - Hkey (IntValue) | Value: 4 @ 0x2578d3de860
+    - Hkey (IntValue) | Value: 0 @ 0x2578d3d89e0
+    - WeaponJoint (Weld) @ 0x2578bf1d0c0
+  - Drum (MeshPart) @ 0x2578bcf2000
+    - Hkey (IntValue) | Value: 5 @ 0x2578d3db4c0
+    - WeaponJoint (Weld) @ 0x2578bf128c0
+  - Frame (MeshPart) @ 0x2578bcf1900
+    - Hkey (IntValue) | Value: 6 @ 0x257848d60c0
+    - Weld (Weld) @ 0x2578bf167c0
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2574d88d700
+  - net (IntValue) | Value: 4 @ 0x257848d9fc0
+  - Loaded (BoolValue) | Value: true @ 0x2578bf26ec0
+
+Found matching config root at path: Workspace/Workspace/DarylGrimes079/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25790254a00
+  - Muzzle (Part) @ 0x257860d4a00
+    - Smoke (ParticleEmitter) @ 0x257900d7e80
+      - Hkey (IntValue) | Value: 1 @ 0x2578ff7a500
+    - Spray (ParticleEmitter) @ 0x257900dc380
+      - Hkey (IntValue) | Value: 2 @ 0x2578ff784a0
+    - Star (ParticleEmitter) @ 0x257900dc680
+      - Hkey (IntValue) | Value: 3 @ 0x2578ff7c640
+    - Bang (ParticleEmitter) @ 0x257900dc980
+      - Hkey (IntValue) | Value: 4 @ 0x2578ff7c720
+    - Hkey (IntValue) | Value: 0 @ 0x2578ff79460
+    - WeaponJoint (Weld) @ 0x257860d6440
+  - Drum (MeshPart) @ 0x25790254d80
+    - Hkey (IntValue) | Value: 5 @ 0x2578ff7f580
+    - WeaponJoint (Weld) @ 0x257860d3340
+  - Frame (MeshPart) @ 0x25790255100
+    - Hkey (IntValue) | Value: 6 @ 0x257393bd8a0
+    - Weld (Weld) @ 0x257860dcb80
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25783615c00
+  - net (IntValue) | Value: 4 @ 0x257393b4d80
+  - Loaded (BoolValue) | Value: true @ 0x25790060da0
+
+Found matching config root at path: Workspace/Workspace/THELEGENDARYGOD1231/Revolver
+- Revolver (Tool) @ 0x25787507e80
+  - RevolverServer (Script) @ 0x2573fb5bc00
+    - RevolverClient (LocalScript) @ 0x2573fb5a000
+      - DefaultFireEffect (ModuleScript) @ 0x257854b98c0
+      - Particles (Configuration) @ 0x25744eb8600
+        - Collision (ParticleEmitter) @ 0x257868d1e80
+        - Debris (ParticleEmitter) @ 0x257868de180
+        - Smoke (Smoke) @ 0x257618a6500
+        - Sparks (ParticleEmitter) @ 0x257868da280
+        - Spark (ParticleEmitter) @ 0x2578bb1de80
+    - DefaultWeaponLogic (ModuleScript) @ 0x257854b6600
+    - OverrideSettings (ModuleScript) @ 0x257854be780
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x257854b13c0
+  - ClientEvent (RemoteEvent) @ 0x257854bc800
+  - ServerEvent (BindableEvent) @ 0x2578c638e40
+  - ToolType (StringValue) | Value: "Unknown" @ 0x25759022900
+  - CheckAmmoState (BindableFunction) @ 0x25782b59a40
+
+Found matching config root at path: Workspace/Workspace/IIIIIllIlIllllIIIIl/Revolver
+- Revolver (Tool) @ 0x2574451b480
+  - RevolverServer (Script) @ 0x25786107a00
+    - RevolverClient (LocalScript) @ 0x25786107200
+      - DefaultFireEffect (ModuleScript) @ 0x2574d1a28c0
+      - Particles (Configuration) @ 0x2578d2c9080
+        - Collision (ParticleEmitter) @ 0x257901c6080
+        - Debris (ParticleEmitter) @ 0x257901c6c80
+        - Smoke (Smoke) @ 0x2578b887f00
+        - Sparks (ParticleEmitter) @ 0x257901cb480
+        - Spark (ParticleEmitter) @ 0x257901c4e80
+    - DefaultWeaponLogic (ModuleScript) @ 0x2574d1a1ac0
+    - OverrideSettings (ModuleScript) @ 0x2574d1a4f40
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x2574d1a4bc0
+  - ClientEvent (RemoteEvent) @ 0x2574d1a0400
+  - ServerEvent (BindableEvent) @ 0x2578bdf12e0
+  - ToolType (StringValue) | Value: "Unknown" @ 0x2575a195a00
+  - CheckAmmoState (BindableFunction) @ 0x25784be8dc0
+  - RAnimDoneIdle (BindableEvent) @ 0x2578dddf120
+  - RAnimDoneFire (BindableEvent) @ 0x2578b7ea500
+
+Found matching config root at path: Workspace/Workspace/KAZEPOPJAM1/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x25791d78580
+  - Muzzle (Part) @ 0x257860d7080
+    - Smoke (ParticleEmitter) @ 0x2578bdc6f80
+      - Hkey (IntValue) | Value: 1 @ 0x2578be0f580
+    - Spray (ParticleEmitter) @ 0x2578bdc3c80
+      - Hkey (IntValue) | Value: 2 @ 0x2578be098c0
+    - Star (ParticleEmitter) @ 0x2578bb48480
+      - Hkey (IntValue) | Value: 3 @ 0x257848dd520
+    - Bang (ParticleEmitter) @ 0x25785f1a880
+      - Hkey (IntValue) | Value: 4 @ 0x257848d6a60
+    - Hkey (IntValue) | Value: 0 @ 0x257848dee80
+    - WeaponJoint (Weld) @ 0x257860dee80
+  - Drum (MeshPart) @ 0x25791d7f200
+    - Hkey (IntValue) | Value: 5 @ 0x2578ed29700
+    - WeaponJoint (Weld) @ 0x257860d8580
+  - Frame (MeshPart) @ 0x2578bcfdd00
+    - Hkey (IntValue) | Value: 6 @ 0x2578b7e0080
+    - Weld (Weld) @ 0x2578df3e240
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x25759023200
+  - net (IntValue) | Value: 4 @ 0x2578b7e0320
+  - Loaded (BoolValue) | Value: true @ 0x2578ddd7b00
+
+Found matching config root at path: Workspace/Workspace/JAIR556785/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2578b7ff200
+  - BoundBox (Part) @ 0x2578c782380
+    - Hkey (IntValue) | Value: 0 @ 0x2578c5d83c0
+    - WeaponJoint (Weld) @ 0x2578c782540
+  - Muzzle (Part) @ 0x2578c78c640
+    - Hkey (IntValue) | Value: 1 @ 0x2578c5d8ac0
+    - WeaponJoint (Weld) @ 0x2578c78bf40
+  - Mag (Part) @ 0x2578c78b840
+    - Mesh (SpecialMesh) @ 0x257925e7580
+      - Hkey (IntValue) | Value: 3 @ 0x2578c5db760
+    - Hkey (IntValue) | Value: 2 @ 0x2578c5d3960
+    - WeaponJoint (Weld) @ 0x2578c78b140
+  - Slider (Part) @ 0x2578c78b4c0
+    - Mesh (SpecialMesh) @ 0x2578c5e0500
+      - Hkey (IntValue) | Value: 5 @ 0x2578c5d3ea0
+    - Hkey (IntValue) | Value: 4 @ 0x2578c5d58e0
+    - WeaponJoint (Weld) @ 0x2578c78bbc0
+  - Joint (Part) @ 0x2578c78c2c0
+    - Mesh (SpecialMesh) @ 0x257860ec200
+      - Hkey (IntValue) | Value: 7 @ 0x2578c5ddde0
+    - Hkey (IntValue) | Value: 6 @ 0x2578c5d30a0
+    - WeaponJoint (Weld) @ 0x2578c78c9c0
+  - Bolt (Part) @ 0x2578c788580
+    - Mesh (SpecialMesh) @ 0x257860eae80
+      - Hkey (IntValue) | Value: 9 @ 0x2578c5de240
+    - Hkey (IntValue) | Value: 8 @ 0x2578c5d7860
+    - WeaponJoint (Weld) @ 0x2578c788900
+  - Handle (Part) @ 0x2578c78c800
+    - Mesh (SpecialMesh) @ 0x2578c0d1700
+      - Hkey (IntValue) | Value: 11 @ 0x2578c5de940
+    - Hkey (IntValue) | Value: 10 @ 0x2578c5df2e0
+    - Weld (Weld) @ 0x2578c780400
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x257618a1500
+  - net (IntValue) | Value: 8 @ 0x2578c5d2700
+  - Loaded (BoolValue) | Value: true @ 0x2578c5df3c0
+
+Found matching config root at path: Workspace/Workspace/Thefire_god9000/ItemPreviews/RevolverModel
+- RevolverModel (Model) @ 0x2578b7fac00
+  - Scope (Part) @ 0x2578f0e5800
+    - Mesh (SpecialMesh) @ 0x257836f3080
+      - Hkey (IntValue) | Value: 1 @ 0x257876cebe0
+    - Hkey (IntValue) | Value: 0 @ 0x257876c90e0
+    - WeaponJoint (Weld) @ 0x2578f0e1900
+  - Lenses (MeshPart) @ 0x2578b7f7b00
+    - Hkey (IntValue) | Value: 2 @ 0x257876cf9e0
+    - WeaponJoint (Weld) @ 0x2578f0eecc0
+  - Muzzle (Part) @ 0x2578f0ee5c0
+    - Star (ParticleEmitter) @ 0x2578c87e480
+      - Hkey (IntValue) | Value: 4 @ 0x257876c5720
+    - Spray (ParticleEmitter) @ 0x2578c87e780
+      - Hkey (IntValue) | Value: 5 @ 0x2578be22380
+    - Smoke (ParticleEmitter) @ 0x2578c87ea80
+      - Hkey (IntValue) | Value: 6 @ 0x2578be22d20
+    - Bang (ParticleEmitter) @ 0x2578c87ed80
+      - Hkey (IntValue) | Value: 7 @ 0x2578be24680
+    - Hkey (IntValue) | Value: 3 @ 0x2578be29540
+    - WeaponJoint (Weld) @ 0x2578f0e8740
+  - Drum (MeshPart) @ 0x2578b7fc100
+    - Hkey (IntValue) | Value: 8 @ 0x2578be2bd80
+    - WeaponJoint (Weld) @ 0x2578f0ef200
+  - Frame (MeshPart) @ 0x2578b7fbd80
+    - Hkey (IntValue) | Value: 9 @ 0x2578be28200
+    - Weld (Weld) @ 0x2578f0e5480
+  - Revolver1 (StringValue) | Value: "Unknown" @ 0x2574d88c800
+  - net (IntValue) | Value: 6 @ 0x2578be2b920
+  - Loaded (BoolValue) | Value: true @ 0x2578be2e160
+
+Found matching config root at path: Workspace/Workspace/Blizx_OnYT/ItemPreviews/KnifeModel/BoundBox
+- BoundBox (Part) @ 0x2578ca09700
+  - Hkey (IntValue) | Value: 2 @ 0x257854a6c20
+  - WeaponJoint (Weld) @ 0x2578ca028c0
+
+Found matching config root at path: Workspace/Workspace/Blizx_OnYT/Revolver
+- Revolver (Tool) @ 0x25759110080
+  - RevolverServer (Script) @ 0x25786109200
+    - RevolverClient (LocalScript) @ 0x2578610de00
+      - DefaultFireEffect (ModuleScript) @ 0x2578ba02540
+      - Particles (Configuration) @ 0x2578cb71640
+        - Collision (ParticleEmitter) @ 0x2578bdc0380
+        - Debris (ParticleEmitter) @ 0x2578bdc1880
+        - Smoke (Smoke) @ 0x2578b882b00
+        - Sparks (ParticleEmitter) @ 0x2578bdc4e80
+        - Spark (ParticleEmitter) @ 0x2578bdced80
+    - DefaultWeaponLogic (ModuleScript) @ 0x2578ba06440
+    - OverrideSettings (ModuleScript) @ 0x2578ba0b4c0
+    - DefaultWeaponLogic_Murder (ModuleScript) @ 0x2578ba059c0
+  - ClientEvent (RemoteEvent) @ 0x2578ba04d80
+  - ServerEvent (BindableEvent) @ 0x257684a92a0
+  - ToolType (StringValue) | Value: "Unknown" @ 0x2574d885e00
+  - CheckAmmoState (BindableFunction) @ 0x25784be7b00
+

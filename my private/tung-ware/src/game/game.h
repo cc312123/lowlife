@@ -11,4 +11,5 @@ namespace game
 	inline rbx::instance_t local_character{};
 
 	inline HWND wnd;
+	HWND get_roblox_window_handle();
 }

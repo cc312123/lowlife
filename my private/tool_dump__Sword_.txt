@@ -1,0 +1,8 @@
+Tool Name: [Sword]
+Tool Class: Tool
+
+Descendants:
+  - Name: Script | Class: Script @ 0x20f97fd3000
+  - Name: LocalScript | Class: LocalScript @ 0x20f8fe3be00
+    - Name: RemoteEvent | Class: RemoteEvent @ 0x20fa8bf1200
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x2259726852224 @ 0x20f8e1cdb40

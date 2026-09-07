@@ -1,0 +1,175 @@
+=== Weapon Config Search for Tool: Sniper ===
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Misc/CosmeticAdSamples/SniperSkin
+- SniperSkin (Model) @ 0x29216d65b80
+  - Model (Model) @ 0x2921a315800
+    - MeshColored (MeshPart) @ 0x2921af7b300
+      - WeldConstraint (WeldConstraint) @ 0x29236a17d80
+    - MeshDark (MeshPart) @ 0x2921af7b680
+  - Part (Part) @ 0x29220ccbf40
+  - Trigger (Part) @ 0x29220ccc100
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Misc/CosmeticAdSamples/Custom/SniperSkinBlack
+- SniperSkinBlack (Model) @ 0x29217353180
+  - Model (Model) @ 0x2921735d600
+    - Glow (Part) @ 0x29222064840
+      - SurfaceGui (SurfaceGui) @ 0x29216de3c80
+        - Glow (ImageLabel) @ 0x293846ec080
+    - MeshDark (MeshPart) @ 0x2921af7f900
+    - MeshColored (MeshPart) @ 0x2921af7fc80
+      - WeldConstraint (WeldConstraint) @ 0x2923376f440
+      - WeldConstraint (WeldConstraint) @ 0x2923376f940
+  - Part (Part) @ 0x293a43ac640
+  - Trigger (Part) @ 0x293a43ad7c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Cosmetics/SniperSkin
+- SniperSkin (Folder) @ 0x2922f05a0a0
+  - Yellow (Color3Value) [ValueObject] @ 0x2922ee5bca0
+  - Pink (Color3Value) [ValueObject] @ 0x2922eecf4a0
+  - Red (Color3Value) [ValueObject] @ 0x2922f059fc0
+  - Blue (Color3Value) [ValueObject] @ 0x2922f4cce20
+  - Green (Color3Value) [ValueObject] @ 0x2922f4ccfe0
+  - White (Color3Value) [ValueObject] @ 0x2922f4cd1a0
+  - Black (Color3Value) [ValueObject] @ 0x2922f4ce160
+  - LightBlue (Color3Value) [ValueObject] @ 0x2922f4c6980
+  - Festive (ObjectValue) | Value: SniperGarland5 (Model) @ 0x2826531383936 @ 0x2922f4c74e0
+    - SniperGarland5 (Model) @ 0x2921a662a80
+      - WL_ToolGarland (Script) @ 0x2921eef8a00
+      - Color2 (MeshPart) @ 0x2921af79700
+      - Wire (MeshPart) @ 0x2921af79380
+      - Color1 (MeshPart) @ 0x29222170080
+      - MeshColored (MeshPart) @ 0x29222170e80
+        - WeldConstraint (WeldConstraint) @ 0x29233741fc0
+        - WeldConstraint (WeldConstraint) @ 0x29233741480
+        - WeldConstraint (WeldConstraint) @ 0x29233763000
+        - WeldConstraint (WeldConstraint) @ 0x29236a10e40
+      - MeshDark (MeshPart) @ 0x29222171200
+  - Orange (Color3Value) [ValueObject] @ 0x2922f4c7080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Sounds/AdButtonPressed
+- AdButtonPressed (Sound) @ 0x292225e8f00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Modules/M_Sniper
+- M_Sniper (ModuleScript) @ 0x29391008ac0
+
+Found matching config root at path: Workspace/Workspace/LeaderboardBlue
+- LeaderboardBlue (Model) @ 0x29238dbaf80
+  - Background (Model) @ 0x29238dba880
+    - Background (Part) @ 0x292215f9a80
+    - Corner (Part) @ 0x2921b962e00
+    - Background (Part) @ 0x2921b963500
+    - Corner (Part) @ 0x2921b9636c0
+    - Corner (Part) @ 0x29222014680
+    - Corner (Part) @ 0x29222014840
+  - BackgroundTitle (Model) @ 0x29238db7080
+    - Background (Part) @ 0x2921b962c40
+    - Corner (Part) @ 0x2921b969a80
+    - Part (Part) @ 0x29222068740
+    - Part (Part) @ 0x29222068900
+    - Background (Part) @ 0x29222068ac0
+    - Corner (Part) @ 0x29222068c80
+    - Corner (Part) @ 0x29222068e40
+    - Corner (Part) @ 0x29222069000
+  - Title (Part) @ 0x2921b963340
+    - SurfaceGui (SurfaceGui) @ 0x29216095a80
+      - TextLabel (TextLabel) @ 0x29216114080
+        - UIStroke (UIStroke) @ 0x292335c7d80
+  - Screen (Part) @ 0x292220144c0
+  - LeaderboardPowerButton (Part) @ 0x29222068580
+
+Found matching config root at path: Workspace/Workspace/Cakesrawberry50/Sniper
+- Sniper (Tool) @ 0x2921c23b480
+  - Sniper (Script) @ 0x29380a3f000
+  - L_Sniper (LocalScript) @ 0x29380a39a00
+  - MeshDark (MeshPart) @ 0x2923b7d4680
+  - MeshColored (MeshPart) @ 0x2923b7d0e80
+  - Handle (Part) @ 0x293a31c8e40
+    - Reload (Sound) @ 0x29230a7a580
+    - Shot (Sound) @ 0x2923c490080
+    - Muzzle (Attachment) @ 0x293a6516f80
+    - WeldConstraint (WeldConstraint) @ 0x293a5bf24c0
+    - WeldConstraint (WeldConstraint) @ 0x293a5bffa80
+    - HitMarker (ImageLabel) @ 0x2923ec70c80
+  - Sniper2 (Script) @ 0x293a1fabe00
+  - L_Sniper2 (LocalScript) @ 0x293a1fa3800
+
+Found matching config root at path: Workspace/Workspace/Duhitzmathew0831/Sniper
+- Sniper (Tool) @ 0x2921f224280
+  - Sniper (Script) @ 0x2921eef4c00
+  - L_Sniper (LocalScript) @ 0x2921eef9a00
+  - Sniper2 (Script) @ 0x2922e7f5c00
+  - L_Sniper2 (LocalScript) @ 0x2922e7f9c00
+  - MeshDark (MeshPart) @ 0x29222176280
+  - MeshColored (MeshPart) @ 0x29222176600
+  - Handle (Part) @ 0x292225c6b40
+    - Reload (Sound) @ 0x292225eaa80
+    - Shot (Sound) @ 0x292225edc80
+    - HitMarker (ImageLabel) @ 0x2923ec70080
+    - WeldConstraint (WeldConstraint) @ 0x29233747240
+    - WeldConstraint (WeldConstraint) @ 0x292337483c0
+    - Muzzle (Attachment) @ 0x293a24ac980
+
+Found matching config root at path: Workspace/Workspace/manika1411/Sniper
+- Sniper (Tool) @ 0x29230a00080
+  - Sniper (Script) @ 0x293a5659600
+  - L_Sniper (LocalScript) @ 0x293a5651a00
+  - MeshDark (MeshPart) @ 0x2923af33c00
+  - MeshColored (MeshPart) @ 0x2923af38200
+  - Handle (Part) @ 0x293a2b72000
+    - Reload (Sound) @ 0x2922fee2b00
+    - Shot (Sound) @ 0x2938c3a4680
+    - Muzzle (Attachment) @ 0x29222685600
+    - WeldConstraint (WeldConstraint) @ 0x2922b6fdf00
+    - WeldConstraint (WeldConstraint) @ 0x2922b6fd500
+    - HitMarker (ImageLabel) @ 0x2922bf64880
+  - Sniper2 (Script) @ 0x2939dc0c600
+  - L_Sniper2 (LocalScript) @ 0x2939dc0ae00
+
+Found matching config root at path: Workspace/Workspace/hellokitty134185/Sniper
+- Sniper (Tool) @ 0x2921632ae80
+  - Sniper (Script) @ 0x2922af6ac00
+  - L_Sniper (LocalScript) @ 0x2922af66c00
+  - MeshDark (MeshPart) @ 0x2922a8fdd00
+  - MeshColored (MeshPart) @ 0x2922a8f0080
+  - Handle (Part) @ 0x29223c65b80
+    - Reload (Sound) @ 0x29215ee1480
+    - Shot (Sound) @ 0x29215ee1700
+    - Muzzle (Attachment) @ 0x2922baa7e80
+    - WeldConstraint (WeldConstraint) @ 0x2922da538c0
+    - WeldConstraint (WeldConstraint) @ 0x2922da56fc0
+    - HitMarker (ImageLabel) @ 0x29389fbf080
+  - Sniper2 (Script) @ 0x2922af60a00
+  - L_Sniper2 (LocalScript) @ 0x2922af60600
+
+Found matching config root at path: Workspace/Workspace/glowsear/Sniper
+- Sniper (Tool) @ 0x2922bd17e80
+  - Sniper (Script) @ 0x29380a3f800
+  - L_Sniper (LocalScript) @ 0x29380a36800
+  - MeshDark (MeshPart) @ 0x2923b7d6980
+  - MeshColored (MeshPart) @ 0x2923b7d7080
+  - Handle (Part) @ 0x293a31c5d40
+    - Reload (Sound) @ 0x2938c3ae180
+    - Shot (Sound) @ 0x2938c3a8a00
+    - Muzzle (Attachment) @ 0x292225b6f80
+    - WeldConstraint (WeldConstraint) @ 0x29397b2fbc0
+    - WeldConstraint (WeldConstraint) @ 0x29397b24cc0
+    - HitMarker (ImageLabel) @ 0x2922bf60c80
+  - Sniper2 (Script) @ 0x29380a3a400
+  - L_Sniper2 (LocalScript) @ 0x29380a33000
+
+Found matching config root at path: Workspace/Workspace/IIIIIllIlIllllIIIIl/Sniper
+- Sniper (Tool) @ 0x29206603c80
+  - Sniper (Script) @ 0x2922af6c400
+  - L_Sniper (LocalScript) @ 0x2922af68e00
+  - MeshDark (MeshPart) @ 0x2922a8f2a80
+  - MeshColored (MeshPart) @ 0x2922a8faf80
+  - Handle (Part) @ 0x292225c3880
+    - Reload (Sound) @ 0x2922d995f80
+    - Shot (Sound) @ 0x2922d996200
+    - Muzzle (Attachment) @ 0x2922baac080
+    - WeldConstraint (WeldConstraint) @ 0x2922d64e680
+    - WeldConstraint (WeldConstraint) @ 0x2922d649cc0
+    - HitMarker (ImageLabel) @ 0x29230e87880
+  - Sniper2 (Script) @ 0x2922af64000
+  - L_Sniper2 (LocalScript) @ 0x2922af62400
+

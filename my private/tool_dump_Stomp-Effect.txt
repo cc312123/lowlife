@@ -1,0 +1,10 @@
+Tool Name: Stomp-Effect
+Tool Class: Tool
+
+Descendants:
+  - Name: _Extra | Class: Script @ 0x20fa2f53a00
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x2259726852224 @ 0x20e3d3af900
+  - Name: Handle | Class: Part @ 0x20fa8bf4f40
+    - Name: Particle | Class: ParticleEmitter @ 0x20fa16d8a80
+    - Name: Eat | Class: StringValue | Value: "Unknown" @ 0x20fa1cf0400
+    - Name: Added | Class: StringValue | Value: "Unknown" @ 0x20f9b092e00

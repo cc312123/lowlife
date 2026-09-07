@@ -1,0 +1,15 @@
+Tool Name: RoninKatana
+Tool Class: Tool
+
+Descendants:
+  - Name: SwordScript | Class: Script @ 0x19ac3531000
+  - Name: MouseIcon | Class: LocalScript @ 0x19ac3530a00
+  - Name: Handle | Class: Part @ 0x19aaeeb3c00
+    - Name: RightGripAttachment | Class: Attachment @ 0x19c0aaff500
+    - Name: Mesh | Class: SpecialMesh @ 0x19ac817f800
+    - Name: Unsheath | Class: Sound @ 0x19ab541f080
+    - Name: Lunge | Class: Sound @ 0x19ab541cb00
+    - Name: Slash | Class: Sound @ 0x19ab5411480
+    - Name: TouchInterest | Class: TouchTransmitter @ 0x19ac442f740
+  - Name: Configuration | Class: Configuration @ 0x19aa5190140
+    - Name: Damage | Class: IntValue | Value: 5 @ 0x19ac4425720

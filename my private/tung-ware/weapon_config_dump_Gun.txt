@@ -1,0 +1,532 @@
+=== Weapon Config Search for Tool: Gun ===
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/WeaponEvents/GunBeam
+- GunBeam (RemoteEvent) @ 0x2575865b680
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/MainGUI/Game/Inventory/Main/Weapons/Equipped/Container/Gun
+- Gun (Frame) @ 0x257836ee680
+  - Container (Frame) @ 0x257836ef080
+    - Tags (Frame) @ 0x25783730080
+      - Unique (Frame) @ 0x25783730a80
+        - PlayerName (TextLabel) @ 0x25783715080
+        - BG (ImageLabel) @ 0x25783720c80
+      - Christmas (Frame) @ 0x25783731480
+        - Year2 (TextLabel) @ 0x25783716080
+        - BG (ImageLabel) @ 0x25783721880
+        - Year (TextLabel) @ 0x25783717080
+      - UIListLayout (UIListLayout) @ 0x25782fcda00
+      - Chroma (Frame) @ 0x25783731e80
+        - BG (ImageLabel) @ 0x25783722480
+        - TagName (TextLabel) @ 0x25783718080
+      - Halloween (Frame) @ 0x25783732880
+        - Year2 (TextLabel) @ 0x25783719080
+        - Year (TextLabel) @ 0x2578371a080
+        - BG (ImageLabel) @ 0x25783723080
+    - ItemName (Frame) @ 0x25783733280
+      - BG (ImageLabel) @ 0x25783723c80
+      - Label (TextLabel) @ 0x2578371b080
+    - Container (Frame) @ 0x25783733c80
+      - Amount (TextLabel) @ 0x2578371c080
+      - Gradient (ImageLabel) @ 0x25783724880
+      - Button (TextButton) @ 0x25783706480
+      - Icon (ImageLabel) @ 0x25783725480
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/MainGUI/Game/Target3/Gun
+- Gun (Frame) @ 0x257837c3c80
+  - Icon (ImageLabel) @ 0x2577f813c80
+    - UIStroke (UIStroke) @ 0x2578375b980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/MainGUI/Game/Gun
+- Gun (ImageButton) @ 0x257837dc080
+  - ImageLabel (ImageLabel) @ 0x2577f815480
+  - PerkName (TextLabel) @ 0x257837dd080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Remotes/Gameplay/FakeGun
+- FakeGun (RemoteEvent) @ 0x2575865e780
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Remotes/Gameplay/GunKill
+- GunKill (BindableEvent) @ 0x2575b972e00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/ClientServices/WeaponService/GunFired
+- GunFired (RemoteEvent) @ 0x2575b947780
+
+Found matching config root at path: Workspace/Workspace/WeaponDisplays/GunDisplay
+- GunDisplay (Part) @ 0x25745c32e00
+  - Mesh (SpecialMesh) @ 0x2575dcfc680
+  - Attachment (Attachment) @ 0x25784002f00
+  - RigidConstraint (RigidConstraint) @ 0x2578400ec00
+
+Found matching config root at path: Workspace/Workspace/WeaponDisplays/GunDisplay
+- GunDisplay (Part) @ 0x2574e20bbc0
+  - Mesh (SpecialMesh) @ 0x2575dcfc500
+  - Attachment (Attachment) @ 0x2574ef4e600
+  - RigidConstraint (RigidConstraint) @ 0x2574ef4e780
+
+Found matching config root at path: Workspace/Workspace/WeaponDisplays/GunDisplay
+- GunDisplay (Part) @ 0x2574e20bf40
+  - Mesh (SpecialMesh) @ 0x2575ddce780
+  - Attachment (Attachment) @ 0x2574ef4f080
+  - RigidConstraint (RigidConstraint) @ 0x2574ef4f200
+
+Found matching config root at path: Workspace/Workspace/WeaponDisplays/GunDisplay
+- GunDisplay (Part) @ 0x2574fcc13c0
+  - Mesh (SpecialMesh) @ 0x2575ce96b00
+  - Attachment (Attachment) @ 0x2574ff21e80
+  - RigidConstraint (RigidConstraint) @ 0x2574ff22000
+
+Found matching config root at path: Workspace/Workspace/WeaponDisplays/GunDisplay
+- GunDisplay (Part) @ 0x2574fcc1ac0
+  - Mesh (SpecialMesh) @ 0x2575dcbd880
+  - Attachment (Attachment) @ 0x2574ff2b180
+  - RigidConstraint (RigidConstraint) @ 0x2574ff2b300
+
+Found matching config root at path: Workspace/Workspace/WeaponDisplays/GunDisplay
+- GunDisplay (MeshPart) @ 0x257539bfc80
+  - CustomAttachment (Attachment) @ 0x2574cbcab80
+  - RigidConstraint (RigidConstraint) @ 0x2574cbc9b00
+
+Found matching config root at path: Workspace/Workspace/WeaponDisplays/GunDisplay
+- GunDisplay (MeshPart) @ 0x2575f04bd80
+  - CustomAttachment (Attachment) @ 0x2575dcb2480
+  - RigidConstraint (RigidConstraint) @ 0x2575dcbfc80
+
+Found matching config root at path: Workspace/Workspace/WeaponDisplays/GunDisplay
+- GunDisplay (Part) @ 0x2574fce52c0
+  - Mesh (SpecialMesh) @ 0x2575dcfc800
+  - Attachment (Attachment) @ 0x2575db04400
+  - RigidConstraint (RigidConstraint) @ 0x2575db0a400
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575e3eac00
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575e3eaf80
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575e3ef900
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575e460080
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/Model/Barrel
+- Barrel (Model) @ 0x25758ed2380
+  - Meshes/Barrel_Metal (MeshPart) @ 0x2575e510b00
+  - Meshes/Barrel_Metal (MeshPart) @ 0x2575e511200
+  - Meshes/Barrel_Mid (MeshPart) @ 0x2575e511580
+  - Meshes/Barrel_Outer (MeshPart) @ 0x2575e511900
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/Model/Barrel
+- Barrel (Model) @ 0x25758ed3180
+  - Meshes/Barrel_Metal (MeshPart) @ 0x2575e513f80
+  - Meshes/Barrel_Outer (MeshPart) @ 0x2575e514300
+  - Meshes/Barrel_Mid (MeshPart) @ 0x2575e514680
+  - Meshes/Barrel_Metal (MeshPart) @ 0x2575e514a00
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/Model/Barrel
+- Barrel (Model) @ 0x25758ed3500
+  - Meshes/Barrel_Metal (MeshPart) @ 0x2575e515b80
+  - Meshes/Barrel_Mid (MeshPart) @ 0x2575e515f00
+  - Meshes/Barrel_Metal (MeshPart) @ 0x2575e516280
+  - Meshes/Barrel_Outer (MeshPart) @ 0x2575e516600
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/Model/Model/Window_Double
+- Window_Double (Model) @ 0x25758ed5800
+  - Part (Part) @ 0x2575e45bf40
+  - Part (Part) @ 0x2575e45c100
+  - Part (Part) @ 0x2575e45c2c0
+  - Part (Part) @ 0x2575e45c480
+  - Part (Part) @ 0x2575e45c640
+  - Part (Part) @ 0x2575e45c800
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/Model/Model/Window_Double
+- Window_Double (Model) @ 0x25758ed6280
+  - Part (Part) @ 0x2575e45d280
+  - Part (Part) @ 0x2575e45d440
+  - Part (Part) @ 0x2575e45d600
+  - Part (Part) @ 0x2575e45d7c0
+  - Part (Part) @ 0x2575e45d980
+  - Part (Part) @ 0x2575e45db40
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/Model/Model/Window_Double
+- Window_Double (Model) @ 0x25758ed6d00
+  - Part (Part) @ 0x2575e45e5c0
+  - Part (Part) @ 0x2575e45e780
+  - Part (Part) @ 0x2575e45e940
+  - Part (Part) @ 0x2575e45eb00
+  - Part (Part) @ 0x2575e45ecc0
+  - Part (Part) @ 0x2575e45ee80
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/Model/Model/Window_Double
+- Window_Double (Model) @ 0x25758ed7780
+  - Part (Part) @ 0x2575e45fac0
+  - Part (Part) @ 0x2575e45fc80
+  - Part (Part) @ 0x2575e45fe40
+  - Part (Part) @ 0x2575d480080
+  - Part (Part) @ 0x2575d480240
+  - Part (Part) @ 0x2575d480400
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/Model/Model/Window_Double
+- Window_Double (Model) @ 0x25758ed8200
+  - Part (Part) @ 0x2575d480e80
+  - Part (Part) @ 0x2575d481040
+  - Part (Part) @ 0x2575d481200
+  - Part (Part) @ 0x2575d4813c0
+  - Part (Part) @ 0x2575d481580
+  - Part (Part) @ 0x2575d481740
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/Model/Model/Window_Double
+- Window_Double (Model) @ 0x25758ed8c80
+  - Part (Part) @ 0x2575d4821c0
+  - Part (Part) @ 0x2575d482380
+  - Part (Part) @ 0x2575d482540
+  - Part (Part) @ 0x2575d482700
+  - Part (Part) @ 0x2575d4828c0
+  - Part (Part) @ 0x2575d482a80
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575e3ce400
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575e670080
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/Model/Model/Window_Double
+- Window_Double (Model) @ 0x2575a1be780
+  - Part (Part) @ 0x2575c47b840
+  - Part (Part) @ 0x2575c47ba00
+  - Part (Part) @ 0x2575c47bbc0
+  - Part (Part) @ 0x2575c47bd80
+  - Part (Part) @ 0x2575c47bf40
+  - Part (Part) @ 0x2575c47c100
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/Model/Model/Window_Double
+- Window_Double (Model) @ 0x2575a1bee80
+  - Part (Part) @ 0x2575c47c2c0
+  - Part (Part) @ 0x2575c47c480
+  - Part (Part) @ 0x2575c47c640
+  - Part (Part) @ 0x2575c47c800
+  - Part (Part) @ 0x2575c47c9c0
+  - Part (Part) @ 0x2575c47cb80
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/Model/Model/Window_Double
+- Window_Double (Model) @ 0x2575a1bfc80
+  - Part (Part) @ 0x2575c47dd00
+  - Part (Part) @ 0x2575c47dec0
+  - Part (Part) @ 0x2575c47e080
+  - Part (Part) @ 0x2575c47e240
+  - Part (Part) @ 0x2575c47e400
+  - Part (Part) @ 0x2575c47e5c0
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/Model/Model/Window_Double
+- Window_Double (Model) @ 0x2575a240780
+  - Part (Part) @ 0x2575c47f040
+  - Part (Part) @ 0x2575c47f200
+  - Part (Part) @ 0x2575c47f3c0
+  - Part (Part) @ 0x2575c47f580
+  - Part (Part) @ 0x2575c47f740
+  - Part (Part) @ 0x2575c47f900
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/Model/Model/Window_Double
+- Window_Double (Model) @ 0x2575a241200
+  - Part (Part) @ 0x2575e650400
+  - Part (Part) @ 0x2575e6505c0
+  - Part (Part) @ 0x2575e650780
+  - Part (Part) @ 0x2575e650940
+  - Part (Part) @ 0x2575e650b00
+  - Part (Part) @ 0x2575e650cc0
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/Model/Model/Window_Double
+- Window_Double (Model) @ 0x2575a242000
+  - Part (Part) @ 0x2575e652000
+  - Part (Part) @ 0x2575e6521c0
+  - Part (Part) @ 0x2575e652380
+  - Part (Part) @ 0x2575e652540
+  - Part (Part) @ 0x2575e652700
+  - Part (Part) @ 0x2575e6528c0
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/Model/Model/Window_Double
+- Window_Double (Model) @ 0x2575a242a80
+  - Part (Part) @ 0x2575e653340
+  - Part (Part) @ 0x2575e653500
+  - Part (Part) @ 0x2575e6536c0
+  - Part (Part) @ 0x2575e653880
+  - Part (Part) @ 0x2575e653a40
+  - Part (Part) @ 0x2575e653c00
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575dbcf900
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575e9e0400
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575e9ef200
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575e9ef580
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/Building_Brick_Burgundy
+- Building_Brick_Burgundy (Model) @ 0x2575a268200
+  - Door_Window (Model) @ 0x2575a268580
+    - Frame_Post (MeshPart) @ 0x2575ead0400
+    - Part (Part) @ 0x2575eb19700
+    - Frame_Post (MeshPart) @ 0x2575ead0780
+    - Frame_Corner (MeshPart) @ 0x2575ead0b00
+    - Part (Part) @ 0x2575eb198c0
+    - Part (Part) @ 0x2575eb19a80
+    - Frame_Post (MeshPart) @ 0x2575ead0e80
+    - Part (Part) @ 0x2575eb19c40
+    - Frame_Post (MeshPart) @ 0x2575ead1200
+    - Part (Part) @ 0x2575eb19e00
+    - Door_Handle_01 (MeshPart) @ 0x2575ead1580
+    - Frame_Corner (MeshPart) @ 0x2575ead1900
+    - Frame_Corner (MeshPart) @ 0x2575ead1c80
+    - Part (Part) @ 0x2575eb19fc0
+    - Part (Part) @ 0x2575eb1a180
+    - Part (Part) @ 0x2575eb1a340
+    - Frame_Post (MeshPart) @ 0x2575ead2000
+  - Roof (Model) @ 0x2575a268900
+    - Part (Part) @ 0x2575eb1a500
+    - Part (Part) @ 0x2575eb1a6c0
+    - Part (Part) @ 0x2575eb1a880
+    - Part (Part) @ 0x2575eb1aa40
+  - Window_Large (Model) @ 0x2575a268c80
+    - Frame_Corner (MeshPart) @ 0x2575ead2380
+    - Part (Part) @ 0x2575eb1ac00
+    - Frame_Post (MeshPart) @ 0x2575ead2700
+    - Frame_Corner (MeshPart) @ 0x2575ead2a80
+    - Frame_Corner (MeshPart) @ 0x2575ead2e00
+    - Part (Part) @ 0x2575eb1adc0
+    - Part (Part) @ 0x2575eb1af80
+    - Frame_Post (MeshPart) @ 0x2575ead3180
+    - Part (Part) @ 0x2575eb1b140
+    - Frame_Post (MeshPart) @ 0x2575ead3500
+    - Frame_Post (MeshPart) @ 0x2575ead3880
+    - Part (Part) @ 0x2575eb1b300
+    - Frame_Corner (MeshPart) @ 0x2575ead3c00
+    - Part (Part) @ 0x2575eb1b4c0
+    - Part (Part) @ 0x2575eb1b680
+  - Window_Large (Model) @ 0x2575a269000
+    - Frame_Post (MeshPart) @ 0x2575ead3f80
+    - Frame_Post (MeshPart) @ 0x2575ead4300
+    - Part (Part) @ 0x2575eb1b840
+    - Frame_Corner (MeshPart) @ 0x2575ead4680
+    - Part (Part) @ 0x2575eb1ba00
+    - Frame_Corner (MeshPart) @ 0x2575ead4a00
+    - Frame_Corner (MeshPart) @ 0x2575ead4d80
+    - Frame_Post (MeshPart) @ 0x2575ead5100
+    - Part (Part) @ 0x2575eb1bbc0
+    - Part (Part) @ 0x2575eb1bd80
+    - Frame_Corner (MeshPart) @ 0x2575ead5480
+    - Frame_Post (MeshPart) @ 0x2575ead5800
+    - Part (Part) @ 0x2575eb1bf40
+    - Part (Part) @ 0x2575eb1c100
+    - Part (Part) @ 0x2575eb1c2c0
+  - Walls (Model) @ 0x2575a269380
+    - Block (Part) @ 0x2575eb1c480
+    - Block (Part) @ 0x2575eb1c640
+    - Part (Part) @ 0x2575eb1c800
+    - Part (Part) @ 0x2575eb1c9c0
+    - Block (Part) @ 0x2575eb1cb80
+  - Window_Large (Model) @ 0x2575a269700
+    - Part (Part) @ 0x2575eb1cd40
+    - Frame_Corner (MeshPart) @ 0x2575ead5b80
+    - Part (Part) @ 0x2575eb1cf00
+    - Frame_Post (MeshPart) @ 0x2575ead5f00
+    - Part (Part) @ 0x2575eb1d0c0
+    - Frame_Corner (MeshPart) @ 0x2575ead6280
+    - Part (Part) @ 0x2575eb1d280
+    - Frame_Post (MeshPart) @ 0x2575ead6600
+    - Part (Part) @ 0x2575eb1d440
+    - Part (Part) @ 0x2575eb1d600
+    - Frame_Corner (MeshPart) @ 0x2575ead6980
+    - Frame_Corner (MeshPart) @ 0x2575ead6d00
+    - Frame_Post (MeshPart) @ 0x2575ead7080
+    - Frame_Post (MeshPart) @ 0x2575ead7400
+    - Part (Part) @ 0x2575eb1d7c0
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575eb93880
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575eb94680
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575dd4b300
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575dd4ba00
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575e9d5480
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575e9d5b80
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575e9dcf00
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575e9dd600
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575e9de780
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575e9df580
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575df82e00
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575df83180
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575df87e80
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575df89380
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575ec07780
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575ec07b00
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575e235b80
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575e237080
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575e238900
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575e239380
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575e23e780
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575e3b0080
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575e3b7780
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575e3b7e80
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575ed9dd00
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575ed9e080
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575ee91c80
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575ee93180
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575ee7d600
+
+Found matching config root at path: Workspace/Workspace/Lobby/Lobby/New Rope/Rope/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575ee7dd00
+
+Found matching config root at path: Workspace/Workspace/Lobby/GunPrompt
+- GunPrompt (Part) @ 0x2575e5b3880
+  - PromptScript (Script) @ 0x257584b1800
+  - ProximityPrompt (ProximityPrompt) @ 0x25759284800
+  - Meshes/candygun (MeshPart) @ 0x2575f04a500
+    - SurfaceAppearance (SurfaceAppearance) @ 0x25758ecba80
+
+Found matching config root at path: Workspace/Workspace/Lobby/ItemBundlePrompt/Meshes/candygun
+- Meshes/candygun (MeshPart) @ 0x2575efd2700
+  - SurfaceAppearance (SurfaceAppearance) @ 0x25758ecd880
+
+Found matching config root at path: Workspace/Workspace/Brinleelane1987/LowerTorso/GunBelt
+- GunBelt (Attachment) @ 0x2578400e480
+
+Found matching config root at path: Workspace/Workspace/Brinleelane1987/DisplayRefGun
+- DisplayRefGun (ObjectValue) | Value: GunDisplay (Part) @ 0x2573855829504 @ 0x2575ec1a260
+
+Found matching config root at path: Workspace/Workspace/Golftracker/LowerTorso/GunBelt
+- GunBelt (Attachment) @ 0x2575e16b900
+
+Found matching config root at path: Workspace/Workspace/Golftracker/DisplayRefGun
+- DisplayRefGun (ObjectValue) | Value: GunDisplay (MeshPart) @ 0x2574088141952 @ 0x257846fd6e0
+
+Found matching config root at path: Workspace/Workspace/xime_jejeu/LowerTorso/GunBelt
+- GunBelt (Attachment) @ 0x2574ff2ad00
+  - OriginalPosition (Vector3Value) [ValueObject] @ 0x2575028ab20
+
+Found matching config root at path: Workspace/Workspace/xime_jejeu/DisplayRefGun
+- DisplayRefGun (ObjectValue) | Value: GunDisplay (Part) @ 0x2574024186560 @ 0x25750280160
+
+Found matching config root at path: Workspace/Workspace/Workplace/Raggy/LowerTorso/GunBelt
+- GunBelt (Attachment) @ 0x25764d24700
+
+Found matching config root at path: Workspace/Workspace/Workplace/Raggy/HumanoidRootPart/GunShoulderAttachment
+- GunShoulderAttachment (Attachment) @ 0x25784d30e00
+
+Found matching config root at path: Workspace/Workspace/Workplace/Raggy/HumanoidRootPart/GunRaycastAttachment
+- GunRaycastAttachment (Attachment) @ 0x25784d3e300
+
+Found matching config root at path: Workspace/Workspace/Workplace/Raggy/RightHand/GunTipAttachment
+- GunTipAttachment (Attachment) @ 0x25784d38f00
+  - ShootParticle (ParticleEmitter) @ 0x2575cc92180
+
+Found matching config root at path: Workspace/Workspace/Workplace/Raggy/LowerTorso/GunBelt
+- GunBelt (Attachment) @ 0x2574ef45c00
+
+Found matching config root at path: Workspace/Workspace/Workplace/GunDrop
+- GunDrop (Part) @ 0x2574da6af80
+  - Fire (Fire) @ 0x25783ecc100
+  - Mesh (SpecialMesh) @ 0x2575db06200
+  - TouchInterest (TouchTransmitter) @ 0x25763592d20
+
+Found matching config root at path: Workspace/Workspace/IIIIIllIlIllllIIIIl/Gun
+- Gun (Tool) @ 0x25784bd8480
+  - Handle (Part) @ 0x2575deb1200
+    - Mesh (SpecialMesh) @ 0x25783e4b300
+    - Gunshot (Sound) @ 0x2573c388c80
+    - Reload (Sound) @ 0x2573c38aa80
+  - GunServer (Script) @ 0x25780c35e00
+    - GunRaycastAttachment1 (Attachment) @ 0x2578209c500
+  - GunClient (LocalScript) @ 0x25780c35a00
+  - Animations (Folder) @ 0x2575e2937a0
+    - Shoot (Animation) @ 0x2575dee0f00
+    - Reload (Animation) @ 0x257609e7400
+  - Sounds (Folder) @ 0x2575e29f9e0
+  - Shoot (RemoteEvent) @ 0x2575deb2e00
+  - CantShoot (BillboardGui) @ 0x2575f43f080
+    - TextLabel (TextLabel) @ 0x2577ffc4080
+
+Found matching config root at path: Workspace/Workspace/Zoeeey665/LowerTorso/GunBelt
+- GunBelt (Attachment) @ 0x2574ef4ec00
+  - OriginalPosition (Vector3Value) [ValueObject] @ 0x2574ff0ff20
+
+Found matching config root at path: Workspace/Workspace/Zoeeey665/DisplayRefGun
+- DisplayRefGun (ObjectValue) | Value: GunDisplay (Part) @ 0x2573996179264 @ 0x2574f993dc0
+
+Found matching config root at path: Workspace/Workspace/Monkeyuser230/LowerTorso/GunBelt
+- GunBelt (Attachment) @ 0x2574ef4f680
+  - OriginalPosition (Vector3Value) [ValueObject] @ 0x2575dd28ac0
+
+Found matching config root at path: Workspace/Workspace/Monkeyuser230/DisplayRefGun
+- DisplayRefGun (ObjectValue) | Value: GunDisplay (MeshPart) @ 0x2574279556480 @ 0x2575e098740
+
+Found matching config root at path: Workspace/Workspace/cuteavamoua/LowerTorso/GunBelt
+- GunBelt (Attachment) @ 0x2574ff21a00
+  - OriginalPosition (Vector3Value) [ValueObject] @ 0x25750288ac0
+
+Found matching config root at path: Workspace/Workspace/cuteavamoua/DisplayRefGun
+- DisplayRefGun (ObjectValue) | Value: GunDisplay (Part) @ 0x2574024184768 @ 0x2574ff41c80
+
+Found matching config root at path: Workspace/Workspace/heyshshbjsj/LowerTorso/GunBelt
+- GunBelt (Attachment) @ 0x2575db03500
+
+Found matching config root at path: Workspace/Workspace/heyshshbjsj/DisplayRefGun
+- DisplayRefGun (ObjectValue) | Value: GunDisplay (Part) @ 0x2574024331968 @ 0x2574f4d8e40
+

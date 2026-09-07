@@ -1,0 +1,19 @@
+Tool Name: Sign
+Tool Class: Tool
+
+Descendants:
+  - Name: GearServer | Class: Script @ 0x25782be5200
+    - Name: GearClient | Class: LocalScript @ 0x25782bea800
+  - Name: ClientEvent | Class: RemoteEvent @ 0x257872f5f00
+  - Name: ServerEvent | Class: BindableEvent @ 0x25786ac3ce0
+  - Name: ToolType | Class: StringValue | Value: "Unknown" @ 0x2575dad0b00
+  - Name: # | Class: IntValue | Value: 2 @ 0x25786acecc0
+  - Name: ToolId | Class: StringValue | Value: "Unknown" @ 0x25766dd4b00
+  - Name: 20 | Class: Part @ 0x257872f28c0
+    - Name: HandleJoint | Class: Motor6D @ 0x257846da400
+    - Name: GearModel | Class: Model @ 0x2578c8c9a80
+      - Name: Sign | Class: Part @ 0x257872f0e80
+        - Name: Mesh | Class: SpecialMesh @ 0x2578dc1fc80
+          - Name: Hkey | Class: IntValue | Value: 1 @ 0x25782a05c60
+        - Name: Hkey | Class: IntValue | Value: 0 @ 0x25782a022a0
+        - Name: OffsetJoint | Class: Motor6D @ 0x257846df400

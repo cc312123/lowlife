@@ -1,0 +1,21 @@
+Tool Name: [Meat]
+Tool Class: Tool
+
+Descendants:
+  - Name: Eat | Class: Script @ 0x15127bf0600
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x1447592663168 @ 0x1512c867be0
+  - Name: Handle | Class: Part @ 0x151374b4bc0
+    - Name: WeldConstraint | Class: WeldConstraint @ 0x1511f06f940
+    - Name: Eat | Class: StringValue | Value: "Unknown" @ 0x1512003eb00
+  - Name: Default | Class: UnionOperation @ 0x1512ab31000
+    - Name: WeldConstraint | Class: WeldConstraint @ 0x1511f06e540
+    - Name: WeldConstraint | Class: WeldConstraint @ 0x1511f06b480
+    - Name: MeshPart | Class: MeshPart @ 0x151215fc800
+      - Name: Decal | Class: Decal @ 0x152801b3f00
+      - Name: Decal | Class: Decal @ 0x152801bb200
+      - Name: Decal | Class: Decal @ 0x152801bd780
+      - Name: Decal | Class: Decal @ 0x152801bd000
+      - Name: Decal | Class: Decal @ 0x152801ba080
+      - Name: Decal | Class: Decal @ 0x152801b7100
+    - Name: Part | Class: Part @ 0x151374bd7c0
+      - Name: Decal | Class: Decal @ 0x152801b9900

@@ -1,0 +1,15 @@
+Tool Name: [Radio]
+Tool Class: Tool
+
+Descendants:
+  - Name: _Extra | Class: Script @ 0x20b160f0200
+    - Name: Client | Class: LocalScript @ 0x20b160f5000
+    - Name: Extra | Class: RemoteEvent @ 0x20b1c34e080
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x2240383318144 @ 0x2099fb8b680
+  - Name: Handle | Class: Part @ 0x20b1c34d0c0
+    - Name: Mesh | Class: SpecialMesh @ 0x209b4429380
+    - Name: Equip | Class: StringValue | Value: "Unknown" @ 0x20b28190e00
+    - Name: Sound | Class: StringValue | Value: "Unknown" @ 0x20b28554000
+    - Name: Equip | Class: Sound @ 0x20b27146e80
+    - Name: Sound | Class: Sound @ 0x209828daa80
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x2240383318144 @ 0x2099fb8a260

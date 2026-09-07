@@ -1,0 +1,12 @@
+Tool Name: Jar
+Tool Class: Tool
+
+Descendants:
+  - Name: SodaScript | Class: Script @ 0x19ab8a8a800
+  - Name: Local Gui | Class: LocalScript @ 0x19ab8a8aa00
+  - Name: SpeedEffect | Class: Script @ 0x19ab8a8ae00
+  - Name: Handle | Class: Part @ 0x19aab0eba00
+    - Name: OpenSound | Class: Sound @ 0x19ab0cea800
+    - Name: DrinkSound | Class: Sound @ 0x19ab0ce0080
+    - Name: RightGripAttachment | Class: Attachment @ 0x19ab8a37a00
+    - Name: Mesh | Class: SpecialMesh @ 0x19ac8175900

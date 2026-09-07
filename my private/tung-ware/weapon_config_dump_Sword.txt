@@ -1,0 +1,237 @@
+=== Weapon Config Search for Tool: Sword ===
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Misc/CosmeticAdSamples/SwordParticles
+- SwordParticles (Model) @ 0x29216d66980
+  - Model (Model) @ 0x292179f5800
+    - Mesh (MeshPart) @ 0x2921af77e80
+    - ParticlePart (Part) @ 0x293a43af740
+  - Trigger (Part) @ 0x29220c4f580
+  - Part (Part) @ 0x292217791c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Misc/CosmeticAdSamples/SwordSkin
+- SwordSkin (Model) @ 0x292179f1900
+  - Model (Model) @ 0x292179f1580
+    - Mesh (MeshPart) @ 0x2921af78580
+  - Part (Part) @ 0x293a7713dc0
+  - Trigger (Part) @ 0x293a77144c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Misc/CosmeticAdSamples/SwordTrail
+- SwordTrail (Model) @ 0x2921a316280
+  - Model (Model) @ 0x2921a315100
+    - Mesh (MeshPart) @ 0x29222171580
+      - Trail (Trail) @ 0x29384e56e80
+      - Attachment0 (Attachment) @ 0x2923cb14d00
+      - Attachment1 (Attachment) @ 0x2923cb17580
+  - Trigger (Part) @ 0x293a43a8ac0
+  - Part (Part) @ 0x293a7719e00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Cosmetics/SwordParticles
+- SwordParticles (Folder) @ 0x2922eecf820
+  - Stars (Folder) @ 0x2922eecaf80
+    - Stars (ParticleEmitter) @ 0x29384340980
+  - LaughEmoji (Folder) @ 0x2922eeca7a0
+    - LaughEmoji (ParticleEmitter) @ 0x29384343980
+  - Hearts (Folder) @ 0x2922eeca500
+    - Hearts (ParticleEmitter) @ 0x2938434db80
+  - PinkFire (Folder) @ 0x2922eec2ee0
+    - PinkFire (ParticleEmitter) @ 0x29384348180
+  - Pumpkins (Folder) @ 0x2922eecadc0
+    - Pumpkins (ParticleEmitter) @ 0x2923cddb180
+      - PumpkinsScript (Script) @ 0x2921eef3800
+  - PoopEmoji (Folder) @ 0x2922eecc480
+    - CryEmoji (ParticleEmitter) @ 0x29384341880
+      - CryScript (Script) @ 0x2921eef8c00
+  - PinkHearts (Folder) @ 0x2922eec8740
+    - PinkHearts (ParticleEmitter) @ 0x2923cddcf80
+  - GreenFire (Folder) @ 0x2922ee5d980
+    - GreenFire (ParticleEmitter) @ 0x2923cdd5d80
+  - Fire (Folder) @ 0x2922ee50780
+    - Fire (ParticleEmitter) @ 0x2923cddfc80
+  - BlackHearts (Folder) @ 0x2922f0574e0
+    - BlackHearts (ParticleEmitter) @ 0x2923cdd7280
+  - BlueFire (Folder) @ 0x2922f057400
+    - BlueFire (ParticleEmitter) @ 0x2923cdd6380
+  - PurpleFire (Folder) @ 0x2922f05b5a0
+    - PurpleFire (ParticleEmitter) @ 0x2923cdd9380
+  - FestiveSparkles (Folder) @ 0x2922f4c8820
+    - FestiveSparklesScript (Script) @ 0x2921eef7e00
+    - Sparkles1 (ParticleEmitter) @ 0x2923cdd6f80
+    - Sparkles4 (ParticleEmitter) @ 0x2923cdddb80
+    - Sparkles3 (ParticleEmitter) @ 0x2923cddde80
+    - Sparkles2 (ParticleEmitter) @ 0x2923cddd280
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Cosmetics/SwordTrail
+- SwordTrail (Folder) @ 0x2922f059b60
+  - Sunset (Trail) @ 0x29384e58780
+  - Rainbow (Trail) @ 0x29384e5c600
+  - Purple (Trail) @ 0x29384e52d80
+  - Flame (Trail) @ 0x29384e57b00
+  - Orange (Trail) @ 0x29384e58000
+  - Pink (Trail) @ 0x29384e54e00
+  - White (Trail) @ 0x29384e53f00
+  - Black (Trail) @ 0x29384e5c380
+  - Acid (Trail) @ 0x29384e55f80
+  - Blue (Trail) @ 0x29384e54900
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Cosmetics/SwordSkin
+- SwordSkin (Folder) @ 0x2922f4c6440
+  - Black (Color3Value) [ValueObject] @ 0x2922eec5560
+  - Pink (Color3Value) [ValueObject] @ 0x2922eec74e0
+  - Rainbow (ObjectValue) | Value: Model (Model) @ 0x2826484801280 @ 0x2922eecf2e0
+    - Model (Model) @ 0x292179f5f00
+      - SwordRainbow (MeshPart) @ 0x2921af7c100
+  - Red (Color3Value) [ValueObject] @ 0x2922f0583c0
+  - Radioactive (Color3Value) [ValueObject] @ 0x2922f058200
+  - Tree (ObjectValue) | Value: Sword_CristmasTree4 (Model) @ 0x2826527943680 @ 0x2922f05a420
+    - Sword_CristmasTree4 (Model) @ 0x2921a31ac00
+      - TreeScript (Script) @ 0x2921eef5400
+      - Part6 (Part) @ 0x2921bfde780
+      - Part5 (Part) @ 0x2921bfde940
+      - Part4 (Part) @ 0x2921bfdeb00
+      - Part3 (Part) @ 0x2921bfdecc0
+      - Part2 (Part) @ 0x2921bfdee80
+      - Main (MeshPart) @ 0x2921af7d980
+        - WeldConstraint (WeldConstraint) @ 0x292337410c0
+        - WeldConstraint (WeldConstraint) @ 0x2923376cb00
+        - WeldConstraint (WeldConstraint) @ 0x2923376cec0
+        - WeldConstraint (WeldConstraint) @ 0x2923376c9c0
+        - WeldConstraint (WeldConstraint) @ 0x2923376db40
+        - WeldConstraint (WeldConstraint) @ 0x29233767240
+        - WeldConstraint (WeldConstraint) @ 0x29233761fc0
+        - WeldConstraint (WeldConstraint) @ 0x29233762100
+        - WeldConstraint (WeldConstraint) @ 0x29236a1c740
+      - Star (MeshPart) @ 0x2921af7eb00
+      - Trunk (MeshPart) @ 0x29222171900
+      - Part1 (Part) @ 0x29221770080
+      - Tree (MeshPart) @ 0x29222171c80
+  - Blue (Color3Value) [ValueObject] @ 0x2922f4c8660
+  - White (Color3Value) [ValueObject] @ 0x2922f4c9ee0
+  - Festive (ObjectValue) | Value: SwordGarlandV3_2 (Model) @ 0x2826527930240 @ 0x2922f4c7320
+    - SwordGarlandV3_2 (Model) @ 0x2921a317780
+      - WL_ToolGarland (Script) @ 0x2921eef2e00
+      - Mesh (MeshPart) @ 0x2921af78900
+        - WeldConstraint (WeldConstraint) @ 0x29233741700
+        - WeldConstraint (WeldConstraint) @ 0x29233769400
+        - WeldConstraint (WeldConstraint) @ 0x29236a1c380
+      - Wire (MeshPart) @ 0x2921af78200
+      - Color2 (MeshPart) @ 0x2921af78c80
+      - Color1 (MeshPart) @ 0x2921af79000
+  - Yellow (Color3Value) [ValueObject] @ 0x2922f4cbe60
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Events/Remote/SwordLunge
+- SwordLunge (RemoteEvent) @ 0x29201dfdd00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Events/SwordKillCheck
+- SwordKillCheck (BindableFunction) @ 0x2923376b5c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Sounds/AdButtonPressed
+- AdButtonPressed (Sound) @ 0x292225e8f00
+
+Found matching config root at path: Workspace/Workspace/MaxDog0612/L_Sword
+- L_Sword (LocalScript) @ 0x293a1fa5000
+
+Found matching config root at path: Workspace/Workspace/LeaderboardBlue
+- LeaderboardBlue (Model) @ 0x29238dbaf80
+  - Background (Model) @ 0x29238dba880
+    - Background (Part) @ 0x292215f9a80
+    - Corner (Part) @ 0x2921b962e00
+    - Background (Part) @ 0x2921b963500
+    - Corner (Part) @ 0x2921b9636c0
+    - Corner (Part) @ 0x29222014680
+    - Corner (Part) @ 0x29222014840
+  - BackgroundTitle (Model) @ 0x29238db7080
+    - Background (Part) @ 0x2921b962c40
+    - Corner (Part) @ 0x2921b969a80
+    - Part (Part) @ 0x29222068740
+    - Part (Part) @ 0x29222068900
+    - Background (Part) @ 0x29222068ac0
+    - Corner (Part) @ 0x29222068c80
+    - Corner (Part) @ 0x29222068e40
+    - Corner (Part) @ 0x29222069000
+  - Title (Part) @ 0x2921b963340
+    - SurfaceGui (SurfaceGui) @ 0x29216095a80
+      - TextLabel (TextLabel) @ 0x29216114080
+        - UIStroke (UIStroke) @ 0x292335c7d80
+  - Screen (Part) @ 0x292220144c0
+  - LeaderboardPowerButton (Part) @ 0x29222068580
+
+Found matching config root at path: Workspace/Workspace/Ads/Cosmetics/GeneratedCatalog/9/Model/Sword_CristmasTree4
+- Sword_CristmasTree4 (Model) @ 0x29222173c00
+  - TreeScript (Script) @ 0x2922af60800
+  - Part6 (Part) @ 0x292225c2a80
+  - Part5 (Part) @ 0x292225cfc80
+  - Part4 (Part) @ 0x292225c3a40
+  - Part3 (Part) @ 0x292225c2fc0
+  - Part2 (Part) @ 0x292225cf040
+  - Main (MeshPart) @ 0x29222175f00
+    - WeldConstraint (WeldConstraint) @ 0x2922b93b5c0
+    - WeldConstraint (WeldConstraint) @ 0x2922b93b700
+    - WeldConstraint (WeldConstraint) @ 0x2922b93b840
+    - WeldConstraint (WeldConstraint) @ 0x2922b93b980
+    - WeldConstraint (WeldConstraint) @ 0x2922b93bac0
+    - WeldConstraint (WeldConstraint) @ 0x2922b93bc00
+    - WeldConstraint (WeldConstraint) @ 0x2922b93bd40
+    - WeldConstraint (WeldConstraint) @ 0x2922b93be80
+    - WeldConstraint (WeldConstraint) @ 0x2922b93bfc0
+  - Star (MeshPart) @ 0x29222175800
+  - Trunk (MeshPart) @ 0x29222175480
+  - Part1 (Part) @ 0x292225c2380
+  - Tree (MeshPart) @ 0x29222175100
+
+Found matching config root at path: Workspace/Workspace/Mewhenthe_boba678/L_Sword
+- L_Sword (LocalScript) @ 0x293a1fa1200
+
+Found matching config root at path: Workspace/Workspace/Zymirhiam/L_Sword
+- L_Sword (LocalScript) @ 0x293a1fa2000
+
+Found matching config root at path: Workspace/Workspace/Cakesrawberry50/L_Sword
+- L_Sword (LocalScript) @ 0x2922af61c00
+
+Found matching config root at path: Workspace/Workspace/Duhitzmathew0831/L_Sword
+- L_Sword (LocalScript) @ 0x2922e7fde00
+
+Found matching config root at path: Workspace/Workspace/Cfc1_237/L_Sword
+- L_Sword (LocalScript) @ 0x293a1fa1c00
+
+Found matching config root at path: Workspace/Workspace/Cfc1_237/RedBeanieWithHair
+- RedBeanieWithHair (Accessory) @ 0x293a31c9fc0
+  - Handle (Part) @ 0x293a31cac00
+    - Mesh (SpecialMesh) @ 0x2922f5ad700
+    - HatAttachment (Attachment) @ 0x29222683f80
+      - OriginalPosition (Vector3Value) [ValueObject] @ 0x2922e5b43e0
+    - OriginalSize (Vector3Value) [ValueObject] @ 0x292312f2700
+    - AccessoryWeld (Weld) @ 0x293a31c9540
+
+Found matching config root at path: Workspace/Workspace/manika1411/L_Sword
+- L_Sword (LocalScript) @ 0x2922af6be00
+
+Found matching config root at path: Workspace/Workspace/hellokitty134185/L_Sword
+- L_Sword (LocalScript) @ 0x293a1faac00
+
+Found matching config root at path: Workspace/Workspace/glowsear/L_Sword
+- L_Sword (LocalScript) @ 0x29380a3c400
+
+Found matching config root at path: Workspace/Workspace/IIIIIllIlIllllIIIIl/L_Sword
+- L_Sword (LocalScript) @ 0x29380a36e00
+
+Found matching config root at path: Workspace/Workspace/IIIIIllIlIllllIIIIl/Sword
+- Sword (Tool) @ 0x29206604280
+  - Handle (Part) @ 0x292225c2700
+    - Attachment1 (Attachment) @ 0x2922baa4580
+    - Attachment0 (Attachment) @ 0x2922baab300
+    - Rainbow (Trail) @ 0x2922e0ab980
+    - Slash (Sound) @ 0x29215eed780
+    - Lunge (Sound) @ 0x29215eed500
+    - Unsheathe (Sound) @ 0x29215eedc80
+    - TouchInterest (TouchTransmitter) @ 0x2922fa95c60
+  - DigTrigger (Part) @ 0x292225c2540
+    - WeldConstraint (WeldConstraint) @ 0x2922d641200
+  - ParticlePart (Part) @ 0x292225c3f80
+    - WeldConstraint (WeldConstraint) @ 0x2922d64ef40
+  - Mesh (MeshPart) @ 0x2922a8f5b80
+    - WeldConstraint (WeldConstraint) @ 0x29224794400
+  - toolanim (StringValue) | Value: "Unknown" @ 0x2922e82be00
+
+Found matching config root at path: Workspace/Workspace/rtdvxh02/L_Sword
+- L_Sword (LocalScript) @ 0x293a1faba00
+

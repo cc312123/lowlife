@@ -1,0 +1,8 @@
+Tool Name: [Adrenaline-Shot]
+Tool Class: Tool
+
+Descendants:
+  - Name: Script | Class: Script @ 0x1512b979c00
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x1447592663168 @ 0x1511defbae0
+  - Name: Handle | Class: MeshPart @ 0x1511db6b300
+    - Name: Switch | Class: StringValue | Value: "Unknown" @ 0x1512500bc00

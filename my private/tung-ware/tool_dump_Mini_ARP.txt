@@ -1,0 +1,81 @@
+Tool Name: Mini ARP
+Tool Class: Tool
+
+Descendants:
+  - Name: Setting | Class: ModuleScript @ 0x2922feaeb00
+  - Name: Price | Class: IntValue | Value: 11600 @ 0x2923490d7c0
+  - Name: SlideAnim | Class: Animation @ 0x2923ef7e000
+  - Name: EquippedAnim | Class: Animation @ 0x2923ef74800
+  - Name: Hold | Class: BoolValue | Value: false @ 0x29234907b00
+  - Name: Jammed | Class: BoolValue | Value: false @ 0x2923490c640
+  - Name: IdleAnim | Class: Animation @ 0x2923ef73800
+  - Name: FireAnim | Class: Animation @ 0x2923ef73a00
+  - Name: ReloadAnim | Class: Animation @ 0x2923ef71300
+  - Name: HoldDownAnim | Class: Animation @ 0x2923ef7a400
+  - Name: Part9 | Class: MeshPart @ 0x2921bfd8c80
+  - Name: dd | Class: Part @ 0x2922feae940
+  - Name: Magazine | Class: MeshPart @ 0x2921bfd8900
+  - Name: Part0 | Class: MeshPart @ 0x2921bfd9380
+  - Name: Barrel | Class: MeshPart @ 0x2921bfd9700
+  - Name: Compensator | Class: MeshPart @ 0x2921bfd9000
+  - Name: Part2 | Class: MeshPart @ 0x2921bfd9a80
+  - Name: Flash | Class: UnionOperation @ 0x2921be04c00
+  - Name: Part5 | Class: MeshPart @ 0x2921bfd9e00
+  - Name: Part | Class: MeshPart @ 0x2921bfda180
+  - Name: Part3 | Class: MeshPart @ 0x2921bfda500
+    - Name: Decal | Class: Decal @ 0x29239ee2100
+  - Name: Part7 | Class: MeshPart @ 0x2921bfda880
+  - Name: Part6 | Class: MeshPart @ 0x2921bfdac00
+  - Name: Part4 | Class: MeshPart @ 0x2921bfdaf80
+  - Name: test | Class: MeshPart @ 0x2921bfdb300
+    - Name: Decal | Class: Decal @ 0x29239eead00
+    - Name: Decal | Class: Decal @ 0x29239eee900
+  - Name: Handle | Class: Part @ 0x2922feae5c0
+    - Name: ReloadSound | Class: Sound @ 0x29239ee6c00
+    - Name: ShotgunClipin | Class: Sound @ 0x29239eef800
+    - Name: SlideSound | Class: Sound @ 0x29239ee7100
+    - Name: TickSound | Class: Sound @ 0x29239ee8c80
+    - Name: WindDown | Class: Sound @ 0x29239eec100
+    - Name: WindUp | Class: Sound @ 0x29239ee3a00
+    - Name: EquippedSound | Class: Sound @ 0x29239ee8780
+    - Name: test | Class: Motor6D @ 0x2922f9e8000
+    - Name: Part | Class: Motor6D @ 0x2922f9e7e00
+    - Name: Part9 | Class: Motor6D @ 0x2922f9e8200
+    - Name: Part7 | Class: Motor6D @ 0x2922f9e8a00
+    - Name: Part6 | Class: Motor6D @ 0x2922f9e9c00
+    - Name: Part5 | Class: Motor6D @ 0x2922f9eb200
+    - Name: Part4 | Class: Motor6D @ 0x2922f9e9a00
+    - Name: Part3 | Class: Motor6D @ 0x2922f9eb600
+    - Name: Part2 | Class: Motor6D @ 0x2922f9eb800
+    - Name: Part0 | Class: Motor6D @ 0x2922f9e3c00
+    - Name: Part | Class: Motor6D @ 0x2922f9ed200
+    - Name: Magazine | Class: Motor6D @ 0x2922f9ee400
+    - Name: Barrel | Class: Motor6D @ 0x2922f9e6400
+    - Name: Compensator | Class: Motor6D @ 0x2922f9e5000
+    - Name: Flash | Class: Motor6D @ 0x2922f9e7400
+    - Name: GunMuzzlePoint | Class: Attachment @ 0x29224732780
+    - Name: GunFirePoint | Class: Attachment @ 0x29224732a80
+      - Name: TouchPart | Class: Part @ 0x2922feae400
+        - Name: TouchInterest | Class: TouchTransmitter @ 0x2922c6b9700
+    - Name: FireSounds | Class: Folder @ 0x29230075d40
+      - Name: dw | Class: Sound @ 0x29239ee1200
+    - Name: WeldConstraint | Class: WeldConstraint @ 0x2923f052240
+  - Name: GunScript_Local | Class: LocalScript @ 0x2922f9e3e00
+    - Name: SpringModule | Class: ModuleScript @ 0x2922feae780
+    - Name: MarkerEvent | Class: BindableEvent @ 0x29230078660
+  - Name: GunScript_Server | Class: Script @ 0x2922f9e1c00
+    - Name: IgniteScript | Class: Script @ 0x2922f9e3a00
+    - Name: IcifyScript | Class: Script @ 0x2922f9e1000
+    - Name: ChangeMagAndAmmo | Class: RemoteEvent @ 0x2922feaf3c0
+    - Name: UnusedStuffs | Class: Folder @ 0x29238bcbae0
+      - Name: WhizScript | Class: Script @ 0x2922f9ef600
+      - Name: Ignore | Class: Folder @ 0x29238bca960
+    - Name: PlayServerSound | Class: RemoteEvent @ 0x2922feaf580
+    - Name: Mag | Class: NumberValue | Value: 31.000000 @ 0x29238bc0b00
+    - Name: Ammo | Class: NumberValue | Value: inf @ 0x29238bcc720
+  - Name: IdleAnim | Class: Animation @ 0x2923ef7ac00
+  - Name: FireAnim | Class: Animation @ 0x2923ef7b300
+  - Name: ReloadAnim | Class: Animation @ 0x2923ef7b600
+  - Name: HoldDownAnim | Class: Animation @ 0x2923ef7b400
+  - Name: EquippedAnimation | Class: Animation @ 0x2923ef7b500
+  - Name: SlideAnim | Class: Animation @ 0x2923ef7bf00

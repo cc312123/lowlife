@@ -1,0 +1,911 @@
+=== Weapon Config Search for Tool: rev ===
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Modules/BeamAssets/Windburst
+- Windburst (Folder) @ 0x19ab8215800
+  - WindB (ParticleEmitter) @ 0x19c0ec58d80
+  - WindA (ParticleEmitter) @ 0x19c0ec5cc80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Modules/Beams/windburst
+- windburst (ModuleScript) @ 0x19aba0f21c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/guns/rev
+- rev (Tool) @ 0x19c135f6080
+  - Single Bullets (Script) @ 0x19abb86c600
+  - AMMO (NumberValue) | Value: 6.000000 @ 0x19ab8e25aa0
+  - rl (RemoteEvent) @ 0x19c1ceaf580
+  - Handle (MeshPart) @ 0x19aaecfa880
+    - ANMO OUT (Sound) @ 0x19ac0250800
+    - Shoot (Sound) @ 0x19ac0255d00
+    - Flare (Attachment) @ 0x19ac74fa880
+      - ParticleEmitter (ParticleEmitter) @ 0x19c0ec5f680
+    - BloodParticle (ParticleEmitter) @ 0x19c0ec50980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/guns/db
+- db (Tool) @ 0x19c135fb480
+  - Multi Bullets (Script) @ 0x19abb86c400
+  - AMMO (NumberValue) | Value: 2.000000 @ 0x19ab8e2b140
+  - rl (RemoteEvent) @ 0x19c1cea1e40
+  - Handle (MeshPart) @ 0x19aaecfac00
+    - Shoot (Sound) @ 0x19ac025da00
+    - ANMO OUT (Sound) @ 0x19ac025f580
+    - Flare (Attachment) @ 0x19ac74f7880
+      - ParticleEmitter (ParticleEmitter) @ 0x19c0ec50f80
+    - BloodParticle (ParticleEmitter) @ 0x19c0ec5b480
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/guns/aimlock db
+- aimlock db (Tool) @ 0x19c135fd880
+  - Multi Bullets (Script) @ 0x19abb86cc00
+  - AMMO (NumberValue) | Value: 2.000000 @ 0x19ab8e244c0
+  - rl (RemoteEvent) @ 0x19c1ceacf00
+  - Handle (MeshPart) @ 0x19aaecf4680
+    - Shoot (Sound) @ 0x19ac0252380
+    - ANMO OUT (Sound) @ 0x19ac025f800
+    - Flare (Attachment) @ 0x19ab0e19c80
+      - ParticleEmitter (ParticleEmitter) @ 0x19c0ec51880
+    - BloodParticle (ParticleEmitter) @ 0x19ab83ddb80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/guns/aimlock rev
+- aimlock rev (Tool) @ 0x19c135f8a80
+  - Single Bullets (Script) @ 0x19abb86ca00
+  - AMMO (NumberValue) | Value: 6.000000 @ 0x19ab8e2b680
+  - rl (RemoteEvent) @ 0x19c1ceaac00
+  - Handle (MeshPart) @ 0x19aaecf4a00
+    - ANMO OUT (Sound) @ 0x19ac0250d00
+    - Shoot (Sound) @ 0x19ac0258780
+    - Flare (Attachment) @ 0x19ab0e18c00
+      - ParticleEmitter (ParticleEmitter) @ 0x19ab83d1e80
+    - BloodParticle (ParticleEmitter) @ 0x19ab83d3c80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/guns/Hitscan db
+- Hitscan db (Tool) @ 0x19c135f3080
+  - Multi Bullets (Script) @ 0x19abb86e000
+  - AMMO (NumberValue) | Value: 2.000000 @ 0x19ab8e2e400
+  - rl (RemoteEvent) @ 0x19c1cead440
+  - Handle (MeshPart) @ 0x19aae3fc100
+    - Shoot (Sound) @ 0x19ac0257600
+    - ANMO OUT (Sound) @ 0x19ac0252100
+    - Flare (Attachment) @ 0x19ab0e17d00
+      - ParticleEmitter (ParticleEmitter) @ 0x19ab83d2a80
+    - BloodParticle (ParticleEmitter) @ 0x19ab83d2780
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/guns/Hitscan rev
+- Hitscan rev (Tool) @ 0x19c135f7e80
+  - Single Bullets (Script) @ 0x19abb86de00
+  - AMMO (NumberValue) | Value: 6.000000 @ 0x19ab8e2f9e0
+  - rl (RemoteEvent) @ 0x19c1cea7780
+  - Handle (MeshPart) @ 0x19aae3fc480
+    - ANMO OUT (Sound) @ 0x19ac0255a80
+    - Shoot (Sound) @ 0x19ac025aa80
+    - Flare (Attachment) @ 0x19ab0e1c200
+      - ParticleEmitter (ParticleEmitter) @ 0x19ab83d2480
+    - BloodParticle (ParticleEmitter) @ 0x19ab83d0080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/STModules/psdb
+- psdb (ModuleScript) @ 0x19aba0f13c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/STModules/sr/surroundBeams
+- surroundBeams (ModuleScript) @ 0x19aba0f9380
+  - BeamFX (Folder) @ 0x19abc84b5a0
+    - Gradient (ParticleEmitter) @ 0x19abf8bb180
+    - Gradient (ParticleEmitter) @ 0x19abf8b0980
+    - Outline (ParticleEmitter) @ 0x19abf8bde80
+    - Shards (ParticleEmitter) @ 0x19abf8bd880
+    - Specs (ParticleEmitter) @ 0x19abf8b9380
+    - Core (ParticleEmitter) @ 0x19abf8bd280
+  - GroundHit (Folder) @ 0x19abc84dfa0
+    - DarkShards (ParticleEmitter) @ 0x19abf8b9680
+    - Gradient (ParticleEmitter) @ 0x19abf8bc680
+    - Rocks (ParticleEmitter) @ 0x19abf8b5d80
+    - ShardFlash (ParticleEmitter) @ 0x19abf8b0380
+    - SpecsOut1 (ParticleEmitter) @ 0x19abf8b5480
+    - SpecsOut2 (ParticleEmitter) @ 0x19abf8b8180
+    - Wind (ParticleEmitter) @ 0x19abf8b3f80
+    - Wisps (ParticleEmitter) @ 0x19abf8b3080
+    - Core1 (ParticleEmitter) @ 0x19abf8bd580
+  - Beams (Folder) @ 0x19abc840940
+    - beam2 (Beam) @ 0x19aa85ea800
+    - Beam3 (Beam) @ 0x19aa85eca00
+  - Down (Folder) @ 0x19abc842fc0
+    - Shards (ParticleEmitter) @ 0x19abf8b2780
+    - Core (ParticleEmitter) @ 0x19abf8bfc80
+  - Target (Folder) @ 0x19abc842ee0
+    - Crescents (ParticleEmitter) @ 0x19abf8bf680
+    - CrescentsDark (ParticleEmitter) @ 0x19abf8bcf80
+    - Gradient1 (ParticleEmitter) @ 0x19abf8b8a80
+    - Lined (ParticleEmitter) @ 0x19abf8b1880
+    - Outline (ParticleEmitter) @ 0x19abf8bea80
+    - Shockwave (ParticleEmitter) @ 0x19abf8b7280
+    - SpecsUp (ParticleEmitter) @ 0x19abf8b7b80
+    - SpecsUp (ParticleEmitter) @ 0x19abf8b0f80
+    - in (ParticleEmitter) @ 0x19abf8bcc80
+    - Core (ParticleEmitter) @ 0x19abf8b4580
+  - SFX (Folder) @ 0x19abc846b40
+    - Energy (Sound) @ 0x19ac51b8000
+      - EchoSoundEffect (EchoSoundEffect) @ 0x19ac94afa80
+    - Fire Crackling (Sound) @ 0x19ac51b8780
+    - burning (Sound) @ 0x19ac51b0080
+      - FlangeSoundEffect (FlangeSoundEffect) @ 0x19ac94a0940
+      - PitchShiftSoundEffect (PitchShiftSoundEffect) @ 0x19c0d4d3700
+    - Crash (Sound) @ 0x19ac51b7b00
+    - Target (Sound) @ 0x19ac51b3a00
+  - Plate (Part) @ 0x19aaf5f3180
+    - Shards (ParticleEmitter) @ 0x19abf8bbd80
+    - Shards2 (ParticleEmitter) @ 0x19abf8b8780
+    - ShardsSmall (ParticleEmitter) @ 0x19abf8b6080
+    - Specs (ParticleEmitter) @ 0x19abf8b0c80
+    - SpecsSmall (ParticleEmitter) @ 0x19abf8b1b80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/STModules/MAA/Audios/Explosion Sound Effect/ReverbSoundEffect
+- ReverbSoundEffect (ReverbSoundEffect) @ 0x19ac94a0800
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Servers/Server_9e9bd28d-512d-40c1-b94b-8423acdb2768
+- Server_9e9bd28d-512d-40c1-b94b-8423acdb2768 (StringValue) | Value: "Unknown" @ 0x19c195d7100
+
+Found matching config root at path: Workspace/Workspace/MAP/Map/slum house 4/doubledoorstair
+- doubledoorstair (Model) @ 0x19ac78bd600
+  - doubledoor (Model) @ 0x19ac78be780
+    - metal door (Model) @ 0x19ac78bd980
+      - Part (Part) @ 0x19ababce240
+      - Part (Part) @ 0x19ababc6600
+      - Part (Part) @ 0x19ababc5f00
+      - Part (Part) @ 0x19ababc59c0
+      - Part (Part) @ 0x19ababc9000
+      - Part (Part) @ 0x19ababc60c0
+      - Part (Part) @ 0x19ababc9a80
+      - Part (Part) @ 0x19ababcc640
+      - Part (Part) @ 0x19ababc5800
+      - Part (Part) @ 0x19ababc8e40
+      - Part (Part) @ 0x19ababcd0c0
+    - Part (Part) @ 0x19ababce080
+    - Part (Part) @ 0x19ababce5c0
+    - Part (Part) @ 0x19ababc83c0
+    - Part (Part) @ 0x19ababc8580
+    - Part (Part) @ 0x19ababcd600
+    - Part (Part) @ 0x19ababc4300
+    - Part (Part) @ 0x19ababcc100
+    - Part (Part) @ 0x19ababc44c0
+    - Part (Part) @ 0x19ababc8040
+    - Part (Part) @ 0x19ababc8900
+    - Part (Part) @ 0x19ababc4680
+  - Part (Part) @ 0x19ababc6440
+  - Part (Part) @ 0x19ababcb4c0
+  - Part (Part) @ 0x19ababc6280
+
+Found matching config root at path: Workspace/Workspace/MAP/Map/slum house 4/doubledoorstair
+- doubledoorstair (Model) @ 0x19ac78be080
+  - doubledoor (Model) @ 0x19ac78bba00
+    - metal door (Model) @ 0x19ac78bcf00
+      - Part (Part) @ 0x19ababcdec0
+      - Part (Part) @ 0x19ababc7240
+      - Part (Part) @ 0x19ababc67c0
+      - Part (Part) @ 0x19ababcb840
+      - Part (Part) @ 0x19ababc3a40
+      - Part (Part) @ 0x19ababc36c0
+      - Part (Part) @ 0x19ababc3340
+      - Part (Part) @ 0x19ababc2fc0
+      - Part (Part) @ 0x19ababc2c40
+      - Part (Part) @ 0x19ababc28c0
+      - Part (Part) @ 0x19ababc2540
+    - Part (Part) @ 0x19ababc0240
+    - Part (Part) @ 0x19ababc4140
+    - Part (Part) @ 0x19ababc9c40
+    - Part (Part) @ 0x19ababcf900
+    - Part (Part) @ 0x19ababc1c80
+    - Part (Part) @ 0x19ababc0080
+    - Part (Part) @ 0x19ababc5480
+    - Part (Part) @ 0x19ababcc800
+    - Part (Part) @ 0x19ababc7cc0
+    - Part (Part) @ 0x19ababc9380
+    - Part (Part) @ 0x19ababca500
+  - Part (Part) @ 0x19ababc0400
+  - Part (Part) @ 0x19ababcee80
+  - Part (Part) @ 0x19ababcd280
+
+Found matching config root at path: Workspace/Workspace/MAP/Map/slum house 6/doubledoorstair
+- doubledoorstair (Model) @ 0x19c00ff0e80
+  - doubledoor (Model) @ 0x19c00ffc480
+    - metal door (Model) @ 0x19c00ff8580
+      - Part (Part) @ 0x19a9ee34840
+      - Part (Part) @ 0x19a9ee34a00
+      - Part (Part) @ 0x19a9ee34bc0
+      - Part (Part) @ 0x19a9ee34d80
+      - Part (Part) @ 0x19a9ee34f40
+      - Part (Part) @ 0x19a9ee35100
+      - Part (Part) @ 0x19a9ee352c0
+      - Part (Part) @ 0x19a9ee35480
+      - Part (Part) @ 0x19a9ee35640
+      - Part (Part) @ 0x19a9ee35800
+      - Part (Part) @ 0x19a9ee359c0
+    - Part (Part) @ 0x19a9ee35b80
+    - Part (Part) @ 0x19a9ee35d40
+    - Part (Part) @ 0x19a9ee35f00
+    - Part (Part) @ 0x19a9ee360c0
+    - Part (Part) @ 0x19a9ee36280
+    - Part (Part) @ 0x19a9ee36440
+    - Part (Part) @ 0x19a9ee36600
+    - Part (Part) @ 0x19a9ee367c0
+    - Part (Part) @ 0x19a9ee36980
+    - Part (Part) @ 0x19a9ee36b40
+    - Part (Part) @ 0x19a9ee36d00
+  - Part (Part) @ 0x19a9ee36ec0
+  - Part (Part) @ 0x19a9ee37080
+  - Part (Part) @ 0x19a9ee37240
+
+Found matching config root at path: Workspace/Workspace/MAP/Map/slum house 6/doubledoorstair
+- doubledoorstair (Model) @ 0x19c00ff3500
+  - doubledoor (Model) @ 0x19c00ff2380
+    - metal door (Model) @ 0x19c00ffd980
+      - Part (Part) @ 0x19a9eecdb40
+      - Part (Part) @ 0x19a9eecdd00
+      - Part (Part) @ 0x19a9eecdec0
+      - Part (Part) @ 0x19a9eece080
+      - Part (Part) @ 0x19a9eece240
+      - Part (Part) @ 0x19a9eece400
+      - Part (Part) @ 0x19a9eece5c0
+      - Part (Part) @ 0x19a9eece780
+      - Part (Part) @ 0x19a9eece940
+      - Part (Part) @ 0x19a9eeceb00
+      - Part (Part) @ 0x19a9eececc0
+    - Part (Part) @ 0x19a9eecee80
+    - Part (Part) @ 0x19a9eecf040
+    - Part (Part) @ 0x19a9eecf200
+    - Part (Part) @ 0x19a9eecf3c0
+    - Part (Part) @ 0x19a9eecf580
+    - Part (Part) @ 0x19a9eecf740
+    - Part (Part) @ 0x19a9eecf900
+    - Part (Part) @ 0x19a9eecfac0
+    - Part (Part) @ 0x19a9eecfc80
+    - Part (Part) @ 0x19a9eecfe40
+    - Part (Part) @ 0x19a9ef50080
+  - Part (Part) @ 0x19a9ef50240
+  - Part (Part) @ 0x19a9ef50400
+  - Part (Part) @ 0x19a9ef505c0
+
+Found matching config root at path: Workspace/Workspace/MAP/Map/slum house 5/doubledoorstair
+- doubledoorstair (Model) @ 0x19c00ff9000
+  - doubledoor (Model) @ 0x19c00ffa500
+    - metal door (Model) @ 0x19c00ffe400
+      - Part (Part) @ 0x19a9f841580
+      - Part (Part) @ 0x19a9f841740
+      - Part (Part) @ 0x19a9f841900
+      - Part (Part) @ 0x19a9f841ac0
+      - Part (Part) @ 0x19a9f841c80
+      - Part (Part) @ 0x19a9f841e40
+      - Part (Part) @ 0x19a9f842000
+      - Part (Part) @ 0x19a9f8421c0
+      - Part (Part) @ 0x19a9f842380
+      - Part (Part) @ 0x19a9f842540
+      - Part (Part) @ 0x19a9f842700
+    - Part (Part) @ 0x19a9f8428c0
+    - Part (Part) @ 0x19a9f842a80
+    - Part (Part) @ 0x19a9f842c40
+    - Part (Part) @ 0x19a9f842e00
+    - Part (Part) @ 0x19a9f842fc0
+    - Part (Part) @ 0x19a9f843180
+    - Part (Part) @ 0x19a9f843340
+    - Part (Part) @ 0x19a9f843500
+    - Part (Part) @ 0x19a9f8436c0
+    - Part (Part) @ 0x19a9f843880
+    - Part (Part) @ 0x19a9f843a40
+  - Part (Part) @ 0x19a9f843c00
+  - Part (Part) @ 0x19a9f843dc0
+  - Part (Part) @ 0x19a9f843f80
+
+Found matching config root at path: Workspace/Workspace/MAP/Map/slum house 6/doubledoorstair
+- doubledoorstair (Model) @ 0x19ab9288580
+  - doubledoor (Model) @ 0x19ab9288200
+    - metal door (Model) @ 0x19ab9286280
+      - Part (Part) @ 0x19aa00a3180
+      - Part (Part) @ 0x19aa00a3340
+      - Part (Part) @ 0x19aa00a3500
+      - Part (Part) @ 0x19aa00a36c0
+      - Part (Part) @ 0x19aa00a3880
+      - Part (Part) @ 0x19aa00a3a40
+      - Part (Part) @ 0x19aa00a3c00
+      - Part (Part) @ 0x19aa00a3dc0
+      - Part (Part) @ 0x19aa00a3f80
+      - Part (Part) @ 0x19aa00a4140
+      - Part (Part) @ 0x19aa00a4300
+    - Part (Part) @ 0x19aa00a44c0
+    - Part (Part) @ 0x19aa00a4680
+    - Part (Part) @ 0x19aa00a4840
+    - Part (Part) @ 0x19aa00a4a00
+    - Part (Part) @ 0x19aa00a4bc0
+    - Part (Part) @ 0x19aa00a4d80
+    - Part (Part) @ 0x19aa00a4f40
+    - Part (Part) @ 0x19aa00a5100
+    - Part (Part) @ 0x19aa00a52c0
+    - Part (Part) @ 0x19aa00a5480
+    - Part (Part) @ 0x19aa00a5640
+  - Part (Part) @ 0x19aa00a5800
+  - Part (Part) @ 0x19aa00a59c0
+  - Part (Part) @ 0x19aa00a5b80
+
+Found matching config root at path: Workspace/Workspace/MAP/Map/slum house 6/doubledoorstair
+- doubledoorstair (Model) @ 0x19ab9285b80
+  - doubledoor (Model) @ 0x19ab9285f00
+    - metal door (Model) @ 0x19ab9285480
+      - Part (Part) @ 0x19aa1974840
+      - Part (Part) @ 0x19aa1974a00
+      - Part (Part) @ 0x19aa1974bc0
+      - Part (Part) @ 0x19aa1974d80
+      - Part (Part) @ 0x19aa1974f40
+      - Part (Part) @ 0x19aa1975100
+      - Part (Part) @ 0x19aa19752c0
+      - Part (Part) @ 0x19aa1975480
+      - Part (Part) @ 0x19aa1975640
+      - Part (Part) @ 0x19aa1975800
+      - Part (Part) @ 0x19aa19759c0
+    - Part (Part) @ 0x19aa1975b80
+    - Part (Part) @ 0x19aa1975d40
+    - Part (Part) @ 0x19aa1975f00
+    - Part (Part) @ 0x19aa19760c0
+    - Part (Part) @ 0x19aa1976280
+    - Part (Part) @ 0x19aa1976440
+    - Part (Part) @ 0x19aa1976600
+    - Part (Part) @ 0x19aa19767c0
+    - Part (Part) @ 0x19aa1976980
+    - Part (Part) @ 0x19aa1976b40
+    - Part (Part) @ 0x19aa1976d00
+  - Part (Part) @ 0x19aa1976ec0
+  - Part (Part) @ 0x19aa1977080
+  - Part (Part) @ 0x19aa1977240
+
+Found matching config root at path: Workspace/Workspace/MAP/Map/slum house 4/doubledoorstair
+- doubledoorstair (Model) @ 0x19c0d32c800
+  - doubledoor (Model) @ 0x19c0d32e080
+    - metal door (Model) @ 0x19c0d326d00
+      - Part (Part) @ 0x19aa42e5480
+      - Part (Part) @ 0x19aa42e5640
+      - Part (Part) @ 0x19aa42e5800
+      - Part (Part) @ 0x19aa42e59c0
+      - Part (Part) @ 0x19aa42e5b80
+      - Part (Part) @ 0x19aa42e5d40
+      - Part (Part) @ 0x19aa42e5f00
+      - Part (Part) @ 0x19aa42e60c0
+      - Part (Part) @ 0x19aa42e6280
+      - Part (Part) @ 0x19aa42e6440
+      - Part (Part) @ 0x19aa42e6600
+    - Part (Part) @ 0x19aa42e67c0
+    - Part (Part) @ 0x19aa42e6980
+    - Part (Part) @ 0x19aa42e6b40
+    - Part (Part) @ 0x19aa42e6d00
+    - Part (Part) @ 0x19aa42e6ec0
+    - Part (Part) @ 0x19aa42e7080
+    - Part (Part) @ 0x19aa42e7240
+    - Part (Part) @ 0x19aa42e7400
+    - Part (Part) @ 0x19aa42e75c0
+    - Part (Part) @ 0x19aa42e7780
+    - Part (Part) @ 0x19aa42e7940
+  - Part (Part) @ 0x19aa42e7b00
+  - Part (Part) @ 0x19aa42e7cc0
+  - Part (Part) @ 0x19aa42e7e80
+
+Found matching config root at path: Workspace/Workspace/MAP/Map/slum house 4/doubledoorstair
+- doubledoorstair (Model) @ 0x19c0d32cb80
+  - doubledoor (Model) @ 0x19c0d328580
+    - metal door (Model) @ 0x19c0d320b00
+      - Part (Part) @ 0x19aa42e9fc0
+      - Part (Part) @ 0x19aa42ea180
+      - Part (Part) @ 0x19aa42ea340
+      - Part (Part) @ 0x19aa42ea500
+      - Part (Part) @ 0x19aa42ea6c0
+      - Part (Part) @ 0x19aa42ea880
+      - Part (Part) @ 0x19aa42eaa40
+      - Part (Part) @ 0x19aa42eac00
+      - Part (Part) @ 0x19aa42eadc0
+      - Part (Part) @ 0x19aa42eaf80
+      - Part (Part) @ 0x19aa42eb140
+    - Part (Part) @ 0x19aa42eb300
+    - Part (Part) @ 0x19aa42eb4c0
+    - Part (Part) @ 0x19aa42eb680
+    - Part (Part) @ 0x19aa42eb840
+    - Part (Part) @ 0x19aa42eba00
+    - Part (Part) @ 0x19aa42ebbc0
+    - Part (Part) @ 0x19aa42ebd80
+    - Part (Part) @ 0x19aa42ebf40
+    - Part (Part) @ 0x19aa42ec100
+    - Part (Part) @ 0x19aa42ec2c0
+    - Part (Part) @ 0x19aa42ec480
+  - Part (Part) @ 0x19aa42ec640
+  - Part (Part) @ 0x19aa42ec800
+  - Part (Part) @ 0x19aa42ec9c0
+
+Found matching config root at path: Workspace/Workspace/MAP/Map/slum house 4/doubledoorstair
+- doubledoorstair (Model) @ 0x19a8c366280
+  - doubledoor (Model) @ 0x19a8c361580
+    - metal door (Model) @ 0x19a8c366980
+      - Part (Part) @ 0x19aa5ef1ac0
+      - Part (Part) @ 0x19aa5ef1c80
+      - Part (Part) @ 0x19aa5ef1e40
+      - Part (Part) @ 0x19aa5ef1740
+      - Part (Part) @ 0x19aa5ef2000
+      - Part (Part) @ 0x19aa5ef21c0
+      - Part (Part) @ 0x19aa5ef2380
+      - Part (Part) @ 0x19aa5ef2540
+      - Part (Part) @ 0x19aa5ef2700
+      - Part (Part) @ 0x19aa5ef28c0
+      - Part (Part) @ 0x19aa5ef2a80
+    - Part (Part) @ 0x19aa5ef2c40
+    - Part (Part) @ 0x19aa5ef2e00
+    - Part (Part) @ 0x19aa5ef2fc0
+    - Part (Part) @ 0x19aa5ef3180
+    - Part (Part) @ 0x19aa5ef3340
+    - Part (Part) @ 0x19aa5ef3500
+    - Part (Part) @ 0x19aa5ef36c0
+    - Part (Part) @ 0x19aa5ef3880
+    - Part (Part) @ 0x19aa5ef3a40
+    - Part (Part) @ 0x19aa5ef3c00
+    - Part (Part) @ 0x19aa5ef3dc0
+  - Part (Part) @ 0x19aa5ef3f80
+  - Part (Part) @ 0x19aa5ef4140
+  - Part (Part) @ 0x19aa5ef4300
+
+Found matching config root at path: Workspace/Workspace/MAP/Map/slum house 4/doubledoorstair
+- doubledoorstair (Model) @ 0x19a8c362700
+  - doubledoor (Model) @ 0x19a8c363500
+    - metal door (Model) @ 0x19a8c362a80
+      - Part (Part) @ 0x19aa5ef6440
+      - Part (Part) @ 0x19aa5ef6600
+      - Part (Part) @ 0x19aa5ef67c0
+      - Part (Part) @ 0x19aa5ef6980
+      - Part (Part) @ 0x19aa5ef6b40
+      - Part (Part) @ 0x19aa5ef6d00
+      - Part (Part) @ 0x19aa5ef6ec0
+      - Part (Part) @ 0x19aa5ef7080
+      - Part (Part) @ 0x19aa5ef7240
+      - Part (Part) @ 0x19aa5ef7400
+      - Part (Part) @ 0x19aa5ef75c0
+    - Part (Part) @ 0x19aa5ef7780
+    - Part (Part) @ 0x19aa5ef7940
+    - Part (Part) @ 0x19aa5ef7b00
+    - Part (Part) @ 0x19aa5ef7cc0
+    - Part (Part) @ 0x19aa5ef7e80
+    - Part (Part) @ 0x19aa5ef8040
+    - Part (Part) @ 0x19aa5ef8200
+    - Part (Part) @ 0x19aa5ef83c0
+    - Part (Part) @ 0x19aa5ef8580
+    - Part (Part) @ 0x19aa5ef8740
+    - Part (Part) @ 0x19aa5ef8900
+  - Part (Part) @ 0x19aa5ef8ac0
+  - Part (Part) @ 0x19aa5ef8c80
+  - Part (Part) @ 0x19aa5ef8e40
+
+Found matching config root at path: Workspace/Workspace/MAP/Map/slum house 4/doubledoorstair
+- doubledoorstair (Model) @ 0x19abc091200
+  - doubledoor (Model) @ 0x19abc098c80
+    - metal door (Model) @ 0x19abc09d280
+      - Part (Part) @ 0x19aa66ad600
+      - Part (Part) @ 0x19aa66ad7c0
+      - Part (Part) @ 0x19aa66ad980
+      - Part (Part) @ 0x19aa66adb40
+      - Part (Part) @ 0x19aa66add00
+      - Part (Part) @ 0x19aa66adec0
+      - Part (Part) @ 0x19aa66ae080
+      - Part (Part) @ 0x19aa66ae240
+      - Part (Part) @ 0x19aa66ae400
+      - Part (Part) @ 0x19aa66ae5c0
+      - Part (Part) @ 0x19aa66ae780
+    - Part (Part) @ 0x19aa66ae940
+    - Part (Part) @ 0x19aa66aeb00
+    - Part (Part) @ 0x19aa66aecc0
+    - Part (Part) @ 0x19aa66aee80
+    - Part (Part) @ 0x19aa66af040
+    - Part (Part) @ 0x19aa66af200
+    - Part (Part) @ 0x19aa66af3c0
+    - Part (Part) @ 0x19aa66af580
+    - Part (Part) @ 0x19aa66af740
+    - Part (Part) @ 0x19aa66af900
+    - Part (Part) @ 0x19aa66afac0
+  - Part (Part) @ 0x19aa66afc80
+  - Part (Part) @ 0x19aa66afe40
+  - Part (Part) @ 0x19aa6920080
+
+Found matching config root at path: Workspace/Workspace/MAP/Map/slum house 4/doubledoorstair
+- doubledoorstair (Model) @ 0x19abc096980
+  - doubledoor (Model) @ 0x19abc093500
+    - metal door (Model) @ 0x19abc092700
+      - Part (Part) @ 0x19aa69221c0
+      - Part (Part) @ 0x19aa6922380
+      - Part (Part) @ 0x19aa6922540
+      - Part (Part) @ 0x19aa6922700
+      - Part (Part) @ 0x19aa69228c0
+      - Part (Part) @ 0x19aa6922a80
+      - Part (Part) @ 0x19aa6922c40
+      - Part (Part) @ 0x19aa6922e00
+      - Part (Part) @ 0x19aa6922fc0
+      - Part (Part) @ 0x19aa6923180
+      - Part (Part) @ 0x19aa6923340
+    - Part (Part) @ 0x19aa6923500
+    - Part (Part) @ 0x19aa69236c0
+    - Part (Part) @ 0x19aa6923880
+    - Part (Part) @ 0x19aa6923a40
+    - Part (Part) @ 0x19aa6923c00
+    - Part (Part) @ 0x19aa6923dc0
+    - Part (Part) @ 0x19aa6923f80
+    - Part (Part) @ 0x19aa6924140
+    - Part (Part) @ 0x19aa6924300
+    - Part (Part) @ 0x19aa69244c0
+    - Part (Part) @ 0x19aa6924680
+  - Part (Part) @ 0x19aa6924840
+  - Part (Part) @ 0x19aa6924a00
+  - Part (Part) @ 0x19aa6924bc0
+
+Found matching config root at path: Workspace/Workspace/MAP/Tryouts/Map/slum house 6/doubledoorstair
+- doubledoorstair (Model) @ 0x19ac65b8580
+  - doubledoor (Model) @ 0x19ac65b8900
+    - metal door (Model) @ 0x19ac65b8c80
+
+Found matching config root at path: Workspace/Workspace/MAP/Tryouts/Map/slum house 5/doubledoorstair
+- doubledoorstair (Model) @ 0x19ac65bc100
+  - doubledoor (Model) @ 0x19ac65bc480
+    - metal door (Model) @ 0x19ac65bc800
+      - Part (Part) @ 0x19aab0d2000
+      - Part (Part) @ 0x19aab0d21c0
+      - Part (Part) @ 0x19aab0d2380
+      - Part (Part) @ 0x19aab0d2540
+      - Part (Part) @ 0x19aab0d2700
+      - Part (Part) @ 0x19aab0d28c0
+      - Part (Part) @ 0x19aab0d2a80
+      - Part (Part) @ 0x19aab0d2c40
+      - Part (Part) @ 0x19aab0d2e00
+      - Part (Part) @ 0x19aab0d2fc0
+      - Part (Part) @ 0x19aab0d3180
+    - Part (Part) @ 0x19aab0d3340
+    - Part (Part) @ 0x19aab0d3500
+    - Part (Part) @ 0x19aab0d36c0
+    - Part (Part) @ 0x19aab0d3880
+    - Part (Part) @ 0x19aab0d3a40
+    - Part (Part) @ 0x19aab0d3c00
+    - Part (Part) @ 0x19aab0d3dc0
+    - Part (Part) @ 0x19aab0d3f80
+    - Part (Part) @ 0x19aab0d4140
+    - Part (Part) @ 0x19aab0d4300
+    - Part (Part) @ 0x19aab0d44c0
+  - Part (Part) @ 0x19aab0d4680
+  - Part (Part) @ 0x19aab0d4840
+  - Part (Part) @ 0x19aab0d4a00
+
+Found matching config root at path: Workspace/Workspace/MAP/Tryouts/Map/slum house 4/doubledoorstair
+- doubledoorstair (Model) @ 0x19c120bd980
+  - doubledoor (Model) @ 0x19c120b7780
+    - metal door (Model) @ 0x19c120b2380
+      - Part (Part) @ 0x19aa5b55640
+      - Part (Part) @ 0x19aa5b55800
+      - Part (Part) @ 0x19aa5b559c0
+      - Part (Part) @ 0x19aa5b55b80
+      - Part (Part) @ 0x19aa5b55d40
+      - Part (Part) @ 0x19aa5b55f00
+      - Part (Part) @ 0x19aa5b560c0
+      - Part (Part) @ 0x19aa5b56280
+      - Part (Part) @ 0x19aa5b56440
+      - Part (Part) @ 0x19aa5b56600
+      - Part (Part) @ 0x19aa5b567c0
+    - Part (Part) @ 0x19aa5b56980
+    - Part (Part) @ 0x19aa5b56b40
+    - Part (Part) @ 0x19aa5b56d00
+    - Part (Part) @ 0x19aa5b56ec0
+    - Part (Part) @ 0x19aa5b57080
+    - Part (Part) @ 0x19aa5b57240
+    - Part (Part) @ 0x19aa5b57400
+    - Part (Part) @ 0x19aa5b575c0
+    - Part (Part) @ 0x19aa5b57780
+    - Part (Part) @ 0x19aa5b57940
+    - Part (Part) @ 0x19aa5b57b00
+  - Part (Part) @ 0x19aa5b57cc0
+  - Part (Part) @ 0x19aa5b57e80
+  - Part (Part) @ 0x19aa5b58040
+
+Found matching config root at path: Workspace/Workspace/MAP/Tryouts/Map/slum house 4/doubledoorstair
+- doubledoorstair (Model) @ 0x19c120b5480
+  - doubledoor (Model) @ 0x19c120b0b00
+    - metal door (Model) @ 0x19c120bb300
+      - Part (Part) @ 0x19aa5b5a180
+      - Part (Part) @ 0x19aa5b5a340
+      - Part (Part) @ 0x19aa5b5a500
+      - Part (Part) @ 0x19aa5b5a6c0
+      - Part (Part) @ 0x19aa5b5a880
+      - Part (Part) @ 0x19aa5b5aa40
+      - Part (Part) @ 0x19aa5b5ac00
+      - Part (Part) @ 0x19aa5b5adc0
+      - Part (Part) @ 0x19aa5b5af80
+      - Part (Part) @ 0x19aa5b5b140
+      - Part (Part) @ 0x19aa5b5b300
+    - Part (Part) @ 0x19aa5b5b4c0
+    - Part (Part) @ 0x19aa5b5b680
+    - Part (Part) @ 0x19aa5b5b840
+    - Part (Part) @ 0x19aa5b5ba00
+    - Part (Part) @ 0x19aa5b5bbc0
+    - Part (Part) @ 0x19aa5b5bd80
+    - Part (Part) @ 0x19aa5b5bf40
+    - Part (Part) @ 0x19aa5b5c100
+    - Part (Part) @ 0x19aa5b5c2c0
+    - Part (Part) @ 0x19aa5b5c480
+    - Part (Part) @ 0x19aa5b5c640
+  - Part (Part) @ 0x19aa5b5c800
+  - Part (Part) @ 0x19aa5b5c9c0
+  - Part (Part) @ 0x19aa5b5cb80
+
+Found matching config root at path: Workspace/Workspace/MAP/Tryouts/Map/slum house 4/doubledoorstair
+- doubledoorstair (Model) @ 0x19c120be080
+  - doubledoor (Model) @ 0x19c120b1200
+    - metal door (Model) @ 0x19c120b3880
+
+Found matching config root at path: Workspace/Workspace/MAP/Tryouts/Map/slum house 4/doubledoorstair
+- doubledoorstair (Model) @ 0x19c120b2000
+  - doubledoor (Model) @ 0x19c120b4300
+    - metal door (Model) @ 0x19c120bcf00
+
+Found matching config root at path: Workspace/Workspace/MAP/Tryouts/Map/slum house 6/doubledoorstair
+- doubledoorstair (Model) @ 0x19c1f7ba180
+  - doubledoor (Model) @ 0x19c1f7bd980
+    - metal door (Model) @ 0x19c1f7b3180
+      - Part (Part) @ 0x19aad3b7940
+      - Part (Part) @ 0x19aad3b7b00
+      - Part (Part) @ 0x19aad3b7cc0
+      - Part (Part) @ 0x19aad3b7e80
+      - Part (Part) @ 0x19aad3b8040
+      - Part (Part) @ 0x19aad3b8200
+      - Part (Part) @ 0x19aad3b83c0
+      - Part (Part) @ 0x19aad3b8580
+      - Part (Part) @ 0x19aad3b8740
+      - Part (Part) @ 0x19aad3b8900
+      - Part (Part) @ 0x19aad3b8ac0
+    - Part (Part) @ 0x19aad3b8c80
+    - Part (Part) @ 0x19aad3b8e40
+    - Part (Part) @ 0x19aad3b9000
+    - Part (Part) @ 0x19aad3b91c0
+    - Part (Part) @ 0x19aad3b9380
+    - Part (Part) @ 0x19aad3b9540
+    - Part (Part) @ 0x19aad3b9700
+    - Part (Part) @ 0x19aad3b98c0
+    - Part (Part) @ 0x19aad3b9a80
+    - Part (Part) @ 0x19aad3b9c40
+    - Part (Part) @ 0x19aad3b9e00
+  - Part (Part) @ 0x19aad3b9fc0
+  - Part (Part) @ 0x19aad3ba180
+  - Part (Part) @ 0x19aad3ba340
+
+Found matching config root at path: Workspace/Workspace/MAP/Tryouts/Map/slum house 6/doubledoorstair
+- doubledoorstair (Model) @ 0x19c1f7be400
+  - doubledoor (Model) @ 0x19c1f7b2700
+    - metal door (Model) @ 0x19c1f7bcf00
+      - Part (Part) @ 0x19aad6f7e80
+      - Part (Part) @ 0x19aad6f8040
+      - Part (Part) @ 0x19aad6f8200
+      - Part (Part) @ 0x19aad6f83c0
+      - Part (Part) @ 0x19aad6f8580
+      - Part (Part) @ 0x19aad6f8740
+      - Part (Part) @ 0x19aad6f8900
+      - Part (Part) @ 0x19aad6f8ac0
+      - Part (Part) @ 0x19aad6f8c80
+      - Part (Part) @ 0x19aad6f8e40
+      - Part (Part) @ 0x19aad6f9000
+    - Part (Part) @ 0x19aad6f91c0
+    - Part (Part) @ 0x19aad6f9380
+    - Part (Part) @ 0x19aad6f9540
+    - Part (Part) @ 0x19aad6f9700
+    - Part (Part) @ 0x19aad6f98c0
+    - Part (Part) @ 0x19aad6f9a80
+    - Part (Part) @ 0x19aad6f9c40
+    - Part (Part) @ 0x19aad6f9e00
+    - Part (Part) @ 0x19aad6f9fc0
+    - Part (Part) @ 0x19aad6fa180
+    - Part (Part) @ 0x19aad6fa340
+  - Part (Part) @ 0x19aad6fa500
+  - Part (Part) @ 0x19aad6fa6c0
+  - Part (Part) @ 0x19aad6fa880
+
+Found matching config root at path: Workspace/Workspace/MAP/Tryouts/Map/slum house 4/doubledoorstair
+- doubledoorstair (Model) @ 0x19a98260b00
+  - doubledoor (Model) @ 0x19a98260e80
+    - metal door (Model) @ 0x19a98261200
+      - Part (Part) @ 0x19aad72ba00
+      - Part (Part) @ 0x19aad72bbc0
+      - Part (Part) @ 0x19aad72bd80
+      - Part (Part) @ 0x19aad72bf40
+      - Part (Part) @ 0x19aad72c100
+      - Part (Part) @ 0x19aad72c2c0
+      - Part (Part) @ 0x19aad72c480
+      - Part (Part) @ 0x19aad72c640
+      - Part (Part) @ 0x19aad72c800
+      - Part (Part) @ 0x19aad72c9c0
+      - Part (Part) @ 0x19aad72cb80
+    - Part (Part) @ 0x19aad72cd40
+    - Part (Part) @ 0x19aad72cf00
+    - Part (Part) @ 0x19aad72d0c0
+    - Part (Part) @ 0x19aad72d280
+    - Part (Part) @ 0x19aad72d440
+    - Part (Part) @ 0x19aad72d600
+    - Part (Part) @ 0x19aad72d7c0
+    - Part (Part) @ 0x19aad72d980
+    - Part (Part) @ 0x19aad72db40
+    - Part (Part) @ 0x19aad72dd00
+    - Part (Part) @ 0x19aad72dec0
+  - Part (Part) @ 0x19aad72e080
+  - Part (Part) @ 0x19aad72e240
+  - Part (Part) @ 0x19aad72e400
+
+Found matching config root at path: Workspace/Workspace/MAP/Tryouts/Map/slum house 4/doubledoorstair
+- doubledoorstair (Model) @ 0x19a98261900
+  - doubledoor (Model) @ 0x19a98261c80
+    - metal door (Model) @ 0x19a98262000
+      - Part (Part) @ 0x19aad9f05c0
+      - Part (Part) @ 0x19aad9f0780
+      - Part (Part) @ 0x19aad9f0940
+      - Part (Part) @ 0x19aad9f0b00
+      - Part (Part) @ 0x19aad9f0cc0
+      - Part (Part) @ 0x19aad9f0e80
+      - Part (Part) @ 0x19aad9f1040
+      - Part (Part) @ 0x19aad9f1200
+      - Part (Part) @ 0x19aad9f13c0
+      - Part (Part) @ 0x19aad9f1580
+      - Part (Part) @ 0x19aad9f1740
+    - Part (Part) @ 0x19aad9f1900
+    - Part (Part) @ 0x19aad9f1ac0
+    - Part (Part) @ 0x19aad9f1c80
+    - Part (Part) @ 0x19aad9f1e40
+    - Part (Part) @ 0x19aad9f2000
+    - Part (Part) @ 0x19aad9f21c0
+    - Part (Part) @ 0x19aad9f2380
+    - Part (Part) @ 0x19aad9f2540
+    - Part (Part) @ 0x19aad9f2700
+    - Part (Part) @ 0x19aad9f28c0
+    - Part (Part) @ 0x19aad9f2a80
+  - Part (Part) @ 0x19aad9f2c40
+  - Part (Part) @ 0x19aad9f2e00
+  - Part (Part) @ 0x19aad9f2fc0
+
+Found matching config root at path: Workspace/Workspace/MAP/Tryouts/Ignored/Shop/[Shotgun]
+- [Shotgun] (Model) @ 0x19a982b1900
+  - doid (Humanoid) @ 0x19a8bc58c80
+  - Price (IntValue) | Value: 5 @ 0x19ac65913c0
+  - ClickDetector (ClickDetector) @ 0x19ac5249e00
+
+Found matching config root at path: Workspace/Workspace/MAP/Tryouts/Ignored/Shop/[Tactical Shotgun]
+- [Tactical Shotgun] (Model) @ 0x19a982b2000
+  - doid (Humanoid) @ 0x19a8bc59a80
+  - Price (IntValue) | Value: 1750 @ 0x19ac6591ba0
+  - ClickDetector (ClickDetector) @ 0x19ac5246980
+  - Head (Part) @ 0x19ab0e40b00
+
+Found matching config root at path: Workspace/Workspace/MAP/Tryouts/Ignored/Shop/[Shotgun]
+- [Shotgun] (Model) @ 0x19a982b2700
+  - doid (Humanoid) @ 0x19a8bc57e80
+  - Price (IntValue) | Value: 1500 @ 0x19ac6595fe0
+  - ClickDetector (ClickDetector) @ 0x19ac52421c0
+  - Head (Part) @ 0x19aaf5ffac0
+
+Found matching config root at path: Workspace/Workspace/MAP/Ignored/Shop/[Shotgun]
+- [Shotgun] (Model) @ 0x19ac284d980
+  - doid (Humanoid) @ 0x19c08b05480
+  - Price (IntValue) | Value: 5 @ 0x19ac659b220
+  - ClickDetector (ClickDetector) @ 0x19ac524d980
+
+Found matching config root at path: Workspace/Workspace/MAP/Ignored/Shop/[Tactical Shotgun]
+- [Tactical Shotgun] (Model) @ 0x19ac2840e80
+  - doid (Humanoid) @ 0x19c08b00e80
+  - Price (IntValue) | Value: 1750 @ 0x19ac6592700
+  - ClickDetector (ClickDetector) @ 0x19ac52460c0
+  - Head (Part) @ 0x19ab0e41ac0
+
+Found matching config root at path: Workspace/Workspace/MAP/Ignored/Shop/[Shotgun]
+- [Shotgun] (Model) @ 0x19ac2843c00
+  - doid (Humanoid) @ 0x19abf68c480
+  - Price (IntValue) | Value: 1500 @ 0x19ac6595720
+  - ClickDetector (ClickDetector) @ 0x19ac524c9c0
+  - Head (Part) @ 0x19ab0e41e40
+
+Found matching config root at path: Workspace/Workspace/IIIIIllIlIllllIIIIl/db
+- db (Tool) @ 0x19aaf570c80
+  - Multi Bullets (Script) @ 0x19a9eab6a00
+  - AMMO (NumberValue) | Value: 0.000000 @ 0x19abd0c0780
+  - rl (RemoteEvent) @ 0x19ab8bd6280
+  - Handle (MeshPart) @ 0x19a9ee42e00
+    - Shoot (Sound) @ 0x19aa8811e80
+    - ANMO OUT (Sound) @ 0x19aa8818280
+    - Flare (Attachment) @ 0x19ac974ae80
+      - ParticleEmitter (ParticleEmitter) @ 0x19c212c3c80
+    - BloodParticle (ParticleEmitter) @ 0x19c212c4880
+    - Shoot (Sound) @ 0x19a9e815300
+    - Shoot (Sound) @ 0x19a9e81e400
+
+Found matching config root at path: Workspace/Workspace/unconditiionallove/rev
+- rev (Tool) @ 0x19c1becb480
+  - Single Bullets (Script) @ 0x19abf933200
+  - AMMO (NumberValue) | Value: 6.000000 @ 0x19abadb6280
+  - rl (RemoteEvent) @ 0x19aab0e6980
+  - Handle (MeshPart) @ 0x19c1be56600
+    - ANMO OUT (Sound) @ 0x19c1927cd80
+    - Shoot (Sound) @ 0x19c19279400
+    - Flare (Attachment) @ 0x19c0cf69e00
+      - ParticleEmitter (ParticleEmitter) @ 0x19c1b858a80
+    - BloodParticle (ParticleEmitter) @ 0x19c1b85ba80
+
+Found matching config root at path: Workspace/Workspace/kaliya_vc/db
+- db (Tool) @ 0x19ac9827280
+  - Multi Bullets (Script) @ 0x19ab6fcac00
+  - AMMO (NumberValue) | Value: 1.000000 @ 0x19c0c2e9540
+  - rl (RemoteEvent) @ 0x19c09bb8900
+  - Handle (MeshPart) @ 0x19a9e97d600
+    - Shoot (Sound) @ 0x19c07af7d80
+    - ANMO OUT (Sound) @ 0x19c07af0d00
+    - Flare (Attachment) @ 0x19c0c36ba80
+      - ParticleEmitter (ParticleEmitter) @ 0x19ac8a49f80
+    - BloodParticle (ParticleEmitter) @ 0x19ac8a49c80
+
+Found matching config root at path: Workspace/Workspace/devo16_2/db
+- db (Tool) @ 0x19ab7c5a280
+  - Multi Bullets (Script) @ 0x19ac719cc00
+  - AMMO (NumberValue) | Value: 2.000000 @ 0x19a9e7fd0c0
+  - rl (RemoteEvent) @ 0x19aa644db40
+  - Handle (MeshPart) @ 0x19ab0c2e400
+    - ANMO OUT (Sound) @ 0x19a8bdae400
+    - Shoot (Sound) @ 0x19a8bdac380
+    - Flare (Attachment) @ 0x19abf0fc200
+      - ParticleEmitter (ParticleEmitter) @ 0x19c0c193f80
+    - BloodParticle (ParticleEmitter) @ 0x19c0c199080
+
+Found matching config root at path: Workspace/Workspace/jurz2112/db
+- db (Tool) @ 0x19abad90680
+  - Multi Bullets (Script) @ 0x19ac8a1d600
+  - AMMO (NumberValue) | Value: 1.000000 @ 0x19aba4ac100
+  - rl (RemoteEvent) @ 0x19ab6528200
+  - Handle (MeshPart) @ 0x19c1bc80e80
+    - Shoot (Sound) @ 0x19c1e598000
+    - ANMO OUT (Sound) @ 0x19c1e598780
+    - Flare (Attachment) @ 0x19c0f435c00
+      - ParticleEmitter (ParticleEmitter) @ 0x19c1a219f80
+    - BloodParticle (ParticleEmitter) @ 0x19c1a211b80
+    - Shoot (Sound) @ 0x19c0bc6fd00
+    - Shoot (Sound) @ 0x19c1e006e80
+
+Found matching config root at path: Workspace/Workspace/Yk_brick/db
+- db (Tool) @ 0x19a9e7d4e80
+  - Multi Bullets (Script) @ 0x19a9eab9a00
+  - AMMO (NumberValue) | Value: 0.000000 @ 0x19ac9f445a0
+  - rl (RemoteEvent) @ 0x19ab8bdf740
+  - Handle (MeshPart) @ 0x19c1dfc2e00
+    - Shoot (Sound) @ 0x19aa881e680
+    - ANMO OUT (Sound) @ 0x19aa8819180
+    - Flare (Attachment) @ 0x19abb248600
+      - ParticleEmitter (ParticleEmitter) @ 0x19ab94efc80
+    - BloodParticle (ParticleEmitter) @ 0x19ab94ede80
+    - Shoot (Sound) @ 0x19c0bc60580
+
+Found matching config root at path: Workspace/Workspace/uwant2bme9/db
+- db (Tool) @ 0x19ab8e6ea80
+  - Multi Bullets (Script) @ 0x19ac9e2ec00
+  - AMMO (NumberValue) | Value: 2.000000 @ 0x19c1a0a8e40
+  - rl (RemoteEvent) @ 0x19c1264e5c0
+  - Handle (MeshPart) @ 0x19abd4e7080
+    - Shoot (Sound) @ 0x19abc6cf080
+    - ANMO OUT (Sound) @ 0x19abc6cf300
+    - Flare (Attachment) @ 0x19c1a0b0380
+      - ParticleEmitter (ParticleEmitter) @ 0x19c1e2d1e80
+    - BloodParticle (ParticleEmitter) @ 0x19c1e2dd880
+
+Found matching config root at path: Workspace/Workspace/Luvch1ps_12/db
+- db (Tool) @ 0x19c0bd42480
+  - Multi Bullets (Script) @ 0x19c0c872c00
+  - AMMO (NumberValue) | Value: 2.000000 @ 0x19c0c863ce0
+  - rl (RemoteEvent) @ 0x19c0bb5b140
+  - Handle (MeshPart) @ 0x19c0c893500
+    - Shoot (Sound) @ 0x19c0c926e80
+    - ANMO OUT (Sound) @ 0x19c0c926980
+    - Flare (Attachment) @ 0x19c0c76b600
+      - ParticleEmitter (ParticleEmitter) @ 0x19c0c6ae780
+    - BloodParticle (ParticleEmitter) @ 0x19c0c6ae480
+
+Found matching config root at path: Workspace/Workspace/zxpsil/db
+- db (Tool) @ 0x19ab7c5cc80
+  - Multi Bullets (Script) @ 0x19ac719aa00
+  - AMMO (NumberValue) | Value: 2.000000 @ 0x19a9e68ab20
+  - rl (RemoteEvent) @ 0x19aa6446440
+  - Handle (MeshPart) @ 0x19ab0ae8200
+    - Shoot (Sound) @ 0x19ab73d3c80
+    - ANMO OUT (Sound) @ 0x19ab73d5580
+    - Flare (Attachment) @ 0x19abf0faa00
+      - ParticleEmitter (ParticleEmitter) @ 0x19c08032a80
+    - BloodParticle (ParticleEmitter) @ 0x19c08030980
+

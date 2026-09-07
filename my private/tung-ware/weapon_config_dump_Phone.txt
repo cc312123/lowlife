@@ -1,0 +1,922 @@
+=== Weapon Config Search for Tool: Phone ===
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Modules/Extras/Effects/ClientView/PhoneRing
+- PhoneRing (ModuleScript) @ 0x2133033e5c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Shared/Vehicles/Assets/Skins/Junka/Frame/OpenedBackRightDoor
+- OpenedBackRightDoor (Attachment) @ 0x21332bb9c80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Shared/Vehicles/Assets/Skins/Junka/Frame/OpenedBackLeftDoor
+- OpenedBackLeftDoor (Attachment) @ 0x21332bb9f80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Shared/Vehicles/Assets/Skins/Junka/Frame/ClosedBackLeftDoor
+- ClosedBackLeftDoor (Attachment) @ 0x21332bbb000
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Shared/Vehicles/Assets/Skins/Junka/Frame/ClosedBackRightDoor
+- ClosedBackRightDoor (Attachment) @ 0x21332bbb300
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/Tags/TagText/Melodies/PhoneAnimated
+- PhoneAnimated (ImageLabel) @ 0x21332e54880
+  - UIAspectRatioConstraint (UIAspectRatioConstraint) @ 0x21332cc5400
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/Standalone/Models/SonicBoom/SoundBarrier
+- SoundBarrier (ParticleEmitter) @ 0x213330a4580
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/Standalone/Guis/PhoneAssets
+- PhoneAssets (Folder) @ 0x21332d27940
+  - PhoneScreenContents (Folder) @ 0x21332d27860
+  - Snake (Frame) @ 0x21333010a80
+    - Tongue (Frame) @ 0x21333011480
+    - TongueLeft (Frame) @ 0x21333011e80
+    - TongueRight (Frame) @ 0x21333012880
+    - LeftEye (Frame) @ 0x21333013280
+    - RightEye (Frame) @ 0x21333013c80
+  - SnakeFruit (Frame) @ 0x21333014680
+    - Leaf (Frame) @ 0x21333015080
+    - LeafTop (Frame) @ 0x21333015a80
+  - SnakePart (Frame) @ 0x21333016480
+  - ModernPlayerBtn (TextButton) @ 0x213313b8c80
+    - PlayerIcon (ImageLabel) @ 0x21332fe9080
+      - UICorner (UICorner) @ 0x21332f75200
+      - UIAspectRatioConstraint (UIAspectRatioConstraint) @ 0x21332f75300
+    - PlayerName (TextLabel) @ 0x213330b0080
+    - FriendIcon (ImageLabel) @ 0x21332fe9c80
+      - UICorner (UICorner) @ 0x21332f75400
+      - UIAspectRatioConstraint (UIAspectRatioConstraint) @ 0x21332f75500
+    - LoadingIcon (ImageLabel) @ 0x21332fea880
+      - UIAspectRatioConstraint (UIAspectRatioConstraint) @ 0x21332f75600
+    - UICorner (UICorner) @ 0x21332f75700
+  - UpdateLog (Frame) @ 0x21333016e80
+    - GameVersion (TextLabel) @ 0x213330b1080
+    - Title (TextLabel) @ 0x213330b2080
+    - Description (TextLabel) @ 0x213330b3080
+    - UICorner (UICorner) @ 0x21332f75800
+    - UIListLayout (UIListLayout) @ 0x21332d38600
+    - NewIconFolder (Folder) @ 0x21332d26d00
+      - NewIcon (ImageLabel) @ 0x21332feb480
+        - UIAspectRatioConstraint (UIAspectRatioConstraint) @ 0x21332f75900
+  - NewUpdate (Frame) @ 0x21333017880
+    - UICorner (UICorner) @ 0x21332f75a00
+    - Icon (ImageLabel) @ 0x21332fec080
+      - UIAspectRatioConstraint (UIAspectRatioConstraint) @ 0x21332f75b00
+    - Title (TextLabel) @ 0x213330b4080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/Standalone/Other/Snap/Assets/PhoneScreenContents
+- PhoneScreenContents (Folder) @ 0x213331f0240
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/Replication/AdminAbuse/Boss/TrailerStuff/Sounds/SecondBG
+- SecondBG (Sound) @ 0x2133031b980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Limited/Ice Phoenix/Assets/Hit/Attachment/WindBlack
+- WindBlack (ParticleEmitter) @ 0x2133144ae80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Limited/Ice Phoenix/Assets/Shard/EXP/WindBlack
+- WindBlack (ParticleEmitter) @ 0x21333632180
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Unknown/Eggsplosion/Shotgun Fire
+- Shotgun Fire (Sound) @ 0x21330548a00
+  - PitchShiftSoundEffect (PitchShiftSoundEffect) @ 0x2133148e500
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Event/Lunar Dragon/Chinese dragon/InitialPoses/R.HindBigToe1_Composited
+- R.HindBigToe1_Composited (CFrameValue) [ValueObject] @ 0x213323cbd00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Event/Lunar Dragon/Chinese dragon/InitialPoses/R.HindBigToe1_Original
+- R.HindBigToe1_Original (CFrameValue) [ValueObject] @ 0x213323cbe00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Event/Lunar Dragon/Chinese dragon/InitialPoses/R.HindBigToe1_Initial
+- R.HindBigToe1_Initial (CFrameValue) [ValueObject] @ 0x213323cbf00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Event/Lunar Dragon/Chinese dragon/InitialPoses/R.HindBigToe2_Composited
+- R.HindBigToe2_Composited (CFrameValue) [ValueObject] @ 0x213323cc000
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Event/Lunar Dragon/Chinese dragon/InitialPoses/R.HindBigToe2_Original
+- R.HindBigToe2_Original (CFrameValue) [ValueObject] @ 0x213323cc100
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Event/Lunar Dragon/Chinese dragon/InitialPoses/R.HindBigToe2_Initial
+- R.HindBigToe2_Initial (CFrameValue) [ValueObject] @ 0x213323cc200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Event/Lunar Dragon/Chinese dragon/InitialPoses/R.HindBigToe3_Composited
+- R.HindBigToe3_Composited (CFrameValue) [ValueObject] @ 0x213323cc300
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Event/Lunar Dragon/Chinese dragon/InitialPoses/R.HindBigToe3_Original
+- R.HindBigToe3_Original (CFrameValue) [ValueObject] @ 0x213323cc400
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Event/Lunar Dragon/Chinese dragon/InitialPoses/R.HindBigToe3_Initial
+- R.HindBigToe3_Initial (CFrameValue) [ValueObject] @ 0x213323cc500
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Event/Lunar Dragon/Chinese dragon/InitialPoses/R.HindBigToe3_end_Composited
+- R.HindBigToe3_end_Composited (CFrameValue) [ValueObject] @ 0x213323cc600
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Event/Lunar Dragon/Chinese dragon/InitialPoses/R.HindBigToe3_end_Original
+- R.HindBigToe3_end_Original (CFrameValue) [ValueObject] @ 0x213323cc700
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Event/Lunar Dragon/Chinese dragon/InitialPoses/R.HindBigToe3_end_Initial
+- R.HindBigToe3_end_Initial (CFrameValue) [ValueObject] @ 0x213323cc800
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Event/Lunar Dragon/Chinese dragon/InitialPoses/L.HindBigToe1_Composited
+- L.HindBigToe1_Composited (CFrameValue) [ValueObject] @ 0x213323cf600
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Event/Lunar Dragon/Chinese dragon/InitialPoses/L.HindBigToe1_Original
+- L.HindBigToe1_Original (CFrameValue) [ValueObject] @ 0x213323cf700
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Event/Lunar Dragon/Chinese dragon/InitialPoses/L.HindBigToe1_Initial
+- L.HindBigToe1_Initial (CFrameValue) [ValueObject] @ 0x213323cf800
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Event/Lunar Dragon/Chinese dragon/InitialPoses/L.HindBigToe2_Composited
+- L.HindBigToe2_Composited (CFrameValue) [ValueObject] @ 0x213323cf900
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Event/Lunar Dragon/Chinese dragon/InitialPoses/L.HindBigToe2_Original
+- L.HindBigToe2_Original (CFrameValue) [ValueObject] @ 0x213323cfa00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Event/Lunar Dragon/Chinese dragon/InitialPoses/L.HindBigToe2_Initial
+- L.HindBigToe2_Initial (CFrameValue) [ValueObject] @ 0x213323cfb00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Event/Lunar Dragon/Chinese dragon/InitialPoses/L.HindBigToe3_Composited
+- L.HindBigToe3_Composited (CFrameValue) [ValueObject] @ 0x213323cfc00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Event/Lunar Dragon/Chinese dragon/InitialPoses/L.HindBigToe3_Original
+- L.HindBigToe3_Original (CFrameValue) [ValueObject] @ 0x213323cfd00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Event/Lunar Dragon/Chinese dragon/InitialPoses/L.HindBigToe3_Initial
+- L.HindBigToe3_Initial (CFrameValue) [ValueObject] @ 0x213323cfe00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Event/Lunar Dragon/Chinese dragon/InitialPoses/L.HindBigToe3_end_Composited
+- L.HindBigToe3_end_Composited (CFrameValue) [ValueObject] @ 0x213323cff00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Event/Lunar Dragon/Chinese dragon/InitialPoses/L.HindBigToe3_end_Original
+- L.HindBigToe3_end_Original (CFrameValue) [ValueObject] @ 0x21332380100
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Event/Lunar Dragon/Chinese dragon/InitialPoses/L.HindBigToe3_end_Initial
+- L.HindBigToe3_end_Initial (CFrameValue) [ValueObject] @ 0x21332380200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Event/Cupid/Assets/CupidBow
+- CupidBow (Model) @ 0x21333b65f00
+  - InitialPoses (Folder) @ 0x21331a9a7a0
+    - CupidBow_Composited (CFrameValue) [ValueObject] @ 0x21332389200
+    - CupidBow_Original (CFrameValue) [ValueObject] @ 0x21332389300
+    - CupidBow_Initial (CFrameValue) [ValueObject] @ 0x21332389400
+    - Arrow_Composited (CFrameValue) [ValueObject] @ 0x21332389500
+    - Arrow_Original (CFrameValue) [ValueObject] @ 0x21332389600
+    - Arrow_Initial (CFrameValue) [ValueObject] @ 0x21332389700
+    - BowRig_Composited (CFrameValue) [ValueObject] @ 0x21332389800
+    - BowRig_Original (CFrameValue) [ValueObject] @ 0x21332389900
+    - BowRig_Initial (CFrameValue) [ValueObject] @ 0x21332389a00
+    - Root_Composited (CFrameValue) [ValueObject] @ 0x21332389b00
+    - Root_Original (CFrameValue) [ValueObject] @ 0x21332389c00
+    - Root_Initial (CFrameValue) [ValueObject] @ 0x21332389d00
+    - L. Limb1_Composited (CFrameValue) [ValueObject] @ 0x21332389e00
+    - L. Limb1_Original (CFrameValue) [ValueObject] @ 0x21332389f00
+    - L. Limb1_Initial (CFrameValue) [ValueObject] @ 0x2133238a000
+    - L. Limb1.001_Composited (CFrameValue) [ValueObject] @ 0x2133238a100
+    - L. Limb1.001_Original (CFrameValue) [ValueObject] @ 0x2133238a200
+    - L. Limb1.001_Initial (CFrameValue) [ValueObject] @ 0x2133238a300
+    - L. Limb1.002_Composited (CFrameValue) [ValueObject] @ 0x2133238a400
+    - L. Limb1.002_Original (CFrameValue) [ValueObject] @ 0x2133238a500
+    - L. Limb1.002_Initial (CFrameValue) [ValueObject] @ 0x2133238a600
+    - L. Limb1.003_Composited (CFrameValue) [ValueObject] @ 0x2133238a700
+    - L. Limb1.003_Original (CFrameValue) [ValueObject] @ 0x2133238a800
+    - L. Limb1.003_Initial (CFrameValue) [ValueObject] @ 0x2133238a900
+    - L. Limb1.004_Composited (CFrameValue) [ValueObject] @ 0x2133238aa00
+    - L. Limb1.004_Original (CFrameValue) [ValueObject] @ 0x2133238ab00
+    - L. Limb1.004_Initial (CFrameValue) [ValueObject] @ 0x2133238ac00
+    - L. Limb1.005_Composited (CFrameValue) [ValueObject] @ 0x2133238ad00
+    - L. Limb1.005_Original (CFrameValue) [ValueObject] @ 0x2133238ae00
+    - L. Limb1.005_Initial (CFrameValue) [ValueObject] @ 0x2133238af00
+    - L. Limb1.006_Composited (CFrameValue) [ValueObject] @ 0x2133238b000
+    - L. Limb1.006_Original (CFrameValue) [ValueObject] @ 0x2133238b100
+    - L. Limb1.006_Initial (CFrameValue) [ValueObject] @ 0x2133238b200
+    - L. Limb1.007_Composited (CFrameValue) [ValueObject] @ 0x2133238b300
+    - L. Limb1.007_Original (CFrameValue) [ValueObject] @ 0x2133238b400
+    - L. Limb1.007_Initial (CFrameValue) [ValueObject] @ 0x2133238b500
+    - L. Limb1.008_Composited (CFrameValue) [ValueObject] @ 0x2133238b600
+    - L. Limb1.008_Original (CFrameValue) [ValueObject] @ 0x2133238b700
+    - L. Limb1.008_Initial (CFrameValue) [ValueObject] @ 0x2133238b800
+    - L. Limb1.009_Composited (CFrameValue) [ValueObject] @ 0x2133238b900
+    - L. Limb1.009_Original (CFrameValue) [ValueObject] @ 0x2133238ba00
+    - L. Limb1.009_Initial (CFrameValue) [ValueObject] @ 0x2133238bb00
+    - L. Limb1.009_end_Composited (CFrameValue) [ValueObject] @ 0x2133238bc00
+    - L. Limb1.009_end_Original (CFrameValue) [ValueObject] @ 0x2133238bd00
+    - L. Limb1.009_end_Initial (CFrameValue) [ValueObject] @ 0x2133238be00
+    - L. String1_Composited (CFrameValue) [ValueObject] @ 0x2133238bf00
+    - L. String1_Original (CFrameValue) [ValueObject] @ 0x2133238c000
+    - L. String1_Initial (CFrameValue) [ValueObject] @ 0x2133238c100
+    - L. String1.001_Composited (CFrameValue) [ValueObject] @ 0x2133238c200
+    - L. String1.001_Original (CFrameValue) [ValueObject] @ 0x2133238c300
+    - L. String1.001_Initial (CFrameValue) [ValueObject] @ 0x2133238c400
+    - L. String1.002_Composited (CFrameValue) [ValueObject] @ 0x2133238c500
+    - L. String1.002_Original (CFrameValue) [ValueObject] @ 0x2133238c600
+    - L. String1.002_Initial (CFrameValue) [ValueObject] @ 0x2133238c700
+    - L. String1.002_end_Composited (CFrameValue) [ValueObject] @ 0x2133238c800
+    - L. String1.002_end_Original (CFrameValue) [ValueObject] @ 0x2133238c900
+    - L. String1.002_end_Initial (CFrameValue) [ValueObject] @ 0x2133238ca00
+    - R. Limb1_Composited (CFrameValue) [ValueObject] @ 0x2133238cb00
+    - R. Limb1_Original (CFrameValue) [ValueObject] @ 0x2133238cc00
+    - R. Limb1_Initial (CFrameValue) [ValueObject] @ 0x2133238cd00
+    - R. Limb1.001_Composited (CFrameValue) [ValueObject] @ 0x2133238ce00
+    - R. Limb1.001_Original (CFrameValue) [ValueObject] @ 0x2133238cf00
+    - R. Limb1.001_Initial (CFrameValue) [ValueObject] @ 0x2133238d000
+    - R. Limb1.002_Composited (CFrameValue) [ValueObject] @ 0x2133238d100
+    - R. Limb1.002_Original (CFrameValue) [ValueObject] @ 0x2133238d200
+    - R. Limb1.002_Initial (CFrameValue) [ValueObject] @ 0x2133238d300
+    - R. Limb1.003_Composited (CFrameValue) [ValueObject] @ 0x2133238d400
+    - R. Limb1.003_Original (CFrameValue) [ValueObject] @ 0x2133238d500
+    - R. Limb1.003_Initial (CFrameValue) [ValueObject] @ 0x2133238d600
+    - R. Limb1.004_Composited (CFrameValue) [ValueObject] @ 0x2133238d700
+    - R. Limb1.004_Original (CFrameValue) [ValueObject] @ 0x2133238d800
+    - R. Limb1.004_Initial (CFrameValue) [ValueObject] @ 0x2133238d900
+    - R. Limb1.005_Composited (CFrameValue) [ValueObject] @ 0x2133238da00
+    - R. Limb1.005_Original (CFrameValue) [ValueObject] @ 0x2133238db00
+    - R. Limb1.005_Initial (CFrameValue) [ValueObject] @ 0x2133238dc00
+    - R. Limb1.006_Composited (CFrameValue) [ValueObject] @ 0x2133238dd00
+    - R. Limb1.006_Original (CFrameValue) [ValueObject] @ 0x2133238de00
+    - R. Limb1.006_Initial (CFrameValue) [ValueObject] @ 0x2133238df00
+    - R. Limb1.007_Composited (CFrameValue) [ValueObject] @ 0x2133238e000
+    - R. Limb1.007_Original (CFrameValue) [ValueObject] @ 0x2133238e100
+    - R. Limb1.007_Initial (CFrameValue) [ValueObject] @ 0x2133238e200
+    - R. Limb1.008_Composited (CFrameValue) [ValueObject] @ 0x2133238e300
+    - R. Limb1.008_Original (CFrameValue) [ValueObject] @ 0x2133238e400
+    - R. Limb1.008_Initial (CFrameValue) [ValueObject] @ 0x2133238e500
+    - R. Limb1.009_Composited (CFrameValue) [ValueObject] @ 0x2133238e600
+    - R. Limb1.009_Original (CFrameValue) [ValueObject] @ 0x2133238e700
+    - R. Limb1.009_Initial (CFrameValue) [ValueObject] @ 0x2133238e800
+    - R. Limb1.009_end_Composited (CFrameValue) [ValueObject] @ 0x2133238e900
+    - R. Limb1.009_end_Original (CFrameValue) [ValueObject] @ 0x2133238ea00
+    - R. Limb1.009_end_Initial (CFrameValue) [ValueObject] @ 0x2133238eb00
+    - R. String1_Composited (CFrameValue) [ValueObject] @ 0x2133238ec00
+    - R. String1_Original (CFrameValue) [ValueObject] @ 0x2133238ed00
+    - R. String1_Initial (CFrameValue) [ValueObject] @ 0x2133238ee00
+    - R. String1.001_Composited (CFrameValue) [ValueObject] @ 0x2133238ef00
+    - R. String1.001_Original (CFrameValue) [ValueObject] @ 0x2133238f000
+    - R. String1.001_Initial (CFrameValue) [ValueObject] @ 0x2133238f100
+    - R. String1.002_Composited (CFrameValue) [ValueObject] @ 0x2133238f200
+    - R. String1.002_Original (CFrameValue) [ValueObject] @ 0x2133238f300
+    - R. String1.002_Initial (CFrameValue) [ValueObject] @ 0x2133238f400
+    - R. String1.002_end_Composited (CFrameValue) [ValueObject] @ 0x2133238f500
+    - R. String1.002_end_Original (CFrameValue) [ValueObject] @ 0x2133238f600
+    - R. String1.002_end_Initial (CFrameValue) [ValueObject] @ 0x2133238f700
+    - ArrowRig_Composited (CFrameValue) [ValueObject] @ 0x2133238f800
+    - ArrowRig_Original (CFrameValue) [ValueObject] @ 0x2133238f900
+    - ArrowRig_Initial (CFrameValue) [ValueObject] @ 0x2133238fa00
+    - Arrow1_Root_Composited (CFrameValue) [ValueObject] @ 0x2133238fb00
+    - Arrow1_Root_Original (CFrameValue) [ValueObject] @ 0x2133238fc00
+    - Arrow1_Root_Initial (CFrameValue) [ValueObject] @ 0x2133238fd00
+    - Arrow2_Composited (CFrameValue) [ValueObject] @ 0x2133238fe00
+    - Arrow2_Original (CFrameValue) [ValueObject] @ 0x2133238ff00
+    - Arrow2_Initial (CFrameValue) [ValueObject] @ 0x21332640100
+    - Arrow3_Composited (CFrameValue) [ValueObject] @ 0x21332640200
+    - Arrow3_Original (CFrameValue) [ValueObject] @ 0x21332640300
+    - Arrow3_Initial (CFrameValue) [ValueObject] @ 0x21332640400
+    - Arrow4_Composited (CFrameValue) [ValueObject] @ 0x21332640500
+    - Arrow4_Original (CFrameValue) [ValueObject] @ 0x21332640600
+    - Arrow4_Initial (CFrameValue) [ValueObject] @ 0x21332640700
+    - Arrow5_Composited (CFrameValue) [ValueObject] @ 0x21332640800
+    - Arrow5_Original (CFrameValue) [ValueObject] @ 0x21332640900
+    - Arrow5_Initial (CFrameValue) [ValueObject] @ 0x21332640a00
+    - Arrow6_Composited (CFrameValue) [ValueObject] @ 0x21332640b00
+    - Arrow6_Original (CFrameValue) [ValueObject] @ 0x21332640c00
+    - Arrow6_Initial (CFrameValue) [ValueObject] @ 0x21332640d00
+    - Arrow7_Composited (CFrameValue) [ValueObject] @ 0x21332640e00
+    - Arrow7_Original (CFrameValue) [ValueObject] @ 0x21332640f00
+    - Arrow7_Initial (CFrameValue) [ValueObject] @ 0x21332641000
+    - Arrow8_Composited (CFrameValue) [ValueObject] @ 0x21332641100
+    - Arrow8_Original (CFrameValue) [ValueObject] @ 0x21332641200
+    - Arrow8_Initial (CFrameValue) [ValueObject] @ 0x21332641300
+    - Arrow9_Composited (CFrameValue) [ValueObject] @ 0x21332641400
+    - Arrow9_Original (CFrameValue) [ValueObject] @ 0x21332641500
+    - Arrow9_Initial (CFrameValue) [ValueObject] @ 0x21332641600
+    - Arrow10_Composited (CFrameValue) [ValueObject] @ 0x21332641700
+    - Arrow10_Original (CFrameValue) [ValueObject] @ 0x21332641800
+    - Arrow10_Initial (CFrameValue) [ValueObject] @ 0x21332641900
+    - Arrow11_Composited (CFrameValue) [ValueObject] @ 0x21332641a00
+    - Arrow11_Original (CFrameValue) [ValueObject] @ 0x21332641b00
+    - Arrow11_Initial (CFrameValue) [ValueObject] @ 0x21332641c00
+    - Arrow12_Composited (CFrameValue) [ValueObject] @ 0x21332641d00
+    - Arrow12_Original (CFrameValue) [ValueObject] @ 0x21332641e00
+    - Arrow12_Initial (CFrameValue) [ValueObject] @ 0x21332641f00
+    - Arrow13_Composited (CFrameValue) [ValueObject] @ 0x21332642000
+    - Arrow13_Original (CFrameValue) [ValueObject] @ 0x21332642100
+    - Arrow13_Initial (CFrameValue) [ValueObject] @ 0x21332642200
+    - Arrow14_Composited (CFrameValue) [ValueObject] @ 0x21332642300
+    - Arrow14_Original (CFrameValue) [ValueObject] @ 0x21332642400
+    - Arrow14_Initial (CFrameValue) [ValueObject] @ 0x21332642500
+    - Arrow15_Composited (CFrameValue) [ValueObject] @ 0x21332642600
+    - Arrow15_Original (CFrameValue) [ValueObject] @ 0x21332642700
+    - Arrow15_Initial (CFrameValue) [ValueObject] @ 0x21332642800
+    - Arrow16_Composited (CFrameValue) [ValueObject] @ 0x21332642900
+    - Arrow16_Original (CFrameValue) [ValueObject] @ 0x21332642a00
+    - Arrow16_Initial (CFrameValue) [ValueObject] @ 0x21332642b00
+    - Arrow17_Composited (CFrameValue) [ValueObject] @ 0x21332642c00
+    - Arrow17_Original (CFrameValue) [ValueObject] @ 0x21332642d00
+    - Arrow17_Initial (CFrameValue) [ValueObject] @ 0x21332642e00
+    - Arrow17_end_Composited (CFrameValue) [ValueObject] @ 0x21332642f00
+    - Arrow17_end_Original (CFrameValue) [ValueObject] @ 0x21332643000
+    - Arrow17_end_Initial (CFrameValue) [ValueObject] @ 0x21332643100
+  - AnimationController (AnimationController) @ 0x21331a9b220
+    - Animator (Animator) @ 0x21333c06280
+  - CupidBow (MeshPart) @ 0x2133ed6d600
+    - CupidBowMotor6D (Motor6D) @ 0x213323d6200
+    - Hearts (ParticleEmitter) @ 0x213323f7880
+  - Arrow (MeshPart) @ 0x2133ed6d980
+    - ArrowMotor6D (Motor6D) @ 0x213323d6400
+    - A2 (Attachment) @ 0x21333c89500
+  - RootPart (Part) @ 0x2133ee05640
+    - Root (Bone) @ 0x213323d6600
+      - L. Limb1 (Bone) @ 0x213323d6800
+        - L. Limb1.001 (Bone) @ 0x213323d6a00
+          - L. Limb1.002 (Bone) @ 0x213323d6c00
+            - L. Limb1.003 (Bone) @ 0x213323d6e00
+              - L. Limb1.004 (Bone) @ 0x213323d7000
+                - L. Limb1.005 (Bone) @ 0x213323d7200
+        - L. String1 (Bone) @ 0x213323d7c00
+          - L. String1.001 (Bone) @ 0x213323d7e00
+            - L. String1.002 (Bone) @ 0x213323d8000
+      - R. Limb1 (Bone) @ 0x213323d8200
+        - R. Limb1.001 (Bone) @ 0x213323d8400
+          - R. Limb1.002 (Bone) @ 0x213323d8600
+            - R. Limb1.003 (Bone) @ 0x213323d8800
+              - R. Limb1.004 (Bone) @ 0x213323d8a00
+                - R. Limb1.005 (Bone) @ 0x213323d8c00
+        - R. String1 (Bone) @ 0x213323d9600
+          - R. String1.001 (Bone) @ 0x213323d9800
+            - R. String1.002 (Bone) @ 0x213323d9a00
+    - Arrow1_Root (Bone) @ 0x213323d9c00
+      - Arrow2 (Bone) @ 0x213323d9e00
+        - Arrow3 (Bone) @ 0x213323da000
+          - Arrow4 (Bone) @ 0x213323da200
+            - Arrow5 (Bone) @ 0x213323da400
+              - Arrow6 (Bone) @ 0x213323da600
+                - Arrow7 (Bone) @ 0x213323da800
+  - ArrowWeld (MeshPart) @ 0x2133ed6e080
+    - A1 (Attachment) @ 0x21333c89680
+    - ParticleEmitter (ParticleEmitter) @ 0x213323f7b80
+    - ParticleEmitter (ParticleEmitter) @ 0x213323f7e80
+    - Main (Attachment) @ 0x21333c89800
+      - ParticleEmitter (ParticleEmitter) @ 0x213323f8180
+      - ParticleEmitter (ParticleEmitter) @ 0x213323f8480
+      - ParticleEmitter (ParticleEmitter) @ 0x213323f8780
+      - ParticleEmitter (ParticleEmitter) @ 0x213323f8a80
+      - lines (ParticleEmitter) @ 0x213323f8d80
+      - lines (ParticleEmitter) @ 0x213323f9080
+      - ParticleEmitter (ParticleEmitter) @ 0x213323f9380
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Mega Rare/Ghost/RDB
+- RDB (Sound) @ 0x2133061c600
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Resources/KillFX/Developer/Sailornite/windbeam
+- windbeam (Part) @ 0x2133f01a6c0
+  - Beams (Attachment) @ 0x2133374c980
+    - Holds (Attachment) @ 0x2133374cb00
+      - Beam1 (Attachment) @ 0x2133374cc80
+        - front (Attachment) @ 0x2133374ce00
+        - back (Attachment) @ 0x2133374cf80
+      - Beam1 (Attachment) @ 0x2133374d100
+        - front (Attachment) @ 0x2133374d280
+        - back (Attachment) @ 0x2133374d400
+      - Beam1 (Attachment) @ 0x2133374d580
+        - front (Attachment) @ 0x2133374d700
+        - back (Attachment) @ 0x2133374d880
+      - Beam1 (Attachment) @ 0x2133374da00
+        - front (Attachment) @ 0x2133374db80
+        - back (Attachment) @ 0x2133374dd00
+    - Beam87 (Beam) @ 0x21332c9e400
+    - Beam87 (Beam) @ 0x21332c9e600
+    - Beam87 (Beam) @ 0x21332c9e800
+    - Beam87 (Beam) @ 0x21332c9ea00
+
+Found matching config root at path: Workspace/Workspace/Map/Buildings/AbandonedBuilding
+- AbandonedBuilding (Model) @ 0x21331afa180
+  - Abandoned_House (Model) @ 0x21331afa500
+    - Model (Model) @ 0x21331afa880
+      - Model (Model) @ 0x21331afac00
+        - Model (Model) @ 0x21331afaf80
+          - Model (Model) @ 0x21331afb300
+            - Part (Part) @ 0x2133a0a8900
+            - Part (Part) @ 0x2133a0a8ac0
+            - Part (Part) @ 0x2133a0a8c80
+            - Part (Part) @ 0x2133a0a8e40
+        - Model (Model) @ 0x21331afb680
+          - Model (Model) @ 0x21331afba00
+            - Part (Part) @ 0x2133a0a9000
+            - Part (Part) @ 0x2133a0a91c0
+            - Part (Part) @ 0x2133a0a9380
+            - Part (Part) @ 0x2133a0a9540
+        - Part (Part) @ 0x2133a0a9700
+          - Decal (Decal) @ 0x21330a8be80
+        - Part (Part) @ 0x2133a0a98c0
+          - Decal (Decal) @ 0x21330a8c100
+        - Part (Part) @ 0x2133a0a9a80
+          - Decal (Decal) @ 0x21330a8c380
+        - Part (Part) @ 0x2133a0a9c40
+          - Decal (Decal) @ 0x21330a8c600
+    - Model (Model) @ 0x21331afbd80
+      - Model (Model) @ 0x21331afc100
+        - Model (Model) @ 0x21331afc480
+          - Model (Model) @ 0x21331afc800
+            - Part (Part) @ 0x2133a0aa180
+            - Part (Part) @ 0x2133a0aa340
+            - Part (Part) @ 0x2133a0aa500
+            - Part (Part) @ 0x2133a0aa6c0
+        - Model (Model) @ 0x21331afcb80
+          - Model (Model) @ 0x21331afcf00
+            - Part (Part) @ 0x2133a0aaf80
+            - Part (Part) @ 0x2133a0ab140
+            - Part (Part) @ 0x2133a0ab300
+            - Part (Part) @ 0x2133a0ab4c0
+        - Part (Part) @ 0x2133a0aa880
+          - Decal (Decal) @ 0x21330a8cd80
+        - Part (Part) @ 0x2133a0aaa40
+          - Decal (Decal) @ 0x21330a8d000
+        - Part (Part) @ 0x2133a0aac00
+          - Decal (Decal) @ 0x21330a8d280
+        - Part (Part) @ 0x2133a0aadc0
+          - Decal (Decal) @ 0x21330a8d500
+        - Part (Part) @ 0x2133a0ab680
+          - Decal (Decal) @ 0x21330a8d780
+        - Part (Part) @ 0x2133a0ab840
+          - Decal (Decal) @ 0x21330a8da00
+        - Part (Part) @ 0x2133a0aba00
+          - Decal (Decal) @ 0x21330a8dc80
+    - Model (Model) @ 0x21331afd280
+      - Part (Part) @ 0x2133a0ac480
+      - Part (Part) @ 0x2133a0ac640
+      - Part (Part) @ 0x2133a0ac800
+      - Part (Part) @ 0x2133a0ac9c0
+    - Model (Model) @ 0x21331afd600
+      - Part (Part) @ 0x2133a0ad280
+        - Decal (Decal) @ 0x21330a8e180
+      - Part (Part) @ 0x2133a0ad440
+        - Decal (Decal) @ 0x21330a8e400
+      - Part (Part) @ 0x2133a0ad600
+      - Part (Part) @ 0x2133a0ad7c0
+        - Decal (Decal) @ 0x21330a8e680
+      - Part (Part) @ 0x2133a0ad980
+        - Decal (Decal) @ 0x21330a8e900
+      - Part (Part) @ 0x2133a0adb40
+      - Part (Part) @ 0x2133a0add00
+        - Decal (Decal) @ 0x21330a8eb80
+      - Part (Part) @ 0x2133a0adec0
+        - Decal (Decal) @ 0x21330a8ee00
+      - Part (Part) @ 0x2133a0ae080
+        - Decal (Decal) @ 0x21330a8f080
+      - Part (Part) @ 0x2133a0ae240
+        - Decal (Decal) @ 0x21330a8f300
+      - Part (Part) @ 0x2133a0ae400
+      - Part (Part) @ 0x2133a0ae5c0
+        - Decal (Decal) @ 0x21330a8f580
+      - Part (Part) @ 0x2133a0ae780
+        - Decal (Decal) @ 0x21330a8f800
+      - Part (Part) @ 0x2133a0ae940
+      - Part (Part) @ 0x2133a0aeb00
+      - Part (Part) @ 0x2133a0aecc0
+      - Part (Part) @ 0x2133a0aee80
+        - Decal (Decal) @ 0x21330a8fa80
+      - Part (Part) @ 0x2133a0af040
+        - Decal (Decal) @ 0x21330a8fd00
+    - Model (Model) @ 0x21331afd980
+      - Model (Model) @ 0x21331afdd00
+        - Part (Part) @ 0x2133a0e0b00
+        - Part (Part) @ 0x2133a0e0cc0
+        - Part (Part) @ 0x2133a0e0e80
+        - Part (Part) @ 0x2133a0e1040
+    - Model (Model) @ 0x21331afe080
+      - Part (Part) @ 0x2133a0e1900
+        - Decal (Decal) @ 0x21331b60a80
+        - Decal (Decal) @ 0x21331b60d00
+      - Part (Part) @ 0x2133a0e1ac0
+        - Decal (Decal) @ 0x21331b60f80
+        - Decal (Decal) @ 0x21331b61200
+      - Part (Part) @ 0x2133a0e1c80
+        - Decal (Decal) @ 0x21331b61480
+        - Decal (Decal) @ 0x21331b61700
+      - Part (Part) @ 0x2133a0e1e40
+        - Decal (Decal) @ 0x21331b61980
+        - Decal (Decal) @ 0x21331b61c00
+    - Part (Part) @ 0x2133a0a8740
+      - Decal (Decal) @ 0x21330a8bc00
+    - Part (Part) @ 0x2133a0a9e00
+    - Part (Part) @ 0x2133a0a9fc0
+      - Decal (Decal) @ 0x21330a8c880
+      - Decal (Decal) @ 0x21330a8cb00
+    - Part (Part) @ 0x2133a0abbc0
+    - Part (Part) @ 0x2133a0abd80
+    - Part (Part) @ 0x2133a0abf40
+    - Part (Part) @ 0x2133a0ac100
+    - Part (Part) @ 0x2133a0ac2c0
+    - Part (Part) @ 0x2133a0acb80
+    - Part (Part) @ 0x2133a0acd40
+    - Part (Part) @ 0x2133a0acf00
+    - Part (Part) @ 0x2133a0ad0c0
+      - Decal (Decal) @ 0x21330a8df00
+    - Part (Part) @ 0x2133a0af200
+    - Part (Part) @ 0x2133a0af3c0
+    - Part (Part) @ 0x2133a0af580
+      - Decal (Decal) @ 0x21331b60080
+    - Part (Part) @ 0x2133a0af740
+    - Part (Part) @ 0x2133a0af900
+    - Part (Part) @ 0x2133a0afac0
+      - Decal (Decal) @ 0x21331b60300
+    - Part (Part) @ 0x2133a0afc80
+    - Part (Part) @ 0x2133a0afe40
+      - Decal (Decal) @ 0x21331b60580
+    - Part (Part) @ 0x2133a0e0080
+      - Decal (Decal) @ 0x21331b60800
+    - Part (Part) @ 0x2133a0e0240
+    - Part (Part) @ 0x2133a0e0400
+    - Part (Part) @ 0x2133a0e05c0
+    - Part (Part) @ 0x2133a0e0780
+    - Part (Part) @ 0x2133a0e0940
+    - Part (Part) @ 0x2133a0e1200
+    - Part (Part) @ 0x2133a0e13c0
+    - Broken_Glass (MeshPart) @ 0x2133a0f0080
+    - Part (Part) @ 0x2133a0e1580
+    - Part (Part) @ 0x2133a0e1740
+    - Part (Part) @ 0x2133a0e2000
+    - Part (Part) @ 0x2133a0e21c0
+    - Part (Part) @ 0x2133a0e2380
+    - Part (Part) @ 0x2133a0e2540
+      - Decal (Decal) @ 0x21331b61e80
+    - Part (Part) @ 0x2133a0e2700
+    - Part (Part) @ 0x2133a0e28c0
+    - Part (Part) @ 0x2133a0e2a80
+    - Part (Part) @ 0x2133a0e2c40
+    - Part (Part) @ 0x2133a0e2e00
+    - Part (Part) @ 0x2133a0e2fc0
+      - Decal (Decal) @ 0x21331b62100
+    - Part (Part) @ 0x2133a0e3180
+    - Part (Part) @ 0x2133a0e3340
+    - Part (Part) @ 0x2133a0e3500
+    - Part (Part) @ 0x2133a0e36c0
+    - Part (Part) @ 0x2133a0e3880
+    - Part (Part) @ 0x2133a0e3a40
+    - Broken_Glass (MeshPart) @ 0x2133a0f0400
+    - Part (Part) @ 0x2133a0e3c00
+    - Part (Part) @ 0x2133a0e3dc0
+    - Part (Part) @ 0x2133a0e3f80
+    - Part (Part) @ 0x2133a0e4140
+      - Decal (Decal) @ 0x21331b62380
+    - Part (Part) @ 0x2133a0e4300
+    - Part (Part) @ 0x2133a0e44c0
+    - Part (Part) @ 0x2133a0e4680
+    - Part (Part) @ 0x2133a0e4840
+    - Part (Part) @ 0x2133a0e4a00
+    - Part (Part) @ 0x2133a0e4bc0
+      - Decal (Decal) @ 0x21331b62600
+    - Part (Part) @ 0x2133a0e4d80
+  - Model (Model) @ 0x21331afe400
+    - table (Model) @ 0x21331afe780
+      - Part (Part) @ 0x2133a0e4f40
+      - Part (Part) @ 0x2133a0e5100
+      - Part (Part) @ 0x2133a0e52c0
+      - Part (Part) @ 0x2133a0e5480
+      - Part (Part) @ 0x2133a0e5640
+    - Model (Model) @ 0x21331afeb00
+      - Part (Part) @ 0x2133a0e5800
+      - Part (Part) @ 0x2133a0e59c0
+      - Part (Part) @ 0x2133a0e5b80
+      - Part (Part) @ 0x2133a0e5d40
+      - Seat (Seat) @ 0x2133a0deb80
+      - Part (Part) @ 0x2133a0e5f00
+      - Part (Part) @ 0x2133a0e60c0
+      - Part (Part) @ 0x2133a0e6280
+      - Part (Part) @ 0x2133a0e6440
+      - Part (Part) @ 0x2133a0e6600
+      - Part (Part) @ 0x2133a0e67c0
+      - Part (Part) @ 0x2133a0e6980
+      - Part (Part) @ 0x2133a0e6b40
+  - Model (Model) @ 0x21331afee80
+    - Part (Part) @ 0x2133a0e6d00
+    - BAR (MeshPart) @ 0x2133a0f0780
+    - Part (Part) @ 0x2133a0e6ec0
+    - Part (Part) @ 0x2133a0e7080
+      - SurfaceLight (SurfaceLight) @ 0x213316de200
+  - twin bed (Model) @ 0x21331aff200
+    - Part (Part) @ 0x2133a0e7240
+      - Decal (Decal) @ 0x21331b62880
+      - Decal (Decal) @ 0x21331b62b00
+      - Decal (Decal) @ 0x21331b62d80
+      - Decal (Decal) @ 0x21331b63000
+    - Part (Part) @ 0x2133a0e7400
+      - Decal (Decal) @ 0x21331b63280
+  - Model (Model) @ 0x21331aff580
+    - Part (Part) @ 0x2133a0e75c0
+    - Part (Part) @ 0x2133a0e7780
+    - BAR (MeshPart) @ 0x2133a0f0b00
+    - Part (Part) @ 0x2133a0e7940
+  - Mailbox (Model) @ 0x21331aff900
+    - Union (UnionOperation) @ 0x21339dbec00
+    - Union (UnionOperation) @ 0x21339dbf000
+    - Union (UnionOperation) @ 0x21339dbf400
+    - Sign (Part) @ 0x2133a0e7cc0
+    - Union (UnionOperation) @ 0x21339dbf800
+  - twin bed (Model) @ 0x21331affc80
+    - Part (Part) @ 0x2133a0e83c0
+      - Decal (Decal) @ 0x21331b63500
+    - Part (Part) @ 0x2133a0e8580
+      - Decal (Decal) @ 0x21331b63780
+      - Decal (Decal) @ 0x21331b63a00
+      - Decal (Decal) @ 0x21331b63c80
+      - Decal (Decal) @ 0x21331b63f00
+  - Part (Part) @ 0x2133a0e7b00
+  - Part (Part) @ 0x2133a0e7e80
+  - Part (Part) @ 0x2133a0e8040
+  - Part (Part) @ 0x2133a0e8200
+  - Part (Part) @ 0x2133a0e8740
+  - Meshes/mountain (MeshPart) @ 0x2133a0f0e80
+  - Part (Part) @ 0x2133a0e8900
+  - Part (Part) @ 0x2133a0e8ac0
+
+Found matching config root at path: Workspace/Workspace/Map/Buildings/Warehouse/Props/Oil Barrel
+- Oil Barrel (MeshPart) @ 0x2133b02af80
+
+Found matching config root at path: Workspace/Workspace/Map/Buildings/Warehouse/Props/Oil Barrel
+- Oil Barrel (MeshPart) @ 0x2133b02b300
+
+Found matching config root at path: Workspace/Workspace/Map/Buildings/Warehouse/Props/Oil Barrel
+- Oil Barrel (MeshPart) @ 0x2133b02b680
+
+Found matching config root at path: Workspace/Workspace/Map/Buildings/Warehouse/Props/Oil Barrel
+- Oil Barrel (MeshPart) @ 0x2133b02e780
+
+Found matching config root at path: Workspace/Workspace/Map/Buildings/Warehouse/Props/Oil Barrel
+- Oil Barrel (MeshPart) @ 0x2133b02f200
+
+Found matching config root at path: Workspace/Workspace/Map/Buildings/Warehouse/Props/Oil Barrel
+- Oil Barrel (MeshPart) @ 0x2133b181c80
+
+Found matching config root at path: Workspace/Workspace/Map/Buildings/Warehouse/Props/Oil Barrel
+- Oil Barrel (MeshPart) @ 0x2133b183f80
+
+Found matching config root at path: Workspace/Workspace/Map/Buildings/Warehouse/Props/Oil Barrel
+- Oil Barrel (MeshPart) @ 0x2133b184d80
+
+Found matching config root at path: Workspace/Workspace/Map/Buildings/Warehouse/Props/Oil Barrel
+- Oil Barrel (MeshPart) @ 0x2133b185100
+
+Found matching config root at path: Workspace/Workspace/Map/Seasonal/Pier/DaShootout1/Cutouts/barrel
+- barrel (MeshPart) @ 0x2133c005480
+
+Found matching config root at path: Workspace/Workspace/Map/Seasonal/Pier/DaShootout2/Cutouts/barrel
+- barrel (MeshPart) @ 0x2133c0a0080
+
+Found matching config root at path: Workspace/Workspace/Map/Props/Oil Barrels
+- Oil Barrels (Folder) @ 0x213324d9700
+  - Oil Barrel (MeshPart) @ 0x213395b2e00
+  - Oil Barrel (MeshPart) @ 0x213395b3180
+  - Oil Barrel (MeshPart) @ 0x213395b3500
+  - Oil Barrel (MeshPart) @ 0x213395b3880
+  - Oil Barrel (MeshPart) @ 0x213395b3c00
+  - Oil Barrel (MeshPart) @ 0x213395b3f80
+  - Oil Barrel (MeshPart) @ 0x213395b4300
+  - Oil Barrel (MeshPart) @ 0x213395b4680
+  - Oil Barrel (MeshPart) @ 0x213395b4a00
+  - Oil Barrel (MeshPart) @ 0x213395b4d80
+  - Oil Barrel (MeshPart) @ 0x213395b5100
+  - Oil Barrel (MeshPart) @ 0x213395b5480
+  - Oil Barrel (MeshPart) @ 0x213395b5800
+  - Oil Barrel (MeshPart) @ 0x213395b5b80
+  - Oil Barrel (MeshPart) @ 0x213395b5f00
+  - Oil Barrel (MeshPart) @ 0x213395b6280
+  - Oil Barrel (MeshPart) @ 0x213395b6600
+  - Oil Barrel (MeshPart) @ 0x213395b6980
+  - Oil Barrel (MeshPart) @ 0x213395b6d00
+  - Oil Barrel (MeshPart) @ 0x213395b7080
+  - Oil Barrel (MeshPart) @ 0x213395b7400
+  - Oil Barrel (MeshPart) @ 0x213395b7780
+  - Oil Barrel (MeshPart) @ 0x213395b7b00
+  - Oil Barrel (MeshPart) @ 0x213395b7e80
+  - Oil Barrel (MeshPart) @ 0x213395b8200
+  - Oil Barrel (MeshPart) @ 0x213395b8580
+  - Oil Barrel (MeshPart) @ 0x213395b8900
+  - Oil Barrel (MeshPart) @ 0x213395b8c80
+  - Oil Barrel (MeshPart) @ 0x213395b9000
+  - Oil Barrel (MeshPart) @ 0x213395b9380
+  - Oil Barrel (MeshPart) @ 0x213395b9700
+  - Oil Barrel (MeshPart) @ 0x213395b9a80
+  - Oil Barrel (MeshPart) @ 0x213395b9e00
+  - Oil Barrel (MeshPart) @ 0x213395ba180
+  - Oil Barrel (MeshPart) @ 0x213395ba500
+  - Oil Barrel (MeshPart) @ 0x213395ba880
+  - Oil Barrel (MeshPart) @ 0x213395bac00
+  - Oil Barrel (MeshPart) @ 0x213395baf80
+  - Oil Barrel (MeshPart) @ 0x213395bb300
+  - Oil Barrel (MeshPart) @ 0x213395bb680
+  - Oil Barrel (MeshPart) @ 0x213395bba00
+  - Oil Barrel (MeshPart) @ 0x213395bbd80
+  - Oil Barrel (MeshPart) @ 0x213395bc100
+  - Oil Barrel (MeshPart) @ 0x213395bc480
+  - Oil Barrel (MeshPart) @ 0x213395bc800
+  - Oil Barrel (MeshPart) @ 0x213395bcb80
+  - Oil Barrel (MeshPart) @ 0x213395bcf00
+  - Oil Barrel (MeshPart) @ 0x213395bd280
+  - Oil Barrel (MeshPart) @ 0x213395bd600
+  - Oil Barrel (MeshPart) @ 0x213395bd980
+  - Oil Barrel (MeshPart) @ 0x213395bdd00
+  - Oil Barrel (MeshPart) @ 0x213395be080
+  - Oil Barrel (MeshPart) @ 0x213395be400
+  - Oil Barrel (MeshPart) @ 0x213395be780
+  - Oil Barrel (MeshPart) @ 0x213395beb00
+  - Oil Barrel (MeshPart) @ 0x213395bee80
+  - Oil Barrel (MeshPart) @ 0x213395bf200
+  - Oil Barrel (MeshPart) @ 0x213395bf580
+  - Oil Barrel (MeshPart) @ 0x213395bf900
+  - Oil Barrel (MeshPart) @ 0x213395bfc80
+  - Oil Barrel (MeshPart) @ 0x2133c050080
+  - Oil Barrel (MeshPart) @ 0x2133c050400
+  - Oil Barrel (MeshPart) @ 0x2133c050780
+  - Oil Barrel (MeshPart) @ 0x2133c050b00
+  - Oil Barrel (MeshPart) @ 0x2133c050e80
+  - Oil Barrel (MeshPart) @ 0x2133c051200
+  - Oil Barrel (MeshPart) @ 0x2133c051580
+
+Found matching config root at path: Workspace/Workspace/Map/Military2024/Military/MilitaryDestruction/Model/Radioactive Barrel
+- Radioactive Barrel (MeshPart) @ 0x2133d35d980
+
+Found matching config root at path: Workspace/Workspace/Map/Military2024/Military/MilitaryDestruction/Model/Radioactive Barrel
+- Radioactive Barrel (MeshPart) @ 0x2133d35ee80
+
+Found matching config root at path: Workspace/Workspace/Map/Military2024/Military/MilitaryDestruction/Model/Radioactive Barrel
+- Radioactive Barrel (MeshPart) @ 0x2133d35f200
+
+Found matching config root at path: Workspace/Workspace/Map/Military2024/Military/MilitaryDestruction/Model/Radioactive Barrel
+- Radioactive Barrel (MeshPart) @ 0x2133d35f580
+
+Found matching config root at path: Workspace/Workspace/Map/DaArcade/ClawMachine/System/ClawMachine/Buttons/DB
+- DB (Model) @ 0x21331a1a180
+  - Button (Part) @ 0x2133d8df040
+  - Base (Part) @ 0x2133d8df200
+
+Found matching config root at path: Workspace/Workspace/Map/DaArcade/Model/Meshes/1DBN(1)
+- Meshes/1DBN(1) (MeshPart) @ 0x2133d8f4300
+  - Attachment (Attachment) @ 0x2133252ab80
+    - Beam (Beam) @ 0x213314a7a00
+  - Attachment (Attachment) @ 0x2133252ad00
+    - Beam (Beam) @ 0x213314a7c00
+  - Part (Part) @ 0x2133d935480
+  - Part (Part) @ 0x2133d935640
+    - flares (ParticleEmitter) @ 0x213324af080
+    - glow (ParticleEmitter) @ 0x213324af380
+
+Found matching config root at path: Workspace/Workspace/Map/Other/Roadblock
+- Roadblock (Model) @ 0x2133285a180
+  - Model (Model) @ 0x2133285a500
+    - Part (Part) @ 0x2133ddf8c80
+      - Texture (Texture) @ 0x213327d2d80
+      - Texture (Texture) @ 0x213327d3080
+    - Part (Part) @ 0x2133ddf8e40
+      - Texture (Texture) @ 0x213327d3380
+      - Texture (Texture) @ 0x213327d3680
+    - Part (Part) @ 0x2133ddf9000
+      - Texture (Texture) @ 0x213327d3980
+      - Texture (Texture) @ 0x213327d3c80
+  - Model (Model) @ 0x2133285a880
+    - Part (Part) @ 0x2133ddf91c0
+    - Part (Part) @ 0x2133ddf9380
+    - Part (Part) @ 0x2133ddf9540
+    - Part (Part) @ 0x2133ddf9700
+    - Part (Part) @ 0x2133ddf98c0
+    - Part (Part) @ 0x2133ddf9a80
+  - Model (Model) @ 0x2133285ac00
+    - Part (Part) @ 0x2133ddf9c40
+    - Part (Part) @ 0x2133ddf9e00
+      - SurfaceGui (SurfaceGui) @ 0x21331ac3c80
+        - TextLabel (TextLabel) @ 0x21332801080
+
+Found matching config root at path: Workspace/Workspace/Map/Other/Roadblock
+- Roadblock (Model) @ 0x2133285b300
+  - Model (Model) @ 0x2133285b680
+    - Part (Part) @ 0x2133ddfbf40
+    - Part (Part) @ 0x2133ddfc100
+    - Part (Part) @ 0x2133ddfc2c0
+    - Part (Part) @ 0x2133ddfc480
+    - Part (Part) @ 0x2133ddfc640
+    - Part (Part) @ 0x2133ddfc800
+  - Model (Model) @ 0x2133285ba00
+    - Part (Part) @ 0x2133ddfc9c0
+      - SurfaceGui (SurfaceGui) @ 0x21331ac4680
+        - TextLabel (TextLabel) @ 0x21332802080
+    - Part (Part) @ 0x2133ddfcb80
+  - Model (Model) @ 0x2133285bd80
+    - Part (Part) @ 0x2133ddfcd40
+      - Texture (Texture) @ 0x213327d6980
+      - Texture (Texture) @ 0x213327d6c80
+    - Part (Part) @ 0x2133ddfcf00
+      - Texture (Texture) @ 0x213327d6f80
+      - Texture (Texture) @ 0x213327d7280
+    - Part (Part) @ 0x2133ddfd0c0
+      - Texture (Texture) @ 0x213327d7580
+      - Texture (Texture) @ 0x213327d7880
+
+Found matching config root at path: Workspace/Workspace/Map/Roadblock
+- Roadblock (Model) @ 0x213326f8900
+  - Model (Model) @ 0x213326f8c80
+    - Part (Part) @ 0x2133de6f200
+      - SurfaceGui (SurfaceGui) @ 0x21331ac5080
+        - TextLabel (TextLabel) @ 0x21332803080
+    - Part (Part) @ 0x2133de6f3c0
+  - Model (Model) @ 0x213326f9000
+    - Part (Part) @ 0x2133de6f580
+    - Part (Part) @ 0x2133de6f740
+    - Part (Part) @ 0x2133de6f900
+    - Part (Part) @ 0x2133de6fac0
+    - Part (Part) @ 0x2133de6fc80
+    - Part (Part) @ 0x2133de6fe40
+  - Model (Model) @ 0x213326f9380
+    - Part (Part) @ 0x21336fc0080
+      - Texture (Texture) @ 0x213327d8780
+      - Texture (Texture) @ 0x213327d8a80
+    - Part (Part) @ 0x21336fc0240
+      - Texture (Texture) @ 0x213327d8d80
+      - Texture (Texture) @ 0x213327d9080
+    - Part (Part) @ 0x21336fc0400
+      - Texture (Texture) @ 0x213327d9380
+      - Texture (Texture) @ 0x213327d9680
+
+Found matching config root at path: Workspace/Workspace/Ignored/Shop/Guns/[Shotgun] - $750
+- [Shotgun] - $750 (Model) @ 0x213300e3880
+  - TheName (BillboardGui) @ 0x21330138c80
+    - Text (TextLabel) @ 0x21330149080
+  - ClickDetector (ClickDetector) @ 0x2132fd79000
+  - Head (Part) @ 0x2132a0c4bc0
+
+Found matching config root at path: Workspace/Workspace/Ignored/Shop/Guns/[Shotgun] - $750
+- [Shotgun] - $750 (Model) @ 0x213300eb680
+  - TheName (BillboardGui) @ 0x213300f0080
+    - Text (TextLabel) @ 0x21330100080
+  - ClickDetector (ClickDetector) @ 0x2132fd7cf00
+  - Head (Part) @ 0x2132a0c8ac0
+
+Found matching config root at path: Workspace/Workspace/Characters/Nocturno232312/UpperTorso/PhoneCall
+- PhoneCall (Sound) @ 0x214821e2380
+
+Found matching config root at path: Workspace/Workspace/Characters/IIIIIllIlIllllIIIIl/UpperTorso/PhoneCall
+- PhoneCall (Sound) @ 0x2133ba6e180
+
+Found matching config root at path: Workspace/Workspace/Characters/IIIIIllIlIllllIIIIl/Phone
+- Phone (Tool) @ 0x21323fae480
+  - _Extra (Script) @ 0x2133ff47400
+    - RightGrip (Weld) @ 0x214a7144140
+  - LocalScript (LocalScript) @ 0x2133ff40e00
+    - received (StringValue) | Value: "Unknown" @ 0x2132e734800
+    - sent (StringValue) | Value: "Unknown" @ 0x2132e73ed00
+  - Handle (MeshPart) @ 0x214a39dc480
+    - PhoneEnd (StringValue) | Value: "Unknown" @ 0x2132e735200
+    - PhoneStart (StringValue) | Value: "Unknown" @ 0x2132e733100
+    - iPhone (Contacts) (MeshPart) @ 0x214a39d4a00
+      - ManualWeld (ManualWeld) @ 0x214a7142c40
+  - OwnerTag (ObjectValue) | Value: IIIIIllIlIllllIIIIl (Player) @ 0x2281154271360 @ 0x214a6ecf040
+
+Found matching config root at path: Workspace/Workspace/Characters/I7akemss/UpperTorso/PhoneCall
+- PhoneCall (Sound) @ 0x2133f741700
+
+Found matching config root at path: Workspace/Workspace/Characters/soaulu/UpperTorso/PhoneCall
+- PhoneCall (Sound) @ 0x214a4a76200
+
+Found matching config root at path: Workspace/Workspace/Characters/6ox0l/UpperTorso/PhoneCall
+- PhoneCall (Sound) @ 0x21489f93f00
+
+Found matching config root at path: Workspace/Workspace/Characters/JESKOOOOOOOOOOOOOOOO/UpperTorso/PhoneCall
+- PhoneCall (Sound) @ 0x2133fa42100
+
+Found matching config root at path: Workspace/Workspace/Characters/JESKOOOOOOOOOOOOOOOO/Headphones
+- Headphones (Accessory) @ 0x213372ddec0
+  - Handle (MeshPart) @ 0x214a39d1200
+    - HatAttachment (Attachment) @ 0x2148a176b00
+      - OriginalPosition (Vector3Value) [ValueObject] @ 0x214a5d3e4e0
+    - OriginalSize (Vector3Value) [ValueObject] @ 0x214a5d34bc0
+    - AccessoryWeld (Weld) @ 0x213372d5b80
+
+Found matching config root at path: Workspace/Workspace/Characters/x0l2n/UpperTorso/PhoneCall
+- PhoneCall (Sound) @ 0x214a4e68500
+
+Found matching config root at path: Workspace/Workspace/Characters/xxiwpo/UpperTorso/PhoneCall
+- PhoneCall (Sound) @ 0x2148b1d1480
+
+Found matching config root at path: Workspace/Workspace/Characters/xxiwpo/Phone
+- Phone (Tool) @ 0x21336142a80
+  - _Extra (Script) @ 0x2148592d600
+    - RightGrip (Weld) @ 0x214a4ebb140
+  - LocalScript (LocalScript) @ 0x2148592c800
+    - received (StringValue) | Value: "Unknown" @ 0x214924de100
+    - sent (StringValue) | Value: "Unknown" @ 0x214924dc000
+  - Handle (MeshPart) @ 0x2132ecf2000
+    - PhoneEnd (StringValue) | Value: "Unknown" @ 0x214924de900
+    - PhoneStart (StringValue) | Value: "Unknown" @ 0x214924d1800
+    - iPhone (Contacts) (MeshPart) @ 0x2132ecfc100
+      - ManualWeld (ManualWeld) @ 0x2147cce4300
+  - OwnerTag (ObjectValue) | Value: xxiwpo (Player) @ 0x2281557393536 @ 0x213370284a0
+
+Found matching config root at path: Workspace/Workspace/Characters/t3gxnn/UpperTorso/PhoneCall
+- PhoneCall (Sound) @ 0x214a4e6be80
+
+Found matching config root at path: Workspace/Workspace/Characters/02Ol3/UpperTorso/PhoneCall
+- PhoneCall (Sound) @ 0x2149cde1700
+
+Found matching config root at path: Workspace/Workspace/Characters/zaypenji/UpperTorso/PhoneCall
+- PhoneCall (Sound) @ 0x21330677100
+
+Found matching config root at path: Workspace/Workspace/Characters/Sombrebike345678/UpperTorso/PhoneCall
+- PhoneCall (Sound) @ 0x21338690300
+
+Found matching config root at path: Workspace/Workspace/M3ance7/BodyEffects/PhoneCall
+- PhoneCall (Sound) @ 0x2149a1e3500
+

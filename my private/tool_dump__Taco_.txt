@@ -1,0 +1,10 @@
+Tool Name: [Taco]
+Tool Class: Tool
+
+Descendants:
+  - Name: Eat | Class: Script @ 0x15128396a00
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x1447592663168 @ 0x1511e6751e0
+  - Name: Animation | Class: Animation @ 0x151206d8100
+  - Name: Handle | Class: Part @ 0x15122d51900
+    - Name: Mesh | Class: SpecialMesh @ 0x1528b8e8180
+    - Name: Eat | Class: StringValue | Value: "Unknown" @ 0x151206da500

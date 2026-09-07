@@ -1,0 +1,20 @@
+Tool Name: Lucky
+Tool Class: Tool
+
+Descendants:
+  - Name: InstructionsGui | Class: ScreenGui @ 0x19abf0e6480
+    - Name: ImageLabel | Class: ImageLabel @ 0x19abc57d880
+  - Name: Main | Class: LocalScript @ 0x19c15993a00
+  - Name: Progress | Class: BoolValue | Value: false @ 0x19aae3c84a0
+  - Name: Handle | Class: MeshPart @ 0x19a9ecf0b00
+    - Name: Glow | Class: ParticleEmitter @ 0x19c00d9c980
+    - Name: MagicSound | Class: Sound @ 0x19aa60ee900
+    - Name: Glow | Class: ParticleEmitter @ 0x19c00d9b180
+    - Name: Weld | Class: Weld @ 0x19aabdec800
+    - Name: Weld | Class: Weld @ 0x19aabdec640
+    - Name: Weld | Class: Weld @ 0x19aabdeb680
+    - Name: Weld | Class: Weld @ 0x19aabdedb40
+  - Name: newMesh | Class: MeshPart @ 0x19a9ecf6980
+  - Name: newMesh | Class: MeshPart @ 0x19a9ecf8c80
+  - Name: newMesh | Class: MeshPart @ 0x19a9ecfd600
+  - Name: newMesh | Class: MeshPart @ 0x19a9ecfc800

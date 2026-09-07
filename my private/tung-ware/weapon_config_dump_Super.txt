@@ -1,0 +1,3909 @@
+=== Weapon Config Search for Tool: Super ===
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/SpawnSuperBlock
+- SpawnSuperBlock (RemoteEvent) @ 0x19ac8a34140
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/SpawnDiamondBlock
+- SpawnDiamondBlock (RemoteEvent) @ 0x19ac8a3d280
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/FakeCharacter/Accessory (StuddedBeltBagAccessory)
+- Accessory (StuddedBeltBagAccessory) (Accessory) @ 0x19c095a3880
+  - Handle (Part) @ 0x19aa6619e00
+    - TouchInterest (TouchTransmitter) @ 0x19ab577d520
+    - SpecialMesh (SpecialMesh) @ 0x19c1ad10080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/BloxbizSDK/AdFilter/AdBalancer
+- AdBalancer (ModuleScript) @ 0x19c093b0080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/BloxbizSDK/PopfeedClient/Gui/Components/FeedBottom
+- FeedBottom (ModuleScript) @ 0x19c15aabbc0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/BloxbizSDK/Utils/RBLXSerialize/Properties/SuperClassDataStatic
+- SuperClassDataStatic (ModuleScript) @ 0x19abc34c2c0
+  - Data1 (ModuleScript) @ 0x19abc34c100
+  - Data2 (ModuleScript) @ 0x19abc34bf40
+  - Data3 (ModuleScript) @ 0x19abc34bd80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/LegacyModules/191816425/Contents/DeluxeExplodingLabTable/DeluxeExplodingLabTable/RedBeaker
+- RedBeaker (Part) @ 0x19aaa165640
+  - Mesh (SpecialMesh) @ 0x19ab0abf380
+  - Smoke (ParticleEmitter) @ 0x19aa8d15a80
+  - Weld (Weld) @ 0x19ac8a32fc0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/FakeCharacter/AngledBackwordsCap
+- AngledBackwordsCap (Accessory) @ 0x19c095a3340
+  - Handle (Part) @ 0x19aaa631ac0
+    - SpecialMesh (SpecialMesh) @ 0x19c09a42180
+    - TouchInterest (TouchTransmitter) @ 0x19ab5773500
+
+Found matching config root at path: Workspace/Workspace/RedBridge
+- RedBridge (Model) @ 0x19ac435b680
+  - Part (Part) @ 0x19c21c51c80
+  - Part (Part) @ 0x19c21c53c00
+  - Part (Part) @ 0x19c21c55100
+  - Part (Part) @ 0x19c21c57b00
+  - Part (Part) @ 0x19c21c536c0
+  - Part (Part) @ 0x19c21c52fc0
+  - Part (Part) @ 0x19c21c544c0
+  - Part (Part) @ 0x19c21c59380
+  - Part (Part) @ 0x19c21c598c0
+  - Part (Part) @ 0x19c21c56440
+  - Part (Part) @ 0x19c21c51900
+  - Part (Part) @ 0x19c21c52c40
+  - Part (Part) @ 0x19c21c58900
+  - Part (Part) @ 0x19c21c51e40
+  - Part (Part) @ 0x19c23de8580
+  - Part (Part) @ 0x19c23de3340
+  - Part (Part) @ 0x19c23deb140
+  - Part (Part) @ 0x19c23deb300
+  - Part (Part) @ 0x19c23deb4c0
+  - Part (Part) @ 0x19c23dea6c0
+  - Part (Part) @ 0x19c23de7400
+  - Part (Part) @ 0x19c23de7080
+  - Part (Part) @ 0x19aa5910240
+  - Part (Part) @ 0x19aa5911ac0
+  - Part (Part) @ 0x19a9f570780
+  - Part (Part) @ 0x19a9f570940
+  - Part (Part) @ 0x19a9f571580
+  - Part (Part) @ 0x19a9f571740
+  - Part (Part) @ 0x19a9f571900
+  - Part (Part) @ 0x19a9f571ac0
+  - Part (Part) @ 0x19a9f577e80
+  - Part (Part) @ 0x19a9f578040
+  - Part (Part) @ 0x19a9f578200
+  - Part (Part) @ 0x19a9f5783c0
+  - Part (Part) @ 0x19a9f578580
+  - Part (Part) @ 0x19a9f578740
+  - Part (Part) @ 0x19a9f578900
+  - Part (Part) @ 0x19a9f57a6c0
+  - Part (Part) @ 0x19a9f57a880
+  - Part (Part) @ 0x19a9f57aa40
+  - Part (Part) @ 0x19a9f57ac00
+  - Part (Part) @ 0x19a9f57ba00
+  - Part (Part) @ 0x19a9f57bbc0
+  - Part (Part) @ 0x19a9f57bd80
+  - Part (Part) @ 0x19a9f57bf40
+  - Part (Part) @ 0x19a9f57c100
+  - Part (Part) @ 0x19a9f57c2c0
+  - Part (Part) @ 0x19a9f57c480
+  - Part (Part) @ 0x19a9f57c640
+  - Part (Part) @ 0x19a9f57c800
+  - Part (Part) @ 0x19aa3687400
+  - Part (Part) @ 0x19aa5965800
+  - Part (Part) @ 0x19aa59659c0
+  - Part (Part) @ 0x19aa5965d40
+  - Part (Part) @ 0x19aa5971900
+  - Part (Part) @ 0x19aa5972000
+  - Part (Part) @ 0x19aa5973dc0
+  - Part (Part) @ 0x19aa661cf00
+  - Part (Part) @ 0x19aa661d980
+  - Part (Part) @ 0x19aa661db40
+  - Part (Part) @ 0x19aa661dd00
+  - Part (Part) @ 0x19aa661dec0
+  - Part (Part) @ 0x19aa661e080
+  - Part (Part) @ 0x19aa6923340
+  - Part (Part) @ 0x19aa6929700
+  - Part (Part) @ 0x19aa69298c0
+  - Part (Part) @ 0x19aa6929a80
+  - Part (Part) @ 0x19aa692a6c0
+  - Part (Part) @ 0x19aa692a880
+  - Part (Part) @ 0x19aa692aa40
+  - Part (Part) @ 0x19aa692ac00
+  - Part (Part) @ 0x19aa692adc0
+  - Part (Part) @ 0x19aa692b840
+  - Part (Part) @ 0x19aa6ea28c0
+  - Part (Part) @ 0x19aa6ea2fc0
+  - Part (Part) @ 0x19aa7cfeb00
+  - Part (Part) @ 0x19aa7cfecc0
+  - Part (Part) @ 0x19aa7cfee80
+  - Part (Part) @ 0x19aa7cff040
+  - Part (Part) @ 0x19aa7cff200
+  - Part (Part) @ 0x19aa7cff3c0
+  - Part (Part) @ 0x19aa7cff580
+  - Part (Part) @ 0x19aa7cff740
+  - Part (Part) @ 0x19aa7cff900
+  - Part (Part) @ 0x19aa7cffac0
+  - Part (Part) @ 0x19aa7cffc80
+  - Part (Part) @ 0x19aa7cffe40
+  - Part (Part) @ 0x19aa7e40080
+  - Part (Part) @ 0x19aa7e4fe40
+  - Part (Part) @ 0x19aa9f40080
+  - Part (Part) @ 0x19aa9f40240
+  - Part (Part) @ 0x19aa9f40400
+  - Part (Part) @ 0x19aa9f405c0
+  - Part (Part) @ 0x19aa9f40780
+  - Part (Part) @ 0x19aa9f41040
+  - Part (Part) @ 0x19aa9f45d40
+  - Part (Part) @ 0x19aa9f46280
+  - Part (Part) @ 0x19aa9f46440
+  - Part (Part) @ 0x19aa9f46600
+  - Part (Part) @ 0x19aa9f467c0
+  - Part (Part) @ 0x19aa9f47780
+  - Part (Part) @ 0x19aa9f47b00
+  - Part (Part) @ 0x19aaa2898c0
+  - Part (Part) @ 0x19aaa289a80
+  - Part (Part) @ 0x19aaa289c40
+  - Part (Part) @ 0x19aaa289e00
+  - Part (Part) @ 0x19aaa289fc0
+  - Part (Part) @ 0x19aaa28a180
+  - Part (Part) @ 0x19aaa28a340
+  - Part (Part) @ 0x19aaa28a500
+  - Part (Part) @ 0x19aaa28a6c0
+  - Part (Part) @ 0x19aaa28a880
+  - Part (Part) @ 0x19aaa28aa40
+  - Part (Part) @ 0x19aaa28ac00
+  - Part (Part) @ 0x19aaa28adc0
+  - Part (Part) @ 0x19aaa28af80
+  - Part (Part) @ 0x19aaa28b140
+  - Part (Part) @ 0x19aaa28b300
+  - Part (Part) @ 0x19aaa28c2c0
+  - Part (Part) @ 0x19aaa3328c0
+  - Part (Part) @ 0x19aaa332a80
+  - Part (Part) @ 0x19aaa332c40
+  - Part (Part) @ 0x19aaa332e00
+  - Part (Part) @ 0x19aaa332fc0
+  - Part (Part) @ 0x19aaa333180
+  - Part (Part) @ 0x19aaa333340
+  - Part (Part) @ 0x19aaa333500
+  - Part (Part) @ 0x19aaa3336c0
+  - Part (Part) @ 0x19aaa333880
+  - Part (Part) @ 0x19aaa333a40
+  - Part (Part) @ 0x19aaa333c00
+  - Part (Part) @ 0x19aaa333dc0
+  - Part (Part) @ 0x19aaa333f80
+  - Part (Part) @ 0x19aaa334140
+  - Part (Part) @ 0x19aaa334300
+  - Part (Part) @ 0x19aaa3344c0
+  - Part (Part) @ 0x19aaa334680
+  - Part (Part) @ 0x19aaa334840
+  - Part (Part) @ 0x19aaa334a00
+  - Part (Part) @ 0x19aaa334bc0
+    - BridgeBase (Part) @ 0x19aa5964840
+  - Part (Part) @ 0x19aaa334d80
+  - Part (Part) @ 0x19aaa334f40
+  - Part (Part) @ 0x19aaa335100
+  - Part (Part) @ 0x19aaa3352c0
+  - Part (Part) @ 0x19aaa335480
+  - Part (Part) @ 0x19aaa335640
+  - Part (Part) @ 0x19aaa335800
+  - Part (Part) @ 0x19aaa3359c0
+  - Part (Part) @ 0x19aaa335b80
+  - Part (Part) @ 0x19aaa335d40
+  - Part (Part) @ 0x19aa5dd83c0
+  - Part (Part) @ 0x19aa5dd8580
+  - Part (Part) @ 0x19aa5dd8740
+  - Part (Part) @ 0x19aa5dd8900
+  - Part (Part) @ 0x19aa5dd8ac0
+  - Part (Part) @ 0x19aa5e40080
+  - Part (Part) @ 0x19aa5e40240
+  - Part (Part) @ 0x19aa5e40400
+  - Part (Part) @ 0x19aa5e460c0
+  - Part (Part) @ 0x19aa5e46440
+  - Part (Part) @ 0x19aa5e46600
+  - Part (Part) @ 0x19aa5e467c0
+  - Part (Part) @ 0x19aa5e46980
+  - Part (Part) @ 0x19aa5e46b40
+  - Part (Part) @ 0x19aa5e46d00
+  - Part (Part) @ 0x19aa5e46ec0
+  - Part (Part) @ 0x19aa5e47080
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/SuperBlockLockBoard
+- SuperBlockLockBoard (Model) @ 0x19ab928fc80
+  - Script (Script) @ 0x19c0b316600
+  - LockBoardBuyGui (Part) @ 0x19aa692b140
+    - SurfaceGui (SurfaceGui) @ 0x19aa4126480
+      - SkipButton (Frame) @ 0x19c09f74680
+        - imageBackgroundshadow (ImageLabel) @ 0x19a8deb3080
+        - imageBackground (ImageLabel) @ 0x19a8deb3c80
+        - SkipButton (ImageButton) @ 0x19c083ea080
+  - LockBoardBlockGui (Part) @ 0x19aa692b300
+    - SurfaceGui (SurfaceGui) @ 0x19aa4125a80
+      - LockFrame (Frame) @ 0x19c09f7e680
+        - ImageLabel (ImageLabel) @ 0x19a8deb2480
+  - LockBoardOrGui (Part) @ 0x19aa692b4c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa4124680
+      - LockFrame (Frame) @ 0x19c09f7d280
+        - ImageLabel (ImageLabel) @ 0x19a8deb1880
+  - LockBoardBlockGui (Part) @ 0x19aa692b680
+    - SurfaceGui (SurfaceGui) @ 0x19aa4123c80
+      - LockFrame (Frame) @ 0x19c09f7f080
+        - ImageLabel (ImageLabel) @ 0x19a8deb0c80
+  - LockBoardTimeGui (Part) @ 0x19aa6eae240
+    - SurfaceGui (SurfaceGui) @ 0x19aa4120a80
+      - LockFrame (Frame) @ 0x19c09f70a80
+        - ImageLabel (ImageLabel) @ 0x19a8ddccc80
+  - LockBoardGuiArrow (Part) @ 0x19aa6eae400
+    - SurfaceGui (SurfaceGui) @ 0x19aa4121480
+      - LockFrame (Frame) @ 0x19c09f70080
+        - ImageLabel (ImageLabel) @ 0x19a8ddcd880
+  - LockBoardBlockGui (Part) @ 0x19aa6eae5c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa4121e80
+      - LockFrame (Frame) @ 0x19c09f73c80
+        - ImageLabel (ImageLabel) @ 0x19a8ddce480
+  - LockBoardBlockGui (Part) @ 0x19aa6eae780
+    - SurfaceGui (SurfaceGui) @ 0x19aa4122880
+      - LockFrame (Frame) @ 0x19c09f73280
+        - ImageLabel (ImageLabel) @ 0x19a8ddcf080
+  - LockBoardBlockGui (Part) @ 0x19aa6eae940
+    - SurfaceGui (SurfaceGui) @ 0x19aa4123280
+      - LockFrame (Frame) @ 0x19c09f72880
+        - ImageLabel (ImageLabel) @ 0x19a8deb0080
+  - LockBoardbottom (Part) @ 0x19aaa2836c0
+  - LockBoard (Part) @ 0x19aaa283880
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/SuperPad
+- SuperPad (Model) @ 0x19ab928d280
+  - Base (Part) @ 0x19aaae3b4c0
+    - Weld (Weld) @ 0x19abb814300
+    - Weld (Weld) @ 0x19abb814140
+    - TouchInterest (TouchTransmitter) @ 0x19abd731d60
+  - Part (Part) @ 0x19aaae3b680
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/RainbowBlockLockBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aa7cf75c0
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/RainbowBlockLockBoard/LockBoardBuyGui
+- LockBoardBuyGui (Part) @ 0x19aaae3b840
+  - SurfaceGui (SurfaceGui) @ 0x19aa3ae6e80
+    - SkipButton (Frame) @ 0x19c17ca6480
+      - imageBackgroundshadow (ImageLabel) @ 0x19a8deb8480
+      - imageBackground (ImageLabel) @ 0x19a8deb9080
+      - SkipButton (ImageButton) @ 0x19c09835080
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/RainbowBlockLockBoard/LockBoardBlockGuiGradient
+- LockBoardBlockGuiGradient (Part) @ 0x19aaae3bbc0
+  - SurfaceGui (SurfaceGui) @ 0x19aa3ae8280
+    - LockFrame (Frame) @ 0x19c17ca9680
+      - ImageLabel (ImageLabel) @ 0x19a8deba880
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaae3bd80
+  - SurfaceGui (SurfaceGui) @ 0x19aa3ae8c80
+    - LockFrame (Frame) @ 0x19c17ca1e80
+      - ImageLabel (ImageLabel) @ 0x19a8debb480
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaae3bf40
+  - SurfaceGui (SurfaceGui) @ 0x19aa3ae9680
+    - LockFrame (Frame) @ 0x19c17caa080
+      - ImageLabel (ImageLabel) @ 0x19a8debc080
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaae3c100
+  - SurfaceGui (SurfaceGui) @ 0x19aa3d5a080
+    - LockFrame (Frame) @ 0x19c17ca1480
+      - ImageLabel (ImageLabel) @ 0x19a8debcc80
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaae3c2c0
+  - SurfaceGui (SurfaceGui) @ 0x19aa3d5aa80
+    - LockFrame (Frame) @ 0x19c17ca2880
+      - ImageLabel (ImageLabel) @ 0x19a8debd880
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/RainbowBlockLockBoard/LockBoardBlockGuiText
+- LockBoardBlockGuiText (Part) @ 0x19aaae3c480
+  - SurfaceGui (SurfaceGui) @ 0x19aa3d5b480
+    - LockFrame (Frame) @ 0x19c17cabe80
+      - ImageLabel (ImageLabel) @ 0x19a8debe480
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/SkipTimerLockBoard/LockBoardBuyGui
+- LockBoardBuyGui (Part) @ 0x19a9f579fc0
+  - SurfaceGui (SurfaceGui) @ 0x19c09f5be80
+    - SkipButton (Frame) @ 0x19c1be13c80
+      - imageBackgroundshadow (ImageLabel) @ 0x19a8dee4880
+      - imageBackground (ImageLabel) @ 0x19a8dee5480
+      - SkipButton (ImageButton) @ 0x19c09834080
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19a9f57a340
+  - SurfaceGui (SurfaceGui) @ 0x19c09f5f080
+    - LockFrame (Frame) @ 0x19c1be1e680
+      - ImageLabel (ImageLabel) @ 0x19a8dee3080
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19a9f57a500
+  - SurfaceGui (SurfaceGui) @ 0x19c09f5dc80
+    - LockFrame (Frame) @ 0x19c17cac880
+      - ImageLabel (ImageLabel) @ 0x19a8dee1880
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa596dd00
+  - SurfaceGui (SurfaceGui) @ 0x19c09f53280
+    - LockFrame (Frame) @ 0x19c1be11480
+      - ImageLabel (ImageLabel) @ 0x19a8dee3c80
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa596dec0
+  - SurfaceGui (SurfaceGui) @ 0x19c09f56e80
+    - LockFrame (Frame) @ 0x19c1be12880
+      - ImageLabel (ImageLabel) @ 0x19a8dee2480
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/SkipTimerLockBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aa5e4bbc0
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/GalaxyBlockLockBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aa37b1740
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaae3c800
+  - SurfaceGui (SurfaceGui) @ 0x19aa52ac880
+    - LockFrame (Frame) @ 0x19c1be1c880
+      - ImageLabel (ImageLabel) @ 0x19a8dee6080
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/GalaxyBlockLockBoard/LockBoardBuyGui
+- LockBoardBuyGui (Part) @ 0x19aaaedc480
+  - SurfaceGui (SurfaceGui) @ 0x19aa3c15080
+    - SkipButton (Frame) @ 0x19c1be1a080
+      - imageBackgroundshadow (ImageLabel) @ 0x19a8deea880
+      - imageBackground (ImageLabel) @ 0x19a8deeb480
+      - SkipButton (ImageButton) @ 0x19c09833080
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaaf45d40
+  - SurfaceGui (SurfaceGui) @ 0x19aa52ad280
+    - LockFrame (Frame) @ 0x19c1be1b480
+      - ImageLabel (ImageLabel) @ 0x19a8dee6c80
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/GalaxyBlockLockBoard/LockBoardBlockGuiEpic
+- LockBoardBlockGuiEpic (Part) @ 0x19aaaf45640
+  - SurfaceGui (SurfaceGui) @ 0x19aa52adc80
+    - LockFrame (Frame) @ 0x19c1be18280
+      - Script (Script) @ 0x19c0b31ae00
+      - ImageLabel (ImageLabel) @ 0x19a8dee7880
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaaf460c0
+  - SurfaceGui (SurfaceGui) @ 0x19aa3d13280
+    - LockFrame (Frame) @ 0x19c1be15080
+      - ImageLabel (ImageLabel) @ 0x19a8dee9080
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaaf46280
+  - SurfaceGui (SurfaceGui) @ 0x19aa3d18c80
+    - LockFrame (Frame) @ 0x19c1be17880
+      - ImageLabel (ImageLabel) @ 0x19a8dee9c80
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/BlockGiverSuper1
+- BlockGiverSuper1 (Model) @ 0x19ab928b300
+  - Settings/Instructions (Script) @ 0x19c0b31cc00
+  - Settings (Folder) @ 0x19ab6da0160
+    - WeaponName (StringValue) | Value: "Unknown" @ 0x19c057b5c00
+    - RegenTime (IntValue) | Value: 60 @ 0x19ab6da0080
+    - RegenColor (BrickColorValue) [ValueObject] @ 0x19ab6dadd00
+    - StartColor (BrickColorValue) [ValueObject] @ 0x19ab6da0cc0
+  - ColoredParts (Model) @ 0x19ab928a500
+    - TopBottomColors (Part) @ 0x19aaa331ac0
+      - Mesh (CylinderMesh) @ 0x19c10b45600
+    - Center (Part) @ 0x19aaa331c80
+      - Mesh (CylinderMesh) @ 0x19c10b47400
+      - Glue (Glue) @ 0x19abf8caf80
+      - Glue (Glue) @ 0x19abf8cb140
+      - Glue (Glue) @ 0x19abf8c52c0
+    - TopBottomColors (Part) @ 0x19aaa331e40
+      - Mesh (CylinderMesh) @ 0x19c10b4cb00
+    - TouchMe (Part) @ 0x19aaa332000
+      - Mesh (CylinderMesh) @ 0x19c10b4b100
+      - TouchInterest (TouchTransmitter) @ 0x19abd73a6c0
+  - LuckyBlock (Model) @ 0x19ab928af80
+    - Model (Model) @ 0x19ab928ac00
+      - newMesh (MeshPart) @ 0x19ac2b60780
+      - newMesh (MeshPart) @ 0x19ac2b63c00
+      - newMesh (MeshPart) @ 0x19ac2b66280
+      - newMesh (MeshPart) @ 0x19ac2b61900
+    - MeshPart (MeshPart) @ 0x19ac2b61c80
+      - Glow (ParticleEmitter) @ 0x19aa359ae80
+      - Glow (ParticleEmitter) @ 0x19aa3592180
+  - GUI (Part) @ 0x19aa6926280
+    - SurfaceGui (SurfaceGui) @ 0x19c1be11e80
+      - LockFrame (Frame) @ 0x19ab244dc80
+        - ImageLabel (ImageLabel) @ 0x19a8deef080
+        - Text (TextLabel) @ 0x19c09839080
+        - Text (TextLabel) @ 0x19c0983e080
+      - Frame (Frame) @ 0x19c1be19680
+        - Time1 (TextLabel) @ 0x19aa42e4080
+        - Time2 (TextLabel) @ 0x19aa42e3080
+        - SkipButton (Frame) @ 0x19ab2442880
+          - TriggerButton (TextButton) @ 0x19a8dd4b480
+          - Button (TextButton) @ 0x19a8dd4c880
+            - Frame (Frame) @ 0x19c1be1aa80
+            - Frame (Frame) @ 0x19c1be10a80
+          - SkipButton (ImageButton) @ 0x19c0983d080
+          - imageBackground (ImageLabel) @ 0x19a8df20080
+          - imageBackgroundshadow (ImageLabel) @ 0x19a8df20c80
+  - Pipe (Part) @ 0x19aa6926440
+    - Mesh (CylinderMesh) @ 0x19c10b4a000
+  - Pipe (Part) @ 0x19aa6926600
+    - Mesh (CylinderMesh) @ 0x19c10b48900
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/BlockGiverSuper2
+- BlockGiverSuper2 (Model) @ 0x19ab928a180
+  - Settings/Instructions (Script) @ 0x19c0b31fc00
+  - Settings (Folder) @ 0x19ab6daa960
+    - WeaponName (StringValue) | Value: "Unknown" @ 0x19c057b6f00
+    - RegenTime (IntValue) | Value: 60 @ 0x19ab6da9c40
+    - RegenColor (BrickColorValue) [ValueObject] @ 0x19ab6dab3e0
+    - StartColor (BrickColorValue) [ValueObject] @ 0x19ab6daadc0
+  - ColoredParts (Model) @ 0x19ab9289e00
+    - TouchMe (Part) @ 0x19aaa3b9540
+      - Mesh (CylinderMesh) @ 0x19c10b4c900
+      - TouchInterest (TouchTransmitter) @ 0x19abd73a7a0
+    - TopBottomColors (Part) @ 0x19aaa3b9700
+      - Mesh (CylinderMesh) @ 0x19c10b4dd00
+    - Center (Part) @ 0x19aaa3b98c0
+      - Mesh (CylinderMesh) @ 0x19c10b40500
+    - TopBottomColors (Part) @ 0x19aaa3b9a80
+      - Mesh (CylinderMesh) @ 0x19c10b4c700
+  - LuckyBlock (Model) @ 0x19ab9289a80
+    - Model (Model) @ 0x19ab9289000
+      - newMesh (MeshPart) @ 0x19ac2b65b80
+      - newMesh (MeshPart) @ 0x19ac2b6e080
+      - newMesh (MeshPart) @ 0x19ac2b60e80
+      - newMesh (MeshPart) @ 0x19ac2b63f80
+    - MeshPart (MeshPart) @ 0x19ac2b64d80
+      - Glow (ParticleEmitter) @ 0x19aa3590080
+      - Glow (ParticleEmitter) @ 0x19aa3595180
+  - GUI (Part) @ 0x19aa69267c0
+    - SurfaceGui (SurfaceGui) @ 0x19c1be1f080
+      - LockFrame (Frame) @ 0x19aa4120080
+        - ImageLabel (ImageLabel) @ 0x19a8df21880
+        - Text (TextLabel) @ 0x19c0983c080
+        - Text (TextLabel) @ 0x19c0983b080
+      - Frame (Frame) @ 0x19c1dbcd280
+        - Time1 (TextLabel) @ 0x19aa3cf3080
+        - Time2 (TextLabel) @ 0x19aa3cf4080
+        - SkipButton (Frame) @ 0x19aa42dbe80
+          - TriggerButton (TextButton) @ 0x19a8dd4dc80
+          - Button (TextButton) @ 0x19a97810080
+            - Frame (Frame) @ 0x19c1dbcdc80
+            - Frame (Frame) @ 0x19c1dbc4680
+          - SkipButton (ImageButton) @ 0x19c10378080
+          - imageBackground (ImageLabel) @ 0x19a8df22480
+          - imageBackgroundshadow (ImageLabel) @ 0x19a8df23080
+  - Pipe (Part) @ 0x19aa6926980
+    - Mesh (CylinderMesh) @ 0x19c10b4b700
+  - Pipe (Part) @ 0x19aa7e43880
+    - Mesh (CylinderMesh) @ 0x19c10b4fb00
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/LockWallSuper
+- LockWallSuper (Model) @ 0x19ab9289380
+  - Script (Script) @ 0x19c0b319400
+  - LockWall2 (Part) @ 0x19aaa283a40
+    - Mesh (CylinderMesh) @ 0x19c10b47300
+  - LockWall1 (Part) @ 0x19aa5e4b840
+    - Mesh (CylinderMesh) @ 0x19c10b42000
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/DiamondBlockLockBoard
+- DiamondBlockLockBoard (Model) @ 0x19abd4ed980
+  - Script (Script) @ 0x19c0b316e00
+  - LockBoard (Part) @ 0x19aa675f040
+  - LockBoardbottom (Part) @ 0x19aa675f200
+  - LockBoardBuyGui (Part) @ 0x19aaa16e5c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d58c80
+      - SkipButton (Frame) @ 0x19c1e027880
+        - imageBackgroundshadow (ImageLabel) @ 0x19a98223c80
+        - imageBackground (ImageLabel) @ 0x19a98224880
+        - SkipButton (ImageButton) @ 0x19c122f9080
+  - LockBoardBlockGui (Part) @ 0x19aaa16e780
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d58280
+      - LockFrame (Frame) @ 0x19c1e02a080
+        - ImageLabel (ImageLabel) @ 0x19a98223080
+  - LockBoardBlockGuiGradient (Part) @ 0x19aaa16e940
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d57880
+      - LockFrame (Frame) @ 0x19c1e021480
+        - ImageLabel (ImageLabel) @ 0x19a98222480
+  - LockBoardBlockGui (Part) @ 0x19aaa16eb00
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d56e80
+      - LockFrame (Frame) @ 0x19c1e020080
+        - ImageLabel (ImageLabel) @ 0x19a98221880
+  - LockBoardBlockGui (Part) @ 0x19aaa16ecc0
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d56480
+      - LockFrame (Frame) @ 0x19c1e028c80
+        - ImageLabel (ImageLabel) @ 0x19a98220c80
+  - LockBoardBlockGui (Part) @ 0x19aaa16ee80
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d55a80
+      - LockFrame (Frame) @ 0x19c1dbcc880
+        - ImageLabel (ImageLabel) @ 0x19a98220080
+  - LockBoardBlockGui (Part) @ 0x19aaa16f040
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d55080
+      - LockFrame (Frame) @ 0x19c1dbc3c80
+        - ImageLabel (ImageLabel) @ 0x19a8df2f080
+  - LockBoardGuiArrow (Part) @ 0x19aaa16f200
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d54680
+      - LockFrame (Frame) @ 0x19c1dbc3280
+        - ImageLabel (ImageLabel) @ 0x19a8df2e480
+  - LockBoardOrGui (Part) @ 0x19aaa16f3c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d53c80
+      - LockFrame (Frame) @ 0x19c1dbcbe80
+        - ImageLabel (ImageLabel) @ 0x19a8df2d880
+  - LockBoardTimeGui (Part) @ 0x19aaa16f580
+    - Weld (Weld) @ 0x19abf8ca500
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d53280
+      - LockFrame (Frame) @ 0x19c1dbc5080
+        - ImageLabel (ImageLabel) @ 0x19a8df2cc80
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/VoidBlockLockBoard
+- VoidBlockLockBoard (Model) @ 0x19abd4e9e00
+  - Script (Script) @ 0x19c0b31d400
+  - LockBoardbottom (Part) @ 0x19aa37b1040
+  - LockBoard (Part) @ 0x19aa37b1200
+  - ParticleCore (Part) @ 0x19aa597d440
+    - Attachment (Attachment) @ 0x19ab1f39c80
+  - LockBoardBlockGui (Part) @ 0x19aa597d600
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d16e80
+      - LockFrame (Frame) @ 0x19c1e024680
+        - ImageLabel (ImageLabel) @ 0x19a9822c080
+  - effectCore (Part) @ 0x19aaa16c800
+    - SurfaceGui (SurfaceGui) @ 0x19aa3ce1480
+      - Frame (Frame) @ 0x19c1f046e80
+      - images (Folder) @ 0x19aaa03f660
+        - questionmark (ImageLabel) @ 0x19a982b2480
+        - questionmark2 (ImageLabel) @ 0x19a982b3080
+      - images2 (Folder) @ 0x19aaa03dde0
+        - questionmark (ImageLabel) @ 0x19a982b3c80
+        - exclamationmark (ImageLabel) @ 0x19a982b4880
+        - atmark (ImageLabel) @ 0x19a982b5480
+        - moneymark (ImageLabel) @ 0x19a982b6080
+        - andmark (ImageLabel) @ 0x19a982b6c80
+        - minusmark (ImageLabel) @ 0x19a982b7880
+        - plusmark (ImageLabel) @ 0x19a982b8480
+        - equalsmark (ImageLabel) @ 0x19a982b9080
+  - LockBoardBuyGui (Part) @ 0x19aaa16c9c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa3ce0a80
+      - SkipButton (Frame) @ 0x19c1f041480
+        - imageBackgroundshadow (ImageLabel) @ 0x19a982b0c80
+        - imageBackground (ImageLabel) @ 0x19a982b1880
+        - SkipButton (ImageButton) @ 0x19c124f3080
+  - LockBoardBlockGui (Part) @ 0x19aaa16cb80
+    - SurfaceGui (SurfaceGui) @ 0x19aa3e43c80
+      - LockFrame (Frame) @ 0x19c1f041e80
+        - ImageLabel (ImageLabel) @ 0x19a982b0080
+  - LockBoardBlockGui (Part) @ 0x19aaa16cd40
+    - SurfaceGui (SurfaceGui) @ 0x19aa3e44680
+      - LockFrame (Frame) @ 0x19c1f045080
+        - ImageLabel (ImageLabel) @ 0x19a9822f080
+  - LockBoardGuiArrow (Part) @ 0x19aaa16cf00
+    - SurfaceGui (SurfaceGui) @ 0x19aa3c18c80
+      - LockFrame (Frame) @ 0x19c1f042880
+        - ImageLabel (ImageLabel) @ 0x19a9822e480
+  - LockBoardBlockGuiEpic (Part) @ 0x19aaa16d0c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d18280
+      - LockFrame (Frame) @ 0x19c1f043280
+        - Script (Script) @ 0x19c0b310c00
+        - ImageLabel (ImageLabel) @ 0x19a9822d880
+  - LockBoardBlockGui (Part) @ 0x19aaa16d280
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d17880
+      - LockFrame (Frame) @ 0x19c1f049680
+        - ImageLabel (ImageLabel) @ 0x19a9822cc80
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/LimitedTimeBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa16b680
+  - SurfaceGui (SurfaceGui) @ 0x19c1f04b480
+    - LockFrame (Frame) @ 0x19c1f048c80
+      - ImageLabel (ImageLabel) @ 0x19a982bd880
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/LimitedTimeBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa16b840
+  - SurfaceGui (SurfaceGui) @ 0x19c1f04c880
+    - LockFrame (Frame) @ 0x19c1f04f080
+      - ImageLabel (ImageLabel) @ 0x19a982bcc80
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/LimitedTimeBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa16ba00
+  - SurfaceGui (SurfaceGui) @ 0x19c1f04dc80
+    - LockFrame (Frame) @ 0x19c1f04d280
+      - ImageLabel (ImageLabel) @ 0x19a982bc080
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/LimitedTimeBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aaa16bbc0
+  - Attachment (Attachment) @ 0x19ab1f37e80
+    - Fire (Fire) @ 0x19aa655ea40
+  - Attachment (Attachment) @ 0x19ab1f37d00
+    - Fire (Fire) @ 0x19aa655ae40
+  - Attachment (Attachment) @ 0x19ab1f37b80
+    - Fire (Fire) @ 0x19aa6559400
+  - Attachment (Attachment) @ 0x19ab1f37a00
+    - Fire (Fire) @ 0x19aa6558280
+  - Attachment (Attachment) @ 0x19ab1f37880
+    - Fire (Fire) @ 0x19aa655e040
+  - Attachment (Attachment) @ 0x19ab1f37700
+    - Fire (Fire) @ 0x19aa6559180
+  - Attachment (Attachment) @ 0x19ab1f37580
+    - Fire (Fire) @ 0x19aa65592c0
+  - Attachment (Attachment) @ 0x19ab1f37400
+    - Fire (Fire) @ 0x19aa6557d80
+  - Attachment (Attachment) @ 0x19ab1f37280
+    - Fire (Fire) @ 0x19aa65583c0
+  - Attachment (Attachment) @ 0x19ab1f37100
+    - Fire (Fire) @ 0x19aa6557c40
+  - Attachment (Attachment) @ 0x19ab1f36f80
+    - Fire (Fire) @ 0x19aa6557880
+  - Attachment (Attachment) @ 0x19ab1f36e00
+    - Fire (Fire) @ 0x19aa65579c0
+  - Attachment (Attachment) @ 0x19ab1f36c80
+    - Fire (Fire) @ 0x19aa6556200
+  - Attachment (Attachment) @ 0x19ab1f36b00
+    - Fire (Fire) @ 0x19aa6556fc0
+  - Attachment (Attachment) @ 0x19ab1f36980
+    - Fire (Fire) @ 0x19aa6557240
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/SuperLocked2
+- SuperLocked2 (BoolValue) | Value: true @ 0x19abadbf3c0
+
+Found matching config root at path: Workspace/Workspace/Spawn6/Givers/SuperLocked1
+- SuperLocked1 (BoolValue) | Value: true @ 0x19abd732460
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/SuperBlockLockBoard
+- SuperBlockLockBoard (Model) @ 0x19ab0a51580
+  - Script (Script) @ 0x19ab1530200
+  - LockBoardBlockGui (Part) @ 0x19aa591f040
+    - SurfaceGui (SurfaceGui) @ 0x19aa42a9680
+      - LockFrame (Frame) @ 0x19ac6106e80
+        - ImageLabel (ImageLabel) @ 0x19c1bdc3c80
+  - LockBoardBlockGui (Part) @ 0x19aa591f200
+    - SurfaceGui (SurfaceGui) @ 0x19aa42aa080
+      - LockFrame (Frame) @ 0x19ac610b480
+        - ImageLabel (ImageLabel) @ 0x19c1bdcd880
+  - LockBoardBuyGui (Part) @ 0x19aaa6352c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa42ad280
+      - SkipButton (Frame) @ 0x19ac9cc3280
+        - imageBackgroundshadow (ImageLabel) @ 0x19c1c4e9c80
+        - imageBackground (ImageLabel) @ 0x19c1c4e4880
+        - SkipButton (ImageButton) @ 0x19ac65b3080
+  - LockBoardBlockGui (Part) @ 0x19aaa635480
+    - SurfaceGui (SurfaceGui) @ 0x19aa42ac880
+      - LockFrame (Frame) @ 0x19ac9cc3c80
+        - ImageLabel (ImageLabel) @ 0x19c1c4e8480
+  - LockBoardOrGui (Part) @ 0x19aaa635640
+    - SurfaceGui (SurfaceGui) @ 0x19aa42abe80
+      - LockFrame (Frame) @ 0x19ac9cc9680
+        - ImageLabel (ImageLabel) @ 0x19c1c4e6080
+  - LockBoardBlockGui (Part) @ 0x19aaa635800
+    - SurfaceGui (SurfaceGui) @ 0x19aa42ab480
+      - LockFrame (Frame) @ 0x19ac9ccf080
+        - ImageLabel (ImageLabel) @ 0x19c1c4ec080
+  - LockBoardBlockGui (Part) @ 0x19aaa6359c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa42aaa80
+      - LockFrame (Frame) @ 0x19ac9cc8280
+        - ImageLabel (ImageLabel) @ 0x19c1bdc0c80
+  - LockBoardGuiArrow (Part) @ 0x19aaa635b80
+    - SurfaceGui (SurfaceGui) @ 0x19aa42a8c80
+      - LockFrame (Frame) @ 0x19ac610dc80
+        - ImageLabel (ImageLabel) @ 0x19c1bdc9c80
+  - LockBoardTimeGui (Part) @ 0x19aaa635d40
+    - SurfaceGui (SurfaceGui) @ 0x19aa42a8280
+      - LockFrame (Frame) @ 0x19ac6103280
+        - ImageLabel (ImageLabel) @ 0x19c1bdc3080
+  - LockBoard (Part) @ 0x19c0cc7a6c0
+  - LockBoardbottom (Part) @ 0x19c0cc7cd40
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/SuperPad
+- SuperPad (Model) @ 0x19ab0a59380
+  - Part (Part) @ 0x19c0cb113c0
+  - Base (Part) @ 0x19c0cb15800
+    - TouchInterest (TouchTransmitter) @ 0x19ab1479fc0
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/RainbowBlockLockBoard/LockBoardBuyGui
+- LockBoardBuyGui (Part) @ 0x19c23de3c00
+  - SurfaceGui (SurfaceGui) @ 0x19aa41c4680
+    - SkipButton (Frame) @ 0x19ac9ccb480
+      - imageBackgroundshadow (ImageLabel) @ 0x19c1c4e5480
+      - imageBackground (ImageLabel) @ 0x19c1c4ecc80
+      - SkipButton (ImageButton) @ 0x19ac65b6080
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19c23de36c0
+  - SurfaceGui (SurfaceGui) @ 0x19aa41c7880
+    - LockFrame (Frame) @ 0x19c00548c80
+      - ImageLabel (ImageLabel) @ 0x19c1cbfc080
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/RainbowBlockLockBoard/LockBoardBlockGuiText
+- LockBoardBlockGuiText (Part) @ 0x19c23de3500
+  - SurfaceGui (SurfaceGui) @ 0x19aa41c8c80
+    - LockFrame (Frame) @ 0x19c00544680
+      - ImageLabel (ImageLabel) @ 0x19c1cbf3080
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19c23de2fc0
+  - SurfaceGui (SurfaceGui) @ 0x19aa41c8280
+    - LockFrame (Frame) @ 0x19c00540a80
+      - ImageLabel (ImageLabel) @ 0x19c1cbf0080
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa634680
+  - SurfaceGui (SurfaceGui) @ 0x19aa41c6e80
+    - LockFrame (Frame) @ 0x19c00541e80
+      - ImageLabel (ImageLabel) @ 0x19c1cbfa880
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa634840
+  - SurfaceGui (SurfaceGui) @ 0x19aa41c6480
+    - LockFrame (Frame) @ 0x19ac9cca080
+      - ImageLabel (ImageLabel) @ 0x19c1cbfb480
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/RainbowBlockLockBoard/LockBoardBlockGuiGradient
+- LockBoardBlockGuiGradient (Part) @ 0x19aaa634a00
+  - SurfaceGui (SurfaceGui) @ 0x19aa41c5a80
+    - LockFrame (Frame) @ 0x19ac9cce680
+      - ImageLabel (ImageLabel) @ 0x19c1cbf8480
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/RainbowBlockLockBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19c0cc79540
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa368f200
+  - SurfaceGui (SurfaceGui) @ 0x19aa42a5a80
+    - LockFrame (Frame) @ 0x19c00548280
+      - ImageLabel (ImageLabel) @ 0x19c1cbf7880
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa368f3c0
+  - SurfaceGui (SurfaceGui) @ 0x19aa42a4680
+    - LockFrame (Frame) @ 0x19c0054f080
+      - ImageLabel (ImageLabel) @ 0x19c1cbf0c80
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa634140
+  - SurfaceGui (SurfaceGui) @ 0x19aa42a3c80
+    - LockFrame (Frame) @ 0x19c0054e680
+      - ImageLabel (ImageLabel) @ 0x19c1cbfe480
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa3bd0c0
+  - SurfaceGui (SurfaceGui) @ 0x19aa42a5080
+    - LockFrame (Frame) @ 0x19c00547880
+      - ImageLabel (ImageLabel) @ 0x19c1cbf2480
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/SkipTimerLockBoard/LockBoardBuyGui
+- LockBoardBuyGui (Part) @ 0x19aaa3be5c0
+  - SurfaceGui (SurfaceGui) @ 0x19aa42a6480
+    - SkipButton (Frame) @ 0x19c00549680
+      - imageBackgroundshadow (ImageLabel) @ 0x19c1cbf9080
+      - imageBackground (ImageLabel) @ 0x19c1cbf9c80
+      - SkipButton (ImageButton) @ 0x19ac65b5080
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/SkipTimerLockBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aa64491c0
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/GalaxyBlockLockBoard/LockBoardBuyGui
+- LockBoardBuyGui (Part) @ 0x19aaa633340
+  - SurfaceGui (SurfaceGui) @ 0x19aa41cd280
+    - SkipButton (Frame) @ 0x19c06ad0a80
+      - imageBackgroundshadow (ImageLabel) @ 0x19c1dc56c80
+      - imageBackground (ImageLabel) @ 0x19c1dc59080
+      - SkipButton (ImageButton) @ 0x19ac65b4080
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa6336c0
+  - SurfaceGui (SurfaceGui) @ 0x19aa41cc880
+    - LockFrame (Frame) @ 0x19c06add280
+      - ImageLabel (ImageLabel) @ 0x19c1dc56080
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa633880
+  - SurfaceGui (SurfaceGui) @ 0x19aa41cbe80
+    - LockFrame (Frame) @ 0x19c06ad0080
+      - ImageLabel (ImageLabel) @ 0x19c1dc53c80
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/GalaxyBlockLockBoard/LockBoardBlockGuiEpic
+- LockBoardBlockGuiEpic (Part) @ 0x19aaa633c00
+  - SurfaceGui (SurfaceGui) @ 0x19aa41caa80
+    - LockFrame (Frame) @ 0x19c00545080
+      - Script (Script) @ 0x19c0b31d000
+      - ImageLabel (ImageLabel) @ 0x19c1cbf4880
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa633dc0
+  - SurfaceGui (SurfaceGui) @ 0x19aa41ca080
+    - LockFrame (Frame) @ 0x19c0054be80
+      - ImageLabel (ImageLabel) @ 0x19c1cbf3c80
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa633f80
+  - SurfaceGui (SurfaceGui) @ 0x19aa41c9680
+    - LockFrame (Frame) @ 0x19c0054b480
+      - ImageLabel (ImageLabel) @ 0x19c1cbf1880
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/GalaxyBlockLockBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19c0cc73180
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/BlockGiverSuper1
+- BlockGiverSuper1 (Model) @ 0x19ab0a56d00
+  - Settings/Instructions (Script) @ 0x19c0b31b800
+  - Settings (Folder) @ 0x19ab6da1120
+    - WeaponName (StringValue) | Value: "Unknown" @ 0x19c057b1800
+    - RegenTime (IntValue) | Value: 60 @ 0x19ab6da1200
+    - RegenColor (BrickColorValue) [ValueObject] @ 0x19ab6da12e0
+    - StartColor (BrickColorValue) [ValueObject] @ 0x19ab6dad6e0
+  - ColoredParts (Model) @ 0x19ab0a53500
+    - TouchMe (Part) @ 0x19aabdee400
+      - Mesh (CylinderMesh) @ 0x19c10b4ad00
+      - TouchInterest (TouchTransmitter) @ 0x19ab1477080
+    - TopBottomColors (Part) @ 0x19aabdee5c0
+      - Mesh (CylinderMesh) @ 0x19c10b41400
+    - Center (Part) @ 0x19aabdee780
+      - Mesh (CylinderMesh) @ 0x19c10b48000
+    - TopBottomColors (Part) @ 0x19aabdee940
+      - Mesh (CylinderMesh) @ 0x19c10b4b900
+  - LuckyBlock (Model) @ 0x19ab0a53880
+    - Model (Model) @ 0x19ab0a50400
+      - newMesh (MeshPart) @ 0x19c1f7be400
+      - newMesh (MeshPart) @ 0x19c1f7b5480
+      - newMesh (MeshPart) @ 0x19c1f7bf580
+      - newMesh (MeshPart) @ 0x19c1f7b8c80
+    - MeshPart (MeshPart) @ 0x19c1f7bc480
+      - Glow (ParticleEmitter) @ 0x19a9f53fc80
+      - Glow (ParticleEmitter) @ 0x19a9f53db80
+  - Pipe (Part) @ 0x19aa5e46280
+    - Mesh (CylinderMesh) @ 0x19c10b4eb00
+  - GUI (Part) @ 0x19aa5e4eb00
+    - SurfaceGui (SurfaceGui) @ 0x19c06ad5080
+      - LockFrame (Frame) @ 0x19aa42a6e80
+        - ImageLabel (ImageLabel) @ 0x19c1dc59c80
+        - Text (TextLabel) @ 0x19ac65ca080
+        - Text (TextLabel) @ 0x19ac65c8080
+      - Frame (Frame) @ 0x19c06ad1480
+        - Time1 (TextLabel) @ 0x19aa41bb080
+        - Time2 (TextLabel) @ 0x19aa41bc080
+        - SkipButton (Frame) @ 0x19aa42d4680
+          - TriggerButton (TextButton) @ 0x19a8d76b480
+          - Button (TextButton) @ 0x19a8d76c880
+            - Frame (Frame) @ 0x19c06adb480
+            - Frame (Frame) @ 0x19c06adaa80
+          - SkipButton (ImageButton) @ 0x19ac65cd080
+          - imageBackground (ImageLabel) @ 0x19c1dc5e480
+          - imageBackgroundshadow (ImageLabel) @ 0x19c1dc5cc80
+  - Pipe (Part) @ 0x19aa5e4ecc0
+    - Mesh (CylinderMesh) @ 0x19c10b45700
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/BlockGiverSuper2
+- BlockGiverSuper2 (Model) @ 0x19ab0a51c80
+  - Settings/Instructions (Script) @ 0x19c0b312e00
+  - Settings (Folder) @ 0x19ab6daa180
+    - WeaponName (StringValue) | Value: "Unknown" @ 0x19c057b6200
+    - RegenTime (IntValue) | Value: 60 @ 0x19ab6dad440
+    - RegenColor (BrickColorValue) [ValueObject] @ 0x19ab6da7940
+    - StartColor (BrickColorValue) [ValueObject] @ 0x19ab6da8d60
+  - ColoredParts (Model) @ 0x19ab0a5b680
+    - TopBottomColors (Part) @ 0x19aa5e721c0
+      - Mesh (CylinderMesh) @ 0x19c10b46800
+    - Center (Part) @ 0x19aa5e72380
+      - Mesh (CylinderMesh) @ 0x19c10b45900
+    - TopBottomColors (Part) @ 0x19aa5e72540
+      - Mesh (CylinderMesh) @ 0x19c10b42700
+    - TouchMe (Part) @ 0x19aa5e72700
+      - Mesh (CylinderMesh) @ 0x19c10b41f00
+      - TouchInterest (TouchTransmitter) @ 0x19ab9dfebe0
+  - LuckyBlock (Model) @ 0x19ab0a5c100
+    - Model (Model) @ 0x19ab0a5a880
+      - newMesh (MeshPart) @ 0x19aa8878200
+      - newMesh (MeshPart) @ 0x19c1f7bac00
+      - newMesh (MeshPart) @ 0x19c1f7bb680
+      - newMesh (MeshPart) @ 0x19c1f7b9a80
+    - MeshPart (MeshPart) @ 0x19c1f7b3c00
+      - Glow (ParticleEmitter) @ 0x19a9f53cf80
+      - Glow (ParticleEmitter) @ 0x19a9f53bd80
+  - GUI (Part) @ 0x19aa9f4d440
+    - SurfaceGui (SurfaceGui) @ 0x19c06ada080
+      - LockFrame (Frame) @ 0x19aa42a7880
+        - ImageLabel (ImageLabel) @ 0x19c1dc5c080
+        - Text (TextLabel) @ 0x19ac65c9080
+        - Text (TextLabel) @ 0x19ac65c3080
+      - Frame (Frame) @ 0x19c06ad9680
+        - Time1 (TextLabel) @ 0x19aa3c0c080
+        - Time2 (TextLabel) @ 0x19aa3cd7080
+        - SkipButton (Frame) @ 0x19aa3d15080
+          - TriggerButton (TextButton) @ 0x19a8d76dc80
+          - Button (TextButton) @ 0x19a8dcc0080
+            - Frame (Frame) @ 0x19c06ad7880
+            - Frame (Frame) @ 0x19c06ad6e80
+          - SkipButton (ImageButton) @ 0x19ac65c2080
+          - imageBackground (ImageLabel) @ 0x19c1dc5d880
+          - imageBackgroundshadow (ImageLabel) @ 0x19c1dc54880
+  - Pipe (Part) @ 0x19aa9f4d600
+    - Mesh (CylinderMesh) @ 0x19c10b42100
+  - Pipe (Part) @ 0x19aa9f4db40
+    - Mesh (CylinderMesh) @ 0x19c10b43200
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/LockWallSuper
+- LockWallSuper (Model) @ 0x19ab0a5a180
+  - Script (Script) @ 0x19c0b313000
+  - LockWall1 (Part) @ 0x19aa644d980
+    - Mesh (CylinderMesh) @ 0x19c10b4d900
+  - LockWall2 (Part) @ 0x19aa6449540
+    - Mesh (CylinderMesh) @ 0x19c10b4df00
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/DiamondBlockLockBoard
+- DiamondBlockLockBoard (Model) @ 0x19ab9283180
+  - Script (Script) @ 0x19c0b31f200
+  - LockBoardBlockGui (Part) @ 0x19c0cb17240
+    - SurfaceGui (SurfaceGui) @ 0x19aa3e4dc80
+      - LockFrame (Frame) @ 0x19c0788c880
+        - ImageLabel (ImageLabel) @ 0x19c1f073c80
+  - LockBoardBlockGui (Part) @ 0x19c0cb1c100
+    - SurfaceGui (SurfaceGui) @ 0x19aa3e4f080
+      - LockFrame (Frame) @ 0x19c0788e680
+        - ImageLabel (ImageLabel) @ 0x19c1f076080
+  - LockBoardBlockGui (Part) @ 0x19c0cb1c2c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa3e4e680
+      - LockFrame (Frame) @ 0x19c0788b480
+        - ImageLabel (ImageLabel) @ 0x19c1f07f080
+  - LockBoardBuyGui (Part) @ 0x19c0cb1bf40
+    - SurfaceGui (SurfaceGui) @ 0x19aa41c1e80
+      - SkipButton (Frame) @ 0x19c09341480
+        - imageBackgroundshadow (ImageLabel) @ 0x19a8dd02480
+        - imageBackground (ImageLabel) @ 0x19a8dd03080
+        - SkipButton (ImageButton) @ 0x19ac65f1080
+  - LockBoardBlockGuiGradient (Part) @ 0x19c0cb12fc0
+    - SurfaceGui (SurfaceGui) @ 0x19aa41c0a80
+      - LockFrame (Frame) @ 0x19c07886480
+        - ImageLabel (ImageLabel) @ 0x19a8dd00c80
+  - LockBoardBlockGui (Part) @ 0x19c0cb1a340
+    - SurfaceGui (SurfaceGui) @ 0x19aa41c0080
+      - LockFrame (Frame) @ 0x19c0788d280
+        - ImageLabel (ImageLabel) @ 0x19a8dd00080
+  - LockBoardGuiArrow (Part) @ 0x19c0cb1db40
+    - SurfaceGui (SurfaceGui) @ 0x19aa3e4d280
+      - LockFrame (Frame) @ 0x19c07883280
+        - ImageLabel (ImageLabel) @ 0x19c1f074880
+  - LockBoardBlockGui (Part) @ 0x19aa9f4d7c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa41c1480
+      - LockFrame (Frame) @ 0x19c07880080
+        - ImageLabel (ImageLabel) @ 0x19a8dd01880
+  - LockBoardOrGui (Part) @ 0x19aa9f4d980
+    - SurfaceGui (SurfaceGui) @ 0x19aa3e4c880
+      - LockFrame (Frame) @ 0x19c07881480
+        - ImageLabel (ImageLabel) @ 0x19c1f07b480
+  - LockBoardTimeGui (Part) @ 0x19aa9f4dd00
+    - SurfaceGui (SurfaceGui) @ 0x19aa3e4be80
+      - LockFrame (Frame) @ 0x19c07883c80
+        - ImageLabel (ImageLabel) @ 0x19c1f072480
+  - LockBoard (Part) @ 0x19c0cc71e40
+  - LockBoardbottom (Part) @ 0x19c0cc73880
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/VoidBlockLockBoard
+- VoidBlockLockBoard (Model) @ 0x19ab9286600
+  - Script (Script) @ 0x19c0b31e600
+  - LockBoardBlockGui (Part) @ 0x19aa675a6c0
+    - Weld (Weld) @ 0x19abb813c00
+    - SurfaceGui (SurfaceGui) @ 0x19aa3ce8c80
+      - LockFrame (Frame) @ 0x19c09341e80
+        - ImageLabel (ImageLabel) @ 0x19a8dd0a880
+  - LockBoardBlockGui (Part) @ 0x19aa675a880
+    - SurfaceGui (SurfaceGui) @ 0x19aa3ce8280
+      - LockFrame (Frame) @ 0x19c09345a80
+        - ImageLabel (ImageLabel) @ 0x19a8dd0b480
+  - LockBoardBlockGuiEpic (Part) @ 0x19aa675aa40
+    - SurfaceGui (SurfaceGui) @ 0x19aa3b59680
+      - LockFrame (Frame) @ 0x19c09340a80
+        - Script (Script) @ 0x19c0b31e800
+        - ImageLabel (ImageLabel) @ 0x19a8dd0c080
+  - LockBoardGuiArrow (Part) @ 0x19aa675ac00
+    - SurfaceGui (SurfaceGui) @ 0x19c0a3e1e80
+      - LockFrame (Frame) @ 0x19c09348280
+        - ImageLabel (ImageLabel) @ 0x19a8dd0cc80
+  - LockBoardBlockGui (Part) @ 0x19aa675adc0
+    - SurfaceGui (SurfaceGui) @ 0x19c0a3e6e80
+      - LockFrame (Frame) @ 0x19c09349680
+        - ImageLabel (ImageLabel) @ 0x19a8dd0d880
+  - LockBoardBlockGui (Part) @ 0x19aa675af80
+    - SurfaceGui (SurfaceGui) @ 0x19c0a3e3280
+      - LockFrame (Frame) @ 0x19c0934aa80
+        - ImageLabel (ImageLabel) @ 0x19a8dd0e480
+  - ParticleCore (Part) @ 0x19aa675b140
+    - Weld (Weld) @ 0x19abb813880
+    - Attachment (Attachment) @ 0x19ab1f32c00
+  - LockBoardBuyGui (Part) @ 0x19aa675b300
+    - SurfaceGui (SurfaceGui) @ 0x19c0a3e0080
+      - SkipButton (Frame) @ 0x19c0934be80
+        - imageBackgroundshadow (ImageLabel) @ 0x19a8dd0f080
+        - imageBackground (ImageLabel) @ 0x19a8ddc0080
+        - SkipButton (ImageButton) @ 0x19c083e8080
+  - effectCore (Part) @ 0x19aa675b4c0
+    - SurfaceGui (SurfaceGui) @ 0x19c0a3e2880
+      - Frame (Frame) @ 0x19c0934d280
+      - images (Folder) @ 0x19aa89cd1a0
+        - questionmark (ImageLabel) @ 0x19a8ddc0c80
+        - questionmark2 (ImageLabel) @ 0x19a8ddc1880
+      - images2 (Folder) @ 0x19aa89cdde0
+        - questionmark (ImageLabel) @ 0x19a8ddc2480
+        - exclamationmark (ImageLabel) @ 0x19a8ddc3080
+        - atmark (ImageLabel) @ 0x19a8ddc3c80
+        - moneymark (ImageLabel) @ 0x19a8ddc4880
+        - andmark (ImageLabel) @ 0x19a8ddc5480
+        - minusmark (ImageLabel) @ 0x19a8ddc6080
+        - plusmark (ImageLabel) @ 0x19a8ddc6c80
+        - equalsmark (ImageLabel) @ 0x19a8ddc7880
+  - LockBoard (Part) @ 0x19aa7e44680
+  - LockBoardbottom (Part) @ 0x19aa7e44840
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/LimitedTimeBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19c23de1740
+  - SurfaceGui (SurfaceGui) @ 0x19c09f75080
+    - LockFrame (Frame) @ 0x19c09f7be80
+      - ImageLabel (ImageLabel) @ 0x19a8ddca880
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/LimitedTimeBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19c23de0cc0
+  - SurfaceGui (SurfaceGui) @ 0x19c09f71e80
+    - LockFrame (Frame) @ 0x19c09f71480
+      - ImageLabel (ImageLabel) @ 0x19a8ddcc080
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/LimitedTimeBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19c23de0b00
+  - SurfaceGui (SurfaceGui) @ 0x19c09f7b480
+    - LockFrame (Frame) @ 0x19c09f7c880
+      - ImageLabel (ImageLabel) @ 0x19a8ddcb480
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/LimitedTimeBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19c23de0940
+  - Attachment (Attachment) @ 0x19ab1f3c380
+    - Fire (Fire) @ 0x19aa42c0080
+  - Attachment (Attachment) @ 0x19ab1f3b480
+    - Fire (Fire) @ 0x19aa42cc380
+  - Attachment (Attachment) @ 0x19ab1f3b300
+    - Fire (Fire) @ 0x19aa42cd000
+  - Attachment (Attachment) @ 0x19ab1f3c200
+    - Fire (Fire) @ 0x19aa42cd3c0
+  - Attachment (Attachment) @ 0x19ab1f3c080
+    - Fire (Fire) @ 0x19aa42ca940
+  - Attachment (Attachment) @ 0x19ab1f3bf00
+    - Fire (Fire) @ 0x19aa42c0440
+  - Attachment (Attachment) @ 0x19ab1f3bd80
+    - Fire (Fire) @ 0x19aa42cb840
+  - Attachment (Attachment) @ 0x19ab1f3bc00
+    - Fire (Fire) @ 0x19aa42c8f00
+  - Attachment (Attachment) @ 0x19ab1f3ba80
+    - Fire (Fire) @ 0x19aa42c9b80
+  - Attachment (Attachment) @ 0x19ab1f3b900
+    - Fire (Fire) @ 0x19aa42ce7c0
+  - Attachment (Attachment) @ 0x19ab1f3b780
+    - Fire (Fire) @ 0x19aa42cdb40
+  - Attachment (Attachment) @ 0x19ab1f3b600
+    - Fire (Fire) @ 0x19aa42c5bc0
+  - Attachment (Attachment) @ 0x19ab1f3ad00
+    - Fire (Fire) @ 0x19aa42c4cc0
+  - Attachment (Attachment) @ 0x19ab1f3ab80
+    - Fire (Fire) @ 0x19aa42c5440
+  - Attachment (Attachment) @ 0x19ab1f3aa00
+    - Fire (Fire) @ 0x19aa42c6200
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/SuperLocked1
+- SuperLocked1 (BoolValue) | Value: true @ 0x19aba4a68a0
+
+Found matching config root at path: Workspace/Workspace/Spawn5/Givers/SuperLocked2
+- SuperLocked2 (BoolValue) | Value: true @ 0x19aba4a5800
+
+Found matching config root at path: Workspace/Workspace/ItzTibbersTi's Clone/GearCount/SuperQueue
+- SuperQueue (IntValue) | Value: 0 @ 0x19ab9df7e80
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/SuperBlockLockBoard
+- SuperBlockLockBoard (Model) @ 0x19abf847b00
+  - Script (Script) @ 0x19c0b311400
+  - LockBoardTimeGui (Part) @ 0x19aaa37a880
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d50080
+      - LockFrame (Frame) @ 0x19a9e63aa80
+        - ImageLabel (ImageLabel) @ 0x19a9eaa0080
+  - LockBoardGuiArrow (Part) @ 0x19aaa37aa40
+    - SurfaceGui (SurfaceGui) @ 0x19aa3cef080
+      - LockFrame (Frame) @ 0x19a9e63b480
+        - ImageLabel (ImageLabel) @ 0x19a9eaa0c80
+  - LockBoardBlockGui (Part) @ 0x19aaa37ac00
+    - SurfaceGui (SurfaceGui) @ 0x19aa3cee680
+      - LockFrame (Frame) @ 0x19a9e63be80
+        - ImageLabel (ImageLabel) @ 0x19a9eaa1880
+  - LockBoardBlockGui (Part) @ 0x19aaa37adc0
+    - SurfaceGui (SurfaceGui) @ 0x19aa3cedc80
+      - LockFrame (Frame) @ 0x19a9e63c880
+        - ImageLabel (ImageLabel) @ 0x19a9eaa2480
+  - LockBoardBlockGui (Part) @ 0x19aaa37af80
+    - SurfaceGui (SurfaceGui) @ 0x19aa3ced280
+      - LockFrame (Frame) @ 0x19a9e63d280
+        - ImageLabel (ImageLabel) @ 0x19a9eaa3080
+  - LockBoardBlockGui (Part) @ 0x19aaa37b140
+    - SurfaceGui (SurfaceGui) @ 0x19aa3cec880
+      - LockFrame (Frame) @ 0x19a9e63dc80
+        - ImageLabel (ImageLabel) @ 0x19a9eaa3c80
+  - LockBoardOrGui (Part) @ 0x19aaa37b300
+    - SurfaceGui (SurfaceGui) @ 0x19aa3cebe80
+      - LockFrame (Frame) @ 0x19a9e63e680
+        - ImageLabel (ImageLabel) @ 0x19a9eaa4880
+  - LockBoardBlockGui (Part) @ 0x19aaa37b4c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa3ceb480
+      - LockFrame (Frame) @ 0x19a9e63f080
+        - ImageLabel (ImageLabel) @ 0x19a9eaa5480
+  - LockBoardBuyGui (Part) @ 0x19aaa37b680
+    - SurfaceGui (SurfaceGui) @ 0x19aa3ceaa80
+      - SkipButton (Frame) @ 0x19a9eb10080
+        - imageBackgroundshadow (ImageLabel) @ 0x19a9eaa6080
+        - imageBackground (ImageLabel) @ 0x19a9eaa6c80
+        - SkipButton (ImageButton) @ 0x19a9eba0080
+  - LockBoard (Part) @ 0x19aaae38740
+  - LockBoardbottom (Part) @ 0x19aaae38900
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/SuperPad
+- SuperPad (Model) @ 0x19abf84cb80
+  - Base (Part) @ 0x19aaa37c800
+    - Weld (Weld) @ 0x19abf8c75c0
+    - Weld (Weld) @ 0x19abf8c1c80
+    - TouchInterest (TouchTransmitter) @ 0x19ab5776d00
+  - Part (Part) @ 0x19aaa37c9c0
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/RainbowBlockLockBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aa5acb680
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/RainbowBlockLockBoard/LockBoardBuyGui
+- LockBoardBuyGui (Part) @ 0x19aaa37cf00
+  - SurfaceGui (SurfaceGui) @ 0x19aa3ae5080
+    - SkipButton (Frame) @ 0x19a9eb16e80
+      - imageBackgroundshadow (ImageLabel) @ 0x19a9eaab480
+      - imageBackground (ImageLabel) @ 0x19a9eaac080
+      - SkipButton (ImageButton) @ 0x19a9eba7080
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/RainbowBlockLockBoard/LockBoardBlockGuiGradient
+- LockBoardBlockGuiGradient (Part) @ 0x19aaa37d280
+  - SurfaceGui (SurfaceGui) @ 0x19aa3ce6e80
+    - LockFrame (Frame) @ 0x19a9eb18280
+      - ImageLabel (ImageLabel) @ 0x19a9eaad880
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa37d440
+  - SurfaceGui (SurfaceGui) @ 0x19c0a3e0a80
+    - LockFrame (Frame) @ 0x19a9eb18c80
+      - ImageLabel (ImageLabel) @ 0x19a9eaae480
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa37d600
+  - SurfaceGui (SurfaceGui) @ 0x19c1be07880
+    - LockFrame (Frame) @ 0x19a9eb19680
+      - ImageLabel (ImageLabel) @ 0x19a9eaaf080
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa37d7c0
+  - SurfaceGui (SurfaceGui) @ 0x19aa420b480
+    - LockFrame (Frame) @ 0x19a9eb1a080
+      - ImageLabel (ImageLabel) @ 0x19a9ee30080
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa37d980
+  - SurfaceGui (SurfaceGui) @ 0x19aa420aa80
+    - LockFrame (Frame) @ 0x19a9eb1aa80
+      - ImageLabel (ImageLabel) @ 0x19a9ee30c80
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/RainbowBlockLockBoard/LockBoardBlockGuiText
+- LockBoardBlockGuiText (Part) @ 0x19aaa37db40
+  - SurfaceGui (SurfaceGui) @ 0x19aa420a080
+    - LockFrame (Frame) @ 0x19a9eb1b480
+      - ImageLabel (ImageLabel) @ 0x19a9ee31880
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/SkipTimerLockBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aa5acf040
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa37e5c0
+  - SurfaceGui (SurfaceGui) @ 0x19aa3bf5080
+    - LockFrame (Frame) @ 0x19a9eb1dc80
+      - ImageLabel (ImageLabel) @ 0x19a9ee34880
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa37e780
+  - SurfaceGui (SurfaceGui) @ 0x19aa3bf4680
+    - LockFrame (Frame) @ 0x19a9eb1e680
+      - ImageLabel (ImageLabel) @ 0x19a9ee35480
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa37e940
+  - SurfaceGui (SurfaceGui) @ 0x19aa3d73280
+    - LockFrame (Frame) @ 0x19a9eb1f080
+      - ImageLabel (ImageLabel) @ 0x19a9ee36080
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa37eb00
+  - SurfaceGui (SurfaceGui) @ 0x19aa3c16e80
+    - LockFrame (Frame) @ 0x19a9ef50080
+      - ImageLabel (ImageLabel) @ 0x19a9ee36c80
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/SkipTimerLockBoard/LockBoardBuyGui
+- LockBoardBuyGui (Part) @ 0x19aaa37ecc0
+  - SurfaceGui (SurfaceGui) @ 0x19aa3c17880
+    - SkipButton (Frame) @ 0x19a9ef50a80
+      - imageBackgroundshadow (ImageLabel) @ 0x19a9ee37880
+      - imageBackground (ImageLabel) @ 0x19a9ee38480
+      - SkipButton (ImageButton) @ 0x19a9eba8080
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/GalaxyBlockLockBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aaa37ee80
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa37f200
+  - SurfaceGui (SurfaceGui) @ 0x19a9ef51480
+    - LockFrame (Frame) @ 0x19a9ef51e80
+      - ImageLabel (ImageLabel) @ 0x19a9ee39080
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa37f3c0
+  - SurfaceGui (SurfaceGui) @ 0x19a9ef52880
+    - LockFrame (Frame) @ 0x19a9ef53280
+      - ImageLabel (ImageLabel) @ 0x19a9ee39c80
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/GalaxyBlockLockBoard/LockBoardBlockGuiEpic
+- LockBoardBlockGuiEpic (Part) @ 0x19aaa37f580
+  - SurfaceGui (SurfaceGui) @ 0x19a9ef53c80
+    - LockFrame (Frame) @ 0x19a9ef54680
+      - Script (Script) @ 0x19c0b314800
+      - ImageLabel (ImageLabel) @ 0x19a9ee3a880
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa37f900
+  - SurfaceGui (SurfaceGui) @ 0x19a9ef56480
+    - LockFrame (Frame) @ 0x19a9ef56e80
+      - ImageLabel (ImageLabel) @ 0x19a9ee3c080
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa37fac0
+  - SurfaceGui (SurfaceGui) @ 0x19a9ef57880
+    - LockFrame (Frame) @ 0x19a9ef58280
+      - ImageLabel (ImageLabel) @ 0x19a9ee3cc80
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/GalaxyBlockLockBoard/LockBoardBuyGui
+- LockBoardBuyGui (Part) @ 0x19aaa37fe40
+  - SurfaceGui (SurfaceGui) @ 0x19a9ef58c80
+    - SkipButton (Frame) @ 0x19a9ef59680
+      - imageBackgroundshadow (ImageLabel) @ 0x19a9ee3d880
+      - imageBackground (ImageLabel) @ 0x19a9ee3e480
+      - SkipButton (ImageButton) @ 0x19a9eba9080
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/BlockGiverSuper1
+- BlockGiverSuper1 (Model) @ 0x19abf84f900
+  - Settings/Instructions (Script) @ 0x19c0b31b400
+  - Settings (Folder) @ 0x19ab0ac36c0
+    - WeaponName (StringValue) | Value: "Unknown" @ 0x19abf8eb800
+    - RegenTime (IntValue) | Value: 60 @ 0x19ab0ac2d20
+    - RegenColor (BrickColorValue) [ValueObject] @ 0x19ab0ac2c40
+    - StartColor (BrickColorValue) [ValueObject] @ 0x19ab0ac2b60
+  - ColoredParts (Model) @ 0x19abf849e00
+    - TouchMe (Part) @ 0x19aaa378ac0
+      - Mesh (CylinderMesh) @ 0x19ac65a3900
+      - TouchInterest (TouchTransmitter) @ 0x19abd736d00
+    - TopBottomColors (Part) @ 0x19aaa378c80
+      - Mesh (CylinderMesh) @ 0x19ac65a3a00
+    - Center (Part) @ 0x19aaa378e40
+      - Mesh (CylinderMesh) @ 0x19ac65a3f00
+      - Glue (Glue) @ 0x19abf8c0cc0
+      - Glue (Glue) @ 0x19abf8c0e80
+      - Glue (Glue) @ 0x19abf8c1040
+    - TopBottomColors (Part) @ 0x19aaa379000
+      - Mesh (CylinderMesh) @ 0x19ac65a3600
+  - LuckyBlock (Model) @ 0x19abf847080
+    - Model (Model) @ 0x19abf848580
+      - newMesh (MeshPart) @ 0x19aa577a880
+      - newMesh (MeshPart) @ 0x19aa577ac00
+      - newMesh (MeshPart) @ 0x19c120b9000
+      - newMesh (MeshPart) @ 0x19c120b7e80
+    - MeshPart (MeshPart) @ 0x19c120ba500
+      - Glow (ParticleEmitter) @ 0x19aa873cc80
+      - Glow (ParticleEmitter) @ 0x19aa873d280
+  - GUI (Part) @ 0x19aaae30780
+    - SurfaceGui (SurfaceGui) @ 0x19a9ef5d280
+      - LockFrame (Frame) @ 0x19aa412e680
+        - ImageLabel (ImageLabel) @ 0x19a9f0f2480
+        - Text (TextLabel) @ 0x19a9ebad080
+        - Text (TextLabel) @ 0x19a9ebae080
+      - Frame (Frame) @ 0x19a9ef5dc80
+        - Time1 (TextLabel) @ 0x19aa1f01080
+        - Time2 (TextLabel) @ 0x19aa421e080
+        - SkipButton (Frame) @ 0x19aa4125080
+          - TriggerButton (TextButton) @ 0x19a9d87b480
+          - Button (TextButton) @ 0x19a9d87c880
+            - Frame (Frame) @ 0x19a9ef5e680
+            - Frame (Frame) @ 0x19a9ef5f080
+          - SkipButton (ImageButton) @ 0x19a9f2f0080
+          - imageBackground (ImageLabel) @ 0x19a9f0f3080
+          - imageBackgroundshadow (ImageLabel) @ 0x19a9f0f3c80
+  - Pipe (Part) @ 0x19aaae30940
+    - Mesh (CylinderMesh) @ 0x19ac65a0f00
+  - Pipe (Part) @ 0x19aaae30b00
+    - Mesh (CylinderMesh) @ 0x19ac65a0e00
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/BlockGiverSuper2
+- BlockGiverSuper2 (Model) @ 0x19abf845b80
+  - Settings/Instructions (Script) @ 0x19c0b31b200
+  - Settings (Folder) @ 0x19ab0acfe40
+    - WeaponName (StringValue) | Value: "Unknown" @ 0x19abf8e1f00
+    - RegenTime (IntValue) | Value: 60 @ 0x19ab0acfd60
+    - RegenColor (BrickColorValue) [ValueObject] @ 0x19ab0acfba0
+    - StartColor (BrickColorValue) [ValueObject] @ 0x19ab0acfac0
+  - ColoredParts (Model) @ 0x19abf847780
+    - TouchMe (Part) @ 0x19aaae37e80
+      - Mesh (CylinderMesh) @ 0x19ac65a0d00
+      - TouchInterest (TouchTransmitter) @ 0x19aba4a2700
+    - TopBottomColors (Part) @ 0x19aaae38040
+      - Mesh (CylinderMesh) @ 0x19ac65a0c00
+    - Center (Part) @ 0x19aaae38200
+      - Mesh (CylinderMesh) @ 0x19ac65a0b00
+      - Glue (Glue) @ 0x19abf8c1200
+      - Glue (Glue) @ 0x19abf8c13c0
+      - Glue (Glue) @ 0x19abf8c1900
+    - TopBottomColors (Part) @ 0x19aaae383c0
+      - Mesh (CylinderMesh) @ 0x19ac65a0a00
+      - Weld (Weld) @ 0x19abf8caa40
+  - LuckyBlock (Model) @ 0x19abf84c100
+    - Model (Model) @ 0x19abf842700
+      - newMesh (MeshPart) @ 0x19aa577b300
+      - newMesh (MeshPart) @ 0x19aa577b680
+      - newMesh (MeshPart) @ 0x19aa577ba00
+      - newMesh (MeshPart) @ 0x19aa577bd80
+    - MeshPart (MeshPart) @ 0x19aa577af80
+      - Glow (ParticleEmitter) @ 0x19aa873d580
+      - Glow (ParticleEmitter) @ 0x19aa873c380
+  - GUI (Part) @ 0x19aa5918c80
+    - SurfaceGui (SurfaceGui) @ 0x19a9f750080
+      - LockFrame (Frame) @ 0x19aa3d50a80
+        - ImageLabel (ImageLabel) @ 0x19a9f0f4880
+        - Text (TextLabel) @ 0x19a9f2f1080
+        - Text (TextLabel) @ 0x19a9f2f2080
+      - Frame (Frame) @ 0x19a9f750a80
+        - Time1 (TextLabel) @ 0x19aa1f06080
+        - Time2 (TextLabel) @ 0x19aa1f05080
+        - SkipButton (Frame) @ 0x19aa3ae0a80
+          - TriggerButton (TextButton) @ 0x19a9d87dc80
+          - Button (TextButton) @ 0x19a9f790080
+            - Frame (Frame) @ 0x19a9f751480
+            - Frame (Frame) @ 0x19a9f751e80
+          - SkipButton (ImageButton) @ 0x19a9f2f3080
+          - imageBackground (ImageLabel) @ 0x19a9f0f5480
+          - imageBackgroundshadow (ImageLabel) @ 0x19a9f0f6080
+  - Pipe (Part) @ 0x19aa5918740
+    - Mesh (CylinderMesh) @ 0x19ac65a0900
+    - Weld (Weld) @ 0x19abf8ca180
+  - Pipe (Part) @ 0x19aa5918e40
+    - Mesh (CylinderMesh) @ 0x19ac65a0800
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/LockWallSuper
+- LockWallSuper (Model) @ 0x19abf84bd80
+  - Script (Script) @ 0x19c0b315200
+  - LockWall1 (Part) @ 0x19aaa33bf40
+    - Mesh (CylinderMesh) @ 0x19ac65a0700
+  - LockWall2 (Part) @ 0x19aaae38580
+    - Mesh (CylinderMesh) @ 0x19ac65a0500
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/DiamondBlockLockBoard
+- DiamondBlockLockBoard (Model) @ 0x19ac4354a00
+  - Script (Script) @ 0x19c0b31a400
+  - LockBoardTimeGui (Part) @ 0x19a9f563500
+    - Weld (Weld) @ 0x19abf8c5100
+    - SurfaceGui (SurfaceGui) @ 0x19aa3c16480
+      - LockFrame (Frame) @ 0x19a9f75dc80
+        - ImageLabel (ImageLabel) @ 0x19a9faa0080
+  - LockBoardBlockGui (Part) @ 0x19aa5967080
+    - SurfaceGui (SurfaceGui) @ 0x19aa52aa080
+      - LockFrame (Frame) @ 0x19a9fb70080
+        - ImageLabel (ImageLabel) @ 0x19a9faa2480
+  - LockBoardBlockGui (Part) @ 0x19aa5967240
+    - SurfaceGui (SurfaceGui) @ 0x19aa52a2880
+      - LockFrame (Frame) @ 0x19a9fb70a80
+        - ImageLabel (ImageLabel) @ 0x19a9faa3080
+  - LockBoardBlockGui (Part) @ 0x19aa5967400
+    - SurfaceGui (SurfaceGui) @ 0x19aa52a3280
+      - LockFrame (Frame) @ 0x19a9fb71480
+        - ImageLabel (ImageLabel) @ 0x19a9faa3c80
+  - LockBoardBlockGui (Part) @ 0x19aa59675c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa52a3c80
+      - LockFrame (Frame) @ 0x19a9fb71e80
+        - ImageLabel (ImageLabel) @ 0x19a9faa4880
+  - LockBoardGuiArrow (Part) @ 0x19aa6619700
+    - SurfaceGui (SurfaceGui) @ 0x19aa52a9680
+      - LockFrame (Frame) @ 0x19a9f75f080
+        - ImageLabel (ImageLabel) @ 0x19a9faa1880
+  - LockBoardOrGui (Part) @ 0x19aa66198c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d11e80
+      - LockFrame (Frame) @ 0x19a9f75e680
+        - ImageLabel (ImageLabel) @ 0x19a9faa0c80
+  - LockBoardBuyGui (Part) @ 0x19aa7e4eb00
+    - SurfaceGui (SurfaceGui) @ 0x19aa52a5a80
+      - SkipButton (Frame) @ 0x19a9fb73c80
+        - imageBackgroundshadow (ImageLabel) @ 0x19a9faa6c80
+        - imageBackground (ImageLabel) @ 0x19a9faa7880
+        - SkipButton (ImageButton) @ 0x19a9f843080
+  - LockBoardBlockGui (Part) @ 0x19aa7e4ecc0
+    - SurfaceGui (SurfaceGui) @ 0x19aa52a5080
+      - LockFrame (Frame) @ 0x19a9fb73280
+        - ImageLabel (ImageLabel) @ 0x19a9faa6080
+  - LockBoardBlockGuiGradient (Part) @ 0x19aa7e4ee80
+    - SurfaceGui (SurfaceGui) @ 0x19aa52a4680
+      - LockFrame (Frame) @ 0x19a9fb72880
+        - ImageLabel (ImageLabel) @ 0x19a9faa5480
+  - LockBoard (Part) @ 0x19aa5e73a40
+  - LockBoardbottom (Part) @ 0x19aa5e73c00
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/VoidBlockLockBoard
+- VoidBlockLockBoard (Model) @ 0x19ac4358580
+  - Script (Script) @ 0x19c0b315a00
+  - LockBoardbottom (Part) @ 0x19aa66a21c0
+  - LockBoardBlockGui (Part) @ 0x19aa7cf8ac0
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d73c80
+      - LockFrame (Frame) @ 0x19a9fb7c880
+        - ImageLabel (ImageLabel) @ 0x19aa01c0080
+  - LockBoardBlockGuiEpic (Part) @ 0x19aa7cf8c80
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d16480
+      - LockFrame (Frame) @ 0x19a9fb7d280
+        - Script (Script) @ 0x19c0b315e00
+        - ImageLabel (ImageLabel) @ 0x19aa01c0c80
+  - LockBoardGuiArrow (Part) @ 0x19aa7cf8e40
+    - SurfaceGui (SurfaceGui) @ 0x19aa3ae3280
+      - LockFrame (Frame) @ 0x19a9fb7dc80
+        - ImageLabel (ImageLabel) @ 0x19aa01c1880
+  - LockBoardBlockGui (Part) @ 0x19aa7cf9000
+    - SurfaceGui (SurfaceGui) @ 0x19aa52abe80
+      - LockFrame (Frame) @ 0x19a9fb7e680
+        - ImageLabel (ImageLabel) @ 0x19aa01c2480
+  - LockBoardBlockGui (Part) @ 0x19aa7cf91c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa3ae1480
+      - LockFrame (Frame) @ 0x19a9fb7f080
+        - ImageLabel (ImageLabel) @ 0x19aa01c3080
+  - LockBoardBuyGui (Part) @ 0x19aa7cf9380
+    - SurfaceGui (SurfaceGui) @ 0x19aa3ae1e80
+      - SkipButton (Frame) @ 0x19aa07d0080
+        - imageBackgroundshadow (ImageLabel) @ 0x19aa01c3c80
+        - imageBackground (ImageLabel) @ 0x19aa01c4880
+        - SkipButton (ImageButton) @ 0x19a9fdf2080
+  - effectCore (Part) @ 0x19aa7cf9540
+    - SurfaceGui (SurfaceGui) @ 0x19aa3ae2880
+      - Frame (Frame) @ 0x19aa07d0a80
+      - images (Folder) @ 0x19aaa03da60
+        - questionmark (ImageLabel) @ 0x19aa01c5480
+        - questionmark2 (ImageLabel) @ 0x19aa01c6080
+      - images2 (Folder) @ 0x19aaa03d280
+        - questionmark (ImageLabel) @ 0x19aa01c6c80
+        - exclamationmark (ImageLabel) @ 0x19aa01c7880
+        - atmark (ImageLabel) @ 0x19aa01c8480
+        - moneymark (ImageLabel) @ 0x19aa01c9080
+        - andmark (ImageLabel) @ 0x19aa01c9c80
+        - minusmark (ImageLabel) @ 0x19aa01ca880
+        - plusmark (ImageLabel) @ 0x19aa01cb480
+        - equalsmark (ImageLabel) @ 0x19aa01cc080
+  - LockBoardBlockGui (Part) @ 0x19aa7cfd280
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d74680
+      - LockFrame (Frame) @ 0x19a9fb7be80
+        - ImageLabel (ImageLabel) @ 0x19a9faaf080
+  - ParticleCore (Part) @ 0x19aa7cfd600
+    - Attachment (Attachment) @ 0x19ab1f3d700
+  - LockBoard (Part) @ 0x19aa9f43880
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/LimitedTimeBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aa7cfa180
+  - Attachment (Attachment) @ 0x19c0b41d280
+    - Fire (Fire) @ 0x19aac54ef40
+  - Attachment (Attachment) @ 0x19c0b418900
+    - Fire (Fire) @ 0x19aac5438c0
+  - Attachment (Attachment) @ 0x19c0b41bc00
+    - Fire (Fire) @ 0x19aac54bac0
+  - Attachment (Attachment) @ 0x19c0b41c680
+    - Fire (Fire) @ 0x19aac549400
+  - Attachment (Attachment) @ 0x19c0b411e80
+    - Fire (Fire) @ 0x19aac54b5c0
+  - Attachment (Attachment) @ 0x19c0b414580
+    - Fire (Fire) @ 0x19aac54b0c0
+  - Attachment (Attachment) @ 0x19c0b41e000
+    - Fire (Fire) @ 0x19aac549b80
+  - Attachment (Attachment) @ 0x19c0b412d80
+    - Fire (Fire) @ 0x19aac549900
+  - Attachment (Attachment) @ 0x19c0b41f500
+    - Fire (Fire) @ 0x19aac547b00
+  - Attachment (Attachment) @ 0x19c0b414d00
+    - Fire (Fire) @ 0x19aac549540
+  - Attachment (Attachment) @ 0x19c0b41f980
+    - Fire (Fire) @ 0x19aac549040
+  - Attachment (Attachment) @ 0x19c0b41b000
+    - Fire (Fire) @ 0x19aac547740
+  - Attachment (Attachment) @ 0x19c0b416500
+    - Fire (Fire) @ 0x19aac547240
+  - Attachment (Attachment) @ 0x19c0b41ec00
+    - Fire (Fire) @ 0x19aac545a80
+  - Attachment (Attachment) @ 0x19c0b41b900
+    - Fire (Fire) @ 0x19aac5433c0
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/LimitedTimeBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa7cfa340
+  - SurfaceGui (SurfaceGui) @ 0x19aa07d3280
+    - LockFrame (Frame) @ 0x19aa07d3c80
+      - ImageLabel (ImageLabel) @ 0x19aa01cf080
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/LimitedTimeBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa7cfa500
+  - SurfaceGui (SurfaceGui) @ 0x19aa07d4680
+    - LockFrame (Frame) @ 0x19aa07d5080
+      - ImageLabel (ImageLabel) @ 0x19aa1620080
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/LimitedTimeBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa7cfa6c0
+  - SurfaceGui (SurfaceGui) @ 0x19aa07d5a80
+    - LockFrame (Frame) @ 0x19aa07d6480
+      - ImageLabel (ImageLabel) @ 0x19aa1620c80
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/SuperLocked2
+- SuperLocked2 (BoolValue) | Value: true @ 0x19ab5776600
+
+Found matching config root at path: Workspace/Workspace/Spawn8/Givers/SuperLocked1
+- SuperLocked1 (BoolValue) | Value: true @ 0x19abadbaea0
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/SuperBlockLockBoard
+- SuperBlockLockBoard (Model) @ 0x19abd4e4680
+  - Script (Script) @ 0x19c0b319000
+  - LockBoardBlockGui (Part) @ 0x19aa37b75c0
+    - SurfaceGui (SurfaceGui) @ 0x19c1be0d280
+      - LockFrame (Frame) @ 0x19c1f050080
+        - ImageLabel (ImageLabel) @ 0x19a98311880
+  - LockBoardBlockGui (Part) @ 0x19aa37b7780
+    - SurfaceGui (SurfaceGui) @ 0x19c1be02880
+      - LockFrame (Frame) @ 0x19c1f05dc80
+        - ImageLabel (ImageLabel) @ 0x19a98312480
+  - LockBoardOrGui (Part) @ 0x19aa37b7940
+    - SurfaceGui (SurfaceGui) @ 0x19c1be0e680
+      - LockFrame (Frame) @ 0x19c1f05e680
+        - ImageLabel (ImageLabel) @ 0x19a98313080
+  - LockBoardBlockGui (Part) @ 0x19aa37b7b00
+    - SurfaceGui (SurfaceGui) @ 0x19c1be0b480
+      - LockFrame (Frame) @ 0x19c1f055a80
+        - ImageLabel (ImageLabel) @ 0x19a98313c80
+  - LockBoardBuyGui (Part) @ 0x19aa37b7cc0
+    - SurfaceGui (SurfaceGui) @ 0x19c09f50080
+      - SkipButton (Frame) @ 0x19c1f05be80
+        - imageBackgroundshadow (ImageLabel) @ 0x19a98314880
+        - imageBackground (ImageLabel) @ 0x19a98315480
+        - SkipButton (ImageButton) @ 0x19c124fd080
+  - LockBoard (Part) @ 0x19aa6eaa500
+  - LockBoardbottom (Part) @ 0x19aa6eaa6c0
+  - LockBoardBlockGui (Part) @ 0x19aaa1698c0
+    - SurfaceGui (SurfaceGui) @ 0x19c1be08c80
+      - LockFrame (Frame) @ 0x19c1f051480
+        - ImageLabel (ImageLabel) @ 0x19a98310c80
+  - LockBoardBlockGui (Part) @ 0x19aaa169a80
+    - SurfaceGui (SurfaceGui) @ 0x19aa3ae0080
+      - LockFrame (Frame) @ 0x19c1f051e80
+        - ImageLabel (ImageLabel) @ 0x19a98310080
+  - LockBoardGuiArrow (Part) @ 0x19aaa169c40
+    - SurfaceGui (SurfaceGui) @ 0x19aa3bf3c80
+      - LockFrame (Frame) @ 0x19c1f053280
+        - ImageLabel (ImageLabel) @ 0x19a982bf080
+  - LockBoardTimeGui (Part) @ 0x19aaa169e00
+    - SurfaceGui (SurfaceGui) @ 0x19aa3bf3280
+      - LockFrame (Frame) @ 0x19c1f044680
+        - ImageLabel (ImageLabel) @ 0x19a982be480
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/SuperPad
+- SuperPad (Model) @ 0x19abd4e3880
+  - Base (Part) @ 0x19c1ceaadc0
+    - Weld (Weld) @ 0x19abf8c3dc0
+    - Weld (Weld) @ 0x19abf8c2a80
+    - TouchInterest (TouchTransmitter) @ 0x19ab1477940
+  - Part (Part) @ 0x19c1ceaa500
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/RainbowBlockLockBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aaa558200
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa7e4af80
+  - SurfaceGui (SurfaceGui) @ 0x19aa3d70080
+    - LockFrame (Frame) @ 0x19c1f054680
+      - ImageLabel (ImageLabel) @ 0x19a9831d880
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa7e4b140
+  - SurfaceGui (SurfaceGui) @ 0x19aa3d5f080
+    - LockFrame (Frame) @ 0x19c1f056e80
+      - ImageLabel (ImageLabel) @ 0x19a9831e480
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa7e4b300
+  - SurfaceGui (SurfaceGui) @ 0x19aa3d5e680
+    - LockFrame (Frame) @ 0x19c1f290080
+      - ImageLabel (ImageLabel) @ 0x19a9831f080
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/RainbowBlockLockBoard/LockBoardBuyGui
+- LockBoardBuyGui (Part) @ 0x19aa7e4db40
+  - SurfaceGui (SurfaceGui) @ 0x19aa3d72880
+    - SkipButton (Frame) @ 0x19c1f056480
+      - imageBackgroundshadow (ImageLabel) @ 0x19a98319c80
+      - imageBackground (ImageLabel) @ 0x19a9831a880
+      - SkipButton (ImageButton) @ 0x19c1812e080
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/RainbowBlockLockBoard/LockBoardBlockGuiGradient
+- LockBoardBlockGuiGradient (Part) @ 0x19aa7e4dec0
+  - SurfaceGui (SurfaceGui) @ 0x19aa3d71480
+    - LockFrame (Frame) @ 0x19c1f052880
+      - ImageLabel (ImageLabel) @ 0x19a9831c080
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa7e4e080
+  - SurfaceGui (SurfaceGui) @ 0x19aa3d70a80
+    - LockFrame (Frame) @ 0x19c1f050a80
+      - ImageLabel (ImageLabel) @ 0x19a9831cc80
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/RainbowBlockLockBoard/LockBoardBlockGuiText
+- LockBoardBlockGuiText (Part) @ 0x19aa9f45640
+  - SurfaceGui (SurfaceGui) @ 0x19aa3d5dc80
+    - LockFrame (Frame) @ 0x19c1f290a80
+      - ImageLabel (ImageLabel) @ 0x19a9aae0080
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/SkipTimerLockBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aa6eaaa40
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/SkipTimerLockBoard/LockBoardBuyGui
+- LockBoardBuyGui (Part) @ 0x19aa9f444c0
+  - SurfaceGui (SurfaceGui) @ 0x19c0848a080
+    - SkipButton (Frame) @ 0x19c1f292880
+      - imageBackgroundshadow (ImageLabel) @ 0x19a9aae6080
+      - imageBackground (ImageLabel) @ 0x19a9aae6c80
+      - SkipButton (ImageButton) @ 0x19c1812d080
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa9f44680
+  - SurfaceGui (SurfaceGui) @ 0x19c08480a80
+    - LockFrame (Frame) @ 0x19c1f293c80
+      - ImageLabel (ImageLabel) @ 0x19a9aae5480
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa9f44840
+  - SurfaceGui (SurfaceGui) @ 0x19c08481480
+    - LockFrame (Frame) @ 0x19c1f29d280
+      - ImageLabel (ImageLabel) @ 0x19a9aae4880
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa9f44a00
+  - SurfaceGui (SurfaceGui) @ 0x19c0848e680
+    - LockFrame (Frame) @ 0x19c1f298c80
+      - ImageLabel (ImageLabel) @ 0x19a9aae3c80
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa9f44bc0
+  - SurfaceGui (SurfaceGui) @ 0x19c0848d280
+    - LockFrame (Frame) @ 0x19c1f296480
+      - ImageLabel (ImageLabel) @ 0x19a9aae3080
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/GalaxyBlockLockBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aa6ea4680
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/GalaxyBlockLockBoard/LockBoardBuyGui
+- LockBoardBuyGui (Part) @ 0x19aa9f421c0
+  - SurfaceGui (SurfaceGui) @ 0x19aa3e46e80
+    - SkipButton (Frame) @ 0x19c21841480
+      - imageBackgroundshadow (ImageLabel) @ 0x19a9aaec080
+      - imageBackground (ImageLabel) @ 0x19a9aaecc80
+      - SkipButton (ImageButton) @ 0x19c18124080
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa9f41e40
+  - SurfaceGui (SurfaceGui) @ 0x19c0d9c0a80
+    - LockFrame (Frame) @ 0x19c21848280
+      - ImageLabel (ImageLabel) @ 0x19a9aaeb480
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa9f41c80
+  - SurfaceGui (SurfaceGui) @ 0x19aa42de680
+    - LockFrame (Frame) @ 0x19c2184c880
+      - ImageLabel (ImageLabel) @ 0x19a9aaea880
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/GalaxyBlockLockBoard/LockBoardBlockGuiEpic
+- LockBoardBlockGuiEpic (Part) @ 0x19aa9f43f80
+  - SurfaceGui (SurfaceGui) @ 0x19aa52aaa80
+    - LockFrame (Frame) @ 0x19c21845a80
+      - Script (Script) @ 0x19c0b31ca00
+      - ImageLabel (ImageLabel) @ 0x19a9aae9080
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa9f44140
+  - SurfaceGui (SurfaceGui) @ 0x19aa52af080
+    - LockFrame (Frame) @ 0x19c21843c80
+      - ImageLabel (ImageLabel) @ 0x19a9aae8480
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa9f44300
+  - SurfaceGui (SurfaceGui) @ 0x19aa3e45080
+    - LockFrame (Frame) @ 0x19c2184be80
+      - ImageLabel (ImageLabel) @ 0x19a9aae7880
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/BlockGiverSuper1
+- BlockGiverSuper1 (Model) @ 0x19abd4e1c80
+  - Settings/Instructions (Script) @ 0x19c0b313200
+  - Settings (Folder) @ 0x19aaa035fe0
+    - WeaponName (StringValue) | Value: "Unknown" @ 0x19c06c53700
+    - RegenTime (IntValue) | Value: 60 @ 0x19aaa035aa0
+    - RegenColor (BrickColorValue) [ValueObject] @ 0x19aaa037be0
+    - StartColor (BrickColorValue) [ValueObject] @ 0x19aaa0344c0
+  - ColoredParts (Model) @ 0x19abd4e3180
+    - TopBottomColors (Part) @ 0x19aaa3b8580
+      - Mesh (CylinderMesh) @ 0x19ac65a4900
+    - Center (Part) @ 0x19aaa3b8740
+      - Mesh (CylinderMesh) @ 0x19ac65a2800
+      - Glue (Glue) @ 0x19abf8c28c0
+      - Glue (Glue) @ 0x19abf8c2fc0
+      - Glue (Glue) @ 0x19abf8c3340
+    - TopBottomColors (Part) @ 0x19aaa3b8900
+      - Mesh (CylinderMesh) @ 0x19ac65a3700
+    - TouchMe (Part) @ 0x19aa5e4af80
+      - Mesh (CylinderMesh) @ 0x19ac65a2a00
+      - TouchInterest (TouchTransmitter) @ 0x19ab147e6a0
+  - LuckyBlock (Model) @ 0x19abd4e5800
+    - Model (Model) @ 0x19abd4e1900
+      - newMesh (MeshPart) @ 0x19c00ff1900
+      - newMesh (MeshPart) @ 0x19c120bf900
+      - newMesh (MeshPart) @ 0x19c120beb00
+      - newMesh (MeshPart) @ 0x19c120bdd00
+    - MeshPart (MeshPart) @ 0x19c120bd980
+      - Glow (ParticleEmitter) @ 0x19aa359e480
+      - Glow (ParticleEmitter) @ 0x19aa359f980
+  - Pipe (Part) @ 0x19aaa3baa40
+    - Mesh (CylinderMesh) @ 0x19ac65a3200
+  - Pipe (Part) @ 0x19aaa3bac00
+    - Mesh (CylinderMesh) @ 0x19ac65a3800
+  - GUI (Part) @ 0x19aaa3b9e00
+    - SurfaceGui (SurfaceGui) @ 0x19a9acc2880
+      - LockFrame (Frame) @ 0x19aa4138280
+        - ImageLabel (ImageLabel) @ 0x19a9b370c80
+        - Text (TextLabel) @ 0x19c18121080
+        - Text (TextLabel) @ 0x19c1812b080
+      - Frame (Frame) @ 0x19a9acc3280
+        - Time1 (TextLabel) @ 0x19aa42ee080
+        - Time2 (TextLabel) @ 0x19aa42ed080
+        - SkipButton (Frame) @ 0x19aa3d19680
+          - TriggerButton (TextButton) @ 0x19a9828b480
+          - Button (TextButton) @ 0x19a9828c880
+            - Frame (Frame) @ 0x19a9acc3c80
+            - Frame (Frame) @ 0x19a9acc4680
+          - SkipButton (ImageButton) @ 0x19c18120080
+          - imageBackground (ImageLabel) @ 0x19a9b371880
+          - imageBackgroundshadow (ImageLabel) @ 0x19a9b372480
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/BlockGiverSuper2
+- BlockGiverSuper2 (Model) @ 0x19abd4e7080
+  - Settings/Instructions (Script) @ 0x19c0b311a00
+  - Settings (Folder) @ 0x19aaa032ee0
+    - WeaponName (StringValue) | Value: "Unknown" @ 0x19c06c5de00
+    - RegenTime (IntValue) | Value: 60 @ 0x19aaa038740
+    - RegenColor (BrickColorValue) [ValueObject] @ 0x19aaa033340
+    - StartColor (BrickColorValue) [ValueObject] @ 0x19aaa035640
+  - ColoredParts (Model) @ 0x19abd4e8c80
+    - TopBottomColors (Part) @ 0x19aaa630240
+      - Mesh (CylinderMesh) @ 0x19ac65ad600
+      - Weld (Weld) @ 0x19abf8c6ec0
+    - Center (Part) @ 0x19aaa630400
+      - Mesh (CylinderMesh) @ 0x19ac65a1d00
+      - Glue (Glue) @ 0x19abf8c6b40
+      - Glue (Glue) @ 0x19abf8c67c0
+      - Glue (Glue) @ 0x19abf8c3f80
+    - TopBottomColors (Part) @ 0x19aaa6305c0
+      - Mesh (CylinderMesh) @ 0x19ac65a4400
+    - TouchMe (Part) @ 0x19aaa630780
+      - Mesh (CylinderMesh) @ 0x19ac65a4800
+      - TouchInterest (TouchTransmitter) @ 0x19ab577a880
+  - LuckyBlock (Model) @ 0x19abd4e2e00
+    - Model (Model) @ 0x19abd4e5100
+      - newMesh (MeshPart) @ 0x19c00ff2e00
+      - newMesh (MeshPart) @ 0x19c00ff0400
+      - newMesh (MeshPart) @ 0x19c00ff4a00
+      - newMesh (MeshPart) @ 0x19c00ffe080
+    - MeshPart (MeshPart) @ 0x19c00ff9e00
+      - Glow (ParticleEmitter) @ 0x19aa359f080
+      - Glow (ParticleEmitter) @ 0x19aa359f380
+  - GUI (Part) @ 0x19aa368e5c0
+    - SurfaceGui (SurfaceGui) @ 0x19a9acc5080
+      - LockFrame (Frame) @ 0x19aa3bf2880
+        - ImageLabel (ImageLabel) @ 0x19a9b373080
+        - Text (TextLabel) @ 0x19c18127080
+        - Text (TextLabel) @ 0x19c21aae080
+      - Frame (Frame) @ 0x19a9acc5a80
+        - Time1 (TextLabel) @ 0x19aa3cfc080
+        - Time2 (TextLabel) @ 0x19aa3cfd080
+        - SkipButton (Frame) @ 0x19aa3d15a80
+          - TriggerButton (TextButton) @ 0x19a9828dc80
+          - Button (TextButton) @ 0x19a9c380080
+            - Frame (Frame) @ 0x19a9acc6480
+            - Frame (Frame) @ 0x19a9acc6e80
+          - SkipButton (ImageButton) @ 0x19c21aa5080
+          - imageBackground (ImageLabel) @ 0x19a9b373c80
+          - imageBackgroundshadow (ImageLabel) @ 0x19a9b374880
+  - Pipe (Part) @ 0x19aa368e780
+    - Mesh (CylinderMesh) @ 0x19ac65a1c00
+    - Weld (Weld) @ 0x19abf8c7080
+  - Pipe (Part) @ 0x19aa368e940
+    - Mesh (CylinderMesh) @ 0x19ac65ad100
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/LockWallSuper
+- LockWallSuper (Model) @ 0x19abd4e7e80
+  - Script (Script) @ 0x19c0b310e00
+  - LockWall2 (Part) @ 0x19aa6eaa340
+    - Mesh (CylinderMesh) @ 0x19ac65ad800
+  - LockWall1 (Part) @ 0x19aa5e4adc0
+    - Mesh (CylinderMesh) @ 0x19ac65ae000
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/DiamondBlockLockBoard
+- DiamondBlockLockBoard (Model) @ 0x19abf849a80
+  - Script (Script) @ 0x19c0b312c00
+  - LockBoardBlockGui (Part) @ 0x19aa3690b00
+    - SurfaceGui (SurfaceGui) @ 0x19aa3e43280
+      - LockFrame (Frame) @ 0x19a9c595080
+        - ImageLabel (ImageLabel) @ 0x19a9cae2480
+  - LockBoardBlockGui (Part) @ 0x19aa3690cc0
+    - SurfaceGui (SurfaceGui) @ 0x19aa529d280
+      - LockFrame (Frame) @ 0x19a9c595a80
+        - ImageLabel (ImageLabel) @ 0x19a9cae3080
+  - LockBoardBlockGuiGradient (Part) @ 0x19aa3690e80
+    - SurfaceGui (SurfaceGui) @ 0x19aa529dc80
+      - LockFrame (Frame) @ 0x19a9c596480
+        - ImageLabel (ImageLabel) @ 0x19a9cae3c80
+  - LockBoardBlockGui (Part) @ 0x19aa3691040
+    - SurfaceGui (SurfaceGui) @ 0x19aa529e680
+      - LockFrame (Frame) @ 0x19a9c596e80
+        - ImageLabel (ImageLabel) @ 0x19a9cae4880
+  - LockBoardBuyGui (Part) @ 0x19aa3691200
+    - SurfaceGui (SurfaceGui) @ 0x19aa529f080
+      - SkipButton (Frame) @ 0x19a9c597880
+        - imageBackgroundshadow (ImageLabel) @ 0x19a9cae5480
+        - imageBackground (ImageLabel) @ 0x19a9cae6080
+        - SkipButton (ImageButton) @ 0x19c23a51080
+  - LockBoardTimeGui (Part) @ 0x19aa6ea3c00
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d76480
+      - LockFrame (Frame) @ 0x19a9c591e80
+        - ImageLabel (ImageLabel) @ 0x19a9b37e480
+  - LockBoardOrGui (Part) @ 0x19aaa63c100
+    - SurfaceGui (SurfaceGui) @ 0x19ab2446480
+      - LockFrame (Frame) @ 0x19a9c592880
+        - ImageLabel (ImageLabel) @ 0x19a9b37f080
+  - LockBoardGuiArrow (Part) @ 0x19aaa63c2c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa5293280
+      - LockFrame (Frame) @ 0x19a9c593280
+        - ImageLabel (ImageLabel) @ 0x19a9cae0080
+  - LockBoardBlockGui (Part) @ 0x19aaa63c480
+    - SurfaceGui (SurfaceGui) @ 0x19aa5293c80
+      - LockFrame (Frame) @ 0x19a9c593c80
+        - ImageLabel (ImageLabel) @ 0x19a9cae0c80
+  - LockBoardBlockGui (Part) @ 0x19aaa63c640
+    - SurfaceGui (SurfaceGui) @ 0x19aa3e42880
+      - LockFrame (Frame) @ 0x19a9c594680
+        - ImageLabel (ImageLabel) @ 0x19a9cae1880
+  - LockBoard (Part) @ 0x19aaa3be940
+  - LockBoardbottom (Part) @ 0x19aa5e4a500
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/VoidBlockLockBoard
+- VoidBlockLockBoard (Model) @ 0x19abf847400
+  - Script (Script) @ 0x19c0b312400
+  - LockBoardbottom (Part) @ 0x19aaa13e240
+  - LockBoard (Part) @ 0x19aaa13e400
+  - effectCore (Part) @ 0x19aaa377080
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d75a80
+      - Frame (Frame) @ 0x19a9e634680
+      - images (Folder) @ 0x19ab0ac6fa0
+        - questionmark (ImageLabel) @ 0x19a9e683c80
+        - questionmark2 (ImageLabel) @ 0x19a9e684880
+      - images2 (Folder) @ 0x19ab0ac6ec0
+        - questionmark (ImageLabel) @ 0x19a9e685480
+        - exclamationmark (ImageLabel) @ 0x19a9e686080
+        - atmark (ImageLabel) @ 0x19a9e686c80
+        - moneymark (ImageLabel) @ 0x19a9e687880
+        - andmark (ImageLabel) @ 0x19a9e688480
+        - minusmark (ImageLabel) @ 0x19a9e689080
+        - plusmark (ImageLabel) @ 0x19a9e689c80
+        - equalsmark (ImageLabel) @ 0x19a9e68a880
+  - LockBoardBuyGui (Part) @ 0x19aaa377240
+    - SurfaceGui (SurfaceGui) @ 0x19c1be05080
+      - SkipButton (Frame) @ 0x19a9e633c80
+        - imageBackgroundshadow (ImageLabel) @ 0x19a9e682480
+        - imageBackground (ImageLabel) @ 0x19a9e683080
+        - SkipButton (ImageButton) @ 0x19c24b1b080
+  - ParticleCore (Part) @ 0x19aaa377400
+    - Weld (Weld) @ 0x19abf8c9380
+    - Attachment (Attachment) @ 0x19ab1f3b000
+  - LockBoardBlockGui (Part) @ 0x19aaa3775c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa3b5f080
+      - LockFrame (Frame) @ 0x19a9e633280
+        - ImageLabel (ImageLabel) @ 0x19a9e681880
+  - LockBoardBlockGui (Part) @ 0x19aaa377780
+    - SurfaceGui (SurfaceGui) @ 0x19aa3b5e680
+      - LockFrame (Frame) @ 0x19a9e632880
+        - ImageLabel (ImageLabel) @ 0x19a9e680c80
+  - LockBoardGuiArrow (Part) @ 0x19aaa377940
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d5be80
+      - LockFrame (Frame) @ 0x19a9e631e80
+        - ImageLabel (ImageLabel) @ 0x19a9e680080
+  - LockBoardBlockGuiEpic (Part) @ 0x19aaa377b00
+    - SurfaceGui (SurfaceGui) @ 0x19aa3b5dc80
+      - LockFrame (Frame) @ 0x19a9e631480
+        - Script (Script) @ 0x19c0b311000
+        - ImageLabel (ImageLabel) @ 0x19a9caef080
+  - LockBoardBlockGui (Part) @ 0x19aaa377cc0
+    - SurfaceGui (SurfaceGui) @ 0x19c08488c80
+      - LockFrame (Frame) @ 0x19a9e630a80
+        - ImageLabel (ImageLabel) @ 0x19a9caee480
+  - LockBoardBlockGui (Part) @ 0x19aaa377e80
+    - Weld (Weld) @ 0x19abf8c3500
+    - SurfaceGui (SurfaceGui) @ 0x19c0848be80
+      - LockFrame (Frame) @ 0x19a9e630080
+        - ImageLabel (ImageLabel) @ 0x19a9caed880
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/LimitedTimeBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa33f900
+  - SurfaceGui (SurfaceGui) @ 0x19a9e636e80
+    - LockFrame (Frame) @ 0x19a9e637880
+      - ImageLabel (ImageLabel) @ 0x19a9e68d880
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/LimitedTimeBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa3791c0
+  - SurfaceGui (SurfaceGui) @ 0x19a9e638280
+    - LockFrame (Frame) @ 0x19a9e638c80
+      - ImageLabel (ImageLabel) @ 0x19a9e68e480
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/LimitedTimeBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa379380
+  - SurfaceGui (SurfaceGui) @ 0x19a9e639680
+    - LockFrame (Frame) @ 0x19a9e63a080
+      - ImageLabel (ImageLabel) @ 0x19a9e68f080
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/LimitedTimeBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aaa63e240
+  - Attachment (Attachment) @ 0x19ab1f3f980
+    - Fire (Fire) @ 0x19aa89e29c0
+  - Attachment (Attachment) @ 0x19ab1f3f800
+    - Fire (Fire) @ 0x19aa89e56c0
+  - Attachment (Attachment) @ 0x19ab1f3f680
+    - Fire (Fire) @ 0x19aa89e4680
+  - Attachment (Attachment) @ 0x19ab1f3f500
+    - Fire (Fire) @ 0x19aa89e4e00
+  - Attachment (Attachment) @ 0x19ab1f3f380
+    - Fire (Fire) @ 0x19aa89e6c00
+  - Attachment (Attachment) @ 0x19ab1f3f200
+    - Fire (Fire) @ 0x19aa89e7b00
+  - Attachment (Attachment) @ 0x19ab1f3f080
+    - Fire (Fire) @ 0x19aa89e8780
+  - Attachment (Attachment) @ 0x19ab1f3ef00
+    - Fire (Fire) @ 0x19aa89ee2c0
+  - Attachment (Attachment) @ 0x19ab1f3ed80
+    - Fire (Fire) @ 0x19aa89e7240
+  - Attachment (Attachment) @ 0x19ab1f3ec00
+    - Fire (Fire) @ 0x19aa89e6e80
+  - Attachment (Attachment) @ 0x19ab1f3ea80
+    - Fire (Fire) @ 0x19aa89e6fc0
+  - Attachment (Attachment) @ 0x19ab1f3e900
+    - Fire (Fire) @ 0x19aa89e6980
+  - Attachment (Attachment) @ 0x19ab1f3e780
+    - Fire (Fire) @ 0x19aa89e5d00
+  - Attachment (Attachment) @ 0x19ab1f3e600
+    - Fire (Fire) @ 0x19aa89e5e40
+  - Attachment (Attachment) @ 0x19ab1f3e480
+    - Fire (Fire) @ 0x19aa89e5bc0
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/SuperLocked2
+- SuperLocked2 (BoolValue) | Value: true @ 0x19ab1473960
+
+Found matching config root at path: Workspace/Workspace/Spawn7/Givers/SuperLocked1
+- SuperLocked1 (BoolValue) | Value: true @ 0x19abadb7080
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/SuperBlockLockBoard
+- SuperBlockLockBoard (Model) @ 0x19ac435c480
+  - Script (Script) @ 0x19ab5cfe200
+  - LockBoardBuyGui (Part) @ 0x19aa6758ac0
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d7dc80
+      - SkipButton (Frame) @ 0x19aa07dbe80
+        - imageBackgroundshadow (ImageLabel) @ 0x19aa1627880
+        - imageBackground (ImageLabel) @ 0x19aa1628480
+        - SkipButton (ImageButton) @ 0x19a9fdf6080
+  - LockBoardBlockGui (Part) @ 0x19aa6758c80
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d7d280
+      - LockFrame (Frame) @ 0x19aa07db480
+        - ImageLabel (ImageLabel) @ 0x19aa1626c80
+  - LockBoardOrGui (Part) @ 0x19aa6758e40
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d7c880
+      - LockFrame (Frame) @ 0x19aa07daa80
+        - ImageLabel (ImageLabel) @ 0x19aa1626080
+  - LockBoardBlockGui (Part) @ 0x19aa6759000
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d7be80
+      - LockFrame (Frame) @ 0x19aa07da080
+        - ImageLabel (ImageLabel) @ 0x19aa1625480
+  - LockBoardBlockGui (Part) @ 0x19aa67591c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d7b480
+      - LockFrame (Frame) @ 0x19aa07d9680
+        - ImageLabel (ImageLabel) @ 0x19aa1624880
+  - LockBoardBlockGui (Part) @ 0x19aa6759380
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d7aa80
+      - LockFrame (Frame) @ 0x19aa07d8c80
+        - ImageLabel (ImageLabel) @ 0x19aa1623c80
+  - LockBoardBlockGui (Part) @ 0x19aa6759540
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d7a080
+      - LockFrame (Frame) @ 0x19aa07d8280
+        - ImageLabel (ImageLabel) @ 0x19aa1623080
+  - LockBoardGuiArrow (Part) @ 0x19aa6759700
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d79680
+      - LockFrame (Frame) @ 0x19aa07d7880
+        - ImageLabel (ImageLabel) @ 0x19aa1622480
+  - LockBoardTimeGui (Part) @ 0x19aa67598c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d78c80
+      - LockFrame (Frame) @ 0x19aa07d6e80
+        - ImageLabel (ImageLabel) @ 0x19aa1621880
+  - LockBoardbottom (Part) @ 0x19aaa330b00
+  - LockBoard (Part) @ 0x19aaa330cc0
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/SuperPad
+- SuperPad (Model) @ 0x19ac435e400
+  - Part (Part) @ 0x19aa5ac6b40
+  - Base (Part) @ 0x19aa5ac6d00
+    - Weld (Weld) @ 0x19ac8a3af80
+    - Weld (Weld) @ 0x19ac8a3adc0
+    - TouchInterest (TouchTransmitter) @ 0x19ab9df20e0
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/RainbowBlockLockBoard/LockBoardBlockGuiText
+- LockBoardBlockGuiText (Part) @ 0x19aa5ac5800
+  - SurfaceGui (SurfaceGui) @ 0x19aa41d6480
+    - LockFrame (Frame) @ 0x19aa1656480
+      - ImageLabel (ImageLabel) @ 0x19aa1683080
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa5ac59c0
+  - SurfaceGui (SurfaceGui) @ 0x19aa41d6e80
+    - LockFrame (Frame) @ 0x19aa1655a80
+      - ImageLabel (ImageLabel) @ 0x19aa1682480
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa5ac5b80
+  - SurfaceGui (SurfaceGui) @ 0x19aa41d7880
+    - LockFrame (Frame) @ 0x19aa1655080
+      - ImageLabel (ImageLabel) @ 0x19aa1681880
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa5ac5d40
+  - SurfaceGui (SurfaceGui) @ 0x19aa41d8280
+    - LockFrame (Frame) @ 0x19aa1654680
+      - ImageLabel (ImageLabel) @ 0x19aa1680c80
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa5ac5f00
+  - SurfaceGui (SurfaceGui) @ 0x19aa41d8c80
+    - LockFrame (Frame) @ 0x19aa1653c80
+      - ImageLabel (ImageLabel) @ 0x19aa1680080
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/RainbowBlockLockBoard/LockBoardBlockGuiGradient
+- LockBoardBlockGuiGradient (Part) @ 0x19aa5ac6600
+  - SurfaceGui (SurfaceGui) @ 0x19aa41d9680
+    - LockFrame (Frame) @ 0x19aa1653280
+      - ImageLabel (ImageLabel) @ 0x19aa162f080
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/RainbowBlockLockBoard/LockBoardBuyGui
+- LockBoardBuyGui (Part) @ 0x19aa5ac6980
+  - SurfaceGui (SurfaceGui) @ 0x19aa41daa80
+    - SkipButton (Frame) @ 0x19aa1651e80
+      - imageBackgroundshadow (ImageLabel) @ 0x19aa162cc80
+      - imageBackground (ImageLabel) @ 0x19aa162d880
+      - SkipButton (ImageButton) @ 0x19a9fdfb080
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/RainbowBlockLockBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aaa3b2c40
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/LimitedTimeBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa6631580
+  - SurfaceGui (SurfaceGui) @ 0x19aa1659680
+    - LockFrame (Frame) @ 0x19aa165a080
+      - ImageLabel (ImageLabel) @ 0x19aa1685480
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/LimitedTimeBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aa66a2e00
+  - Attachment (Attachment) @ 0x19c0b41c500
+    - Fire (Fire) @ 0x19aac548f00
+  - Attachment (Attachment) @ 0x19c0b41ae80
+    - Fire (Fire) @ 0x19aac540bc0
+  - Attachment (Attachment) @ 0x19c0b413500
+    - Fire (Fire) @ 0x19aac54f440
+  - Attachment (Attachment) @ 0x19c0b41d880
+    - Fire (Fire) @ 0x19aac54c600
+  - Attachment (Attachment) @ 0x19c0b413680
+    - Fire (Fire) @ 0x19aac54ad00
+  - Attachment (Attachment) @ 0x19c0b410500
+    - Fire (Fire) @ 0x19aac54a080
+  - Attachment (Attachment) @ 0x19c0b41f800
+    - Fire (Fire) @ 0x19aac54f080
+  - Attachment (Attachment) @ 0x19c0b411d00
+    - Fire (Fire) @ 0x19aac54d640
+  - Attachment (Attachment) @ 0x19c0b415a80
+    - Fire (Fire) @ 0x19aac54a1c0
+  - Attachment (Attachment) @ 0x19c0b414e80
+    - Fire (Fire) @ 0x19aac54d500
+  - Attachment (Attachment) @ 0x19c0b41fc80
+    - Fire (Fire) @ 0x19aac540440
+  - Attachment (Attachment) @ 0x19c0b416080
+    - Fire (Fire) @ 0x19aac54e2c0
+  - Attachment (Attachment) @ 0x19c0b416380
+    - Fire (Fire) @ 0x19aac54eb80
+  - Attachment (Attachment) @ 0x19c0b412480
+    - Fire (Fire) @ 0x19aac542ec0
+  - Attachment (Attachment) @ 0x19c0b414880
+    - Fire (Fire) @ 0x19aac54a940
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/LimitedTimeBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa66a3340
+  - SurfaceGui (SurfaceGui) @ 0x19aa1658280
+    - LockFrame (Frame) @ 0x19aa1658c80
+      - ImageLabel (ImageLabel) @ 0x19aa1684880
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/LimitedTimeBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa675a180
+  - SurfaceGui (SurfaceGui) @ 0x19aa1656e80
+    - LockFrame (Frame) @ 0x19aa1657880
+      - ImageLabel (ImageLabel) @ 0x19aa1683c80
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/GalaxyBlockLockBoard/LockBoardBlockGuiEpic
+- LockBoardBlockGuiEpic (Part) @ 0x19aa3686280
+  - SurfaceGui (SurfaceGui) @ 0x19aa41d4680
+    - LockFrame (Frame) @ 0x19aa165be80
+      - Script (Script) @ 0x19ab5cff800
+      - ImageLabel (ImageLabel) @ 0x19aa1687880
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/GalaxyBlockLockBoard/LockBoardBuyGui
+- LockBoardBuyGui (Part) @ 0x19aa5ac4bc0
+  - SurfaceGui (SurfaceGui) @ 0x19aa41d1e80
+    - SkipButton (Frame) @ 0x19aa165e680
+      - imageBackgroundshadow (ImageLabel) @ 0x19aa168a880
+      - imageBackground (ImageLabel) @ 0x19aa168b480
+      - SkipButton (ImageButton) @ 0x19a9fdfc080
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa5ac4d80
+  - SurfaceGui (SurfaceGui) @ 0x19aa41d2880
+    - LockFrame (Frame) @ 0x19aa165dc80
+      - ImageLabel (ImageLabel) @ 0x19aa1689c80
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa5ac4f40
+  - SurfaceGui (SurfaceGui) @ 0x19aa41d3280
+    - LockFrame (Frame) @ 0x19aa165d280
+      - ImageLabel (ImageLabel) @ 0x19aa1689080
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa5ac52c0
+  - SurfaceGui (SurfaceGui) @ 0x19aa41d5080
+    - LockFrame (Frame) @ 0x19aa165b480
+      - ImageLabel (ImageLabel) @ 0x19aa1686c80
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa5ac5480
+  - SurfaceGui (SurfaceGui) @ 0x19aa41d5a80
+    - LockFrame (Frame) @ 0x19aa165aa80
+      - ImageLabel (ImageLabel) @ 0x19aa1686080
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/GalaxyBlockLockBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aaa3b28c0
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/BlockGiverSuper1
+- BlockGiverSuper1 (Model) @ 0x19ac78bf200
+  - Settings/Instructions (Script) @ 0x19ab5cfba00
+  - Settings (Folder) @ 0x19ab0de0860
+    - WeaponName (StringValue) | Value: "Unknown" @ 0x19ab5ca2e00
+    - RegenTime (IntValue) | Value: 60 @ 0x19ab0de2b60
+    - RegenColor (BrickColorValue) [ValueObject] @ 0x19ab0de29a0
+    - StartColor (BrickColorValue) [ValueObject] @ 0x19ab0de28c0
+  - ColoredParts (Model) @ 0x19ac78bee80
+    - Center (Part) @ 0x19aaa28fc80
+      - Mesh (CylinderMesh) @ 0x19ac65a7b00
+    - TopBottomColors (Part) @ 0x19aaa28fe40
+      - Mesh (CylinderMesh) @ 0x19ac65a7700
+    - TopBottomColors (Part) @ 0x19aaa330780
+      - Mesh (CylinderMesh) @ 0x19ac65a8200
+    - TouchMe (Part) @ 0x19aaa330940
+      - Mesh (CylinderMesh) @ 0x19ac65a8300
+      - TouchInterest (TouchTransmitter) @ 0x19abd7383c0
+  - LuckyBlock (Model) @ 0x19ac78beb00
+    - Model (Model) @ 0x19ac78be780
+      - newMesh (MeshPart) @ 0x19aa5770780
+      - newMesh (MeshPart) @ 0x19aa5771200
+      - newMesh (MeshPart) @ 0x19aa5774680
+      - newMesh (MeshPart) @ 0x19aa37a9380
+    - MeshPart (MeshPart) @ 0x19aa37a9700
+      - Glow (ParticleEmitter) @ 0x19aa87dea80
+      - Glow (ParticleEmitter) @ 0x19aa87de780
+  - Pipe (Part) @ 0x19aa5ac3f80
+    - Mesh (CylinderMesh) @ 0x19ac65ab900
+  - Pipe (Part) @ 0x19aa5ac4140
+    - Mesh (CylinderMesh) @ 0x19ac65aa300
+  - GUI (Part) @ 0x19aa5ac4300
+    - SurfaceGui (SurfaceGui) @ 0x19aa1692880
+      - LockFrame (Frame) @ 0x19a9b1ff080
+        - ImageLabel (ImageLabel) @ 0x19aa168f080
+        - Text (TextLabel) @ 0x19aa19e1080
+        - Text (TextLabel) @ 0x19aa19e2080
+      - Frame (Frame) @ 0x19aa1693280
+        - Time1 (TextLabel) @ 0x19aa4014080
+        - Time2 (TextLabel) @ 0x19aa4015080
+        - SkipButton (Frame) @ 0x19ab244aa80
+          - TriggerButton (TextButton) @ 0x19a9fdbb480
+          - Button (TextButton) @ 0x19a9fdbc880
+            - Frame (Frame) @ 0x19aa1693c80
+            - Frame (Frame) @ 0x19aa1694680
+          - SkipButton (ImageButton) @ 0x19aa19e3080
+          - imageBackground (ImageLabel) @ 0x19aa1a10080
+          - imageBackgroundshadow (ImageLabel) @ 0x19aa1a10c80
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/BlockGiverSuper2
+- BlockGiverSuper2 (Model) @ 0x19ac78be400
+  - Settings/Instructions (Script) @ 0x19ab5cfdc00
+  - Settings (Folder) @ 0x19ab0de2380
+    - WeaponName (StringValue) | Value: "Unknown" @ 0x19ac65a9900
+    - RegenTime (IntValue) | Value: 60 @ 0x19ab0de22a0
+    - RegenColor (BrickColorValue) [ValueObject] @ 0x19ab0de21c0
+    - StartColor (BrickColorValue) [ValueObject] @ 0x19ab0de20e0
+  - ColoredParts (Model) @ 0x19ac78be080
+    - TouchMe (Part) @ 0x19aaa330080
+      - Mesh (CylinderMesh) @ 0x19c1f3bc400
+      - TouchInterest (TouchTransmitter) @ 0x19ab9df83c0
+    - TopBottomColors (Part) @ 0x19aaa330240
+      - Mesh (CylinderMesh) @ 0x19c1f3b9c00
+    - Center (Part) @ 0x19aaa330400
+      - Mesh (CylinderMesh) @ 0x19c1f3bbe00
+      - Glue (Glue) @ 0x19ac8a3a6c0
+      - Glue (Glue) @ 0x19ac8a3a500
+    - TopBottomColors (Part) @ 0x19aaa3305c0
+      - Mesh (CylinderMesh) @ 0x19c1f3bb100
+      - Weld (Weld) @ 0x19ac8a3b840
+  - LuckyBlock (Model) @ 0x19ac78bdd00
+    - Model (Model) @ 0x19ac78bd980
+      - newMesh (MeshPart) @ 0x19aa37a7080
+      - newMesh (MeshPart) @ 0x19aa37a7400
+      - newMesh (MeshPart) @ 0x19aa37a7780
+      - newMesh (MeshPart) @ 0x19ac95cb680
+    - MeshPart (MeshPart) @ 0x19ac95cc100
+      - Glow (ParticleEmitter) @ 0x19aa87de480
+      - Glow (ParticleEmitter) @ 0x19aa87de180
+  - Pipe (Part) @ 0x19aa6613500
+    - Mesh (CylinderMesh) @ 0x19c1f3b3900
+    - Weld (Weld) @ 0x19ac8a3a180
+  - Pipe (Part) @ 0x19aa66136c0
+    - Mesh (CylinderMesh) @ 0x19c1f3b0d00
+  - GUI (Part) @ 0x19aa7e4f740
+    - SurfaceGui (SurfaceGui) @ 0x19aa1695080
+      - LockFrame (Frame) @ 0x19aa3d78280
+        - ImageLabel (ImageLabel) @ 0x19aa1a11880
+        - Text (TextLabel) @ 0x19aa19e4080
+        - Text (TextLabel) @ 0x19aa19e5080
+      - Frame (Frame) @ 0x19aa1695a80
+        - Time1 (TextLabel) @ 0x19aa4016080
+        - Time2 (TextLabel) @ 0x19aa4017080
+        - SkipButton (Frame) @ 0x19ab2443c80
+          - TriggerButton (TextButton) @ 0x19a9fdbdc80
+          - Button (TextButton) @ 0x19aa2320080
+            - Frame (Frame) @ 0x19aa1696480
+            - Frame (Frame) @ 0x19aa1696e80
+          - SkipButton (ImageButton) @ 0x19aa19e6080
+          - imageBackground (ImageLabel) @ 0x19aa1a12480
+          - imageBackgroundshadow (ImageLabel) @ 0x19aa1a13080
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/LockWallSuper
+- LockWallSuper (Model) @ 0x19ac78bd600
+  - Script (Script) @ 0x19ab5cf7600
+  - LockWall2 (Part) @ 0x19aaa330e80
+    - Mesh (CylinderMesh) @ 0x19c1f3bd000
+  - LockWall1 (Part) @ 0x19aaa3bf200
+    - Mesh (CylinderMesh) @ 0x19c1f3ba200
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/DiamondBlockLockBoard
+- DiamondBlockLockBoard (Model) @ 0x19ac78b8c80
+  - Script (Script) @ 0x19ab5cf6a00
+  - LockBoardOrGui (Part) @ 0x19a9f56fac0
+    - SurfaceGui (SurfaceGui) @ 0x19aa412c880
+      - LockFrame (Frame) @ 0x19aa3332880
+        - ImageLabel (ImageLabel) @ 0x19aa1a1d880
+  - LockBoardGuiArrow (Part) @ 0x19a9f56fc80
+    - SurfaceGui (SurfaceGui) @ 0x19aa412be80
+      - LockFrame (Frame) @ 0x19aa3333280
+        - ImageLabel (ImageLabel) @ 0x19aa1a1e480
+  - LockBoardTimeGui (Part) @ 0x19aa5975b80
+    - Weld (Weld) @ 0x19ac8a39380
+    - SurfaceGui (SurfaceGui) @ 0x19aa412d280
+      - LockFrame (Frame) @ 0x19aa3331e80
+        - ImageLabel (ImageLabel) @ 0x19aa1a1cc80
+  - LockBoardBlockGui (Part) @ 0x19aa597fac0
+    - SurfaceGui (SurfaceGui) @ 0x19aa4129680
+      - LockFrame (Frame) @ 0x19aa3335a80
+        - ImageLabel (ImageLabel) @ 0x19aa3381880
+  - LockBoardBlockGui (Part) @ 0x19aa597ecc0
+    - SurfaceGui (SurfaceGui) @ 0x19aa412a080
+      - LockFrame (Frame) @ 0x19aa3335080
+        - ImageLabel (ImageLabel) @ 0x19aa3380c80
+  - LockBoardBlockGui (Part) @ 0x19aa597dd00
+    - SurfaceGui (SurfaceGui) @ 0x19aa412aa80
+      - LockFrame (Frame) @ 0x19aa3334680
+        - ImageLabel (ImageLabel) @ 0x19aa3380080
+  - LockBoardBlockGui (Part) @ 0x19aa597eb00
+    - SurfaceGui (SurfaceGui) @ 0x19aa412b480
+      - LockFrame (Frame) @ 0x19aa3333c80
+        - ImageLabel (ImageLabel) @ 0x19aa1a1f080
+  - LockBoardBlockGuiGradient (Part) @ 0x19aa9f46980
+    - SurfaceGui (SurfaceGui) @ 0x19aa4128c80
+      - LockFrame (Frame) @ 0x19aa3336480
+        - ImageLabel (ImageLabel) @ 0x19aa3382480
+  - LockBoardBlockGui (Part) @ 0x19aa9f46b40
+    - SurfaceGui (SurfaceGui) @ 0x19aa4128280
+      - LockFrame (Frame) @ 0x19aa3336e80
+        - ImageLabel (ImageLabel) @ 0x19aa3383080
+  - LockBoardBuyGui (Part) @ 0x19aa9f46d00
+    - SurfaceGui (SurfaceGui) @ 0x19aa4127880
+      - SkipButton (Frame) @ 0x19aa3337880
+        - imageBackgroundshadow (ImageLabel) @ 0x19aa3383c80
+        - imageBackground (ImageLabel) @ 0x19aa3384880
+        - SkipButton (ImageButton) @ 0x19aa3134080
+  - LockBoard (Part) @ 0x19aaa33d0c0
+  - LockBoardbottom (Part) @ 0x19aaa33d280
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/VoidBlockLockBoard
+- VoidBlockLockBoard (Model) @ 0x19ac78b4d80
+  - Script (Script) @ 0x19ab5cf6000
+  - LockBoardBlockGui (Part) @ 0x19aa66add00
+    - SurfaceGui (SurfaceGui) @ 0x19aa3b52880
+      - LockFrame (Frame) @ 0x19a9f400080
+        - ImageLabel (ImageLabel) @ 0x19aa338c080
+  - LockBoardBlockGuiEpic (Part) @ 0x19aa6928200
+    - SurfaceGui (SurfaceGui) @ 0x19aa3b53c80
+      - LockFrame (Frame) @ 0x19a9f401e80
+        - Script (Script) @ 0x19ab5cf5800
+        - ImageLabel (ImageLabel) @ 0x19aa338d880
+  - effectCore (Part) @ 0x19aa69283c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa3b56e80
+      - Frame (Frame) @ 0x19a9f404680
+        - questionmark2 (ImageLabel) @ 0x19ab0829080
+        - questionmark2 (ImageLabel) @ 0x19aba599080
+        - questionmark (ImageLabel) @ 0x19ab1307880
+        - questionmark (ImageLabel) @ 0x19ab85a3080
+        - questionmark (ImageLabel) @ 0x19ab83f6080
+        - questionmark2 (ImageLabel) @ 0x19abaa28480
+        - questionmark2 (ImageLabel) @ 0x19abe592480
+        - questionmark2 (ImageLabel) @ 0x19abf629080
+        - questionmark2 (ImageLabel) @ 0x19abaa2b480
+        - questionmark (ImageLabel) @ 0x19ab1303080
+        - questionmark (ImageLabel) @ 0x19abaa20080
+        - questionmark (ImageLabel) @ 0x19abe590c80
+        - questionmark (ImageLabel) @ 0x19a9cba4880
+        - questionmark2 (ImageLabel) @ 0x19ab51b6c80
+        - questionmark2 (ImageLabel) @ 0x19ab85a1880
+        - questionmark (ImageLabel) @ 0x19abaa2cc80
+        - questionmark2 (ImageLabel) @ 0x19aba59e480
+        - questionmark2 (ImageLabel) @ 0x19abe590080
+        - questionmark (ImageLabel) @ 0x19ac3c80080
+        - questionmark (ImageLabel) @ 0x19abdc8f080
+        - questionmark2 (ImageLabel) @ 0x19ab83fc080
+        - questionmark (ImageLabel) @ 0x19ab83f6c80
+        - questionmark (ImageLabel) @ 0x19a9cad7880
+        - questionmark2 (ImageLabel) @ 0x19a9cad4880
+        - questionmark2 (ImageLabel) @ 0x19abaa29c80
+        - questionmark (ImageLabel) @ 0x19abaa26c80
+        - questionmark2 (ImageLabel) @ 0x19ab1302480
+        - questionmark (ImageLabel) @ 0x19aba9b1880
+        - questionmark2 (ImageLabel) @ 0x19a9cad3c80
+        - questionmark2 (ImageLabel) @ 0x19abaa2a880
+        - questionmark2 (ImageLabel) @ 0x19ab51b6080
+        - questionmark2 (ImageLabel) @ 0x19abdc8b480
+        - questionmark2 (ImageLabel) @ 0x19abf62b480
+        - questionmark2 (ImageLabel) @ 0x19abaa27880
+        - questionmark (ImageLabel) @ 0x19ab83f9080
+        - questionmark (ImageLabel) @ 0x19a9cad0c80
+        - questionmark2 (ImageLabel) @ 0x19abe71d880
+        - questionmark (ImageLabel) @ 0x19ab1306080
+        - questionmark (ImageLabel) @ 0x19aba9b9080
+        - questionmark (ImageLabel) @ 0x19aa5813c80
+        - questionmark2 (ImageLabel) @ 0x19abaa21880
+        - questionmark2 (ImageLabel) @ 0x19aa58ae480
+        - questionmark (ImageLabel) @ 0x19abaa2c080
+        - questionmark (ImageLabel) @ 0x19abe712480
+        - questionmark2 (ImageLabel) @ 0x19ac2f09080
+        - questionmark2 (ImageLabel) @ 0x19ab85ad880
+        - questionmark2 (ImageLabel) @ 0x19abf4d0c80
+        - questionmark2 (ImageLabel) @ 0x19ab83fd880
+        - questionmark2 (ImageLabel) @ 0x19abf4d6c80
+        - questionmark2 (ImageLabel) @ 0x19aa58af080
+        - questionmark2 (ImageLabel) @ 0x19abe716080
+        - questionmark2 (ImageLabel) @ 0x19ab1300080
+        - questionmark (ImageLabel) @ 0x19abdc83080
+        - questionmark (ImageLabel) @ 0x19abdc8c080
+        - questionmark2 (ImageLabel) @ 0x19a9cadd880
+        - questionmark2 (ImageLabel) @ 0x19a9cad8480
+        - questionmark2 (ImageLabel) @ 0x19abaa23080
+        - questionmark (ImageLabel) @ 0x19abe593080
+        - questionmark2 (ImageLabel) @ 0x19a9e97e480
+        - questionmark (ImageLabel) @ 0x19a9cad3080
+        - questionmark2 (ImageLabel) @ 0x19abf4dcc80
+      - images (Folder) @ 0x19ab0de9ee0
+        - questionmark (ImageLabel) @ 0x19a9f412480
+        - questionmark2 (ImageLabel) @ 0x19a9f413080
+      - images2 (Folder) @ 0x19ab0de4680
+        - questionmark (ImageLabel) @ 0x19a9f413c80
+        - exclamationmark (ImageLabel) @ 0x19a9f414880
+        - atmark (ImageLabel) @ 0x19a9f415480
+        - moneymark (ImageLabel) @ 0x19a9f416080
+        - andmark (ImageLabel) @ 0x19a9f416c80
+        - minusmark (ImageLabel) @ 0x19a9f417880
+        - plusmark (ImageLabel) @ 0x19a9f418480
+        - equalsmark (ImageLabel) @ 0x19a9f419080
+  - LockBoardBlockGui (Part) @ 0x19aaa3bb300
+    - SurfaceGui (SurfaceGui) @ 0x19aa3b55a80
+      - LockFrame (Frame) @ 0x19a9f403280
+        - ImageLabel (ImageLabel) @ 0x19a9f410080
+  - LockBoardBlockGui (Part) @ 0x19aaa3bb4c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa3b55080
+      - LockFrame (Frame) @ 0x19a9f402880
+        - ImageLabel (ImageLabel) @ 0x19aa338f080
+  - LockBoardGuiArrow (Part) @ 0x19aaa3bb680
+    - SurfaceGui (SurfaceGui) @ 0x19aa3b54680
+      - LockFrame (Frame) @ 0x19a9f400a80
+        - ImageLabel (ImageLabel) @ 0x19aa338e480
+  - LockBoardBlockGui (Part) @ 0x19aaa3bb840
+    - SurfaceGui (SurfaceGui) @ 0x19aa3b53280
+      - LockFrame (Frame) @ 0x19a9f401480
+        - ImageLabel (ImageLabel) @ 0x19aa338cc80
+  - LockBoard (Part) @ 0x19ac5240780
+  - LockBoardbottom (Part) @ 0x19ac5246600
+  - LockBoardBuyGui (Part) @ 0x19aa5e72c40
+    - SurfaceGui (SurfaceGui) @ 0x19aa3b56480
+      - SkipButton (Frame) @ 0x19a9f403c80
+        - imageBackgroundshadow (ImageLabel) @ 0x19a9f410c80
+        - imageBackground (ImageLabel) @ 0x19a9f411880
+        - SkipButton (ImageButton) @ 0x19aa3633080
+  - ParticleCore (Part) @ 0x19aa5e72fc0
+    - Weld (Weld) @ 0x19ac8a38c80
+    - Attachment (Attachment) @ 0x19c0b413980
+      - ParticleEmitter (ParticleEmitter) @ 0x19aa9fb3680
+      - ParticleEmitter2 (ParticleEmitter) @ 0x19aa9fbdb80
+      - Rays_Thick (ParticleEmitter) @ 0x19aa9fb3380
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa7e47b00
+  - SurfaceGui (SurfaceGui) @ 0x19aa3aef080
+    - LockFrame (Frame) @ 0x19a9f408c80
+      - ImageLabel (ImageLabel) @ 0x19a9f41e480
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/SkipTimerLockBoard/LockBoardBuyGui
+- LockBoardBuyGui (Part) @ 0x19aa7e47cc0
+  - SurfaceGui (SurfaceGui) @ 0x19aa3b51e80
+    - SkipButton (Frame) @ 0x19a9f40b480
+      - imageBackgroundshadow (ImageLabel) @ 0x19aa3721880
+      - imageBackground (ImageLabel) @ 0x19aa3722480
+      - SkipButton (ImageButton) @ 0x19aa3637080
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa7e47e80
+  - SurfaceGui (SurfaceGui) @ 0x19aa3b50a80
+    - LockFrame (Frame) @ 0x19a9f40a080
+      - ImageLabel (ImageLabel) @ 0x19aa3720080
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa7e4e5c0
+  - SurfaceGui (SurfaceGui) @ 0x19aa3b50080
+    - LockFrame (Frame) @ 0x19a9f409680
+      - ImageLabel (ImageLabel) @ 0x19a9f41f080
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa7e4e780
+  - SurfaceGui (SurfaceGui) @ 0x19aa3b51480
+    - LockFrame (Frame) @ 0x19a9f40aa80
+      - ImageLabel (ImageLabel) @ 0x19aa3720c80
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/SkipTimerLockBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19ac5243dc0
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/SuperLocked2
+- SuperLocked2 (BoolValue) | Value: false @ 0x19ab9dfc8e0
+
+Found matching config root at path: Workspace/Workspace/Spawn1/Givers/SuperLocked1
+- SuperLocked1 (BoolValue) | Value: false @ 0x19abd73f740
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/SuperBlockLockBoard
+- SuperBlockLockBoard (Model) @ 0x19a9ee41200
+  - Script (Script) @ 0x19ab1533800
+  - LockBoardBlockGui (Part) @ 0x19aaa630940
+    - SurfaceGui (SurfaceGui) @ 0x19a9caf1e80
+      - LockFrame (Frame) @ 0x19abd149680
+        - ImageLabel (ImageLabel) @ 0x19ac57f6080
+  - LockBoardOrGui (Part) @ 0x19aaa630b00
+    - SurfaceGui (SurfaceGui) @ 0x19a9caf1480
+      - LockFrame (Frame) @ 0x19abd140a80
+        - ImageLabel (ImageLabel) @ 0x19ac57f1880
+  - LockBoardBlockGui (Part) @ 0x19aaaedaf80
+    - SurfaceGui (SurfaceGui) @ 0x19a9caf5a80
+      - LockFrame (Frame) @ 0x19abd148c80
+        - ImageLabel (ImageLabel) @ 0x19ac57f8480
+  - LockBoardGuiArrow (Part) @ 0x19aaaedb140
+    - SurfaceGui (SurfaceGui) @ 0x19a9caf6480
+      - LockFrame (Frame) @ 0x19abd140080
+        - ImageLabel (ImageLabel) @ 0x19ac57f4880
+  - LockBoardBuyGui (Part) @ 0x19aaaedb300
+    - SurfaceGui (SurfaceGui) @ 0x19aa883e680
+      - SkipButton (Frame) @ 0x19abd753280
+        - imageBackgroundshadow (ImageLabel) @ 0x19ac57f0c80
+        - imageBackground (ImageLabel) @ 0x19ac57f7880
+        - SkipButton (ImageButton) @ 0x19abd0ec080
+  - LockBoardBlockGui (Part) @ 0x19aaaedb4c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa883d280
+      - LockFrame (Frame) @ 0x19abd75be80
+        - ImageLabel (ImageLabel) @ 0x19ac57fe480
+  - LockBoardBlockGui (Part) @ 0x19aaaedb680
+    - SurfaceGui (SurfaceGui) @ 0x19a9caf0080
+      - LockFrame (Frame) @ 0x19abd145a80
+        - ImageLabel (ImageLabel) @ 0x19ac57fb480
+  - LockBoardBlockGui (Part) @ 0x19aaaedb840
+    - SurfaceGui (SurfaceGui) @ 0x19a9caf6e80
+      - LockFrame (Frame) @ 0x19abd14a080
+        - ImageLabel (ImageLabel) @ 0x19ac57f9080
+  - LockBoardTimeGui (Part) @ 0x19aaaedba00
+    - SurfaceGui (SurfaceGui) @ 0x19a9caf0a80
+      - LockFrame (Frame) @ 0x19abd148280
+        - ImageLabel (ImageLabel) @ 0x19ac57fc080
+  - LockBoardbottom (Part) @ 0x19aaaf47080
+  - LockBoard (Part) @ 0x19aaaf47240
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/SuperPad
+- SuperPad (Model) @ 0x19a9ee45f00
+  - Base (Part) @ 0x19aa6639540
+    - TouchInterest (TouchTransmitter) @ 0x19abadb0cc0
+  - Part (Part) @ 0x19aa6639700
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/RainbowBlockLockBoard/LockBoardBlockGuiText
+- LockBoardBlockGuiText (Part) @ 0x19aaaed05c0
+  - SurfaceGui (SurfaceGui) @ 0x19aa5294680
+    - LockFrame (Frame) @ 0x19a9caf2880
+      - ImageLabel (ImageLabel) @ 0x19ac687a880
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaaed0780
+  - SurfaceGui (SurfaceGui) @ 0x19aa3bfb480
+    - LockFrame (Frame) @ 0x19a9cafe680
+      - ImageLabel (ImageLabel) @ 0x19ac6879080
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaaed0940
+  - SurfaceGui (SurfaceGui) @ 0x19aa3bfaa80
+    - LockFrame (Frame) @ 0x19a9caf3280
+      - ImageLabel (ImageLabel) @ 0x19ac6874880
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaaed0b00
+  - SurfaceGui (SurfaceGui) @ 0x19aa3bfa080
+    - LockFrame (Frame) @ 0x19a9caf3c80
+      - ImageLabel (ImageLabel) @ 0x19ac6878480
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaaed0cc0
+  - SurfaceGui (SurfaceGui) @ 0x19aa3bf9680
+    - LockFrame (Frame) @ 0x19abd9ec880
+      - ImageLabel (ImageLabel) @ 0x19ac687d880
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/RainbowBlockLockBoard/LockBoardBlockGuiGradient
+- LockBoardBlockGuiGradient (Part) @ 0x19aaaed0e80
+  - SurfaceGui (SurfaceGui) @ 0x19aa3bf8c80
+    - LockFrame (Frame) @ 0x19c09605080
+      - ImageLabel (ImageLabel) @ 0x19ac6873c80
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/RainbowBlockLockBoard/LockBoardBuyGui
+- LockBoardBuyGui (Part) @ 0x19aaaed1200
+  - SurfaceGui (SurfaceGui) @ 0x19aa3bf7880
+    - SkipButton (Frame) @ 0x19aa45d3c80
+      - imageBackgroundshadow (ImageLabel) @ 0x19ac687c080
+      - imageBackground (ImageLabel) @ 0x19ac6870080
+      - SkipButton (ImageButton) @ 0x19abd430080
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/RainbowBlockLockBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aa5dd60c0
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa7e43a40
+  - SurfaceGui (SurfaceGui) @ 0x19aa4207880
+    - LockFrame (Frame) @ 0x19a9faf3280
+      - ImageLabel (ImageLabel) @ 0x19ac6875480
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa63f900
+  - SurfaceGui (SurfaceGui) @ 0x19aa4206e80
+    - LockFrame (Frame) @ 0x19a9fafe680
+      - ImageLabel (ImageLabel) @ 0x19ac6873080
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa63fac0
+  - SurfaceGui (SurfaceGui) @ 0x19aa4206480
+    - LockFrame (Frame) @ 0x19a9fafd280
+      - ImageLabel (ImageLabel) @ 0x19ac6877880
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/SkipTimerLockBoard/LockBoardBuyGui
+- LockBoardBuyGui (Part) @ 0x19aaaf44680
+  - SurfaceGui (SurfaceGui) @ 0x19aa4208c80
+    - SkipButton (Frame) @ 0x19a9fafbe80
+      - imageBackgroundshadow (ImageLabel) @ 0x19ac9f8e480
+      - imageBackground (ImageLabel) @ 0x19ac9f8d880
+      - SkipButton (ImageButton) @ 0x19abd431080
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaaf44840
+  - SurfaceGui (SurfaceGui) @ 0x19aa4208280
+    - LockFrame (Frame) @ 0x19a9faf3c80
+      - ImageLabel (ImageLabel) @ 0x19ac9f8cc80
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/SkipTimerLockBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aaaf4c480
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaaf43c00
+  - SurfaceGui (SurfaceGui) @ 0x19c0a3eaa80
+    - LockFrame (Frame) @ 0x19a9fafa080
+      - ImageLabel (ImageLabel) @ 0x19ac9f86080
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaaf43dc0
+  - SurfaceGui (SurfaceGui) @ 0x19c0a3e6480
+    - LockFrame (Frame) @ 0x19a9faf0a80
+      - ImageLabel (ImageLabel) @ 0x19ac9f88480
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/GalaxyBlockLockBoard/LockBoardBlockGuiEpic
+- LockBoardBlockGuiEpic (Part) @ 0x19aaaf44140
+  - SurfaceGui (SurfaceGui) @ 0x19c0a3ea080
+    - LockFrame (Frame) @ 0x19a9faf2880
+      - Script (Script) @ 0x19ab1532c00
+      - ImageLabel (ImageLabel) @ 0x19ac9f83080
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaaf44300
+  - SurfaceGui (SurfaceGui) @ 0x19c0a3e4680
+    - LockFrame (Frame) @ 0x19a9faf1480
+      - ImageLabel (ImageLabel) @ 0x19ac9f83c80
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaaf444c0
+  - SurfaceGui (SurfaceGui) @ 0x19c0a3eb480
+    - LockFrame (Frame) @ 0x19a9faf0080
+      - ImageLabel (ImageLabel) @ 0x19ac9f87880
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/GalaxyBlockLockBoard/LockBoardBuyGui
+- LockBoardBuyGui (Part) @ 0x19aa5dd2e00
+  - SurfaceGui (SurfaceGui) @ 0x19c0a3ebe80
+    - SkipButton (Frame) @ 0x19a9fafaa80
+      - imageBackgroundshadow (ImageLabel) @ 0x19ac9f8c080
+      - imageBackground (ImageLabel) @ 0x19ac9f8a880
+      - SkipButton (ImageButton) @ 0x19abd43c080
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/GalaxyBlockLockBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aa5dd36c0
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/BlockGiverSuper1
+- BlockGiverSuper1 (Model) @ 0x19a9ee48200
+  - Settings/Instructions (Script) @ 0x19ab153f600
+  - Settings (Folder) @ 0x19ab5d021c0
+    - WeaponName (StringValue) | Value: "Unknown" @ 0x19c210f9300
+    - RegenTime (IntValue) | Value: 60 @ 0x19ab5d022a0
+    - RegenColor (BrickColorValue) [ValueObject] @ 0x19ab5d02380
+    - StartColor (BrickColorValue) [ValueObject] @ 0x19ab5d02460
+  - ColoredParts (Model) @ 0x19a9ee4e780
+    - TouchMe (Part) @ 0x19aaa33b4c0
+      - Mesh (CylinderMesh) @ 0x19c10b43500
+      - TouchInterest (TouchTransmitter) @ 0x19ab5771d60
+    - TopBottomColors (Part) @ 0x19aaa33b680
+      - Mesh (CylinderMesh) @ 0x19c10b47900
+    - Center (Part) @ 0x19aaa33b840
+      - Mesh (CylinderMesh) @ 0x19c10b44800
+    - TopBottomColors (Part) @ 0x19aaa33ba00
+      - Mesh (CylinderMesh) @ 0x19c10b41900
+  - LuckyBlock (Model) @ 0x19a9ee4ba00
+    - Model (Model) @ 0x19a9ee47e80
+      - newMesh (MeshPart) @ 0x19c120b2380
+      - newMesh (MeshPart) @ 0x19c120bbd80
+      - newMesh (MeshPart) @ 0x19c1f7b1900
+      - newMesh (MeshPart) @ 0x19c1f7b1200
+    - MeshPart (MeshPart) @ 0x19ac2b6bd80
+      - Glow (ParticleEmitter) @ 0x19a9ef96980
+      - Glow (ParticleEmitter) @ 0x19a9ef9c680
+  - GUI (Part) @ 0x19aa692bf40
+    - SurfaceGui (SurfaceGui) @ 0x19aa0360a80
+      - LockFrame (Frame) @ 0x19a9caff080
+        - ImageLabel (ImageLabel) @ 0x19ac9f86c80
+        - Text (TextLabel) @ 0x19abd43d080
+        - Text (TextLabel) @ 0x19abd438080
+      - Frame (Frame) @ 0x19aa0369680
+        - Time1 (TextLabel) @ 0x19aa42ec080
+        - Time2 (TextLabel) @ 0x19aa42eb080
+        - SkipButton (Frame) @ 0x19aa413a080
+          - TriggerButton (TextButton) @ 0x19c1cc4c880
+          - Button (TextButton) @ 0x19c1cc45080
+            - Frame (Frame) @ 0x19aa036be80
+            - Frame (Frame) @ 0x19aa0360080
+          - SkipButton (ImageButton) @ 0x19abd746080
+          - imageBackground (ImageLabel) @ 0x19ac9f89c80
+          - imageBackgroundshadow (ImageLabel) @ 0x19ac9f8b480
+  - Pipe (Part) @ 0x19aaaedadc0
+    - Mesh (CylinderMesh) @ 0x19c10b4da00
+  - Pipe (Part) @ 0x19aaaedbbc0
+    - Mesh (CylinderMesh) @ 0x19c10b40700
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/BlockGiverSuper2
+- BlockGiverSuper2 (Model) @ 0x19a9ee40400
+  - Settings/Instructions (Script) @ 0x19ab153f400
+  - Settings (Folder) @ 0x19ab5d01ba0
+    - WeaponName (StringValue) | Value: "Unknown" @ 0x19c210f9100
+    - RegenTime (IntValue) | Value: 60 @ 0x19ab5d013c0
+    - RegenColor (BrickColorValue) [ValueObject] @ 0x19ab5d01040
+    - StartColor (BrickColorValue) [ValueObject] @ 0x19ab5d00940
+  - ColoredParts (Model) @ 0x19a9ee4a500
+    - TopBottomColors (Part) @ 0x19aa5e48900
+      - Mesh (CylinderMesh) @ 0x19c10b44500
+    - Center (Part) @ 0x19aa5e48ac0
+      - Mesh (CylinderMesh) @ 0x19c10b4dc00
+      - Glue (Glue) @ 0x19abb81c480
+      - Glue (Glue) @ 0x19abb81c2c0
+      - Glue (Glue) @ 0x19abb81c100
+    - TopBottomColors (Part) @ 0x19aa5e48c80
+      - Mesh (CylinderMesh) @ 0x19c10b4d200
+    - TouchMe (Part) @ 0x19aa5e48e40
+      - Mesh (CylinderMesh) @ 0x19c10b40c00
+      - TouchInterest (TouchTransmitter) @ 0x19ab5771e40
+  - LuckyBlock (Model) @ 0x19a9ee4b680
+    - Model (Model) @ 0x19a9ee45800
+      - newMesh (MeshPart) @ 0x19c120b6d00
+      - newMesh (MeshPart) @ 0x19c120b5f00
+      - newMesh (MeshPart) @ 0x19c120b5100
+      - newMesh (MeshPart) @ 0x19c120b0780
+    - MeshPart (MeshPart) @ 0x19c120b1580
+      - Glow (ParticleEmitter) @ 0x19a9ef92780
+      - Glow (ParticleEmitter) @ 0x19a9ef90980
+  - Pipe (Part) @ 0x19aaae3af80
+    - Mesh (CylinderMesh) @ 0x19c10b49400
+  - GUI (Part) @ 0x19aaae3b140
+    - SurfaceGui (SurfaceGui) @ 0x19aa036b480
+      - LockFrame (Frame) @ 0x19a9cafc880
+        - ImageLabel (ImageLabel) @ 0x19aca2ba880
+        - Text (TextLabel) @ 0x19abd749080
+        - Text (TextLabel) @ 0x19abd74e080
+      - Frame (Frame) @ 0x19aa073be80
+        - Time1 (TextLabel) @ 0x19aa3c0b080
+        - Time2 (TextLabel) @ 0x19aa3c0a080
+        - SkipButton (Frame) @ 0x19aa3c13c80
+          - TriggerButton (TextButton) @ 0x19c1cc46480
+          - Button (TextButton) @ 0x19c1cc47880
+            - Frame (Frame) @ 0x19aa073d280
+            - Frame (Frame) @ 0x19aa0733c80
+          - SkipButton (ImageButton) @ 0x19abd744080
+          - imageBackground (ImageLabel) @ 0x19aca2b8480
+          - imageBackgroundshadow (ImageLabel) @ 0x19aca2b2480
+  - Pipe (Part) @ 0x19aaaedbd80
+    - Mesh (CylinderMesh) @ 0x19c10b45500
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/LockWallSuper
+- LockWallSuper (Model) @ 0x19a9ee46600
+  - Script (Script) @ 0x19ab153f200
+  - LockWall2 (Part) @ 0x19aaaf47400
+    - Mesh (CylinderMesh) @ 0x19c10b4ba00
+  - LockWall1 (Part) @ 0x19aaaf475c0
+    - Mesh (CylinderMesh) @ 0x19c10b4b500
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/DiamondBlockLockBoard
+- DiamondBlockLockBoard (Model) @ 0x19ab0a52000
+  - Script (Script) @ 0x19ab153c400
+  - LockBoardbottom (Part) @ 0x19aaaf46b40
+  - LockBoard (Part) @ 0x19aaaf46d00
+  - LockBoardTimeGui (Part) @ 0x19aa5dd1580
+    - Weld (Weld) @ 0x19abb819c40
+    - SurfaceGui (SurfaceGui) @ 0x19aa8834680
+      - LockFrame (Frame) @ 0x19aa07c6480
+        - ImageLabel (ImageLabel) @ 0x19c0828b480
+  - LockBoardOrGui (Part) @ 0x19aa5dd1740
+    - SurfaceGui (SurfaceGui) @ 0x19aa883b480
+      - LockFrame (Frame) @ 0x19aa07c5080
+        - ImageLabel (ImageLabel) @ 0x19c0828a880
+  - LockBoardGuiArrow (Part) @ 0x19aa5dd1900
+    - SurfaceGui (SurfaceGui) @ 0x19aa8838280
+      - LockFrame (Frame) @ 0x19aa07c3c80
+        - ImageLabel (ImageLabel) @ 0x19c08289c80
+  - LockBoardBlockGui (Part) @ 0x19aa5dd1ac0
+    - SurfaceGui (SurfaceGui) @ 0x19aaaf72880
+      - LockFrame (Frame) @ 0x19aa07cf080
+        - ImageLabel (ImageLabel) @ 0x19c0828c080
+  - LockBoardBlockGui (Part) @ 0x19aa5dd1c80
+    - SurfaceGui (SurfaceGui) @ 0x19aaaf7c880
+      - LockFrame (Frame) @ 0x19aa0757880
+        - ImageLabel (ImageLabel) @ 0x19c0828cc80
+  - LockBoardBlockGui (Part) @ 0x19aa5dd1e40
+    - SurfaceGui (SurfaceGui) @ 0x19aaaf77880
+      - LockFrame (Frame) @ 0x19aa241f080
+        - ImageLabel (ImageLabel) @ 0x19c0828d880
+  - LockBoardBlockGui (Part) @ 0x19aa5dd2000
+    - SurfaceGui (SurfaceGui) @ 0x19aaaf76e80
+      - LockFrame (Frame) @ 0x19aa2411e80
+        - ImageLabel (ImageLabel) @ 0x19c0828e480
+  - LockBoardBlockGuiGradient (Part) @ 0x19aa5dd21c0
+    - SurfaceGui (SurfaceGui) @ 0x19aaaf71480
+      - LockFrame (Frame) @ 0x19aa2410a80
+        - ImageLabel (ImageLabel) @ 0x19c08288480
+  - LockBoardBlockGui (Part) @ 0x19aa5dd2380
+    - SurfaceGui (SurfaceGui) @ 0x19aaaf7a080
+      - LockFrame (Frame) @ 0x19aa2416e80
+        - ImageLabel (ImageLabel) @ 0x19c0828f080
+  - LockBoardBuyGui (Part) @ 0x19aa5dd2540
+    - SurfaceGui (SurfaceGui) @ 0x19aaaf7aa80
+      - SkipButton (Frame) @ 0x19aa2413280
+        - imageBackgroundshadow (ImageLabel) @ 0x19c08285480
+        - imageBackground (ImageLabel) @ 0x19c08280080
+        - SkipButton (ImageButton) @ 0x19ac5670080
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/VoidBlockLockBoard
+- VoidBlockLockBoard (Model) @ 0x19ab0a5eb00
+  - Script (Script) @ 0x19ab153d000
+  - ParticleCore (Part) @ 0x19aaa3b6440
+    - Weld (Weld) @ 0x19abb8191c0
+    - Attachment (Attachment) @ 0x19ab1b7c380
+  - LockBoardBlockGui (Part) @ 0x19aaa3b6600
+    - SurfaceGui (SurfaceGui) @ 0x19aa3bff080
+      - LockFrame (Frame) @ 0x19ac5465a80
+        - ImageLabel (ImageLabel) @ 0x19c0f9b4880
+  - LockBoardBlockGui (Part) @ 0x19aaa3b67c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa3bfe680
+      - LockFrame (Frame) @ 0x19ac5465080
+        - ImageLabel (ImageLabel) @ 0x19c0f9be480
+  - LockBoardGuiArrow (Part) @ 0x19aaa3bf740
+    - SurfaceGui (SurfaceGui) @ 0x19aa3bfdc80
+      - LockFrame (Frame) @ 0x19ac5468280
+        - ImageLabel (ImageLabel) @ 0x19c0f9b2480
+  - LockBoardBlockGuiEpic (Part) @ 0x19aaa3bf900
+    - SurfaceGui (SurfaceGui) @ 0x19aa3bfd280
+      - LockFrame (Frame) @ 0x19ac5466e80
+        - Script (Script) @ 0x19ab1530e00
+        - ImageLabel (ImageLabel) @ 0x19c0f9bd880
+  - LockBoardBlockGui (Part) @ 0x19aaa3bfac0
+    - SurfaceGui (SurfaceGui) @ 0x19aa3bfc880
+      - LockFrame (Frame) @ 0x19ac5461e80
+        - ImageLabel (ImageLabel) @ 0x19c0f9bf080
+  - LockBoardBlockGui (Part) @ 0x19aaa3bfc80
+    - Weld (Weld) @ 0x19abb819380
+    - SurfaceGui (SurfaceGui) @ 0x19aa3bfbe80
+      - LockFrame (Frame) @ 0x19ac5460a80
+        - ImageLabel (ImageLabel) @ 0x19c0f9bb480
+  - effectCore (Part) @ 0x19c0cc72fc0
+    - SurfaceGui (SurfaceGui) @ 0x19aa3c10a80
+      - Frame (Frame) @ 0x19ac546b480
+      - images (Folder) @ 0x19ab6daf040
+        - questionmark (ImageLabel) @ 0x19c0f9b8480
+        - questionmark2 (ImageLabel) @ 0x19c0f9b6c80
+      - images2 (Folder) @ 0x19ab6dae6a0
+        - questionmark (ImageLabel) @ 0x19c0f9b0c80
+        - exclamationmark (ImageLabel) @ 0x19c1bdcf080
+        - atmark (ImageLabel) @ 0x19c1bdcc080
+        - moneymark (ImageLabel) @ 0x19c1bdc2480
+        - andmark (ImageLabel) @ 0x19c1bdcb480
+        - minusmark (ImageLabel) @ 0x19c1bdc4880
+        - plusmark (ImageLabel) @ 0x19c1bdc8480
+        - equalsmark (ImageLabel) @ 0x19c1bdce480
+  - LockBoardBuyGui (Part) @ 0x19c0cc7fe40
+    - SurfaceGui (SurfaceGui) @ 0x19aa3c10080
+      - SkipButton (Frame) @ 0x19ac5467880
+        - imageBackgroundshadow (ImageLabel) @ 0x19c0f9b3c80
+        - imageBackground (ImageLabel) @ 0x19c0f9b1880
+        - SkipButton (ImageButton) @ 0x19ac5671080
+  - LockBoardbottom (Part) @ 0x19aa5e71e40
+  - LockBoard (Part) @ 0x19aa5e72000
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/LimitedTimeBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa636ec0
+  - SurfaceGui (SurfaceGui) @ 0x19ac6107880
+    - LockFrame (Frame) @ 0x19ac6101e80
+      - ImageLabel (ImageLabel) @ 0x19c1bdc1880
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/LimitedTimeBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa637080
+  - SurfaceGui (SurfaceGui) @ 0x19ac5469680
+    - LockFrame (Frame) @ 0x19ac6100a80
+      - ImageLabel (ImageLabel) @ 0x19c1bdc0080
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/LimitedTimeBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa637240
+  - SurfaceGui (SurfaceGui) @ 0x19ac546aa80
+    - LockFrame (Frame) @ 0x19ac5463280
+      - ImageLabel (ImageLabel) @ 0x19c1bdc5480
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/LimitedTimeBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aaa637400
+  - Attachment (Attachment) @ 0x19ab1f33e00
+    - Fire (Fire) @ 0x19aa19d0440
+  - Attachment (Attachment) @ 0x19ab1f30200
+    - Fire (Fire) @ 0x19aa19d01c0
+  - Attachment (Attachment) @ 0x19ab1f33500
+    - Fire (Fire) @ 0x19aa19d0300
+  - Attachment (Attachment) @ 0x19ab1f32f00
+    - Fire (Fire) @ 0x19aa19d2240
+  - Attachment (Attachment) @ 0x19ab1f32a80
+    - Fire (Fire) @ 0x19aa19d5080
+  - Attachment (Attachment) @ 0x19ab1f30080
+    - Fire (Fire) @ 0x19aa19d51c0
+  - Attachment (Attachment) @ 0x19ab1f32180
+    - Fire (Fire) @ 0x19aa19d7100
+  - Attachment (Attachment) @ 0x19ab1f31d00
+    - Fire (Fire) @ 0x19aa19dda00
+  - Attachment (Attachment) @ 0x19ab1f31880
+    - Fire (Fire) @ 0x19aa19ddf00
+  - Attachment (Attachment) @ 0x19ab1f31400
+    - Fire (Fire) @ 0x19aa19dcd80
+  - Attachment (Attachment) @ 0x19ab1f30c80
+    - Fire (Fire) @ 0x19aa19d7380
+  - Attachment (Attachment) @ 0x19ab1f33c80
+    - Fire (Fire) @ 0x19aa19ddb40
+  - Attachment (Attachment) @ 0x19ab1f30b00
+    - Fire (Fire) @ 0x19aa19d6c00
+  - Attachment (Attachment) @ 0x19ab1f33b00
+    - Fire (Fire) @ 0x19aa19dd280
+  - Attachment (Attachment) @ 0x19ab1f33980
+    - Fire (Fire) @ 0x19aa19d6480
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/SuperLocked1
+- SuperLocked1 (BoolValue) | Value: true @ 0x19abd737780
+
+Found matching config root at path: Workspace/Workspace/Spawn4/Givers/SuperLocked2
+- SuperLocked2 (BoolValue) | Value: true @ 0x19abd730be0
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/SuperBlockLockBoard
+- SuperBlockLockBoard (Model) @ 0x19c1817cf00
+  - Script (Script) @ 0x19ab153e600
+  - LockBoardGuiArrow (Part) @ 0x19a9f562c40
+    - SurfaceGui (SurfaceGui) @ 0x19abd146480
+      - LockFrame (Frame) @ 0x19a97d26e80
+        - ImageLabel (ImageLabel) @ 0x19c1ff8d880
+  - LockBoardBlockGui (Part) @ 0x19a9f562e00
+    - SurfaceGui (SurfaceGui) @ 0x19abd14c880
+      - LockFrame (Frame) @ 0x19a97d2aa80
+        - ImageLabel (ImageLabel) @ 0x19c1ff8f080
+  - LockBoardBlockGui (Part) @ 0x19a9f562fc0
+    - SurfaceGui (SurfaceGui) @ 0x19abd14d280
+      - LockFrame (Frame) @ 0x19a97d2b480
+        - ImageLabel (ImageLabel) @ 0x19c1ff85480
+  - LockBoardBlockGui (Part) @ 0x19a9f563180
+    - SurfaceGui (SurfaceGui) @ 0x19c08486480
+      - LockFrame (Frame) @ 0x19a97d27880
+        - ImageLabel (ImageLabel) @ 0x19c1ff83080
+  - LockBoardBlockGui (Part) @ 0x19a9f563340
+    - SurfaceGui (SurfaceGui) @ 0x19c08483c80
+      - LockFrame (Frame) @ 0x19a97d20a80
+        - ImageLabel (ImageLabel) @ 0x19c1ff84880
+  - LockBoardOrGui (Part) @ 0x19aa3694a00
+    - SurfaceGui (SurfaceGui) @ 0x19c08484680
+      - LockFrame (Frame) @ 0x19a97d2dc80
+        - ImageLabel (ImageLabel) @ 0x19c1ff80080
+  - LockBoardBlockGui (Part) @ 0x19aa3694bc0
+    - SurfaceGui (SurfaceGui) @ 0x19c08486e80
+      - LockFrame (Frame) @ 0x19a97d2a080
+        - ImageLabel (ImageLabel) @ 0x19aa9f5b480
+  - LockBoardBuyGui (Part) @ 0x19aa3694d80
+    - SurfaceGui (SurfaceGui) @ 0x19c08487880
+      - SkipButton (Frame) @ 0x19a97d23c80
+        - imageBackgroundshadow (ImageLabel) @ 0x19aa9f5e480
+        - imageBackground (ImageLabel) @ 0x19aa9f53080
+        - SkipButton (ImageButton) @ 0x19a9f026080
+  - LockBoardTimeGui (Part) @ 0x19aa6ea67c0
+    - SurfaceGui (SurfaceGui) @ 0x19abd143c80
+      - LockFrame (Frame) @ 0x19a97d21480
+        - ImageLabel (ImageLabel) @ 0x19c1ff8a880
+  - LockBoard (Part) @ 0x19aabde2e00
+  - LockBoardbottom (Part) @ 0x19aabde2fc0
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/SuperPad
+- SuperPad (Model) @ 0x19c18170b00
+  - Base (Part) @ 0x19aa3695800
+    - Weld (Weld) @ 0x19ababc05c0
+    - Weld (Weld) @ 0x19ababc0940
+    - TouchInterest (TouchTransmitter) @ 0x19ab9dfe780
+  - Part (Part) @ 0x19aa36959c0
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/RainbowBlockLockBoard/LockBoardBuyGui
+- LockBoardBuyGui (Part) @ 0x19aa3695b80
+  - SurfaceGui (SurfaceGui) @ 0x19a977e2880
+    - SkipButton (Frame) @ 0x19a9eeeb480
+      - imageBackgroundshadow (ImageLabel) @ 0x19aa9f52480
+      - imageBackground (ImageLabel) @ 0x19aa9f59080
+      - SkipButton (ImageButton) @ 0x19c0d9ad080
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/RainbowBlockLockBoard/LockBoardBlockGuiGradient
+- LockBoardBlockGuiGradient (Part) @ 0x19aa3695f00
+  - SurfaceGui (SurfaceGui) @ 0x19a977e8c80
+    - LockFrame (Frame) @ 0x19abd9e3c80
+      - ImageLabel (ImageLabel) @ 0x19aa9f58480
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa36960c0
+  - SurfaceGui (SurfaceGui) @ 0x19a977e5a80
+    - LockFrame (Frame) @ 0x19abd9e6480
+      - ImageLabel (ImageLabel) @ 0x19aa9f50c80
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa3696280
+  - SurfaceGui (SurfaceGui) @ 0x19a977eaa80
+    - LockFrame (Frame) @ 0x19abd9e7880
+      - ImageLabel (ImageLabel) @ 0x19aa9f50080
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa3696440
+  - SurfaceGui (SurfaceGui) @ 0x19a977e3280
+    - LockFrame (Frame) @ 0x19abd9ee680
+      - ImageLabel (ImageLabel) @ 0x19aa9f5f080
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa3696600
+  - SurfaceGui (SurfaceGui) @ 0x19a977e5080
+    - LockFrame (Frame) @ 0x19abd9e0080
+      - ImageLabel (ImageLabel) @ 0x19aa9f57880
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/RainbowBlockLockBoard/LockBoardBlockGuiText
+- LockBoardBlockGuiText (Part) @ 0x19aa6633c00
+  - SurfaceGui (SurfaceGui) @ 0x19a977ed280
+    - LockFrame (Frame) @ 0x19abd9e6e80
+      - ImageLabel (ImageLabel) @ 0x19aa9f56c80
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/RainbowBlockLockBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aa5e4d440
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19c23de9e00
+  - SurfaceGui (SurfaceGui) @ 0x19aa42d0080
+    - LockFrame (Frame) @ 0x19abd9e9680
+      - ImageLabel (ImageLabel) @ 0x19aaa35b480
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19c23de7cc0
+  - SurfaceGui (SurfaceGui) @ 0x19aa42d1480
+    - LockFrame (Frame) @ 0x19abd9e3280
+      - ImageLabel (ImageLabel) @ 0x19aaa351880
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa597d7c0
+  - SurfaceGui (SurfaceGui) @ 0x19aa42d1e80
+    - LockFrame (Frame) @ 0x19abd9ebe80
+      - ImageLabel (ImageLabel) @ 0x19aaa353c80
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/SkipTimerLockBoard/LockBoardBuyGui
+- LockBoardBuyGui (Part) @ 0x19aa5acecc0
+  - SurfaceGui (SurfaceGui) @ 0x19aa42d2880
+    - SkipButton (Frame) @ 0x19abd9e0a80
+      - imageBackgroundshadow (ImageLabel) @ 0x19aaa358480
+      - imageBackground (ImageLabel) @ 0x19aaa355480
+      - SkipButton (ImageButton) @ 0x19ac59fd080
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa554840
+  - SurfaceGui (SurfaceGui) @ 0x19aa42d0a80
+    - LockFrame (Frame) @ 0x19abd9edc80
+      - ImageLabel (ImageLabel) @ 0x19aaa354880
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/SkipTimerLockBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aabde21c0
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/GalaxyBlockLockBoard/LockBoardBuyGui
+- LockBoardBuyGui (Part) @ 0x19aa368c9c0
+  - SurfaceGui (SurfaceGui) @ 0x19ab244e680
+    - SkipButton (Frame) @ 0x19aa2dde680
+      - imageBackgroundshadow (ImageLabel) @ 0x19aaa356c80
+      - imageBackground (ImageLabel) @ 0x19ab8564880
+      - SkipButton (ImageButton) @ 0x19ac685c080
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa368cd40
+  - SurfaceGui (SurfaceGui) @ 0x19ab244c880
+    - LockFrame (Frame) @ 0x19aa2ddaa80
+      - ImageLabel (ImageLabel) @ 0x19aaa35c080
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa368cf00
+  - SurfaceGui (SurfaceGui) @ 0x19a9cafaa80
+    - LockFrame (Frame) @ 0x19aa2dd6e80
+      - ImageLabel (ImageLabel) @ 0x19aaa357880
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/GalaxyBlockLockBoard/LockBoardBlockGuiEpic
+- LockBoardBlockGuiEpic (Part) @ 0x19aa6633340
+  - SurfaceGui (SurfaceGui) @ 0x19a977e3c80
+    - LockFrame (Frame) @ 0x19aa2dd3280
+      - Script (Script) @ 0x19ab153d600
+      - ImageLabel (ImageLabel) @ 0x19aaa350080
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa6633500
+  - SurfaceGui (SurfaceGui) @ 0x19a977ee680
+    - LockFrame (Frame) @ 0x19aa2dd9680
+      - ImageLabel (ImageLabel) @ 0x19aaa350c80
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa66336c0
+  - SurfaceGui (SurfaceGui) @ 0x19a977e7880
+    - LockFrame (Frame) @ 0x19abd9e5a80
+      - ImageLabel (ImageLabel) @ 0x19aaa35a880
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/GalaxyBlockLockBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aa5e4d7c0
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/BlockGiverSuper1
+- BlockGiverSuper1 (Model) @ 0x19c18175480
+  - Settings/Instructions (Script) @ 0x19ab1538800
+  - Settings (Folder) @ 0x19a9efcdfa0
+    - WeaponName (StringValue) | Value: "Unknown" @ 0x19c0bbeb900
+    - RegenTime (IntValue) | Value: 60 @ 0x19a9efcb300
+    - RegenColor (BrickColorValue) [ValueObject] @ 0x19a9efc98c0
+    - StartColor (BrickColorValue) [ValueObject] @ 0x19a9efcb4c0
+  - ColoredParts (Model) @ 0x19c18176280
+    - TouchMe (Part) @ 0x19aabdebbc0
+      - Mesh (CylinderMesh) @ 0x19c14edfa00
+      - TouchInterest (TouchTransmitter) @ 0x19ab0debf40
+    - TopBottomColors (Part) @ 0x19aabdeecc0
+      - Mesh (CylinderMesh) @ 0x19c14edbe00
+    - Center (Part) @ 0x19aabdeee80
+      - Mesh (CylinderMesh) @ 0x19c14ed0100
+      - Glue (Glue) @ 0x19ababc2fc0
+      - Glue (Glue) @ 0x19ababc3340
+      - Glue (Glue) @ 0x19ababc36c0
+    - TopBottomColors (Part) @ 0x19aabdef040
+      - Mesh (CylinderMesh) @ 0x19c14ed1200
+  - LuckyBlock (Model) @ 0x19c18175100
+    - Model (Model) @ 0x19c18171200
+      - newMesh (MeshPart) @ 0x19c00ff3500
+      - newMesh (MeshPart) @ 0x19c00ffd280
+      - newMesh (MeshPart) @ 0x19c00ff8900
+      - newMesh (MeshPart) @ 0x19c00ff5b80
+    - MeshPart (MeshPart) @ 0x19c00ff9000
+      - Glow (ParticleEmitter) @ 0x19a9eac0680
+      - Glow (ParticleEmitter) @ 0x19a9eac2480
+  - Pipe (Part) @ 0x19aa368bbc0
+    - Mesh (CylinderMesh) @ 0x19c14ed1f00
+  - Pipe (Part) @ 0x19aa368bd80
+    - Mesh (CylinderMesh) @ 0x19c14ed1500
+  - GUI (Part) @ 0x19aa368bf40
+    - SurfaceGui (SurfaceGui) @ 0x19aa455dc80
+      - LockFrame (Frame) @ 0x19abd144680
+        - ImageLabel (ImageLabel) @ 0x19ab8563c80
+        - Text (TextLabel) @ 0x19aa8748080
+        - Text (TextLabel) @ 0x19aa8746080
+      - Frame (Frame) @ 0x19aa4557880
+        - Time1 (TextLabel) @ 0x19aa430a080
+        - Time2 (TextLabel) @ 0x19aa430b080
+        - SkipButton (Frame) @ 0x19aa42d5080
+          - TriggerButton (TextButton) @ 0x19c111f5080
+          - Button (TextButton) @ 0x19c111fdc80
+            - Frame (Frame) @ 0x19aa4553c80
+            - Frame (Frame) @ 0x19aa455b480
+          - SkipButton (ImageButton) @ 0x19aa874c080
+          - imageBackground (ImageLabel) @ 0x19ab8563080
+          - imageBackgroundshadow (ImageLabel) @ 0x19ab8565480
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/BlockGiverSuper2
+- BlockGiverSuper2 (Model) @ 0x19c18175800
+  - Settings/Instructions (Script) @ 0x19ab1538e00
+  - Settings (Folder) @ 0x19ab993a500
+    - WeaponName (StringValue) | Value: "Unknown" @ 0x19c0bbeb700
+    - RegenTime (IntValue) | Value: 60 @ 0x19ab993d280
+    - RegenColor (BrickColorValue) [ValueObject] @ 0x19ab993c3a0
+    - StartColor (BrickColorValue) [ValueObject] @ 0x19ab993a5e0
+  - ColoredParts (Model) @ 0x19c18171c80
+    - TouchMe (Part) @ 0x19aabdef580
+      - Mesh (CylinderMesh) @ 0x19c14ed0300
+      - TouchInterest (TouchTransmitter) @ 0x19ab577ef60
+    - TopBottomColors (Part) @ 0x19aabdef740
+      - Mesh (CylinderMesh) @ 0x19c14edab00
+    - Center (Part) @ 0x19aabdef900
+      - Mesh (CylinderMesh) @ 0x19c14ed9900
+      - Glue (Glue) @ 0x19ababc3a40
+      - Glue (Glue) @ 0x19ababcb840
+      - Glue (Glue) @ 0x19ababc67c0
+    - TopBottomColors (Part) @ 0x19aabdefac0
+      - Mesh (CylinderMesh) @ 0x19c14edb300
+      - Weld (Weld) @ 0x19ababc6b40
+  - LuckyBlock (Model) @ 0x19c18174300
+    - Model (Model) @ 0x19c18177080
+      - newMesh (MeshPart) @ 0x19c00ff7e80
+      - newMesh (MeshPart) @ 0x19c00ff8200
+      - newMesh (MeshPart) @ 0x19c00ff0780
+      - newMesh (MeshPart) @ 0x19c00ff2700
+    - MeshPart (MeshPart) @ 0x19c00ff2380
+      - Glow (ParticleEmitter) @ 0x19a9eacba80
+      - Glow (ParticleEmitter) @ 0x19a9eac6380
+  - Pipe (Part) @ 0x19aa368b680
+    - Mesh (CylinderMesh) @ 0x19c14ed2f00
+  - Pipe (Part) @ 0x19aa368b840
+    - Mesh (CylinderMesh) @ 0x19c14eddb00
+    - Weld (Weld) @ 0x19ababc6ec0
+  - GUI (Part) @ 0x19aa368ba00
+    - SurfaceGui (SurfaceGui) @ 0x19aa4559680
+      - LockFrame (Frame) @ 0x19abd14be80
+        - ImageLabel (ImageLabel) @ 0x19ab8561880
+        - Text (TextLabel) @ 0x19aa874a080
+        - Text (TextLabel) @ 0x19aa874b080
+      - Frame (Frame) @ 0x19aa4556e80
+        - Time1 (TextLabel) @ 0x19aa3b4b080
+        - Time2 (TextLabel) @ 0x19aa3b4c080
+        - SkipButton (Frame) @ 0x19aa42d6e80
+          - TriggerButton (TextButton) @ 0x19c111f8c80
+          - Button (TextButton) @ 0x19c111f3c80
+            - Frame (Frame) @ 0x19aa4556480
+            - Frame (Frame) @ 0x19aa4550080
+          - SkipButton (ImageButton) @ 0x19aa8749080
+          - imageBackground (ImageLabel) @ 0x19ab856b480
+          - imageBackgroundshadow (ImageLabel) @ 0x19ab8560c80
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/LockWallSuper
+- LockWallSuper (Model) @ 0x19c18174d80
+  - Script (Script) @ 0x19ab1539000
+  - LockWall1 (Part) @ 0x19aabde2a80
+    - Mesh (CylinderMesh) @ 0x19c14edfe00
+  - LockWall2 (Part) @ 0x19aabde2c40
+    - Mesh (CylinderMesh) @ 0x19c14edd100
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/DiamondBlockLockBoard
+- DiamondBlockLockBoard (Model) @ 0x19c0d32f900
+  - Script (Script) @ 0x19ab1539800
+  - LockBoardBuyGui (Part) @ 0x19aa3682000
+    - SurfaceGui (SurfaceGui) @ 0x19a977ea080
+      - SkipButton (Frame) @ 0x19c083baa80
+        - imageBackgroundshadow (ImageLabel) @ 0x19ab86bcc80
+        - imageBackground (ImageLabel) @ 0x19ab86b0080
+        - SkipButton (ImageButton) @ 0x19aac56e080
+  - LockBoardBlockGui (Part) @ 0x19aa36821c0
+    - SurfaceGui (SurfaceGui) @ 0x19a977e0a80
+      - LockFrame (Frame) @ 0x19c083b7880
+        - ImageLabel (ImageLabel) @ 0x19ab86b1880
+  - LockBoardBlockGuiGradient (Part) @ 0x19aa3682380
+    - SurfaceGui (SurfaceGui) @ 0x19a977e6480
+      - LockFrame (Frame) @ 0x19c083bb480
+        - ImageLabel (ImageLabel) @ 0x19ab86b9c80
+  - LockBoardBlockGui (Part) @ 0x19aa3682540
+    - SurfaceGui (SurfaceGui) @ 0x19a977e0080
+      - LockFrame (Frame) @ 0x19c06b7c880
+        - ImageLabel (ImageLabel) @ 0x19ab86bf080
+  - LockBoardBlockGui (Part) @ 0x19aa3682700
+    - SurfaceGui (SurfaceGui) @ 0x19a977e6e80
+      - LockFrame (Frame) @ 0x19c06b73280
+        - ImageLabel (ImageLabel) @ 0x19ab86ba880
+  - LockBoardBlockGui (Part) @ 0x19aa36828c0
+    - SurfaceGui (SurfaceGui) @ 0x19a977e9680
+      - LockFrame (Frame) @ 0x19c06b7d280
+        - ImageLabel (ImageLabel) @ 0x19ab86b3c80
+  - LockBoardBlockGui (Part) @ 0x19aa3682a80
+    - SurfaceGui (SurfaceGui) @ 0x19a9cafbe80
+      - LockFrame (Frame) @ 0x19c06b71480
+        - ImageLabel (ImageLabel) @ 0x19ab86b0c80
+  - LockBoardGuiArrow (Part) @ 0x19aa3682c40
+    - SurfaceGui (SurfaceGui) @ 0x19a9caf4680
+      - LockFrame (Frame) @ 0x19c06b71e80
+        - ImageLabel (ImageLabel) @ 0x19ab86b4880
+  - LockBoardOrGui (Part) @ 0x19aa3682e00
+    - SurfaceGui (SurfaceGui) @ 0x19a9caf5080
+      - LockFrame (Frame) @ 0x19c06b70a80
+        - ImageLabel (ImageLabel) @ 0x19ab86bc080
+  - LockBoardTimeGui (Part) @ 0x19aa3682fc0
+    - Weld (Weld) @ 0x19ababc1e40
+    - SurfaceGui (SurfaceGui) @ 0x19a9caf7880
+      - LockFrame (Frame) @ 0x19c06b75080
+        - ImageLabel (ImageLabel) @ 0x19ab86b3080
+  - LockBoard (Part) @ 0x19aa5e4c9c0
+  - LockBoardbottom (Part) @ 0x19aa5e4cb80
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/VoidBlockLockBoard
+- VoidBlockLockBoard (Model) @ 0x19a9ee46d00
+  - Script (Script) @ 0x19ab1534400
+  - LockBoardbottom (Part) @ 0x19ac5249a80
+  - LockBoard (Part) @ 0x19ac5240cc0
+  - LockBoardBlockGui (Part) @ 0x19aa5dd9380
+    - Weld (Weld) @ 0x19abb81e240
+    - SurfaceGui (SurfaceGui) @ 0x19aa3d10080
+      - LockFrame (Frame) @ 0x19ab244d280
+        - ImageLabel (ImageLabel) @ 0x19aba08c080
+  - LockBoardBlockGui (Part) @ 0x19aa5dd9540
+    - SurfaceGui (SurfaceGui) @ 0x19aa3c1f080
+      - LockFrame (Frame) @ 0x19ab2448280
+        - ImageLabel (ImageLabel) @ 0x19aba086080
+  - LockBoardBlockGuiEpic (Part) @ 0x19aa5dd9700
+    - SurfaceGui (SurfaceGui) @ 0x19aa3c1e680
+      - LockFrame (Frame) @ 0x19ab2440080
+        - Script (Script) @ 0x19ab1534600
+        - ImageLabel (ImageLabel) @ 0x19aba08e480
+  - LockBoardGuiArrow (Part) @ 0x19aa5dd98c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa3c1dc80
+      - LockFrame (Frame) @ 0x19ab244be80
+        - ImageLabel (ImageLabel) @ 0x19aba080080
+  - LockBoardBlockGui (Part) @ 0x19aa5dd9a80
+    - SurfaceGui (SurfaceGui) @ 0x19aa3c1d280
+      - LockFrame (Frame) @ 0x19ab2445a80
+        - ImageLabel (ImageLabel) @ 0x19aba081880
+  - LockBoardBlockGui (Part) @ 0x19aa5dd9c40
+    - SurfaceGui (SurfaceGui) @ 0x19aa3c1c880
+      - LockFrame (Frame) @ 0x19ab2440a80
+        - ImageLabel (ImageLabel) @ 0x19aba08d880
+  - ParticleCore (Part) @ 0x19aa5dd9e00
+    - Weld (Weld) @ 0x19abb81e080
+    - Attachment (Attachment) @ 0x19ab1b7d400
+  - LockBoardBuyGui (Part) @ 0x19aa5dd9fc0
+    - SurfaceGui (SurfaceGui) @ 0x19aa3c1be80
+      - SkipButton (Frame) @ 0x19ab2447880
+        - imageBackgroundshadow (ImageLabel) @ 0x19aba080c80
+        - imageBackground (ImageLabel) @ 0x19aba088480
+        - SkipButton (ImageButton) @ 0x19abd0e1080
+  - effectCore (Part) @ 0x19aa5dda180
+    - SurfaceGui (SurfaceGui) @ 0x19aa3c1b480
+      - Frame (Frame) @ 0x19ab244f080
+      - images (Folder) @ 0x19ab5d00b00
+        - questionmark (ImageLabel) @ 0x19aba089c80
+        - questionmark2 (ImageLabel) @ 0x19aba086c80
+      - images2 (Folder) @ 0x19ab5d00a20
+        - questionmark (ImageLabel) @ 0x19aba08b480
+        - exclamationmark (ImageLabel) @ 0x19aba085480
+        - atmark (ImageLabel) @ 0x19aba08cc80
+        - moneymark (ImageLabel) @ 0x19aba08a880
+        - andmark (ImageLabel) @ 0x19ac57fd880
+        - minusmark (ImageLabel) @ 0x19ac57f2480
+        - plusmark (ImageLabel) @ 0x19ac57fcc80
+        - equalsmark (ImageLabel) @ 0x19ac57f3080
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/LimitedTimeBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aa5964140
+  - Attachment (Attachment) @ 0x19ab1b7b180
+    - Fire (Fire) @ 0x19c0c134400
+  - Attachment (Attachment) @ 0x19ab1b7b000
+    - Fire (Fire) @ 0x19c0c136d40
+  - Attachment (Attachment) @ 0x19ab1b7ae80
+    - Fire (Fire) @ 0x19c0c13e400
+  - Attachment (Attachment) @ 0x19ab1b7ad00
+    - Fire (Fire) @ 0x19c0c136480
+  - Attachment (Attachment) @ 0x19ab1b7ab80
+    - Fire (Fire) @ 0x19c0c137ec0
+  - Attachment (Attachment) @ 0x19ab1b7aa00
+    - Fire (Fire) @ 0x19c0c134a40
+  - Attachment (Attachment) @ 0x19ab1b7a880
+    - Fire (Fire) @ 0x19c0c138000
+  - Attachment (Attachment) @ 0x19ab1b7a700
+    - Fire (Fire) @ 0x19c0c13af80
+  - Attachment (Attachment) @ 0x19ab1b7a580
+    - Fire (Fire) @ 0x19c0c130940
+  - Attachment (Attachment) @ 0x19ab1b7a400
+    - Fire (Fire) @ 0x19c0c130800
+  - Attachment (Attachment) @ 0x19ab1b7a280
+    - Fire (Fire) @ 0x19c0c134cc0
+  - Attachment (Attachment) @ 0x19ab1b7a100
+    - Fire (Fire) @ 0x19c0c139040
+  - Attachment (Attachment) @ 0x19ab1b79f80
+    - Fire (Fire) @ 0x19c0c13b980
+  - Attachment (Attachment) @ 0x19ab1b79e00
+    - Fire (Fire) @ 0x19c0c1338c0
+  - Attachment (Attachment) @ 0x19ab1b79c80
+    - Fire (Fire) @ 0x19c0c13b340
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/LimitedTimeBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa5973a40
+  - SurfaceGui (SurfaceGui) @ 0x19abd14b480
+    - LockFrame (Frame) @ 0x19abd14e680
+      - ImageLabel (ImageLabel) @ 0x19ac57fa880
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/LimitedTimeBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa7e4e400
+  - SurfaceGui (SurfaceGui) @ 0x19abd141e80
+    - LockFrame (Frame) @ 0x19abd14dc80
+      - ImageLabel (ImageLabel) @ 0x19ac57f5480
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/LimitedTimeBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa9f41200
+  - SurfaceGui (SurfaceGui) @ 0x19abd14aa80
+    - LockFrame (Frame) @ 0x19abd143280
+      - ImageLabel (ImageLabel) @ 0x19ac57f9c80
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/SuperLocked1
+- SuperLocked1 (BoolValue) | Value: true @ 0x19ab1478ac0
+
+Found matching config root at path: Workspace/Workspace/Spawn3/Givers/SuperLocked2
+- SuperLocked2 (BoolValue) | Value: true @ 0x19ab1479000
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/SuperBlockLockBoard
+- SuperBlockLockBoard (Model) @ 0x19c0d32ba00
+  - Script (Script) @ 0x19ab1537200
+  - LockBoardTimeGui (Part) @ 0x19a9f578c80
+    - SurfaceGui (SurfaceGui) @ 0x19aa529aa80
+      - LockFrame (Frame) @ 0x19a9adbd280
+        - ImageLabel (ImageLabel) @ 0x19aafb52480
+  - LockBoardGuiArrow (Part) @ 0x19a9f578e40
+    - SurfaceGui (SurfaceGui) @ 0x19aa529a080
+      - LockFrame (Frame) @ 0x19a9adbaa80
+        - ImageLabel (ImageLabel) @ 0x19aafb53080
+  - LockBoardBlockGui (Part) @ 0x19a9f579000
+    - SurfaceGui (SurfaceGui) @ 0x19aa5299680
+      - LockFrame (Frame) @ 0x19a9adb9680
+        - ImageLabel (ImageLabel) @ 0x19aafb53c80
+  - LockBoardBlockGui (Part) @ 0x19a9f5791c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa5298c80
+      - LockFrame (Frame) @ 0x19a9adb5a80
+        - ImageLabel (ImageLabel) @ 0x19aafb54880
+  - LockBoardBlockGui (Part) @ 0x19a9f579380
+    - SurfaceGui (SurfaceGui) @ 0x19aa5298280
+      - LockFrame (Frame) @ 0x19a9adb3280
+        - ImageLabel (ImageLabel) @ 0x19aafb55480
+  - LockBoardOrGui (Part) @ 0x19a9f579540
+    - SurfaceGui (SurfaceGui) @ 0x19aa5296e80
+      - LockFrame (Frame) @ 0x19aa45d0a80
+        - ImageLabel (ImageLabel) @ 0x19aca2bf080
+  - LockBoardBlockGui (Part) @ 0x19a9f579700
+    - SurfaceGui (SurfaceGui) @ 0x19aa5296480
+      - LockFrame (Frame) @ 0x19aa45d6e80
+        - ImageLabel (ImageLabel) @ 0x19c09893c80
+  - LockBoardBuyGui (Part) @ 0x19aa6ea21c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa5295a80
+      - SkipButton (Frame) @ 0x19aa45da080
+        - imageBackgroundshadow (ImageLabel) @ 0x19c06eea880
+        - imageBackground (ImageLabel) @ 0x19c0fad6080
+        - SkipButton (ImageButton) @ 0x19ac59f9080
+  - LockBoard (Part) @ 0x19aaaed6980
+  - LockBoardbottom (Part) @ 0x19aaaed6b40
+  - LockBoardBlockGui (Part) @ 0x19aa5ddb680
+    - SurfaceGui (SurfaceGui) @ 0x19aa5297880
+      - LockFrame (Frame) @ 0x19aa45d9680
+        - ImageLabel (ImageLabel) @ 0x19aca2b6080
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/SuperPad
+- SuperPad (Model) @ 0x19c0d325b80
+  - Part (Part) @ 0x19aa5ddba00
+  - Base (Part) @ 0x19aa5ddbbc0
+    - TouchInterest (TouchTransmitter) @ 0x19ab5771ba0
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/RainbowBlockLockBoard/LockBoardBuyGui
+- LockBoardBuyGui (Part) @ 0x19aa9f49a80
+  - SurfaceGui (SurfaceGui) @ 0x19aa42af080
+    - SkipButton (Frame) @ 0x19aa45d5080
+      - imageBackgroundshadow (ImageLabel) @ 0x19c0fadf080
+      - imageBackground (ImageLabel) @ 0x19c0fad9080
+      - SkipButton (ImageButton) @ 0x19ac59f6080
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/RainbowBlockLockBoard/LockBoardBlockGuiGradient
+- LockBoardBlockGuiGradient (Part) @ 0x19aa9f49e00
+  - SurfaceGui (SurfaceGui) @ 0x19aa4200a80
+    - LockFrame (Frame) @ 0x19aa45d0080
+      - ImageLabel (ImageLabel) @ 0x19c0fade480
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa9f49fc0
+  - SurfaceGui (SurfaceGui) @ 0x19aa4201480
+    - LockFrame (Frame) @ 0x19aa45d1480
+      - ImageLabel (ImageLabel) @ 0x19c0fada880
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa9f4a180
+  - SurfaceGui (SurfaceGui) @ 0x19aa4201e80
+    - LockFrame (Frame) @ 0x19aa45d1e80
+      - ImageLabel (ImageLabel) @ 0x19c0fad5480
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa9f4a340
+  - SurfaceGui (SurfaceGui) @ 0x19aa4202880
+    - LockFrame (Frame) @ 0x19aa45ddc80
+      - ImageLabel (ImageLabel) @ 0x19c0fadcc80
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/RainbowBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa9f4a500
+  - SurfaceGui (SurfaceGui) @ 0x19aa4203280
+    - LockFrame (Frame) @ 0x19aa45dd280
+      - ImageLabel (ImageLabel) @ 0x19c0fad9c80
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/RainbowBlockLockBoard/LockBoardBlockGuiText
+- LockBoardBlockGuiText (Part) @ 0x19aa9f4a6c0
+  - SurfaceGui (SurfaceGui) @ 0x19aa4203c80
+    - LockFrame (Frame) @ 0x19aa45d4680
+      - ImageLabel (ImageLabel) @ 0x19c0fad0c80
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/RainbowBlockLockBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aaaf4dec0
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa9f4af80
+  - SurfaceGui (SurfaceGui) @ 0x19aa413c880
+    - LockFrame (Frame) @ 0x19c0d9cb480
+      - ImageLabel (ImageLabel) @ 0x19a9b6fd880
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa9f4b140
+  - SurfaceGui (SurfaceGui) @ 0x19aa413d280
+    - LockFrame (Frame) @ 0x19c0d9cc880
+      - ImageLabel (ImageLabel) @ 0x19a9b6f2480
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa9f4b300
+  - SurfaceGui (SurfaceGui) @ 0x19aa413dc80
+    - LockFrame (Frame) @ 0x19c0d9c7880
+      - ImageLabel (ImageLabel) @ 0x19a9b6f9c80
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/SkipTimerLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa632700
+  - SurfaceGui (SurfaceGui) @ 0x19aa413e680
+    - LockFrame (Frame) @ 0x19c0d9caa80
+      - ImageLabel (ImageLabel) @ 0x19a9b6f0080
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/SkipTimerLockBoard/LockBoardBuyGui
+- LockBoardBuyGui (Part) @ 0x19aaa6328c0
+  - SurfaceGui (SurfaceGui) @ 0x19aa5290080
+    - SkipButton (Frame) @ 0x19c0d9ca080
+      - imageBackgroundshadow (ImageLabel) @ 0x19a9b6fe480
+      - imageBackground (ImageLabel) @ 0x19a9b6f3c80
+      - SkipButton (ImageButton) @ 0x19ac59f1080
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/SkipTimerLockBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aabde1c80
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/GalaxyBlockLockBoard/LockBoardBuyGui
+- LockBoardBuyGui (Part) @ 0x19aa9f4ee80
+  - SurfaceGui (SurfaceGui) @ 0x19aa3d1b480
+    - SkipButton (Frame) @ 0x19c0d9cbe80
+      - imageBackgroundshadow (ImageLabel) @ 0x19a9b6f7880
+      - imageBackground (ImageLabel) @ 0x19a9b6f9080
+      - SkipButton (ImageButton) @ 0x19ac59f3080
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa632a80
+  - SurfaceGui (SurfaceGui) @ 0x19aa3d1f080
+    - LockFrame (Frame) @ 0x19c0d9c8280
+      - ImageLabel (ImageLabel) @ 0x19a9b6f8480
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaa632c40
+  - SurfaceGui (SurfaceGui) @ 0x19aa3d1e680
+    - LockFrame (Frame) @ 0x19c0d9cf080
+      - ImageLabel (ImageLabel) @ 0x19a9b6f6c80
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/GalaxyBlockLockBoard/LockBoardBlockGuiEpic
+- LockBoardBlockGuiEpic (Part) @ 0x19aaaeda6c0
+  - SurfaceGui (SurfaceGui) @ 0x19aa3d1dc80
+    - LockFrame (Frame) @ 0x19c0d9cd280
+      - Script (Script) @ 0x19ab1536e00
+      - ImageLabel (ImageLabel) @ 0x19a9b6fa880
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaaedaa40
+  - SurfaceGui (SurfaceGui) @ 0x19aa3d1c880
+    - LockFrame (Frame) @ 0x19c0d9cdc80
+      - ImageLabel (ImageLabel) @ 0x19a9b6ff080
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/GalaxyBlockLockBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aaaedac00
+  - SurfaceGui (SurfaceGui) @ 0x19aa3d1be80
+    - LockFrame (Frame) @ 0x19c0d9c9680
+      - ImageLabel (ImageLabel) @ 0x19a9b6f1880
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/GalaxyBlockLockBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aa5e47cc0
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/BlockGiverSuper1
+- BlockGiverSuper1 (Model) @ 0x19c0d32cf00
+  - Settings/Instructions (Script) @ 0x19ab1537c00
+  - Settings (Folder) @ 0x19ab99391c0
+    - WeaponName (StringValue) | Value: "Unknown" @ 0x19c0bbed400
+    - RegenTime (IntValue) | Value: 60 @ 0x19ab9938f20
+    - RegenColor (BrickColorValue) [ValueObject] @ 0x19ab9937160
+    - StartColor (BrickColorValue) [ValueObject] @ 0x19ab993d8a0
+  - ColoredParts (Model) @ 0x19c0d32c800
+    - TouchMe (Part) @ 0x19aaaf42a80
+      - Mesh (CylinderMesh) @ 0x19c14ed6500
+      - TouchInterest (TouchTransmitter) @ 0x19ab577d360
+    - TopBottomColors (Part) @ 0x19aaaf42c40
+      - Mesh (CylinderMesh) @ 0x19c14ed8b00
+    - Center (Part) @ 0x19aaaf42e00
+      - Mesh (CylinderMesh) @ 0x19c14ed8200
+    - TopBottomColors (Part) @ 0x19aaaf42fc0
+      - Mesh (CylinderMesh) @ 0x19c14ed1a00
+  - LuckyBlock (Model) @ 0x19c0d32d280
+    - Model (Model) @ 0x19c0d325480
+      - newMesh (MeshPart) @ 0x19aa37aba00
+      - newMesh (MeshPart) @ 0x19aa37abd80
+      - newMesh (MeshPart) @ 0x19aa37ac100
+      - newMesh (MeshPart) @ 0x19aa37ac480
+    - MeshPart (MeshPart) @ 0x19aa37ab680
+      - Glow (ParticleEmitter) @ 0x19c0c7c2a80
+      - Glow (ParticleEmitter) @ 0x19c0c7c9980
+  - Pipe (Part) @ 0x19aa5accb80
+    - Mesh (CylinderMesh) @ 0x19c14ed0700
+  - Pipe (Part) @ 0x19aa5ddb4c0
+    - Mesh (CylinderMesh) @ 0x19c14edae00
+  - GUI (Part) @ 0x19aa5ddeb00
+    - SurfaceGui (SurfaceGui) @ 0x19c1be09680
+      - LockFrame (Frame) @ 0x19aa3aeb480
+        - ImageLabel (ImageLabel) @ 0x19c04b59c80
+        - Text (TextLabel) @ 0x19c1dcae080
+        - Text (TextLabel) @ 0x19c1dca6080
+      - Frame (Frame) @ 0x19c1be00080
+        - Time1 (TextLabel) @ 0x19aa4215080
+        - Time2 (TextLabel) @ 0x19aa4216080
+        - SkipButton (Frame) @ 0x19aa413f080
+          - TriggerButton (TextButton) @ 0x19c04261480
+          - Button (TextButton) @ 0x19c04268c80
+            - Frame (Frame) @ 0x19c1be03c80
+            - Frame (Frame) @ 0x19c1be06480
+          - SkipButton (ImageButton) @ 0x19c1dcab080
+          - imageBackground (ImageLabel) @ 0x19c04b5a880
+          - imageBackgroundshadow (ImageLabel) @ 0x19c04b5e480
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/BlockGiverSuper2
+- BlockGiverSuper2 (Model) @ 0x19c0d327b00
+  - Settings/Instructions (Script) @ 0x19ab1537000
+  - Settings (Folder) @ 0x19ab9939540
+    - WeaponName (StringValue) | Value: "Unknown" @ 0x19c0bbed100
+    - RegenTime (IntValue) | Value: 60 @ 0x19ab993be60
+    - RegenColor (BrickColorValue) [ValueObject] @ 0x19ab9932460
+    - StartColor (BrickColorValue) [ValueObject] @ 0x19ab9930860
+  - ColoredParts (Model) @ 0x19c0d322380
+    - TopBottomColors (Part) @ 0x19aaaed60c0
+      - Mesh (CylinderMesh) @ 0x19c14edc600
+    - Center (Part) @ 0x19aaaed6280
+      - Mesh (CylinderMesh) @ 0x19c14ed0d00
+    - TopBottomColors (Part) @ 0x19aaaed6440
+      - Mesh (CylinderMesh) @ 0x19c14ed0e00
+    - TouchMe (Part) @ 0x19aaaed6600
+      - Mesh (CylinderMesh) @ 0x19c14ed3300
+      - TouchInterest (TouchTransmitter) @ 0x19ab577b300
+  - LuckyBlock (Model) @ 0x19c0d321580
+    - Model (Model) @ 0x19c0d321c80
+      - newMesh (MeshPart) @ 0x19aa37a3500
+      - newMesh (MeshPart) @ 0x19c1f7ba880
+      - newMesh (MeshPart) @ 0x19c1f7b0b00
+      - newMesh (MeshPart) @ 0x19c1f7bd600
+    - MeshPart (MeshPart) @ 0x19aa37a3880
+      - Glow (ParticleEmitter) @ 0x19c0c7c0380
+      - Glow (ParticleEmitter) @ 0x19c0c7c9c80
+  - GUI (Part) @ 0x19aaa336440
+    - SurfaceGui (SurfaceGui) @ 0x19c1be01480
+      - LockFrame (Frame) @ 0x19aa529b480
+        - ImageLabel (ImageLabel) @ 0x19c04b5f080
+        - Text (TextLabel) @ 0x19c1dca4080
+        - Text (TextLabel) @ 0x19c1dcad080
+      - Frame (Frame) @ 0x19c1be05a80
+        - Time1 (TextLabel) @ 0x19aa4303080
+        - Time2 (TextLabel) @ 0x19aa4304080
+        - SkipButton (Frame) @ 0x19aa5295080
+          - TriggerButton (TextButton) @ 0x19c04265080
+          - Button (TextButton) @ 0x19c04263c80
+            - Frame (Frame) @ 0x19aaaf7e680
+            - Frame (Frame) @ 0x19aaaf7b480
+          - SkipButton (ImageButton) @ 0x19c1dca2080
+          - imageBackground (ImageLabel) @ 0x19c04b56c80
+          - imageBackgroundshadow (ImageLabel) @ 0x19c04b57880
+  - Pipe (Part) @ 0x19aaa336600
+    - Mesh (CylinderMesh) @ 0x19c14ed5700
+  - Pipe (Part) @ 0x19aa5ddb840
+    - Mesh (CylinderMesh) @ 0x19c14edfd00
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/LockWallSuper
+- LockWallSuper (Model) @ 0x19c0d323180
+  - Script (Script) @ 0x19ab1536600
+  - LockWall2 (Part) @ 0x19aaaed67c0
+    - Mesh (CylinderMesh) @ 0x19c14ed6a00
+  - LockWall1 (Part) @ 0x19aaaf428c0
+    - Mesh (CylinderMesh) @ 0x19c14ed8000
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/DiamondBlockLockBoard
+- DiamondBlockLockBoard (Model) @ 0x19c0d325f00
+  - Script (Script) @ 0x19ab1535a00
+  - LockBoardTimeGui (Part) @ 0x19c1ceaf740
+    - SurfaceGui (SurfaceGui) @ 0x19aa4136e80
+      - LockFrame (Frame) @ 0x19c0960c880
+        - ImageLabel (ImageLabel) @ 0x19c1cce1880
+  - LockBoardBlockGui (Part) @ 0x19aa9f4b840
+    - SurfaceGui (SurfaceGui) @ 0x19aa4133280
+      - LockFrame (Frame) @ 0x19abc469680
+        - ImageLabel (ImageLabel) @ 0x19c1cce6c80
+  - LockBoardBlockGui (Part) @ 0x19aa9f4ba00
+    - SurfaceGui (SurfaceGui) @ 0x19aa4133c80
+      - LockFrame (Frame) @ 0x19abc46e680
+        - ImageLabel (ImageLabel) @ 0x19c1ccef080
+  - LockBoardBlockGui (Part) @ 0x19aa9f4bbc0
+    - SurfaceGui (SurfaceGui) @ 0x19aa4134680
+      - LockFrame (Frame) @ 0x19abc463280
+        - ImageLabel (ImageLabel) @ 0x19c1ccee480
+  - LockBoardBlockGui (Part) @ 0x19aa9f4bd80
+    - SurfaceGui (SurfaceGui) @ 0x19aa4135080
+      - LockFrame (Frame) @ 0x19abc467880
+        - ImageLabel (ImageLabel) @ 0x19c1cce9c80
+  - LockBoardGuiArrow (Part) @ 0x19aa9f4bf40
+    - SurfaceGui (SurfaceGui) @ 0x19aa4135a80
+      - LockFrame (Frame) @ 0x19c09601480
+        - ImageLabel (ImageLabel) @ 0x19c1cce8480
+  - LockBoardOrGui (Part) @ 0x19aa9f4c100
+    - SurfaceGui (SurfaceGui) @ 0x19aa4136480
+      - LockFrame (Frame) @ 0x19c0960b480
+        - ImageLabel (ImageLabel) @ 0x19c1cce0c80
+  - LockBoard (Part) @ 0x19aaa33af80
+  - LockBoardbottom (Part) @ 0x19aaa33b140
+  - LockBoardBlockGuiGradient (Part) @ 0x19aaaed9c40
+    - SurfaceGui (SurfaceGui) @ 0x19aa4132880
+      - LockFrame (Frame) @ 0x19abc460a80
+        - ImageLabel (ImageLabel) @ 0x19c1cce3c80
+  - LockBoardBlockGui (Part) @ 0x19aaaed9e00
+    - SurfaceGui (SurfaceGui) @ 0x19aa4131e80
+      - LockFrame (Frame) @ 0x19abc460080
+        - ImageLabel (ImageLabel) @ 0x19c1cce3080
+  - LockBoardBuyGui (Part) @ 0x19aaaed9fc0
+    - SurfaceGui (SurfaceGui) @ 0x19aa4131480
+      - SkipButton (Frame) @ 0x19abc464680
+        - imageBackgroundshadow (ImageLabel) @ 0x19c1ccea880
+        - imageBackground (ImageLabel) @ 0x19c1cce7880
+        - SkipButton (ImageButton) @ 0x19ac6851080
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/VoidBlockLockBoard
+- VoidBlockLockBoard (Model) @ 0x19c1817b300
+  - Script (Script) @ 0x19ab1534e00
+  - LockBoardBlockGui (Part) @ 0x19a9f568e40
+    - SurfaceGui (SurfaceGui) @ 0x19aa3b5b480
+      - LockFrame (Frame) @ 0x19c0b72b480
+        - ImageLabel (ImageLabel) @ 0x19ac69fb480
+  - LockBoardBlockGui (Part) @ 0x19a9f569000
+    - SurfaceGui (SurfaceGui) @ 0x19aa3b5aa80
+      - LockFrame (Frame) @ 0x19c0b720a80
+        - ImageLabel (ImageLabel) @ 0x19ac69f7880
+  - LockBoardGuiArrow (Part) @ 0x19a9f5698c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa3b5a080
+      - LockFrame (Frame) @ 0x19c0b72c880
+        - ImageLabel (ImageLabel) @ 0x19ac69fa880
+  - LockBoardBlockGuiEpic (Part) @ 0x19a9f569a80
+    - SurfaceGui (SurfaceGui) @ 0x19aa3e49680
+      - LockFrame (Frame) @ 0x19c0b728280
+        - Script (Script) @ 0x19ab1535000
+        - ImageLabel (ImageLabel) @ 0x19ac69f0c80
+  - LockBoardBlockGui (Part) @ 0x19a9f569c40
+    - SurfaceGui (SurfaceGui) @ 0x19aa3e48c80
+      - LockFrame (Frame) @ 0x19c0b725a80
+        - ImageLabel (ImageLabel) @ 0x19ac69f4880
+  - LockBoardBlockGui (Part) @ 0x19a9f569e00
+    - Weld (Weld) @ 0x19ababce080
+    - SurfaceGui (SurfaceGui) @ 0x19aa3e48280
+      - LockFrame (Frame) @ 0x19c0b722880
+        - ImageLabel (ImageLabel) @ 0x19ac69f2480
+  - LockBoardbottom (Part) @ 0x19aa37b8200
+  - LockBoard (Part) @ 0x19aa37b83c0
+  - ParticleCore (Part) @ 0x19aa5acd7c0
+    - Weld (Weld) @ 0x19ababce240
+    - Attachment (Attachment) @ 0x19ab1b72a80
+  - LockBoardBuyGui (Part) @ 0x19aa5acd980
+    - SurfaceGui (SurfaceGui) @ 0x19aa3b5be80
+      - SkipButton (Frame) @ 0x19c0b721480
+        - imageBackgroundshadow (ImageLabel) @ 0x19ac69f9c80
+        - imageBackground (ImageLabel) @ 0x19ac69fc080
+        - SkipButton (ImageButton) @ 0x19c1fd48080
+  - effectCore (Part) @ 0x19aa675c2c0
+    - SurfaceGui (SurfaceGui) @ 0x19aa3b5c880
+      - Frame (Frame) @ 0x19c0b720080
+      - images (Folder) @ 0x19a9efcb140
+        - questionmark (ImageLabel) @ 0x19ac69fcc80
+        - questionmark2 (ImageLabel) @ 0x19ac69f9080
+      - images2 (Folder) @ 0x19a9efc9460
+        - questionmark (ImageLabel) @ 0x19ac69f6c80
+        - exclamationmark (ImageLabel) @ 0x19ac69f0080
+        - atmark (ImageLabel) @ 0x19ac69fe480
+        - moneymark (ImageLabel) @ 0x19c1ff89080
+        - andmark (ImageLabel) @ 0x19c1ff8b480
+        - minusmark (ImageLabel) @ 0x19c1ff8e480
+        - plusmark (ImageLabel) @ 0x19c1ff89c80
+        - equalsmark (ImageLabel) @ 0x19c1ff86c80
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/LimitedTimeBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa7e42380
+  - SurfaceGui (SurfaceGui) @ 0x19c0b724680
+    - LockFrame (Frame) @ 0x19c0b725080
+      - ImageLabel (ImageLabel) @ 0x19c1ff83c80
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/LimitedTimeBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa7e42540
+  - SurfaceGui (SurfaceGui) @ 0x19c0b72f080
+    - LockFrame (Frame) @ 0x19c0b72d280
+      - ImageLabel (ImageLabel) @ 0x19c1ff82480
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/LimitedTimeBoard/LockBoardBlockGui
+- LockBoardBlockGui (Part) @ 0x19aa7e42700
+  - SurfaceGui (SurfaceGui) @ 0x19c0b72a080
+    - LockFrame (Frame) @ 0x19c0b721e80
+      - ImageLabel (ImageLabel) @ 0x19c1ff86080
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/LimitedTimeBoard/LockBoardbottom
+- LockBoardbottom (Part) @ 0x19aa7e4e940
+  - Attachment (Attachment) @ 0x19ab1b70b00
+    - Fire (Fire) @ 0x19c1189cc40
+  - Attachment (Attachment) @ 0x19ab1b70680
+    - Fire (Fire) @ 0x19c11898140
+  - Attachment (Attachment) @ 0x19ab1b70500
+    - Fire (Fire) @ 0x19c1189fbc0
+  - Attachment (Attachment) @ 0x19ab1b70380
+    - Fire (Fire) @ 0x19c1189f1c0
+  - Attachment (Attachment) @ 0x19ab1b70200
+    - Fire (Fire) @ 0x19c11899540
+  - Attachment (Attachment) @ 0x19ab1b70080
+    - Fire (Fire) @ 0x19c1189e680
+  - Attachment (Attachment) @ 0x19ab1b7fe00
+    - Fire (Fire) @ 0x19c11899180
+  - Attachment (Attachment) @ 0x19ab1b7fc80
+    - Fire (Fire) @ 0x19c11899e00
+  - Attachment (Attachment) @ 0x19ab1b7fb00
+    - Fire (Fire) @ 0x19c1189b0c0
+  - Attachment (Attachment) @ 0x19ab1b7f980
+    - Fire (Fire) @ 0x19c1189ef40
+  - Attachment (Attachment) @ 0x19ab1b7f800
+    - Fire (Fire) @ 0x19c1189a080
+  - Attachment (Attachment) @ 0x19ab1b7e600
+    - Fire (Fire) @ 0x19c1189a800
+  - Attachment (Attachment) @ 0x19ab1b7e480
+    - Fire (Fire) @ 0x19c11893640
+  - Attachment (Attachment) @ 0x19ab1b7e300
+    - Fire (Fire) @ 0x19c11890300
+  - Attachment (Attachment) @ 0x19ab1b7e180
+    - Fire (Fire) @ 0x19c11894a40
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/SuperLocked1
+- SuperLocked1 (BoolValue) | Value: true @ 0x19ab5771660
+
+Found matching config root at path: Workspace/Workspace/Spawn2/Givers/SuperLocked2
+- SuperLocked2 (BoolValue) | Value: true @ 0x19aba4af820
+
+Found matching config root at path: Workspace/Workspace/GHJSOWKDH/DoubleScythe
+- DoubleScythe (Tool) @ 0x19abff89680
+  - Animations (Folder) @ 0x19ac4421660
+    - Spin (Animation) @ 0x19abf8ea500
+    - Slash (Animation) @ 0x19c0d7d0800
+    - Jab (Animation) @ 0x19c1e188f00
+    - Hold (Animation) @ 0x19ac4013600
+    - DownwardSpin (Animation) @ 0x19aa57e5700
+    - CounterClockwiseWhip (Animation) @ 0x19ac4013a00
+    - ClockwiseWhip (Animation) @ 0x19abd49f200
+  - Remotes (Folder) @ 0x19ac4422620
+    - ClientControl (RemoteFunction) @ 0x19ac3531400
+    - ServerControl (RemoteFunction) @ 0x19ac3537800
+  - LocalScript (LocalScript) @ 0x19ac353a200
+  - MotorizeGrip (Script) @ 0x19ac353ae00
+  - Script (Script) @ 0x19ac3537600
+  - MouseIcon (LocalScript) @ 0x19ac3538200
+  - Handle (Part) @ 0x19aaeeb0780
+    - Fire (ParticleEmitter) @ 0x19abf47f080
+    - Swing (Sound) @ 0x19ab89ee680
+    - Hit (Sound) @ 0x19ab89eb980
+    - Mesh (SpecialMesh) @ 0x19ac8178180
+  - Blade (Part) @ 0x19a9acb7cc0
+    - Weld (Weld) @ 0x19a9acb3180
+    - TouchInterest (TouchTransmitter) @ 0x19bfff81740
+  - Blade (Part) @ 0x19a9acb3340
+    - Weld (Weld) @ 0x19a9acb0e80
+    - TouchInterest (TouchTransmitter) @ 0x19bfff84220
+
+Found matching config root at path: Workspace/Workspace/GHJSOWKDH/GearCount/SuperQueue
+- SuperQueue (IntValue) | Value: 0 @ 0x19ac442bae0
+
+Found matching config root at path: Workspace/Workspace/IIIIIllIlIllllIIIIl/GearCount/SuperQueue
+- SuperQueue (IntValue) | Value: 0 @ 0x19c0a071820
+
+Found matching config root at path: Workspace/Workspace/IIIIIllIlIllllIIIIl/Super
+- Super (Tool) @ 0x19ac3eede80
+  - Main (LocalScript) @ 0x19a9654fc00
+  - Progress (BoolValue) | Value: true @ 0x19bfff8a7a0
+  - Handle (MeshPart) @ 0x19c00fff900
+    - MagicSound (Sound) @ 0x19aa60e1e80
+    - Glow (ParticleEmitter) @ 0x19c00d99980
+    - Glow (ParticleEmitter) @ 0x19c00d98780
+    - Weld (Weld) @ 0x19a9acb3dc0
+    - Weld (Weld) @ 0x19a9acbd980
+    - Weld (Weld) @ 0x19a9acbadc0
+    - Weld (Weld) @ 0x19a9acb8ac0
+  - newMesh (MeshPart) @ 0x19c00ff5480
+  - newMesh (MeshPart) @ 0x19c00ff1200
+  - newMesh (MeshPart) @ 0x19c00ff6d00
+  - newMesh (MeshPart) @ 0x19c00ff3880
+
+Found matching config root at path: Workspace/Workspace/OREO123456789059/GearCount/SuperQueue
+- SuperQueue (IntValue) | Value: 0 @ 0x19bfff80b00
+
+Found matching config root at path: Workspace/Workspace/antlersun/GearCount/SuperQueue
+- SuperQueue (IntValue) | Value: 0 @ 0x19bfff8e240
+
+Found matching config root at path: Workspace/Workspace/Hanram087/GearCount/SuperQueue
+- SuperQueue (IntValue) | Value: 0 @ 0x19bfff89a80
+

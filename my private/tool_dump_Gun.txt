@@ -1,0 +1,18 @@
+Tool Name: Gun
+Tool Class: Tool
+
+Descendants:
+  - Name: Handle | Class: Part @ 0x2575deb1200
+    - Name: Mesh | Class: SpecialMesh @ 0x25783e4b300
+    - Name: Gunshot | Class: Sound @ 0x2573c388c80
+    - Name: Reload | Class: Sound @ 0x2573c38aa80
+  - Name: GunServer | Class: Script @ 0x25780c35e00
+    - Name: GunRaycastAttachment1 | Class: Attachment @ 0x2578209c500
+  - Name: GunClient | Class: LocalScript @ 0x25780c35a00
+  - Name: Animations | Class: Folder @ 0x2575e2937a0
+    - Name: Shoot | Class: Animation @ 0x2575dee0f00
+    - Name: Reload | Class: Animation @ 0x257609e7400
+  - Name: Sounds | Class: Folder @ 0x2575e29f9e0
+  - Name: Shoot | Class: RemoteEvent @ 0x2575deb2e00
+  - Name: CantShoot | Class: BillboardGui @ 0x2575f43f080
+    - Name: TextLabel | Class: TextLabel @ 0x2577ffc4080

@@ -1,0 +1,12 @@
+Tool Name: [Lantern]
+Tool Class: Tool
+
+Descendants:
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x2380537796736 @ 0x22a5f68d280
+  - Name: Handle | Class: MeshPart @ 0x22a5e5c8900
+    - Name: Lantern | Class: Script @ 0x22a58a89200
+    - Name: Attachment | Class: Attachment @ 0x22a63fb2180
+      - Name: PointLight | Class: PointLight @ 0x22a6395a700
+      - Name: ParticleEmitter | Class: ParticleEmitter @ 0x22a629a8a80
+    - Name: A | Class: Decal @ 0x22a62d34680
+    - Name: B | Class: Decal @ 0x22a62d34400

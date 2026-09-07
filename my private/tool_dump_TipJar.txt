@@ -1,0 +1,64 @@
+Tool Name: TipJar
+Tool Class: Tool
+
+Descendants:
+  - Name: TipJarScript | Class: Script @ 0x2ae21764000
+    - Name: BillboardGui | Class: BillboardGui @ 0x2adce091480
+      - Name: Frame | Class: Frame @ 0x2ade5ea1480
+        - Name: Template | Class: TextLabel @ 0x2ae21276080
+    - Name: TipGui | Class: ScreenGui @ 0x2ade419e680
+      - Name: Donate | Class: Frame @ 0x2ae1d390080
+        - Name: LocalScript | Class: LocalScript @ 0x2ae21764200
+          - Name: RemoteEvent | Class: RemoteEvent @ 0x2ae1d360940
+            - Name: Script | Class: Script @ 0x2ae21765200
+        - Name: UICorner | Class: UICorner @ 0x2ae22bbd100
+        - Name: DonateLogo | Class: ImageLabel @ 0x2ae1976e480
+        - Name: CloseButton | Class: ImageButton @ 0x2ae21277080
+          - Name: UIScale | Class: UIScale @ 0x2ade354af80
+        - Name: PlayerIcon | Class: ImageLabel @ 0x2ae1d3a0080
+          - Name: UICorner | Class: UICorner @ 0x2ae22bbd200
+          - Name: UIAspectRatioConstraint | Class: UIAspectRatioConstraint @ 0x2ae22bbd300
+        - Name: UIAspectRatioConstraint | Class: UIAspectRatioConstraint @ 0x2ae22bbd400
+        - Name: UIStroke | Class: UIStroke @ 0x2ae22a4fd00
+        - Name: UIGradient | Class: UIGradient @ 0x2ae16f55a80
+        - Name: DonationBoard | Class: Frame @ 0x2ae1d390a80
+          - Name: UICorner | Class: UICorner @ 0x2ae22bbd500
+          - Name: PlayerDisplay | Class: TextLabel @ 0x2ae21278080
+          - Name: PlayerID | Class: TextLabel @ 0x2ae21279080
+          - Name: ScrollingFrame | Class: ScrollingFrame @ 0x2ae2127a080
+            - Name: UIListLayout | Class: UIListLayout @ 0x2ae21765400
+            - Name: Template | Class: Frame @ 0x2ae1d391480
+              - Name: RealTemplate | Class: Frame @ 0x2ae1d391e80
+                - Name: UIGradient | Class: UIGradient @ 0x2ae16f55c00
+                - Name: UIStroke | Class: UIStroke @ 0x2ae1d3b06c0
+                - Name: UICorner | Class: UICorner @ 0x2ae22bbd600
+                - Name: RobuxHolder | Class: Frame @ 0x2ae1d392880
+                - Name: Buy | Class: ImageButton @ 0x2ae2127b080
+                - Name: Icon | Class: ImageLabel @ 0x2ae1d3a0c80
+                - Name: RobuxIcon | Class: ImageLabel @ 0x2ae1d3a1880
+                - Name: BuyName | Class: TextLabel @ 0x2ae2127c080
+                - Name: Robux | Class: TextLabel @ 0x2ae2127d080
+                - Name: Variant | Class: TextLabel @ 0x2ae2127e080
+          - Name: Raised | Class: TextLabel @ 0x2ae1d3d0080
+          - Name: Donated | Class: TextLabel @ 0x2ae1d3d1080
+          - Name: Note | Class: TextLabel @ 0x2ae1d3d2080
+  - Name: Jar | Class: Model @ 0x2ae21cd9380
+    - Name: Jar | Class: MeshPart @ 0x2ae21cd9700
+      - Name: Donate | Class: Attachment @ 0x2ae3477a700
+        - Name: shards | Class: ParticleEmitter @ 0x2ae3337fc80
+        - Name: flare | Class: ParticleEmitter @ 0x2ae33372180
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2ae347bef40
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2ae347bf580
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2ae347bd500
+      - Name: Part | Class: Part @ 0x2ae347a21c0
+        - Name: Decal | Class: Decal @ 0x2ae16e6dc80
+        - Name: Decal | Class: Decal @ 0x2ae16e6da00
+      - Name: Part | Class: Part @ 0x2ae347a28c0
+        - Name: Decal | Class: Decal @ 0x2ae16e6d500
+        - Name: Decal | Class: Decal @ 0x2ae16e6d280
+    - Name: Sticker | Class: MeshPart @ 0x2ae32ab9000
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2ae347bd000
+  - Name: Handle | Class: Part @ 0x2ae347a2fc0
+    - Name: Sound | Class: Sound @ 0x2ae1a7f5a80
+    - Name: ProximityPrompt | Class: ProximityPrompt @ 0x2ae269f4e00
+  - Name: OwnerTag | Class: ObjectValue | Value: displayyit (Model) @ 0x2946914688512 @ 0x2ae42444680

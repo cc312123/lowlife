@@ -1,0 +1,19 @@
+Tool Name: [Tip Jar]
+Tool Class: Tool
+
+Descendants:
+  - Name: Handle | Class: MeshPart @ 0x2923f5a5f00
+    - Name: ParticleAttachment | Class: Attachment @ 0x2923238a580
+      - Name: Flare | Class: ParticleEmitter @ 0x2939f009380
+      - Name: ParticleEmitter | Class: ParticleEmitter @ 0x2939f00cf80
+      - Name: Star | Class: ParticleEmitter @ 0x2939f005480
+    - Name: Robux Icon | Class: MeshPart @ 0x2923f5a6280
+    - Name: Robux Icon | Class: MeshPart @ 0x2923f5a8900
+      - Name: Robux Icon | Class: Weld @ 0x2923dc9c640
+      - Name: Cylinder | Class: Weld @ 0x2923dc96b40
+    - Name: ProximityPrompt | Class: ProximityPrompt @ 0x29221c84400
+    - Name: DonatedLabel | Class: BillboardGui @ 0x29239891e80
+      - Name: Frame | Class: Frame @ 0x293a1b74680
+        - Name: TextLabel | Class: TextLabel @ 0x29237d70080
+    - Name: DonateSound | Class: Sound @ 0x2923cc24400
+  - Name: Script | Class: Script @ 0x29221c8de00

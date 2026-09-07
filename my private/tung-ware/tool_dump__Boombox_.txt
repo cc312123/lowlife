@@ -1,0 +1,9 @@
+Tool Name: [Boombox]
+Tool Class: Tool
+
+Descendants:
+  - Name: Script | Class: Script @ 0x1f4dfc31400
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x2150695282816 @ 0x1f518c32700
+  - Name: Handle | Class: Part @ 0x1f50e9f2380
+    - Name: ABoomBox | Class: Sound @ 0x1f521a18f00
+    - Name: Mesh | Class: SpecialMesh @ 0x1f4e3872c00

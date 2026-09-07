@@ -1,0 +1,10 @@
+Roblox procs found: 1
+PID: 6952
+OpenProcess handle: 764
+BaseAddr: 0x7FF78C450000
+FakeDataModel ptr (0x8d22868): 0x7FF795172868 ok=True val=0x1E99D876080
+RealDataModel (0x1f8): 0x1E99D876278 ok=True val=0x1E99D876270
+Workspace (0x158): 0x1E99D8763C8 ok=True val=0x1E9B0356280
+VisualEngine ptr (0x8351408): 0x7FF7947A1408 ok=True val=0x1E808CE6080
+Dimensions (0xb10): ok=True w=1280 h=720
+ViewMatrix (0x1b0): ok=True m00=0.5590497 m11=1.30302

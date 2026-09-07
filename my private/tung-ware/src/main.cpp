@@ -318,7 +318,7 @@ static bool initialize_roblox_objects() noexcept {
         print_colored_bot_message(buffer, true);
     }
 
-    return real_dm != 0 && workspace != 0 && players != 0 && local_player != 0 && game::local_character.address != 0;
+    return real_dm != 0 && workspace != 0 && players != 0 && local_player != 0;
 }
 
 

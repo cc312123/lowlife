@@ -1,0 +1,18 @@
+Tool Name: Super
+Tool Class: Tool
+
+Descendants:
+  - Name: Main | Class: LocalScript @ 0x19a9654fc00
+  - Name: Progress | Class: BoolValue | Value: false @ 0x19bfff8a7a0
+  - Name: Handle | Class: MeshPart @ 0x19c00fff900
+    - Name: MagicSound | Class: Sound @ 0x19aa60e1e80
+    - Name: Glow | Class: ParticleEmitter @ 0x19c00d99980
+    - Name: Glow | Class: ParticleEmitter @ 0x19c00d98780
+    - Name: Weld | Class: Weld @ 0x19a9acb3dc0
+    - Name: Weld | Class: Weld @ 0x19a9acbd980
+    - Name: Weld | Class: Weld @ 0x19a9acbadc0
+    - Name: Weld | Class: Weld @ 0x19a9acb8ac0
+  - Name: newMesh | Class: MeshPart @ 0x19c00ff5480
+  - Name: newMesh | Class: MeshPart @ 0x19c00ff1200
+  - Name: newMesh | Class: MeshPart @ 0x19c00ff6d00
+  - Name: newMesh | Class: MeshPart @ 0x19c00ff3880

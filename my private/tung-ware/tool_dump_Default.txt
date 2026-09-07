@@ -1,0 +1,38 @@
+Tool Name: Default
+Tool Class: Tool
+
+Descendants:
+  - Name: RigObjects | Class: Model @ 0x25794187780
+    - Name: r_Knife | Class: Part @ 0x2578ba0e080
+      - Name: Base | Class: Motor6D @ 0x257801b7c00
+  - Name: Animations | Class: Folder @ 0x257937414a0
+    - Name: Equip | Class: Animation @ 0x2579e0f6b00
+    - Name: Idle | Class: Animation @ 0x2579e0fff00
+    - Name: Inspect | Class: Animation @ 0x2579e0f4100
+    - Name: Swing1 | Class: Animation @ 0x2579e0f6900
+    - Name: Swing2 | Class: Animation @ 0x2579e0f9500
+    - Name: Swing3 | Class: Animation @ 0x2579e0fdb00
+    - Name: SprintIn | Class: Animation @ 0x2579e0f3500
+    - Name: Sprint | Class: Animation @ 0x2579e0fa700
+    - Name: SprintOut | Class: Animation @ 0x2579e0f6700
+    - Name: ReadyThrow | Class: Animation @ 0x2579e0faa00
+    - Name: ThrowIdle | Class: Animation @ 0x2579e0f8800
+    - Name: Throw | Class: Animation @ 0x2579e0fd500
+    - Name: SimpleInspect | Class: Animation @ 0x2579e0fcc00
+  - Name: Knife | Class: Model @ 0x2579418e080
+    - Name: Base | Class: MeshPart @ 0x2579418cf00
+      - Name: SurfaceAppearance | Class: SurfaceAppearance @ 0x2578e0e3980
+  - Name: ToolHandle | Class: Part @ 0x2578ba02540
+    - Name: SoundPointWeld | Class: WeldConstraint @ 0x2575d9aa300
+    - Name: r_Knife | Class: Motor6D @ 0x257801b4200
+    - Name: TrakrWeld | Class: WeldConstraint @ 0x2575d9af940
+    - Name: SoundPoint | Class: Part @ 0x2578ba0ba00
+      - Name: Swing001 | Class: Sound @ 0x25785f64180
+      - Name: Swing002 | Class: Sound @ 0x25785f61e80
+      - Name: Swing003 | Class: Sound @ 0x25785f62d80
+      - Name: equip | Class: Sound @ 0x25785f6b480
+  - Name: FragTrakr | Class: Part @ 0x2578ba01040
+    - Name: SurfaceGui | Class: SurfaceGui @ 0x2578f09f080
+      - Name: Count | Class: TextLabel @ 0x2574efd9080
+  - Name: ToolWeld | Class: Motor6D @ 0x2578571dc00
+  - Name: PreventSelfTeamHighlight | Class: Highlight @ 0x2578c8eef40

@@ -1,0 +1,17 @@
+Tool Name: SpeedyShoes
+Tool Class: Tool
+
+Descendants:
+  - Name: MouseIcon | Class: LocalScript @ 0x19ac3539400
+  - Name: LocalScript | Class: LocalScript @ 0x19ac3538200
+  - Name: Script | Class: Script @ 0x19aa3889e00
+    - Name: SpeedBoostGui | Class: ScreenGui @ 0x19a9e6a8280
+      - Name: Frame | Class: Frame @ 0x19aa7bfe680
+        - Name: TextLabel | Class: TextLabel @ 0x19abfd00080
+        - Name: FuelDisplay | Class: Frame @ 0x19abf9ebe80
+        - Name: TextLabel | Class: TextLabel @ 0x19abfd01080
+  - Name: Handle | Class: Part @ 0x19abf962700
+    - Name: RightGripAttachment | Class: Attachment @ 0x19ab4592900
+    - Name: Mesh | Class: SpecialMesh @ 0x19ac8175180
+  - Name: ServerControl | Class: RemoteFunction @ 0x19aa388bc00
+  - Name: ClientControl | Class: RemoteFunction @ 0x19aa3888800

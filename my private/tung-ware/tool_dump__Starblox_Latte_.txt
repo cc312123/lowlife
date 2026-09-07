@@ -1,0 +1,8 @@
+Tool Name: [Starblox Latte]
+Tool Class: Tool
+
+Descendants:
+  - Name: Drink | Class: Script @ 0x15129514200
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x1447592663168 @ 0x1528ca120e0
+  - Name: Handle | Class: MeshPart @ 0x1528c33ac00
+    - Name: Eat | Class: StringValue | Value: "Unknown" @ 0x152905e7e00

@@ -1,0 +1,8 @@
+Tool Name: Charm
+Tool Class: Tool
+
+Descendants:
+  - Name: Handler | Class: Script @ 0x214a66f9a00
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x2280887134336 @ 0x214a7c68120
+  - Name: Handle | Class: MeshPart @ 0x2133f511200
+    - Name: Aura | Class: ParticleEmitter @ 0x2148fbbcc80

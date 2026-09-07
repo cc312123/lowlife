@@ -1,0 +1,110 @@
+Tool Name: [Knife]
+Tool Class: Tool
+
+Descendants:
+  - Name: KnifeScript | Class: Script @ 0x2961bd13200
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x2837146775680 @ 0x2961bfddd00
+  - Name: Handle | Class: MeshPart @ 0x294acdc1580
+    - Name: Attachment | Class: Attachment @ 0x2961e432c00
+    - Name: Attachment | Class: Attachment @ 0x2961e432d80
+    - Name: Trail | Class: Trail @ 0x2962c672b00
+    - Name: Equip | Class: Sound @ 0x2962c671200
+    - Name: Hit | Class: Sound @ 0x2962c670f80
+    - Name: Skin | Class: Part @ 0x294ae8bba00
+      - Name: Swing2 | Class: Sound @ 0x2962c670a80
+        - Name: PitchShiftSoundEffect | Class: PitchShiftSoundEffect @ 0x2961ea93100
+      - Name: TestHeart | Class: Model @ 0x294acdc0b00
+        - Name: InitialPoses | Class: Folder @ 0x2961cc14bc0
+          - Name: Cube.021_Composited | Class: CFrameValue [ValueObject] @ 0x2961ea90500
+          - Name: Cube.021_Original | Class: CFrameValue [ValueObject] @ 0x2961ea93500
+          - Name: Cube.021_Initial | Class: CFrameValue [ValueObject] @ 0x2961ea92b00
+          - Name: Vert.009_Composited | Class: CFrameValue [ValueObject] @ 0x2961ea90c00
+          - Name: Vert.009_Original | Class: CFrameValue [ValueObject] @ 0x2961ea90800
+          - Name: Vert.009_Initial | Class: CFrameValue [ValueObject] @ 0x2961ea93000
+          - Name: Vert.016_Composited | Class: CFrameValue [ValueObject] @ 0x2961ea93a00
+          - Name: Vert.016_Original | Class: CFrameValue [ValueObject] @ 0x2961ea90100
+          - Name: Vert.016_Initial | Class: CFrameValue [ValueObject] @ 0x2961ea90d00
+          - Name: WingKnife.003_Composited | Class: CFrameValue [ValueObject] @ 0x2961ea91000
+          - Name: WingKnife.003_Original | Class: CFrameValue [ValueObject] @ 0x2961ea90a00
+          - Name: WingKnife.003_Initial | Class: CFrameValue [ValueObject] @ 0x2961ea91900
+          - Name: Armature.001_Composited | Class: CFrameValue [ValueObject] @ 0x2961ea90b00
+          - Name: Armature.001_Original | Class: CFrameValue [ValueObject] @ 0x2961ea90200
+          - Name: Armature.001_Initial | Class: CFrameValue [ValueObject] @ 0x2961ea91d00
+          - Name: Bone.003_Composited | Class: CFrameValue [ValueObject] @ 0x2961ea90e00
+          - Name: Bone.003_Original | Class: CFrameValue [ValueObject] @ 0x2961ea90300
+          - Name: Bone.003_Initial | Class: CFrameValue [ValueObject] @ 0x2961ea91200
+          - Name: Bone.004_Composited | Class: CFrameValue [ValueObject] @ 0x2961ea90700
+          - Name: Bone.004_Original | Class: CFrameValue [ValueObject] @ 0x2961ea93300
+          - Name: Bone.004_Initial | Class: CFrameValue [ValueObject] @ 0x2961ea91e00
+          - Name: Bone.004_end_Composited | Class: CFrameValue [ValueObject] @ 0x2961ea93e00
+          - Name: Bone.004_end_Original | Class: CFrameValue [ValueObject] @ 0x2961ea91400
+          - Name: Bone.004_end_Initial | Class: CFrameValue [ValueObject] @ 0x2961ea90600
+          - Name: Bone.005_Composited | Class: CFrameValue [ValueObject] @ 0x2961ea90f00
+          - Name: Bone.005_Original | Class: CFrameValue [ValueObject] @ 0x2961ea93d00
+          - Name: Bone.005_Initial | Class: CFrameValue [ValueObject] @ 0x2961ea93600
+          - Name: Bone.006_Composited | Class: CFrameValue [ValueObject] @ 0x2961ea93b00
+          - Name: Bone.006_Original | Class: CFrameValue [ValueObject] @ 0x2961ea94000
+          - Name: Bone.006_Initial | Class: CFrameValue [ValueObject] @ 0x2961ea93c00
+          - Name: Bone.006_end_Composited | Class: CFrameValue [ValueObject] @ 0x2961ea93800
+          - Name: Bone.006_end_Original | Class: CFrameValue [ValueObject] @ 0x2961ea93400
+          - Name: Bone.006_end_Initial | Class: CFrameValue [ValueObject] @ 0x2961ea92300
+          - Name: Armature.002_Composited | Class: CFrameValue [ValueObject] @ 0x2961ea92900
+          - Name: Armature.002_Original | Class: CFrameValue [ValueObject] @ 0x2961ea92f00
+          - Name: Armature.002_Initial | Class: CFrameValue [ValueObject] @ 0x2961ea92500
+          - Name: Bone.001_Composited | Class: CFrameValue [ValueObject] @ 0x2961ea92d00
+          - Name: Bone.001_Original | Class: CFrameValue [ValueObject] @ 0x2961ea92200
+          - Name: Bone.001_Initial | Class: CFrameValue [ValueObject] @ 0x2961ea92a00
+          - Name: Bone.001_end_Composited | Class: CFrameValue [ValueObject] @ 0x2961ea92e00
+          - Name: Bone.001_end_Original | Class: CFrameValue [ValueObject] @ 0x2961ea92700
+          - Name: Bone.001_end_Initial | Class: CFrameValue [ValueObject] @ 0x2961ea92100
+          - Name: Armature.003_Composited | Class: CFrameValue [ValueObject] @ 0x2961ea92600
+          - Name: Armature.003_Original | Class: CFrameValue [ValueObject] @ 0x2961ea92800
+          - Name: Armature.003_Initial | Class: CFrameValue [ValueObject] @ 0x2961ea92c00
+          - Name: Bone_Composited | Class: CFrameValue [ValueObject] @ 0x2961ea92400
+          - Name: Bone_Original | Class: CFrameValue [ValueObject] @ 0x2961ea91300
+          - Name: Bone_Initial | Class: CFrameValue [ValueObject] @ 0x2961ea91f00
+          - Name: Bone_end_Composited | Class: CFrameValue [ValueObject] @ 0x2961ea91500
+          - Name: Bone_end_Original | Class: CFrameValue [ValueObject] @ 0x2961ea91a00
+          - Name: Bone_end_Initial | Class: CFrameValue [ValueObject] @ 0x2961ea91100
+          - Name: Bone.002_Composited | Class: CFrameValue [ValueObject] @ 0x2961ea91700
+          - Name: Bone.002_Original | Class: CFrameValue [ValueObject] @ 0x2961ea91600
+          - Name: Bone.002_Initial | Class: CFrameValue [ValueObject] @ 0x2961ea91b00
+          - Name: Bone.002_end_Composited | Class: CFrameValue [ValueObject] @ 0x2961ea92000
+          - Name: Bone.002_end_Original | Class: CFrameValue [ValueObject] @ 0x2961ea91c00
+          - Name: Bone.002_end_Initial | Class: CFrameValue [ValueObject] @ 0x2961ea91800
+        - Name: AnimationController | Class: AnimationController @ 0x2961d2ec020
+          - Name: Animator | Class: Animator @ 0x296312dee80
+        - Name: Main | Class: MeshPart @ 0x294acdc9000
+          - Name: Sound | Class: Sound @ 0x2962bd4d000
+            - Name: PitchShiftSoundEffect | Class: PitchShiftSoundEffect @ 0x2962e660a00
+          - Name: Swing | Class: Sound @ 0x2962bd45d00
+            - Name: PitchShiftSoundEffect | Class: PitchShiftSoundEffect @ 0x2962e660100
+          - Name: Cube.021Motor6D | Class: Motor6D @ 0x2962bc39c00
+          - Name: PointLight | Class: PointLight @ 0x2962e660700
+          - Name: Sparks | Class: ParticleEmitter @ 0x29630e3b480
+          - Name: Sparks | Class: ParticleEmitter @ 0x29630e3ae80
+          - Name: Aura | Class: ParticleEmitter @ 0x29630e39080
+          - Name: Start | Class: Attachment @ 0x2962bc2d400
+          - Name: End | Class: Attachment @ 0x2962bc2fe00
+          - Name: Trail | Class: Trail @ 0x2962bd46700
+          - Name: Heart | Class: MeshPart @ 0x296178ca880
+            - Name: Vert.016Motor6D | Class: Motor6D @ 0x2962bc39000
+          - Name: Wings | Class: MeshPart @ 0x29617cdbd80
+            - Name: WingKnife.003Motor6D | Class: Motor6D @ 0x2962bc39800
+          - Name: Neon | Class: MeshPart @ 0x29617cd8580
+            - Name: Vert.009Motor6D | Class: Motor6D @ 0x2962bc38c00
+        - Name: RootPart | Class: Part @ 0x294bba22c40
+          - Name: Bone.003 | Class: Bone @ 0x2962bc3cc00
+            - Name: Bone.004 | Class: Bone @ 0x2962bc3ce00
+          - Name: Bone.002 | Class: Bone @ 0x2962bc3d000
+          - Name: Bone.005 | Class: Bone @ 0x2962bc3ca00
+            - Name: Bone.006 | Class: Bone @ 0x2962bc3c800
+          - Name: Bone.001 | Class: Bone @ 0x2962bc3c200
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2962bd03a00
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2962bd08780
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2962bd088c0
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2962bd08a00
+      - Name: WeldConstraint | Class: WeldConstraint @ 0x2962bd08b40
+      - Name: Trail | Class: Trail @ 0x2962bd42380
+      - Name: Heartfire | Class: Script @ 0x2962bc3d200
+      - Name: Weld | Class: Weld @ 0x294bba2bf40

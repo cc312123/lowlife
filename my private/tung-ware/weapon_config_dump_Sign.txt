@@ -1,0 +1,422 @@
+=== Weapon Config Search for Tool: Sign ===
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/Modules/FuzzyBloodSystem/FastCast/Signal
+- Signal (ModuleScript) @ 0x2574d4513c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/Gears - 20/GearModel/Sign
+- Sign (Part) @ 0x2575c960b00
+  - Mesh (SpecialMesh) @ 0x2574ef44400
+    - Hkey (IntValue) | Value: 1 @ 0x2574e7c75c0
+  - Hkey (IntValue) | Value: 0 @ 0x2574e7cadc0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/FollowersContent - 48/ShopModel/BoundBox
+- BoundBox (Part) @ 0x25784d96980
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 153/WeaponModel/Shotgun
+- Shotgun (Part) @ 0x25764fd91c0
+  - Mesh (SpecialMesh) @ 0x257590d6b00
+    - Hkey (IntValue) | Value: 7 @ 0x2574d582fc0
+  - Hkey (IntValue) | Value: 6 @ 0x2574d583180
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/KnifeSkins - 335/WeaponModel/BoundBox
+- BoundBox (Part) @ 0x2575ddbfac0
+  - Hkey (IntValue) | Value: 1 @ 0x25782a8ba00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/KnifeSkins - 335/ShopModel/BoundBox
+- BoundBox (Part) @ 0x25785143f80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/FollowersContent - 176/ShopModel/BoundBox
+- BoundBox (Part) @ 0x25784d9c2c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/KnifeSkins - 340/WeaponModel/BoundBox
+- BoundBox (Part) @ 0x2575a8daf80
+  - Hkey (IntValue) | Value: 0 @ 0x2575d122a80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/KnifeSkins - 340/ShopModel/BoundBox
+- BoundBox (Part) @ 0x25785145b80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/KnifeSkins - 387/WeaponModel/BoundBox
+- BoundBox (Part) @ 0x25767e1bf40
+  - Hkey (IntValue) | Value: 6 @ 0x25783027cc0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 391/WeaponModel/BoundBox
+- BoundBox (Part) @ 0x2576861fe40
+  - Hkey (IntValue) | Value: 0 @ 0x25783b24300
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 391/ShopModel/BoundBox
+- BoundBox (Part) @ 0x257854328c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 281/WeaponModel/BoundBox
+- BoundBox (Part) @ 0x25781fc3c00
+  - Hkey (IntValue) | Value: 0 @ 0x257844cc100
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 328/WeaponModel/BoundBox
+- BoundBox (Part) @ 0x25783107080
+  - Hkey (IntValue) | Value: 0 @ 0x25759fb3dc0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/RevolverSkins - 328/WeaponModel/Barrel
+- Barrel (Part) @ 0x25784ca13c0
+  - Mesh (SpecialMesh) @ 0x25757198c00
+    - Hkey (IntValue) | Value: 7 @ 0x25763591f20
+  - Hkey (IntValue) | Value: 6 @ 0x25763595640
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/KnifeSkins - 225/WeaponModel/BoundBox
+- BoundBox (Part) @ 0x257831ec2c0
+  - Hkey (IntValue) | Value: 4 @ 0x25785fa6520
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/KnifeSkins - 324/WeaponModel/BoundBox
+- BoundBox (Part) @ 0x257831edb40
+  - Hkey (IntValue) | Value: 6 @ 0x25785fa2a80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/KnifeSkins - 70/WeaponModel/BoundBox
+- BoundBox (Part) @ 0x257836498c0
+  - Hkey (IntValue) | Value: 2 @ 0x25785fa7080
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/FollowersContent - 338/ShopModel/BoundBox
+- BoundBox (Part) @ 0x25784d95f00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/GameContent/Web/WebContentCache/FollowersContent - 239/ShopModel/BoundBox
+- BoundBox (Part) @ 0x25784d960c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/spearminct/ItemPreviews/RevolverModel/BoundBox
+- BoundBox (Part) @ 0x2575c4c6b40
+  - Hkey (IntValue) | Value: 0 @ 0x257556ab220
+  - WeaponJoint (Weld) @ 0x257556f13c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/ItemPreviews/RevolverModel/Shotgun
+- Shotgun (Part) @ 0x2575d9f28c0
+  - Mesh (SpecialMesh) @ 0x25757198600
+    - Hkey (IntValue) | Value: 7 @ 0x25756e00240
+  - Hkey (IntValue) | Value: 6 @ 0x25756e05c60
+  - WeaponJoint (Weld) @ 0x2575d9f1200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/Shotgun
+- Shotgun (Part) @ 0x257593c4d80
+  - Mesh (SpecialMesh) @ 0x2575a93b900
+    - Hkey (IntValue) | Value: 7 @ 0x25781f991c0
+  - Hkey (IntValue) | Value: 6 @ 0x25781f98f20
+  - WeaponJoint (Motor6D) @ 0x25757263200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/ItemPreviews/RevolverModel/Shotgun
+- Shotgun (Part) @ 0x257825505c0
+  - Mesh (SpecialMesh) @ 0x257596ab600
+    - Hkey (IntValue) | Value: 7 @ 0x2575a37b840
+  - Hkey (IntValue) | Value: 6 @ 0x2575a377240
+  - WeaponJoint (Weld) @ 0x25782558200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/Shotgun
+- Shotgun (Part) @ 0x2575afa98c0
+  - Mesh (SpecialMesh) @ 0x25759cdf680
+    - Hkey (IntValue) | Value: 7 @ 0x25782b9f120
+  - Hkey (IntValue) | Value: 6 @ 0x25782b92000
+  - WeaponJoint (Motor6D) @ 0x25758481600
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/ItemPreviews/RevolverModel/Shotgun
+- Shotgun (Part) @ 0x2578261e080
+  - Mesh (SpecialMesh) @ 0x2575ec78a80
+    - Hkey (IntValue) | Value: 7 @ 0x25781f95020
+  - Hkey (IntValue) | Value: 6 @ 0x25781f95640
+  - WeaponJoint (Weld) @ 0x2578261e240
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/Shotgun
+- Shotgun (Part) @ 0x25781857cc0
+  - Mesh (SpecialMesh) @ 0x257572a5000
+    - Hkey (IntValue) | Value: 7 @ 0x2575d41bca0
+  - Hkey (IntValue) | Value: 6 @ 0x2575d41be60
+  - WeaponJoint (Motor6D) @ 0x2575aa7e200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/Shotgun
+- Shotgun (Part) @ 0x2575a65c9c0
+  - Mesh (SpecialMesh) @ 0x257661c4d00
+    - Hkey (IntValue) | Value: 7 @ 0x2575cf4b680
+  - Hkey (IntValue) | Value: 6 @ 0x2575cf4b060
+  - WeaponJoint (Motor6D) @ 0x25759aed600
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/ItemPreviews/RevolverModel/Shotgun
+- Shotgun (Part) @ 0x2575ec9e780
+  - Mesh (SpecialMesh) @ 0x25756dfa100
+    - Hkey (IntValue) | Value: 7 @ 0x2575d126b40
+  - Hkey (IntValue) | Value: 6 @ 0x2575d12a500
+  - WeaponJoint (Weld) @ 0x2575ec99a80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/ItemPreviews/RevolverModel/Shotgun
+- Shotgun (Part) @ 0x25781a79e00
+  - Mesh (SpecialMesh) @ 0x257590dcf80
+    - Hkey (IntValue) | Value: 7 @ 0x257393bdec0
+  - Hkey (IntValue) | Value: 6 @ 0x257393bcc60
+  - WeaponJoint (Weld) @ 0x2575a51dd00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/Shotgun
+- Shotgun (Part) @ 0x2575ff291c0
+  - Mesh (SpecialMesh) @ 0x2575bbf5f00
+    - Hkey (IntValue) | Value: 7 @ 0x25782a86de0
+  - Hkey (IntValue) | Value: 6 @ 0x25782a84060
+  - WeaponJoint (Motor6D) @ 0x25759aee200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/Shotgun
+- Shotgun (Part) @ 0x2575c7f4bc0
+  - Mesh (SpecialMesh) @ 0x257660d5a80
+    - Hkey (IntValue) | Value: 7 @ 0x257393beb00
+  - Hkey (IntValue) | Value: 6 @ 0x257393b3ea0
+  - WeaponJoint (Motor6D) @ 0x257678cda00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/ItemPreviews/RevolverModel/Shotgun
+- Shotgun (Part) @ 0x2575b324840
+  - Mesh (SpecialMesh) @ 0x2575afb6380
+    - Hkey (IntValue) | Value: 7 @ 0x2578284ce20
+  - Hkey (IntValue) | Value: 6 @ 0x2578284b920
+  - WeaponJoint (Weld) @ 0x2575b32bd80
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/Shotgun
+- Shotgun (Part) @ 0x25782df2000
+  - Mesh (SpecialMesh) @ 0x25781a58600
+    - Hkey (IntValue) | Value: 7 @ 0x25782bb44c0
+  - Hkey (IntValue) | Value: 6 @ 0x25782bb4ae0
+  - WeaponJoint (Motor6D) @ 0x2575848b600
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/ItemPreviews/RevolverModel/Shotgun
+- Shotgun (Part) @ 0x25782978c80
+  - Mesh (SpecialMesh) @ 0x257825efb00
+    - Hkey (IntValue) | Value: 7 @ 0x25782b2cfe0
+  - Hkey (IntValue) | Value: 6 @ 0x25782b26a60
+  - WeaponJoint (Weld) @ 0x257829791c0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/Shotgun
+- Shotgun (Part) @ 0x2575f778900
+  - Mesh (SpecialMesh) @ 0x25764d25a80
+    - Hkey (IntValue) | Value: 7 @ 0x2574e8cc3a0
+  - Hkey (IntValue) | Value: 6 @ 0x2574e8c1040
+  - WeaponJoint (Motor6D) @ 0x25759aefe00
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/Shotgun
+- Shotgun (Part) @ 0x25782dffc80
+  - Mesh (SpecialMesh) @ 0x2575af35180
+    - Hkey (IntValue) | Value: 7 @ 0x25781f9f040
+  - Hkey (IntValue) | Value: 6 @ 0x25781f98e40
+  - WeaponJoint (Motor6D) @ 0x257678cd600
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/Shotgun
+- Shotgun (Part) @ 0x2575b32c9c0
+  - Mesh (SpecialMesh) @ 0x25781a51580
+    - Hkey (IntValue) | Value: 7 @ 0x25782a3b840
+  - Hkey (IntValue) | Value: 6 @ 0x25782a39700
+  - WeaponJoint (Motor6D) @ 0x25759ae9200
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/BoundBox
+- BoundBox (Part) @ 0x257684f3180
+  - Hkey (IntValue) | Value: 0 @ 0x25782bbf3c0
+  - WeaponJoint (Motor6D) @ 0x2575b4fd000
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/BoundBox
+- BoundBox (Part) @ 0x257599f2000
+  - Hkey (IntValue) | Value: 0 @ 0x25783b2d1a0
+  - WeaponJoint (Motor6D) @ 0x257677e4000
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/BoundBox
+- BoundBox (Part) @ 0x257832f2c40
+  - Hkey (IntValue) | Value: 0 @ 0x25782acebe0
+  - WeaponJoint (Motor6D) @ 0x25766ec4400
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/ItemPreviews/RevolverModel/BoundBox
+- BoundBox (Part) @ 0x25783243340
+  - Hkey (IntValue) | Value: 0 @ 0x2575afe4760
+  - WeaponJoint (Weld) @ 0x25783248ac0
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/ItemPreviews/RevolverModel/Shotgun
+- Shotgun (Part) @ 0x257847028c0
+  - Mesh (SpecialMesh) @ 0x25783ffcf80
+    - Hkey (IntValue) | Value: 7 @ 0x2574e8859c0
+  - Hkey (IntValue) | Value: 6 @ 0x2574e88fd60
+  - WeaponJoint (Weld) @ 0x25784702700
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/Shotgun
+- Shotgun (Part) @ 0x25782887240
+  - Mesh (SpecialMesh) @ 0x257831bce00
+    - Hkey (IntValue) | Value: 7 @ 0x25784a567c0
+  - Hkey (IntValue) | Value: 6 @ 0x25784a512e0
+  - WeaponJoint (Motor6D) @ 0x25757a0a800
+
+Found matching config root at path: ReplicatedStorage/ReplicatedStorage/RagdollCache/ISearsl/WeaponHandle/WeaponModel/Shotgun
+- Shotgun (Part) @ 0x25783102000
+  - Mesh (SpecialMesh) @ 0x2574ef44580
+    - Hkey (IntValue) | Value: 7 @ 0x25783826d00
+  - Hkey (IntValue) | Value: 6 @ 0x257838284a0
+  - WeaponJoint (Motor6D) @ 0x257678c1600
+
+Found matching config root at path: Workspace/Workspace/WorldIgnore/Ignore/WeaponPickup/WeaponModel/BoundBox
+- BoundBox (Part) @ 0x2575d358e40
+  - Hkey (IntValue) | Value: 6 @ 0x2578d65d7c0
+  - WeaponJoint (Motor6D) @ 0x257846d8800
+
+Found matching config root at path: Workspace/Workspace/Lobby/MapParts/LobbyParts/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575adbe080
+
+Found matching config root at path: Workspace/Workspace/Lobby/MapParts/LobbyParts/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575b1dcf00
+
+Found matching config root at path: Workspace/Workspace/Lobby/MapParts/LobbyParts/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575b9cc800
+
+Found matching config root at path: Workspace/Workspace/Lobby/MapParts/LobbyParts/Sign
+- Sign (Part) @ 0x2575b43f900
+  - SurfaceGui (SurfaceGui) @ 0x257534ad280
+    - TextLabel (TextLabel) @ 0x2575394a080
+    - v2 (TextLabel) @ 0x25753949080
+
+Found matching config root at path: Workspace/Workspace/Lobby/MapParts/LobbyParts/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575a470e80
+
+Found matching config root at path: Workspace/Workspace/Lobby/MapParts/LobbyParts/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575a472380
+
+Found matching config root at path: Workspace/Workspace/Lobby/MapParts/LobbyParts/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2575059ee80
+
+Found matching config root at path: Workspace/Workspace/Lobby/MapParts/LobbyParts/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x25764597780
+
+Found matching config root at path: Workspace/Workspace/Lobby/MapParts/LobbyParts/RopeCapRoundBase
+- RopeCapRoundBase (MeshPart) @ 0x2576459cb80
+
+Found matching config root at path: Workspace/Workspace/MapMain/MapParts/MapStructure/Building/Sign
+- Sign (Model) @ 0x25785f25800
+  - Part (Part) @ 0x2577fa0e240
+  - Part (Part) @ 0x2577fa0e400
+
+Found matching config root at path: Workspace/Workspace/MapMain/MapParts/MapStructure/Building/Sign
+- Sign (Model) @ 0x25785f2d280
+  - Part (Part) @ 0x25785f48740
+
+Found matching config root at path: Workspace/Workspace/MapMain/MapParts/MapStructure/Building/Sign
+- Sign (Model) @ 0x2578b9a3c00
+  - Part (Part) @ 0x2578bde0cc0
+  - Part (Part) @ 0x2578bde0e80
+
+Found matching config root at path: Workspace/Workspace/MapMain/MapParts/Props/ArrowSign
+- ArrowSign (Model) @ 0x2578b9a8900
+  - Arrow (Model) @ 0x2578b9a8c80
+    - Colour (Part) @ 0x2578bde8900
+    - Colour (Part) @ 0x2578bde8ac0
+    - Colour (Part) @ 0x2578bde8c80
+  - Colour (Part) @ 0x2578bde8e40
+
+Found matching config root at path: Workspace/Workspace/MapMain/MapParts/Props/ArrowSign
+- ArrowSign (Model) @ 0x2578b9a9000
+  - Arrow (Model) @ 0x2578b9a9380
+    - Colour (Part) @ 0x2578bde9000
+    - Colour (Part) @ 0x2578bde91c0
+    - Colour (Part) @ 0x2578bde9380
+  - Colour (Part) @ 0x2578bde9540
+
+Found matching config root at path: Workspace/Workspace/MapMain/MapParts/Props/ArrowSign
+- ArrowSign (Model) @ 0x2578b9a9700
+  - Arrow (Model) @ 0x2578b9a9a80
+    - Colour (Part) @ 0x2578bde9700
+    - Colour (Part) @ 0x2578bde98c0
+    - Colour (Part) @ 0x2578bde9a80
+  - Colour (Part) @ 0x2578bde9c40
+
+Found matching config root at path: Workspace/Workspace/MapMain/MapParts/Props/Barrel
+- Barrel (Model) @ 0x2578b9a9e00
+  - Roundies (Part) @ 0x2578bde9e00
+  - Roundies (Part) @ 0x2578bde9fc0
+  - Part (Part) @ 0x2578bdea180
+  - Roundies (Part) @ 0x2578bdea340
+  - Roundies (Part) @ 0x2578bdea500
+
+Found matching config root at path: Workspace/Workspace/MapMain/MapParts/Props/Barrel
+- Barrel (Model) @ 0x2578b9aa180
+  - Roundies (Part) @ 0x2578bdea6c0
+  - Roundies (Part) @ 0x2578bdea880
+  - Part (Part) @ 0x2578bdeaa40
+  - Roundies (Part) @ 0x2578bdeac00
+  - Roundies (Part) @ 0x2578bdeadc0
+
+Found matching config root at path: Workspace/Workspace/MapMain/MapParts/Props/Barrel
+- Barrel (Model) @ 0x2578b9aa500
+  - Roundies (Part) @ 0x2578bdeaf80
+  - Roundies (Part) @ 0x2578bdeb140
+  - Part (Part) @ 0x2578bdeb300
+  - Roundies (Part) @ 0x2578bdeb4c0
+  - Roundies (Part) @ 0x2578bdeb680
+
+Found matching config root at path: Workspace/Workspace/MapMain/MapParts/Props/Barrel
+- Barrel (Model) @ 0x2578b9aa880
+  - Roundies (Part) @ 0x2578bdeb840
+  - Roundies (Part) @ 0x2578bdeba00
+  - Part (Part) @ 0x2578bdebbc0
+  - Roundies (Part) @ 0x2578bdebd80
+  - Roundies (Part) @ 0x2578bdebf40
+
+Found matching config root at path: Workspace/Workspace/MapMain/MapParts/Props/Barrel
+- Barrel (Model) @ 0x2578b9aac00
+  - Roundies (Part) @ 0x2578bdec100
+  - Roundies (Part) @ 0x2578bdec2c0
+  - Part (Part) @ 0x2578bdec480
+  - Roundies (Part) @ 0x2578bdec640
+  - Roundies (Part) @ 0x2578bdec800
+
+Found matching config root at path: Workspace/Workspace/MapMain/MapParts/Props/Barrel
+- Barrel (Model) @ 0x2578b9aaf80
+  - Roundies (Part) @ 0x2578bdec9c0
+  - Roundies (Part) @ 0x2578bdecb80
+  - Part (Part) @ 0x2578bdecd40
+  - Roundies (Part) @ 0x2578bdecf00
+  - Roundies (Part) @ 0x2578bded0c0
+
+Found matching config root at path: Workspace/Workspace/MapMain/MapParts/Props/Barrel
+- Barrel (Model) @ 0x2578b9ab300
+  - Roundies (Part) @ 0x2578bded280
+  - Roundies (Part) @ 0x2578bded440
+  - Part (Part) @ 0x2578bded600
+  - Roundies (Part) @ 0x2578bded7c0
+  - Roundies (Part) @ 0x2578bded980
+
+Found matching config root at path: Workspace/Workspace/MapMain/MapParts/Props/DumpsterDouble
+- DumpsterDouble (Model) @ 0x2578bf01580
+  - MainFrame (Model) @ 0x2578bf01900
+    - MainFrame (Model) @ 0x2578bf01c80
+      - Part (Part) @ 0x2578bef5d40
+      - Part (Part) @ 0x2578bef5f00
+      - Part (Part) @ 0x2578bef60c0
+      - Part (Part) @ 0x2578bef6280
+      - Part (Part) @ 0x2578bef6440
+      - Part (Part) @ 0x2578bef6600
+      - Part (Part) @ 0x2578bef67c0
+    - Part (WedgePart) @ 0x2578bef6980
+  - Handle (Model) @ 0x2578bf02000
+    - Part (Part) @ 0x2578bef6b40
+    - Part (Part) @ 0x2578bef6d00
+    - Part (Part) @ 0x2578bef6ec0
+    - Part (Part) @ 0x2578bef7080
+  - Handle (Model) @ 0x2578bf02380
+    - Part (Part) @ 0x2578bef7240
+    - Part (Part) @ 0x2578bef7400
+    - Part (Part) @ 0x2578bef75c0
+    - Part (Part) @ 0x2578bef7780
+  - Lid (Model) @ 0x2578bf02700
+    - Part (Part) @ 0x2578bef7940
+
+Found matching config root at path: Workspace/Workspace/noodlehoodlefeet/WeaponHandle/WeaponModel/BoundBox
+- BoundBox (Part) @ 0x257860c1040
+  - Hkey (IntValue) | Value: 0 @ 0x2578da43500
+  - WeaponJoint (Motor6D) @ 0x2575726d000
+
+Found matching config root at path: Workspace/Workspace/IIIIIllIlIllllIIIIl/Sign
+- Sign (Tool) @ 0x2572ca70080
+  - GearServer (Script) @ 0x25782be5200
+    - GearClient (LocalScript) @ 0x25782bea800
+  - ClientEvent (RemoteEvent) @ 0x257872f5f00
+  - ServerEvent (BindableEvent) @ 0x25786ac3ce0
+  - ToolType (StringValue) | Value: "Unknown" @ 0x2575dad0b00
+  - # (IntValue) | Value: 2 @ 0x25786acecc0
+  - ToolId (StringValue) | Value: "Unknown" @ 0x25766dd4b00
+  - 20 (Part) @ 0x257872f28c0
+    - HandleJoint (Motor6D) @ 0x257846da400
+    - GearModel (Model) @ 0x2578c8c9a80
+      - Sign (Part) @ 0x257872f0e80
+        - Mesh (SpecialMesh) @ 0x2578dc1fc80
+          - Hkey (IntValue) | Value: 1 @ 0x25782a05c60
+        - Hkey (IntValue) | Value: 0 @ 0x25782a022a0
+        - OffsetJoint (Motor6D) @ 0x257846df400
+

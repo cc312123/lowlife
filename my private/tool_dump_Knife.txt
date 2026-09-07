@@ -1,0 +1,16 @@
+Tool Name: Knife
+Tool Class: Tool
+
+Descendants:
+  - Name: KnifeServer | Class: Script @ 0x2578610b000
+    - Name: KnifeClient | Class: LocalScript @ 0x25786108800
+      - Name: Particles | Class: Configuration @ 0x257850808c0
+        - Name: Blood | Class: ParticleEmitter @ 0x2578c7c3c80
+        - Name: Spark | Class: ParticleEmitter @ 0x2578c7c2180
+        - Name: Dust | Class: ParticleEmitter @ 0x2578c7c4280
+    - Name: ChargeTrailEffect | Class: Trail @ 0x2578e2f3780
+  - Name: ClientEvent | Class: RemoteEvent @ 0x2578c7dbbc0
+  - Name: ServerEvent | Class: BindableEvent @ 0x2578c79b060
+  - Name: ToolType | Class: StringValue | Value: "Unknown" @ 0x25765c29000
+  - Name: KAnimDoneIdle | Class: BindableEvent @ 0x2575f4f4060
+  - Name: KAnimDoneEquip | Class: BindableEvent @ 0x2575f4fc020

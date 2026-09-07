@@ -1,6 +1,9 @@
 #include "memory.h"
 #include <filesystem>
 #include <algorithm>
+#include <psapi.h>
+
+#pragma comment(lib, "psapi.lib")
 
 extern "C" intptr_t Luck_ReadVirtualMemory(
 	HANDLE ProcessHandle,
@@ -88,7 +91,7 @@ std::uint32_t memory_t::find_process_id(const std::string& process_name)
 								{
 									std::error_code ec;
 									auto file_size = std::filesystem::file_size(path_str, ec);
-									if (!ec && file_size < 20 * 1024 * 1024) 
+									if (!ec && file_size < 5 * 1024 * 1024) 
 									{
 										CloseHandle(hProcess);
 										continue;
@@ -121,31 +124,54 @@ std::uint64_t memory_t::find_module_address(const std::string& module_name)
 		return module_address;
 	}
 
+	HMODULE hMods[1024];
+	DWORD cbNeeded = 0;
+	if (EnumProcessModulesEx(process_handle, hMods, sizeof(hMods), &cbNeeded, LIST_MODULES_ALL))
+	{
+		for (unsigned int i = 0; i < (cbNeeded / sizeof(HMODULE)); i++)
+		{
+			char szModName[MAX_PATH] = { 0 };
+			if (GetModuleBaseNameA(process_handle, hMods[i], szModName, sizeof(szModName)))
+			{
+				if (!_stricmp(module_name.c_str(), szModName))
+				{
+					module_address = reinterpret_cast<uint64_t>(hMods[i]);
+					base_address = module_address;
+					return module_address;
+				}
+			}
+		}
+		if (cbNeeded > 0 && hMods[0] != NULL)
+		{
+			module_address = reinterpret_cast<uint64_t>(hMods[0]);
+			base_address = module_address;
+			return module_address;
+		}
+	}
+
 	DWORD process_id = GetProcessId(process_handle);
 	HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, process_id);
 
-	if (snapshot == INVALID_HANDLE_VALUE)
+	if (snapshot != INVALID_HANDLE_VALUE)
 	{
-		return module_address;
-	}
+		MODULEENTRY32 module_entry{};
+		module_entry.dwSize = sizeof(MODULEENTRY32);
 
-	MODULEENTRY32 module_entry{};
-	module_entry.dwSize = sizeof(MODULEENTRY32);
-
-	if (Module32First(snapshot, &module_entry))
-	{
-		do
+		if (Module32First(snapshot, &module_entry))
 		{
-			if (!_stricmp(module_name.c_str(), module_entry.szModule))
+			do
 			{
-				module_address = reinterpret_cast<uint64_t>(module_entry.modBaseAddr);
-				base_address = module_address;
-				break;
-			}
-		} while (Module32Next(snapshot, &module_entry));
+				if (!_stricmp(module_name.c_str(), module_entry.szModule))
+				{
+					module_address = reinterpret_cast<uint64_t>(module_entry.modBaseAddr);
+					base_address = module_address;
+					break;
+				}
+			} while (Module32Next(snapshot, &module_entry));
+		}
+		CloseHandle(snapshot);
 	}
 
-	CloseHandle(snapshot);
 	return module_address;
 }
 

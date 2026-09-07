@@ -1,0 +1,10 @@
+Tool Name: [Da Milk]
+Tool Class: Tool
+
+Descendants:
+  - Name: Food | Class: Script @ 0x1511e61a200
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x1447592663168 @ 0x1528c621820
+  - Name: Handle | Class: Part @ 0x15122d5e780
+    - Name: WeldConstraint | Class: WeldConstraint @ 0x15285542380
+    - Name: Eat | Class: StringValue | Value: "Unknown" @ 0x15280471f00
+  - Name: Default | Class: MeshPart @ 0x15290ac5480

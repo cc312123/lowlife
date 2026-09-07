@@ -1,0 +1,17 @@
+Tool Name: [DoubleBarrel]
+Tool Class: Tool
+
+Descendants:
+  - Name: Script | Class: Script @ 0x29383dae600
+    - Name: Ammo | Class: IntValue | Value: 2 @ 0x2922d9ae4e0
+      - Name: CLIENT | Class: NumberValue | Value: 2.000000 @ 0x2922d9a0a20
+    - Name: MaxAmmo | Class: IntValue | Value: 2 @ 0x2922d9a5800
+    - Name: CanHitPlayer | Class: ObjectValue | Value: infectedmz (Player) @ 0x2826525106304 @ 0x2922d9a8f20
+    - Name: CanHitPlayer2 | Class: ObjectValue | Value: nil @ 0x2922d9a8c80
+  - Name: GunData | Class: ModuleScript @ 0x293843acd40
+  - Name: Handle | Class: MeshPart @ 0x2921af72700
+    - Name: Shoot | Class: Sound @ 0x29384e5fa80
+    - Name: NoAmmo | Class: Sound @ 0x29384e54400
+    - Name: RightGrip | Class: Weld @ 0x29201e3d280
+    - Name: ShootBBGUI | Class: BillboardGui @ 0x29215926e80
+      - Name: Shoot | Class: ImageLabel @ 0x29236e21880

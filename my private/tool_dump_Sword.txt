@@ -1,0 +1,14 @@
+Tool Name: Sword
+Tool Class: Tool
+
+Descendants:
+  - Name: Handle | Class: Part @ 0x292225c2700
+    - Name: Attachment1 | Class: Attachment @ 0x2922baa4580
+    - Name: Attachment0 | Class: Attachment @ 0x2922baab300
+    - Name: Rainbow | Class: Trail @ 0x2922e0ab980
+  - Name: DigTrigger | Class: Part @ 0x292225c2540
+    - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d641200
+  - Name: ParticlePart | Class: Part @ 0x292225c3f80
+    - Name: WeldConstraint | Class: WeldConstraint @ 0x2922d64ef40
+  - Name: Mesh | Class: MeshPart @ 0x2922a8f5b80
+    - Name: WeldConstraint | Class: WeldConstraint @ 0x29224794400

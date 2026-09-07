@@ -1,0 +1,14 @@
+Tool Name: [Sniper]
+Tool Class: Tool
+
+Descendants:
+  - Name: Ammo | Class: IntValue | Value: 5 @ 0x213194cb3e0
+  - Name: Handle | Class: MeshPart @ 0x214a4b6ee80
+    - Name: ShootSound | Class: Sound @ 0x21481b91480
+    - Name: NoAmmo | Class: Sound @ 0x21481b9c600
+    - Name: Light | Class: PointLight @ 0x213222b4d00
+    - Name: Flash | Class: BillboardGui @ 0x214a7bc5a80
+      - Name: Shoot | Class: ImageLabel @ 0x214a4113080
+  - Name: LocalScript | Class: LocalScript @ 0x214a7066800
+  - Name: MaxAmmo | Class: NumberValue | Value: 5.000000 @ 0x2147ce37e80
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x2281154271360 @ 0x2147ce343e0

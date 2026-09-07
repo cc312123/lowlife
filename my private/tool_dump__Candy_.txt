@@ -1,0 +1,10 @@
+Tool Name: [Candy]
+Tool Class: Tool
+
+Descendants:
+  - Name: Eat | Class: Script @ 0x2a4c8ea1000
+  - Name: OwnerTag | Class: ObjectValue | Value: IIIIIllIlIllllIIIIl (Player) @ 0x2906076223616 @ 0x2a517034300
+  - Name: Handle | Class: MeshPart @ 0x2a4d50b3c00
+    - Name: Eat | Class: StringValue | Value: "Unknown" @ 0x2a4c8e88100
+    - Name: WeldConstraint | Class: WeldConstraint @ 0x2a518f642c0
+  - Name: Candy Corn | Class: MeshPart @ 0x2a4d50b1c80

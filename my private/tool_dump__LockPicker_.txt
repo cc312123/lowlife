@@ -1,0 +1,8 @@
+Tool Name: [LockPicker]
+Tool Class: Tool
+
+Descendants:
+  - Name: LockPicker | Class: Script @ 0x13bfd6f8400
+  - Name: Handle | Class: UnionOperation @ 0x13be632c000
+    - Name: WeldConstraint | Class: WeldConstraint @ 0x13bfc41c800
+    - Name: Part | Class: MeshPart @ 0x13be632e000
