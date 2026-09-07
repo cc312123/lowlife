@@ -2001,15 +2001,43 @@ namespace shot_detect
 					if (cls == "Part" || cls == "MeshPart" || cls == "UnionOperation") { handle = child; break; }
 				}
 			}
-			if (handle.address == 0) return 0;
+			if (handle.address != 0)
+			{
+				for (auto& child : handle.get_children())
+				{
+					if (child.get_class_name() != "Sound") continue;
+					std::string name = child.get_name();
+					std::string nl = name;
+					std::transform(nl.begin(), nl.end(), nl.begin(), ::tolower);
+					if (nl == "shoot" || nl == "shootsound" || nl == "fire" || nl == "gunshot" || nl == "shot" || nl.find("shoot") != std::string::npos || nl.find("fire") != std::string::npos)
+					{
+						cached_shoot_sound_address = child.address;
+						cached_shoot_sound_tool_addr = equipped_tool.address;
+						char notif[128];
+						std::snprintf(notif, sizeof(notif), "ShootSound Locked: %s @ %llx", name.c_str(), child.address);
+						notifications::add(notif, notifications::NotificationType::Success, 3.0f);
+						return child.address;
+					}
+				}
+				for (auto& child : handle.get_children())
+				{
+					if (child.get_class_name() == "Sound")
+					{
+						cached_shoot_sound_address = child.address;
+						cached_shoot_sound_tool_addr = equipped_tool.address;
+						return child.address;
+					}
+				}
+			}
 
-			for (auto& child : handle.get_children())
+			// Fallback: Check direct children of equipped_tool
+			for (auto& child : equipped_tool.get_children())
 			{
 				if (child.get_class_name() != "Sound") continue;
 				std::string name = child.get_name();
 				std::string nl = name;
 				std::transform(nl.begin(), nl.end(), nl.begin(), ::tolower);
-				if (nl == "shoot" || nl == "shootsound" || nl == "fire" || nl == "gunshot" || nl == "shot")
+				if (nl == "shoot" || nl == "shootsound" || nl == "fire" || nl == "gunshot" || nl == "shot" || nl.find("shoot") != std::string::npos || nl.find("fire") != std::string::npos)
 				{
 					cached_shoot_sound_address = child.address;
 					cached_shoot_sound_tool_addr = equipped_tool.address;
@@ -2019,8 +2047,7 @@ namespace shot_detect
 					return child.address;
 				}
 			}
-			// Fallback: first Sound in Handle
-			for (auto& child : handle.get_children())
+			for (auto& child : equipped_tool.get_children())
 			{
 				if (child.get_class_name() == "Sound")
 				{
@@ -2036,7 +2063,13 @@ namespace shot_detect
 	static bool read_sound_is_playing(std::uint64_t sound_addr)
 	{
 		if (sound_addr == 0) return false;
-		try { return memory->read<bool>(sound_addr + Offsets::Sound::IsPlaying); } catch (...) { return false; }
+		try {
+			if (memory->read<bool>(sound_addr + Offsets::Sound::IsPlaying)) return true;
+			// Fallback check adjacent bytes in case of 1-byte packing variance
+			if (memory->read<bool>(sound_addr + Offsets::Sound::IsPlaying - 1)) return true;
+			if (memory->read<bool>(sound_addr + Offsets::Sound::IsPlaying + 1)) return true;
+			return false;
+		} catch (...) { return false; }
 	}
 
 	static bool check_target_muzzle_flash(const cache::entity_t& target)

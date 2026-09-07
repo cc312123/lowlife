@@ -2501,18 +2501,44 @@ namespace shot_detect
 					}
 				}
 			}
-			if (handle.address == 0) return 0;
-
-			// Search Handle's children for a Sound named "Shoot" or "ShootSound" or "Fire"
-			for (auto& child : handle.get_children())
+			if (handle.address != 0)
 			{
-				std::string cls = child.get_class_name();
-				if (cls != "Sound") continue;
+				for (auto& child : handle.get_children())
+				{
+					std::string cls = child.get_class_name();
+					if (cls != "Sound") continue;
+					std::string name = child.get_name();
+					std::string name_lower = name;
+					std::transform(name_lower.begin(), name_lower.end(), name_lower.begin(), ::tolower);
+					if (name_lower == "shoot" || name_lower == "shootsound" || name_lower == "fire" || name_lower == "gunshot" || name_lower == "shot" || name_lower.find("shoot") != std::string::npos || name_lower.find("fire") != std::string::npos)
+					{
+						cached_shoot_sound_address = child.address;
+						cached_shoot_sound_tool_addr = equipped_tool.address;
+						char notif[128];
+						std::snprintf(notif, sizeof(notif), "ShootSound Locked: %s @ %llx", name.c_str(), child.address);
+						notifications::add(notif, notifications::NotificationType::Success, 3.0f);
+						return child.address;
+					}
+				}
+				for (auto& child : handle.get_children())
+				{
+					if (child.get_class_name() == "Sound")
+					{
+						cached_shoot_sound_address = child.address;
+						cached_shoot_sound_tool_addr = equipped_tool.address;
+						return child.address;
+					}
+				}
+			}
+
+			// Fallback: Check direct children of equipped_tool
+			for (auto& child : equipped_tool.get_children())
+			{
+				if (child.get_class_name() != "Sound") continue;
 				std::string name = child.get_name();
-				// Convert to lowercase for comparison
 				std::string name_lower = name;
 				std::transform(name_lower.begin(), name_lower.end(), name_lower.begin(), ::tolower);
-				if (name_lower == "shoot" || name_lower == "shootsound" || name_lower == "fire" || name_lower == "gunshot" || name_lower == "shot")
+				if (name_lower == "shoot" || name_lower == "shootsound" || name_lower == "fire" || name_lower == "gunshot" || name_lower == "shot" || name_lower.find("shoot") != std::string::npos || name_lower.find("fire") != std::string::npos)
 				{
 					cached_shoot_sound_address = child.address;
 					cached_shoot_sound_tool_addr = equipped_tool.address;
@@ -2522,9 +2548,7 @@ namespace shot_detect
 					return child.address;
 				}
 			}
-
-			// Fallback: grab first Sound found in Handle
-			for (auto& child : handle.get_children())
+			for (auto& child : equipped_tool.get_children())
 			{
 				if (child.get_class_name() == "Sound")
 				{
@@ -2543,7 +2567,11 @@ namespace shot_detect
 	{
 		if (sound_addr == 0) return false;
 		try {
-			return memory->read<bool>(sound_addr + Offsets::Sound::IsPlaying);
+			if (memory->read<bool>(sound_addr + Offsets::Sound::IsPlaying)) return true;
+			// Fallback check adjacent bytes in case of 1-byte packing variance
+			if (memory->read<bool>(sound_addr + Offsets::Sound::IsPlaying - 1)) return true;
+			if (memory->read<bool>(sound_addr + Offsets::Sound::IsPlaying + 1)) return true;
+			return false;
 		} catch (...) { return false; }
 	}
 

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 /* =============================================================
 /*                       theo's offsets                         
 /*                  https://offsets.imtheo.lol                  
@@ -203,9 +203,9 @@ namespace Offsets {
     }
 
     namespace GuiBase2D {
-          inline Offset AbsolutePosition = { "GuiBase2D::AbsolutePosition", 0x10c };
+          inline Offset AbsolutePosition = { "GuiBase2D::AbsolutePosition", 0x0 };
           inline Offset AbsoluteRotation = { "GuiBase2D::AbsoluteRotation", 0xe8 };
-          inline Offset AbsoluteSize = { "GuiBase2D::AbsoluteSize", 0x114 };
+          inline Offset AbsoluteSize = { "GuiBase2D::AbsoluteSize", 0x0 };
     }
 
     namespace GuiObject {
@@ -254,7 +254,7 @@ namespace Offsets {
           inline Offset NameDisplayDistance = { "Humanoid::NameDisplayDistance", 0x1b0 };
           inline Offset NameOcclusion = { "Humanoid::NameOcclusion", 0x1b4 };
           inline Offset PlatformStand = { "Humanoid::PlatformStand", 0x1dc };
-          inline Offset PlatformStatePointer = { "Humanoid::PlatformStatePointer", 0x4a7dd9a9 };
+          inline Offset PlatformStatePointer = { "Humanoid::PlatformStatePointer", 0x0 };
           inline Offset RequiresNeck = { "Humanoid::RequiresNeck", 0x1dd };
           inline Offset RigType = { "Humanoid::RigType", 0x1c0 };
           inline Offset SeatPart = { "Humanoid::SeatPart", 0x108 };
@@ -276,6 +276,7 @@ namespace Offsets {
           inline Offset Name = { "Instance::Name", 0x8 };
           inline Offset Parent = { "Instance::Parent", 0x68 };
           inline Offset This = { "Instance::This", 0x8 };
+          inline Offset NameContainer = { "Instance::NameContainer", 0x70 };
     }
 
     namespace Lighting {
@@ -304,7 +305,7 @@ namespace Offsets {
     }
 
     namespace LocalScript {
-          inline Offset ByteCode = { "LocalScript::ByteCode", 0x0 };
+          inline Offset ByteCode = { "LocalScript::ByteCode", 0xf00 };
           inline Offset GUID = { "LocalScript::GUID", 0xd0 };
           inline Offset Hash = { "LocalScript::Hash", 0x1a0 };
     }
@@ -339,6 +340,7 @@ namespace Offsets {
           inline Offset LRUCache = { "MeshContentProvider::LRUCache", 0x20 };
           inline Offset MeshData = { "MeshContentProvider::MeshData", 0x40 };
           inline Offset ToMeshData = { "MeshContentProvider::ToMeshData", 0x40 };
+          inline Offset LRUHolder = { "MeshContentProvider::LRUHolder", 0xd8 };
     }
 
     namespace MeshData {
@@ -460,14 +462,14 @@ namespace Offsets {
     }
 
     namespace RenderView {
-          inline Offset DeviceD3D11 = { "RenderView::DeviceD3D11", 0x8 };
-          inline Offset LightingValid = { "RenderView::LightingValid", 0x150 };
-          inline Offset SkyValid = { "RenderView::SkyValid", 0x28d };
-          inline Offset VisualEngine = { "RenderView::VisualEngine", 0x10 };
+          inline Offset DeviceD3D11 = { "RenderView::DeviceD3D11", 0x0 };
+          inline Offset LightingValid = { "RenderView::LightingValid", 0x0 };
+          inline Offset SkyValid = { "RenderView::SkyValid", 0x0 };
+          inline Offset VisualEngine = { "RenderView::VisualEngine", 0x0 };
     }
 
     namespace RunService {
-          inline Offset HeartbeatFPS = { "RunService::HeartbeatFPS", 0xc0 };
+          inline Offset HeartbeatFPS = { "RunService::HeartbeatFPS", 0xc8 };
           inline Offset HeartbeatTask = { "RunService::HeartbeatTask", 0xe0 };
     }
 
@@ -512,7 +514,7 @@ namespace Offsets {
     }
 
     namespace SpawnLocation {
-          inline Offset AllowTeamChangeOnTouch = { "SpawnLocation::AllowTeamChangeOnTouch", 0x3d };
+          inline Offset AllowTeamChangeOnTouch = { "SpawnLocation::AllowTeamChangeOnTouch", 0x1f0 };
           inline Offset Enabled = { "SpawnLocation::Enabled", 0x1f1 };
           inline Offset ForcefieldDuration = { "SpawnLocation::ForcefieldDuration", 0x1e8 };
           inline Offset Neutral = { "SpawnLocation::Neutral", 0x1f2 };
@@ -525,7 +527,7 @@ namespace Offsets {
     }
 
     namespace StatsItem {
-          inline Offset Value = { "StatsItem::Value", 0xc8 };
+          inline Offset Value = { "StatsItem::Value", 0xad34 };
     }
 
     namespace SunRaysEffect {
@@ -575,10 +577,10 @@ namespace Offsets {
 
     namespace Tool {
           inline Offset CanBeDropped = { "Tool::CanBeDropped", 0x4b8 };
-          inline Offset Enabled = { "Tool::Enabled", 0x4b9 };
+          inline Offset Enabled = { "Tool::Enabled", 0x405 };
           inline Offset Grip = { "Tool::Grip", 0x4ac };
           inline Offset ManualActivationOnly = { "Tool::ManualActivationOnly", 0x4ba };
-          inline Offset RequiresHandle = { "Tool::RequiresHandle", 0x1d5 };
+          inline Offset RequiresHandle = { "Tool::RequiresHandle", 0x475 };
           inline Offset TextureId = { "Tool::TextureId", 0x360 };
           inline Offset Tooltip = { "Tool::Tooltip", 0x468 };
     }
@@ -594,7 +596,7 @@ namespace Offsets {
     namespace VehicleSeat {
           inline Offset MaxSpeed = { "VehicleSeat::MaxSpeed", 0x228 };
           inline Offset SteerFloat = { "VehicleSeat::SteerFloat", 0x22c };
-          inline Offset ThrottleFloat = { "VehicleSeat::ThrottleFloat", 0x188 };
+          inline Offset ThrottleFloat = { "VehicleSeat::ThrottleFloat", 0x230 };
           inline Offset Torque = { "VehicleSeat::Torque", 0x234 };
           inline Offset TurnSpeed = { "VehicleSeat::TurnSpeed", 0x238 };
     }
