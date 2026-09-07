@@ -345,7 +345,7 @@ static bool initialize_roblox_objects() noexcept {
     for (uintptr_t offset = 0x100; offset <= 0x600; offset += 8) {
         uintptr_t potential_char = memory->read<uintptr_t>(local_player + offset);
         if (potential_char != 0 && (potential_char & 0x7) == 0 && potential_char > 0x10000) {
-            rbx::nameable_t inst{ potential_char };
+            rbx::instance_t inst{ potential_char };
             std::string name = inst.get_name();
             std::string class_name = inst.get_class_name();
             if (class_name == "Model" && (name == lp_name || (!lp_name.empty() && lp_name != "unknown" && name.find(lp_name) != std::string::npos) || inst.find_first_child_by_class("Humanoid").address != 0)) {
