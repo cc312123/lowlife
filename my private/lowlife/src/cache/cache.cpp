@@ -334,9 +334,13 @@ void cache::run()
 					for (rbx::part_t& part : model_instance.get_children<rbx::part_t>())
 					{
 						std::string part_class = part.get_class_name();
-						if (part_class.find("Part") != std::string::npos)
+						if (part_class.find("Part") != std::string::npos || part_class.find("Mesh") != std::string::npos || part_class.find("Base") != std::string::npos)
 						{
-							cached_entity.parts[part.get_name()] = part;
+							std::string p_name = part.get_name();
+							if (!p_name.empty() && p_name != "unknown")
+							{
+								cached_entity.parts[p_name] = part;
+							}
 						}
 					}
 
@@ -351,7 +355,9 @@ void cache::run()
 						cached_entity.head_mesh_address = 0;
 					}
 
-					cached_entity.humanoid = { model_instance.find_first_child("Humanoid").address };
+					rbx::instance_t hum_inst = model_instance.find_first_child("Humanoid");
+					if (hum_inst.address == 0) hum_inst = model_instance.find_first_child_by_class("Humanoid");
+					cached_entity.humanoid = { hum_inst.address };
 					cached_entity.rig_type = cached_entity.humanoid.get_rig_type();
 				}
 				else

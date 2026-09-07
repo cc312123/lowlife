@@ -319,7 +319,21 @@ bool PerformSmartRescan(GameState::StateType expectedState) {
             game::players = datamodel.find_first_child_by_class("Players");
             
             if (game::players.address) {
-                game::local_player = memory->read<rbx::instance_t>(game::players.address + Offsets::Player::LocalPlayer);
+                uintptr_t lp_addr = memory->read<uintptr_t>(game::players.address + Offsets::Player::LocalPlayer);
+                if (lp_addr == 0 || (lp_addr & 0x7) != 0 || lp_addr < 0x10000) {
+                    for (uintptr_t off = 0x100; off <= 0x400; off += 8) {
+                        uintptr_t candidate = memory->read<uintptr_t>(game::players.address + off);
+                        if (candidate != 0 && (candidate & 0x7) == 0 && candidate > 0x10000) {
+                            rbx::nameable_t inst{ candidate };
+                            if (inst.get_class_name() == "Player") {
+                                Offsets::Player::LocalPlayer = off;
+                                lp_addr = candidate;
+                                break;
+                            }
+                        }
+                    }
+                }
+                game::local_player = { lp_addr };
                 if (game::local_player.address) {
                     rbx::player_t local_player_obj = { game::local_player.address };
                     game::local_character = { local_player_obj.get_model_instance().address };

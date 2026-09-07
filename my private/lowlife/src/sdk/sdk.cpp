@@ -9,11 +9,23 @@
 
 std::string rbx::nameable_t::get_name()
 {
+	if (this->address == 0) return "unknown";
+
 	std::uint64_t name = memory->read<std::uint64_t>(this->address + Offsets::Instance::Name);
 
-	if (name)
+	if (name && (name & 0x7) == 0 && name > 0x10000)
 	{
-		return memory->read_string(name);
+		std::string str = memory->read_string(name);
+		if (!str.empty() && str != "Unknown")
+		{
+			return str;
+		}
+	}
+
+	std::string direct_str = memory->read_string(this->address + Offsets::Instance::Name);
+	if (!direct_str.empty() && direct_str != "Unknown")
+	{
+		return direct_str;
 	}
 
 	return "unknown";
@@ -616,41 +628,44 @@ bool Offsets::Update(const std::string& current_version) {
         }
 
         
-        if (line.find("inline constexpr uintptr_t") != std::string::npos ||
-            line.find("inline constexpr std::uintptr_t") != std::string::npos) {
-            
-            size_t type_pos = line.find("uintptr_t");
-            if (type_pos == std::string::npos) continue;
+        size_t eq_pos = line.find('=');
+        if (eq_pos != std::string::npos && (line.find("Offset") != std::string::npos || line.find("uintptr_t") != std::string::npos || line.find("uint64_t") != std::string::npos)) {
+            std::string before_eq = trim_str(line.substr(0, eq_pos));
+            std::string val_str = trim_str(line.substr(eq_pos + 1));
 
-            std::string after_type = trim_str(line.substr(type_pos + 9));
-            size_t eq_pos = after_type.find('=');
-            if (eq_pos == std::string::npos) continue;
+            size_t last_space = before_eq.find_last_of(" \t*&");
+            std::string var_name = (last_space != std::string::npos) ? trim_str(before_eq.substr(last_space + 1)) : before_eq;
 
-            std::string var_name = trim_str(after_type.substr(0, eq_pos));
-            std::string val_str = trim_str(after_type.substr(eq_pos + 1));
-
-            
-            if (!val_str.empty() && val_str.back() == ';') {
-                val_str.pop_back();
-                val_str = trim_str(val_str);
-            }
-
-            uintptr_t value = 0;
-            try {
-                if (val_str.rfind("0x", 0) == 0 || val_str.rfind("0X", 0) == 0) {
-                    value = std::stoull(val_str, nullptr, 16);
-                } else {
-                    value = std::stoull(val_str, nullptr, 10);
+            if (!var_name.empty()) {
+                size_t comma_pos = val_str.rfind(',');
+                if (comma_pos != std::string::npos) {
+                    val_str = trim_str(val_str.substr(comma_pos + 1));
                 }
-            } catch (...) {
-                continue;
-            }
+                
+                while (!val_str.empty() && (val_str.back() == ';' || val_str.back() == '}' || val_str.back() == ')' || val_str.back() == ' ')) {
+                    val_str.pop_back();
+                    val_str = trim_str(val_str);
+                }
 
-            std::string registry_key = current_namespace.empty() ? var_name : (current_namespace + "::" + var_name);
-            auto it = registry.find(registry_key);
-            if (it != registry.end()) {
-                *(it->second) = value;
-                updated_count++;
+                uintptr_t value = 0;
+                try {
+                    if (val_str.rfind("0x", 0) == 0 || val_str.rfind("0X", 0) == 0) {
+                        value = std::stoull(val_str, nullptr, 16);
+                    } else if (!val_str.empty() && (std::isdigit(val_str[0]) || val_str[0] == '-')) {
+                        value = std::stoull(val_str, nullptr, 10);
+                    } else {
+                        continue;
+                    }
+                } catch (...) {
+                    continue;
+                }
+
+                std::string registry_key = current_namespace.empty() ? var_name : (current_namespace + "::" + var_name);
+                auto it = registry.find(registry_key);
+                if (it != registry.end()) {
+                    *(it->second) = value;
+                    updated_count++;
+                }
             }
         }
     }

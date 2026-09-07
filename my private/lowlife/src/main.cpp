@@ -286,7 +286,55 @@ static bool initialize_roblox_objects() noexcept {
     game::players = { players };
 
     
+    // Dynamically resolve correct Instance::Name offset at runtime
+    if (workspace != 0) {
+        bool found_name_offset = false;
+        std::uint64_t class_desc = memory->read<std::uint64_t>(workspace + Offsets::Instance::ClassDescriptor);
+        std::uint64_t class_name_ptr = memory->read<std::uint64_t>(class_desc + Offsets::Instance::ClassName);
+        std::string expected_class = class_name_ptr ? memory->read_string(class_name_ptr) : "Workspace";
+
+        for (std::uint64_t off = 0x10; off <= 0xA0; off += 8) {
+            std::uint64_t name_ptr = memory->read<std::uint64_t>(workspace + off);
+            if (name_ptr && (name_ptr & 0x7) == 0 && name_ptr > 0x10000) {
+                std::string str = memory->read_string(name_ptr);
+                if (str == "Workspace" || str == "game" || str == expected_class) {
+                    Offsets::Instance::Name = off;
+                    found_name_offset = true;
+                    sprintf_s(buffer, "[SCAN] Dynamically resolved Instance::Name offset to 0x%llx", off);
+                    print_colored_bot_message(buffer, true);
+                    break;
+                }
+            }
+            std::string direct_str = memory->read_string(workspace + off);
+            if (direct_str == "Workspace" || direct_str == "game" || direct_str == expected_class) {
+                Offsets::Instance::Name = off;
+                found_name_offset = true;
+                sprintf_s(buffer, "[SCAN] Dynamically resolved Instance::Name (direct) offset to 0x%llx", off);
+                print_colored_bot_message(buffer, true);
+                break;
+            }
+        }
+        if (!found_name_offset) {
+            Offsets::Instance::Name = 0x48;
+        }
+    }
+
     uintptr_t local_player = memory->read<uintptr_t>(players + Offsets::Player::LocalPlayer);
+    if (local_player == 0 || (local_player & 0x7) != 0 || local_player < 0x10000) {
+        for (uintptr_t off = 0x100; off <= 0x400; off += 8) {
+            uintptr_t candidate = memory->read<uintptr_t>(players + off);
+            if (candidate != 0 && (candidate & 0x7) == 0 && candidate > 0x10000) {
+                rbx::nameable_t inst{ candidate };
+                if (inst.get_class_name() == "Player") {
+                    Offsets::Player::LocalPlayer = off;
+                    local_player = candidate;
+                    sprintf_s(buffer, "[SCAN] Dynamically resolved Player::LocalPlayer offset to 0x%llx", off);
+                    print_colored_bot_message(buffer, true);
+                    break;
+                }
+            }
+        }
+    }
     game::local_player = { local_player };
 
     rbx::player_t lp_obj{ local_player };
@@ -300,7 +348,7 @@ static bool initialize_roblox_objects() noexcept {
             rbx::nameable_t inst{ potential_char };
             std::string name = inst.get_name();
             std::string class_name = inst.get_class_name();
-            if (class_name == "Model" && name == lp_name) {
+            if (class_name == "Model" && (name == lp_name || (!lp_name.empty() && lp_name != "unknown" && name.find(lp_name) != std::string::npos) || inst.find_first_child_by_class("Humanoid").address != 0)) {
                 Offsets::Player::ModelInstance = offset;
                 found_model_instance_offset = true;
                 sprintf_s(buffer, "[SCAN] Dynamically resolved Player::ModelInstance offset to 0x%llx", offset);
