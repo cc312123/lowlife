@@ -9,12 +9,49 @@
 
 std::string rbx::nameable_t::get_name()
 {
-	std::uint64_t name = memory->read<std::uint64_t>(this->address + Offsets::Instance::Name);
+	if (this->address == 0) return "unknown";
 
-	if (name)
-	{
-		return memory->read_string(name);
-	}
+	// NameContainer (0x70) holds the std::string for the instance name
+	// std::string layout: if len < 16, chars are inline at offset 0; if len >= 16, ptr to heap at offset 0
+	std::uint64_t name_container = this->address + Offsets::Instance::NameContainer;
+
+	try {
+		// Read the string length (stored 8 bytes after the char buffer in MSVC std::string: buf[0..15], len at +0x10, cap at +0x18)
+		std::uint64_t str_len = memory->read<std::uint64_t>(name_container + 0x10);
+
+		if (str_len > 0 && str_len < 512)
+		{
+			if (str_len < 16)
+			{
+				// Small string optimization: chars inline at name_container
+				char buf[16] = {};
+				Luck_ReadVirtualMemory(memory->get_process_handle(), reinterpret_cast<void*>(name_container), buf, static_cast<ULONG>(str_len), nullptr);
+				buf[str_len] = '\0';
+				std::string result(buf, str_len);
+				if (!result.empty()) return result;
+			}
+			else
+			{
+				// Large string: pointer at name_container
+				std::uint64_t str_ptr = memory->read<std::uint64_t>(name_container);
+				if (str_ptr && (str_ptr & 0x7) == 0 && str_ptr > 0x10000)
+				{
+					std::string result = memory->read_string(str_ptr);
+					if (!result.empty()) return result;
+				}
+			}
+		}
+	} catch (...) {}
+
+	// Fallback: try reading Name offset as a string pointer
+	try {
+		std::uint64_t name_ptr = memory->read<std::uint64_t>(this->address + Offsets::Instance::Name);
+		if (name_ptr && (name_ptr & 0x7) == 0 && name_ptr > 0x10000)
+		{
+			std::string result = memory->read_string(name_ptr);
+			if (!result.empty() && result != "Unknown") return result;
+		}
+	} catch (...) {}
 
 	return "unknown";
 }
