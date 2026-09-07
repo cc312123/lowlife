@@ -11,120 +11,13 @@ static std::string get_equipped_tool_name(std::uint64_t character_address)
 {
 	if (character_address == 0) return "";
 
-	std::uint64_t start = memory->read<std::uint64_t>(character_address + Offsets::Instance::ChildrenStart);
-	if (start == 0) return "";
-
-	std::uint64_t array_start = memory->read<std::uint64_t>(start);
-	std::uint64_t array_end = memory->read<std::uint64_t>(start + Offsets::Instance::ChildrenEnd);
-
-	if (array_start == 0 || array_end == 0 || array_start >= array_end)
+	rbx::instance_t model(character_address);
+	for (rbx::instance_t& child : model.get_children())
 	{
-		return "";
-	}
-
-	std::uint64_t size_bytes = array_end - array_start;
-	std::uint64_t count = size_bytes / 16; // 16 bytes per shared_ptr
-
-	if (count == 0 || count > 1000)
-	{
-		return "";
-	}
-
-	struct raw_shared_ptr {
-		std::uint64_t ptr;
-		std::uint64_t ref_count;
-	};
-
-	std::vector<raw_shared_ptr> raw_ptrs;
-	raw_shared_ptr* ptr_buf = nullptr;
-	raw_shared_ptr stack_ptrs[64];
-	if (count <= 64) {
-		ptr_buf = stack_ptrs;
-	} else {
-		raw_ptrs.resize(count);
-		ptr_buf = raw_ptrs.data();
-	}
-
-	Luck_ReadVirtualMemory(memory->get_process_handle(), reinterpret_cast<void*>(array_start), ptr_buf, static_cast<ULONG>(count * 16), nullptr);
-
-	struct msvc_string_layout {
-		union {
-			char buf[16];
-			char* ptr;
-		} u;
-		size_t size;
-		size_t res;
-	};
-
-	static std::unordered_map<std::uint64_t, std::string> class_desc_name_cache;
-	static std::mutex class_desc_name_cache_mutex;
-	static std::uint32_t last_cache_pid = 0;
-
-	{
-		std::lock_guard<std::mutex> lock(class_desc_name_cache_mutex);
-		std::uint32_t current_pid = memory->get_process_id();
-		if (current_pid != last_cache_pid)
+		std::string class_name = child.get_class_name();
+		if (class_name == "Tool" || class_name == "HopperBin")
 		{
-			class_desc_name_cache.clear();
-			last_cache_pid = current_pid;
-		}
-	}
-
-	for (std::uint64_t i = 0; i < count; ++i)
-	{
-		std::uint64_t child_address = ptr_buf[i].ptr;
-		if (child_address == 0) continue;
-
-		// Class descriptor address
-		std::uint64_t class_descriptor = memory->read<std::uint64_t>(child_address + Offsets::Instance::ClassDescriptor);
-		if (class_descriptor == 0) continue;
-
-		std::string class_str = "";
-		bool found = false;
-		{
-			std::lock_guard<std::mutex> lock(class_desc_name_cache_mutex);
-			auto it = class_desc_name_cache.find(class_descriptor);
-			if (it != class_desc_name_cache.end())
-			{
-				class_str = it->second;
-				found = true;
-			}
-		}
-
-		if (!found)
-		{
-			// Class name address
-			std::uint64_t class_name_addr = memory->read<std::uint64_t>(class_descriptor + Offsets::Instance::ClassName);
-			if (class_name_addr != 0)
-			{
-				// Read class name string structure
-				msvc_string_layout layout{};
-				Luck_ReadVirtualMemory(memory->get_process_handle(), reinterpret_cast<void*>(class_name_addr), &layout, sizeof(msvc_string_layout), nullptr);
-				if (layout.size > 0 && layout.size <= 255)
-				{
-					char stack_buf[16];
-					if (layout.size < 16) {
-						layout.u.buf[layout.size] = '\0';
-						class_str = layout.u.buf;
-					} else {
-						Luck_ReadVirtualMemory(memory->get_process_handle(), layout.u.ptr, stack_buf, 15, nullptr);
-						stack_buf[15] = '\0';
-						class_str = stack_buf;
-					}
-				}
-			}
-			{
-				std::lock_guard<std::mutex> lock(class_desc_name_cache_mutex);
-				class_desc_name_cache[class_descriptor] = class_str;
-			}
-		}
-
-		if (class_str == "Tool" || class_str == "HopperBin")
-		{
-			std::uint64_t name_ptr = memory->read<std::uint64_t>(child_address + Offsets::Instance::Name);
-			if (name_ptr) {
-				return memory->read_string(name_ptr);
-			}
+			return child.get_name();
 		}
 	}
 

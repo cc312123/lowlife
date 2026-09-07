@@ -111,12 +111,75 @@ template <typename T>
 std::vector<T> rbx::interface_t::get_children()
 {
 	rbx::instance_t* base = static_cast<rbx::instance_t*>(this);
+	if (base->address == 0) return {};
 
+	std::uint64_t array_start = 0;
+	std::uint64_t array_end = 0;
+
+	// Method 1: Check pointer container at ChildrenStart (0x78)
 	std::uint64_t start = memory->read<std::uint64_t>(base->address + Offsets::Instance::ChildrenStart);
-	if (start == 0) return {};
+	if (start != 0 && (start & 0x7) == 0 && start > 0x10000)
+	{
+		std::uint64_t a_start = memory->read<std::uint64_t>(start);
+		std::uint64_t a_end = memory->read<std::uint64_t>(start + Offsets::Instance::ChildrenEnd);
+		if (a_start != 0 && a_end != 0 && a_start < a_end && ((a_end - a_start) % 16 == 0))
+		{
+			array_start = a_start;
+			array_end = a_end;
+		}
+	}
 
-	std::uint64_t array_start = memory->read<std::uint64_t>(start);
-	std::uint64_t array_end = memory->read<std::uint64_t>(start + Offsets::Instance::ChildrenEnd);
+	// Method 2: Check direct vector at ChildrenStart
+	if (array_start == 0)
+	{
+		std::uint64_t a_start = memory->read<std::uint64_t>(base->address + Offsets::Instance::ChildrenStart);
+		std::uint64_t a_end = memory->read<std::uint64_t>(base->address + Offsets::Instance::ChildrenStart + Offsets::Instance::ChildrenEnd);
+		if (a_start != 0 && a_end != 0 && a_start < a_end && ((a_end - a_start) % 16 == 0))
+		{
+			array_start = a_start;
+			array_end = a_end;
+		}
+	}
+
+	// Method 3: Scan candidate offsets on base->address if Methods 1 & 2 failed
+	if (array_start == 0)
+	{
+		static const std::uint64_t candidate_offsets[] = { 0x50, 0x60, 0x68, 0x70, 0x78, 0x80, 0x88, 0x90, 0x48, 0x58 };
+		for (std::uint64_t off : candidate_offsets)
+		{
+			std::uint64_t ptr = memory->read<std::uint64_t>(base->address + off);
+			if (ptr != 0 && (ptr & 0x7) == 0 && ptr > 0x10000)
+			{
+				std::uint64_t a_start = memory->read<std::uint64_t>(ptr);
+				std::uint64_t a_end = memory->read<std::uint64_t>(ptr + Offsets::Instance::ChildrenEnd);
+				if (a_start != 0 && a_end != 0 && a_start < a_end && ((a_end - a_start) % 16 == 0))
+				{
+					std::uint64_t count = (a_end - a_start) / 16;
+					if (count > 0 && count <= 50000)
+					{
+						array_start = a_start;
+						array_end = a_end;
+						Offsets::Instance::ChildrenStart = off;
+						break;
+					}
+				}
+			}
+
+			std::uint64_t a_start = ptr;
+			std::uint64_t a_end = memory->read<std::uint64_t>(base->address + off + Offsets::Instance::ChildrenEnd);
+			if (a_start != 0 && a_end != 0 && a_start < a_end && ((a_end - a_start) % 16 == 0))
+			{
+				std::uint64_t count = (a_end - a_start) / 16;
+				if (count > 0 && count <= 50000)
+				{
+					array_start = a_start;
+					array_end = a_end;
+					Offsets::Instance::ChildrenStart = off;
+					break;
+				}
+			}
+		}
+	}
 
 	if (array_start == 0 || array_end == 0 || array_start >= array_end)
 	{
@@ -124,10 +187,9 @@ std::vector<T> rbx::interface_t::get_children()
 	}
 
 	std::uint64_t size_bytes = array_end - array_start;
-	std::uint64_t count = size_bytes / sizeof(std::shared_ptr<void*>);
+	std::uint64_t count = size_bytes / 16;
 
-	// Safety check to prevent memory allocation crashes (std::bad_alloc) on garbage offsets or large counts
-	if (count > 50000)
+	if (count == 0 || count > 50000)
 	{
 		return {};
 	}
@@ -146,7 +208,7 @@ std::vector<T> rbx::interface_t::get_children()
 	for (std::uint64_t i = 0; i < count; ++i)
 	{
 		std::uint64_t child_address = raw_ptrs[i].ptr;
-		if (child_address != 0)
+		if (child_address != 0 && (child_address & 0x7) == 0 && child_address > 0x10000)
 		{
 			children.emplace_back(child_address);
 		}

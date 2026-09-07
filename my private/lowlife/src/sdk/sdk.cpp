@@ -75,68 +75,12 @@ std::string rbx::nameable_t::get_class_name()
 
 std::vector<rbx::instance_t> rbx::interface_t::get_children()
 {
-	rbx::instance_t* base = static_cast<rbx::instance_t*>(this);
-
-	std::uint64_t start{ memory->read<std::uint64_t>(base->address + Offsets::Instance::ChildrenStart) };
-	if (start == 0) return {};
-
-	std::uint64_t array_start = memory->read<std::uint64_t>(start);
-	std::uint64_t array_end = memory->read<std::uint64_t>(start + Offsets::Instance::ChildrenEnd);
-
-	if (array_start == 0 || array_end == 0 || array_start >= array_end)
-	{
-		return {};
-	}
-
-	std::uint64_t size_bytes = array_end - array_start;
-	std::uint64_t count = size_bytes / sizeof(std::shared_ptr<void*>);
-
-	if (count > 50000)
-	{
-		return {};
-	}
-
-	struct raw_shared_ptr {
-		std::uint64_t ptr;
-		std::uint64_t ref_count;
-	};
-
-	std::vector<raw_shared_ptr> raw_ptrs(count);
-	Luck_ReadVirtualMemory(memory->get_process_handle(), reinterpret_cast<void*>(array_start), raw_ptrs.data(), static_cast<ULONG>(count * sizeof(raw_shared_ptr)), nullptr);
-
-	std::vector<rbx::instance_t> children;
-	children.reserve(count);
-
-	for (std::uint64_t i = 0; i < count; ++i)
-	{
-		std::uint64_t child_address = raw_ptrs[i].ptr;
-		if (child_address != 0)
-		{
-			children.emplace_back(child_address);
-		}
-	}
-
-	return children;
+	return this->get_children<rbx::instance_t>();
 }
 
 size_t rbx::interface_t::get_children_count()
 {
-	rbx::instance_t* base = static_cast<rbx::instance_t*>(this);
-	if (base->address == 0) return 0;
-
-	std::uint64_t start = memory->read<std::uint64_t>(base->address + Offsets::Instance::ChildrenStart);
-	if (start == 0) return 0;
-
-	std::uint64_t array_start = memory->read<std::uint64_t>(start);
-	std::uint64_t array_end = memory->read<std::uint64_t>(start + Offsets::Instance::ChildrenEnd);
-
-	if (array_start == 0 || array_end == 0 || array_start >= array_end)
-	{
-		return 0;
-	}
-
-	std::uint64_t size_bytes = array_end - array_start;
-	return size_bytes / sizeof(std::shared_ptr<void*>);
+	return this->get_children<rbx::instance_t>().size();
 }
 
 rbx::instance_t rbx::interface_t::find_first_child(std::string_view str)
