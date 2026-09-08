@@ -240,43 +240,117 @@ namespace tungware::detection {
     }
 }
 
+static uintptr_t find_real_datamodel(uintptr_t module_base) {
+    uintptr_t fake_dm = memory->read<uintptr_t>(module_base + Offsets::FakeDataModel::Pointer);
+    if (fake_dm) {
+        constexpr uintptr_t candidate_real_dm_offsets[] = { 0x1f8, 0x1f0, 0x1e8, 0x200, 0x1c0, 0x1d0 };
+        for (uintptr_t off : candidate_real_dm_offsets) {
+            uintptr_t real_dm = memory->read<uintptr_t>(fake_dm + off);
+            if (real_dm && (real_dm & 0x7) == 0 && real_dm > 0x10000) {
+                rbx::instance_t dm{ real_dm };
+                if (dm.find_first_child_by_class("Workspace").address != 0 && dm.find_first_child_by_class("Players").address != 0) {
+                    return real_dm;
+                }
+            }
+        }
+    }
+
+    uintptr_t ts = memory->read<uintptr_t>(module_base + Offsets::TaskScheduler::Pointer);
+    if (ts) {
+        uintptr_t job_start = memory->read<uintptr_t>(ts + Offsets::TaskScheduler::JobStart);
+        uintptr_t job_end = memory->read<uintptr_t>(ts + Offsets::TaskScheduler::JobEnd);
+        if (job_start && job_end && job_end > job_start && (job_end - job_start) < 0x10000) {
+            for (uintptr_t job_ptr = job_start; job_ptr < job_end; job_ptr += 0x10) {
+                uintptr_t job = memory->read<uintptr_t>(job_ptr);
+                if (!job) continue;
+
+                uintptr_t r_fake_dm = memory->read<uintptr_t>(job + Offsets::RenderJob::FakeDataModel);
+                if (r_fake_dm) {
+                    constexpr uintptr_t candidate_real_dm_offsets[] = { 0x1f8, 0x1f0, 0x1e8, 0x200 };
+                    for (uintptr_t off : candidate_real_dm_offsets) {
+                        uintptr_t real_dm = memory->read<uintptr_t>(r_fake_dm + off);
+                        if (real_dm && (real_dm & 0x7) == 0 && real_dm > 0x10000) {
+                            rbx::instance_t dm{ real_dm };
+                            if (dm.find_first_child_by_class("Workspace").address != 0 && dm.find_first_child_by_class("Players").address != 0) {
+                                return real_dm;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return 0;
+}
+
+static uintptr_t find_visual_engine(uintptr_t module_base) {
+    uintptr_t vis = memory->read<uintptr_t>(module_base + Offsets::VisualEngine::Pointer);
+    if (vis) {
+        math::vector2 dims = memory->read<math::vector2>(vis + Offsets::VisualEngine::Dimensions);
+        if (dims.x > 100.0f && dims.x < 15000.0f && dims.y > 100.0f && dims.y < 15000.0f) {
+            return vis;
+        }
+    }
+    for (int delta = -0x100; delta <= 0x100; delta += 0x8) {
+        uintptr_t candidate = memory->read<uintptr_t>(module_base + Offsets::VisualEngine::Pointer + delta);
+        if (candidate && (candidate & 0x7) == 0) {
+            math::vector2 dims = memory->read<math::vector2>(candidate + Offsets::VisualEngine::Dimensions);
+            if (dims.x > 100.0f && dims.x < 15000.0f && dims.y > 100.0f && dims.y < 15000.0f) {
+                return candidate;
+            }
+        }
+    }
+    return vis;
+}
+
 static bool initialize_roblox_objects() noexcept {
     static char buffer[256];
 
-    
     uintptr_t module_base = memory->get_module_address();
     if (!module_base) return false;
 
-    uintptr_t fake_dm = memory->read<uintptr_t>(module_base + Offsets::FakeDataModel::Pointer);
-    uintptr_t real_dm = memory->read<uintptr_t>(fake_dm + Offsets::FakeDataModel::RealDataModel);
+    uintptr_t real_dm = find_real_datamodel(module_base);
+    if (!real_dm) {
+        uintptr_t fake_dm = memory->read<uintptr_t>(module_base + Offsets::FakeDataModel::Pointer);
+        real_dm = memory->read<uintptr_t>(fake_dm + Offsets::FakeDataModel::RealDataModel);
+    }
+
+    if (!real_dm) return false;
 
     game::datamodel = { real_dm };
-    game::visengine = { memory->read<uintptr_t>(module_base + Offsets::VisualEngine::Pointer) };
+    game::visengine = { find_visual_engine(module_base) };
 
-    
-    uintptr_t workspace = memory->read<uintptr_t>(real_dm + Offsets::DataModel::Workspace);
-    game::workspace = { workspace };
+    rbx::instance_t workspace = game::datamodel.find_first_child_by_class("Workspace");
+    if (workspace.address == 0) {
+        workspace = { memory->read<uintptr_t>(real_dm + Offsets::DataModel::Workspace) };
+    }
+    game::workspace = workspace;
 
-    
-    uintptr_t players = game::datamodel.find_first_child_by_class("Players").address;
-    game::players = { players };
+    rbx::instance_t players = game::datamodel.find_first_child_by_class("Players");
+    game::players = players;
 
-    
-    uintptr_t local_player = memory->read<uintptr_t>(players + Offsets::Player::LocalPlayer);
+    if (players.address == 0) return false;
+
+    uintptr_t local_player = memory->read<uintptr_t>(players.address + Offsets::Player::LocalPlayer);
     game::local_player = { local_player };
+
+    if (local_player == 0) return false;
 
     rbx::player_t lp_obj{ local_player };
     std::string lp_name = lp_obj.get_name();
 
-    
     bool found_model_instance_offset = false;
     for (uintptr_t offset = 0x100; offset <= 0x600; offset += 8) {
         uintptr_t potential_char = memory->read<uintptr_t>(local_player + offset);
         if (potential_char != 0 && (potential_char & 0x7) == 0 && potential_char > 0x10000) {
-            rbx::nameable_t inst{ potential_char };
+            rbx::instance_t inst{ potential_char };
             std::string name = inst.get_name();
             std::string class_name = inst.get_class_name();
-            if (class_name == "Model" && name == lp_name) {
+            if (class_name == "Model" && (
+                (name != "unknown" && !name.empty() && (name == lp_name || name == memory->read_string(local_player + Offsets::Player::DisplayName))) ||
+                inst.find_first_child_by_class("Humanoid").address != 0
+            )) {
                 Offsets::Player::ModelInstance = offset;
                 found_model_instance_offset = true;
                 sprintf_s(buffer, "[SCAN] Dynamically resolved Player::ModelInstance offset to 0x%llx", offset);
@@ -298,17 +372,15 @@ static bool initialize_roblox_objects() noexcept {
     print_colored_bot_message(buffer, true);
 
     sprintf_s(buffer, "workspace -> 0x%llx | players -> 0x%llx | local_player -> 0x%llx",
-        workspace, players, local_player);
+        workspace.address, players.address, local_player);
     print_colored_bot_message(buffer, true);
 
     sprintf_s(buffer, "local_character -> 0x%llx", game::local_character.address);
     print_colored_bot_message(buffer, true);
 
-    
     sprintf_s(buffer, "local_player name -> %s", lp_name.c_str());
     print_colored_bot_message(buffer, true);
 
-    
     auto player_list = game::players.get_children();
     sprintf_s(buffer, "player count -> %d", (int)player_list.size());
     print_colored_bot_message(buffer, true);
@@ -318,7 +390,7 @@ static bool initialize_roblox_objects() noexcept {
         print_colored_bot_message(buffer, true);
     }
 
-    return real_dm != 0 && workspace != 0 && players != 0 && local_player != 0;
+    return real_dm != 0 && workspace.address != 0 && players.address != 0 && local_player != 0;
 }
 
 

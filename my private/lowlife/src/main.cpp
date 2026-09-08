@@ -329,18 +329,27 @@ static bool initialize_roblox_objects() noexcept {
                     Offsets::Player::LocalPlayer = off;
                     local_player = candidate;
                     sprintf_s(buffer, "[SCAN] Dynamically resolved Player::LocalPlayer offset to 0x%llx", off);
-                    print_colored_bot_message(buffer, true);
-                    break;
-                }
-            }
-        }
+    game::visengine = { find_visual_engine(module_base) };
+
+    rbx::instance_t workspace = game::datamodel.find_first_child_by_class("Workspace");
+    if (workspace.address == 0) {
+        workspace = { memory->read<uintptr_t>(real_dm + Offsets::DataModel::Workspace) };
     }
+    game::workspace = workspace;
+
+    rbx::instance_t players = game::datamodel.find_first_child_by_class("Players");
+    game::players = players;
+
+    if (players.address == 0) return false;
+
+    uintptr_t local_player = memory->read<uintptr_t>(players.address + Offsets::Player::LocalPlayer);
     game::local_player = { local_player };
+
+    if (local_player == 0) return false;
 
     rbx::player_t lp_obj{ local_player };
     std::string lp_name = lp_obj.get_name();
 
-    // Dynamically resolve correct ModelInstance/Character offset at runtime
     bool found_model_instance_offset = false;
     for (uintptr_t offset = 0x100; offset <= 0x600; offset += 8) {
         uintptr_t potential_char = memory->read<uintptr_t>(local_player + offset);
@@ -348,7 +357,10 @@ static bool initialize_roblox_objects() noexcept {
             rbx::instance_t inst{ potential_char };
             std::string name = inst.get_name();
             std::string class_name = inst.get_class_name();
-            if (class_name == "Model" && (name == lp_name || (!lp_name.empty() && lp_name != "unknown" && name.find(lp_name) != std::string::npos) || inst.find_first_child_by_class("Humanoid").address != 0)) {
+            if (class_name == "Model" && (
+                (name != "unknown" && !name.empty() && (name == lp_name || name == memory->read_string(local_player + Offsets::Player::DisplayName))) ||
+                inst.find_first_child_by_class("Humanoid").address != 0
+            )) {
                 Offsets::Player::ModelInstance = offset;
                 found_model_instance_offset = true;
                 sprintf_s(buffer, "[SCAN] Dynamically resolved Player::ModelInstance offset to 0x%llx", offset);
@@ -370,17 +382,15 @@ static bool initialize_roblox_objects() noexcept {
     print_colored_bot_message(buffer, true);
 
     sprintf_s(buffer, "workspace -> 0x%llx | players -> 0x%llx | local_player -> 0x%llx",
-        workspace, players, local_player);
+        workspace.address, players.address, local_player);
     print_colored_bot_message(buffer, true);
 
     sprintf_s(buffer, "local_character -> 0x%llx", game::local_character.address);
     print_colored_bot_message(buffer, true);
 
-    // Debug print local player name
     sprintf_s(buffer, "local_player name -> %s", lp_name.c_str());
     print_colored_bot_message(buffer, true);
 
-    // Debug print all players in the player list
     auto player_list = game::players.get_children();
     sprintf_s(buffer, "player count -> %d", (int)player_list.size());
     print_colored_bot_message(buffer, true);
@@ -390,7 +400,7 @@ static bool initialize_roblox_objects() noexcept {
         print_colored_bot_message(buffer, true);
     }
 
-    return real_dm != 0 && workspace != 0 && players != 0 && local_player != 0 && game::local_character.address != 0;
+    return real_dm != 0 && workspace.address != 0 && players.address != 0 && local_player != 0 && game::local_character.address != 0;
 }
 
 
