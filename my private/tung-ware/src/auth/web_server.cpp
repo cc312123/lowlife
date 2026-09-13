@@ -125,7 +125,7 @@ namespace web_server {
             send(client_sock, response.c_str(), (int)response.length(), 0);
         }
         
-        else if (method == "POST" && path == "/inject") {
+        else if ((method == "POST" || method == "GET") && path == "/inject") {
             if (!globals::keyauth_authenticated) {
                 std::string response = "HTTP/1.1 403 Forbidden\r\nConnection: close\r\n\r\n";
                 send(client_sock, response.c_str(), (int)response.length(), 0);

