@@ -1,13 +1,12 @@
-﻿#pragma once
+#pragma once
 /* =============================================================
 /*                       theo's offsets                         
 /*                  https://offsets.imtheo.lol                  
 /* -------------------------------------------------------------
 /*  Dumped With     : RbxDumperV2                               
-/*  Roblox Version  : version-e7d81637d42c4b23
 /*  Dumper Version  : 2.1.7
 /*  Dumped At       : 17:43 02/09/2026 (GMT)
-/*  Total Offsets   : 388
+/*  Total Offsets   : 393
 /* -------------------------------------------------------------
 /*  Join the discord!                                           
 /*  https://offsets.imtheo.lol/discord                          
@@ -29,7 +28,7 @@ struct Offset {
 };
 
 namespace Offsets {
-    inline std::string ClientVersion = "version-e7d81637d42c4b23";
+    inline std::string ClientVersion = "version-c5aecda2245e4fae";
     bool Update(const std::string& current_version);
     std::unordered_map<std::string, uintptr_t*>& GetRegistry();
 
@@ -48,7 +47,7 @@ namespace Offsets {
     }
 
     namespace Animator {
-          inline Offset ActiveAnimations = { "Animator::ActiveAnimations", 0xb50 };
+          inline Offset ActiveAnimations = { "Animator::ActiveAnimations", 0xab0 };
     }
 
     namespace Atmosphere {
@@ -116,7 +115,7 @@ namespace Offsets {
 
     namespace ByteCode {
           inline Offset Pointer = { "ByteCode::Pointer", 0x10 };
-          inline Offset Size = { "ByteCode::Size", 0x20 };
+          inline Offset Size = { "ByteCode::Size", 0x28 };
     }
 
     namespace Camera {
@@ -198,12 +197,12 @@ namespace Offsets {
     }
 
     namespace FakeDataModel {
-          inline Offset Pointer = { "FakeDataModel::Pointer", 0x8d22868 };
+          inline Offset Pointer = { "FakeDataModel::Pointer", 0x8dc2258 };
           inline Offset RealDataModel = { "FakeDataModel::RealDataModel", 0x1f8 };
     }
 
     namespace GuiBase2D {
-          inline Offset AbsolutePosition = { "GuiBase2D::AbsolutePosition", 0x0 };
+          inline Offset AbsolutePosition = { "GuiBase2D::AbsolutePosition", 0x10c };
           inline Offset AbsoluteRotation = { "GuiBase2D::AbsoluteRotation", 0xe8 };
           inline Offset AbsoluteSize = { "GuiBase2D::AbsoluteSize", 0x0 };
     }
@@ -212,15 +211,15 @@ namespace Offsets {
           inline Offset BackgroundColor3 = { "GuiObject::BackgroundColor3", 0x540 };
           inline Offset BackgroundTransparency = { "GuiObject::BackgroundTransparency", 0x54c };
           inline Offset BorderColor3 = { "GuiObject::BorderColor3", 0x54c };
-          inline Offset Image = { "GuiObject::Image", 0x988 };
+          inline Offset Image = { "GuiObject::Image", 0x9a0 };
           inline Offset LayoutOrder = { "GuiObject::LayoutOrder", 0x57c };
           inline Offset Position = { "GuiObject::Position", 0x510 };
-          inline Offset RichText = { "GuiObject::RichText", 0xb88 };
+          inline Offset RichText = { "GuiObject::RichText", 0xb98 };
           inline Offset Rotation = { "GuiObject::Rotation", 0xe8 };
           inline Offset ScreenGui_Enabled = { "GuiObject::ScreenGui_Enabled", 0x4c4 };
           inline Offset Size = { "GuiObject::Size", 0x530 };
-          inline Offset Text = { "GuiObject::Text", 0xdf0 };
-          inline Offset TextColor3 = { "GuiObject::TextColor3", 0xea0 };
+          inline Offset Text = { "GuiObject::Text", 0xe00 };
+          inline Offset TextColor3 = { "GuiObject::TextColor3", 0xeb0 };
           inline Offset Visible = { "GuiObject::Visible", 0x5ad };
           inline Offset ZIndex = { "GuiObject::ZIndex", 0x5a4 };
     }
@@ -239,10 +238,10 @@ namespace Offsets {
           inline Offset HealthDisplayDistance = { "Humanoid::HealthDisplayDistance", 0x188 };
           inline Offset HealthDisplayType = { "Humanoid::HealthDisplayType", 0x18c };
           inline Offset HipHeight = { "Humanoid::HipHeight", 0x194 };
-          inline Offset HumanoidRootPart = { "Humanoid::HumanoidRootPart", 0x478 };
-          inline Offset HumanoidState = { "Humanoid::HumanoidState", 0x8c0 };
+          inline Offset HumanoidRootPart = { "Humanoid::HumanoidRootPart", 0x470 };
+          inline Offset HumanoidState = { "Humanoid::HumanoidState", 0x8b8 };
           inline Offset HumanoidStateID = { "Humanoid::HumanoidStateID", 0x20 };
-          inline Offset IsWalking = { "Humanoid::IsWalking", 0x967 };
+          inline Offset IsWalking = { "Humanoid::IsWalking", 0x95f };
           inline Offset Jump = { "Humanoid::Jump", 0x1da };
           inline Offset JumpHeight = { "Humanoid::JumpHeight", 0x1a0 };
           inline Offset JumpPower = { "Humanoid::JumpPower", 0x1a4 };
@@ -254,16 +253,16 @@ namespace Offsets {
           inline Offset NameDisplayDistance = { "Humanoid::NameDisplayDistance", 0x1b0 };
           inline Offset NameOcclusion = { "Humanoid::NameOcclusion", 0x1b4 };
           inline Offset PlatformStand = { "Humanoid::PlatformStand", 0x1dc };
-          inline Offset PlatformStatePointer = { "Humanoid::PlatformStatePointer", 0x0 };
+          inline Offset PlatformStatePointer = { "Humanoid::PlatformStatePointer", 0x42f95cc3 };
           inline Offset RequiresNeck = { "Humanoid::RequiresNeck", 0x1dd };
           inline Offset RigType = { "Humanoid::RigType", 0x1c0 };
           inline Offset SeatPart = { "Humanoid::SeatPart", 0x108 };
           inline Offset Sit = { "Humanoid::Sit", 0x1dd };
           inline Offset TargetPoint = { "Humanoid::TargetPoint", 0x14c };
           inline Offset UseJumpPower = { "Humanoid::UseJumpPower", 0x1e0 };
-          inline Offset WalkTimer = { "Humanoid::WalkTimer", 0x408 };
+          inline Offset WalkTimer = { "Humanoid::WalkTimer", 0x400 };
           inline Offset Walkspeed = { "Humanoid::Walkspeed", 0x1d0 };
-          inline Offset WalkspeedCheck = { "Humanoid::WalkspeedCheck", 0x3bc };
+          inline Offset WalkspeedCheck = { "Humanoid::WalkspeedCheck", 0x3b4 };
     }
 
     namespace Instance {
@@ -274,9 +273,9 @@ namespace Offsets {
           inline Offset ClassName = { "Instance::ClassName", 0x8 };
           inline Offset ComponentMap = { "Instance::ComponentMap", 0x38 };
           inline Offset Name = { "Instance::Name", 0x8 };
+          inline Offset NameContainer = { "Instance::NameContainer", 0x70 };
           inline Offset Parent = { "Instance::Parent", 0x68 };
           inline Offset This = { "Instance::This", 0x8 };
-          inline Offset NameContainer = { "Instance::NameContainer", 0x70 };
     }
 
     namespace Lighting {
@@ -305,7 +304,7 @@ namespace Offsets {
     }
 
     namespace LocalScript {
-          inline Offset ByteCode = { "LocalScript::ByteCode", 0xf00 };
+          inline Offset ByteCode = { "LocalScript::ByteCode", 0x190 };
           inline Offset GUID = { "LocalScript::GUID", 0xd0 };
           inline Offset Hash = { "LocalScript::Hash", 0x1a0 };
     }
@@ -340,7 +339,6 @@ namespace Offsets {
           inline Offset LRUCache = { "MeshContentProvider::LRUCache", 0x20 };
           inline Offset MeshData = { "MeshContentProvider::MeshData", 0x40 };
           inline Offset ToMeshData = { "MeshContentProvider::ToMeshData", 0x40 };
-          inline Offset LRUHolder = { "MeshContentProvider::LRUHolder", 0xd8 };
     }
 
     namespace MeshData {
@@ -368,7 +366,7 @@ namespace Offsets {
     }
 
     namespace ModuleScript {
-          inline Offset ByteCode = { "ModuleScript::ByteCode", 0x0 };
+          inline Offset ByteCode = { "ModuleScript::ByteCode", 0x138 };
           inline Offset GUID = { "ModuleScript::GUID", 0xd0 };
           inline Offset Hash = { "ModuleScript::Hash", 0x148 };
           inline Offset IsCoreScript = { "ModuleScript::IsCoreScript", 0x0 };
@@ -469,12 +467,12 @@ namespace Offsets {
     }
 
     namespace RunService {
-          inline Offset HeartbeatFPS = { "RunService::HeartbeatFPS", 0xc8 };
+          inline Offset HeartbeatFPS = { "RunService::HeartbeatFPS", 0xc0 };
           inline Offset HeartbeatTask = { "RunService::HeartbeatTask", 0xe0 };
     }
 
     namespace Script {
-          inline Offset ByteCode = { "Script::ByteCode", 0x0 };
+          inline Offset ByteCode = { "Script::ByteCode", 0x190 };
           inline Offset GUID = { "Script::GUID", 0xd0 };
           inline Offset Hash = { "Script::Hash", 0x1a0 };
     }
@@ -527,7 +525,7 @@ namespace Offsets {
     }
 
     namespace StatsItem {
-          inline Offset Value = { "StatsItem::Value", 0xad34 };
+          inline Offset Value = { "StatsItem::Value", 0x1091 };
     }
 
     namespace SunRaysEffect {
@@ -553,7 +551,7 @@ namespace Offsets {
           inline Offset JobName = { "TaskScheduler::JobName", 0x18 };
           inline Offset JobStart = { "TaskScheduler::JobStart", 0xc8 };
           inline Offset MaxFPS = { "TaskScheduler::MaxFPS", 0xb0 };
-          inline Offset Pointer = { "TaskScheduler::Pointer", 0x8abd728 };
+          inline Offset Pointer = { "TaskScheduler::Pointer", 0x8b5cee8 };
     }
 
     namespace Team {
@@ -571,16 +569,16 @@ namespace Offsets {
     }
 
     namespace Textures {
-          inline Offset Decal_Texture = { "Textures::Decal_Texture", 0x1b0 };
-          inline Offset Texture_Texture = { "Textures::Texture_Texture", 0x1b0 };
+          inline Offset Decal_Texture = { "Textures::Decal_Texture", 0x1e0 };
+          inline Offset Texture_Texture = { "Textures::Texture_Texture", 0x1e0 };
     }
 
     namespace Tool {
           inline Offset CanBeDropped = { "Tool::CanBeDropped", 0x4b8 };
-          inline Offset Enabled = { "Tool::Enabled", 0x405 };
+          inline Offset Enabled = { "Tool::Enabled", 0x4b9 };
           inline Offset Grip = { "Tool::Grip", 0x4ac };
           inline Offset ManualActivationOnly = { "Tool::ManualActivationOnly", 0x4ba };
-          inline Offset RequiresHandle = { "Tool::RequiresHandle", 0x475 };
+          inline Offset RequiresHandle = { "Tool::RequiresHandle", 0x4bb };
           inline Offset TextureId = { "Tool::TextureId", 0x360 };
           inline Offset Tooltip = { "Tool::Tooltip", 0x468 };
     }
@@ -604,7 +602,7 @@ namespace Offsets {
     namespace VisualEngine {
           inline Offset Dimensions = { "VisualEngine::Dimensions", 0xb10 };
           inline Offset FakeDataModel = { "VisualEngine::FakeDataModel", 0xaf0 };
-          inline Offset Pointer = { "VisualEngine::Pointer", 0x8351408 };
+          inline Offset Pointer = { "VisualEngine::Pointer", 0x83f0a08 };
           inline Offset RenderView = { "VisualEngine::RenderView", 0xc30 };
           inline Offset ViewMatrix = { "VisualEngine::ViewMatrix", 0x1b0 };
     }
@@ -627,7 +625,7 @@ namespace Offsets {
     namespace Workspace {
           inline Offset CurrentCamera = { "Workspace::CurrentCamera", 0x4b8 };
           inline Offset DistributedGameTime = { "Workspace::DistributedGameTime", 0x4d8 };
-          inline Offset ReadOnlyGravity = { "Workspace::ReadOnlyGravity", 0x9f0 };
+          inline Offset ReadOnlyGravity = { "Workspace::ReadOnlyGravity", 0xa00 };
           inline Offset World = { "Workspace::World", 0x410 };
     }
 
