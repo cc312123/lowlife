@@ -385,7 +385,7 @@ void cache::run()
 						cached_entity.tool_name = get_equipped_tool_name(model_instance.address);
 					}
 				}
-				else if (settings::visuals::tool)
+				else if (settings::visuals::tool || settings::visuals::weapon_icon)
 				{
 					if ((tick_count + (player.address >> 3)) % 15 == 0 || cached_entity.tool_name.empty())
 					{

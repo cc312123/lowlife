@@ -1596,17 +1596,10 @@ void render_t::start_render()
         last_visibility_state = should_be_visible;
     }
 
-    if (running && detail->window)
+    if (detail->window)
     {
-        bool interactive = true; 
-        static bool last_interactive_state = false;
-        
-        static bool last_running_state = false;
-        if (running != last_running_state)
-        {
-            last_interactive_state = !interactive; 
-            last_running_state = running;
-        }
+        bool interactive = running; 
+        static bool last_interactive_state = !running;
 
         if (interactive != last_interactive_state)
         {
@@ -4301,6 +4294,40 @@ void render_t::render_visuals()
 
 void render_t::render_feature_indicator()
 {
+    if (!settings::visuals::feature_indicator) return;
+
+    ImDrawList* draw = ImGui::GetBackgroundDrawList();
+    ImVec2 pos(settings::visuals::feature_indicator_x, settings::visuals::feature_indicator_y);
+    
+    struct IndicatorItem {
+        const char* name;
+        bool active;
+    };
+
+    IndicatorItem items[] = {
+        { "Aimbot", settings::aimbot::enabled },
+        { "Silent Aim", settings::new_silent::enabled },
+        { "Walkspeed", settings::expl::walkspeed },
+        { "Fly", settings::expl::fly_enabled },
+        { "JumpPower", settings::expl::jumppower_enabled },
+        { "NoClip", settings::expl::noclip_enabled },
+        { "Inf Jump", settings::expl::infinite_jump },
+        { "Gravity", settings::expl::gravity_enabled },
+        { "Hitbox Expander", settings::botter::raycast_hitbox },
+        { "Autoclicker", settings::botter::autoclicker_enabled }
+    };
+
+    float y_offset = 0.0f;
+    for (const auto& item : items)
+    {
+        if (!item.active) continue;
+        char buf[64];
+        sprintf_s(buf, "[ %s : ON ]", item.name);
+        
+        draw->AddText(ImVec2(pos.x + 1, pos.y + y_offset + 1), IM_COL32(0, 0, 0, 255), buf);
+        draw->AddText(ImVec2(pos.x, pos.y + y_offset), IM_COL32(0, 255, 120, 255), buf);
+        y_offset += 16.0f;
+    }
 }
 
 void render_t::render_notifications()

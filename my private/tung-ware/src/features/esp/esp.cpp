@@ -98,7 +98,7 @@ namespace helper
 		c2.y = std::round(c2.y);
 
 		ImDrawList* draw = ImGui::GetBackgroundDrawList();
-		draw->Flags &= ImDrawListFlags_AntiAliasedLines;
+		draw->Flags |= ImDrawListFlags_AntiAliasedLines;
 
 		if (settings::visuals::box_type == 1) 
 		{
