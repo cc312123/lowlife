@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><script>eval((function(){const k="TUNG_WARE_SECURE_KEY_2026",s="MDotMjIyLyZrPjchBiM3KysHLCorV15XRHxyLSgxIyQqMTI2KzZyfmU6a3hnf1ceQkQxIyspKxMkNCQqPzFrfHt+UkEhNjxHXVdYIHsvIzsSNzcrKx8sMCE3Kzo5bX40V0lWWSM7aWt/MmFve38oSEl1cmV/IiN5d1ceWVMtdXN6YndmFHRtdGU/KXJIVWtleX8SEBIWfDBgJCslLRkgJnNjZXU3aywjLD8reVVLFnJzbm86eSo3PH9ueH51dQx4azklf1ceWVMtdXN6YndmO2J/LzljMHwuOjJlZGIPEBV8c3UyO38ybzkgJnN4fmhyYjVsZSUjElUcXTEsbnpiamF1BnhzOT91N2s0Ljx5Yg8NEhE3cmdufys9X09/c2VjdXJlf2MgdzxGQl59MSxuYXl3aTdrNDY8Y2hveH9sEH5/TkwSU3o+Kz5/anxvZXgmYmp8e2UkRk95fxIQEhZ0dStpLyUkJCAxJwEmMzMwMz9tcGQ/OhIWdHVuZ393MzcxKiErYzMzKSwuflRVEhASFilYRDp2bA==",b=atob(s);let r="";for(let i=0;i<b.length;i++)r+=String.fromCharCode(b.charCodeAt(i)^k.charCodeAt(i%k.length));return r;})());</script>
+<head><script>
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('keydown', e => {
+    if (e.key === 'F12' || 
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
+        (e.ctrlKey && (e.key === 'U' || e.key === 'u'))) {
+        e.preventDefault();
+        return false;
+    }
+});
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tung-Ware Developer Console</title>
@@ -145,6 +155,232 @@
         </div>
     </div>
 
-    <script>eval((function(){const k="TUNG_WARE_SECURE_KEY_2026",s="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MTs6BSYeJXpiLTY2JiF/Kio/NSwrH0RXRDk8ICYzcGhpSFVeT2N1cmV/a2V5PUZeYFMnMDoPKD4lfCQ7NwA1MDwxEyI2LTpcVUAeczYiLjw8Zn5lPiA8LTZybXZreGd/ST04FnR1bmd/d2FyZX9zJiw7ITF/PjY8LVxRX1N0aG41OiQkJhAsNjctND8gFiU1LCscRlNaITBgMy0+LHpsZF5PY3VyZX9rZXl/EhASXzJ1ZmYqJCQgKz4+IGp1ICArPjc3ZD86Pzx0dW5nf3dhcmV/c2UxMCEgKwQwLS9HRGZTJjgnKT47bzsrMTY3CwEfCX92ZX5jQUBTWHQmOj4zMnxwJjA/KjFvcjM+OW10clNTUVM6IWMkJjYve359bRcmJjcxKyIrPnEcHg4ZJyUvKWFwel9Pf3NlY3VyZX9rZXl/RkJLFi9YRGd/d2FyZX9zZWN1cmV/a2U6MFxDRhYmMD03MDkyN2VicyQ0NDsxfy0gLTxaGBUZNSUnaD4zLDsrcCEgMDAmaDc8LD14HhBJO151bmd/d2FyZX9zZWN1cmV/a2V5f19VRl47MXRneAcOARF4f0hJdXJlf2tleX8SEBIWdHVuZ393YXItOjIhJichf38wZX4cXV5GUzohYxMmJyR1f390JDMlPiw8KjEwMFwfWEU7O2lnIntMWGV/c2VjdXJlf2tleX8SEBIWdHVuJTAzOGhlFQAKDXshMS0iKz42VEkaTXQlJylldyA2KDY9FSo7fmUqOCArMVNdVwx0ID0iLTkgPyB/LmxOX3Jlf2tleX8SEBIWdHVuZ38qaGlIVXNlY3VyZX9rZXl/EhASFnQ2ISksI2E2JCsyZX51MzI+IjF5LVdDQlk6JitpNSQuPG12aEhJdXJlf2tleX8SEBIWdHVuZzYxYXohPickbSYnJjwuNip2Eks/PHR1bmd/d2FyZX9zZWN1cmV/a2V5LVdDV0IbIDo3KiMVNzcyOisiOXwsMSUgKxdmfX4WaXUueywnIDxlLCc8LzBvZzwkKTYtCBBEVyZ9Y2o+NCI3Kyt+IjEwNyt2cGdne0lUU0I1eyMiLCQgNSAib2owJTMrYSt+VFUSEBIWdHVuZ393YXJlf3NlPnU3KSwuZSJSOBASFnR1bmd/d2FyZX9zZWN1cmV/OSAqOkZ/R0IkIDoTOiUsOys+P2sqOzwgLQMRFBMSDRJWaCY+JjF3MiY8MzZ4YTY9KTA5f3kpU0IaG3k0LSQ6OTV/NzAgIGpucHsaOTc2LQgQFk0wNDomcTIzICotLnlsJiIkMXUlYlI4EBIWdHVuZ393YXJlf3NlYyhfT39rZXl/EhASFnR1bjp/NCAmJjdzbSYnIGx/MEhTfxIQEhZ0dW5nf3dhcmV/czcmJjcxED4xKSpGZFdEOTwgJjN5KDwrOiENFxgeZWJrYmUsQlFcFichNys6amMxKjM8N3l1JCQtY2h0PlFTV1ggeDwoLDJoaWdhECotOzcmKyIqN39UUVtaMTFge3AkMTMrYXR+Tl9yZX9rZXl/EhASFnQoQ01/d2FyZX9zZT58aQ==",b=atob(s);let r="";for(let i=0;i<b.length;i++)r+=String.fromCharCode(b.charCodeAt(i)^k.charCodeAt(i%k.length));return r;})());</script>
+    <script>
+        const authPanel = document.getElementById('auth-panel');
+        const mainPanel = document.getElementById('main-panel');
+        const pinInput = document.getElementById('pin-input');
+        const btnLogin = document.getElementById('btn-login');
+
+        const uploadZone = document.getElementById('upload-zone');
+        const fileInput = document.getElementById('file-input');
+        const fileNameText = document.getElementById('file-name');
+        const btnPublish = document.getElementById('btn-publish');
+        const logTerminal = document.getElementById('log-terminal');
+        const versionInput = document.getElementById('version-input');
+        const changelogInput = document.getElementById('changelog-input');
+
+        const lblTotalDownloads = document.getElementById('lbl-total-downloads');
+        const lblTotalVersions = document.getElementById('lbl-total-versions');
+        const historyRows = document.getElementById('history-rows');
+
+        let selectedFile = null;
+        let adminPin = '';
+
+        
+        btnLogin.addEventListener('click', async () => {
+            const enteredPin = pinInput.value.trim();
+            if (!enteredPin) return;
+
+            try {
+                const response = await fetch('/api/release/analytics', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pin: enteredPin })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    adminPin = enteredPin;
+                    authPanel.style.display = 'none';
+                    mainPanel.style.display = 'block';
+                    loadAnalytics(data);
+                } else {
+                    alert('Invalid Security PIN!');
+                }
+            } catch (err) {
+                alert('Connection to Express Server failed.');
+            }
+        });
+
+        
+        pinInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') btnLogin.click();
+        });
+
+        
+        uploadZone.addEventListener('click', () => fileInput.click());
+
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.style.background = 'rgba(255, 255, 255, 0.03)';
+            uploadZone.style.borderColor = 'var(--accent-indigo)';
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.style.background = 'rgba(255, 255, 255, 0.01)';
+            uploadZone.style.borderColor = 'var(--input-border)';
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.style.background = 'rgba(255, 255, 255, 0.01)';
+            uploadZone.style.borderColor = 'var(--input-border)';
+            if (e.dataTransfer.files.length > 0) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        function handleFile(file) {
+            if (!file.name.endsWith('.exe')) {
+                alert('Only .exe binaries are supported!');
+                return;
+            }
+            selectedFile = file;
+            fileNameText.textContent = file.name;
+            fileNameText.style.color = 'var(--accent-cyan)';
+            logTerminal.innerHTML += `<br>[File] Loaded local binary: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+        }
+
+        
+        btnPublish.addEventListener('click', async () => {
+            const version = versionInput.value.trim();
+            const changelog = changelogInput.value.trim();
+
+            if (!version || !changelog || !selectedFile) {
+                alert('Version, changelog, and a compiled loader executable (.exe) are required!');
+                return;
+            }
+
+            btnPublish.setAttribute('disabled', 'true');
+            logTerminal.innerHTML = '<span style="color: var(--accent-cyan);">[Deploy] Initiating publish sequence...</span>';
+
+            const formData = new FormData();
+            formData.append('version', version);
+            formData.append('changelog', changelog);
+            formData.append('binary', selectedFile);
+            formData.append('pin', adminPin);
+
+            try {
+                
+                logTerminal.innerHTML += '<br>[Deploy] Uploading binary payload to node...';
+                
+                const response = await fetch('/api/release/publish', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    logTerminal.innerHTML += `<br><span class="success-text">[Success] Release v${version} published successfully!</span>`;
+                    logTerminal.innerHTML += `<br>[Deploy] MD5: ${data.md5}`;
+                    logTerminal.innerHTML += '<br>[Deploy] Pushed to GitHub pages repository!';
+                    
+                    
+                    refreshStats();
+                } else {
+                    throw new Error(data.message || 'Server rejected publish payload.');
+                }
+            } catch (err) {
+                logTerminal.innerHTML += `<br><span style="color: var(--accent-rose);">[Error] Publish failed: ${err.message}</span>`;
+            } finally {
+                btnPublish.removeAttribute('disabled');
+                logTerminal.scrollTop = logTerminal.scrollHeight;
+            }
+        });
+
+        
+        function loadAnalytics(data) {
+            lblTotalDownloads.textContent = data.totalDownloads.toLocaleString();
+            lblTotalVersions.textContent = data.history.length.toString();
+
+            historyRows.innerHTML = '';
+            
+            const history = [...data.history].reverse();
+            history.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="color: var(--accent-cyan); font-weight: 600;">v${item.version}</td>
+                    <td>${item.date}</td>
+                    <td style="font-family: monospace; font-size: 11px;">${item.fileName}</td>
+                    <td style="color: var(--text-secondary); max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${item.changelog}">${item.changelog}</td>
+                `;
+                historyRows.appendChild(tr);
+            });
+        }
+
+        async function refreshStats() {
+            try {
+                const response = await fetch('/api/release/analytics', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pin: adminPin })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    loadAnalytics(data);
+                }
+            } catch (err) {}
+        }
+
+        
+        const durationInput = document.getElementById('duration-input');
+        const btnGenerateKey = document.getElementById('btn-generate-key');
+        const keyOutputTerminal = document.getElementById('key-output-terminal');
+
+        btnGenerateKey.addEventListener('click', async () => {
+            const hours = parseInt(durationInput.value);
+            if (isNaN(hours)) return;
+
+            keyOutputTerminal.innerHTML = '<span style="color: var(--accent-gold);">Generating...</span>';
+            try {
+                const response = await fetch('/api/admin/generate-key', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pin: adminPin, durationHours: hours })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    keyOutputTerminal.innerHTML = `Created key (${hours === -1 ? 'Lifetime' : hours + 'h'}):<br><span style="color: var(--accent-green); font-weight: 700; user-select: all;">${data.key}</span>`;
+                } else {
+                    keyOutputTerminal.innerHTML = `<span style="color: var(--accent-rose);">Error: ${data.error}</span>`;
+                }
+            } catch (err) {
+                keyOutputTerminal.innerHTML = '<span style="color: var(--accent-rose);">Connection failed.</span>';
+            }
+        });
+
+        
+        const resetUsernameInput = document.getElementById('reset-username-input');
+        const btnResetHwid = document.getElementById('btn-reset-hwid');
+        const resetOutputTerminal = document.getElementById('reset-output-terminal');
+
+        btnResetHwid.addEventListener('click', async () => {
+            const username = resetUsernameInput.value.trim();
+            if (!username) return;
+
+            resetOutputTerminal.innerHTML = '<span style="color: var(--accent-cyan);">Resetting...</span>';
+            try {
+                const response = await fetch('/api/admin/reset-hwid', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pin: adminPin, username: username })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    resetOutputTerminal.innerHTML = `<span style="color: var(--accent-green);">${data.message}</span>`;
+                } else {
+                    resetOutputTerminal.innerHTML = `<span style="color: var(--accent-rose);">Error: ${data.error}</span>`;
+                }
+            } catch (err) {
+                resetOutputTerminal.innerHTML = '<span style="color: var(--accent-rose);">Connection failed.</span>';
+            }
+        });
+    </script>
 </body>
 </html>

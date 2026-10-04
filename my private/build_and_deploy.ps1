@@ -120,7 +120,7 @@ try {
     git restore .gitignore 2>$null
     
     git add index.html style.css files/
-    git add "installer.ps1" "setup.ps1" "cleanup.ps1" "my private/installer.ps1" "my private/setup.ps1" "my private/cleanup.ps1" "my private/deploy_static.ps1" "my private/copy_release.ps1" "my private/tung-ware/src/auth/updater.h" "my private/updates-server/public/index.html" "my private/updates-server/public/admin.html" "my private/updates-server/public/index.src.html" "my private/updates-server/public/admin.src.html" "my private/updates-server/obfuscate_scripts.ps1" "my private/updates-server/public/style.css" "my private/updates-server/releases.json" "my private/updates-server/server.js" "my private/updates-server/server.ps1" "my private/tung-ware/src/" "my private/tung-ware/ext/" "my private/build_and_deploy.ps1"
+    git add "installer.ps1" "setup.ps1" "cleanup.ps1" "my private/installer.ps1" "my private/setup.ps1" "my private/cleanup.ps1" "my private/deploy_static.ps1" "my private/copy_release.ps1" "my private/tung-ware/src/auth/updater.h" "my private/updates-server/public/index.html" "my private/updates-server/public/admin.html" "my private/updates-server/public/index.src.html" "my private/updates-server/public/admin.src.html" "my private/updates-server/obfuscate_scripts.ps1" "my private/updates-server/public/style.css" "my private/updates-server/releases.json" "my private/updates-server/server.js" "my private/updates-server/server.ps1" "my private/tung-ware/src/" "my private/tung-ware/ext/" "my private/lowlife/src/" "my private/build_and_deploy.ps1"
     
     git commit -m "Publish release v$newVersion"
     Write-Host "Pulling latest changes from remote repository..." -ForegroundColor Yellow

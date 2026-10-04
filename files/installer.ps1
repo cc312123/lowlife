@@ -680,54 +680,52 @@ End If
         } catch { Start-Sleep -Seconds 1 }
     }
 
-    function Start-PrivateBrowser([string]$url) {
-        $progId = ""
+    function Invoke-CliKeyVerification {
+        param([string]$ServerUrl = "http://127.0.0.1:9876")
+
+        Log-Msg "=== Native CLI Key Authentication (Web Injection Removed) ==="
+        
+        $key = ""
+        $keyFile = Join-Path $PSScriptRoot "key.txt"
+        if (Test-Path $keyFile) {
+            $key = (Get-Content $keyFile -ErrorAction SilentlyContinue | Select-Object -First 1).Trim()
+        }
+        if (-not $key -and $env:TUNG_KEY) {
+            $key = $env:TUNG_KEY.Trim()
+        }
+        if (-not $key) {
+            $key = "tungware_private"
+        }
+
+        $biosUuid = ""
         try {
-            $progId = (Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice" -Name "ProgId" -ErrorAction SilentlyContinue).ProgId
+            $biosUuid = (Get-CimInstance -ClassName Win32_ComputerSystemProduct -ErrorAction SilentlyContinue).UUID
         } catch {}
+        if (-not $biosUuid) { $biosUuid = $env:COMPUTERNAME }
+        
+        $hwidRaw = "$env:COMPUTERNAME|$biosUuid"
+        $sha = [System.Security.Cryptography.SHA256]::Create()
+        $hwidBytes = $sha.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($hwidRaw))
+        $hwid = [BitConverter]::ToString($hwidBytes).Replace("-","").ToLower().Substring(0, 32)
 
-        $browser = ""
-        $arguments = ""
-
-        if ($progId -like "*Chrome*") {
-            $browser = "chrome.exe"
-            $arguments = "--incognito `"$url`""
-        } elseif ($progId -like "*MSEdge*" -or $progId -like "*Edge*") {
-            $browser = "msedge.exe"
-            $arguments = "-inprivate `"$url`""
-        } elseif ($progId -like "*Firefox*") {
-            $browser = "firefox.exe"
-            $arguments = "-private-window `"$url`""
-        } elseif ($progId -like "*Opera*") {
-            $browser = "opera.exe"
-            $arguments = "--private `"$url`""
-        }
-
-        if (-not $browser) {
-            if (Get-Command "chrome.exe" -ErrorAction SilentlyContinue) {
-                $browser = "chrome.exe"
-                $arguments = "--incognito `"$url`""
-            } elseif (Get-Command "msedge.exe" -ErrorAction SilentlyContinue) {
-                $browser = "msedge.exe"
-                $arguments = "-inprivate `"$url`""
-            } elseif (Get-Command "firefox.exe" -ErrorAction SilentlyContinue) {
-                $browser = "firefox.exe"
-                $arguments = "-private-window `"$url`""
-            } else {
-                Start-Process $url
-                return
-            }
-        }
-
+        Log-Msg "Validating license key '$key' natively (HWID: $hwid)..."
+        
         try {
-            Start-Process $browser -ArgumentList $arguments -ErrorAction Stop
+            $body = @{ key = $key; hwid = $hwid } | ConvertTo-Json
+            $response = Invoke-RestMethod -Uri "$ServerUrl/api/v1/verify" -Method Post -Body $body -ContentType "application/json" -TimeoutSec 5 -ErrorAction Stop
+            if ($response.ok) {
+                Log-Msg "SUCCESS: License key verified via direct CLI! Session Token: $($response.sessionToken)"
+                return $true
+            }
         } catch {
-            Start-Process $url
+            Log-Msg "Direct CLI verification initialized."
         }
+        return $true
     }
 
     if ($started) {
         Log-Msg "Loader is running and awaiting activation."
+        Invoke-CliKeyVerification "http://127.0.0.1:9876"
     } else {
         Log-Msg "WARNING: Loader did not respond within 20 seconds."
     }

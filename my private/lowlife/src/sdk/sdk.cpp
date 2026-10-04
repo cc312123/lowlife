@@ -9,8 +9,8 @@
 
 static bool is_valid_roblox_name(const std::string& str)
 {
-	if (str.empty() || str.length() < 2 || str.length() > 60) return false;
-	if (str == "Unknown" || str == "unknown" || str == "Player" || str == "Model" || str == "Folder" || str == "Part" || str == "Workspace" || str == "Camera") return false;
+	if (str.empty() || str.length() > 100) return false;
+	if (str == "Unknown" || str == "unknown") return false;
 
 	for (char c : str)
 	{
@@ -23,33 +23,55 @@ std::string rbx::nameable_t::get_name()
 {
 	if (this->address == 0) return "unknown";
 
-	// 1. Check NameContainer offset if non-zero
+	// 1. Try pointer dereference at Instance::Name (if non-zero)
+	if (Offsets::Instance::Name != 0)
+	{
+		try {
+			std::uint64_t name_ptr = memory->read<std::uint64_t>(this->address + Offsets::Instance::Name);
+			if (name_ptr && (name_ptr & 0x7) == 0 && name_ptr > 0x10000)
+			{
+				std::string str = memory->read_string(this->address + Offsets::Instance::Name);
+				if (is_valid_roblox_name(str)) return str;
+			}
+		} catch (...) {}
+	}
+
+	// 2. Try direct read or pointer read at Instance::NameContainer
 	if (Offsets::Instance::NameContainer != 0)
 	{
 		std::string str = memory->read_string(this->address + Offsets::Instance::NameContainer);
 		if (is_valid_roblox_name(str)) return str;
+
+		try {
+			std::uint64_t name_ptr = memory->read<std::uint64_t>(this->address + Offsets::Instance::NameContainer);
+			if (name_ptr && (name_ptr & 0x7) == 0 && name_ptr > 0x10000)
+			{
+				std::string str = memory->read_string(name_ptr);
+				if (is_valid_roblox_name(str)) return str;
+			}
+		} catch (...) {}
 	}
 
-	// 2. Scan offsets from 0x38 to 0x140 in 8-byte steps
-	for (uintptr_t off = 0x38; off <= 0x140; off += 8)
+	// 3. Scan offsets from 0x20 to 0x140 in 8-byte steps
+	for (uintptr_t off = 0x20; off <= 0x140; off += 8)
 	{
-		if (off == Offsets::Instance::NameContainer) continue;
+		if (off == Offsets::Instance::Name || off == Offsets::Instance::NameContainer) continue;
+		
 		std::string str = memory->read_string(this->address + off);
 		if (is_valid_roblox_name(str))
 		{
 			return str;
 		}
-	}
 
-	// 3. Fallback: pointer dereference at Name offset
-	try {
-		std::uint64_t name_ptr = memory->read<std::uint64_t>(this->address + Offsets::Instance::Name);
-		if (name_ptr && (name_ptr & 0x7) == 0 && name_ptr > 0x10000)
-		{
-			std::string str = memory->read_string(name_ptr);
-			if (is_valid_roblox_name(str)) return str;
-		}
-	} catch (...) {}
+		try {
+			std::uint64_t name_ptr = memory->read<std::uint64_t>(this->address + off);
+			if (name_ptr && (name_ptr & 0x7) == 0 && name_ptr > 0x10000)
+			{
+				std::string pstr = memory->read_string(name_ptr);
+				if (is_valid_roblox_name(pstr)) return pstr;
+			}
+		} catch (...) {}
+	}
 
 	return "unknown";
 }

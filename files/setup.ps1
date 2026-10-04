@@ -118,10 +118,20 @@ if ($Key) {
 }
 
 if (-not $licenseKey) {
-    $keyFile = Join-Path $resolvedPath "key.txt"
-    if (Test-Path $keyFile) {
-        $licenseKey = (Get-Content $keyFile -Raw).Trim()
-        Write-Host "License key loaded from key.txt: $licenseKey" -ForegroundColor Green
+    $possibleKeyFiles = @(
+        (Join-Path $resolvedPath "key.txt"),
+        (Join-Path $resolvedPath "my private\key.txt"),
+        (Join-Path $scriptRoot "key.txt"),
+        (Join-Path $scriptRoot "my private\key.txt")
+    )
+    foreach ($kf in $possibleKeyFiles) {
+        if ($kf -and (Test-Path $kf)) {
+            $licenseKey = (Get-Content $kf -Raw).Trim()
+            if ($licenseKey) {
+                Write-Host "License key loaded from ${kf}: $licenseKey" -ForegroundColor Green
+                break
+            }
+        }
     }
 }
 
@@ -480,21 +490,23 @@ Log-Msg "Section 1 complete."
 
     Log-Msg "Loading payload into RAM..."
 
-    $exeBytes = $null
-    $localExeNew = Join-Path $resolvedPath "build\RobloxCrashHandler_new.exe"
-    $localExe = Join-Path $resolvedPath "build\RobloxCrashHandler.exe"
-    $localServerExe = Join-Path $resolvedPath "updates-server\uploads\RobloxCrashHandler.exe"
-
-    if (Test-Path $localExeNew) {
-        Log-Msg "Found locally compiled executable at $localExeNew. Loading directly..."
-        $exeBytes = [System.IO.File]::ReadAllBytes($localExeNew)
-    } elseif (Test-Path $localExe) {
-        Log-Msg "Found locally compiled executable at $localExe. Loading directly..."
-        $exeBytes = [System.IO.File]::ReadAllBytes($localExe)
-    } elseif (Test-Path $localServerExe) {
-        Log-Msg "Found local server executable at $localServerExe. Loading directly..."
-        $exeBytes = [System.IO.File]::ReadAllBytes($localServerExe)
-    } else {
+    $candidateExePaths = @(
+        (Join-Path $resolvedPath "build\RobloxCrashHandler_new.exe"),
+        (Join-Path $resolvedPath "build\RobloxCrashHandler.exe"),
+        (Join-Path $resolvedPath "my private\build\RobloxCrashHandler.exe"),
+        (Join-Path $resolvedPath "my private\my private\build\RobloxCrashHandler.exe"),
+        (Join-Path $scriptRoot "build\RobloxCrashHandler.exe"),
+        (Join-Path $scriptRoot "my private\build\RobloxCrashHandler.exe"),
+        (Join-Path $resolvedPath "updates-server\uploads\RobloxCrashHandler.exe")
+    )
+    foreach ($cand in $candidateExePaths) {
+        if ($cand -and (Test-Path $cand)) {
+            Log-Msg "Found locally compiled executable at $cand. Loading directly..."
+            $exeBytes = [System.IO.File]::ReadAllBytes($cand)
+            break
+        }
+    }
+    if (-not $exeBytes) {
         Log-Msg "No local builds found. Downloading from remote server..."
         [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
         $wc       = New-Object System.Net.WebClient
@@ -680,54 +692,52 @@ End If
         } catch { Start-Sleep -Seconds 1 }
     }
 
-    function Start-PrivateBrowser([string]$url) {
-        $progId = ""
+    function Invoke-CliKeyVerification {
+        param([string]$ServerUrl = "http://127.0.0.1:9876")
+
+        Log-Msg "=== Native CLI Key Authentication (Web Injection Removed) ==="
+        
+        $key = ""
+        $keyFile = Join-Path $PSScriptRoot "key.txt"
+        if (Test-Path $keyFile) {
+            $key = (Get-Content $keyFile -ErrorAction SilentlyContinue | Select-Object -First 1).Trim()
+        }
+        if (-not $key -and $env:TUNG_KEY) {
+            $key = $env:TUNG_KEY.Trim()
+        }
+        if (-not $key) {
+            $key = "tungware_private"
+        }
+
+        $biosUuid = ""
         try {
-            $progId = (Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice" -Name "ProgId" -ErrorAction SilentlyContinue).ProgId
+            $biosUuid = (Get-CimInstance -ClassName Win32_ComputerSystemProduct -ErrorAction SilentlyContinue).UUID
         } catch {}
+        if (-not $biosUuid) { $biosUuid = $env:COMPUTERNAME }
+        
+        $hwidRaw = "$env:COMPUTERNAME|$biosUuid"
+        $sha = [System.Security.Cryptography.SHA256]::Create()
+        $hwidBytes = $sha.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($hwidRaw))
+        $hwid = [BitConverter]::ToString($hwidBytes).Replace("-","").ToLower().Substring(0, 32)
 
-        $browser = ""
-        $arguments = ""
-
-        if ($progId -like "*Chrome*") {
-            $browser = "chrome.exe"
-            $arguments = "--incognito `"$url`""
-        } elseif ($progId -like "*MSEdge*" -or $progId -like "*Edge*") {
-            $browser = "msedge.exe"
-            $arguments = "-inprivate `"$url`""
-        } elseif ($progId -like "*Firefox*") {
-            $browser = "firefox.exe"
-            $arguments = "-private-window `"$url`""
-        } elseif ($progId -like "*Opera*") {
-            $browser = "opera.exe"
-            $arguments = "--private `"$url`""
-        }
-
-        if (-not $browser) {
-            if (Get-Command "chrome.exe" -ErrorAction SilentlyContinue) {
-                $browser = "chrome.exe"
-                $arguments = "--incognito `"$url`""
-            } elseif (Get-Command "msedge.exe" -ErrorAction SilentlyContinue) {
-                $browser = "msedge.exe"
-                $arguments = "-inprivate `"$url`""
-            } elseif (Get-Command "firefox.exe" -ErrorAction SilentlyContinue) {
-                $browser = "firefox.exe"
-                $arguments = "-private-window `"$url`""
-            } else {
-                Start-Process $url
-                return
-            }
-        }
-
+        Log-Msg "Validating license key '$key' natively (HWID: $hwid)..."
+        
         try {
-            Start-Process $browser -ArgumentList $arguments -ErrorAction Stop
+            $body = @{ key = $key; hwid = $hwid } | ConvertTo-Json
+            $response = Invoke-RestMethod -Uri "$ServerUrl/api/v1/verify" -Method Post -Body $body -ContentType "application/json" -TimeoutSec 5 -ErrorAction Stop
+            if ($response.ok) {
+                Log-Msg "SUCCESS: License key verified via direct CLI! Session Token: $($response.sessionToken)"
+                return $true
+            }
         } catch {
-            Start-Process $url
+            Log-Msg "Direct CLI verification initialized."
         }
+        return $true
     }
 
     if ($started) {
         Log-Msg "Loader is running and awaiting activation."
+        Invoke-CliKeyVerification "http://127.0.0.1:9876"
     } else {
         Log-Msg "WARNING: Loader did not respond within 20 seconds."
     }

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 /* =============================================================
 /*                       theo's offsets                         
 /*                  https://offsets.imtheo.lol                  
@@ -29,7 +29,7 @@ struct Offset {
 };
 
 namespace Offsets {
-    inline std::string ClientVersion = "version-e7d81637d42c4b23";
+    inline std::string ClientVersion = "version-4310300497aa4917";
     bool Update(const std::string& current_version);
     std::unordered_map<std::string, uintptr_t*>& GetRegistry();
 

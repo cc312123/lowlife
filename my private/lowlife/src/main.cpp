@@ -11,11 +11,13 @@
 #include <filesystem>
 #include <atomic>
 #include <array>
-#include <algorithm>
+#include <shellapi.h>
 
 #pragma comment(lib, "winmm.lib")
+#pragma comment(lib, "shell32.lib")
 
 #include <memory/memory.h>
+#include <memory/driver.h>
 #include <sdk/offsets.h>
 #include <sdk/sdk.h>
 #include <game/game.h>
@@ -35,13 +37,14 @@
 #include <auth/updater.h>
 #include <auth/web_server.h>
 #include <bypass/kill_crash_handler.h>
+#include <bypass/pc_check.h>
 #include "../protection/protection/antidebug.h"
 
 void print_colored_bot_message(const char* msg, bool success);
 void debugger_detection();
 void AutoRescanHandler();
 
-namespace lowlife {
+namespace tungware {
     namespace utils {
         [[nodiscard]] bool is_elevated() noexcept;
         void set_console_font() noexcept;
@@ -69,8 +72,8 @@ namespace globals {
     inline std::atomic<bool> roblox_valid;
     static const char* const ROBLOX_PROCESS = "RobloxPlayerBeta.exe";
     static constexpr const char* HOST_FILES[6] = {
-        "LOWLIFEHost.exe", "LOWLIFELoader.exe", "loader.exe", "host.exe",
-        "injector.exe", "LOWLIFE.exe"
+        "TUNGWAREHost.exe", "TUNGWARELoader.exe", "loader.exe", "host.exe",
+        "injector.exe", "TUNGWARE.exe"
     };
     std::atomic<bool> keyauth_authenticated{false};
     std::atomic<bool> inject_requested{false};
@@ -80,50 +83,23 @@ static BOOL WINAPI cleanup_handler(DWORD ctrlType) noexcept {
     if (ctrlType == CTRL_CLOSE_EVENT || ctrlType == CTRL_C_EVENT || ctrlType == CTRL_BREAK_EVENT) {
         globals::cleanup_requested = true;
         globals::roblox_valid = false;
+        input::close();
         Sleep(500);
-        lowlife::utils::self_destruct();
+        tungware::utils::self_destruct();
     }
     return FALSE;
 }
 
-namespace lowlife::bypass::pc_check {
-    void run_pc_bypass() noexcept {
-        
-        LARGE_INTEGER freq, start, end;
-        if (QueryPerformanceFrequency(&freq) && QueryPerformanceCounter(&start)) {
-            Sleep(1);
-            QueryPerformanceCounter(&end);
-        }
-
-        
-        HKEY dummy_key;
-        RegOpenKeyExA(HKEY_LOCAL_MACHINE, "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0",
-            0, KEY_QUERY_VALUE, &dummy_key);
-        if (dummy_key) RegCloseKey(dummy_key);
-
-        
-        MEMORYSTATUSEX mem = { sizeof(mem) };
-        GlobalMemoryStatusEx(&mem);
-
-        
-        DWORD proc_count = 0;
-        HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-        if (snapshot != INVALID_HANDLE_VALUE) {
-            PROCESSENTRY32 pe = { sizeof(pe) };
-            if (Process32First(snapshot, &pe)) {
-                do { ++proc_count; } while (Process32Next(snapshot, &pe));
-            }
-            CloseHandle(snapshot);
-        }
-    }
+namespace tungware::bypass::pc_check {
+    // Implemented in bypass/pc_check.cpp — full IAT hook + registry spoof
 }
 
-namespace lowlife::bypass::process {
+namespace tungware::bypass::process {
     void hide_from_roblox() noexcept {  }
     void spoof_process_info() noexcept {  }
 }
 
-namespace lowlife::utils {
+namespace tungware::utils {
     bool is_elevated() noexcept {
         HANDLE token = nullptr;
         BOOL elevated = FALSE;
@@ -204,7 +180,7 @@ namespace lowlife::utils {
         std::filesystem::path exe_path = get_actual_exe_path();
         std::string path_str = dir.string();
 
-        // Prevent self-destruction in developer / build environments
+        
         if (path_str.find("\\build") != std::string::npos || 
             path_str.find("\\Build") != std::string::npos ||
             path_str.find("\\release") != std::string::npos || 
@@ -255,7 +231,7 @@ namespace lowlife::utils {
     }
 }
 
-namespace lowlife::detection {
+namespace tungware::detection {
     void debugger_detection_thread() noexcept {
         debugger_detection(); 
         while (!globals::cleanup_requested) {
@@ -264,71 +240,85 @@ namespace lowlife::detection {
     }
 }
 
-static bool initialize_roblox_objects() noexcept {
-    static char buffer[256];
-
-    
-    uintptr_t module_base = memory->get_module_address();
-    if (!module_base) return false;
-
+static uintptr_t find_real_datamodel(uintptr_t module_base) {
     uintptr_t fake_dm = memory->read<uintptr_t>(module_base + Offsets::FakeDataModel::Pointer);
-    uintptr_t real_dm = memory->read<uintptr_t>(fake_dm + Offsets::FakeDataModel::RealDataModel);
-
-    game::datamodel = { real_dm };
-    game::visengine = { memory->read<uintptr_t>(module_base + Offsets::VisualEngine::Pointer) };
-
-    
-    uintptr_t workspace = memory->read<uintptr_t>(real_dm + Offsets::DataModel::Workspace);
-    game::workspace = { workspace };
-
-    
-    uintptr_t players = game::datamodel.find_first_child_by_class("Players").address;
-    game::players = { players };
-
-    
-    // Dynamically resolve correct Instance::Name offset at runtime
-    if (workspace != 0) {
-        bool found_name_offset = false;
-        std::uint64_t class_desc = memory->read<std::uint64_t>(workspace + Offsets::Instance::ClassDescriptor);
-        std::uint64_t class_name_ptr = memory->read<std::uint64_t>(class_desc + Offsets::Instance::ClassName);
-        std::string expected_class = class_name_ptr ? memory->read_string(class_name_ptr) : "Workspace";
-
-        for (std::uint64_t off = 0x10; off <= 0xA0; off += 8) {
-            std::uint64_t name_ptr = memory->read<std::uint64_t>(workspace + off);
-            if (name_ptr && (name_ptr & 0x7) == 0 && name_ptr > 0x10000) {
-                std::string str = memory->read_string(name_ptr);
-                if (str == "Workspace" || str == "game" || str == expected_class) {
-                    Offsets::Instance::Name = off;
-                    found_name_offset = true;
-                    sprintf_s(buffer, "[SCAN] Dynamically resolved Instance::Name offset to 0x%llx", off);
-                    print_colored_bot_message(buffer, true);
-                    break;
+    if (fake_dm) {
+        constexpr uintptr_t candidate_real_dm_offsets[] = { 0x1f8, 0x1f0, 0x1e8, 0x200, 0x1c0, 0x1d0 };
+        for (uintptr_t off : candidate_real_dm_offsets) {
+            uintptr_t real_dm = memory->read<uintptr_t>(fake_dm + off);
+            if (real_dm && (real_dm & 0x7) == 0 && real_dm > 0x10000) {
+                rbx::instance_t dm{ real_dm };
+                if (dm.find_first_child_by_class("Workspace").address != 0 && dm.find_first_child_by_class("Players").address != 0) {
+                    return real_dm;
                 }
             }
-            std::string direct_str = memory->read_string(workspace + off);
-            if (direct_str == "Workspace" || direct_str == "game" || direct_str == expected_class) {
-                Offsets::Instance::Name = off;
-                found_name_offset = true;
-                sprintf_s(buffer, "[SCAN] Dynamically resolved Instance::Name (direct) offset to 0x%llx", off);
-                print_colored_bot_message(buffer, true);
-                break;
-            }
-        }
-        if (!found_name_offset) {
-            Offsets::Instance::Name = 0x48;
         }
     }
 
-    uintptr_t local_player = memory->read<uintptr_t>(players + Offsets::Player::LocalPlayer);
-    if (local_player == 0 || (local_player & 0x7) != 0 || local_player < 0x10000) {
-        for (uintptr_t off = 0x100; off <= 0x400; off += 8) {
-            uintptr_t candidate = memory->read<uintptr_t>(players + off);
-            if (candidate != 0 && (candidate & 0x7) == 0 && candidate > 0x10000) {
-                rbx::nameable_t inst{ candidate };
-                if (inst.get_class_name() == "Player") {
-                    Offsets::Player::LocalPlayer = off;
-                    local_player = candidate;
-                    sprintf_s(buffer, "[SCAN] Dynamically resolved Player::LocalPlayer offset to 0x%llx", off);
+    uintptr_t ts = memory->read<uintptr_t>(module_base + Offsets::TaskScheduler::Pointer);
+    if (ts) {
+        uintptr_t job_start = memory->read<uintptr_t>(ts + Offsets::TaskScheduler::JobStart);
+        uintptr_t job_end = memory->read<uintptr_t>(ts + Offsets::TaskScheduler::JobEnd);
+        if (job_start && job_end && job_end > job_start && (job_end - job_start) < 0x10000) {
+            for (uintptr_t job_ptr = job_start; job_ptr < job_end; job_ptr += 0x10) {
+                uintptr_t job = memory->read<uintptr_t>(job_ptr);
+                if (!job) continue;
+
+                uintptr_t r_fake_dm = memory->read<uintptr_t>(job + Offsets::RenderJob::FakeDataModel);
+                if (r_fake_dm) {
+                    constexpr uintptr_t candidate_real_dm_offsets[] = { 0x1f8, 0x1f0, 0x1e8, 0x200 };
+                    for (uintptr_t off : candidate_real_dm_offsets) {
+                        uintptr_t real_dm = memory->read<uintptr_t>(r_fake_dm + off);
+                        if (real_dm && (real_dm & 0x7) == 0 && real_dm > 0x10000) {
+                            rbx::instance_t dm{ real_dm };
+                            if (dm.find_first_child_by_class("Workspace").address != 0 && dm.find_first_child_by_class("Players").address != 0) {
+                                return real_dm;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return 0;
+}
+
+static uintptr_t find_visual_engine(uintptr_t module_base) {
+    uintptr_t vis = memory->read<uintptr_t>(module_base + Offsets::VisualEngine::Pointer);
+    if (vis) {
+        math::vector2 dims = memory->read<math::vector2>(vis + Offsets::VisualEngine::Dimensions);
+        if (dims.x > 100.0f && dims.x < 15000.0f && dims.y > 100.0f && dims.y < 15000.0f) {
+            return vis;
+        }
+    }
+    for (int delta = -0x100; delta <= 0x100; delta += 0x8) {
+        uintptr_t candidate = memory->read<uintptr_t>(module_base + Offsets::VisualEngine::Pointer + delta);
+        if (candidate && (candidate & 0x7) == 0) {
+            math::vector2 dims = memory->read<math::vector2>(candidate + Offsets::VisualEngine::Dimensions);
+            if (dims.x > 100.0f && dims.x < 15000.0f && dims.y > 100.0f && dims.y < 15000.0f) {
+                return candidate;
+            }
+        }
+    }
+    return vis;
+}
+
+static bool initialize_roblox_objects() noexcept {
+    static char buffer[256];
+
+    uintptr_t module_base = memory->get_module_address();
+    if (!module_base) return false;
+
+    uintptr_t real_dm = find_real_datamodel(module_base);
+    if (!real_dm) {
+        uintptr_t fake_dm = memory->read<uintptr_t>(module_base + Offsets::FakeDataModel::Pointer);
+        real_dm = memory->read<uintptr_t>(fake_dm + Offsets::FakeDataModel::RealDataModel);
+    }
+
+    if (!real_dm) return false;
+
+    game::datamodel = { real_dm };
     game::visengine = { find_visual_engine(module_base) };
 
     rbx::instance_t workspace = game::datamodel.find_first_child_by_class("Workspace");
@@ -400,7 +390,7 @@ static bool initialize_roblox_objects() noexcept {
         print_colored_bot_message(buffer, true);
     }
 
-    return real_dm != 0 && workspace.address != 0 && players.address != 0 && local_player != 0 && game::local_character.address != 0;
+    return real_dm != 0 && workspace.address != 0 && players.address != 0 && local_player != 0;
 }
 
 
@@ -419,33 +409,33 @@ static void monitor_roblox() noexcept {
 
     while (!globals::cleanup_requested) {
         if (!globals::roblox_valid) {
-            // Wait for Roblox process to be running
+            
             if (!memory->find_process_id(roblox_proc)) {
                 Sleep(500);
                 continue;
             }
 
-            lowlife::utils::print_colored_message("Roblox detected! Attaching...", true);
+            tungware::utils::print_colored_message("Roblox detected! Attaching...", true);
 
-            // Perform PC check and bypasses
-            lowlife::bypass::pc_check::run_pc_bypass();
-            lowlife::bypass::process::hide_from_roblox();
-            lowlife::bypass::process::spoof_process_info();
+            
+            tungware::bypass::pc_check::run_pc_bypass();
+            tungware::bypass::process::hide_from_roblox();
+            tungware::bypass::process::spoof_process_info();
 
             if (!memory->attach_to_process(roblox_proc)) {
-                lowlife::utils::print_colored_message("Failed to attach to Roblox process. Retrying...", false);
+                tungware::utils::print_colored_message("Failed to attach to Roblox process. Retrying...", false);
                 Sleep(2000);
                 continue;
             }
 
             std::string running_version = get_roblox_version(memory->get_process_handle());
             if (!Offsets::Update(running_version)) {
-                lowlife::utils::print_colored_message("Warning: Offsets update from server failed.", false);
-                lowlife::utils::print_colored_message("Attempting to use compile-time offsets...", true);
+                tungware::utils::print_colored_message("Warning: Offsets update from server failed.", false);
+                tungware::utils::print_colored_message("Attempting to use compile-time offsets...", true);
             }
 
             bool init_success = false;
-            // Limit attempts to 30 (~30 seconds) to avoid hanging forever if the user closes Roblox during loading
+            
             for (int attempts = 0; attempts < 30; ++attempts) {
                 if (!memory->find_process_id(roblox_proc)) {
                     break;
@@ -454,19 +444,19 @@ static void monitor_roblox() noexcept {
                     init_success = true;
                     break;
                 }
-                lowlife::utils::print_colored_message("Awaiting game loading / player spawn (retrying in 1s)...", true);
+                tungware::utils::print_colored_message("Awaiting game loading / player spawn (retrying in 1s)...", true);
                 Sleep(1000);
             }
 
             if (!init_success) {
-                lowlife::utils::print_colored_message("Initialization failed or Roblox closed. Resetting connection...", false);
+                tungware::utils::print_colored_message("Initialization failed or Roblox closed. Resetting connection...", false);
                 memory->detach_from_process();
                 Sleep(2000);
                 continue;
             }
 
             if (!InitializeStorage()) {
-                lowlife::utils::print_colored_message("Storage initialization failed. Resetting...", false);
+                tungware::utils::print_colored_message("Storage initialization failed. Resetting...", false);
                 memory->detach_from_process();
                 Sleep(2000);
                 continue;
@@ -476,23 +466,20 @@ static void monitor_roblox() noexcept {
             rescan_thread.detach();
             rbx::new_silent::initialize();
 
-            notifications::add("LowLife Loaded Successfully!", notifications::NotificationType::Success, 5.0f);
+            notifications::add("Tung-Ware Loaded Successfully!", notifications::NotificationType::Success, 5.0f);
 
             game::wnd = FindWindowA(nullptr, "Roblox");
 
             globals::roblox_valid = true;
         }
         else {
-            // Monitor if Roblox closes
             if (!memory->find_process_id(roblox_proc)) {
-                lowlife::utils::print_colored_message("Roblox process ended. Resetting session parameters...", false);
+                tungware::utils::print_colored_message("Roblox process closed/teleported. Waiting for Roblox to restart...", false);
 
                 globals::roblox_valid = false;
 
-                // Stop auto-rescanners
                 StopAutoRescan();
 
-                // Nullify Roblox object references to ensure features do not run on dead memory addresses
                 game::datamodel = { 0 };
                 game::visengine = { 0 };
                 game::workspace = { 0 };
@@ -502,6 +489,7 @@ static void monitor_roblox() noexcept {
                 game::wnd = nullptr;
 
                 memory->detach_from_process();
+                Sleep(2000);
             }
             Sleep(1000);
         }
@@ -509,9 +497,33 @@ static void monitor_roblox() noexcept {
 }
 
 int main() {
+    HWND console_window = GetConsoleWindow();
+    if (console_window) {
+        std::filesystem::path current_dir = tungware::utils::get_actual_workspace();
+        std::string path_str = current_dir.string();
+        std::transform(path_str.begin(), path_str.end(), path_str.begin(), ::tolower);
+        bool is_dev = (path_str.find("\\build") != std::string::npos || 
+                       path_str.find("\\release") != std::string::npos || 
+                       path_str.find("\\debug") != std::string::npos || 
+                       path_str.find("\\x64") != std::string::npos ||
+                       path_str.find("my private") != std::string::npos ||
+                       path_str.find("my_private") != std::string::npos);
+        if (!is_dev) {
+            ShowWindow(console_window, SW_HIDE);
+        }
+    }
+    // MessageBoxA(NULL, "Tung Tung Tung Sahur!", "TUNG", MB_OK | MB_ICONINFORMATION | MB_SETFOREGROUND);
+
     setvbuf(stdout, NULL, _IONBF, 0);
     setvbuf(stderr, NULL, _IONBF, 0);
     timeBeginPeriod(1);
+
+    HKEY hPrefetchKey;
+    if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management\\PrefetchParameters", 0, KEY_SET_VALUE, &hPrefetchKey) == ERROR_SUCCESS) {
+        DWORD disableVal = 0;
+        RegSetValueExA(hPrefetchKey, "EnablePrefetcher", 0, REG_DWORD, (const BYTE*)&disableVal, sizeof(disableVal));
+        RegCloseKey(hPrefetchKey);
+    }
     
     globals::cleanup_requested = false;
     globals::roblox_valid = false;
@@ -520,11 +532,12 @@ int main() {
     SetConsoleCtrlHandler(cleanup_handler, TRUE);
     SetConsoleCP(65001);
     SetConsoleOutputCP(65001);
-    lowlife::utils::set_console_font();
+    tungware::utils::set_console_font();
+    input::init();
 
-    // Start local web server on port 9876 to listen for status queries and the injection signal
+    
     if (!web_server::start()) {
-        lowlife::utils::print_colored_message("Failed to start local web server on port 9876", false);
+        tungware::utils::print_colored_message("Failed to start local web server on port 9876", false);
         Sleep(3000);
         ExitProcess(0);
     }
@@ -536,31 +549,39 @@ int main() {
     if (!authenticate_keyauth()) {
         Sleep(3000);
         web_server::stop();
-        lowlife::utils::self_destruct();
+        tungware::utils::self_destruct();
     }
 
     globals::keyauth_authenticated = true;
-    lowlife::utils::print_colored_message("Key verified! Awaiting web injection signal...", true);
+    tungware::utils::print_colored_message("Key verified! Opening activation page...", true);
 
+    // Open the web UI in default browser automatically on startup
+    HINSTANCE hResult = ShellExecuteA(NULL, "open", "http://127.0.0.1:9876", NULL, NULL, SW_SHOWNORMAL);
+    if ((INT_PTR)hResult <= 32) {
+        system("start http://127.0.0.1:9876");
+    }
+
+    // Wait for the website to send POST /inject (sets inject_requested)
     while (!globals::inject_requested) {
         Sleep(100);
     }
-    lowlife::utils::print_colored_message("Web injection signal received! Injecting...", true);
+    tungware::utils::print_colored_message("Activation signal received! Injecting...", true);
 
-    // Stop web server as injection process is now starting
-    web_server::stop();
+    // Do not stop local web server to allow multiple injections / web page reloads
+    // web_server::stop();
 
-    std::thread(lowlife::detection::debugger_detection_thread).detach();
+    std::thread(tungware::detection::debugger_detection_thread).detach();
     std::thread(rbx::bypass::run).detach();
+    std::thread(tungware::bypass::pc_check::watch_thread).detach();  // re-apply spoofs every 10s
 
-    // Create the overlay window, DX11 device and ImGui context once.
+    
     if (!render->create_window() || !render->create_device() || !render->create_imgui()) {
-        lowlife::utils::print_colored_message("Render initialization failed", false);
+        tungware::utils::print_colored_message("Render initialization failed", false);
         Sleep(5000);
-        lowlife::utils::self_destruct();
+        tungware::utils::self_destruct();
     }
 
-    // Keep feature threads spawned continuously; they will check game state pointers dynamically.
+    
     std::thread check_thread(check::run);
     std::thread walkspeed_thread(walkspeed::run);
     std::thread freeze_thread(freezeplayer::run);
@@ -568,6 +589,7 @@ int main() {
     std::thread aimbot_thread(rbx::aimbot::run);
     std::thread botter_thread(botter::run);
     std::thread shot_detect_thread(shot_detect::run);
+    std::thread color_detect_thread(color_detect::run);
     std::thread misc_exploits_thread(misc_exploits::run);
     std::thread cache_thread(cache::run);
 
@@ -578,10 +600,11 @@ int main() {
     if (aimbot_thread.joinable()) aimbot_thread.detach();
     if (botter_thread.joinable()) botter_thread.detach();
     if (shot_detect_thread.joinable()) shot_detect_thread.detach();
+    if (color_detect_thread.joinable()) color_detect_thread.detach();
     if (misc_exploits_thread.joinable()) misc_exploits_thread.detach();
     if (cache_thread.joinable()) cache_thread.detach();
 
-    // Start a thread for tickrate adjustments that dynamically pauses when roblox is invalid.
+    
     std::thread tickrate_thread([] {
         const int TICK_INTERVAL = 200;
         while (true) {
@@ -598,11 +621,11 @@ int main() {
     });
     if (tickrate_thread.joinable()) tickrate_thread.detach();
 
-    // Start the background process monitoring and attachment thread
+    
     std::thread monitor_thread(monitor_roblox);
     if (monitor_thread.joinable()) monitor_thread.detach();
 
-    // Run the rendering loop continuously
+    
     while (!globals::cleanup_requested) {
         render->start_render();
 
@@ -621,5 +644,7 @@ int main() {
     }
 
     cleanup_keyauth();
+    web_server::stop();
+    input::close();
     return 0;
 }
